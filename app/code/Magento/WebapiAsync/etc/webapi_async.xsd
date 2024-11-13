@@ -26,6 +26,9 @@
     </xs:complexType>
 
     <xs:complexType name="routeType">
+        <xs:sequence>
+            <xs:element name="data" type="dataType" minOccurs="0"/>
+        </xs:sequence>
         <xs:attribute name="url" type="xs:string" use="required"/>
         <xs:attribute name="method" use="required">
             <xs:simpleType>
@@ -38,6 +41,10 @@
             </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="alias" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="dataType" >
+        <xs:attribute name="input-array-size-limit" type="xs:nonNegativeInteger" use="optional" />
     </xs:complexType>
 
 </xs:schema>

@@ -10,6 +10,13 @@
         <referenceBlock name="head.components">
             <block class="Magento\Framework\View\Element\Js\Components" name="pagecache_page_head_components" template="Magento_PageCache::js/components.phtml"/>
         </referenceBlock>
+        <referenceBlock name="head.additional">
+            <block name="form_key_provider" template="Magento_PageCache::form_key_provider.phtml">
+                <arguments>
+                    <argument name="form_key_provider" xsi:type="object">Magento\PageCache\ViewModel\FormKeyProvider</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
         <referenceContainer name="content">
             <block class="Magento\PageCache\Block\Javascript" template="Magento_PageCache::javascript.phtml" name="pageCache" as="pageCache"/>
         </referenceContainer>

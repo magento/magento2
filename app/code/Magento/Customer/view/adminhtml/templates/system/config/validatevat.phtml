@@ -41,6 +41,11 @@ require(['prototype'], function(){
                         validationMessage.setStyle({color:'green'});
                     } else {
                         validationMessage.removeClassName('hidden').addClassName('admin__field-error');
+                        if (validationMessage.style.removeProperty) {
+                            validationMessage.style.removeProperty('color');
+                        } else {
+                            validationMessage.style.removeAttribute('color');
+                        }
                     }
                 } catch (e) {
                     validationMessage.removeClassName('hidden').addClassName('admin__field-error');
@@ -60,7 +65,8 @@ script;
 
 <div class="actions actions-validate-vat">
     <p class="admin__field-error hidden" id="validation_result"></p>
-    <button class="action-validate-vat" type="button" id="<?= /* @noEscape */ $block->getHtmlId() ?>">
+    <button class="action-validate-vat" type="button" id="<?= /* @noEscape */ $block->getHtmlId() ?>"
+            style="display:none">
         <span><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
     </button>
 </div>

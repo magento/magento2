@@ -158,7 +158,7 @@ class ExtensionAttributesProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function buildOutputDataArrayWithPermissionProvider()
+    public static function buildOutputDataArrayWithPermissionProvider()
     {
         return [
             'permission allowed' => [

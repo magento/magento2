@@ -95,7 +95,7 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
 
         $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($source);
         if (empty($taxClassAmount)) {
-            $rates = $this->_taxOrderFactory->create()->getCollection()->loadByOrder($source)->toArray();
+            $rates = $this->_taxOrderFactory->create()->getCollection()->loadByOrder($this->getOrder())->toArray();
             $taxClassAmount = $this->_taxCalculation->reproduceProcess($rates['items']);
         }
 

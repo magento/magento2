@@ -145,7 +145,7 @@ class DataTest extends TestCase
     public function testSendPaymentFailedEmail()
     {
         $quoteMock = $this->getMockBuilder(Quote::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->any())->method('getId')->willReturn(1);

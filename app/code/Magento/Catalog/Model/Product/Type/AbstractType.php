@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Http;
 use Magento\Framework\File\UploaderFactory;
 
 /**
@@ -65,16 +65,16 @@ abstract class AbstractType
      */
     protected $_fileQueue = [];
 
-    const CALCULATE_CHILD = 0;
+    public const CALCULATE_CHILD = 0;
 
-    const CALCULATE_PARENT = 1;
+    public const CALCULATE_PARENT = 1;
 
     /**#@+
      * values for shipment type (invoice etc)
      */
-    const SHIPMENT_SEPARATELY = 1;
+    public const SHIPMENT_SEPARATELY = 1;
 
-    const SHIPMENT_TOGETHER = 0;
+    public const SHIPMENT_TOGETHER = 0;
     /**#@-*/
 
     /**
@@ -83,19 +83,19 @@ abstract class AbstractType
      * Full validation - all required options must be set, whole configuration
      * must be valid
      */
-    const PROCESS_MODE_FULL = 'full';
+    public const PROCESS_MODE_FULL = 'full';
 
     /**
      * Process modes
      *
      * Lite validation - only received options are validated
      */
-    const PROCESS_MODE_LITE = 'lite';
+    public const PROCESS_MODE_LITE = 'lite';
 
     /**
      * Item options prefix
      */
-    const OPTION_PREFIX = 'option_';
+    public const OPTION_PREFIX = 'option_';
 
     /**
      * @var \Magento\Framework\Filesystem
@@ -128,8 +128,6 @@ abstract class AbstractType
     abstract public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product);
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -147,22 +145,16 @@ abstract class AbstractType
     protected $_logger;
 
     /**
-     * Catalog product type
-     *
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $_catalogProductType;
 
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
 
     /**
-     * Catalog product option
-     *
      * @var \Magento\Catalog\Model\Product\Option
      */
     protected $_catalogProductOption;
@@ -502,24 +494,20 @@ abstract class AbstractType
                     case 'receive_uploaded_file':
                         $src = $queueOptions['src_name'] ?? '';
                         $dst = $queueOptions['dst_name'] ?? '';
-                        /** @var $uploader \Zend_File_Transfer_Adapter_Http */
+                        /** @var $uploader Http */
                         $uploader = $queueOptions['uploader'] ?? null;
                         $isUploaded = false;
-                        if ($uploader && $uploader->isValid()) {
+                        if ($uploader && $uploader->isValid($src)) {
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                             $path = pathinfo($dst, PATHINFO_DIRNAME);
                             $uploader = $this->uploaderFactory->create(['fileId' => $src]);
                             $uploader->setFilesDispersion(false);
                             $uploader->setAllowRenameFiles(true);
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                             $isUploaded = $uploader->save($path, pathinfo($dst, PATHINFO_FILENAME));
                         }
 
                         if (empty($src) || empty($dst) || !$isUploaded) {
-                            /**
-                             * @todo: show invalid option
-                             */
-                            if (isset($queueOptions['option'])) {
-                                $queueOptions['option']->setIsValid(false);
-                            }
                             throw new \Magento\Framework\Exception\LocalizedException(
                                 __('The file upload failed. Try to upload again.')
                             );
@@ -604,10 +592,16 @@ abstract class AbstractType
 
                     if ($product->getSkipCheckRequiredOption() !== true) {
                         $group->validateUserValue($optionsFromRequest);
-                    } elseif ($optionsFromRequest !== null && isset($optionsFromRequest[$option->getId()])) {
-                        $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
+                    } elseif ($optionsFromRequest !== null
+                        && isset($optionsFromRequest[$option->getId()])
+                        && $optionsFromRequest[$option->getId()] !== ''
+                    ) {
+                        if (is_array($optionsFromRequest[$option->getId()])) {
+                            $group->validateUserValue($optionsFromRequest);
+                        } else {
+                            $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
+                        }
                     }
-
                 } catch (LocalizedException $e) {
                     $results[] = $e->getMessage();
                     continue;
@@ -645,7 +639,7 @@ abstract class AbstractType
             foreach ($options as $option) {
                 if ($option->getIsRequire()) {
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
-                    if (!$customOption || strlen($customOption->getValue()) == 0) {
+                    if (!$customOption || strlen($customOption->getValue() ?? '') == 0) {
                         $product->setSkipCheckRequiredOption(true);
                         throw new \Magento\Framework\Exception\LocalizedException(
                             __('The product has required options. Enter the options and try again.')
@@ -674,7 +668,7 @@ abstract class AbstractType
 
         $optionIds = $product->getCustomOption('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
@@ -753,6 +747,9 @@ abstract class AbstractType
      */
     public function beforeSave($product)
     {
+        if (!$product->getTypeId()) {
+            $product->setTypeId($this->_typeId);
+        }
         $this->_removeNotApplicableAttributes($product);
         $product->canAffectOptions(true);
         return $this;
@@ -822,7 +819,7 @@ abstract class AbstractType
         }
         $optionIds = $product->getCustomOption('option_ids');
         if ($optionIds) {
-            foreach (explode(',', $optionIds->getValue()) as $optionId) {
+            foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $optionId);

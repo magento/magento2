@@ -33,37 +33,52 @@ class CollectionTest extends TestCase
      */
     private $collectionMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->selectMock = $this->createMock(Select::class);
         $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getSelect'])
+            ->onlyMethods(['getSelect'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
     }
 
-    public function testGetSelectCountSqlWithoutHavingClauses()
+    /**
+     * @return void
+     */
+    public function testGetSelectCountSqlWithoutHavingClauses(): void
     {
         $havingClauses = [];
         $this->selectMock->expects($this->atLeastOnce())->method('getPart')->willReturn($havingClauses);
-        $this->selectMock->expects($this->at(1))->method('reset')->with(Select::ORDER);
-        $this->selectMock->expects($this->at(2))->method('reset')->with(Select::LIMIT_COUNT);
-        $this->selectMock->expects($this->at(3))->method('reset')->with(Select::LIMIT_OFFSET);
         $this->selectMock->expects($this->atLeastOnce())->method('columns')
             ->with(new \Zend_Db_Expr('1'))->willReturnSelf();
         $this->selectMock->expects($this->atLeastOnce())->method('resetJoinLeft')->willReturnSelf();
 
-        $this->selectMock->expects($this->at(4))->method('reset')->with(Select::COLUMNS);
-        $this->selectMock->expects($this->at(5))->method('reset')->with(Select::HAVING);
+        $this->selectMock
+            ->method('reset')
+            ->willReturnCallback(function ($arg) {
+                if ($arg == Select::ORDER ||
+                    $arg == Select::LIMIT_COUNT ||
+                    $arg == Select::LIMIT_OFFSET ||
+                    $arg == Select::COLUMNS ||
+                    $arg == Select::HAVING) {
+                        return null;
+                }
+            });
         $this->selectMock->expects($this->atLeastOnce())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->atLeastOnce())->method('from')->willReturnSelf();
 
         $this->assertEquals($this->selectMock, $this->collectionMock->getSelectCountSql());
     }
 
-    public function testGetSelectCountSqlWithHavingClauses()
+    /**
+     * @return void
+     */
+    public function testGetSelectCountSqlWithHavingClauses(): void
     {
         $havingClauses = [
             'clause-1' => '(review_cnt LIKE %4%)',
@@ -71,9 +86,15 @@ class CollectionTest extends TestCase
         ];
 
         $this->selectMock->expects($this->atLeastOnce())->method('getPart')->willReturn($havingClauses);
-        $this->selectMock->expects($this->at(1))->method('reset')->with(Select::ORDER);
-        $this->selectMock->expects($this->at(2))->method('reset')->with(Select::LIMIT_COUNT);
-        $this->selectMock->expects($this->at(3))->method('reset')->with(Select::LIMIT_OFFSET);
+        $this->selectMock
+            ->method('reset')
+            ->willReturnCallback(function ($arg) {
+                if ($arg == Select::ORDER ||
+                    $arg == Select::LIMIT_COUNT ||
+                    $arg == Select::LIMIT_OFFSET) {
+                    return null;
+                }
+            });
         $this->selectMock->expects($this->atLeastOnce())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->atLeastOnce())->method('from')->willReturnSelf();
 

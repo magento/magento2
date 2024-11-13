@@ -10,7 +10,7 @@
     <actionGroup name="AdminFillIntegrationFormActionGroup">
         <arguments>
             <argument name="integration" type="entity" />
-            <argument name="currentAdminPassword" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
+            <argument name="currentAdminPassword" type="string" defaultValue="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}" />
         </arguments>
 
         <fillField selector="{{AdminNewIntegrationFormSection.integrationName}}" userInput="{{integration.name}}" stepKey="fillIntegrationName"/>

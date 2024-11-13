@@ -84,6 +84,9 @@ class RemoveTrackTest extends TestCase
      */
     protected $controller;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
@@ -155,7 +158,7 @@ class RemoveTrackTest extends TestCase
      *
      * @return void
      */
-    protected function shipmentLoad()
+    protected function shipmentLoad(): void
     {
         $orderId = 1;
         $shipmentId = 1;
@@ -169,26 +172,15 @@ class RemoveTrackTest extends TestCase
         $this->shipmentTrackMock->expects($this->once())
             ->method('getId')
             ->willReturn($trackId);
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('track_id')
-            ->willReturn($trackId);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('order_id')
-            ->willReturn($orderId);
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with('shipment_id')
-            ->willReturn($shipmentId);
-        $this->requestMock->expects($this->at(3))
-            ->method('getParam')
-            ->with('shipment')
-            ->willReturn($shipment);
-        $this->requestMock->expects($this->at(4))
-            ->method('getParam')
-            ->with('tracking')
-            ->willReturn($tracking);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['track_id'] =>$trackId,
+                ['order_id'] => $orderId,
+                ['shipment_id'] => $shipmentId,
+                ['shipment'] => $shipment,
+                ['tracking'] =>  $tracking
+            });
         $this->shipmentLoaderMock->expects($this->once())->method('setOrderId')->with($orderId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipmentId')->with($shipmentId);
         $this->shipmentLoaderMock->expects($this->once())->method('setShipment')->with($shipment);
@@ -199,9 +191,10 @@ class RemoveTrackTest extends TestCase
      * Represent json json section
      *
      * @param array $errors
+     *
      * @return void
      */
-    protected function representJson(array $errors)
+    protected function representJson(array $errors): void
     {
         $jsonHelper = $this->createPartialMock(Data::class, ['jsonEncode']);
         $jsonHelper->expects($this->once())
@@ -219,8 +212,10 @@ class RemoveTrackTest extends TestCase
 
     /**
      * Run test execute method
+     *
+     * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $response = 'html-data';
         $this->shipmentLoad();
@@ -255,8 +250,10 @@ class RemoveTrackTest extends TestCase
 
     /**
      * Run test execute method (fail track load)
+     *
+     * @return void
      */
-    public function testExecuteTrackIdFail()
+    public function testExecuteTrackIdFail(): void
     {
         $trackId = null;
         $errors = ['error' => true, 'message' => 'We can\'t load track with retrieving identifier right now.'];
@@ -274,8 +271,10 @@ class RemoveTrackTest extends TestCase
 
     /**
      * Run test execute method (fail load shipment)
+     *
+     * @return void
      */
-    public function testExecuteShipmentLoadFail()
+    public function testExecuteShipmentLoadFail(): void
     {
         $errors = [
             'error' => true,
@@ -293,8 +292,10 @@ class RemoveTrackTest extends TestCase
 
     /**
      * Run test execute method (delete exception)
+     *
+     * @return void
      */
-    public function testExecuteDeleteFail()
+    public function testExecuteDeleteFail(): void
     {
         $errors = ['error' => true, 'message' => 'We can\'t delete tracking number.'];
         $this->shipmentLoad();

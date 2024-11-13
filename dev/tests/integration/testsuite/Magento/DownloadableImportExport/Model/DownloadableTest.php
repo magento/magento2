@@ -16,7 +16,7 @@ class DownloadableTest extends AbstractProductExportImportTestCase
     /**
      * @return array
      */
-    public function exportImportDataProvider(): array
+    public static function exportImportDataProvider(): array
     {
         return [
             'downloadable-product' => [
@@ -47,6 +47,25 @@ class DownloadableTest extends AbstractProductExportImportTestCase
     {
         $skippedAttributes = array_merge(self::$skippedAttributes, ['downloadable_links']);
         parent::testImportExport($fixtures, $skus, $skippedAttributes);
+    }
+
+    /**
+     * Run import/export test with pagination.
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider exportImportDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function testImportExportWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
+    {
+        $skippedAttributes = array_merge(self::$skippedAttributes, ['downloadable_links']);
+        parent::testImportExportWithPagination($fixtures, $skus, $skippedAttributes);
     }
 
     /**

@@ -17,6 +17,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Catalog search indexer plugin for catalog category products assignment.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Rows
 {
@@ -77,12 +79,16 @@ class Rows
     ): ActionRows {
         $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
         if (!empty($entityIds) && $indexer->isScheduled()) {
+            $productIds = [];
+
             foreach ($this->storeManager->getStores() as $store) {
                 $indexTable = $this->getIndexTable((int) $store->getId(), $useTempTable);
-                $productIds = $this->getProductIdsFromIndex($indexTable, $entityIds);
-                if (!empty($productIds)) {
-                    $indexer->reindexList($productIds);
-                }
+                $productIds[] = $this->getProductIdsFromIndex($indexTable, $entityIds);
+            }
+
+            $productIds = array_merge([], ...$productIds);
+            if (!empty($productIds)) {
+                $indexer->getView()->getChangelog()->addList($productIds);
             }
         }
 

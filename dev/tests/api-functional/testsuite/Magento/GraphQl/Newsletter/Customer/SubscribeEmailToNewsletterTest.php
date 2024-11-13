@@ -8,11 +8,14 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Newsletter\Customer;
 
 use Exception;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResourceModel;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -40,6 +43,10 @@ class SubscribeEmailToNewsletterTest extends GraphQlAbstract
      * @var SubscriberResourceModel
      */
     private $subscriberResource;
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @inheritDoc
@@ -47,6 +54,7 @@ class SubscribeEmailToNewsletterTest extends GraphQlAbstract
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
         $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
         $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
@@ -146,10 +154,17 @@ class SubscribeEmailToNewsletterTest extends GraphQlAbstract
     {
         $query = $this->getQuery('customer2@search.example.com');
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Cannot create a newsletter subscription.' . "\n");
+        $guestLoginConfig = $this->scopeConfig->getValue(
+            AccountManagement::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_WEBSITE,
+            1
+        );
 
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer@search.example.com'));
+        if ($guestLoginConfig) {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage('Cannot create a newsletter subscription.' . "\n");
+            $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer@search.example.com'));
+        }
     }
 
     /**

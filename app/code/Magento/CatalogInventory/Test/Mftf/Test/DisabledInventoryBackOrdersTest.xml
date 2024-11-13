@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DisabledInventoryBackOrdersTest">
+        <annotations>
+            <features value="[Disabled Inventory Check] Onepage Checkout and Enabled Backorders"/>
+            <stories value="[Disabled Inventory Check] Onepage Checkout and Enabled Backorders"/>
+            <title value="OnePageCheckoutAndEnabledBackOrders"/>
+            <description value="[Disabled Inventory Check] Onepage Checkout and Enabled Backorders"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5245"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!-- Enable Back Orders-->
+            <magentoCLI command="config:set cataloginventory/item_options/backorders 1" stepKey="EnableBackorders"/>
+            <!--Create Category-->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- Create SimpleProductwithPrice100 -->
+            <createData entity="SimpleProduct_100" stepKey="simpleProductOne">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Assign SimpleProductOne to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignSimpleProductOneToTestCategory">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="simpleProductOne"/>
+            </createData>
+            <!--Set Enable Inventory Check On Cart Load = No-->
+            <magentoCLI command="config:set {{DisableInventoryCheckOnCartLoad.path}} {{DisableInventoryCheckOnCartLoad.value}}" stepKey="disableCartLoad"/>
+            <!-- Cache Flush-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </before>
+        <!--Delete Category, Product and Set Enable Inventory Check On Cart Load = Yes-->
+        <after>
+            <magentoCLI command="config:set {{EnableInventoryCheckOnCartLoad.path}} {{EnableInventoryCheckOnCartLoad.value}}" stepKey="enableCartLoad"/>
+            <magentoCLI command="config:set cataloginventory/item_options/backorders 0" stepKey="EnableBackorders"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
+            <deleteData createDataKey="testCategory" stepKey="deleteTestCategory"/>
+        </after>
+        <!--Go to product page-->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="productUrlKey" value="$simpleProductOne.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$simpleProductOne.name$$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openViewAndEditCart"/>
+        <!--Go to Checkout-->
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="gotocheckout"/>
+        <!--Filling shipping information and click next-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+            <argument name="customerVar" value="Simple_US_Customer_NY"/>
+            <argument name="customerAddressVar" value="US_Address_NY"/>
+        </actionGroup>
+        <!--Select Payment Method-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!-- Open and switch to a new browser tab. -->
+        <openNewTab stepKey="openNewTab"/>
+        <!-- Open Product From AdminPage-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPageinNewTab">
+            <argument name="productId" value="$simpleProductOne.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillVirtualProductQuantity">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clicksaveProduct"/>
+        <!-- Switch to Previous tab and Check Error message There are no source items with the in stock status* is displayed -->
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForPageLoad stepKey="waitForSuccessMessage"/>
+        <!--See success messages-->
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
+
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogPage"/>
+        <!--Apply Name Filter-->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
+            <argument name="product" value="$$simpleProductOne$$"/>
+        </actionGroup>
+        <!--Check Simple qty changed to negative value "-1"-->
+        <see selector="{{AdminProductGridSection.productSalableQty('1', _defaultStock.name)}}" userInput="-1" stepKey="checkSalableQtyAfterPlaceOrder"/>
+    </test>
+</tests>

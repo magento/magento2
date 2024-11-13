@@ -9,6 +9,7 @@
 
     <exchange name="magento" type="topic" connection="db">
         <binding id="demo.exception.consumer" topic="demo.exception" destination="queue-exception" destinationType="queue"/>
+        <binding id="demo.connection.exception.consumer" topic="demo.connection.exception" destination="queue-connection-exception" destinationType="queue"/>
         <binding id="test.schema.defined.by.method" topic="test.schema.defined.by.method" destination="demo-queue-6" destinationType="queue"/>
         <binding id="demo.object.created" topic="demo.object.created" destination="queue-created" destinationType="queue"/>
         <binding id="demo.object.updated" topic="demo.object.updated" destination="queue-updated" destinationType="queue"/>

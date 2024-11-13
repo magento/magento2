@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyBundleProductOptionActionGroup">
+        <annotations>
+            <description>Verify bundle option data for the specified option index on the Edit Product page in admin for
+                a Bundle product.</description>
+        </annotations>
+        <arguments>
+            <argument name="optionTitle" defaultValue="{{DropDownBundleOption.title}}" type="string"/>
+            <argument name="inputType" defaultValue="{{DropDownBundleOption.type}}" type="string"/>
+            <argument name="required" defaultValue="{{DropDownBundleOption.required}}" type="string"/>
+            <argument name="numberOfProducts" defaultValue="1" type="string"/>
+            <argument name="index" defaultValue="1" type="string"/>
+        </arguments>
+        <executeJS function="return ({{index}}-1).toString()" stepKey="indexMinusOne"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle({$indexMinusOne})}}" stepKey="waitForOptionTitle"/>
+        <seeInField userInput="{{optionTitle}}" selector="{{AdminProductFormBundleSection.bundleOptionXTitle({$indexMinusOne})}}" stepKey="seeOptionTitle"/>
+        <seeOptionIsSelected userInput="{{inputType}}" selector="{{AdminProductFormBundleSection.bundleOptionXInputType({$indexMinusOne})}}" stepKey="seeOptionType"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminProductFormBundleSection.bundleOptionXRequired({$indexMinusOne})}}&quot;).checked.toString()" stepKey="optionRequiredValue"/>
+        <assertEquals stepKey="assertOptionRequiredValue">
+            <actualResult type="variable">optionRequiredValue</actualResult>
+            <expectedResult type="string">{{required}}</expectedResult>
+        </assertEquals>
+        <seeNumberOfElements userInput="{{numberOfProducts}}" selector="{{AdminProductFormBundleSection.bundleOptionXAllProductRows(index)}}" stepKey="seeNumberOfProductsInOption"/>
+    </actionGroup>
+</actionGroups>

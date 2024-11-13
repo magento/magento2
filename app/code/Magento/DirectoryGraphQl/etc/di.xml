@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Store\Model\Config\Cache\Tag\Strategy\CompositeTagGenerator">
+        <arguments>
+            <argument name="tagGenerators" xsi:type="array">
+                <item name="currency_tag_generator" xsi:type="object">
+                    Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Config\CurrencyTagGenerator
+                </item>
+                <item name="country_tag_generator" xsi:type="object">
+                    Magento\DirectoryGraphQl\Model\Cache\Tag\Strategy\Config\CountryTagGenerator
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Directory\Model\Currency">
+        <plugin name="afterSaveRate" type="Magento\DirectoryGraphQl\Plugin\Currency" />
+    </type>
+</config>

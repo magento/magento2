@@ -102,7 +102,7 @@ class PreviewTest extends TestCase
         $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
         $this->templateMock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isPlain',
                     'setId',
@@ -130,7 +130,7 @@ class PreviewTest extends TestCase
         $queueFactory = $this->createPartialMock(QueueFactory::class, ['create']);
         $this->queueMock = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'load',
                 ]

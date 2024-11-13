@@ -156,7 +156,7 @@ class CssUrls implements ProcessorInterface
             foreach ($targetFiles as $matchedFileData) {
                 $filePath = $matchedFileData['filePath'];
                 $oldCss = $this->staticDir->readFile($filePath);
-                $newCss = str_replace($ref, $matchedFileData['replace'], $oldCss);
+                $newCss = str_replace($ref, $matchedFileData['replace'] ?? '', $oldCss);
                 if ($oldCss !== $newCss) {
                     $this->staticDir->writeFile($filePath, $newCss);
                 }

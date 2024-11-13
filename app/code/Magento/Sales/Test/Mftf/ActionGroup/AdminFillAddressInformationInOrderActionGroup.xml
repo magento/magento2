@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillAddressInformationInOrderActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer and Address details on the Admin 'Create New Order for' page for Customer not having Select state.</description>
+        </annotations>
+        <arguments>
+            <argument name="customer"/>
+            <argument name="address"/>
+        </arguments>
+        <fillField selector="{{AdminOrderFormBillingAddressSection.FirstName}}" userInput="{{customer.firstname}}" stepKey="fillFirstName"/>
+        <fillField selector="{{AdminOrderFormBillingAddressSection.LastName}}" userInput="{{customer.lastname}}" stepKey="fillLastName"/>
+        <fillField selector="{{AdminOrderFormBillingAddressSection.StreetLine1}}" userInput="{{address.street[0]}}" stepKey="fillStreetLine1"/>
+        <fillField selector="{{AdminOrderFormBillingAddressSection.City}}" userInput="{{address.city}}" stepKey="fillCity"/>
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.Country}}" userInput="{{address.country_id}}" stepKey="fillCountry"/>
+        <fillField selector="{{AdminOrderFormBillingAddressSection.PostalCode}}" userInput="{{address.postcode}}" stepKey="fillPostalCode"/>
+        <fillField selector="{{AdminOrderFormBillingAddressSection.Phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
+    </actionGroup>
+</actionGroups>

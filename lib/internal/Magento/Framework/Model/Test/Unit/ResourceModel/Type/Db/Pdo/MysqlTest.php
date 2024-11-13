@@ -58,7 +58,7 @@ class MysqlTest extends TestCase
     /**
      * @return array
      */
-    public function constructorDataProvider()
+    public static function constructorDataProvider()
     {
         return [
             'default values' => [

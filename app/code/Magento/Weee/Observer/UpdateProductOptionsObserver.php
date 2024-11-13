@@ -10,8 +10,6 @@ use Magento\Framework\Event\ObserverInterface;
 class UpdateProductOptionsObserver implements ObserverInterface
 {
     /**
-     * Weee data
-     *
      * @var \Magento\Weee\Helper\Data
      */
     protected $weeeData = null;
@@ -22,8 +20,6 @@ class UpdateProductOptionsObserver implements ObserverInterface
     protected $registry;
 
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $taxData;
@@ -81,7 +77,7 @@ class UpdateProductOptionsObserver implements ObserverInterface
                 // we need to display the individual Weee amounts
                 foreach ($this->weeeData->getWeeeAttributesForBundle($product) as $weeeAttributes) {
                     foreach ($weeeAttributes as $weeeAttribute) {
-                        if (!preg_match('/' . $weeeAttribute->getCode() . '/', $options['optionTemplate'])) {
+                        if (!preg_match('/' . $weeeAttribute->getCode() . '/', $options['optionTemplate'] ?? '')) {
                             $options['optionTemplate'] .= sprintf(
                                 ' <%% if (data.weeePrice' . $weeeAttribute->getCode() . ') { %%>'
                                 . '  (' . $weeeAttribute->getName()

@@ -9,6 +9,7 @@ namespace Magento\CatalogInventory\Model;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division as MathDivision;
@@ -48,6 +49,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @param FormatInterface $localeFormat
      * @param ObjectFactory $objectFactory
      * @param ProductFactory $productFactory
+     * @param ScopeConfigInterface $scopeConfig
      * @param bool $qtyCheckApplicable
      */
     public function __construct(
@@ -55,6 +57,7 @@ class StockStateProvider implements StockStateProviderInterface
         FormatInterface $localeFormat,
         ObjectFactory $objectFactory,
         ProductFactory $productFactory,
+        private readonly ScopeConfigInterface $scopeConfig,
         $qtyCheckApplicable = true
     ) {
         $this->mathDivision = $mathDivision;
@@ -105,47 +108,46 @@ class StockStateProvider implements StockStateProviderInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function checkQuoteItemQty(StockItemInterface $stockItem, $qty, $summaryQty, $origQty = 0)
     {
         $result = $this->objectFactory->create();
         $result->setHasError(false);
-
         $qty = $this->getNumber($qty);
-
-        /**
-         * Check quantity type
-         */
-        $result->setItemIsQtyDecimal($stockItem->getIsQtyDecimal());
-        if (!$stockItem->getIsQtyDecimal()) {
-            $result->setHasQtyOptionUpdate(true);
-            $qty = (int) $qty ?: 1;
-            /**
-             * Adding stock data to quote item
-             */
-            $result->setItemQty($qty);
-            $result->setOrigQty((int)$this->getNumber($origQty) ?: 1);
-        }
+        $quoteMessage = __('Please correct the quantity for some products.');
 
         if ($stockItem->getMinSaleQty() && $qty < $stockItem->getMinSaleQty()) {
             $result->setHasError(true)
                 ->setMessage(__('The fewest you may purchase is %1.', $stockItem->getMinSaleQty() * 1))
                 ->setErrorCode('qty_min')
-                ->setQuoteMessage(__('Please correct the quantity for some products.'))
+                ->setQuoteMessage($quoteMessage)
                 ->setQuoteMessageIndex('qty');
             return $result;
         }
 
         if ($stockItem->getMaxSaleQty() && $qty > $stockItem->getMaxSaleQty()) {
             $result->setHasError(true)
-                ->setMessage(__('The most you may purchase is %1.', $stockItem->getMaxSaleQty() * 1))
+                ->setMessage(__('The requested qty exceeds the maximum qty allowed in shopping cart'))
                 ->setErrorCode('qty_max')
-                ->setQuoteMessage(__('Please correct the quantity for some products.'))
+                ->setQuoteMessage($quoteMessage)
                 ->setQuoteMessageIndex('qty');
             return $result;
         }
 
         $result->addData($this->checkQtyIncrements($stockItem, $qty)->getData());
+
+        $result->setItemIsQtyDecimal($stockItem->getIsQtyDecimal());
+        if (!$stockItem->getIsQtyDecimal() && (floor($qty) !== (float) $qty)) {
+            $result->setHasError(true)
+                ->setMessage(__('You cannot use decimal quantity for this product.'))
+                ->setErrorCode('qty_decimal')
+                ->setQuoteMessage($quoteMessage)
+                ->setQuoteMessageIndex('qty');
+
+            return $result;
+        }
+
         if ($result->getHasError()) {
             return $result;
         }
@@ -165,10 +167,19 @@ class StockStateProvider implements StockStateProviderInterface
         }
 
         if (!$this->checkQty($stockItem, $summaryQty) || !$this->checkQty($stockItem, $qty)) {
-            $message = __('The requested qty is not available');
+            $message = __('The requested qty. is not available');
+            if ((int) $this->scopeConfig->getValue('cataloginventory/options/not_available_message') === 1) {
+                $itemMessage = (__(sprintf(
+                    'Only %s of %s available',
+                    $stockItem->getQty() - $stockItem->getMinQty(),
+                    $this->localeFormat->getNumber($qty)
+                )));
+            } else {
+                $itemMessage = (__('Not enough items for sale'));
+            }
             $result->setHasError(true)
                 ->setErrorCode('qty_available')
-                ->setMessage($message)
+                ->setMessage($itemMessage)
                 ->setQuoteMessage($message)
                 ->setQuoteMessageIndex('qty');
             return $result;
@@ -221,7 +232,7 @@ class StockStateProvider implements StockStateProviderInterface
                         }
                     } elseif ($stockItem->getShowDefaultNotificationMessage()) {
                         $result->setMessage(
-                            __('The requested qty is not available')
+                            __('The requested qty. is not available')
                         );
                     }
                 }
@@ -249,6 +260,9 @@ class StockStateProvider implements StockStateProviderInterface
         }
         if (!$stockItem->getManageStock()) {
             return true;
+        }
+        if (!$stockItem->getIsInStock()) {
+            return false;
         }
         if ($stockItem->getQty() - $stockItem->getMinQty() - $qty < 0) {
             switch ($stockItem->getBackorders()) {

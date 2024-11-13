@@ -44,6 +44,9 @@ class TaxTest extends TestCase
      */
     protected $selectMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -72,27 +75,28 @@ class TaxTest extends TestCase
         $this->model = $objectManager->getObject(
             Tax::class,
             [
-                'context' => $contextMock,
+                'context' => $contextMock
             ]
         );
     }
 
-    public function testInWeeeLocation()
+    /**
+     * @return void
+     */
+    public function testInWeeeLocation(): void
     {
-        $this->selectMock->expects($this->at(1))
-            ->method('where')
-            ->with('website_id IN(?)', [1, 0])
-            ->willReturn($this->selectMock);
 
-        $this->selectMock->expects($this->at(2))
+        $this->selectMock
             ->method('where')
-            ->with('country = ?', 'US')
-            ->willReturn($this->selectMock);
-
-        $this->selectMock->expects($this->at(3))
-            ->method('where')
-            ->with('state = ?', 0)
-            ->willReturn($this->selectMock);
+            ->willReturnCallback(function ($column, $value) {
+                if ($column == 'website_id IN(?)' && $value == [1, 0]) {
+                    return $this->selectMock;
+                } elseif ($column == 'country = ?' && $value == 'US') {
+                    return $this->selectMock;
+                } elseif ($column == 'state = ?' && $value == 0) {
+                    return $this->selectMock;
+                }
+            });
 
         $this->selectMock->expects($this->any())
             ->method('from')
@@ -102,7 +106,10 @@ class TaxTest extends TestCase
         $this->model->isWeeeInLocation('US', 0, 1);
     }
 
-    public function testFetchWeeeTaxCalculationsByEntity()
+    /**
+     * @return void
+     */
+    public function testFetchWeeeTaxCalculationsByEntity(): void
     {
         $this->selectMock->expects($this->any())
             ->method('where')

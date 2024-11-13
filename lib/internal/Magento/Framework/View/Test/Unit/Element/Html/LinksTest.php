@@ -22,12 +22,19 @@ class LinksTest extends TestCase
      */
     protected $objectManagerHelper;
 
-    /** @var Links|MockObject */
+    /**
+     * @var Links|MockObject
+     */
     protected $block;
 
-    /** @var Context|MockObject */
+    /**
+     * @var Context|MockObject
+     */
     protected $context;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
@@ -37,7 +44,10 @@ class LinksTest extends TestCase
         $this->block = new Links($this->context);
     }
 
-    public function testGetLinks()
+    /**
+     * @return void
+     */
+    public function testGetLinks(): void
     {
         $blocks = [0 => 'blocks'];
         $name = 'test_name';
@@ -50,18 +60,24 @@ class LinksTest extends TestCase
         $this->assertEquals($blocks, $this->block->getLinks());
     }
 
-    public function testSetActive()
+    /**
+     * @return void
+     */
+    public function testSetActive(): void
     {
         $link = $this->createMock(Link::class);
+
         $link
-            ->expects($this->at(1))
             ->method('__call')
-            ->with('setIsHighlighted', [true]);
-        $link
-            ->expects($this->at(0))
-            ->method('__call')
-            ->with('getPath', [])
-            ->willReturn('test/path');
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'getPath' && empty($arg2)) {
+                        return 'test/path';
+                    } elseif ($arg1 == 'setIsHighlighted' && $arg2 == [true]) {
+                        return 'test/path';
+                    }
+                }
+            );
 
         $name = 'test_name';
         $this->context->getLayout()
@@ -74,7 +90,10 @@ class LinksTest extends TestCase
         $this->block->setActive('test/path');
     }
 
-    public function testRenderLink()
+    /**
+     * @return void
+     */
+    public function testRenderLink(): void
     {
         $blockHtml = 'test';
         $name = 'test_name';

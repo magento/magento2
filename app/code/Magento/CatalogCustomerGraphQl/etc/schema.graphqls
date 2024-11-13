@@ -2,21 +2,21 @@
 # See COPYING.txt for license details.
 
 interface ProductInterface {
-    tier_prices: [ProductTierPrices] @deprecated(reason: "Use price_tiers for product tier price information.") @doc(description: "An array of ProductTierPrices objects.") @resolver(class: "Magento\\CatalogCustomerGraphQl\\Model\\Resolver\\TierPrices")
-    price_tiers: [TierPrice] @doc(description: "An array of TierPrice objects.") @resolver(class: "Magento\\CatalogCustomerGraphQl\\Model\\Resolver\\PriceTiers")
+    tier_prices: [ProductTierPrices] @deprecated(reason: "Use `price_tiers` for product tier price information.") @doc(description: "An array of ProductTierPrices objects.") @resolver(class: "Magento\\CatalogCustomerGraphQl\\Model\\Resolver\\TierPrices")
+    price_tiers: [TierPrice] @doc(description: "An array of `TierPrice` objects.") @resolver(class: "Magento\\CatalogCustomerGraphQl\\Model\\Resolver\\PriceTiers")
 }
 
-type ProductTierPrices @doc(description: "ProductTierPrices is deprecated and has been replaced by TierPrice. The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group.") {
-    customer_group_id: String @deprecated(reason: "customer_group_id is not relevant for storefront.") @doc(description: "The ID of the customer group.")
-    qty: Float @deprecated(reason: "ProductTierPrices is deprecated, use TierPrice.quantity.") @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
-    value: Float @deprecated(reason: "ProductTierPrices is deprecated. Use TierPrice.final_price") @doc(description: "The price of the fixed price item.")
-    percentage_value: Float @deprecated(reason: "ProductTierPrices is deprecated. Use TierPrice.discount.") @doc(description: "The percentage discount of the item.")
-    website_id: Float @deprecated(reason: "website_id is not relevant for storefront.") @doc(description: "The ID assigned to the website.")
+type ProductTierPrices @doc(description: "Deprecated. Use `TierPrice` instead. Defines a tier price, which is a quantity discount offered to a specific customer group.") {
+    customer_group_id: String @deprecated(reason: "Not relevant for the storefront.") @doc(description: "The ID of the customer group.")
+    qty: Float @deprecated(reason: "Use `TierPrice.quantity` instead.") @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
+    value: Float @deprecated(reason: "Use `TierPrice.final_price` instead.") @doc(description: "The price of the fixed price item.")
+    percentage_value: Float @deprecated(reason: "Use `TierPrice.discount` instead.") @doc(description: "The percentage discount of the item.")
+    website_id: Float @deprecated(reason: "Not relevant for the storefront.") @doc(description: "The ID assigned to the website.")
 }
 
 
-type TierPrice @doc(description: "A price based on the quantity purchased.") {
-    final_price: Money @doc(desription: "The price of the product at this tier.")
+type TierPrice @doc(description: "Defines a price based on the quantity purchased.") {
+    final_price: Money @doc(description: "The price of the product at this tier.")
     quantity: Float @doc(description: "The minimum number of items that must be purchased to qualify for this price tier.")
     discount: ProductDiscount @doc(description: "The price discount that this tier represents.")
 }

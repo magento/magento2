@@ -16,15 +16,11 @@ use Magento\Framework\View\TemplateEngineInterface;
 class Php implements TemplateEngineInterface
 {
     /**
-     * Current block
-     *
      * @var BlockInterface
      */
     protected $_currentBlock;
 
     /**
-     * Helper factory
-     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_helperFactory;
@@ -70,7 +66,7 @@ class Php implements TemplateEngineInterface
             extract($dictionary, EXTR_SKIP);
             include $fileName;
             $this->_currentBlock = $tmpBlock;
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             ob_end_clean();
             throw $exception;
         }

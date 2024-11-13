@@ -4,19 +4,32 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
+use Magento\Sales\ViewModel\Order\Create\SidebarPermissionCheck;
+
 /**
- * @var \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar $block
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var Sidebar $block
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Escaper $escaper
  */
+
+/**
+ * @var SidebarPermissionCheck $sideBarPermissionCheck
+ */
+$sideBarPermissionCheck = $block->getData('sideBarPermissionCheck');
+
 ?>
+<?php  if ($sideBarPermissionCheck->isAllowed()): ?>
 <div class="customer-current-activity-inner">
-    <h4 class="customer-activity-title"><?= $block->escapeHtml(__('Customer\'s Activities')) ?></h4>
+    <h4 class="customer-activity-title"><?= $escaper->escapeHtml(__('Customer\'s Activities')) ?></h4>
     <div class="create-order-sidebar-container">
     <?= $block->getChildHtml('top_button') ?>
     <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child): ?>
         <?php if ($_alias != 'top_button' && $_alias != 'bottom_button'): ?>
             <?php if ($block->canDisplay($_child)): ?>
-                <div class="order-sidebar-block" id="order-sidebar_<?= $block->escapeHtmlAttr($_alias) ?>">
+                <div class="order-sidebar-block" id="order-sidebar_<?= $escaper->escapeHtmlAttr($_alias) ?>">
                     <?= $block->getChildHtml($_alias) ?>
                 </div>
             <?php endif; ?>
@@ -25,6 +38,7 @@
     <?= $block->getChildHtml('bottom_button') ?>
     </div>
 </div>
+<?php endif; ?>
 <?php $scriptString = <<<script
 require([
     "prototype",

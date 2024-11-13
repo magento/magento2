@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductAddNewOptionsTest">
+        <annotations>
+            <stories value="Create configurable product"/>
+            <title value="Adding new options to configurable product should not affect existing options"/>
+            <description value="Adding new options to configurable product should not affect existing options"/>
+            <testCaseId value="AC-1714"/>
+            <useCaseId value="ACP2E-101"/>
+            <severity value="MAJOR"/>
+            <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+
+            <!-- Create Default Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create an attribute with three options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOption4">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption5" stepKey="createConfigProductAttributeOption5">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the attribute just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Get the first option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Get the second option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Get the third option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getConfigAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create a simple product and give it the attribute with the first option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+
+            <!--Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete Created Data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductDisableConfigurationsActionGroup" stepKey="disableOption1">
+            <argument name="productName" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductCreateConfigurationsAndSkipBulkByAttributeCodeActionGroup" stepKey="generateConfigurations">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionStatusActionGroup" stepKey="checkOption1Status">
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
+            <argument name="status" value="Disabled"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionStatusActionGroup" stepKey="checkOption3Status">
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="status" value="Enabled"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductDisableConfigurationsActionGroup" stepKey="disableOption3">
+            <argument name="productName" value="$$getConfigAttributeOption3.label$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductChangeOptionQtyActionGroup" stepKey="changeOption3Qty">
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="qty" value="742"/>
+        </actionGroup>
+
+        <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changeOption3Price">
+            <argument name="productAttributes" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="productPrice" value="5"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductChangeOptionWeightActionGroup" stepKey="changeOption3Weight">
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="weight" value="3"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductCreateConfigurationsAndSkipBulkByAttributeCodeActionGroup" stepKey="generateConfigurations2">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionStatusActionGroup" stepKey="checkOption1Status2">
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
+            <argument name="status" value="Disabled"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionStatusActionGroup" stepKey="checkOption3Status2">
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="status" value="Disabled"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionQtyActionGroup" stepKey="checkOption3Qty">
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="qty" value="742"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionPriceActionGroup" stepKey="checkOption3Price">
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="price" value="5"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionWeightActionGroup" stepKey="checkOption3Weight">
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="weight" value="3"/>
+        </actionGroup>
+
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="generateConfigurations3">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionQtyActionGroup" stepKey="checkOption1Qty">
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
+            <argument name="qty" value="99"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionQtyActionGroup" stepKey="checkOption2Qty">
+            <argument name="optionLabel" value="$$getConfigAttributeOption2.label$$"/>
+            <argument name="qty" value="99"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminConfigurableProductVerifyOptionQtyActionGroup" stepKey="checkOption3Qty3">
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+            <argument name="qty" value="99"/>
+        </actionGroup>
+    </test>
+</tests>

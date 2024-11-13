@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for @see \Magento\Framework\Data\Tree\Node
+ *
+ * @api
  */
 class NodeFactory
 {

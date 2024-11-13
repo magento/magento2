@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Png;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
@@ -33,15 +36,23 @@ class WriteFile implements WriteFileInterface
     private $segmentNames;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param DriverInterface $driver
      * @param SegmentNames $segmentNames
+     * @param Filesystem $filesystem
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DriverInterface $driver,
-        SegmentNames $segmentNames
+        SegmentNames $segmentNames,
+        Filesystem $filesystem = null
     ) {
-        $this->driver = $driver;
         $this->segmentNames = $segmentNames;
+        $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
@@ -53,11 +64,11 @@ class WriteFile implements WriteFileInterface
      */
     public function execute(FileInterface $file): void
     {
-        $resource = $this->driver->fileOpen($file->getPath(), 'wb');
+        $resource = $this->getDriver()->fileOpen($file->getPath(), 'wb');
 
-        $this->driver->fileWrite($resource, self::PNG_FILE_START);
+        $this->getDriver()->fileWrite($resource, self::PNG_FILE_START);
         $this->writeSegments($resource, $file->getSegments());
-        $this->driver->fileClose($resource);
+        $this->getDriver()->fileClose($resource);
     }
 
     /**
@@ -69,10 +80,25 @@ class WriteFile implements WriteFileInterface
     private function writeSegments($resource, array $segments): void
     {
         foreach ($segments as $segment) {
-            $this->driver->fileWrite($resource, pack("N", strlen($segment->getData())));
-            $this->driver->fileWrite($resource, pack("a4", $segment->getName()));
-            $this->driver->fileWrite($resource, $segment->getData());
-            $this->driver->fileWrite($resource, pack("N", crc32($segment->getName() . $segment->getData())));
+            $this->getDriver()->fileWrite($resource, pack("N", strlen($segment->getData())));
+            $this->getDriver()->fileWrite($resource, pack("a4", $segment->getName()));
+            $this->getDriver()->fileWrite($resource, $segment->getData());
+            $this->getDriver()->fileWrite($resource, pack("N", crc32($segment->getName() . $segment->getData())));
         }
+    }
+
+    /**
+     * Returns current driver for media directory
+     *
+     * @return DriverInterface
+     * @throws FileSystemException
+     */
+    private function getDriver(): DriverInterface
+    {
+        if ($this->driver === null) {
+            $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        }
+
+        return $this->driver;
     }
 }

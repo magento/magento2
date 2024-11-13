@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUnlockAdminUserEntityViaCLITest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Unlock admin user, locked during login via CLI"/>
+            <title value="Unlock admin when the user was locked after entering incorrect password specified number of times"/>
+            <description value="Unlocked user should be able login into admin panel"/>
+            <severity value="MAJOR"/>
+            <group value="user"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set admin/captcha/enable 0" stepKey="disableAdminCaptcha"/>
+            <magentoCLI command="config:set admin/security/lockout_failures 2" stepKey="setDefaultMaximumLoginFailures"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set admin/captcha/enable 1" stepKey="enableAdminCaptcha"/>
+            <magentoCLI command="config:set admin/security/lockout_failures 6" stepKey="setDefaultMaximumLoginFailures"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCachesAfterTestExecution">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdmin"/>
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteCreatedUser">
+                <argument name="user" value="adminUserCorrectPassword"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm">
+            <argument name="user" value="adminUserCorrectPassword"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsCreatedUserWithIncorrectCredentials">
+            <argument name="username" value="{{adminUserIncorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserIncorrectPassword.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="lockNewlyCreatedUser">
+            <argument name="username" value="{{adminUserIncorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserIncorrectPassword.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="assertErrorMessage"/>
+
+        <actionGroup ref="AdminUnlockAdminUserEntityViaCLIActionGroup" stepKey="runUnlockCLI">
+            <argument name="username" value="adminUserCorrectPassword.username"/>
+        </actionGroup>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsUnlockedUser">
+            <argument name="username" value="{{adminUserCorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserCorrectPassword.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsUnlockedAdminUser"/>
+    </test>
+</tests>

@@ -12,7 +12,7 @@ use Magento\Ui\Component\Form\Element\RadioSet;
 /**
  * @method RadioSet getModel
  */
-class RadioSetTest extends AbstractElementTest
+class RadioSetTest extends AbstractElementTestCase
 {
     /**
      * @inheritdoc

@@ -59,7 +59,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function fieldsDataProvider()
+    public static function fieldsDataProvider()
     {
         return [
             [
@@ -157,9 +157,9 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getChildrenDataProvider()
+    public static function getChildrenDataProvider()
     {
-        $data = $this->fieldsDataProvider();
+        $data = self::fieldsDataProvider();
         $textField = $data[1][0][0];
         $fieldsetField = $textField;
         $fieldsetField[1] = 'fieldset';
@@ -192,9 +192,9 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getBasicChildrenDataProvider()
+    public static function getBasicChildrenDataProvider()
     {
-        $data = $this->getChildrenDataProvider();
+        $data = self::getChildrenDataProvider();
         // set isAdvanced flag
         $data[0][0][0][4] = true;
         return $data;
@@ -214,9 +214,9 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getAdvancedChildrenDataProvider()
+    public static function getAdvancedChildrenDataProvider()
     {
-        $data = $this->getChildrenDataProvider();
+        $data = self::getChildrenDataProvider();
         // change isAdvanced flag
         $data[0][0][0][4] = true;
         // change expected results
@@ -239,9 +239,9 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getSubFieldsetDataProvider()
+    public static function getSubFieldsetDataProvider()
     {
-        $data = $this->fieldsDataProvider();
+        $data = self::fieldsDataProvider();
         $textField = $data[1][0][0];
         $fieldsetField = $textField;
         $fieldsetField[1] = 'fieldset';

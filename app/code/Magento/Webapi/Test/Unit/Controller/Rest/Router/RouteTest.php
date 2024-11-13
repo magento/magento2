@@ -1,7 +1,5 @@
 <?php
 /**
- * Test Rest router route.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -33,7 +31,7 @@ class RouteTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->setMethods(['getPathInfo'])
+            ->addMethods(['getPathInfo'])
             ->getMockForAbstractClass();
     }
 
@@ -85,7 +83,7 @@ class RouteTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderRoutes()
+    public static function dataProviderRoutes()
     {
         return [
             // Success

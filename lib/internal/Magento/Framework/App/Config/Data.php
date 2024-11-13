@@ -1,12 +1,13 @@
 <?php
 /**
- * Configuration data container
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * Configuration data container
+ */
 class Data implements DataInterface
 {
     /**
@@ -35,6 +36,8 @@ class Data implements DataInterface
     }
 
     /**
+     * Get config source
+     *
      * @return array
      */
     public function getSource()
@@ -67,7 +70,7 @@ class Data implements DataInterface
      */
     public function setValue($path, $value)
     {
-        $keys = explode('/', $path);
+        $keys = explode('/', (string)$path);
         $lastKey = array_pop($keys);
         $currentElement = & $this->_data;
         foreach ($keys as $key) {

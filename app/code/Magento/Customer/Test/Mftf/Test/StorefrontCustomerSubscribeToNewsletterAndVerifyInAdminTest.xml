@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<test name="StorefrontCustomerSubscribeToNewsletterAndVerifyInAdminTest">
+    <annotations>
+        <features value="Newsletter Subscription Checkbox Verify"/>
+        <stories value="Subscribe To Newsletter Subscription on StoreFront And Verify In Admin"/>
+        <title value="StoreFront Customer Newsletter Subscription And Verify In Admin"/>
+        <description value="Customer can be subscribed to Newsletter Subscription on StoreFront And Verify In Admin"/>
+        <group value="module-customer"/>
+        <severity value="MAJOR"/>
+        <testCaseId value="MC-27411"/>
+        <group value="cloud"/>
+    </annotations>
+    <before>
+        <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+    </before>
+    <after>
+        <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
+        <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+    </after>
+    <!-- Check the newsletter checkbox -->
+    <actionGroup ref="StorefrontCustomerNavigateToNewsletterPageActionGroup" stepKey="navigateToNewsletterPage"/>
+    <actionGroup ref="StorefrontCustomerUpdateGeneralSubscriptionActionGroup" stepKey="subscribeToNewsletter"/>
+    <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertMessage">
+        <argument name="message" value="We have saved your subscription."/>
+    </actionGroup>
+    <!--login in admin-->
+    <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+    <!--Open Customer Page -->
+    <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerPage"/>
+    <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
+        <argument name="customer" value="$createCustomer$"/>
+    </actionGroup>
+    <actionGroup ref="AdminAssertCustomerIsSubscribedToNewsletters" stepKey="adminSubscribeToNewsletter"/>
+    <seeElement selector="{{AdminEditCustomerNewsletterSection.checkboxIsVisbale}}" stepKey="checkboxIsVisbale"/>
+    <seeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.checkboxIsVisbale}}" stepKey="checkBoxIsChecked"/>
+    <!--Uncheck the newsletter checkbox -->
+    <actionGroup ref="StorefrontCustomerNavigateToNewsletterPageActionGroup" stepKey="navigateToNewsletterPageAgain"/>
+    <actionGroup ref="StorefrontCustomerUpdateGeneralSubscriptionActionGroup" stepKey="subscribeToNewsletterPage"/>
+    <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertMessages">
+        <argument name="message" value="We have removed your newsletter subscription."/>
+    </actionGroup>
+    <!--Open Customer Page -->
+    <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerPageAgain"/>
+    <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageAgain">
+        <argument name="customer" value="$createCustomer$"/>
+    </actionGroup>
+    <!-- Open Newseltter tab header-->
+    <actionGroup ref="AdminAssertCustomerIsSubscribedToNewslettersUncheckedActionGroup" stepKey="subscribeToNewsletterAgain"/>
+    <dontSeeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.checkboxIsVisibility}}" stepKey="checkBoxIsUnchecked"/>
+</test>
+</tests>

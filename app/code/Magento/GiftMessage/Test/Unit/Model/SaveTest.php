@@ -33,7 +33,7 @@ class SaveTest extends TestCase
     {
         $productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $sessionMock = $this->createMock(Quote::class);

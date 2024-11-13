@@ -41,4 +41,8 @@
             <argument name="reporting" xsi:type="object">CustomerGridCollectionReporting</argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Model\Website">
+        <plugin name="reindex_customer_grid_after_website_remove" type="Magento\Customer\Model\Plugin\CustomerGridIndexAfterWebsiteDelete" />
+        <plugin name="deleteCustomerGroupExcludedWebsiteAfterWebsiteDelete" type="Magento\Customer\Model\Plugin\Website\DeleteCustomerGroupExcludedWebsite"/>
+    </type>
 </config>

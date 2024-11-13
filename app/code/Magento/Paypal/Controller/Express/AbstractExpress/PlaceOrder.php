@@ -113,6 +113,14 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             }
 
             $this->_eventManager->dispatch(
+                'checkout_submit_all_after',
+                [
+                    'order' => $order,
+                    'quote' => $this->_getQuote()
+                ]
+            );
+
+            $this->_eventManager->dispatch(
                 'paypal_express_place_order_success',
                 [
                     'order' => $order,

@@ -140,8 +140,23 @@ class ModuleList implements ModuleListInterface
      */
     private function loadConfigData()
     {
-        if (null === $this->configData && null !== $this->config->get(ConfigOptionsListConstants::KEY_MODULES)) {
-            $this->configData = $this->config->get(ConfigOptionsListConstants::KEY_MODULES);
+        if (null === $this->configData) {
+            $config = $this->config->get(ConfigOptionsListConstants::KEY_MODULES);
+            if (null !== $config) {
+                $this->configData = $config;
+            }
         }
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     *
+     * @return array|null
+     */
+    public function __debugInfo(): ?array
+    {
+        return [];
     }
 }

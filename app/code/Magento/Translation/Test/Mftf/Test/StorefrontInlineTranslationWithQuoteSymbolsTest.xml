@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontInlineTranslationWithQuoteSymbolsTest">
+        <annotations>
+            <features value="Translation"/>
+            <stories value="Inline Translation"/>
+            <title value="Inline translation with quote symbols"/>
+            <description value="As merchant I want to be able to rename text labels using quote symbols in it"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-41175"/>
+            <useCaseId value="MC-23989"/>
+            <group value="translation"/>
+            <group value="developer_mode_only"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineStorefront"/>
+            <createData entity="RevertWelcomeMessageTranslate" stepKey="revertWelcomeMessageTranslation">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createProductSecond"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterTranslateEnabled">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineStorefront"/>
+            <createData entity="RevertWelcomeMessageTranslate" stepKey="revertWelcomeMessageTranslation">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createProductSecond" stepKey="deleteProductSecond"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterTranslateDisabled">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontDefaultWelcomeMessageActionGroup" stepKey="assertDefaultWelcomeMessage"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeProductInMiniCart">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertWelcomeMessageInInlineTranslateMode">
+            <argument name="elementSelector" value="{{StorefrontPanelHeaderTranslationSection.welcomeMessage}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenInlineTranslationPopupActionGroup" stepKey="openWelcomeMessageInlineTranslatePopup">
+            <argument name="elementSelector" value="{{StorefrontPanelHeaderTranslationSection.welcomeMessage}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontFillCustomTranslationFieldActionGroup" stepKey="fillInlineTranslateNewValue">
+            <argument name="translateText" value="Welcome to &quot;Food &amp; Drinks&quot; store"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="saveInlineTranslateNewValue"/>
+
+        <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterTranslateDisabled">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <actionGroup ref="AssertStorefrontCustomWelcomeMessageActionGroup" stepKey="verifyTranslatedWelcomeMessage"/>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeProductInMiniCartAgain">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSecondProductPage">
+            <argument name="productUrl" value="$createProductSecond.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomWelcomeMessageActionGroup" stepKey="verifyTranslatedWelcomeMessageForSecondProduct"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSecondProductToCart">
+            <argument name="productName" value="$createProductSecond.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeSecondProductInMiniCart">
+            <argument name="productName" value="$createProductSecond.name$"/>
+        </actionGroup>
+    </test>
+</tests>

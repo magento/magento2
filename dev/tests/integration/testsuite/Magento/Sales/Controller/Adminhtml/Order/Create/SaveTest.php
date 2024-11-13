@@ -146,6 +146,31 @@ class SaveTest extends AbstractBackendController
     }
 
     /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/guest_quote_with_addresses.php
+     *
+     * @return void
+     */
+    public function testNotSendEmailOnOrderSave(): void
+    {
+        $this->prepareRequest();
+        $this->dispatch('backend/sales/order_create/save');
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You created the order.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
+
+        $this->assertRedirect($this->stringContains('sales/order/view/'));
+
+        $orderId = $this->getOrderId();
+        if ($orderId === false) {
+            $this->fail('Order is not created.');
+        }
+
+        $this->assertNull($this->transportBuilder->getSentMessage());
+    }
+
+    /**
      * Gets quote by reserved order id.
      *
      * @param string $reservedOrderId

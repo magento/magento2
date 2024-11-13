@@ -13,8 +13,10 @@
             <description>Clicks on Insert File in the Media Gallery.</description>
         </annotations>
 
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{MediaGallerySection.InsertFile}}" stepKey="waitForInsertBtn"/>
         <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 </actionGroups>

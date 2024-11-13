@@ -15,12 +15,13 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 
 /**
  * Add data to category entity and populate with default values
  */
-class PopulateWithValues
+class PopulateWithValues implements ResetAfterRequestInterface
 {
     /**
      * @var ScopeOverriddenValue
@@ -149,5 +150,13 @@ class PopulateWithValues
         }
 
         return $this->attributes;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = null;
     }
 }

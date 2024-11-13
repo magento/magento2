@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontValidateItemQtyShouldNotBeNegativeValueWhenPressKeyboardDownKeyTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Item Qty Goes Negative When Using The Down Arrow Keyboard Key"/>
+            <title value="Validate item quantity value should not be negative value when pressing keyboard down."/>
+            <description value="Validate item quantity value should not be negative value when pressing keyboard down."/>
+            <testCaseId value="AC-6927"/>
+            <useCaseId value="ACP2E-1276"/>
+            <severity value="AVERAGE"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create simple products and category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <!-- Open created product and add to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="productAddToCart"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.quantity}}" stepKey="waitForElementQty"/>
+        <pressKey selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DOWN]" stepKey="pressKeyDown1"/>
+        <pressKey selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DOWN]" stepKey="pressKeyDown2"/>
+        <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
+        <assertGreaterThanOrEqual stepKey="validateMiniCartQtyValueGreaterThanZero">
+            <actualResult type="const">$grabProductQtyInMinicart</actualResult>
+            <expectedResult type="const">0</expectedResult>
+        </assertGreaterThanOrEqual>
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMiniCart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <pressKey selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DOWN]" stepKey="pressCartQuantityKeyDown1"/>
+        <pressKey selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DOWN]" stepKey="pressCartQuantityKeyDown2"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}" stepKey="grabProductQtyInCart"/>
+        <assertGreaterThanOrEqual stepKey="validateCartQtyValueGreaterThanZero">
+            <actualResult type="const">$grabProductQtyInCart</actualResult>
+            <expectedResult type="const">0</expectedResult>
+        </assertGreaterThanOrEqual>
+    </test>
+</tests>

@@ -24,7 +24,7 @@ class ImageTypeProcessorTest extends TestCase
 
         $resource = $this->getMockBuilder(ResourceModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTable', 'getConnection'])
+            ->onlyMethods(['getTable', 'getConnection'])
             ->getMock();
         $resource->expects($this->once())
             ->method('getTable')

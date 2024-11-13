@@ -84,6 +84,7 @@ class CreateCustomOptionsTest extends TestCase
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      * @magentoAppArea adminhtml
      * @magentoAppIsolation disabled
+     * @magentoDbIsolation disabled
      * @magentoConfigFixture default_store catalog/price/scope 1
      * @magentoConfigFixture secondstore_store catalog/price/scope 1
      */
@@ -242,7 +243,7 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @return array
      */
-    public function productCustomOptionsTypeTextDataProvider(): array
+    public static function productCustomOptionsTypeTextDataProvider(): array
     {
         return [
             'area_field_required_options' => [
@@ -330,7 +331,7 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @return array
      */
-    public function fileExtensionsDataProvider(): array
+    public static function fileExtensionsDataProvider(): array
     {
         return [
             ['JPG, PNG, GIF', 'jpg, png, gif'],
@@ -350,7 +351,7 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @return array
      */
-    public function productCustomOptionsTypeSelectDataProvider(): array
+    public static function productCustomOptionsTypeSelectDataProvider(): array
     {
         return [
             'drop_down_field_required_option' => [
@@ -651,7 +652,7 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @return array
      */
-    public function productCustomOptionsTypeDateDataProvider(): array
+    public static function productCustomOptionsTypeDateDataProvider(): array
     {
         return [
             'date_field_required_options' => [
@@ -808,7 +809,7 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @return array
      */
-    public function productCustomOptionsWithErrorDataProvider(): array
+    public static function productCustomOptionsWithErrorDataProvider(): array
     {
         return [
             'error_option_without_product_sku' => [

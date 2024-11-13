@@ -4,4 +4,3 @@ dev/tests
 phpserver
 pub
 setup
-*.php

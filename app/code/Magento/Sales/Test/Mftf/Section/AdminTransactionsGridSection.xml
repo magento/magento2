@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminTransactionsGridSection">
+        <element name="transactionsSectionBtn" type="button" selector="#sales_order_view_tabs_order_transactions" />
+        <element name="orderTxnTable" type="text" selector="#order_transactions"/>
+        <element name="orderTxnTableFirstRow" type="text"  selector=".col-id.col-transaction_id.col-number" />
+        <element name="transactionId" type="text" selector="#log_details_fieldset > table > tbody > tr:nth-child(1) > td" />
+        <element name="orderTxnTableTypeFilter" type="button" selector="#order_transactions_filter_txn_type"/>
+        <element name="orderTxnTableSearchBtn" type="button"  selector="#container button[title='Search']" />
+        <element name="transactionData" type="text" selector="//th[text()='{{transactionData}}']/following-sibling::td" parameterized="true"/>
+        <element name="transitionStatus" type="text" selector="//div[@class='admin__data-grid-wrap admin__data-grid-wrap-static']" />
+        <element name="transitionsStatus" type="text" selector="//tr[@data-role='row']//td[@data-column='{{transactionStatus}}']" parameterized="true" />
+    </section>
+</sections>

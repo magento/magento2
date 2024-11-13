@@ -22,6 +22,11 @@ define([
         options: {
             superSelector: '.super-attribute-select',
             selectSimpleProduct: '[name="selected_configurable_option"]',
+
+            /**
+             * @deprecated Not used anymore
+             * @see selectorProductPrice
+             */
             priceHolderSelector: '.price-box',
             spConfig: {},
             state: {},
@@ -46,7 +51,10 @@ define([
             gallerySwitchStrategy: 'replace',
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: ''
+            tierPriceTemplate: '',
+            selectorProduct: '.product-info-main',
+            selectorProductPrice: '[data-role=priceBox]',
+            qtyInfo: '#qty'
         },
 
         /**
@@ -73,6 +81,7 @@ define([
             this._configureForValues();
 
             $(this.element).trigger('configurable.initialized');
+            $(this.options.qtyInfo).on('input', this._reloadPrice.bind(this));
         },
 
         /**
@@ -82,7 +91,7 @@ define([
         _initializeOptions: function () {
             var options = this.options,
                 gallery = $(options.mediaGallerySelector),
-                priceBoxOptions = $(this.options.priceHolderSelector).priceBox('option').priceConfig || null;
+                priceBoxOptions = this._getPriceBoxElement().priceBox('option').priceConfig || null;
 
             if (priceBoxOptions && priceBoxOptions.optionTemplate) {
                 options.optionTemplate = priceBoxOptions.optionTemplate;
@@ -96,7 +105,7 @@ define([
 
             options.settings = options.spConfig.containerId ?
                 $(options.spConfig.containerId).find(options.superSelector) :
-                $(options.superSelector);
+                this.element.parents(this.options.selectorProduct).find(options.superSelector);
 
             options.values = options.spConfig.defaultValues || {};
             options.parentImage = $('[data-role=base-image-container] img').attr('src');
@@ -275,7 +284,7 @@ define([
         _configureElement: function (element) {
             this.simpleProduct = this._getSimpleProductId(element);
 
-            if (element.value) {
+            if (element.value && element.config) {
                 this.options.state[element.config.id] = element.value;
 
                 if (element.nextSetting) {
@@ -294,9 +303,11 @@ define([
             }
 
             this._reloadPrice();
-            this._displayRegularPriceBlock(this.simpleProduct);
-            this._displayTierPriceBlock(this.simpleProduct);
-            this._displayNormalPriceLabel();
+            if (element.config) {
+                this._displayRegularPriceBlock(this.simpleProduct);
+                this._displayTierPriceBlock(this.simpleProduct);
+                this._displayNormalPriceLabel();
+            }
             this._changeProductImage();
         },
 
@@ -368,7 +379,7 @@ define([
          */
         _sortImages: function (images) {
             return _.sortBy(images, function (image) {
-                return image.position;
+                return parseInt(image.position, 10);
             });
         },
 
@@ -430,11 +441,15 @@ define([
                 allowedOptions = [],
                 indexKey,
                 allowedProductMinPrice,
-                allowedProductsAllMinPrice;
+                allowedProductsAllMinPrice,
+                canDisplayOutOfStockProducts = false,
+                filteredSalableProducts;
 
             this._clearSelect(element);
-            element.options[0] = new Option('', '');
-            element.options[0].innerHTML = this.options.spConfig.chooseText;
+            if (element.options) {
+                element.options[0] = new Option('', '');
+                element.options[0].innerHTML = this.options.spConfig.chooseText;
+            }
             prevConfig = false;
 
             if (element.prevSetting) {
@@ -492,7 +507,7 @@ define([
                         options[i].label = options[i].initialLabel;
 
                         if (optionPriceDiff !== 0) {
-                            options[i].label += ' ' + priceUtils.formatPrice(
+                            options[i].label += ' ' + priceUtils.formatPriceLocale(
                                 optionPriceDiff,
                                 this.options.priceFormat,
                                 true
@@ -504,11 +519,17 @@ define([
                         options[i].allowedProducts = allowedProducts;
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
 
+                        if (this.options.spConfig.canDisplayShowOutOfStockStatus) {
+                            filteredSalableProducts = $(this.options.spConfig.salable[attributeId][options[i].id]).
+                            filter(options[i].allowedProducts);
+                            canDisplayOutOfStockProducts = filteredSalableProducts.length === 0;
+                        }
+
                         if (typeof options[i].price !== 'undefined') {
                             element.options[index].setAttribute('price', options[i].price);
                         }
 
-                        if (allowedProducts.length === 0) {
+                        if (allowedProducts.length === 0 || canDisplayOutOfStockProducts) {
                             element.options[index].disabled = true;
                         }
 
@@ -540,8 +561,10 @@ define([
         _clearSelect: function (element) {
             var i;
 
-            for (i = element.options.length - 1; i >= 0; i--) {
-                element.remove(i);
+            if (element.options) {
+                for (i = element.options.length - 1; i >= 0; i--) {
+                    element.remove(i);
+                }
             }
         },
 
@@ -562,7 +585,7 @@ define([
          * configurable product's option selections.
          */
         _reloadPrice: function () {
-            $(this.options.priceHolderSelector).trigger('updatePrice', this._getPrices());
+            this._getPriceBoxElement().trigger('updatePrice', this._getPrices());
         },
 
         /**
@@ -573,26 +596,31 @@ define([
         _getPrices: function () {
             var prices = {},
                 elements = _.toArray(this.options.settings),
-                allowedProduct;
+                allowedProduct,
+                selected,
+                config,
+                priceValue;
 
             _.each(elements, function (element) {
-                var selected = element.options[element.selectedIndex],
-                    config = selected && selected.config,
-                    priceValue = {};
+                if (element.options) {
+                    selected = element.options[element.selectedIndex];
+                    config = selected && selected.config;
+                    priceValue = this._calculatePrice({});
 
-                if (config && config.allowedProducts.length === 1) {
-                    priceValue = this._calculatePrice(config);
-                } else if (element.value) {
-                    allowedProduct = this._getAllowedProductWithMinPrice(config.allowedProducts);
-                    priceValue = this._calculatePrice({
-                        'allowedProducts': [
-                            allowedProduct
-                        ]
-                    });
-                }
+                    if (config && config.allowedProducts.length === 1) {
+                        priceValue = this._calculatePrice(config);
+                    } else if (element.value) {
+                        allowedProduct = this._getAllowedProductWithMinPrice(config.allowedProducts);
+                        priceValue = this._calculatePrice({
+                            'allowedProducts': [
+                                allowedProduct
+                            ]
+                        });
+                    }
 
-                if (!_.isEmpty(priceValue)) {
-                    prices.prices = priceValue;
+                    if (!_.isEmpty(priceValue)) {
+                        prices.prices = priceValue;
+                    }
                 }
             }, this);
 
@@ -631,13 +659,11 @@ define([
          * @private
          */
         _calculatePrice: function (config) {
-            var displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices,
-                newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)];
+            var displayPrices = this._getPriceBoxElement().priceBox('option').prices,
+                newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)] || {};
 
             _.each(displayPrices, function (price, code) {
-                if (newPrices[code]) {
-                    displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
-                }
+                displayPrices[code].amount = newPrices[code] ? newPrices[code].amount - displayPrices[code].amount : 0;
             });
 
             return displayPrices;
@@ -654,19 +680,23 @@ define([
         _getSimpleProductId: function (element) {
             // TODO: Rewrite algorithm. It should return ID of
             //        simple product based on selected options.
-            var allOptions = element.config.options,
-                value = element.value,
+            var allOptions,
+                value,
                 config;
 
-            config = _.filter(allOptions, function (option) {
-                return option.id === value;
-            });
-            config = _.first(config);
+            if (element.config) {
+                allOptions = element.config.options;
+                value = element.value;
 
-            return _.isEmpty(config) ?
-                undefined :
-                _.first(config.allowedProducts);
+                config = _.filter(allOptions, function (option) {
+                    return option.id === value;
+                });
+                config = _.first(config);
 
+                return _.isEmpty(config) ?
+                    undefined :
+                    _.first(config.allowedProducts);
+            }
         },
 
         /**
@@ -676,7 +706,8 @@ define([
          * @private
          */
         _displayRegularPriceBlock: function (optionId) {
-            var shouldBeShown = true;
+            var shouldBeShown = true,
+                $priceBox = this._getPriceBoxElement();
 
             _.each(this.options.settings, function (element) {
                 if (element.value === '') {
@@ -696,7 +727,8 @@ define([
             $(document).trigger('updateMsrpPriceBlock',
                 [
                     optionId,
-                    this.options.spConfig.optionPrices
+                    this.options.spConfig.optionPrices,
+                    $priceBox
                 ]
             );
         },
@@ -757,6 +789,18 @@ define([
             } else {
                 $(this.options.tierPriceBlockSelector).hide();
             }
+        },
+
+        /**
+         * Returns the price container element
+         *
+         * @returns {*}
+         * @private
+         */
+        _getPriceBoxElement: function () {
+            return this.element
+                .parents(this.options.selectorProduct)
+                .find(this.options.selectorProductPrice);
         }
     });
 

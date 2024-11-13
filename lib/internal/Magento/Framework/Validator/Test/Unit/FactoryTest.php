@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Validator\Test\Unit;
 
-use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\ObjectManagerInterface;
@@ -62,6 +61,9 @@ class FactoryTest extends TestCase
      */
     private $data = ['/tmp/moduleOne/etc/validation.xml'];
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->defaultTranslator = AbstractValidator::getDefaultTranslator();
@@ -72,23 +74,23 @@ class FactoryTest extends TestCase
             ['createValidatorBuilder', 'createValidator']
         );
         $translateAdapterMock = $this->createMock(Adapter::class);
-        $this->objectManagerMock->expects($this->at(0))
-            ->method('create')
-            ->with(Adapter::class)
-            ->willReturn($translateAdapterMock);
         $this->fileIteratorMock = $this->createMock(FileIterator::class);
-        $this->objectManagerMock->expects($this->at(1))
+        $this->objectManagerMock
             ->method('create')
-            ->with(
-                Config::class,
-                ['configFiles' => $this->fileIteratorMock]
-            )
-            ->willReturn($this->validatorConfigMock);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($translateAdapterMock) {
+                    if ($arg1 == Adapter::class) {
+                        return $translateAdapterMock;
+                    } elseif ($arg1 == Config::class && $arg2 == ['configFiles' => $this->fileIteratorMock]) {
+                        return $this->validatorConfigMock;
+                    }
+                }
+            );
+
         $this->readerMock = $this->createPartialMock(
             Reader::class,
             ['getConfigurationFiles']
         );
-        $this->cacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $objectManager = new ObjectManager($this);
 
@@ -102,7 +104,9 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * Restore default translator
+     * Restore default translator.
+     *
+     * @inheritdoc
      */
     protected function tearDown(): void
     {
@@ -110,7 +114,10 @@ class FactoryTest extends TestCase
         unset($this->defaultTranslator);
     }
 
-    public function testGetValidatorConfig()
+    /**
+     * @return void
+     */
+    public function testGetValidatorConfig(): void
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')
@@ -130,7 +137,10 @@ class FactoryTest extends TestCase
         );
     }
 
-    public function testCreateValidatorBuilder()
+    /**
+     * @return void
+     */
+    public function testCreateValidatorBuilder(): void
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')
@@ -148,7 +158,10 @@ class FactoryTest extends TestCase
         );
     }
 
-    public function testCreateValidator()
+    /**
+     * @return void
+     */
+    public function testCreateValidator(): void
     {
         $this->readerMock->method('getConfigurationFiles')
             ->with('validation.xml')

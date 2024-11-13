@@ -5,34 +5,46 @@
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
+use Laminas\Stdlib\Parameters;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Filesystem;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @magentoAppArea adminhtml
  */
-class ExtendedTest extends \PHPUnit\Framework\TestCase
+class ExtendedTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Widget\Grid\Extended
+     * @var Extended
      */
     protected $_block;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var LayoutInterface
      */
     protected $_layoutMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->_layoutMock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\View\LayoutInterface::class
+        $this->_layoutMock = Bootstrap::getObjectManager()->create(
+            LayoutInterface::class
         );
-        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Backend\Block\Template\Context::class,
+        $context = Bootstrap::getObjectManager()->create(
+            Context::class,
             ['layout' => $this->_layoutMock]
         );
         $this->_block = $this->_layoutMock->createBlock(
-            \Magento\Backend\Block\Widget\Grid\Extended::class,
+            Extended::class,
             'grid',
             ['context' => $context]
         );
@@ -47,7 +59,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     public function testAddColumnAddsChildToColumnSet()
     {
         $this->assertInstanceOf(
-            \Magento\Backend\Block\Widget\Grid\Column::class,
+            Column::class,
             $this->_block->getColumnSet()->getChildBlock('column1')
         );
         $this->assertCount(2, $this->_block->getColumnSet()->getChildNames());
@@ -83,5 +95,50 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     {
         $this->_block->setFilterVisibility(false);
         $this->assertEquals('', $this->_block->getMainButtonsHtml());
+    }
+
+    /**
+     * Checks that template does not have redundant div close tag
+     *
+     * @return void
+     */
+    public function testExtendedTemplateMarkup(): void
+    {
+        $mockCollection = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_block->setCollection($mockCollection);
+        $this->_block->getRequest()
+            ->setQuery(
+                Bootstrap::getObjectManager()
+                ->create(
+                    Parameters::class,
+                    [
+                        'values' => [
+                            'ajax' => true
+                        ]
+                    ]
+                )
+            );
+        $html = $this->_block->getHtml();
+        $html = str_replace(["\n", " "], '', $html);
+        $this->assertStringEndsWith("</table></div>", $html);
+    }
+
+    public function testGetCsvFileStartsWithBOM(): void
+    {
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $this->_block->setCollection($collection);
+        $data = $this->_block->getCsvFile();
+
+        $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        self::assertTrue($directory->isFile($data['value']));
+        self::assertStringStartsWith(
+            pack('CCC', 0xef, 0xbb, 0xbf),
+            $directory->readFile($data['value'])
+        );
+
+        $directory->delete($data['value']);
     }
 }

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyCartPriceRuleToBundleChildProductTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Checking Cart Price Rule for bundle products"/>
+            <description value="Checking Cart Price Rule for bundle products"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-36654"/>
+            <useCaseId value="MC-35548"/>
+            <group value="salesRule"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct1">
+                <field key="price">5.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct2">
+                <field key="price">3.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct3">
+                <field key="price">7.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct4">
+                <field key="price">18.00</field>
+            </createData>
+            <createData entity="ApiBundleProduct" stepKey="createBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createDropDownBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="CheckboxOption" stepKey="createCheckboxBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkDropDownOptionToProduct1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createDropDownBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkDropDownOptionToProduct2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createDropDownBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct2"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkCheckboxOptionToProduct3">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createCheckboxBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct3"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkCheckboxOptionToProduct4">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createCheckboxBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct4"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Make Attribute 'sku' accessible for Promo Rule Conditions -->
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="editSkuAttribute">
+                <argument name="ProductAttribute" value="sku"/>
+            </actionGroup>
+            <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeAttributePromoRule">
+                <argument name="option" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteCartPriceRules"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteCartPriceRule"/>
+            <!-- Revert Attribute 'sku' to it's default value (not accessible for Promo Rule Conditions) -->
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="editSkuAttribute">
+                <argument name="ProductAttribute" value="sku"/>
+            </actionGroup>
+            <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeAttributePromoRule">
+                <argument name="option" value="0"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Start to create new cart price rule via SKU conditions and not default condition value -->
+        <actionGroup ref="AdminCreateCartPriceRuleWithConditionAndNotDefaultConditionOperatorActionGroup" stepKey="createRule">
+            <argument name="ruleName" value="CatPriceRule"/>
+            <argument name="conditionOperator" value="is one of"/>
+            <argument name="actionValue" value="$createSimpleProduct1.sku$, $createSimpleProduct2.sku$"/>
+        </actionGroup>
+        <!-- Add Bundle product with simple1 and simple3 products to the cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefront">
+            <argument name="productUrl" value="$createBundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct1">
+            <argument name="productName" value="$createSimpleProduct1.name$"/>
+        </actionGroup>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts(CheckboxOption.title, '1')}}" stepKey="selectFirstCheckboxOption"/>
+        <actionGroup ref="StorefrontAddToTheCartButtonActionGroup" stepKey="addToTheCartBundleProduct"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $createBundleProduct.name$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+        <!-- Click "mini cart" icon-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <waitForPageLoad stepKey="waitForDetailsOpen"/>
+        <!--Check all products and Cart Subtotal and Discount is only for SimpleProduct1-->
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxSection" />
+        <actionGroup ref="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" stepKey="checkDiscountIsAppliedOnlyForSimple1productOnly">
+            <argument name="subtotal" value="12.00"/>
+            <argument name="shipping" value="5.00"/>
+            <argument name="discount" value="0.50"/>
+            <argument name="total" value="16.50"/>
+        </actionGroup>
+        <!-- Clear Shopping cart -->
+        <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="clearShoppingCart">
+            <argument name="productName" value="$createBundleProduct.name$"/>
+        </actionGroup>
+        <!-- Add Bundle product with simple2 and simple3 products to the cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefront2">
+            <argument name="productUrl" value="$createBundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart2"/>
+        <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct2">
+            <argument name="productName" value="$createSimpleProduct2.name$"/>
+        </actionGroup>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts(CheckboxOption.title, '1')}}" stepKey="selectFirstCheckboxOption2"/>
+        <actionGroup ref="StorefrontAddToTheCartButtonActionGroup" stepKey="addToTheCartBundleProduct2"/>
+        <!--Click "mini cart" icon-->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart2"/>
+        <waitForPageLoad stepKey="waitForDetailsOpen2"/>
+        <!--Check all products and Cart Subtotal and Discount is only for SimpleProduct2-->
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxSectionForSimple2" />
+        <actionGroup ref="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" stepKey="checkDiscountIsAppliedOnlyForSimple2productOnly">
+            <argument name="subtotal" value="10.00"/>
+            <argument name="shipping" value="5.00"/>
+            <argument name="discount" value="0.30"/>
+            <argument name="total" value="14.70"/>
+        </actionGroup>
+    </test>
+</tests>

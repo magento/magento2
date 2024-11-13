@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\GiftMessage\Test\Unit\Ui\DataProvider\Product\Modifier;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 use Magento\GiftMessage\Ui\DataProvider\Product\Modifier\GiftMessage;
@@ -17,7 +17,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * @method GiftMessage getModel
  */
-class GiftMessageTest extends AbstractModifierTest
+class GiftMessageTest extends AbstractModifierTestCase
 {
     /**
      * @var ScopeConfigInterface

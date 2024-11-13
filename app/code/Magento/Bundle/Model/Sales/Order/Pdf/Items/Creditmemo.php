@@ -101,7 +101,7 @@ class Creditmemo extends AbstractItems
             }
 
             if (!isset($drawItems[$optionId])) {
-                $drawItems[$optionId] = ['lines' => [], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [], 'height' => 20];
             }
 
             // draw selection attributes
@@ -112,7 +112,7 @@ class Creditmemo extends AbstractItems
                     'feed' => $x,
                 ];
 
-                $drawItems[$optionId] = ['lines' => [$line], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [$line], 'height' => 20];
 
                 $line = [];
                 $prevOptionId = $attributes['option_id'];
@@ -137,10 +137,10 @@ class Creditmemo extends AbstractItems
                 foreach ($this->string->split($item->getSku(), 17) as $part) {
                     $text[] = $part;
                 }
-                $line[] = ['text' => $text, 'feed' => $x];
+                $line[] = ['text' => $text, 'feed' => $x, 'align' => 'right'];
             }
 
-            $x += 100;
+            $x += 30;
 
             // draw prices
             if ($this->canShowPriceInfo($childItem)) {
@@ -152,7 +152,7 @@ class Creditmemo extends AbstractItems
                 // draw Discount
                 $text = $order->formatPriceTxt(-$childItem->getDiscountAmount());
                 $line[] = ['text' => $text, 'feed' => $x, 'font' => 'bold', 'align' => 'right', 'width' => 50];
-                $x += 50;
+                $x += 85;
 
                 // draw QTY
                 $text = $childItem->getQty() * 1;
@@ -160,10 +160,10 @@ class Creditmemo extends AbstractItems
                     'text' => $text,
                     'feed' => $x,
                     'font' => 'bold',
-                    'align' => 'center',
+                    'align' => 'right',
                     'width' => 30,
                 ];
-                $x += 30;
+                $x += 35;
 
                 // draw Tax
                 $text = $order->formatPriceTxt($childItem->getTaxAmount());
@@ -199,9 +199,10 @@ class Creditmemo extends AbstractItems
                 if ($option['value']) {
                     $text = [];
                     $printValue = $option['print_value'] ?? $this->filterManager->stripTags($option['value']);
+                    $printValue = str_replace(PHP_EOL, ', ', $printValue);
                     $values = explode(', ', $printValue);
                     foreach ($values as $value) {
-                        foreach ($this->string->split($value, 30, true, true) as $subValue) {
+                        foreach ($this->string->split($value, 50, true, true) as $subValue) {
                             $text[] = $subValue;
                         }
                     }
@@ -209,7 +210,7 @@ class Creditmemo extends AbstractItems
                     $lines[][] = ['text' => $text, 'feed' => $leftBound + 5];
                 }
 
-                $drawItems[] = ['lines' => $lines, 'height' => 15];
+                $drawItems[] = ['lines' => $lines, 'height' => 20, 'shift' => 5];
             }
         }
 

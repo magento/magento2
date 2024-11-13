@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
@@ -27,6 +28,9 @@
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
                 <argument name="storeGroupName" value="customStore.name"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -44,8 +48,11 @@
             <argument name="StoreGroup" value="customStore"/>
             <argument name="customStore" value="customStore"/>
         </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
-        <!--Verify created SubCAtegory is present on Store Front -->
+        <!--Verify created SubCategory is present on Store Front -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
         <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="seeCustomStore">
             <argument name="storeName" value="{{customStore.name}}"/>

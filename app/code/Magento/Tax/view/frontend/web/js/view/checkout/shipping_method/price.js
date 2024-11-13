@@ -35,7 +35,7 @@ define([
          */
         getFormattedPrice: function (price) {
             //todo add format data
-            return priceUtils.formatPrice(price, quote.getPriceFormat());
+            return priceUtils.formatPriceLocale(price, quote.getPriceFormat());
         }
     });
 });

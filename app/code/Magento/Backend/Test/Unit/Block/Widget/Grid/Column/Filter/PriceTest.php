@@ -20,27 +20,44 @@ use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
-    /** @var RequestInterface|MockObject  */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $requestMock;
 
-    /** @var Context|MockObject */
+    /**
+     * @var Context|MockObject
+     */
     private $context;
 
-    /** @var Helper|MockObject */
+    /**
+     * @var Helper|MockObject
+     */
     private $helper;
 
-    /** @var Currency|MockObject */
+    /**
+     * @var Currency|MockObject
+     */
     private $currency;
 
-    /** @var DefaultLocator|MockObject */
+    /**
+     * @var DefaultLocator|MockObject
+     */
     private $currencyLocator;
 
-    /** @var Column|MockObject */
+    /**
+     * @var Column|MockObject
+     */
     private $columnMock;
 
-    /** @var Price  */
+    /**
+     * @var Price
+     */
     private $blockPrice;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
@@ -52,14 +69,14 @@ class PriceTest extends TestCase
 
         $this->currency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAnyRate'])
+            ->onlyMethods(['getAnyRate'])
             ->getMock();
 
         $this->currencyLocator = $this->createMock(DefaultLocator::class);
 
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrencyCode'])
+            ->addMethods(['getCurrencyCode'])
             ->getMock();
 
         $helper = new ObjectManager($this);
@@ -73,7 +90,10 @@ class PriceTest extends TestCase
         $this->blockPrice->setColumn($this->columnMock);
     }
 
-    public function testGetCondition()
+    /**
+     * @return void
+     */
+    public function testGetCondition(): void
     {
         $this->currencyLocator->expects(
             $this->any()
@@ -85,14 +105,14 @@ class PriceTest extends TestCase
             'defaultCurrency'
         );
 
-        $this->currency->expects($this->at(0))
+        $this->currency
             ->method('getAnyRate')
             ->with('defaultCurrency')
             ->willReturn(1.0);
 
         $testValue = [
             'value' => [
-                'from' => '1234a',
+                'from' => '1234a'
             ]
         ];
 

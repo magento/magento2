@@ -15,6 +15,7 @@
                 <arguments>
                     <argument name="configurable_view_model"
                               xsi:type="object">Magento\Swatches\ViewModel\Product\Renderer\Configurable</argument>
+                    <argument name="cache_lifetime" xsi:type="boolean">false</argument>
                 </arguments>
             </block>
         </referenceBlock>

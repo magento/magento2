@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\AbstractDb;
@@ -10,6 +12,8 @@ use Magento\Framework\Data\Collection\AbstractDb;
 /**
  * Represents specific condition, that can be applied on product collection.
  * This condition can be some join statement, some filter, some derived query, etc...
+ *
+ * @api
  */
 interface CollectionModifierInterface
 {

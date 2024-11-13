@@ -8,13 +8,9 @@ declare(strict_types=1);
 namespace Magento\Multishipping\Model\Cart\Controller;
 
 use Magento\Checkout\Controller\Cart;
-use Magento\Checkout\Model\Session;
-use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\Quote;
+use Magento\Multishipping\Model\Cart\MultishippingClearItemAddress;
 
 /**
  * Cleans shipping addresses and item assignments after MultiShipping flow
@@ -22,33 +18,17 @@ use Magento\Quote\Model\Quote;
 class CartPlugin
 {
     /**
-     * @var CartRepositoryInterface
+     * @var MultishippingClearItemAddress
      */
-    private $cartRepository;
+    private $multishippingClearItemAddress;
 
     /**
-     * @var Session
-     */
-    private $checkoutSession;
-
-    /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @param CartRepositoryInterface $cartRepository
-     * @param Session $checkoutSession
-     * @param AddressRepositoryInterface $addressRepository
+     * @param MultishippingClearItemAddress $multishippingClearItemAddress
      */
     public function __construct(
-        CartRepositoryInterface $cartRepository,
-        Session $checkoutSession,
-        AddressRepositoryInterface $addressRepository
+        MultishippingClearItemAddress $multishippingClearItemAddress
     ) {
-        $this->cartRepository = $cartRepository;
-        $this->checkoutSession = $checkoutSession;
-        $this->addressRepository = $addressRepository;
+        $this->multishippingClearItemAddress = $multishippingClearItemAddress;
     }
 
     /**
@@ -62,30 +42,6 @@ class CartPlugin
      */
     public function beforeDispatch(Cart $subject, RequestInterface $request)
     {
-        /** @var Quote $quote */
-        $quote = $this->checkoutSession->getQuote();
-        if ($quote->isMultipleShippingAddresses() && $this->isCheckoutComplete()) {
-            foreach ($quote->getAllShippingAddresses() as $address) {
-                $quote->removeAddress($address->getId());
-            }
-
-            $shippingAddress = $quote->getShippingAddress();
-            $defaultShipping = $quote->getCustomer()->getDefaultShipping();
-            if ($defaultShipping) {
-                $defaultCustomerAddress = $this->addressRepository->getById($defaultShipping);
-                $shippingAddress->importCustomerAddressData($defaultCustomerAddress);
-            }
-            $this->cartRepository->save($quote);
-        }
-    }
-
-    /**
-     * Checks whether the checkout flow is complete
-     *
-     * @return bool
-     */
-    private function isCheckoutComplete() : bool
-    {
-        return (bool) ($this->checkoutSession->getStepData(State::STEP_SHIPPING)['is_complete'] ?? true);
+        $this->multishippingClearItemAddress->clearAddressItem($subject, $request);
     }
 }

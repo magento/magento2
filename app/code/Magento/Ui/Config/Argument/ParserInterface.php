@@ -7,6 +7,8 @@ namespace Magento\Ui\Config\Argument;
 
 /**
  * Convert node to array
+ *
+ * @api
  */
 interface ParserInterface
 {

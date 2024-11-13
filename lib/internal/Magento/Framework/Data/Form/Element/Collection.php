@@ -10,8 +10,6 @@ use Magento\Framework\Data\Form\AbstractForm;
 
 /**
  * Form element collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 {
@@ -45,6 +43,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @return \ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->_elements);
@@ -57,6 +56,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param mixed $value
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         $this->_elements[$key] = $value;
@@ -68,6 +68,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param mixed $key
      * @return AbstractElement
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->_elements[$key];
@@ -79,6 +80,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param mixed $key
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         unset($this->_elements[$key]);
@@ -90,6 +92,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param mixed $key
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return isset($this->_elements[$key]);
@@ -121,6 +124,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
                 if ($currElement->getId() == $after) {
                     $newOrderElements[] = $currElement;
                     $newOrderElements[] = $element;
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $this->_elements = array_merge($newOrderElements, array_slice($this->_elements, $index + 1));
                     return $element;
                 }
@@ -167,6 +171,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->_elements);

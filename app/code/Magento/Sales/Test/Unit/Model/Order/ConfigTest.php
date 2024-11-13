@@ -18,12 +18,28 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Model\Order\StatusLabel;
 
 /**
  * Test for Magento\Sales\Model\Order\Config class
  */
 class ConfigTest extends TestCase
 {
+    /**
+     * Pending status stub
+     */
+    private const STUB_PENDING_STATUS_CODE = 'pending';
+
+    /**
+     * Store view with id 2
+     */
+    private const STUB_STORE_VIEW_WITH_ID_2 = 2;
+
+    /**
+     * Pending label in store view 2
+     */
+    private const STUB_STORE_VIEW_LABEL_WITH_ID_2 = 'Pending-2';
+
     /**
      * @var  Config
      */
@@ -50,6 +66,11 @@ class ConfigTest extends TestCase
     protected $storeManagerMock;
 
     /**
+     * @var StatusLabel|MockObject
+     */
+    protected $statusLabel;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -62,18 +83,21 @@ class ConfigTest extends TestCase
         ]);
         $this->statusFactoryMock = $this->getMockBuilder(StatusFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'create'])
+            ->addMethods(['load'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
         );
+        $this->statusLabel = $this->createMock(StatusLabel::class);
         $this->salesConfig = $objectManager
             ->getObject(
                 Config::class,
                 [
                     'orderStatusFactory' => $this->statusFactoryMock,
-                    'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock
+                    'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock,
+                    'statusLabel' => $this->statusLabel
                 ]
             );
     }
@@ -204,6 +228,7 @@ class ConfigTest extends TestCase
 
         $this->statusFactoryMock->method('load')
             ->willReturn($this->orderStatusModel);
+        $this->statusLabel->method('getStatusLabel')->willReturn('Pending label');
 
         $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->method('getId')
@@ -227,7 +252,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getStatusesDataProvider()
+    public static function getStatusesDataProvider()
     {
         return [
             'processing state' => [

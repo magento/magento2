@@ -1,7 +1,5 @@
 <?php
 /**
- * Media application
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -45,8 +43,6 @@ class Media implements AppInterface
     private $isAllowed;
 
     /**
-     * Media directory path
-     *
      * @var string
      */
     private $mediaDirectoryPath;
@@ -152,7 +148,7 @@ class Media implements AppInterface
             DirectoryList::MEDIA,
             Filesystem\DriverPool::FILE
         );
-        $mediaDirectory = trim($mediaDirectory);
+        $mediaDirectory = $mediaDirectory !== null ? trim($mediaDirectory) : '';
         if (!empty($mediaDirectory)) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $this->mediaDirectoryPath = str_replace('\\', '/', $file->getRealPath($mediaDirectory));
@@ -187,7 +183,9 @@ class Media implements AppInterface
             $this->mediaDirectoryPath = $config->getMediaDirectory();
             $allowedResources = $config->getAllowedResources();
             $isAllowed = $this->isAllowed;
-            if (!$isAllowed($this->relativeFileName, $allowedResources)) {
+            $fileAbsolutePath = $this->directoryPub->getAbsolutePath($this->relativeFileName);
+            $fileRelativePath = str_replace(rtrim($this->mediaDirectoryPath, '/') . '/', '', $fileAbsolutePath);
+            if (!$isAllowed($fileRelativePath, $allowedResources)) {
                 throw new LogicException('The path is not allowed: ' . $this->relativeFileName);
             }
         }
@@ -214,8 +212,8 @@ class Media implements AppInterface
      */
     private function createLocalCopy(): void
     {
-        $this->syncFactory->create(['directory' => $this->directoryPub])
-            ->synchronize($this->relativeFileName);
+        $synchronizer = $this->syncFactory->create(['directory' => $this->directoryPub]);
+        $synchronizer->synchronize($this->relativeFileName);
 
         if ($this->directoryPub->isReadable($this->relativeFileName)) {
             return;
@@ -223,7 +221,22 @@ class Media implements AppInterface
 
         if ($this->mediaUrlFormat === CatalogMediaConfig::HASH) {
             $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+            if (!$this->directoryPub->isReadable($this->relativeFileName)) {
+                $synchronizer->synchronize($this->relativeFileName);
+            }
         }
+    }
+
+    /**
+     * Create local vopy for the placeholder
+     *
+     * @param ?string $relativeFileName
+     * @return void
+     */
+    private function createPlaceholderLocalCopy(?string $relativeFileName): void
+    {
+        $synchronizer = $this->syncFactory->create(['directory' => $this->directoryMedia]);
+        $synchronizer->synchronize($relativeFileName);
     }
 
     /**
@@ -233,7 +246,10 @@ class Media implements AppInterface
      */
     private function checkMediaDirectoryChanged(): bool
     {
-        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+        $mediaDirectoryPath = $this->mediaDirectoryPath ? rtrim($this->mediaDirectoryPath, '/') : '';
+        $directoryMediaAbsolutePath = $this->directoryMedia->getAbsolutePath();
+        $directoryMediaAbsolutePath = $directoryMediaAbsolutePath ? rtrim($directoryMediaAbsolutePath, '/') : '';
+        return $mediaDirectoryPath !== $directoryMediaAbsolutePath;
     }
 
     /**
@@ -244,6 +260,7 @@ class Media implements AppInterface
     private function setPlaceholderImage(): void
     {
         $placeholder = $this->placeholderFactory->create(['type' => 'image']);
+        $this->createPlaceholderLocalCopy($placeholder->getRelativePath());
         $this->response->setFilePath($placeholder->getPath());
     }
 
@@ -255,7 +272,7 @@ class Media implements AppInterface
      */
     private function getOriginalImage(string $resizedImagePath): string
     {
-        return preg_replace('|^.*?((?:/([^/])/([^/])/\2\3)?/?[^/]+$)|', '$1', $resizedImagePath);
+        return preg_replace('|^.*((?:/[^/]+){3})$|', '$1', $resizedImagePath);
     }
 
     /**

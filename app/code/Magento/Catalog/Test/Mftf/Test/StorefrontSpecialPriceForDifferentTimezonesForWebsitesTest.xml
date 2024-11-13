@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-97508"/>
             <useCaseId value="MAGETWO-96847"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
@@ -31,6 +32,7 @@
         <after>
             <!--Delete create data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -69,7 +71,7 @@
         </actionGroup>
 
         <!--Go to the product page and check special price-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" stepKey="grabSpecialPrice"/>
         <assertEquals stepKey="assertSpecialPrice">

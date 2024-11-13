@@ -49,7 +49,11 @@ class Authorization implements AuthorizationInterface
         $resource,
         $privilege = null
     ) {
-        if ($this->persistentSession->isPersistent() && !$this->customerSession->isLoggedIn()) {
+        if (
+            $this->persistentSession->isPersistent() &&
+            $this->customerSession->getCustomerId() &&
+            $this->customerSession->getIsCustomerEmulated()
+        ) {
             return false;
         }
 

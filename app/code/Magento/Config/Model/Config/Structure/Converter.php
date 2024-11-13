@@ -94,10 +94,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             switch ($child->nodeType) {
                 case XML_COMMENT_NODE:
                     continue 2;
-                    break;
 
                 case XML_TEXT_NODE:
-                    if ($children->length && trim($child->nodeValue, "\n ") === '') {
+                    if ($children->length
+                        && ($child->nodeValue === null || trim($child->nodeValue, "\n ") === '')
+                    ) {
                         continue 2;
                     }
                     $childName = 'value';

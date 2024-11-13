@@ -144,7 +144,7 @@ class PreProcessorTest extends TestCase
      *
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             [
@@ -152,8 +152,8 @@ class PreProcessorTest extends TestCase
                     'area_code' => FrontNameResolver::AREA_CODE
                 ],
                 [
-                    'areaList_getArea' => $this->never(),
-                    'area_load' => $this->never(),
+                    'areaList_getArea' => self::never(),
+                    'area_load' => self::never(),
                 ]
             ],
             [
@@ -161,8 +161,8 @@ class PreProcessorTest extends TestCase
                     'area_code' => 'frontend'
                 ],
                 [
-                    'areaList_getArea' => $this->once(),
-                    'area_load' => $this->once(),
+                    'areaList_getArea' => self::once(),
+                    'area_load' => self::once(),
                 ]
             ],
         ];

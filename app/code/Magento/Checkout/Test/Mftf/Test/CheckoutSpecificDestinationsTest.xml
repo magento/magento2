@@ -39,7 +39,7 @@
         </actionGroup>
 
         <!--Go to product page-->
-        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.name$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!--Add product to cart-->
@@ -68,16 +68,14 @@
 
         <!--Go to shopping cart-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart2"/>
-
+        
         <!--Verify country options is shown by default-->
         <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry2">
             <argument name="country" value="Afghanistan"/>
             <argument name="placeNumber" value="2"/>
         </actionGroup>
-
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
         </after>

@@ -45,20 +45,21 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @deprecated
      * @see \Magento\Email\Model\Transport::XML_PATH_SENDING_SET_RETURN_PATH
      */
-    const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
+    public const XML_PATH_SENDING_SET_RETURN_PATH = 'system/smtp/set_return_path';
 
     /**
      * Configuration path for custom Return-Path email
      * @deprecated
      * @see \Magento\Email\Model\Transport::XML_PATH_SENDING_RETURN_PATH_EMAIL
      */
-    const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
+    public const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
     /**
      * Config path to mail sending setting that shows if email communications are disabled
      * @deprecated
+     * @see https://github.com/magento/magento2/issues/5988
      */
-    const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
+    public const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 
     /**
      * BCC list
@@ -68,8 +69,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     protected $_bcc = [];
 
     /**
-     * Return path
-     *
      * @var string
      */
     protected $_returnPath = '';
@@ -247,17 +246,11 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         $this->applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
 
-        $previousStrictMode = $processor->setStrictMode(
-            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
-        );
-
         try {
-            $processedResult = $processor->setStoreId($storeId)->filter(__($this->getTemplateSubject()));
+            $processedResult = $processor->setStoreId($storeId)->filter($this->getTemplateSubject());
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
-        } finally {
-            $processor->setStrictMode($previousStrictMode);
         }
 
         $this->cancelDesignConfig();

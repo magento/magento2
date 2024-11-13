@@ -35,6 +35,6 @@
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

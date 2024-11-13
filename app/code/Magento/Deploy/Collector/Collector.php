@@ -93,6 +93,9 @@ class Collector implements CollectorInterface
                 if ($file->getModule() && !$this->moduleManager->isEnabled($file->getModule())) {
                     continue;
                 }
+                if (!$file->getFileName()) {
+                    continue;
+                }
                 $file->setDeployedFileName($this->fileNameResolver->resolve($file->getFileName()));
                 $params = $this->getParams($file);
                 $packagePath = "{$params['area']}/{$params['theme']}/{$params['locale']}";

@@ -17,7 +17,8 @@
             <argument name="expectedRgb" type="string" defaultValue="rgb(231, 77, 60)"/>
         </arguments>
 
-        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption(nthSwatch)}}" userInput="style" stepKey="grabStyle1"/>
+        <executeJS function="return document.evaluate(&quot;//div[@class='swatch-option color'][{{nthSwatch}}]&quot;,
+document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.style.cssText" stepKey="grabStyle1" />
         <assertEquals stepKey="assertStyle1">
             <actualResult type="string">{$grabStyle1}</actualResult>
             <expectedResult type="string">background: center center no-repeat {{expectedRgb}};</expectedResult>

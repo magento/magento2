@@ -65,7 +65,7 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function createConnectionExceptionDataProvider()
+    public static function createConnectionExceptionDataProvider()
     {
         return [
             [[]],
@@ -79,7 +79,7 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function createAutomaticModeDataProvider()
+    public static function createAutomaticModeDataProvider()
     {
         return [
             [

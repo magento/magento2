@@ -70,7 +70,7 @@ class ReadXmp implements ReadMetadataInterface
     private function isXmpSegment(SegmentInterface $segment): bool
     {
         return $segment->getName() === self::XMP_SEGMENT_NAME
-            && strpos($segment->getData(), '<x:xmpmeta') !== -1;
+            && strpos($segment->getData(), '<x:xmpmeta') !== false;
     }
 
     /**

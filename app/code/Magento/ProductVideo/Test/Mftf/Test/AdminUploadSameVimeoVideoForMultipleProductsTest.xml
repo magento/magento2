@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUploadSameVimeoVideoForMultipleProductsTest">
+        <annotations>
+            <features value="ProductVideo"/>
+            <stories value="Upload product video"/>
+            <title value="Admin should be able to upload same Vimeo video for multiple products"/>
+            <description value="Admin should be able to upload same Vimeo video for multiple products"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-42645"/>
+            <useCaseId value="MC-42448"/>
+            <group value="productVideo"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct2"/>
+            <!-- Login to Admin page -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <createData entity="DefaultProductVideoConfig" stepKey="setYoutubeApiKeyDefaultConfig"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <!-- Logout from Admin page -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Open product 1 edit page -->
+        <amOnPage url="{{AdminProductEditPage.url($createProduct1.id$)}}" stepKey="goToProduct1EditPage"/>
+        <!-- Add product video -->
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideoToProduct1">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormOfProduct1"/>
+
+        <!-- Open product 2 edit page -->
+        <amOnPage url="{{AdminProductEditPage.url($createProduct2.id$)}}" stepKey="goToProduct2EditPage"/>
+        <!-- Add product video -->
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="saveProductFormOfProduct2">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormOfSecondSimpleProduct"/>
+
+    </test>
+</tests>

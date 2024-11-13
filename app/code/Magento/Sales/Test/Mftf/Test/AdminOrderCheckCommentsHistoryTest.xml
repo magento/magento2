@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCheckCommentsHistoryTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin order page"/>
+            <title value="Check Comments History Tab"/>
+            <description value="Check if order comments history tab is loading"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-7087"/>
+            <useCaseId value="ACP2E-1369"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Create order, invoice, shipment and credit memo -->
+        <createData entity="CustomerCart" stepKey="createCustomerCart">
+            <requiredEntity createDataKey="createCustomer"/>
+        </createData>
+        <createData entity="CustomerCartItem" stepKey="addCartItem">
+            <requiredEntity createDataKey="createCustomerCart"/>
+            <requiredEntity createDataKey="createProduct"/>
+        </createData>
+        <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="createFirstOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </updateData>
+        <createData entity="Invoice" stepKey="invoiceOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <createData entity="Shipment" stepKey="createShipment">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <createData entity="CreditMemo" stepKey="createCreditMemo">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+
+        <!-- Open Admin Order page -->
+        <actionGroup ref="AdminOpenOrderViewPageByOrderIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="$createCustomerCart.return$"/>
+        </actionGroup>
+
+        <!--Go to Comments history and switch to Information -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="goToCommentsHistory1"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.information}}" stepKey="goToInformation"/>
+        <dontSee userInput="A technical problem with the server created an error" stepKey="dontSeeTechnicalErrorMessageOne"/>
+
+        <!--Go to Comments history and don't see the error message -->
+        <click selector="{{AdminOrderDetailsOrderViewSection.commentsHistory}}" stepKey="goToCommentsHistory2"/>
+        <waitForPageLoad stepKey="waitForCommentsHistoryPage"/>
+        <see userInput="Notes for this Order" stepKey="seeMessageNotesForThisOrder"/>
+        <dontSee userInput="A technical problem with the server created an error" stepKey="dontSeeTechnicalErrorMessageTwo"/>
+    </test>
+</tests>

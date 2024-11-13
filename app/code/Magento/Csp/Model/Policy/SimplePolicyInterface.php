@@ -11,6 +11,8 @@ use Magento\Csp\Api\Data\PolicyInterface;
 
 /**
  * Simple policy that is represented by the default prefix and an ID - string value combination.
+ *
+ * @api
  */
 interface SimplePolicyInterface extends PolicyInterface
 {

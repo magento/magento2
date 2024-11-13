@@ -113,7 +113,7 @@ class StatePluginTest extends TestCase
      *
      * @return array
      */
-    public function newRelicConfigDataProvider(): array
+    public static function newRelicConfigDataProvider(): array
     {
         return [
             'Separate apps config is disabled' => [

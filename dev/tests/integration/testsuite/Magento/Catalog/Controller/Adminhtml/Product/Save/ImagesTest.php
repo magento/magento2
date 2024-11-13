@@ -76,11 +76,11 @@ class ImagesTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function simpleProductImagesDataProvider(): array
+    public static function simpleProductImagesDataProvider(): array
     {
         return [
             'simple_product_with_jpg_image' => [
-                'post_data' => [
+                'postData' => [
                     'product' => [
                         'media_gallery' => [
                             'images' => [
@@ -138,8 +138,10 @@ class ImagesTest extends AbstractBackendController
         $this->assertEquals($expectation['small_image'], $product->getData('small_image'));
         $this->assertEquals($expectation['thumbnail'], $product->getData('thumbnail'));
         $this->assertEquals($expectation['swatch_image'], $product->getData('swatch_image'));
-        $this->assertFileExists(
-            $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $expectation['image'])
+        $this->assertTrue(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $expectation['image'])
+            )
         );
     }
 }

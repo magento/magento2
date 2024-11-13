@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
@@ -21,7 +22,8 @@ use Magento\Sales\Model\Order\Validation\InvoiceOrderInterface as InvoiceOrderVa
 use Psr\Log\LoggerInterface;
 
 /**
- * Class InvoiceOrder
+ * Creates invoice for an order
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceOrder implements InvoiceOrderInterface
@@ -77,6 +79,11 @@ class InvoiceOrder implements InvoiceOrderInterface
     private $logger;
 
     /**
+     * @var OrderMutexInterface
+     */
+    private $orderMutex;
+
+    /**
      * InvoiceOrder constructor.
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
@@ -88,6 +95,7 @@ class InvoiceOrder implements InvoiceOrderInterface
      * @param InvoiceOrderValidator $invoiceOrderValidator
      * @param NotifierInterface $notifierInterface
      * @param LoggerInterface $logger
+     * @param OrderMutex|null $orderMutex
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -100,7 +108,8 @@ class InvoiceOrder implements InvoiceOrderInterface
         InvoiceRepository $invoiceRepository,
         InvoiceOrderValidator $invoiceOrderValidator,
         NotifierInterface $notifierInterface,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?OrderMutexInterface $orderMutex = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->orderRepository = $orderRepository;
@@ -112,9 +121,12 @@ class InvoiceOrder implements InvoiceOrderInterface
         $this->invoiceOrderValidator = $invoiceOrderValidator;
         $this->notifierInterface = $notifierInterface;
         $this->logger = $logger;
+        $this->orderMutex = $orderMutex ?: ObjectManager::getInstance()->get(OrderMutexInterface::class);
     }
 
     /**
+     * Creates invoice for provided order ID
+     *
      * @param int $orderId
      * @param bool $capture
      * @param array $items
@@ -138,7 +150,48 @@ class InvoiceOrder implements InvoiceOrderInterface
         InvoiceCommentCreationInterface $comment = null,
         InvoiceCreationArgumentsInterface $arguments = null
     ) {
-        $connection = $this->resourceConnection->getConnection('sales');
+        return $this->orderMutex->execute(
+            (int) $orderId,
+            \Closure::fromCallable([$this, 'createInvoice']),
+            [
+                $orderId,
+                $capture,
+                $items,
+                $notify,
+                $appendComment,
+                $comment,
+                $arguments
+            ]
+        );
+    }
+
+    /**
+     * Creates invoice for provided order ID
+     *
+     * @param int $orderId
+     * @param bool $capture
+     * @param array $items
+     * @param bool $notify
+     * @param bool $appendComment
+     * @param \Magento\Sales\Api\Data\InvoiceCommentCreationInterface|null $comment
+     * @param \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface|null $arguments
+     * @return int
+     * @throws \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
+     * @throws \Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \DomainException
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function createInvoice(
+        $orderId,
+        $capture = false,
+        array $items = [],
+        $notify = false,
+        $appendComment = false,
+        InvoiceCommentCreationInterface $comment = null,
+        InvoiceCreationArgumentsInterface $arguments = null
+    ) {
         $order = $this->orderRepository->get($orderId);
         $invoice = $this->invoiceDocumentFactory->create(
             $order,
@@ -162,7 +215,6 @@ class InvoiceOrder implements InvoiceOrderInterface
                 __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages->getMessages()))
             );
         }
-        $connection->beginTransaction();
         try {
             $order = $this->paymentAdapter->pay($order, $invoice, $capture);
             $order->setState(
@@ -172,10 +224,8 @@ class InvoiceOrder implements InvoiceOrderInterface
             $invoice->setState(\Magento\Sales\Model\Order\Invoice::STATE_PAID);
             $this->invoiceRepository->save($invoice);
             $this->orderRepository->save($order);
-            $connection->commit();
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            $connection->rollBack();
             throw new \Magento\Sales\Exception\CouldNotInvoiceException(
                 __('Could not save an invoice, see error log for details')
             );

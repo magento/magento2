@@ -13,6 +13,7 @@ use Magento\Framework\Config\SchemaLocatorInterface;
 
 /**
  * Media gallery directory config schema locator
+ * @deprecated
  */
 class SchemaLocator implements SchemaLocatorInterface
 {

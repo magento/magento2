@@ -29,7 +29,8 @@
             "failures_num": true,
             "first_failure": true,
             "lock_expired": true,
-            "lock_expires": true
+            "lock_expires": true,
+            "session_cutoff": true
         },
         "index": {
             "CUSTOMER_ENTITY_STORE_ID": true,
@@ -282,7 +283,8 @@
             "is_used_in_grid": true,
             "is_visible_in_grid": true,
             "is_filterable_in_grid": true,
-            "is_searchable_in_grid": true
+            "is_searchable_in_grid": true,
+            "grid_filter_condition_type": true
         },
         "index": {
             "CUSTOMER_EAV_ATTRIBUTE_SORT_ORDER": true
@@ -328,6 +330,7 @@
             "visitor_id": true,
             "customer_id": true,
             "session_id": true,
+            "created_at": true,
             "last_visit_at": true
         },
         "index": {
@@ -348,6 +351,20 @@
         "constraint": {
             "PRIMARY": true,
             "CUSTOMER_LOG_CUSTOMER_ID": true
+        }
+    },
+    "customer_group_excluded_website": {
+        "column": {
+            "entity_id": true,
+            "customer_group_id": true,
+            "website_id": true
+        },
+        "index": {
+            "CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID": true,
+            "CUSTOMER_GROUP_EXCLUDED_WEBSITE_CUSTOMER_GROUP_ID_WEBSITE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true
         }
     }
 }

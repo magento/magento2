@@ -11,6 +11,8 @@ use Magento\PageCache\Model\VclTemplateLocatorInterface;
 
 /**
  * Varnish vcl generator model.
+ *
+ * @api
  */
 class VclGenerator implements VclGeneratorInterface
 {
@@ -82,12 +84,12 @@ class VclGenerator implements VclGeneratorInterface
      * Return generated varnish.vcl configuration file
      *
      * @param int $version
+     * @param string $inputFile
      * @return string
-     * @api
      */
-    public function generateVcl($version)
+    public function generateVcl($version, $inputFile = null)
     {
-        $template = $this->vclTemplateLocator->getTemplate($version);
+        $template = $this->vclTemplateLocator->getTemplate($version, $inputFile);
         return strtr($template, $this->getReplacements());
     }
 
@@ -106,7 +108,7 @@ class VclGenerator implements VclGeneratorInterface
             // http headers get transformed by php `X-Forwarded-Proto: https`
             // becomes $SERVER['HTTP_X_FORWARDED_PROTO'] = 'https'
             // Apache and Nginx drop all headers with underlines by default.
-            '/* {{ ssl_offloaded_header }} */' => str_replace('_', '-', $this->getSslOffloadedHeader()),
+            '/* {{ ssl_offloaded_header }} */' => str_replace('_', '-', $this->getSslOffloadedHeader() ?? ''),
             '/* {{ grace_period }} */' => $this->getGracePeriod(),
         ];
     }
@@ -129,7 +131,7 @@ class VclGenerator implements VclGeneratorInterface
         if ($expressions) {
             $rules = array_values($expressions);
             foreach ($rules as $i => $rule) {
-                if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'], $matches)) {
+                if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'] ?? '', $matches)) {
                     if (!empty($matches[2])) {
                         $pattern = sprintf("(?%s)%s", $matches[2], $matches[1]);
                     } else {
@@ -165,8 +167,8 @@ class VclGenerator implements VclGeneratorInterface
             },
             ''
         );
-        $result = rtrim($result, "\n");
-        return $result;
+
+        return rtrim($result ?: '', "\n");
     }
 
     /**

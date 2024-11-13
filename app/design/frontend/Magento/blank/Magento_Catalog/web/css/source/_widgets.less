@@ -95,7 +95,7 @@
     .block.widget .products-grid .product-item,
     .page-layout-1column .block.widget .products-grid .product-item,
     .page-layout-3columns .block.widget .products-grid .product-item {
-        width: 100%/3;
+        width: (100%/3);
     }
 
     .page-layout-1column .block.widget .products-grid .product-item {
@@ -114,7 +114,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block.widget .products-grid .product-item {
-        width: 100%/3;
+        width: (100%/3);
 
         .sidebar & {
             margin-left: 0;
@@ -141,7 +141,7 @@
     }
 
     .page-layout-3columns .block.widget .products-grid .product-item {
-        width: 100%/2;
+        width: (100%/2);
     }
 
     .sidebar .block.widget .pager {
@@ -161,7 +161,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
     .block.widget .products-grid .product-item {
-        width: 100%/5;
+        width: (100%/5);
     }
 
     .page-layout-1column .block.widget .products-grid .product-item {
@@ -178,7 +178,7 @@
     }
 
     .page-layout-3columns .block.widget .products-grid .product-item {
-        width: 100%/4;
+        width: (100%/4);
     }
 
     .block.widget .products-grid .product-items {

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithSavedCreditCardPaypalPayflowProTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Admin create order with saved credit card paypal payflow pro"/>
+            <description value="Use saved PayPal Payflow Pro credit card on admin sales order creation if two vault providers are available"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5386"/>
+            <group value="paypalPayflowProWithOutValut"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <!--Create a customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create simple product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
+            <!-- Enable Vault for paypal payflow pro-->
+            <magentoCLI command="config:set {{EnablePaypalPayflowProVault.path}} {{EnablePaypalPayflowProVault.value}}" stepKey="enablePaypalPayflowProVault"/>
+            <!-- Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!-- Login as Customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <!-- Navigate to StoreFront -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+            <!-- Add product to cart -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$$createSimpleProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+            <!-- Select shipping -->
+            <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRate">
+                <argument name="shippingMethodName" value="Flat Rate"/>
+            </actionGroup>
+            <!-- Go to Order review -->
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+            <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+            <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectPaypalPayflowProPaymentMethod"/>
+            <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+            <!--Fill Card Data  and place an order-->
+            <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+                <argument name="cardData" value="VisaDefaultCard"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForFillCardData"/>
+            <!--Save credit card for the registered user-->
+            <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUse"/>
+            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+            <!-- Grab order number-->
+            <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOderNumber"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        </before>
+        <after>
+            <!-- Delete product and customer-->
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Disable Vault for paypal payflow pro-->
+            <magentoCLI command="config:set {{DisablePaypalPayflowProVault.path}} {{DisablePaypalPayflowProVault.value}}" stepKey="disablePaypalPayflowProVault"/>
+            <!-- Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Create new order -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <!-- Add product to order -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="WaitForProductAdd"/>
+        <waitForLoadingMaskToDisappear stepKey="WaitForProductAddLoading"/>
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <!--Select Stored Cards (PayPal pay flow pro) as a payment-->
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.storedCard}}" dependentSelector="{{AdminOrderFormPaymentSection.storedCard}}" visible="true" stepKey="selectStoredPayflowProCreditCard"/>
+        <!--Verify credit card cvv is not visible-->
+        <waitForElementNotVisible selector="{{StorefrontPaypalCheckoutSection.verificationNumber}}" stepKey="verifyCreditCardCvvNotVisible"/>
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="WaitForOrderSubmit"/>
+        <!--verify order placed success message-->
+        <waitForText selector="{{CheckoutCartMessageSection.successMessage}}" userInput="You created the order." stepKey="seeOrderPlacedSuccessMessage"/>
+    </test>
+</tests>

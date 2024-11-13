@@ -9,6 +9,8 @@ namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\
 
 /**
  * Field type converter from internal index value to elastic service.
+ *
+ * @api
  */
 interface ConverterInterface
 {

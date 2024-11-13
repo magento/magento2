@@ -64,7 +64,7 @@ class SpecificationPluginTest extends TestCase
     {
         $this->billingAgreementFactoryMock = $this->getMockBuilder(BillingAgreementFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->specificationMock = $this->getMockBuilder(SpecificationInterface::class)
             ->getMockForAbstractClass();
@@ -72,7 +72,7 @@ class SpecificationPluginTest extends TestCase
             ->getMockForAbstractClass();
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId'])
+            ->addMethods(['getCustomerId'])
             ->getMock();
         $this->billingAgreementCollectionMock = $this->getMockBuilder(BillingAgreementCollection::class)
             ->disableOriginalConstructor()
@@ -161,7 +161,7 @@ class SpecificationPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterIsApplicableDataProvider()
+    public static function afterIsApplicableDataProvider()
     {
         return [[0], [1], [2]];
     }

@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Filesystem;
 
 use Magento\Framework\Code\Generator\Io;
 
 /**
  * A Magento application specific list of directories
+ *
+ * @api
  */
 class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
 {
@@ -63,9 +67,9 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const VAR_EXPORT = 'var_export';
 
     /**
-     * Storage of files which were imported.
+     * Storage of files for import/export.
      */
-    const VAR_IMPORT = 'var_import';
+    const VAR_IMPORT_EXPORT = 'import_export';
 
     /**
      * Temporary files
@@ -156,7 +160,8 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::CONFIG => [parent::PATH => 'app/etc'],
             self::LIB_INTERNAL => [parent::PATH => 'lib/internal'],
             self::VAR_DIR => [parent::PATH => 'var'],
-            self::VAR_EXPORT => [parent::PATH => 'var/export', parent::URL_PATH => 'export'],
+            /** @deprecated  */
+            self::VAR_EXPORT => [parent::PATH => 'var/export'],
             self::CACHE => [parent::PATH => 'var/cache'],
             self::LOG => [parent::PATH => 'var/log'],
             self::DI => [parent::PATH => 'generated/metadata'],
@@ -175,7 +180,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::GENERATED => [parent::PATH => 'generated'],
             self::GENERATED_CODE => [parent::PATH => Io::DEFAULT_DIRECTORY],
             self::GENERATED_METADATA => [parent::PATH => 'generated/metadata'],
-            self::VAR_IMPORT => [parent::PATH => 'var/import', parent::URL_PATH => 'var/import'],
+            self::VAR_IMPORT_EXPORT => [parent::PATH => 'var', parent::URL_PATH => 'import_export'],
         ];
         return parent::getDefaultConfig() + $result;
     }

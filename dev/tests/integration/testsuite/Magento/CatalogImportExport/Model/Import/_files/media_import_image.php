@@ -11,5 +11,10 @@ $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->g
     \Magento\Framework\App\Filesystem\DirectoryList::MEDIA
 );
 $mediaDirectory->create('import/m/a');
-$dirPath = $mediaDirectory->getAbsolutePath('import');
-copy(__DIR__ . '/../../../../../Magento/Catalog/_files/magento_image.jpg', "{$dirPath}/m/a/magento_image.jpg");
+$dirPath = $mediaDirectory->getAbsolutePath('import/m/a');
+$driver = $mediaDirectory->getDriver();
+$driver->createDirectory($dirPath);
+$driver->filePutContents(
+    $dirPath . '/magento_image.jpg',
+    file_get_contents(__DIR__ . '/../../../../../Magento/Catalog/_files/magento_image.jpg')
+);

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
@@ -25,6 +27,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
+use Magento\Customer\Model\Data\Address as CustomerAddress;
 
 /**
  * Shipping method read service
@@ -38,7 +41,7 @@ class ShippingMethodManagement implements
     ShipmentEstimationInterface
 {
     /**
-     * Quote repository.
+     * Quote repository model
      *
      * @var CartRepositoryInterface
      */
@@ -224,7 +227,15 @@ class ShippingMethodManagement implements
             $this->quoteAddressResource->delete($shippingAddress);
             throw new StateException(__('The shipping address is missing. Set the address and try again.'));
         }
-        $shippingAddress->setShippingMethod($carrierCode . '_' . $methodCode);
+        $shippingMethod = $carrierCode . '_' . $methodCode;
+        $shippingAddress->setShippingMethod($shippingMethod);
+        $shippingAssignments = (array)$quote->getExtensionAttributes()->getShippingAssignments();
+        if (!empty($shippingAssignments)) {
+            $shippingAssignment = $shippingAssignments[0];
+            $shipping = $shippingAssignment->getShipping();
+            $shipping->setMethod($shippingMethod);
+            $shippingAssignment->setShipping($shipping);
+        }
     }
 
     /**
@@ -260,6 +271,8 @@ class ShippingMethodManagement implements
 
     /**
      * @inheritDoc
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function estimateByAddressId($cartId, $addressId)
     {
@@ -270,7 +283,7 @@ class ShippingMethodManagement implements
         if ($quote->isVirtual() || 0 == $quote->getItemsCount()) {
             return [];
         }
-        $address = $this->addressRepository->getById($addressId);
+        $address = $this->getAddress($addressId, $quote);
 
         return $this->getShippingMethods($quote, $address);
     }
@@ -287,6 +300,7 @@ class ShippingMethodManagement implements
      * @return ShippingMethodInterface[] An array of shipping methods.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated 100.1.6
+     * @see Updated-deprication-doc-annotations
      */
     protected function getEstimatedRates(
         Quote $quote,
@@ -367,6 +381,7 @@ class ShippingMethodManagement implements
      *
      * @return DataObjectProcessor
      * @deprecated 101.0.0
+     * @see Updated-deprication-doc-annotations
      */
     private function getDataObjectProcessor()
     {
@@ -375,5 +390,25 @@ class ShippingMethodManagement implements
                 ->get(DataObjectProcessor::class);
         }
         return $this->dataProcessor;
+    }
+
+    /**
+     * Gets the address if exists for customer
+     *
+     * @param int $addressId
+     * @param Quote $quote
+     * @return CustomerAddress
+     * @throws InputException The shipping address is incorrect.
+     */
+    private function getAddress(int $addressId, Quote $quote): CustomerAddress
+    {
+        $addresses = $quote->getCustomer()->getAddresses();
+        foreach ($addresses as $address) {
+            if ($addressId === (int)$address->getId()) {
+                return $address;
+            }
+        }
+
+        throw new InputException(__('The shipping address is missing. Set the address and try again.'));
     }
 }

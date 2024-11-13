@@ -127,11 +127,9 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
             );
             $blacklistItems = [];
             foreach (glob($blacklistFiles) as $fileName) {
-                $blacklistItems = array_merge(
-                    $blacklistItems,
-                    file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
-                );
+                $blacklistItems[] = file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             }
+            $blacklistItems = array_merge([], ...$blacklistItems);
             $this->pluginBlacklist = $blacklistItems;
         }
         return $this->pluginBlacklist;
@@ -243,10 +241,10 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
         $allowedFiles = array_keys($classes);
         foreach ($classes as $class) {
             if (!in_array($class, $output)) {
-                $output = array_merge($output, $this->_buildInheritanceHierarchyTree($class, $allowedFiles));
-                $output = array_unique($output);
+                $output[] = $this->_buildInheritanceHierarchyTree($class, $allowedFiles);
             }
         }
+        $output = array_unique(array_merge([], ...$output));
 
         /** Convert data into data provider format */
         $outputClasses = [];
@@ -409,7 +407,7 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
                     $plugin = $node->attributes->getNamedItem('type')->nodeValue;
                     if (!in_array($plugin, $this->getPluginBlacklist())) {
                         $plugin = \Magento\Framework\App\Utility\Classes::resolveVirtualType($plugin);
-                        $plugins[] = ['plugin' => $plugin, 'intercepted type' => $type];
+                        $plugins[] = [$plugin, $type];
                     }
                 }
             }

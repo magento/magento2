@@ -35,18 +35,26 @@ class UpdateUrlKeyForProducts implements DataPatchInterface, PatchVersionInterfa
     private $urlProduct;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      * @param Url $urlProduct
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory,
-        Url $urlProduct
+        Url $urlProduct,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetup = $eavSetupFactory->create(['setup' => $moduleDataSetup]);
         $this->urlProduct = $urlProduct;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -58,7 +66,7 @@ class UpdateUrlKeyForProducts implements DataPatchInterface, PatchVersionInterfa
         $table = $this->moduleDataSetup->getTable('catalog_product_entity_varchar');
         $select = $this->moduleDataSetup->getConnection()->select()->from(
             $table,
-            ['value_id', 'value']
+            [$this->getProductLinkField(), 'attribute_id', 'store_id', 'value_id', 'value']
         )->where(
             'attribute_id = ?',
             $this->eavSetup->getAttributeId($productTypeId, 'url_key')
@@ -98,5 +106,18 @@ class UpdateUrlKeyForProducts implements DataPatchInterface, PatchVersionInterfa
     public function getAliases()
     {
         return [];
+    }
+
+    /**
+     * Return product id field name - entity_id|row_id
+     *
+     * @return string
+     * @throws \Exception
+     */
+    private function getProductLinkField()
+    {
+        return $this->metadataPool
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
     }
 }

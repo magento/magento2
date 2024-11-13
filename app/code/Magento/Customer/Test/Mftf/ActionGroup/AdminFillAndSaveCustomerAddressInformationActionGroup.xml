@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillAndSaveCustomerAddressInformationActionGroup">
+        <annotations>
+            <description>Fills and Saves Customer Address information.</description>
+        </annotations>
+        <arguments>
+            <argument name="address" type="entity"/>
+        </arguments>
+       
+        <fillField userInput="{{address.firstname}}" selector="{{AdminCustomerAddressesSection.firstNameForAddress}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{address.lastname}}" selector="{{AdminCustomerAddressesSection.lastNameForAddress}}" stepKey="fillLastName"/>
+        <fillField userInput="{{address.company}}" selector="{{AdminCustomerAddressesSection.company}}" stepKey="fillCompany"/>
+        <fillField userInput="{{address.street[0]}}" selector="{{AdminCustomerAddressesSection.streetAddress}}" stepKey="fillStreet"/>
+        <fillField userInput="{{address.city}}" selector="{{AdminCustomerAddressesSection.city}}" stepKey="fillCity"/>
+        <click selector="{{AdminCustomerAddressesSection.country}}" stepKey="clickCountryToOpenListOfCountries"/>
+        <click selector="{{AdminCustomerAddressesSection.countryId(address.country_id)}}" stepKey="fillCountry"/>
+        <fillField userInput="{{address.postcode}}" selector="{{AdminCustomerAddressesSection.zip}}" stepKey="fillPostcode"/>
+        <fillField userInput="{{address.telephone}}" selector="{{AdminCustomerAddressesSection.phoneNumber}}" stepKey="fillTelephone"/>
+        <click selector="{{AdminCustomerAddressesSection.region}}" stepKey="clickRegionToOpenListOfRegions"/>
+        <click selector="{{AdminCustomerAddressesSection.regionId(address.state)}}" stepKey="fillRegion"/>
+        <click selector="{{AdminCustomerAddressesSection.saveAddress}}" stepKey="clickSaveCustomerAddressOnAddUpdateAddressForm"/>
+        <waitForPageLoad stepKey="waitForNewAddressIsCreated"/>
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Helper;
 
@@ -52,13 +52,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getAttributeMetadata'
         )->willReturnMap(
-            
-                [
-                    ['prefix', $isPrefixAllowed ? $visibleAttribute : $invisibleAttribute],
-                    ['middlename', $isMiddleNameAllowed ? $visibleAttribute : $invisibleAttribute],
-                    ['suffix', $isSuffixAllowed ? $visibleAttribute : $invisibleAttribute],
-                ]
-            
+            [
+                ['prefix', $isPrefixAllowed ? $visibleAttribute : $invisibleAttribute],
+                ['middlename', $isMiddleNameAllowed ? $visibleAttribute : $invisibleAttribute],
+                ['suffix', $isSuffixAllowed ? $visibleAttribute : $invisibleAttribute],
+            ]
         );
 
         $this->assertEquals(
@@ -68,7 +66,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function getCustomerNameDataProvider()
+    public static function getCustomerNameDataProvider()
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
         $customerFactory = Bootstrap::getObjectManager()->create(
@@ -125,7 +123,17 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                 true, // $isPrefixAllowed
                 true, // $isMiddleNameAllowed
                 true, //$isSuffixAllowed
-            ]
+            ],
+            'With html entities' => [
+                $customerFactory->create()->setPrefix(
+                    'prefix'
+                )->setFirstname(
+                    '<h1>FirstName</h1>'
+                )->setLastname(
+                    '<strong>LastName</strong>'
+                ),
+                '<h1>FirstName</h1> <strong>LastName</strong>',
+            ],
         ];
     }
 }

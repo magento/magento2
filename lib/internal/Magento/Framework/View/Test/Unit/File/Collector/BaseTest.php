@@ -45,7 +45,7 @@ class BaseTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeMock = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->getMockForAbstractClass();
 
         $this->dirSearch = $this->createMock(DirSearch::class);

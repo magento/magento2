@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * File writer
+ * @api
  */
 interface WriteFileInterface
 {

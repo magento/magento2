@@ -131,7 +131,7 @@ class ConfirmationTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderPrepareDataSource()
+    public static function dataProviderPrepareDataSource()
     {
         return [
             [false, 'confirmation', __('Confirmation Not Required')],

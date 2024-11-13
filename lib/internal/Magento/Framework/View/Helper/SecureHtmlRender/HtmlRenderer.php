@@ -13,6 +13,31 @@ use Magento\Framework\Escaper;
  */
 class HtmlRenderer
 {
+
+    /**
+     * List of void elements which require a self-closing tag and don't allow content
+     *
+     * @var array
+     */
+    private const VOID_ELEMENTS_MAP = [
+        'area' => true,
+        'base' => true,
+        'br' => true,
+        'col' => true,
+        'command' => true,
+        'embed' => true,
+        'hr' => true,
+        'img' => true,
+        'input' => true,
+        'keygen' => true,
+        'link' => true,
+        'meta' => true,
+        'param' => true,
+        'source' => true,
+        'track' => true,
+        'wbr' => true,
+    ];
+
     /**
      * @var Escaper
      */
@@ -49,10 +74,10 @@ class HtmlRenderer
         }
 
         $html = '<' .$tagData->getTag() .$attributesHtml;
-        if ($content) {
-            $html .= '>' .$content .'</' .$tagData->getTag() .'>';
-        } else {
+        if (isset(self::VOID_ELEMENTS_MAP[$tagData->getTag()])) {
             $html .= '/>';
+        } else {
+            $html .= '>' .$content .'</' .$tagData->getTag() .'>';
         }
 
         return $html;

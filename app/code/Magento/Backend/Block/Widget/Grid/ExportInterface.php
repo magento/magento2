@@ -18,7 +18,6 @@ interface ExportInterface
      * Retrieve grid export types
      *
      * @return array|bool
-     * @api
      */
     public function getExportTypes();
 
@@ -26,7 +25,6 @@ interface ExportInterface
      * Retrieve grid id
      *
      * @return string
-     * @api
      */
     public function getId();
 
@@ -52,7 +50,6 @@ interface ExportInterface
      * Return array with keys type and value
      *
      * @return array
-     * @api
      */
     public function getCsvFile();
 
@@ -60,7 +57,6 @@ interface ExportInterface
      * Retrieve Grid data as CSV
      *
      * @return string
-     * @api
      */
     public function getCsv();
 
@@ -68,7 +64,6 @@ interface ExportInterface
      * Retrieve data in xml
      *
      * @return string
-     * @api
      */
     public function getXml();
 
@@ -79,7 +74,6 @@ interface ExportInterface
      *
      * @param string $sheetName
      * @return array
-     * @api
      */
     public function getExcelFile($sheetName = '');
 
@@ -87,7 +81,6 @@ interface ExportInterface
      * Retrieve grid data as MS Excel 2003 XML Document
      *
      * @return string
-     * @api
      */
     public function getExcel();
 }

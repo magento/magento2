@@ -6,8 +6,6 @@
 
 /**
  * Source model of customer address types
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Model\Config\Source\Address;
 

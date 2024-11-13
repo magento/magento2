@@ -13,6 +13,7 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,7 +42,7 @@ class AdditionalCommentTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getLabel'])
+            ->addMethods(['getComment', 'getLabel'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -57,6 +58,13 @@ class AdditionalCommentTest extends TestCase
         $this->formMock = $this->createMock(Form::class);
 
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->additionalComment = $objectManager->getObject(
             AdditionalComment::class,
             [

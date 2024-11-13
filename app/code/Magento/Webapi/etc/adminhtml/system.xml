@@ -20,6 +20,31 @@
                     <comment>If empty, UTF-8 will be used.</comment>
                 </field>
             </group>
+            <group id="validation" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Web Api Input Limits</label>
+                <field id="input_limit_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Enable Input Limits</label>
+                </field>
+                <field id="complex_array_limit" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Input List Limit</label>
+                    <comment>Maximum number of items allowed in an entity's array property.</comment>
+                    <depends>
+                        <field id="input_limit_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="maximum_page_size" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Maximum Page Size</label>
+                    <comment>Maximum number of items allowed in a paginated search result.</comment>
+                    <depends>
+                        <field id="input_limit_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="default_page_size" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Page Size</label>
+                    <comment>Default number of items a paginated search result.</comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>

@@ -16,40 +16,35 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractTest extends TestCase
 {
-    /** @var ObjectManager  */
+    /**
+     * @var ObjectManager
+     */
     protected $_objectManager;
 
+    /**
+     * @inheirtDoc
+     */
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
     }
 
-    public function testGetItemRenderer()
+    /**
+     * @return void
+     */
+    public function testGetItemRenderer(): void
     {
         $renderer = $this->createMock(AbstractBlock::class);
         $layout = $this->createPartialMock(
             Layout::class,
             ['getChildName', 'getBlock', 'getGroupChildNames']
         );
-        $layout->expects(
-            $this->at(0)
-        )->method(
-            'getChildName'
-        )->with(
-            null,
-            'some-type'
-        )->willReturn(
-            'some-block-name'
-        );
-        $layout->expects(
-            $this->at(1)
-        )->method(
-            'getBlock'
-        )->with(
-            'some-block-name'
-        )->willReturn(
-            $renderer
-        );
+        $layout->method('getChildName')
+            ->with(null, 'some-type')
+            ->willReturn('some-block-name');
+        $layout->method('getBlock')
+            ->with('some-block-name')
+            ->willReturn($renderer);
 
         /** @var AbstractItems $block */
         $block = $this->_objectManager->getObject(
@@ -65,7 +60,10 @@ class AbstractTest extends TestCase
         $this->assertSame($renderer, $block->getItemRenderer('some-type'));
     }
 
-    public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
+    /**
+     * @return void
+     */
+    public function testGetItemRendererThrowsExceptionForNonexistentRenderer(): void
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Renderer for type "some-type" does not exist.');
@@ -74,25 +72,12 @@ class AbstractTest extends TestCase
             Layout::class,
             ['getChildName', 'getBlock']
         );
-        $layout->expects(
-            $this->at(0)
-        )->method(
-            'getChildName'
-        )->with(
-            null,
-            'some-type'
-        )->willReturn(
-            'some-block-name'
-        );
-        $layout->expects(
-            $this->at(1)
-        )->method(
-            'getBlock'
-        )->with(
-            'some-block-name'
-        )->willReturn(
-            $renderer
-        );
+        $layout->method('getChildName')
+            ->with(null, 'some-type')
+            ->willReturn('some-block-name');
+        $layout->method('getBlock')
+            ->with('some-block-name')
+            ->willReturn($renderer);
 
         /** @var AbstractItems $block */
         $block = $this->_objectManager->getObject(

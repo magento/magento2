@@ -142,6 +142,7 @@
             "SALES_ORDER_STATUS": true,
             "SALES_ORDER_STATE": true,
             "SALES_ORDER_STORE_ID": true,
+            "SALES_ORDER_STORE_ID_STATE_CREATED_AT": true,
             "SALES_ORDER_CREATED_AT": true,
             "SALES_ORDER_CUSTOMER_ID": true,
             "SALES_ORDER_EXT_ORDER_ID": true,

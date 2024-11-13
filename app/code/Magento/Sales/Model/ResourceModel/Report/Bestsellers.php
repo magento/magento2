@@ -5,25 +5,39 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Report;
 
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\Timezone\Validator;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Reports\Model\FlagFactory;
+use Magento\Sales\Model\ResourceModel\Helper;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
+
 /**
  * Bestsellers report resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bestsellers extends AbstractReport
 {
-    const AGGREGATION_DAILY = 'daily';
+    public const AGGREGATION_DAILY = 'daily';
 
-    const AGGREGATION_MONTHLY = 'monthly';
+    public const AGGREGATION_MONTHLY = 'monthly';
 
-    const AGGREGATION_YEARLY = 'yearly';
+    public const AGGREGATION_YEARLY = 'yearly';
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @var Product
      */
     protected $_productResource;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Helper
+     * @var Helper
      */
     protected $_salesResourceHelper;
 
@@ -37,29 +51,41 @@ class Bestsellers extends AbstractReport
     ];
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @var array
+     */
+    private array $rangesByQuery = [];
+
+    /**
+     * @param Context $context
+     * @param LoggerInterface $logger
+     * @param TimezoneInterface $localeDate
+     * @param FlagFactory $reportsFlagFactory
+     * @param Validator $timezoneValidator
+     * @param DateTime $dateTime
+     * @param Product $productResource
+     * @param Helper $salesResourceHelper
+     * @param string|null $connectionName
      * @param array $ignoredProductTypes
-     * @param string $connectionName
+     * @param StoreManagerInterface|null $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper,
-        $connectionName = null,
-        array $ignoredProductTypes = []
+        Context $context,
+        LoggerInterface $logger,
+        TimezoneInterface $localeDate,
+        FlagFactory $reportsFlagFactory,
+        Validator $timezoneValidator,
+        DateTime $dateTime,
+        Product $productResource,
+        Helper $salesResourceHelper,
+        ?string $connectionName = null,
+        array $ignoredProductTypes = [],
+        ?StoreManagerInterface $storeManager = null
     ) {
         parent::__construct(
             $context,
@@ -73,6 +99,7 @@ class Bestsellers extends AbstractReport
         $this->_productResource = $productResource;
         $this->_salesResourceHelper = $salesResourceHelper;
         $this->ignoredProductTypes = array_merge($this->ignoredProductTypes, $ignoredProductTypes);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -92,116 +119,217 @@ class Bestsellers extends AbstractReport
      * @param string|int|\DateTime|array|null $to
      * @return $this
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function aggregate($from = null, $to = null)
     {
         $connection = $this->getConnection();
-        //$this->getConnection()->beginTransaction();
-
-        try {
-            if ($from !== null || $to !== null) {
-                $subSelect = $this->_getTableDateRangeSelect(
-                    $this->getTable('sales_order'),
-                    'created_at',
-                    'updated_at',
-                    $from,
-                    $to
-                );
-            } else {
-                $subSelect = null;
-            }
-
-            $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
-            // convert dates to current admin timezone
-            $periodExpr = $connection->getDatePartSql(
-                $this->getStoreTZOffsetQuery(
-                    ['source_table' => $this->getTable('sales_order')],
-                    'source_table.created_at',
-                    $from,
-                    $to
-                )
-            );
-            $select = $connection->select();
-
-            $select->group([$periodExpr, 'source_table.store_id', 'order_item.product_id']);
-
-            $columns = [
-                'period' => $periodExpr,
-                'store_id' => 'source_table.store_id',
-                'product_id' => 'order_item.product_id',
-                'product_name' => new \Zend_Db_Expr('MIN(order_item.name)'),
-                'product_price' => new \Zend_Db_Expr(
-                    'MIN(IF(order_item_parent.base_price, order_item_parent.base_price, order_item.base_price))' .
-                    '* MIN(source_table.base_to_global_rate)'
-                ),
-                'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
-            ];
-
-            $select->from(
-                ['source_table' => $this->getTable('sales_order')],
-                $columns
-            )->joinInner(
-                ['order_item' => $this->getTable('sales_order_item')],
-                'order_item.order_id = source_table.entity_id',
-                []
-            )->joinLeft(
-                ['order_item_parent' => $this->getTable('sales_order_item')],
-                'order_item.parent_item_id = order_item_parent.item_id',
-                []
-            )->where(
-                'source_table.state != ?',
-                \Magento\Sales\Model\Order::STATE_CANCELED
-            )->where(
-                'order_item.product_type NOT IN(?)',
-                $this->ignoredProductTypes
-            );
-
-            if ($subSelect !== null) {
-                $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
-            }
-
-            $select->useStraightJoin();
-            // important!
-            $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
-            $connection->query($insertQuery);
-
-            $columns = [
-                'period' => 'period',
-                'store_id' => new \Zend_Db_Expr(\Magento\Store\Model\Store::DEFAULT_STORE_ID),
-                'product_id' => 'product_id',
-                'product_name' => new \Zend_Db_Expr('MIN(product_name)'),
-                'product_price' => new \Zend_Db_Expr('MIN(product_price)'),
-                'qty_ordered' => new \Zend_Db_Expr('SUM(qty_ordered)'),
-            ];
-
-            $select->reset();
-            $select->from(
-                $this->getMainTable(),
-                $columns
-            )->where(
-                'store_id <> ?',
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            );
-
-            if ($subSelect !== null) {
-                $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
-            }
-
-            $select->group(['period', 'product_id']);
-            $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
-            $connection->query($insertQuery);
-
-            // update rating
-            $this->_updateRatingPos(self::AGGREGATION_DAILY);
-            $this->_updateRatingPos(self::AGGREGATION_MONTHLY);
-            $this->_updateRatingPos(self::AGGREGATION_YEARLY);
-            $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_BESTSELLERS_FLAG_CODE);
-        } catch (\Exception $e) {
-            throw $e;
+        $this->clearByDateRange($from, $to);
+        foreach ($this->storeManager->getStores(true) as $store) {
+            $this->processStoreAggregate($store->getId(), $from, $to);
         }
 
+        $columns = [
+            'period' => 'period',
+            'store_id' => new \Zend_Db_Expr(Store::DEFAULT_STORE_ID),
+            'product_id' => 'product_id',
+            'product_name' => new \Zend_Db_Expr('MIN(product_name)'),
+            'product_price' => new \Zend_Db_Expr('MIN(product_price)'),
+            'qty_ordered' => new \Zend_Db_Expr('SUM(qty_ordered)'),
+        ];
+
+        $select = $connection->select();
+        $select->reset();
+        $select->from(
+            $this->getMainTable(),
+            $columns
+        )->where(
+            'store_id <> ?',
+            Store::DEFAULT_STORE_ID
+        );
+        $subSelect = $this->getRangeSubSelect($from, $to);
+        if ($subSelect !== null) {
+            $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+        }
+
+        $select->group(['period', 'product_id']);
+        $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
+        $connection->query($insertQuery);
+
+        $this->_updateRatingPos(self::AGGREGATION_DAILY);
+        $this->_updateRatingPos(self::AGGREGATION_MONTHLY);
+        $this->_updateRatingPos(self::AGGREGATION_YEARLY);
+        $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_BESTSELLERS_FLAG_CODE);
+
         return $this;
+    }
+
+    /**
+     * Clear aggregate existing data by range
+     *
+     * @param string|int|\DateTime|array|null $from
+     * @param string|int|\DateTime|array|null $to
+     * @return void
+     * @throws LocalizedException
+     */
+    private function clearByDateRange($from = null, $to = null): void
+    {
+        $subSelect = $this->getRangeSubSelect($from, $to);
+        $this->clearTableRanges($this->getMainTable(), $from, $to, $subSelect);
+    }
+
+    /**
+     * Clear table by date range
+     *
+     * @param string $table
+     * @param ?string $from
+     * @param ?string $to
+     * @param null|Select|string $subSelect
+     * @return void
+     */
+    private function clearTableRanges($table, $from = null, $to = null, $subSelect = null): void
+    {
+        if ($from === null && $to === null) {
+            $this->_truncateTable($table);
+            return;
+        }
+
+        if ($subSelect !== null) {
+            $dataRange = $this->getRange($subSelect);
+            $deleteCondition = $this->getConnection()->prepareSqlCondition('period', ['in' => $dataRange]);
+            $this->getConnection()->delete($table, $deleteCondition);
+            return;
+        } else {
+            $condition = [];
+            if ($from !== null) {
+                $condition[] = $this->getConnection()->quoteInto('period >= ?', $from);
+            }
+
+            if ($to !== null) {
+                $condition[] = $this->getConnection()->quoteInto('period <= ?', $to);
+            }
+            $deleteCondition = implode(' AND ', $condition);
+        }
+        $this->getConnection()->delete($table, $deleteCondition);
+    }
+
+    /**
+     * Get dates range to clear the table
+     *
+     * @param Select $select
+     * @return array
+     */
+    private function getRange(Select $select): array
+    {
+        $queryHash = sha1($select->__toString());
+        if (!isset($this->rangesByQuery[$queryHash])) {
+
+            $connection = $this->getConnection();
+            try {
+                $query = $connection->query($select);
+                $range = $query->fetchAll(\Zend_Db::FETCH_COLUMN);
+            } catch (\Exception) {
+                $range = [];
+            }
+
+            $this->rangesByQuery[$queryHash] = $range;
+        }
+        return $this->rangesByQuery[$queryHash];
+    }
+
+    /**
+     * Get report range sub-select
+     *
+     * @param string|int|\DateTime|array|null $from
+     * @param string|int|\DateTime|array|null $to
+     * @return Select|null
+     */
+    private function getRangeSubSelect($from = null, $to = null): ?Select
+    {
+        $subSelect = null;
+        if ($from !== null || $to !== null) {
+            $subSelect = $this->_getTableDateRangeSelect(
+                $this->getTable('sales_order'),
+                'created_at',
+                'updated_at',
+                $from,
+                $to
+            );
+        }
+
+        return $subSelect;
+    }
+
+    /**
+     * Calculate report aggregate per store
+     *
+     * @param int|null $storeId
+     * @param string|int|\DateTime|array|null $from
+     * @param string|int|\DateTime|array|null $to
+     * @return void
+     * @throws LocalizedException
+     */
+    private function processStoreAggregate(?int $storeId, $from = null, $to = null): void
+    {
+        $connection = $this->getConnection();
+
+        // convert dates to current admin timezone
+        $periodExpr = $connection->getDatePartSql(
+            $this->getStoreTZOffsetQuery(
+                ['source_table' => $this->getTable('sales_order')],
+                'source_table.created_at',
+                $from,
+                $to
+            )
+        );
+
+        $subSelect = $this->getRangeSubSelect($from, $to);
+        if ($subSelect) {
+            $dataRange = $this->getRange($subSelect);
+            $whereCondition = $connection->prepareSqlCondition($periodExpr, ['in' => $dataRange]);
+        }
+
+        $select = $connection->select();
+        $select->group([$periodExpr, 'source_table.store_id', 'order_item.product_id']);
+
+        $columns = [
+            'period' => $periodExpr,
+            'store_id' => 'source_table.store_id',
+            'product_id' => 'order_item.product_id',
+            'product_name' => new \Zend_Db_Expr('MIN(order_item.name)'),
+            'product_price' => new \Zend_Db_Expr(
+                'MIN(IF(order_item_parent.base_price, order_item_parent.base_price, order_item.base_price))' .
+                '* MIN(source_table.base_to_global_rate)'
+            ),
+            'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
+        ];
+
+        $select->from(
+            ['source_table' => $this->getTable('sales_order')],
+            $columns
+        )->joinInner(
+            ['order_item' => $this->getTable('sales_order_item')],
+            'order_item.order_id = source_table.entity_id',
+            []
+        )->joinLeft(
+            ['order_item_parent' => $this->getTable('sales_order_item')],
+            'order_item.parent_item_id = order_item_parent.item_id',
+            []
+        )->where(
+            "source_table.entity_id IN (SELECT entity_id FROM " . $this->getTable('sales_order') .
+            " WHERE store_id = " . $storeId .
+            " AND state != '" . \Magento\Sales\Model\Order::STATE_CANCELED . "'" .
+            ($subSelect !== null ?
+                " AND " . $whereCondition :
+                '') . ")"
+        )->where(
+            'order_item.product_type NOT IN(?)',
+            $this->ignoredProductTypes
+        );
+
+        $select->useStraightJoin();
+        // important!
+        $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
+        $connection->query($insertQuery);
     }
 
     /**
@@ -209,6 +337,7 @@ class Bestsellers extends AbstractReport
      *
      * @param string $aggregation
      * @return $this
+     * @throws LocalizedException
      */
     protected function _updateRatingPos($aggregation)
     {

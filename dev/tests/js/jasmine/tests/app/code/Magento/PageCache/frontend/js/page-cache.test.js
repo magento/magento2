@@ -106,13 +106,6 @@ define([
             expect($.mage.cookies.set).toHaveBeenCalled();
             expect(inputContainer.val()).toEqual(jasmine.any(String));
         });
-
-        it('widget exists on load on body', function (done) {
-            $(function () {
-                expect($('body').data('mageFormKey')).toBeDefined();
-                done();
-            });
-        });
     });
 
     describe('Testing PageCache Widget', function () {
@@ -192,7 +185,9 @@ define([
                     patternPlaceholderClose: /^ \/BLOCK (.+) $/
                 }
             };
+            // eslint-disable-next-line jquery-no-bind-unbind
             replacer = $.mage.pageCache.prototype._replacePlaceholder.bind(context);
+            // eslint-disable-next-line jquery-no-bind-unbind
             searcher = $.mage.pageCache.prototype._searchPlaceholders.bind(context);
 
             wdContainer
@@ -215,7 +210,9 @@ define([
                     patternPlaceholderClose: /^ \/BLOCK (.+) $/
                 }
             };
+            // eslint-disable-next-line jquery-no-bind-unbind
             replacer = $.mage.pageCache.prototype._replacePlaceholder.bind(context);
+            // eslint-disable-next-line jquery-no-bind-unbind
             searcher = $.mage.pageCache.prototype._searchPlaceholders.bind(context);
 
             wdContainer

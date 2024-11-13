@@ -12,6 +12,12 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\ComponentsDir;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
@@ -173,11 +179,21 @@ QUERY;
 
     /**
      * Test that creating a customer on an alternative store sends an email in the translated language
-     *
-     * @magentoDataFixture Magento/CustomerGraphQl/_files/website_store_with_store_view.php
-     * @magentoConfigFixture test_store_view_store general/locale/code fr_FR
-     * @magentoComponentsDir Magento/CustomerGraphQl/_files
      */
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(
+            StoreGroupFixture::class,
+            ['name' => 'Test Group', 'website_id' => '$website2.id$'],
+            'store_group2'
+        ),
+        DataFixture(
+            StoreFixture::class,
+            ['code' => 'test_store_view', 'name' => 'Test Store View', 'store_group_id' => '$store_group2.id$']
+        ),
+        Config('general/locale/code', 'fr_FR', 'store', 'test_store_view'),
+        ComponentsDir('Magento/CustomerGraphQl/_files')
+    ]
     public function testCreateCustomerForStoreSendsTranslatedEmail()
     {
         $query

@@ -44,6 +44,9 @@ class GeneratePatchCommandTest extends TestCase
      */
     private $command;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->componentRegistrarMock = $this->createMock(ComponentRegistrar::class);
@@ -59,7 +62,10 @@ class GeneratePatchCommandTest extends TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $this->componentRegistrarMock->expects($this->once())
             ->method('getPath')
@@ -67,7 +73,7 @@ class GeneratePatchCommandTest extends TestCase
             ->willReturn('/long/path/to/Vendor/Module');
 
         $read = $this->createMock(Read::class);
-        $read->expects($this->at(0))
+        $read
             ->method('readFile')
             ->with('patch_template.php.dist')
             ->willReturn('something');
@@ -89,7 +95,10 @@ class GeneratePatchCommandTest extends TestCase
         $this->assertStringContainsString('successfully generated', $commandTester->getDisplay());
     }
 
-    public function testWrongParameter()
+    /**
+     * @return void
+     */
+    public function testWrongParameter(): void
     {
         $this->expectExceptionMessage('Not enough arguments');
         $this->expectException(\RuntimeException::class);
@@ -98,7 +107,10 @@ class GeneratePatchCommandTest extends TestCase
         $commandTester->execute([]);
     }
 
-    public function testBadModule()
+    /**
+     * @return void
+     */
+    public function testBadModule(): void
     {
         $this->componentRegistrarMock->expects($this->once())
             ->method('getPath')

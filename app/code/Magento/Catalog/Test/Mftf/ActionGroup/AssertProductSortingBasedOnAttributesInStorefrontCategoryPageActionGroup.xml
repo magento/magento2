@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertProductSortingBasedOnAttributesInStorefrontCategoryPageActionGroup">
+        <annotations>
+            <description>Goes to the Storefront page. Validates the sorting of products based on the attributes.</description>
+        </annotations>
+        <arguments>
+            <argument name="product1" defaultValue="product"/>
+            <argument name="product2" defaultValue="product"/>
+            <argument name="sortBy" type="string"/>
+        </arguments>
+        <selectOption userInput="{{sortBy}}" selector="{{StorefrontCategoryTopToolbarSection.sortByDropdown}}" stepKey="selectSortBy"/>
+        <waitForPageLoad stepKey="waitForPageLoadPostSelectingSortBy"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productInOrderDisplay('1',product1.name)}}" stepKey="assertsTheProductAtIndex1"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.productInOrderDisplay('2',product2.name)}}" stepKey="assertsTheProductAtIndex2"/>
+    </actionGroup>
+</actionGroups>

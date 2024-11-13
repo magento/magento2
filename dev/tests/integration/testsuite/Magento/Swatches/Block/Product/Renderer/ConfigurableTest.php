@@ -150,6 +150,31 @@ class ConfigurableTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swatch_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_image.php
+     * @return void
+     */
+    public function testGetJsonSwatchConfigUsedWithSwatchImageType(): void
+    {
+        $this->updateAttributeUseProductImageFlag();
+        $this->updateProductImage('simple_option_2', '/m/a/magento_image.jpg', ['swatch_image']);
+        $expectedOptions = $this->getDefaultOptionsList();
+        $expectedOptions['option 2']['value'] = $this->imageUrlBuilder->getUrl(
+            '/m/a/magento_image.jpg',
+            'swatch_image_base'
+        );
+        $expectedOptions['option 2']['thumb'] = $this->imageUrlBuilder->getUrl(
+            '/m/a/magento_image.jpg',
+            'swatch_thumb_base'
+        );
+        $this->assertOptionsData(
+            $this->serializer->unserialize($this->block->getJsonSwatchConfig()),
+            $expectedOptions,
+            ['swatch_input_type' => 'visual', 'use_product_image_for_swatch' => 1]
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swatch_attribute.php
      * @return void
      */
     public function testGetJsonSwatchConfigUsedEmptyProductImage(): void
@@ -223,15 +248,16 @@ class ConfigurableTest extends TestCase
      *
      * @param string $sku
      * @param string $imageName
+     * @param array $imageRoles
      * @return void
      */
-    private function updateProductImage(string $sku, string $imageName): void
-    {
+    private function updateProductImage(
+        string $sku,
+        string $imageName,
+        array $imageRoles = ['image', 'small_image', 'thumbnail']
+    ): void {
         $product = $this->productRepository->get($sku);
         $product->setStoreId(Store::DEFAULT_STORE_ID)
-            ->setImage($imageName)
-            ->setSmallImage($imageName)
-            ->setThumbnail($imageName)
             ->setData(
                 'media_gallery',
                 [
@@ -247,6 +273,10 @@ class ConfigurableTest extends TestCase
                 ]
             )
             ->setCanSaveCustomOptions(true);
+        foreach ($imageRoles as $role) {
+            $product->setData($role, $imageName);
+        }
+
         $this->productResource->save($product);
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Gallery\UpdateHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\LayoutInterface;
@@ -56,7 +57,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     /**
      * @var array
      */
-    private $imageExpectation = [
+    private static $imageExpectation = [
         'thumb' => '/m/a/magento_image.jpg',
         'img' => '/m/a/magento_image.jpg',
         'full' => '/m/a/magento_image.jpg',
@@ -70,7 +71,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     /**
      * @var array
      */
-    private $thumbnailExpectation = [
+    private static $thumbnailExpectation = [
         'thumb' => '/m/a/magento_thumbnail.jpg',
         'img' => '/m/a/magento_thumbnail.jpg',
         'full' => '/m/a/magento_thumbnail.jpg',
@@ -174,7 +175,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function galleryDisabledImagesDataProvider(): array
+    public static function galleryDisabledImagesDataProvider(): array
     {
         return [
             [
@@ -182,7 +183,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '/m/a/magento_image.jpg' => ['disabled' => true],
                     '/m/a/magento_thumbnail.jpg' => [],
                 ],
-                'expectation' => $this->thumbnailExpectation,
+                'expectation' => self::$thumbnailExpectation,
             ],
         ];
     }
@@ -211,7 +212,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function galleryImagesDataProvider(): array
+    public static function galleryImagesDataProvider(): array
     {
         return [
             'with_main_image' => [
@@ -220,8 +221,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '/m/a/magento_thumbnail.jpg' => ['main' => true],
                 ],
                 'expectation' => [
-                    $this->imageExpectation,
-                    array_merge($this->thumbnailExpectation, ['isMain' => true]),
+                    self::$imageExpectation,
+                    array_merge(self::$thumbnailExpectation, ['isMain' => true]),
                 ],
             ],
             'without_main_image' => [
@@ -230,8 +231,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '/m/a/magento_thumbnail.jpg' => [],
                 ],
                 'expectation' => [
-                    array_merge($this->imageExpectation, ['isMain' => true]),
-                    $this->thumbnailExpectation,
+                    array_merge(self::$imageExpectation, ['isMain' => true]),
+                    self::$thumbnailExpectation,
                 ],
             ],
             'with_changed_position' => [
@@ -240,8 +241,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '/m/a/magento_thumbnail.jpg' => ['position' => '1'],
                 ],
                 'expectation' => [
-                    array_merge($this->thumbnailExpectation, ['position' => '1']),
-                    array_merge($this->imageExpectation, ['position' => '2', 'isMain' => true]),
+                    array_merge(self::$thumbnailExpectation, ['position' => '1']),
+                    array_merge(self::$imageExpectation, ['position' => '2', 'isMain' => true]),
                 ],
             ],
         ];
@@ -272,7 +273,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function galleryImagesWithImageOptimizationParametersInUrlDataProvider(): array
+    public static function galleryImagesWithImageOptimizationParametersInUrlDataProvider(): array
     {
 
         $imageExpectation = [
@@ -356,7 +357,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function galleryImagesOnStoreViewDataProvider(): array
+    public static function galleryImagesOnStoreViewDataProvider(): array
     {
         return [
             'with_store_labels' => [
@@ -365,8 +366,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '/m/a/magento_thumbnail.jpg' => [],
                 ],
                 'expectation' => [
-                    array_merge($this->imageExpectation, ['isMain' => true, 'caption' => 'Some store label']),
-                    $this->thumbnailExpectation,
+                    array_merge(self::$imageExpectation, ['isMain' => true, 'caption' => 'Some store label']),
+                    self::$thumbnailExpectation,
                 ],
             ],
             'with_changed_position' => [
@@ -375,8 +376,8 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '/m/a/magento_thumbnail.jpg' => [],
                 ],
                 'expectation' => [
-                    array_merge($this->thumbnailExpectation, ['position' => '2']),
-                    array_merge($this->imageExpectation, ['position' => '3', 'isMain' => true]),
+                    array_merge(self::$thumbnailExpectation, ['position' => '2']),
+                    array_merge(self::$imageExpectation, ['position' => '3', 'isMain' => true]),
                 ],
             ],
             'with_main_store_image' => [
@@ -385,10 +386,111 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     '/m/a/magento_thumbnail.jpg' => ['main' => true],
                 ],
                 'expectation' => [
-                    $this->imageExpectation,
-                    array_merge($this->thumbnailExpectation, ['isMain' => true]),
+                    self::$imageExpectation,
+                    array_merge(self::$thumbnailExpectation, ['isMain' => true]),
                 ],
             ],
+        ];
+    }
+
+    /**
+     * Tests images positions in store view
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture default/web/url/catalog_media_url_format image_optimization_parameters
+     * @dataProvider imagesPositionStoreViewDataProvider
+     * @param string $addFromStore
+     * @param array $newImages
+     * @param string $viewFromStore
+     * @param array $expectedImages
+     * @return void
+     */
+    public function testImagesPositionStoreView(
+        string $addFromStore,
+        array $newImages,
+        string $viewFromStore,
+        array $expectedImages
+    ): void {
+        $storeId = (int)$this->storeRepository->get($addFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $images = $product->getData('media_gallery')['images'];
+        $images = array_merge($images, $newImages);
+        $product->setData('media_gallery', ['images' => $images]);
+        $updateHandler = Bootstrap::getObjectManager()->create(UpdateHandler::class);
+        $updateHandler->execute($product);
+        $storeId = (int)$this->storeRepository->get($viewFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $this->block->setData('product', $product);
+        $actualImages = array_map(
+            function ($item) {
+                return [
+                    'img' => parse_url($item['img'], PHP_URL_PATH),
+                    'caption' => $item['caption'],
+                    'position' => $item['position'],
+                ];
+            },
+            $this->serializer->unserialize($this->block->getGalleryImagesJson())
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function imagesPositionStoreViewDataProvider(): array
+    {
+        return [
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'default',
+                [
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_image.jpg',
+                        'caption' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_small_image.jpg',
+                        'caption' => 'Simple Product',
+                        'position' => 2,
+                    ],
+                ]
+            ],
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'fixture_second_store',
+                [
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_image.jpg',
+                        'caption' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_small_image.jpg',
+                        'caption' => 'New Image Alt Text',
+                        'position' => 2,
+                    ],
+                ]
+            ]
         ];
     }
 

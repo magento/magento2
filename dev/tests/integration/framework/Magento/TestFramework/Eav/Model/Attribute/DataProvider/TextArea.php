@@ -18,12 +18,15 @@ class TextArea extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getAttributeData(): array
+    public static function getAttributeData(): array
     {
+        if(isset(static::$defaultAttributePostData['serialized_options_arr'])) {
+            unset(static::$defaultAttributePostData['serialized_options_arr']);
+        }
         return array_replace_recursive(
             parent::getAttributeData(),
             [
-                "{$this->getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     [
                         'default_value_text' => '',
                         'default_value_textarea' => 'Default attribute value',
@@ -36,25 +39,28 @@ class TextArea extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        if(isset(static::$defaultAttributePostData['serialized_options_arr'])) {
+            unset(static::$defaultAttributePostData['serialized_options_arr']);
+        }
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'text_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'text_attribute',
                     ],
                 ],
                 "{$frontendInput}_change_frontend_input" => [
-                    'post_data' => [
+                    'postData' => [
                         'frontend_input' => 'texteditor',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'frontend_input' => 'textarea',
                         'is_wysiwyg_enabled' => '1'
                     ],
@@ -66,7 +72,7 @@ class TextArea extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getFrontendInput(): string
+    protected static function getFrontendInput(): string
     {
         return 'textarea';
     }
@@ -74,7 +80,7 @@ class TextArea extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdatePostData(): array
+    protected static function getUpdatePostData(): array
     {
         return [
             'frontend_label' => [
@@ -102,9 +108,9 @@ class TextArea extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdateExpectedData(): array
+    protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = $this->getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         unset($updatePostData['default_value_textarea']);
         return array_merge(
             $updatePostData,

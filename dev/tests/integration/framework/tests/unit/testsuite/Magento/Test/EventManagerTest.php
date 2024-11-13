@@ -28,8 +28,12 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_subscriberOne = $this->createPartialMock(\stdClass::class, ['testEvent']);
-        $this->_subscriberTwo = $this->createPartialMock(\stdClass::class, ['testEvent']);
+        $this->_subscriberOne = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['testEvent'])
+            ->getMock();
+        $this->_subscriberTwo = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['testEvent'])
+            ->getMock();
         $this->_eventManager = new \Magento\TestFramework\EventManager(
             [$this->_subscriberOne, $this->_subscriberTwo]
         );
@@ -55,7 +59,7 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedSubscribers, $actualSubscribers);
     }
 
-    public function fireEventDataProvider()
+    public static function fireEventDataProvider()
     {
         return [
             'straight order' => [false, ['subscriberOne', 'subscriberTwo']],

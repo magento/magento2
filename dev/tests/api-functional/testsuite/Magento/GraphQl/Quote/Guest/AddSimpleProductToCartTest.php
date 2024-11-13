@@ -82,6 +82,56 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testAddSimpleProductWithDifferentStoreHeader()
+    {
+        $sku = 'simple_product';
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
+        self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+
+        self::assertArrayHasKey('shipping_addresses', $response['addSimpleProductsToCart']['cart']);
+        self::assertEmpty($response['addSimpleProductsToCart']['cart']['shipping_addresses']);
+        self::assertEquals($quantity, $response['addSimpleProductsToCart']['cart']['items'][0]['quantity']);
+        self::assertEquals($sku, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
+        self::assertArrayHasKey('prices', $response['addSimpleProductsToCart']['cart']['items'][0]);
+        self::assertArrayHasKey('id', $response['addSimpleProductsToCart']['cart']);
+        self::assertEquals($maskedQuoteId, $response['addSimpleProductsToCart']['cart']['id']);
+
+        self::assertArrayHasKey('price', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
+        $price = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['price'];
+        self::assertArrayHasKey('value', $price);
+        self::assertEquals(10, $price['value']);
+        self::assertArrayHasKey('currency', $price);
+        self::assertEquals('USD', $price['currency']);
+
+        self::assertArrayHasKey('row_total', $response['addSimpleProductsToCart']['cart']['items'][0]['prices']);
+        $rowTotal = $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total'];
+        self::assertArrayHasKey('value', $rowTotal);
+        self::assertEquals(20, $rowTotal['value']);
+        self::assertArrayHasKey('currency', $rowTotal);
+        self::assertEquals('USD', $rowTotal['currency']);
+
+        self::assertArrayHasKey(
+            'row_total_including_tax',
+            $response['addSimpleProductsToCart']['cart']['items'][0]['prices']
+        );
+        $rowTotalIncludingTax =
+            $response['addSimpleProductsToCart']['cart']['items'][0]['prices']['row_total_including_tax'];
+        self::assertArrayHasKey('value', $rowTotalIncludingTax);
+        self::assertEquals(20, $rowTotalIncludingTax['value']);
+        self::assertArrayHasKey('currency', $rowTotalIncludingTax);
+        self::assertEquals('USD', $rowTotalIncludingTax['currency']);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image_no_options.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      */
@@ -146,8 +196,7 @@ QUERY;
 
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
-            'Product that you are trying to add is not available.'
+            'GraphQL response contains errors: Could not find a product with SKU "' . $sku . '"'
         );
 
         $this->graphQlMutation($query);
@@ -156,6 +205,36 @@ QUERY;
     /**
      * Add out of stock product to cart
      *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testAddOutOfStockProductToCart(): void
+    {
+        $sku = 'simple1';
+        $skuOutOfStock = 'simple_product';
+        $quantity = 1;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+        $this->graphQlMutation($query);
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage(
+            'Product that you are trying to add is not available'
+        );
+        $query = $this->getQuery($maskedQuoteId, $skuOutOfStock, $quantity);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Add out of stock product to cart with disabled quote item check
+     *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -164,9 +243,36 @@ QUERY;
      * @return void
      * @throws NoSuchEntityException
      */
-    public function testAddOutOfStockProductToCart(): void
+    public function testAddOutOfStockProductToCartWithDisabledInventoryCheck(): void
     {
         $sku = 'simple1';
+        $quantity = 1;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+        $response = $this->graphQlMutation($query);
+
+        $this->assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+        $this->assertCount(2, $response['addSimpleProductsToCart']['cart']['items']);
+        $cartItems = $response['addSimpleProductsToCart']['cart']['items'];
+        $this->assertEquals(2, $cartItems[0]['quantity']);
+        $this->assertEquals(1, $cartItems[1]['quantity']);
+    }
+
+    /**
+     * Add out of stock simple product to cart with disabled quote item check
+     *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testAddOutOfStockSimpleProductToCart(): void
+    {
+        $sku = 'simple_product';
         $quantity = 1;
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
@@ -174,7 +280,36 @@ QUERY;
 
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
-            'Some of the products are out of stock.'
+            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
+            'Product that you are trying to add is not available.'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Add out of stock simple product to cart with disabled quote item check
+     *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testAddOutOfStockSimpleProductToCartWithDisabledInventoryCheck(): void
+    {
+        $sku = 'simple_product';
+        $quantity = 1;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
+            'Product that you are trying to add is not available.'
         );
 
         $this->graphQlMutation($query);

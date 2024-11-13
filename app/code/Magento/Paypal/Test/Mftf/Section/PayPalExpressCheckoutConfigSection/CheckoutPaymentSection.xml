@@ -6,12 +6,26 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutPaymentSection">
         <element name="email" type="input" selector="#checkout-customer-email"/>
         <element name="payPalFrame" type="iframe" selector="//iframe[contains(@class, 'zoid-component-frame zoid-visible')]" timeout="5"/>
         <element name="smartButtonPayPalFrame" type="iframe" selector=".component-frame" timeout="10"/>
         <element name="PayPalPaymentRadio" type="radio" selector="input#paypal_express.radio" timeout="30"/>
         <element name="PayPalBtn" type="radio" selector=".paypal-button.paypal-button-number-0" timeout="30"/>
+        <element name="ContinuePayPalBtn" type="radio" selector="//span[text()='Continue to PayPal']"/>
+        <element name="PayPalExpressCheckoutPayFlowEdition" type="radio" selector="input#payflow_express.radio"/>
+        <element name="continueButton" type="button" selector="//div[@class='payment-method _active']//button[@class='action primary checkout']/span[text()='Continue to PayPal']"/>
+        <element name="PayPalPayflowLinkRadio" type="radio" selector="input#payflow_link.radio" timeout="30"/>
+        <element name="cntinuebtn" type="button" selector="//button[@data-role='review-save']/span[text()='Continue']" timeout="10"/>
+        <element name="selectCheckoutWithPaypalBtn" type="button" selector="//input[@name ='submit.x']" timeout="10"/>
+        <element name="selectCheckboxforBilling" type="checkbox" selector="//input[@id='billing-address-same-as-shipping-payflow_link']" timeout="10"/>
+        <element name="creditCardField" type="input" selector="//input[@id='cc_number']" timeout="10"/>
+        <element name="expirationMonth" type="input" selector="//input[@id='expdate_month']" timeout="10"/>
+        <element name="expirationYear" type="input" selector="//input[@id='expdate_year']" timeout="10"/>
+        <element name="cvv" type="input" selector="//input[@id='cvv2_number']" timeout="10"/>
+        <element name="payNowBtn" type="button" selector="//input[@id='btn_pay_cc']" timeout="10"/>
+        <element name="invalidAddressError" type="text" selector="div.message.message-error.error" timeout="5"/>
     </section>
 </sections>

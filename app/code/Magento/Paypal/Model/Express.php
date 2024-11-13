@@ -843,7 +843,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $transactionClosingDate->setTime(11, 49, 00);
         $transactionClosingDate->modify('+' . $period . ' days');
 
-        $currentTime = new \DateTime(null, new \DateTimeZone('US/Pacific'));
+        $currentTime = new \DateTime('now', new \DateTimeZone('US/Pacific'));
 
         if ($currentTime > $transactionClosingDate) {
             return true;

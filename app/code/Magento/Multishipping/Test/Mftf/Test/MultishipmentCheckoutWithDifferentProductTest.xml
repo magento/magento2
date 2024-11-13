@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MultishipmentCheckoutWithDifferentProductTest">
+        <annotations>
+            <features value="Multishipment"/>
+            <stories value="Multishipping checkout with different product's types"/>
+            <title value="Multishipping checkout with different product's types"/>
+            <description value="Multishipping checkout with different product's types"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4267"/>
+            <group value="Multishipment"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="Customer_US_UK_DE" stepKey="createCustomer"/>
+            <!-- Create category and 2 simple product -->
+           <createData entity="ApiCategory" stepKey="createCategory"/>
+           <createData entity="ApiSimpleProduct" stepKey="firstSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="secondSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">15</field>
+            </createData>
+            <!-- Create group product with created above simple products -->
+            <createData entity="ApiGroupedProduct2" stepKey="createGroupedProduct">
+                 <requiredEntity createDataKey="createCategory"/>
+             </createData>
+             <createData entity="OneSimpleProductLink" stepKey="addFirstProduct">
+                 <requiredEntity createDataKey="createGroupedProduct"/>
+                 <requiredEntity createDataKey="firstSimpleProduct"/>
+             </createData>
+             <updateData entity="OneMoreSimpleProductLink" createDataKey="addFirstProduct" stepKey="addSecondProduct">
+                 <requiredEntity createDataKey="createGroupedProduct"/>
+                 <requiredEntity createDataKey="secondSimpleProduct"/>
+             </updateData>
+            <!--edit default quantity of each simple product under grouped product.-->
+            <amOnPage url="{{AdminProductEditPage.url($$createGroupedProduct.id$$)}}" stepKey="openGroupedProductEditPage"/>
+             <actionGroup ref="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup" stepKey="fillDefaultQtyForVirtualProduct">
+                 <argument name="productName" value="$$firstSimpleProduct.name$$"/>
+                 <argument name="qty" value="1"/>
+             </actionGroup>
+             <actionGroup ref="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup" stepKey="fillDefaultQtyForSecondProduct">
+                 <argument name="productName" value="$$secondSimpleProduct.name$$"/>
+                 <argument name="qty" value="2"/>
+             </actionGroup>
+             <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveAndCloseCreatedGroupedProduct"/>
+            <!-- Create Configurable Product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--  Search for the Created Configurable Product -->
+            <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigurableProductForEdit">
+                <argument name="productSku" value="$$createConfigurableProduct.sku$$"/>
+            </actionGroup>
+            <!--Update the Created Configurable Product -->
+            <actionGroup ref="AdminCreateThreeConfigurationsForConfigurableProductActionGroup" stepKey="editConfigurableProduct">
+                <argument name="product" value="{{createConfigurableProduct}}"/>
+                <argument name="redColor" value="{{colorProductAttribute2.name}}"/>
+                <argument name="blueColor" value="{{colorProductAttribute3.name}}"/>
+                <argument name="whiteColor" value="{{colorProductAttribute1.name}}"/>
+            </actionGroup>
+            <!--Create bundle product with dynamic price with two simple products -->
+             <createData entity="ApiBundleProduct" stepKey="createDynamicBundleProduct"/>
+              <createData entity="DropDownBundleOption" stepKey="createFirstBundleOption">
+                  <requiredEntity createDataKey="createDynamicBundleProduct"/>
+              </createData>
+              <createData entity="ApiBundleLink" stepKey="firstLinkOptionToDynamicProduct">
+                  <requiredEntity createDataKey="createDynamicBundleProduct"/>
+                  <requiredEntity createDataKey="createFirstBundleOption"/>
+                  <requiredEntity createDataKey="firstSimpleProduct"/>
+              </createData>
+              <createData entity="ApiBundleLink" stepKey="secondLinkOptionToDynamicProduct">
+                  <requiredEntity createDataKey="createDynamicBundleProduct"/>
+                  <requiredEntity createDataKey="createFirstBundleOption"/>
+                  <requiredEntity createDataKey="secondSimpleProduct"/>
+              </createData>
+              <!--Assign bundle product to category-->
+              <amOnPage url="{{AdminProductEditPage.url($$createDynamicBundleProduct.id$$)}}" stepKey="openBundleProductEditPage"/>
+              <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCategoryToProduct">
+                  <argument name="categoryName" value="$createCategory.name$"/>
+              </actionGroup>
+        </before>
+        <after>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteAllProducts"/>
+
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete the Created Color attribute-->
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteWhiteColorAttribute">
+                <argument name="Color" value="{{colorProductAttribute1.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteRedColorAttribute">
+                <argument name="Color" value="{{colorProductAttribute2.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteBlueColorAttribute">
+                <argument name="Color" value="{{colorProductAttribute3.name}}"/>
+            </actionGroup>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addFirstSimpleProductToCart">
+            <argument name="product" value="$$firstSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondSimpleProductToCart">
+            <argument name="product" value="$$secondSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Add grouped product to shopping cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addGroupedProductToCart">
+            <argument name="product" value="$$createGroupedProduct$$"/>
+        </actionGroup>
+        <!-- goto Bundle Product Page-->
+        <amOnPage url="{{StorefrontProductPage.url($createDynamicBundleProduct.custom_attributes[url_key]$)}}" stepKey="navigateToBundleProduct"/>
+        <!-- Add Bundle first Product to Cart -->
+        <actionGroup ref="StorefrontAddBundleProductToTheCartActionGroup" stepKey="addFirstBundleProductToCart">
+            <argument name="productName" value="$firstSimpleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Add Bundle second Product to Cart -->
+        <actionGroup ref="StorefrontAddBundleProductToTheCartActionGroup" stepKey="addSecondBundleProductToCart">
+            <argument name="productName" value="$secondSimpleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!--Add different configurable product to cart.-->
+        <actionGroup ref="StorefrontAddConfigurableProductOfSpecificColorToTheCartActionGroup" stepKey="addRedConfigurableProductToCart">
+            <argument name="urlKey" value="$createConfigurableProduct.custom_attributes[url_key]$" />
+            <argument name="color" value="Red"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddConfigurableProductOfSpecificColorToTheCartActionGroup" stepKey="addBlueConfigurableProductToCart">
+            <argument name="urlKey" value="$createConfigurableProduct.custom_attributes[url_key]$" />
+            <argument name="color" value="Blue"/>
+            <argument name="qty" value="3"/>
+        </actionGroup>
+        <!--verify total product quantity in minicart.-->
+        <seeElement selector="{{StorefrontMinicartSection.quantity(11)}}" stepKey="seeAddedProductQuantityInMiniCart"/>
+        <!-- Go to Shopping Cart page -->
+        <actionGroup ref="clickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <!-- Link "Check Out with Multiple Addresses" is shown -->
+        <seeLink userInput="Check Out with Multiple Addresses" stepKey="seeLinkIsPresent"/>
+        <!-- Click Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <!-- Check Ship to Multiple Address Page is opened-->
+        <waitForPageLoad stepKey="waitForAddressPage"/>
+        <seeInCurrentUrl url="{{MultishippingCheckoutAddressesPage.url}}" stepKey="seeShipToMultipleAddressesPageIsOpened"/>
+        <!--select different address To Ship for different products-->
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFirstAddressFromThreeOption">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 368 Broadway St. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSecondAddressFromThreeOption">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="Jane Doe, 172, Westminster Bridge Rd, London,  SE1 7RW, United Kingdom"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectThirdAddressFromThreeOption">
+            <argument name="sequenceNumber" value="3"/>
+            <argument name="option" value="John Doe, 368 Broadway St. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFourthAddressFromThreeOption">
+            <argument name="sequenceNumber" value="4"/>
+            <argument name="option" value="Jane Doe, 172, Westminster Bridge Rd, London,  SE1 7RW, United Kingdom"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFifthAddressFromThreeOption">
+            <argument name="sequenceNumber" value="5"/>
+            <argument name="option" value="Jane Doe, 172, Westminster Bridge Rd, London,  SE1 7RW, United Kingdom"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSixthAddressFromThreeOption">
+            <argument name="sequenceNumber" value="6"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSeventhAddressFromThreeOption">
+            <argument name="sequenceNumber" value="7"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectEighthAddressFromThreeOption">
+            <argument name="sequenceNumber" value="8"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectNinthAddressFromThreeOption">
+            <argument name="sequenceNumber" value="9"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectTenthAddressFromThreeOption">
+            <argument name="sequenceNumber" value="10"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectEleventhAddressFromThree">
+            <argument name="sequenceNumber" value="11"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <click selector="{{SingleShippingSection.updateAddress}}" stepKey="clickOnUpdateAddress"/>
+        <waitForPageLoad time="30" stepKey="waitForShippingInformationAfterUpdated"/>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemActionGroup" stepKey="verifyFirstLineAllDetails">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="productName" value="$firstSimpleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="{{US_Address_NY.firstname}}"/>
+            <argument name="lastName" value="{{US_Address_NY.lastname}}"/>
+            <argument name="city" value="{{US_Address_NY.city}}"/>
+            <argument name="state" value="{{US_Address_NY.state}}"/>
+            <argument name="postCode" value="{{US_Address_NY.postcode}}"/>
+            <argument name="country" value="{{US_Address_NY.country}}"/>
+            <argument name="addressStreetLine1" value="{{US_Address_NY.street[0]}}"/>
+            <argument name="addressStreetLine2" value="{{US_Address_NY.street[1]}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemActionGroup" stepKey="verifySecondLineQtyAllDetails">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="productName" value="$firstSimpleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="{{US_Address_NY.firstname}}"/>
+            <argument name="lastName" value="{{US_Address_NY.lastname}}"/>
+            <argument name="city" value="{{US_Address_NY.city}}"/>
+            <argument name="state" value="{{US_Address_NY.state}}"/>
+            <argument name="postCode" value="{{US_Address_NY.postcode}}"/>
+            <argument name="country" value="{{US_Address_NY.country}}"/>
+            <argument name="addressStreetLine1" value="{{US_Address_NY.street[0]}}"/>
+            <argument name="addressStreetLine2" value="{{US_Address_NY.street[1]}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifyThirdLineAllDetails">
+            <argument name="productSequenceNumber" value="1"/>
+            <argument name="addressQtySequenceNumber" value="3"/>
+            <argument name="productName" value="$secondSimpleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="Jane"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="London"/>
+            <argument name="postCode" value="SE1 7RW"/>
+            <argument name="country" value="United Kingdom"/>
+            <argument name="addressStreetLine1" value="172, Westminster Bridge Rd"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifyFourthLineAllDetails">
+            <argument name="productSequenceNumber" value="2"/>
+            <argument name="addressQtySequenceNumber" value="4"/>
+            <argument name="productName" value="$secondSimpleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="Jane"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="London"/>
+            <argument name="postCode" value="SE1 7RW"/>
+            <argument name="country" value="United Kingdom"/>
+            <argument name="addressStreetLine1" value="172, Westminster Bridge Rd"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifyFifthLineAllDetails">
+            <argument name="productSequenceNumber" value="3"/>
+            <argument name="addressQtySequenceNumber" value="5"/>
+            <argument name="productName" value="$secondSimpleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="Jane"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="London"/>
+            <argument name="postCode" value="SE1 7RW"/>
+            <argument name="country" value="United Kingdom"/>
+            <argument name="addressStreetLine1" value="172, Westminster Bridge Rd"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifySixthLineAllDetails">
+            <argument name="productSequenceNumber" value="1"/>
+            <argument name="addressQtySequenceNumber" value="6"/>
+            <argument name="productName" value="$createDynamicBundleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="John"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="Berlin"/>
+            <argument name="postCode" value="10789"/>
+            <argument name="country" value="Germany"/>
+            <argument name="addressStreetLine1" value="Augsburger Strabe 41"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifySeventhLineAllDetails">
+            <argument name="productSequenceNumber" value="2"/>
+            <argument name="addressQtySequenceNumber" value="7"/>
+            <argument name="productName" value="$createDynamicBundleProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="John"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="Berlin"/>
+            <argument name="postCode" value="10789"/>
+            <argument name="country" value="Germany"/>
+            <argument name="addressStreetLine1" value="Augsburger Strabe 41"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifyEighthLineAllDetails">
+            <argument name="productSequenceNumber" value="1"/>
+            <argument name="addressQtySequenceNumber" value="8"/>
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="John"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="Berlin"/>
+            <argument name="postCode" value="10789"/>
+            <argument name="country" value="Germany"/>
+            <argument name="addressStreetLine1" value="Augsburger Strabe 41"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifyNinthLineAllDetails">
+            <argument name="productSequenceNumber" value="2"/>
+            <argument name="addressQtySequenceNumber" value="9"/>
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="John"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="Berlin"/>
+            <argument name="postCode" value="10789"/>
+            <argument name="country" value="Germany"/>
+            <argument name="addressStreetLine1" value="Augsburger Strabe 41"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifyTenthLineAllDetails">
+            <argument name="productSequenceNumber" value="3"/>
+            <argument name="addressQtySequenceNumber" value="10"/>
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="John"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="Berlin"/>
+            <argument name="postCode" value="10789"/>
+            <argument name="country" value="Germany"/>
+            <argument name="addressStreetLine1" value="Augsburger Strabe 41"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontMultishippingAddressAndItemUKGEActionGroup" stepKey="verifyEleventhLineAllDetails">
+            <argument name="productSequenceNumber" value="4"/>
+            <argument name="addressQtySequenceNumber" value="11"/>
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="firstName" value="John"/>
+            <argument name="lastName" value="Doe"/>
+            <argument name="city" value="{{DE_Address_Berlin_Not_Default_Address.city}}"/>
+            <argument name="postCode" value="10789"/>
+            <argument name="country" value="Germany"/>
+            <argument name="addressStreetLine1" value="Augsburger Strabe 41"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveAddresses"/>
+        <!--verify multishipment all three section-->
+        <seeElement selector="{{MultishippingSection.addressSection('1')}}" stepKey="firstAddressSection"/>
+        <seeElement selector="{{MultishippingSection.addressSection('2')}}" stepKey="secondAddressSection"/>
+        <seeElement selector="{{MultishippingSection.addressSection('3')}}" stepKey="thirdAddressSection"/>
+        <!--verify flat rate charge for all three section-->
+        <seeElement selector="{{MultishippingSection.flatRateCharge('10.00')}}" stepKey="verifyFirstFlatRateAmount"/>
+        <seeElement selector="{{MultishippingSection.flatRateCharge('15.00')}}" stepKey="verifySecondFlatRateAmount"/>
+        <seeElement selector="{{MultishippingSection.flatRateCharge('30.00')}}" stepKey="verifyThirdFlatRateAmount"/>
+        <!-- Click On Continue to Billing-->
+        <click selector="{{StorefrontMultishippingCheckoutShippingToolbarSection.continueToBilling}}" stepKey="clickContinueToBilling"/>
+        <waitForPageLoad stepKey="waitForCheckoutShippingToolbarPageLoad"/>
+        <!-- See Billing Information Page is opened-->
+        <seeInCurrentUrl url="{{MultishippingCheckoutBillingPage.url}}" stepKey="seeBillingPageIsOpened"/>
+        <!-- click on change billing address button -->
+        <click selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.changeBillingAddress}}" stepKey="clickChangeBillingAddressButton"/>
+       <!-- select new billing address-->
+        <click selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.selectBillingAddress}}" stepKey="selectBillingAddress"/>
+        <wait stepKey="waitForPaymentPageToLoad" time="10"/>
+        <!-- Page contains Payment Method -->
+        <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorder}}" stepKey="CheckMoney"/>
+        <!-- Select Payment method  "Check / Money Order -->
+        <conditionalClick selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorder}}" dependentSelector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorder}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <!--  Select Payment method e.g. "Check / Money Order" and click Go to Review Your Order -->
+        <waitForElement selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.goToReviewOrder}}" stepKey="waitForElementgoToReviewOrder"/>
+        <click selector="{{StorefrontMultishippingCheckoutBillingToolbarSection.goToReviewOrder}}" stepKey="clickGoToReviewOrder"/>
+        <!-- See Order review  Page is opened-->
+        <seeInCurrentUrl url="{{MultishippingCheckoutOverviewPage.url}}" stepKey="seeMultishipingCheckoutOverviewPageIsOpened"/>
+        <!-- Check Page contains customer's billing address on OverViewPage-->
+        <actionGroup ref="StorefrontAssertBillingAddressInBillingInfoStepGEActionGroup" stepKey="assertCustomerBillingInformationOverViewPage">
+            <argument name="address" value="DE_Address_Berlin_Not_Default_Address"/>
+        </actionGroup>
+        <!-- Check Payment Method on OverViewPage-->
+        <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorderonOverViewPage}}" stepKey="seeCheckMoneyorderonOverViewPage"/>
+        <!--Check total amount -->
+        <see selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.grandTotalAmount}}" userInput="Grand Total: $215.00" stepKey="seeGrandTotalAmount"/>
+        <!-- Click 'Place Order' -->
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+        <!--Check Thank you for your purchase!" page is opened -->
+        <see selector="{{StorefrontMultipleShippingMethodSection.successMessage}}" userInput="Successfully ordered" stepKey="seeSuccessMessage"/>
+        <!--Grab Order ID of placed all 3 order -->
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabFirstOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('2')}}" stepKey="grabSecondOrderId"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('3')}}" stepKey="grabThirdOrderId"/>
+        <!-- Go to My Account > My Orders  and  verify orderId-->
+        <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="goToMyOrdersPage"/>
+        <waitForPageLoad stepKey="waitForMyOrdersPageLoad"/>
+        <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabFirstOrderId})}}" stepKey="seeFirstOrder"/>
+        <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
+        <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabThirdOrderId})}}" stepKey="seeThirdOrder"/>
+        <!-- Logout customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+    </test>
+</tests>

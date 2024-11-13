@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingMethodUSPSSection">
+        <element name="USPSTab" type="button" selector="//div[@class='section-config']//div[@class='entry-edit-head admin__collapsible-block']//a[@id='carriers_usps-head']"/>
+        <element name="handlingFeeUSPS" type="input" selector="//tr[@id='row_carriers_usps_handling_fee']//td//input[@id='carriers_usps_handling_fee']"/>
+        <element name="enableCheckoutCheckboxUSPS" type="checkbox" selector="//tr[@id='row_carriers_usps_active']//td//input[@id='carriers_usps_active_inherit']"/>
+        <element name="enableCheckoutSelectUSPS" type="select" selector="//tr[@id='row_carriers_usps_active']//td//select[@id='carriers_usps_active']"/>
+        <element name="gatewayURLCheckboxUSPS" type="checkbox" selector="//tr[@id='row_carriers_usps_gateway_url']//td//input[@id='carriers_usps_gateway_url_inherit']"/>
+        <element name="gatewayURLInputUSPS" type="input" selector="//tr[@id='row_carriers_usps_gateway_url']//td//input[@id='carriers_usps_gateway_url']"/>
+        <element name="secureGatewayURLCheckboxUSPS" type="checkbox" selector="//tr[@id='row_carriers_usps_gateway_secure_url']//td//input[@id='carriers_usps_gateway_secure_url_inherit']"/>
+        <element name="secureGatewayURLInputUSPS" type="input" selector="//tr[@id='row_carriers_usps_gateway_secure_url']//td//input[@id='carriers_usps_gateway_secure_url']"/>
+        <element name="passwordUSPS" type="input" selector="//input[@id='carriers_usps_password']"/>
+        <element name="usernameUSPS" type="input" selector="//input[@id='carriers_usps_userid']"/>
+        <element name="USPSshowMethodIfNotApplicableField" type="select" selector="//tr[@id='row_carriers_usps_showmethod']//td//select[@id='carriers_usps_showmethod']"/>
+        <element name="debugSelectUSPS" type="select" selector="//tr[@id='row_carriers_usps_debug']//td//select[@id='carriers_usps_debug']"/>
+    </section>
+</sections>

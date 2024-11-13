@@ -10,6 +10,7 @@ namespace Magento\Shipping\Test\Unit\Model\Shipping;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\Framework\App\Config;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -74,30 +75,39 @@ class LabelsTest extends TestCase
             ->getMock();
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $requestFactory->expects(static::any())->method('create')->willReturn($this->request);
         $this->carrierFactory = $this->getMockBuilder(CarrierFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $storeManager = $this->getStoreManager();
         $this->user = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFirstname', 'getLastname', 'getEmail', 'getName'])
+            ->onlyMethods(['getFirstname', 'getLastname', 'getEmail', 'getName'])
             ->getMock();
 
         $authSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->getMock();
         $authSession->expects(static::any())->method('getUser')->willReturn($this->user);
         $regionFactory = $this->getRegionFactory();
         $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
+
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                RateRequestFactory::class,
+                $this->createMock(RateRequestFactory::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->labels = $objectManagerHelper->getObject(
             Labels::class,
             [
@@ -129,7 +139,7 @@ class LabelsTest extends TestCase
         $this->user->expects($this->once())->method('getEmail')->willReturn('admin@admin.test.com');
         $shippingMethod = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCarrierCode'])
+            ->addMethods(['getCarrierCode'])
             ->getMock();
         $shippingMethod->expects(static::once())
             ->method('getCarrierCode')
@@ -187,7 +197,7 @@ class LabelsTest extends TestCase
             ->getMock();
         $shippingMethod = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCarrierCode'])
+            ->addMethods(['getCarrierCode'])
             ->getMock();
         $order->expects($this->atLeastOnce())
             ->method('getShippingMethod')
@@ -215,7 +225,7 @@ class LabelsTest extends TestCase
 
         $storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMock();
         $storeManager->expects(static::any())->method('getStore')->willReturn($store);
         return $storeManager;
@@ -228,11 +238,12 @@ class LabelsTest extends TestCase
     {
         $this->region = $this->getMockBuilder(Region::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getCode'])
+            ->addMethods(['getCode'])
+            ->onlyMethods(['load'])
             ->getMock();
         $regionFactory = $this->getMockBuilder(RegionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $regionFactory->expects(static::any())->method('create')->willReturn($this->region);
         return $regionFactory;
@@ -283,7 +294,7 @@ class LabelsTest extends TestCase
      * Data provider to testRequestToShipment
      * @return array
      */
-    public function requestToShipmentDataProvider()
+    public static function requestToShipmentDataProvider()
     {
         return [
             [
@@ -299,7 +310,7 @@ class LabelsTest extends TestCase
      * Data provider to testRequestToShipmentLocalizedException
      * @return array
      */
-    public function requestToShipmentLocalizedExceptionDataProvider()
+    public static function requestToShipmentLocalizedExceptionDataProvider()
     {
         return [
             [

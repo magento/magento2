@@ -33,14 +33,13 @@
                 </div>
             </div>
             <div class="field text">
-                <label for="gift-message-whole-message" class="label">
+                <label data-bind="attr: {for: 'gift-message-whole-message-' + index }" class="label">
                     <span data-bind="i18n: 'Message:'"></span>
                 </label>
                 <div class="control">
-                    <textarea id="gift-message-whole-message"
-                              class="input-text"
+                    <textarea class="input-text"
                               rows="5" cols="10"
-                              data-bind="value: getObservable('message')"></textarea>
+                              data-bind="value: getObservable('message'), attr: { id: 'gift-message-whole-message-' + index }"></textarea>
                 </div>
             </div>
         </fieldset>

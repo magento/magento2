@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminInsertCatalogProductsListWidgetForCmsPageContentSectionActionGroup">
+        <annotations>
+            <description>Insert "Catalog Products List" Widget into Content Section of CMS page</description>
+        </annotations>
+        <arguments>
+            <argument name="title" type="string" defaultValue=""/>
+            <argument name="numberOfProductsToDisplay" type="string" defaultValue="10"/>
+            <argument name="displayPageControl" type="string" defaultValue="No"/>
+            <argument name="template" type="string" defaultValue="Products Grid Template"/>
+            <argument name="cacheLifetime" type="string" defaultValue=""/>
+            <argument name="categoryName" type="string" defaultValue="{{DefaultCategory.name}}"/>
+        </arguments>
+        <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectWidgetType"/>
+        <waitForPageLoad stepKey="waitForWidgetOptions"/>
+        <fillField selector="{{AdminNewWidgetSection.title}}" userInput="{{title}}" stepKey="setTitle"/>
+        <selectOption selector="{{AdminNewWidgetSection.displayPageControl}}" userInput="{{displayPageControl}}" stepKey="selectDisplayPageControl"/>
+        <fillField selector="{{AdminNewWidgetSection.numberOfProductsToDisplay}}" userInput="{{numberOfProductsToDisplay}}" stepKey="fillNumberOfProductsToDisplay"/>
+        <selectOption selector="{{AdminNewWidgetSection.template}}" userInput="{{template}}" stepKey="selectTemplate"/>
+        <fillField selector="{{AdminNewWidgetSection.cacheLifetime}}" userInput="{{cacheLifetime}}" stepKey="fillCacheLifetime"/>
+        <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
+        <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="Magento\CatalogWidget\Model\Rule\Condition\Product|category_ids" stepKey="selectCondition"/>
+        <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
+        <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
+        <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
+        <waitForPageLoad stepKey="waitForAjaxLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryName)}}" stepKey="clickCategoryToEditInitial"/>
+        <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
+    </actionGroup>
+</actionGroups>

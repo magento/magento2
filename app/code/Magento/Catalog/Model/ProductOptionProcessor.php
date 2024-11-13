@@ -152,6 +152,15 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
      */
     private function isDateWithDateInternal(array $optionValue): bool
     {
-        return array_key_exists('date_internal', $optionValue) && array_key_exists('date', $optionValue);
+        $hasDate = !empty($optionValue['day'])
+            && !empty($optionValue['month'])
+            && !empty($optionValue['year']);
+
+        $hasTime = !empty($optionValue['hour'])
+            && isset($optionValue['minute']);
+
+        $hasDateInternal = !empty($optionValue['date_internal']);
+
+        return $hasDateInternal && ($hasDate || $hasTime || !empty($optionValue['date']));
     }
 }

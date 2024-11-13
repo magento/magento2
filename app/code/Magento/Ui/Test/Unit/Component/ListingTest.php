@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContentType\AbstractContentType;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\View\Element\UiComponent\ContentType\Html;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Listing;
@@ -27,7 +30,12 @@ class ListingTest extends TestCase
     protected $objectManager;
 
     /**
-     * Set up
+     * @var ContentTypeFactory|MockObject
+     */
+    private ContentTypeFactory $contentTypeFactory;
+
+    /**
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -39,6 +47,8 @@ class ListingTest extends TestCase
             '',
             false
         );
+
+        $this->contentTypeFactory = $this->createMock(ContentTypeFactory::class);
     }
 
     /**
@@ -46,7 +56,7 @@ class ListingTest extends TestCase
      *
      * @return void
      */
-    public function testGetComponentName()
+    public function testGetComponentName(): void
     {
         $this->contextMock->expects($this->never())->method('getProcessor');
         /** @var Listing $listing */
@@ -66,7 +76,7 @@ class ListingTest extends TestCase
      *
      * @return void
      */
-    public function testPrepare()
+    public function testPrepare(): void
     {
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
@@ -84,14 +94,14 @@ class ListingTest extends TestCase
                 'data' => [
                     'js_config' => [
                         'extends' => 'test_config_extends',
-                        'testData' => 'testValue',
+                        'testData' => 'testValue'
                     ],
                     'buttons' => $buttons
                 ]
             ]
         );
 
-        $this->contextMock->expects($this->at(0))
+        $this->contextMock
             ->method('getNamespace')
             ->willReturn(Listing::NAME);
         $this->contextMock->expects($this->once())
@@ -102,5 +112,49 @@ class ListingTest extends TestCase
             ->with($buttons, $listing);
 
         $listing->prepare();
+    }
+
+    /**
+     * @return void
+     */
+    public function testRenderSpecificContentType(): void
+    {
+        $html = 'html output';
+        $renderer = $this->createMock(Html::class);
+        $renderer->expects($this->once())->method('render')->willReturn($html);
+        $this->contentTypeFactory->expects($this->once())
+            ->method('get')
+            ->with('html')
+            ->willReturn($renderer);
+
+        /** @var Listing $listing */
+        $listing = $this->objectManager->getObject(
+            Listing::class,
+            [
+                'context' => $this->contextMock,
+                'contentTypeFactory' => $this->contentTypeFactory
+            ]
+        );
+        $this->assertSame($html, $listing->render('html'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRenderParent()
+    {
+        $html = 'html output';
+        $renderer = $this->createMock(AbstractContentType::class);
+        $renderer->expects($this->once())->method('render')->willReturn($html);
+        $this->contextMock->expects($this->once())->method('getRenderEngine')->willReturn($renderer);
+
+        /** @var Listing $listing */
+        $listing = $this->objectManager->getObject(
+            Listing::class,
+            [
+                'context' => $this->contextMock
+            ]
+        );
+        $this->assertSame($html, $listing->render());
     }
 }

@@ -13,7 +13,7 @@
             <description>Validates that the Success Message is present and correct.</description>
         </annotations>
 
-        <waitForLoadingMaskToDisappear stepKey="waitForGridLoad"/>
+        <waitForPageLoad stepKey="waitForGridLoad"/>
         <waitForElementVisible selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="waitForStoreGridToReload2"/>
         <see userInput="You saved the store view." stepKey="seeSavedMessage"/>
     </actionGroup>

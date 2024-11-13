@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminExportTaxRatesFromGridActionGroup">
+        <annotations>
+            <description>Selects the export file type and clicks the 'Export' button from the Tax Zones and Rates admin page.</description>
+        </annotations>
+        <arguments>
+            <argument name="fileType" defaultValue="CSV" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminTaxRateGridSection.exportFileType}}" stepKey="waitForExportFileTypeDropDown"/>
+        <selectOption userInput="{{fileType}}" selector="{{AdminTaxRateGridSection.exportFileType}}" stepKey="selectFileType"/>
+        <click selector="{{AdminTaxRateGridSection.exportButton}}" stepKey="clickExportButton"/>
+        <waitForPageLoad stepKey="waitForExport"/>
+    </actionGroup>
+</actionGroups>

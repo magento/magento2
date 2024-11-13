@@ -16,15 +16,17 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-38693"/>
             <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
             <skip>
                 <issueId value="MC-33903"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
+            <comment userInput="BIC workaround" stepKey="enableRemoteStorage"/>
         </before>
         <after>
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+            <comment userInput="BIC workaround" stepKey="disableRemoteStorage"/>
         </after>
     </test>
 </tests>

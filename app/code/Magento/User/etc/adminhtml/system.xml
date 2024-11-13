@@ -14,6 +14,11 @@
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
+                <field id="new_user_notification_template" translate="label comment" type="select" sortOrder="50" showInDefault="1" canRestore="1">
+                    <label>New User Notification Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
             </group>
             <group id="security">
                 <field id="lockout_failures" translate="label comment" sortOrder="100" showInDefault="1" canRestore="1">

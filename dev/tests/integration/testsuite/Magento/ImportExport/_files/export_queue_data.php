@@ -22,7 +22,6 @@ $messagePublisher = $objectManager->get(PublisherInterface::class);
 $dataObject = $exportInfoFactory->create(
     'csv',
     ProductAttributeInterface::ENTITY_TYPE_CODE,
-    [ProductInterface::SKU => 'simple2'],
-    []
+    [ProductInterface::SKU => 'simple2']
 );
 $messagePublisher->publish('import_export.export', $dataObject);

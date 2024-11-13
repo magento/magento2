@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnePageCheckoutWithSignInLinkForEmailVerificationTest">
+        <annotations>
+            <features value="OnePageCheckout"/>
+            <title value="OnePageCheckout with sign in link for email verification test"/>
+            <description value="Verify that error message is correct for invalid a email entered with 'Sign in' form"/>
+            <stories value="Inconsistent customer email validation on frontend"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-42729"/>
+            <group value="checkout"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">560</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete created product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+
+        <!-- Add Simple Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Go to shopping cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+
+        <!-- Try to login using invalid email and Sign In link from checkout page -->
+        <click selector="{{StorefrontCustomerSignInLinkSection.signInLink}}" stepKey="clickOnCustomizeAndAddToCartButton"/>
+        <fillField selector="{{StorefrontCustomerSignInLinkSection.email}}" userInput="invalid @example.com" stepKey="fillEmail"/>
+        <fillField selector="{{StorefrontCustomerSignInLinkSection.password}}" userInput="Password123" stepKey="fillPassword"/>
+        <click selector="{{StorefrontCustomerSignInLinkSection.signInBtn}}" stepKey="clickSignInBtn"/>
+
+        <waitForElementVisible selector="#login-email-error" stepKey="waitForFormValidation"/>
+        <see selector="#login-email-error" userInput="Please enter a valid email address (Ex: johndoe@domain.com)." stepKey="seeTheCorrectErrorMessageIsDisplayed"/>
+    </test>
+</tests>

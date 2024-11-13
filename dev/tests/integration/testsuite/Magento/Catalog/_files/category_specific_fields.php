@@ -34,7 +34,7 @@ $category
     ->setMetaKeywords('Category_en Meta Keywords')
     ->setMetaDescription('Category_en Meta Description')
     ->setParentId(2)
-    ->setPath('1/2/3')
+    ->setPath('1/2/10')
     ->setLevel(2)
     ->setIsActive(true)
     ->setPosition(1);

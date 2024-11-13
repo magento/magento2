@@ -16,7 +16,6 @@ use Magento\Sales\Model\AbstractModel;
  * By default transactions are saved as closed.
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -26,7 +25,7 @@ class Transaction extends AbstractModel implements TransactionInterface
     /**
      * Raw details key in additional info
      */
-    const RAW_DETAILS = 'raw_details_info';
+    public const RAW_DETAILS = 'raw_details_info';
 
     /**
      * Order instance
@@ -95,8 +94,6 @@ class Transaction extends AbstractModel implements TransactionInterface
     protected $_eventObject = 'order_payment_transaction';
 
     /**
-     * Order website id
-     *
      * @var int
      */
     protected $_orderWebsiteId = null;
@@ -409,6 +406,7 @@ class Transaction extends AbstractModel implements TransactionInterface
             return true;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // jam all logical exceptions, fallback to false
+            return false;
         }
         return false;
     }

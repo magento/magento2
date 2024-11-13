@@ -37,6 +37,16 @@ class ImageProviderTest extends TestCase
      */
     private $customerItem;
 
+    /**
+     * @var MockObject|\Magento\Catalog\Helper\Image
+     */
+    private $imageHelper;
+
+    /**
+     * @var MockObject|\Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface
+     */
+    private $itemResolver;
+
     protected function setUp(): void
     {
         $this->itemRepositoryMock = $this->getMockForAbstractClass(CartItemRepositoryInterface::class);
@@ -44,10 +54,18 @@ class ImageProviderTest extends TestCase
         $this->customerItem = $this->getMockBuilder(DefaultItem::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->itemResolver = $this->getMockForAbstractClass(
+            \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
+        );
         $this->model = new ImageProvider(
             $this->itemRepositoryMock,
             $this->itemPoolMock,
-            $this->customerItem
+            $this->customerItem,
+            $this->imageHelper,
+            $this->itemResolver
         );
     }
 
@@ -55,14 +73,23 @@ class ImageProviderTest extends TestCase
     {
         $cartId = 42;
         $itemId = 74;
-        $itemData = ['product_image' => 'Magento.png', 'random' => '3.1415926535'];
+        $itemData = [
+            'src' => 'Url',
+            'alt' => 'Label',
+            'width' => 'Width',
+            'height' => 'Height'
+        ];
         $itemMock = $this->createMock(Item::class);
         $itemMock->expects($this->once())->method('getItemId')->willReturn($itemId);
 
-        $expectedResult = [$itemId => $itemData['product_image']];
+        $expectedResult = [$itemId => $itemData];
 
         $this->itemRepositoryMock->expects($this->once())->method('getList')->with($cartId)->willReturn([$itemMock]);
-        $this->customerItem->expects($this->once())->method('getItemData')->with($itemMock)->willReturn($itemData);
+        $this->imageHelper->expects($this->once())->method('init')->willReturnSelf();
+        $this->imageHelper->expects($this->once())->method('getUrl')->willReturn('Url');
+        $this->imageHelper->expects($this->once())->method('getLabel')->willReturn('Label');
+        $this->imageHelper->expects($this->once())->method('getWidth')->willReturn('Width');
+        $this->imageHelper->expects($this->once())->method('getHeight')->willReturn('Height');
 
         $this->assertEquals($expectedResult, $this->model->getImages($cartId));
     }

@@ -9,6 +9,8 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Category\DataProvider;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Breadcrumbs data provider
@@ -20,13 +22,20 @@ class Breadcrumbs
      */
     private $collectionFactory;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param CollectionFactory $collectionFactory
+     * @param Uid|null $uidEncoder
      */
     public function __construct(
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        Uid $uidEncoder = null
     ) {
         $this->collectionFactory = $collectionFactory;
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
     }
 
     /**
@@ -52,6 +61,7 @@ class Breadcrumbs
             foreach ($collection as $category) {
                 $breadcrumbsData[] = [
                     'category_id' => $category->getId(),
+                    'category_uid' => $this->uidEncoder->encode((string) $category->getId()),
                     'category_name' => $category->getName(),
                     'category_level' => $category->getLevel(),
                     'category_url_key' => $category->getUrlKey(),

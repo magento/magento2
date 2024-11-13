@@ -34,6 +34,7 @@ $orders = [
         'base_grand_total' => 120.00,
         'store_id' => 1,
         'website_id' => 1,
+        'created_at' => '2022-09-04'
     ],
     [
         'increment_id' => '100000003',
@@ -45,6 +46,7 @@ $orders = [
         'total_paid' => 130.00,
         'store_id' => 0,
         'website_id' => 0,
+        'created_at' => '2022-09-10'
     ],
     [
         'increment_id' => '100000004',
@@ -55,6 +57,7 @@ $orders = [
         'subtotal' => 140.00,
         'store_id' => 1,
         'website_id' => 1,
+        'created_at' => '2022-09-05'
     ],
     [
         'increment_id' => '100000005',
@@ -66,6 +69,7 @@ $orders = [
         'total_paid' => 150.00,
         'store_id' => 1,
         'website_id' => 1,
+        'created_at' => '2022-09-08'
     ],
     [
         'increment_id' => '100000006',
@@ -77,6 +81,7 @@ $orders = [
         'total_paid' => 160.00,
         'store_id' => 1,
         'website_id' => 1,
+        'created_at' => '2022-09-09'
     ],
 ];
 

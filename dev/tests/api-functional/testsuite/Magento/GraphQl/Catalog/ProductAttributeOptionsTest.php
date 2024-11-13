@@ -60,7 +60,7 @@ class ProductAttributeOptionsTest extends GraphQlAbstract
         label
         value
       }
-    } 
+    }
   }
  }
 QUERY;
@@ -101,5 +101,46 @@ QUERY;
             $actualOption = $actualAttributes[$index]['attribute_options'];
             $this->assertEquals($expectedOptions, $actualOption);
         }
+        $queryWithStoreFrontProperties = <<<QUERY
+
+{
+  customAttributeMetadata(attributes:
+  [
+    {
+      attribute_code:"dropdown_attribute",
+      entity_type:"catalog_product"
+    }
+  ]
+  )
+  {
+    items
+    {
+      attribute_code
+      attribute_type
+      entity_type
+      input_type
+       storefront_properties {
+         position
+         use_in_product_listing
+         use_in_layered_navigation
+         use_in_search_results_layered_navigation
+         visible_on_catalog_pages
+      }
+    }
+  }
+ }
+
+QUERY;
+        $response = $this->graphQlQuery($queryWithStoreFrontProperties);
+        $this->assertArrayHasKey('storefront_properties', $response['customAttributeMetadata']['items'][0]);
+        $actualStorefrontPropery = $response['customAttributeMetadata']['items'][0]['storefront_properties'];
+        $expectedStorefrontProperties = [
+            'position' => 0,
+            'use_in_product_listing' => true,
+            'use_in_layered_navigation' => 'NO',
+            'use_in_search_results_layered_navigation' => false,
+            'visible_on_catalog_pages' => true
+        ];
+        $this->assertEquals($expectedStorefrontProperties, $actualStorefrontPropery);
     }
 }

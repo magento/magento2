@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateProductFromShoppingCartTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Cart qty update should be reverted back if the requested qty is not available"/>
+            <description value="Update Product Qty on Shopping Cart when the requested qty is not available"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-42907"/>
+            <group value="shoppingCart"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!--Create product according to dataset.-->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct"/>
+
+            <!--Add product to cart-->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
+        </after>
+
+        <!--Go to cart page, update qty -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
+        <see userInput="Shopping Cart" stepKey="seeCartPageIsOpened"/>
+
+        <fillField selector="{{CheckoutCartProductSection.qty($$createProduct.sku$$)}}" userInput="1001" stepKey="updateProductQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <click  selector=".modal-footer button[data-role='action']" stepKey="clickAlertMessage"/>
+        <grabValueFrom selector="{{CheckoutCartProductSection.qty($$createProduct.sku$$)}}" stepKey="grabQty"/>
+        <assertEquals stepKey="assertQty">
+            <actualResult type="const">$grabQty</actualResult>
+            <expectedResult type="const">1</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminMediaGalleryInsertImageLargeFileSizeTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
@@ -33,6 +34,7 @@
                 <argument name="categoryName" value="$category.name$"/>
             </actionGroup>
             <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryForDelete"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
             <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
             <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
                 <argument name="imageName" value="{{ImageUpload.fileName}}"/>
@@ -52,6 +54,7 @@
 
         <!-- Add image to category from gallery -->
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="addCategoryImage">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>

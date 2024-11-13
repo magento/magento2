@@ -27,4 +27,7 @@ return [
     'sales-order-increment-prefix' => time(),
     'session-save'                 => 'db',
     'cleanup-database'             => true,
+    'search-engine'                => 'opensearch',
+    'opensearch-host'           => 'localhost',
+    'opensearch-port'           => 9200,
 ];

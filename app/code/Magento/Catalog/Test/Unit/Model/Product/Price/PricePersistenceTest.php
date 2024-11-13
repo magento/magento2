@@ -77,7 +77,8 @@ class PricePersistenceTest extends TestCase
             ->getMockForAbstractClass();
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLinkField', 'getMetadata'])
+            ->addMethods(['getLinkField'])
+            ->onlyMethods(['getMetadata'])
             ->getMock();
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -135,8 +136,13 @@ class PricePersistenceTest extends TestCase
         $select
             ->expects($this->atLeastOnce())
             ->method('where')
-            ->withConsecutive(['row_id IN (?)', [1, 2]], ['attribute_id = ?', $attributeId])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($attributeId, $select) {
+                if ($arg1 == 'row_id IN (?)' && $arg2 == [1, 2]) {
+                    return $select;
+                } elseif ($arg1 == 'attribute_id = ?' && $arg2 == $attributeId) {
+                    return $select;
+                }
+            });
         $this->metadataPool->expects($this->atLeastOnce())->method('getMetadata')->willReturnSelf();
         $this->metadataPool->expects($this->atLeastOnce())->method('getLinkField')->willReturn('row_id');
         $this->model->get($skus);
@@ -350,7 +356,7 @@ class PricePersistenceTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRetrieveSkuById()
+    public static function dataProviderRetrieveSkuById()
     {
         return [
             [

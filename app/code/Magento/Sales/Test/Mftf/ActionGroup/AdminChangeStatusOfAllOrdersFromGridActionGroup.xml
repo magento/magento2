@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeStatusOfAllOrdersFromGridActionGroup">
+        <annotations>
+            <description>Select all orders and change to specified status</description>
+        </annotations>
+        <arguments>
+            <argument name="status" defaultValue="Cancel" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
+        <click selector="{{AdminOrdersGridSection.orderActions}}" stepKey="clickOnActionsDropdown"/>
+        <click selector="{{AdminOrdersGridSection.changeOrderStatus(status)}}" stepKey="clickStatus"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

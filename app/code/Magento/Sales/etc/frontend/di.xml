@@ -22,4 +22,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Reorder\Reorder">
+        <arguments>
+            <argument name="addToCartInvalidProduct" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
 </config>

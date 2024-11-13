@@ -9,6 +9,7 @@ namespace Magento\Framework\MessageQueue\PoisonPill;
 
 /**
  * Describes how to get latest version of poison pill.
+ * @api
  */
 interface PoisonPillReadInterface
 {

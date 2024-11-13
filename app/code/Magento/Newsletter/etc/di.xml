@@ -26,10 +26,18 @@
                 type="Magento\Newsletter\Model\Plugin\CustomerPlugin"/>
     </type>
     <type name="Magento\Newsletter\Model\Subscriber">
+        <plugin name="remove_subscriber_from_queue_after_unsubscribe" type="Magento\Newsletter\Model\Plugin\RemoveSubscriberFromQueue"/>
         <arguments>
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
     <preference for="Magento\Newsletter\Model\SubscriptionManagerInterface"
                 type="Magento\Newsletter\Model\SubscriptionManager"/>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="newsletterCompatibilityCheck" xsi:type="object">Magento\Newsletter\Console\Command\TemplateCheckCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -20,7 +20,7 @@ define([
 
     templateLoader.loadTemplate(blockLoaderTemplatePath).done(function (blockLoaderTemplate) {
         loaderImageHref.done(function (loaderHref) {
-            blockLoader = template($.trim(blockLoaderTemplate), {
+            blockLoader = template(blockLoaderTemplate.trim(), {
                 loaderImageHref: loaderHref
             });
             blockLoader = $(blockLoader);
@@ -49,7 +49,7 @@ define([
      * @param {Object} element
      */
     function addBlockLoader(element) {
-        element.find(':focus').blur();
+        element.find(':focus').trigger('blur');
         element.find('input:disabled, select:disabled').addClass('_disabled');
         element.find('input, select').prop('disabled', true);
 

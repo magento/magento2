@@ -69,7 +69,11 @@ class BodyTest extends TestCase
             ->willReturn($bodyClasses);
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('addBodyClass')
-            ->withConsecutive(['class_1'], ['class--2']);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'class_1' || $arg == 'class--2') {
+                    return null;
+                }
+            });
 
         $this->assertEquals(
             $this->bodyGenerator,

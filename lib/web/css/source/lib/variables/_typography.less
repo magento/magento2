@@ -29,7 +29,7 @@
 @font-size-ratio__base: 1.4; // Defines ratio of the root font-size to the base font-size
 
 @font-size-unit: rem; // The unit to which most typography values will be converted by default
-@font-size-unit-ratio: unit(@root__font-size * 16/100); // Ratio of the root font-size to the font-size unit
+@font-size-unit-ratio: unit((@root__font-size * 16/100)); // Ratio of the root font-size to the font-size unit
 @font-size-unit-convert: true; // Controls whether font-size values are converted to the specified font-size unit
 
 @font-size__base: unit(@font-size-unit-ratio * @font-size-ratio__base, px); // Base font size value in <b>px</b>
@@ -73,8 +73,8 @@
 @indent__xl: @indent__base * 2; // 40px
 @indent__l: @indent__base * 1.5; // 30px
 @indent__m: @indent__base * 1.25; // 25px
-@indent__s: @indent__base / 2; // 10px
-@indent__xs: @indent__base / 4; // 5px
+@indent__s: (@indent__base / 2); // 10px
+@indent__xs: (@indent__base / 4); // 5px
 
 //
 //  Borders

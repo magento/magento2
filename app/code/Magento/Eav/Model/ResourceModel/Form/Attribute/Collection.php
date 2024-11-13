@@ -97,6 +97,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_store = null;
+        $this->_entityType = null;
+        parent::_resetState();
+    }
+
+    /**
      * Get EAV website table
      *
      * Get table, where website-dependent attribute parameters are stored
@@ -193,6 +203,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _beforeLoad()
     {
+        $store = $this->getStore();
         $select = $this->getSelect();
         $connection = $this->getConnection();
         $entityType = $this->getEntityType();
@@ -254,7 +265,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 }
             }
 
-            $store = $this->getStore();
             $joinWebsiteExpression = $connection->quoteInto(
                 'sa.attribute_id = main_table.attribute_id AND sa.website_id = ?',
                 (int)$store->getWebsiteId()

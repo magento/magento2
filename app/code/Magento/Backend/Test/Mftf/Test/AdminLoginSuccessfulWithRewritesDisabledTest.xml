@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginSuccessfulWithRewritesDisabledTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Login on the Admin Login page"/>
+            <title
+                value="Admin should be able to log into the Magento Admin backend successfully if url rewrites are disabled"/>
+            <description
+                value="Admin should be able to log into the Magento Admin backend successfully if url rewrites are disabled"/>
+            <severity value="CRITICAL"/>
+            <group value="example"/>
+            <group value="login"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{AdminDisableUrlRewritesConfigData.path}} {{AdminDisableUrlRewritesConfigData.value}}" stepKey="disableUrlRewrites"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{AdminEnableUrlRewritesConfigData.path}} {{AdminEnableUrlRewritesConfigData.value}}" stepKey="enableUrlRewrites"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+    </test>
+</tests>

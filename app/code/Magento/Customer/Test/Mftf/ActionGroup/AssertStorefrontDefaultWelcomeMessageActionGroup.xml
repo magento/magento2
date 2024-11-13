@@ -14,7 +14,7 @@
         </annotations>
 
         <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="waitDefaultMessage"/>
-        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyDefaultMessage"/>
+        <waitForText userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyDefaultMessage"/>
         <dontSeeElement selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="checkAbsenceLinkNotYou"/>
     </actionGroup>
 </actionGroups>

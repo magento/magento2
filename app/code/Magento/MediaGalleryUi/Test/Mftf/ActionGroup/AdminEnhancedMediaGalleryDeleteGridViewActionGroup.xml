@@ -13,7 +13,7 @@
             <description>Delete grid view bookmarks by name</description>
         </annotations>
         <arguments>
-            <argument name="viewToDelete" type="string"/>
+            <argument name="viewToDelete" type="string" defaultValue="{{NewGridView.name}}"/>
         </arguments>
 
         <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckShippingPolicyParamsInDifferentScopesTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Shipping Policy Parameters"/>
+            <title value="Displaying of Shipping Policy Parameters in different scopes"/>
+            <description value="Displaying of Shipping Policy Parameters in different scopes"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7003"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminShippingSettingsPage.url}}" stepKey="goToAdminShippingPage"/>
+        <waitForPageLoad stepKey="waitForShippingConfigLoad"/>
+        <conditionalClick selector="{{AdminShippingSettingsConfigSection.shippingPolicyParameters}}" dependentSelector="{{AdminShippingSettingsConfigSection.shippingPolicyParametersOpened}}" visible="false" stepKey="openShippingPolicySettings"/>
+        <uncheckOption selector="{{AdminShippingSettingsConfigSection.systemValueShippingPolicy}}" stepKey="disableUseDefaultCondition"/>
+        <selectOption selector="{{AdminShippingSettingsConfigSection.dropdownShippingPolicy}}" userInput="Yes" stepKey="SelectApplyCustomShippingPolicy"/>
+
+        <!-- Save the settings -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveChanges"/>
+
+        <!--Switch to Store view 1-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView">
+            <argument name="storeViewName" value="{{_defaultStore.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminShippingSettingsConfigSection.shippingPolicy}}" stepKey="seeShippingPolicy"/>
+
+        <!--Switch to Store view 1-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchtoDefaultConfig">
+            <argument name="storeViewName" value="Default Config"/>
+        </actionGroup>
+
+        <selectOption selector="{{AdminShippingSettingsConfigSection.dropdownShippingPolicy}}" userInput="No" stepKey="SelectApplyCustomShippingPolicy1"/>
+
+        <checkOption selector="{{AdminShippingSettingsConfigSection.systemValueShippingPolicy}}" stepKey="enableUseDefaultCondition"/>
+        <!-- Save the settings -->
+        <scrollToTopOfPage stepKey="scrollToTop1"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveChanges1"/>
+
+        <!--Switch to Store view 1-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView2">
+            <argument name="storeViewName" value="{{_defaultStore.name}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminShippingSettingsConfigSection.shippingPolicy}}" stepKey="seeShippingPolicy2"/>
+
+    </test>
+</tests>

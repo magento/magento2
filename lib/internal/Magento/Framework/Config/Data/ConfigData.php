@@ -14,15 +14,11 @@ namespace Magento\Framework\Config\Data;
 class ConfigData
 {
     /**
-     * File key
-     *
      * @var string
      */
     private $fileKey;
 
     /**
-     * Data
-     *
      * @var array
      */
     private $data = [];
@@ -124,7 +120,7 @@ class ConfigData
      */
     private function expand($path)
     {
-        $chunks = explode('/', $path);
+        $chunks = explode('/', $path ?: '');
 
         foreach ($chunks as $chunk) {
             if ('' == $chunk) {

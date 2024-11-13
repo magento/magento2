@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
@@ -21,10 +22,10 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory as Invoice
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory as CreditmemoCollectionFactory;
 
 /**
- * Class Pdfdocs
+ * Export all docs in pdf
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
+class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -124,13 +125,13 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
         $creditmemos = $this->creditmemoCollectionFactory->create()->setOrderFilter(['in' => $orderIds]);
 
         $documents = [];
-        if ($invoices->getSize()) {
+        if ($this->_authorization->isAllowed('Magento_Sales::invoice') && $invoices->getSize()) {
             $documents[] = $this->pdfInvoice->getPdf($invoices);
         }
-        if ($shipments->getSize()) {
+        if ($this->_authorization->isAllowed('Magento_Sales::ship') && $shipments->getSize()) {
             $documents[] = $this->pdfShipment->getPdf($shipments);
         }
-        if ($creditmemos->getSize()) {
+        if ($this->_authorization->isAllowed('Magento_Sales::creditmemo') && $creditmemos->getSize()) {
             $documents[] = $this->pdfCreditmemo->getPdf($creditmemos);
         }
 
@@ -140,9 +141,13 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassActi
         }
 
         $pdf = array_shift($documents);
+        $documentList = [];
         foreach ($documents as $document) {
-            $pdf->pages = array_merge($pdf->pages, $document->pages);
+            $documentList[] = $document->pages;
         }
+
+        $pdf->pages = array_merge($pdf->pages, array_merge(...$documentList));
+
         $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
 
         return $this->fileFactory->create(

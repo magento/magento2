@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontQuickSearchUsingElasticSearchByProductSkuTest">
+        <annotations>
+            <features value="Elasticsearch7"/>
+            <stories value="Storefront Search"/>
+            <title value="Check that AND query is performed when searching using ElasticSearch 7"/>
+            <description value="Check that AND query is performed when searching using ElasticSearch 7"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-31114"/>
+            <useCaseId value="MC-29788"/>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
+
+            <createData entity="VirtualProduct" stepKey="createFirtsSimpleProduct"/>
+            <createData entity="SimpleProductWithCustomSku24MB06" stepKey="createSecondSimpleProduct"/>
+            <createData entity="SimpleProductWithCustomSku24MB04" stepKey="createThirdSimpleProduct"/>
+            <createData entity="SimpleProductWithCustomSku24MB02" stepKey="createFourthSimpleProduct"/>
+            <createData entity="SimpleProductWithCustomSku24MB01" stepKey="createFifthSimpleProduct"/>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirtsSimpleProduct" stepKey="deleteProductOne"/>
+
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProductsAfterTest"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductSku">
+            <argument name="phrase" value="24 MB0"/>
+        </actionGroup>
+
+        <see userInput="4" selector="{{StorefrontCatalogSearchMainSection.productCount}}" stepKey="assertSearchResultCount"/>
+
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertSecondProductName">
+            <argument name="productName" value="$createSecondSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertThirdProductName">
+            <argument name="productName" value="$createThirdSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertFourthProductName">
+            <argument name="productName" value="$createFourthSimpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="assertFifthProductName">
+            <argument name="productName" value="$createFifthSimpleProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

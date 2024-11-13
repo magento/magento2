@@ -58,24 +58,24 @@ class AbstractMethodTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
         $this->quoteMock = $this->getMockBuilder(CartInterface::class)
-            ->setMethods(['getStoreId'])
+            ->onlyMethods(['getStoreId'])
             ->getMockForAbstractClass();
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEventDispatcher'])
+            ->onlyMethods(['getEventDispatcher'])
             ->getMock();
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($this->eventManagerMock);
         $this->loggerMock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
-            ->setMethods(['debug'])
+            ->onlyMethods(['debug'])
             ->getMock();
 
         $helper = new ObjectManager($this);
@@ -163,7 +163,7 @@ class AbstractMethodTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsAvailable()
+    public static function dataProviderForTestIsAvailable()
     {
         return [
             [

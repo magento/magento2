@@ -18,6 +18,7 @@
             <testCaseId value="MC-14767"/>
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create three search term -->

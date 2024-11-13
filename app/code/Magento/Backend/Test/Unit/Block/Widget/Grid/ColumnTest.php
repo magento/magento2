@@ -103,7 +103,7 @@ class ColumnTest extends TestCase
     /**
      * @return array
      */
-    public function getSortableDataProvider()
+    public static function getSortableDataProvider()
     {
         return ['zero' => ['0'], 'false' => [false], 'null' => [null]];
     }
@@ -394,7 +394,7 @@ class ColumnTest extends TestCase
     /**
      * @return array
      */
-    public function columnGroupedDataProvider()
+    public static function columnGroupedDataProvider()
     {
         return [[[], false], [['grouped' => 0], false], [['grouped' => 1], true]];
     }
@@ -408,7 +408,7 @@ class ColumnTest extends TestCase
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['renderExport', 'render'])
+            ->onlyMethods(['renderExport', 'render'])
             ->getMock();
 
         $rendererMock->expects($this->any())->method('renderExport')->willReturnCallback(
@@ -425,7 +425,7 @@ class ColumnTest extends TestCase
 
         $frameCallbackHostObject = $this->getMockBuilder(Widget::class)
             ->disableOriginalConstructor()
-            ->setMethods(['decorate'])
+            ->addMethods(['decorate'])
             ->getMock();
 
         $frameCallbackHostObject->expects($this->any())
@@ -452,7 +452,7 @@ class ColumnTest extends TestCase
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['renderExport', 'render'])
+            ->onlyMethods(['renderExport', 'render'])
             ->getMock();
 
         $rendererMock->expects($this->any())->method('renderExport')->willReturnCallback(
@@ -474,7 +474,7 @@ class ColumnTest extends TestCase
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['render'])
+            ->onlyMethods(['render'])
             ->getMock();
 
         $rendererMock->expects($this->any())->method('render')->willReturnCallback(

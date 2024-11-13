@@ -23,7 +23,7 @@ class FormKeyTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $formKeyMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey::class)
-            ->setMethods(['getFormKey'])->disableOriginalConstructor()
+            ->onlyMethods(['getFormKey'])->disableOriginalConstructor()
             ->getMock();
 
         $formKeyMock->expects($this->any())

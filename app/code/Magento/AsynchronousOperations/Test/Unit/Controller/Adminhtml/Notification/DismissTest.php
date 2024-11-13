@@ -81,6 +81,11 @@ class DismissTest extends TestCase
             ->with(ResultFactory::TYPE_JSON, [])
             ->willReturn($this->jsonResultMock);
 
+        $this->jsonResultMock->expects($this->once())
+            ->method('setData')
+            ->with([''])
+            ->willReturn($this->jsonResultMock);
+
         $this->assertEquals($this->jsonResultMock, $this->model->execute());
     }
 
@@ -96,6 +101,11 @@ class DismissTest extends TestCase
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
             ->with(ResultFactory::TYPE_JSON, [])
+            ->willReturn($this->jsonResultMock);
+
+        $this->jsonResultMock->expects($this->once())
+            ->method('setData')
+            ->with([''])
             ->willReturn($this->jsonResultMock);
 
         $this->notificationManagementMock->expects($this->once())

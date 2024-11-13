@@ -8,6 +8,8 @@ namespace Magento\Customer\CustomerData;
 
 /**
  * Js layout data provider pool interface
+ *
+ * @api
  */
 interface JsLayoutDataProviderPoolInterface
 {

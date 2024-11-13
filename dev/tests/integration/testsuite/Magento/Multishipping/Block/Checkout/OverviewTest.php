@@ -6,28 +6,58 @@
 
 namespace Magento\Multishipping\Block\Checkout;
 
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Checkout\Block\Cart\Item\Renderer;
+use Magento\Framework\App\Area;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Element\RendererList;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Xpath;
+use PHPUnit\Framework\TestCase;
+
 /**
- * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+ * Verify default items template
  */
-class OverviewTest extends \PHPUnit\Framework\TestCase
+class OverviewTest extends TestCase
 {
     /**
-     * @var \Magento\Multishipping\Block\Checkout\Overview
+     * @var Overview
      */
-    protected $_block;
+    private $block;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
-    protected $_objectManager;
+    private $objectManager;
 
+    /**
+     * @var Quote
+     */
+    private $quote;
+
+    /**
+     * @var ProductRepository
+     */
+    private $product;
+
+    /**
+     * @var Item
+     */
+    private $item;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
-        $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_block = $this->_objectManager->get(\Magento\Framework\View\LayoutInterface::class)
+        Bootstrap::getInstance()->loadArea(Area::AREA_FRONTEND);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->block = $this->objectManager->get(LayoutInterface::class)
             ->createBlock(
-                \Magento\Multishipping\Block\Checkout\Overview::class,
+                Overview::class,
                 'checkout_overview',
                 [
                     'data' => [
@@ -37,33 +67,49 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $this->_block->addChild('renderer.list', \Magento\Framework\View\Element\RendererList::class);
-        $this->_block->getChildBlock(
+        $this->block->addChild('renderer.list', RendererList::class);
+        $this->block->getChildBlock(
             'renderer.list'
         )->addChild(
             'default',
-            \Magento\Checkout\Block\Cart\Item\Renderer::class,
+            Renderer::class,
             ['template' => 'cart/item/default.phtml']
         );
+        $this->quote = $this->objectManager->create(Quote::class);
+        $this->product = $this->objectManager->create(ProductRepository::class);
+        $this->item = $this->objectManager->create(Item::class);
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
     public function testGetRowItemHtml()
     {
-        /** @var $item \Magento\Quote\Model\Quote\Item */
-        $item = $this->_objectManager->create(\Magento\Quote\Model\Quote\Item::class);
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = $this->_objectManager->create(\Magento\Catalog\Model\Product::class);
-        $product->load(1);
-        $item->setProduct($product);
-        /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->_objectManager->create(\Magento\Quote\Model\Quote::class);
-        $item->setQuote($quote);
+        $product = $this->product->get('simple');
+        $item = $this->item->setProduct($product);
+        $item->setQuote($this->quote);
         // assure that default renderer was obtained
         $this->assertEquals(
             1,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+            Xpath::getElementsCountForXpath(
                 '//*[contains(@class,"product") and contains(@class,"name")]/a',
-                $this->_block->getRowItemHtml($item)
+                $this->block->getRowItemHtml($item)
+            )
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Checkout/_files/customer_quote_with_items_simple_product_options.php
+     */
+    public function testLinkOptionalProductFileItemHtml()
+    {
+        $quote = $this->quote->load('customer_quote_product_custom_options', 'reserved_order_id');
+        $item = current($quote->getAllItems());
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(
+                '//dd/a[contains(text(), "test.jpg")]',
+                $this->block->getRowItemHtml($item)
             )
         );
     }

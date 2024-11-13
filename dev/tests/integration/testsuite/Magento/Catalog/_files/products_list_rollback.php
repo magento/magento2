@@ -6,6 +6,9 @@
 declare(strict_types=1);
 
 /** @var \Magento\Framework\Registry $registry */
+
+use Magento\Framework\Indexer\IndexerRegistry;
+
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
@@ -37,6 +40,9 @@ try {
     //Product already removed
 }
 
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(IndexerRegistry::class)
+    ->get(Magento\CatalogInventory\Model\Indexer\Stock\Processor::INDEXER_ID)
+    ->reindexAll();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

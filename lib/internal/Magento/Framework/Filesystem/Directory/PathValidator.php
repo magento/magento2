@@ -42,13 +42,10 @@ class PathValidator implements PathValidatorInterface
         bool $absolutePath = false
     ): void {
         $realDirectoryPath = $this->driver->getRealPathSafety($directoryPath);
-        if ($realDirectoryPath[-1] !== DIRECTORY_SEPARATOR) {
-            $realDirectoryPath .= DIRECTORY_SEPARATOR;
-        }
         if (!$absolutePath) {
             $actualPath = $this->driver->getRealPathSafety(
                 $this->driver->getAbsolutePath(
-                    $realDirectoryPath,
+                    $realDirectoryPath . DIRECTORY_SEPARATOR,
                     $path,
                     $scheme
                 )
@@ -57,8 +54,11 @@ class PathValidator implements PathValidatorInterface
             $actualPath = $this->driver->getRealPathSafety($path);
         }
 
-        if (mb_strpos($actualPath, $realDirectoryPath) !== 0
-            && rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR !== $realDirectoryPath
+        if (preg_match('/(?:^-|\s-\S|[\t\r\n\f])/', $path)
+            || (
+                mb_strpos($actualPath, $realDirectoryPath) !== 0
+                && rtrim($path, DIRECTORY_SEPARATOR) !== $realDirectoryPath
+            )
         ) {
             throw new ValidatorException(
                 new Phrase(

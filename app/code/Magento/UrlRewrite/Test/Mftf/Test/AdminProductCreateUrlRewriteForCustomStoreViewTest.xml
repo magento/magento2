@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <group value="catalog"/>
             <group value="url_rewrite"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -43,6 +44,9 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearFilterForStores"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Step 1. Navigate as Admin on Product Page for edit product`s Url Key-->

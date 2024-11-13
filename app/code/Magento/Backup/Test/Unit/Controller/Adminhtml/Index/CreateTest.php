@@ -101,34 +101,35 @@ class CreateTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAjax', 'isPost', 'getParam'])
+            ->onlyMethods(['isAjax', 'isPost', 'getParam'])
             ->getMock();
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['representJson', 'setRedirect'])
+            ->onlyMethods(['representJson', 'setRedirect'])
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->backupFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->backupModelMock = $this->getMockBuilder(Backup::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setBackupExtension', 'setTime', 'setBackupsDir', 'setName', 'create'])
+            ->addMethods(['setBackupExtension', 'setBackupsDir', 'create'])
+            ->onlyMethods(['setTime', 'setName'])
             ->getMock();
         $this->dataBackendHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMock();
         $this->dataBackupHelperMock = $this->getMockBuilder(\Magento\Backup\Helper\Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionByType', 'getBackupsDir'])
+            ->onlyMethods(['getExtensionByType', 'getBackupsDir'])
             ->getMock();
         $this->maintenanceModeMock = $this->getMockBuilder(MaintenanceMode::class)
             ->disableOriginalConstructor()
-            ->setMethods(['set'])
+            ->onlyMethods(['set'])
             ->getMock();
         $this->fileFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()

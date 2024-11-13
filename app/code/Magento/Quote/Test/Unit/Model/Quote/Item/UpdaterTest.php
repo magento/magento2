@@ -95,7 +95,7 @@ class UpdaterTest extends TestCase
             ]
         );
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->getMockForAbstractClass();
 
         $this->object = (new ObjectManager($this))
@@ -142,14 +142,14 @@ class UpdaterTest extends TestCase
             ->method('getProduct')
             ->willReturn($this->productMock);
 
-        $result = $this->object->update($this->itemMock, ['qty' => $qty]);
+        $result = $this->object->update($this->itemMock, ['qty' => (double) $qty]);
         $this->assertEquals($result, $this->object);
     }
 
     /**
      * @return array
      */
-    public function qtyProvider()
+    public static function qtyProvider()
     {
         return [
             [1, 1],
@@ -164,7 +164,7 @@ class UpdaterTest extends TestCase
     /**
      * @return array
      */
-    public function qtyProviderDecimal()
+    public static function qtyProviderDecimal()
     {
         return [
             [1, 1],
@@ -211,7 +211,7 @@ class UpdaterTest extends TestCase
             ->method('getProduct')
             ->willReturn($this->productMock);
 
-        $object = $this->object->update($this->itemMock, ['qty' => $qty]);
+        $object = $this->object->update($this->itemMock, ['qty' => (double) $qty]);
         $this->assertEquals($this->object, $object);
     }
 
@@ -316,7 +316,7 @@ class UpdaterTest extends TestCase
         $buyRequestMock->expects($this->never())->method('setCustomPrice');
         $buyRequestMock->expects($this->once())->method('getData')->willReturn([]);
         $serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->getMockForAbstractClass();
         $serializer->expects($this->any())
             ->method('serialize')
@@ -364,9 +364,14 @@ class UpdaterTest extends TestCase
 
         $this->itemMock->expects($this->exactly(2))
             ->method('setData')
-            ->withConsecutive(
-                ['custom_price', null],
-                ['original_custom_price', null]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'custom_price' && $arg2 == null) {
+                        return null;
+                    } elseif ($arg1 == 'original_custom_price' && $arg2 == null) {
+                        return null;
+                    }
+                }
             );
 
         $this->itemMock->expects($this->once())

@@ -7,7 +7,11 @@
 namespace Magento\Test\Annotation;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Annotation\ComponentRegistrarFixture;
+use Magento\TestFramework\Fixture\Parser\ComponentsDir;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,13 +20,35 @@ class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $componentRegistrar;
 
-    const LIBRARY_NAME = 'magento/library';
-    const MODULE_NAME = 'Magento_ModuleOne';
-    const THEME_NAME = 'frontend/Magento/theme';
-    const LANGUAGE_NAME = 'magento_language';
+    private const LIBRARY_NAME = 'magento/library';
+    private const MODULE_NAME = 'Magento_ModuleOne';
+    private const THEME_NAME = 'frontend/Magento/theme';
+    private const LANGUAGE_NAME = 'magento_language';
 
     protected function setUp(): void
     {
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->onlyMethods(['get', 'create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $sharedInstances = [
+            ComponentsDir::class => $this->createConfiguredMock(ComponentsDir::class, ['parse' => []])
+        ];
+        $objectManager->method('get')
+            ->willReturnCallback(
+                function (string $type) use ($sharedInstances) {
+                    return $sharedInstances[$type] ?? new $type();
+                }
+            );
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type, array $arguments = []) {
+                    return new $type(...array_values($arguments));
+                }
+            );
+        Bootstrap::setObjectManager($objectManager);
         $this->componentRegistrar = new ComponentRegistrar();
     }
 

@@ -5,12 +5,17 @@
  */
 namespace Magento\NewRelicReporting\Model;
 
-use \Magento\Framework\HTTP\ZendClient;
+use Laminas\Http\Request;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Json\Helper\Data;
 
 class CronEvent
 {
     /**
-     * @var \Magento\Framework\HTTP\ZendClient
+     * @var LaminasClient
      */
     protected $request;
 
@@ -29,31 +34,31 @@ class CronEvent
     protected $customParameters = [];
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var Data
      */
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+     * @var LaminasClientFactory $clientFactory
      */
     protected $clientFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\NewRelicReporting\Model\Config $config
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+     * @param Config $config
+     * @param EncoderInterface $jsonEncoder
+     * @param LaminasClientFactory $clientFactory
      */
     public function __construct(
-        \Magento\NewRelicReporting\Model\Config $config,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\HTTP\ZendClientFactory $clientFactory
+        Config $config,
+        EncoderInterface $jsonEncoder,
+        LaminasClientFactory $clientFactory
     ) {
         $this->config = $config;
         $this->jsonEncoder = $jsonEncoder;
@@ -64,14 +69,14 @@ class CronEvent
      * Returns Insights API url with account id
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function getEventsUrl()
     {
         if (empty($this->eventsUrl)) {
             $accountId = $this->config->getNewRelicAccountId();
             if (empty($accountId)) {
-                throw new \Magento\Framework\Exception\LocalizedException(__(
+                throw new LocalizedException(__(
                     'No New Relic Application ID configured, cannot continue with Cron Event reporting'
                 ));
             }
@@ -86,7 +91,7 @@ class CronEvent
     /**
      * Returns HTTP request to events url
      *
-     * @return \Magento\Framework\HTTP\ZendClient
+     * @return LaminasClient
      */
     protected function getRequest()
     {
@@ -95,7 +100,7 @@ class CronEvent
             $this->request->setUri($this->getEventsUrl());
             $insertKey = $this->config->getInsightsInsertKey();
 
-            $this->request->setMethod(ZendClient::POST);
+            $this->request->setMethod(Request::METHOD_POST);
             $this->request->setHeaders(
                 [
                     'X-Insert-Key' => $insertKey,
@@ -135,7 +140,7 @@ class CronEvent
      * Add custom parameters to send with API request
      *
      * @param array $data
-     * @return \Magento\NewRelicReporting\Model\CronEvent $this
+     * @return CronEvent $this
      */
     public function addData(array $data)
     {
@@ -150,11 +155,9 @@ class CronEvent
      */
     public function sendRequest()
     {
-        $response = $this->getRequest()
-            ->setRawData($this->getJsonForResponse())
-            ->request();
-
-        if ($response->getStatus() >= 200 && $response->getStatus() < 300) {
+        $this->getRequest()->setRawBody($this->getJsonForResponse());
+        $response = $this->getRequest()->send();
+        if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
             return true;
         }
         return false;

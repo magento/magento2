@@ -5,10 +5,11 @@
  */
 namespace Magento\Downloadable\Model\Link;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Downloadable links purchased model
  *
- * @api
  * @method int getOrderId()
  * @method \Magento\Downloadable\Model\Link\Purchased setOrderId(int $value)
  * @method string getOrderIncrementId()
@@ -52,7 +53,7 @@ class Purchased extends \Magento\Framework\Model\AbstractModel
     public function beforeSave()
     {
         if (null == $this->getOrderId()) {
-            throw new \Exception(__('Order id cannot be null'));
+            throw new LocalizedException(__('Order id cannot be null'));
         }
         return parent::beforeSave();
     }

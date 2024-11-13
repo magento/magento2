@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config\Backend;
 
-use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\Url as UrlValidator;
 
 /**
  * @api
@@ -56,7 +56,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      */
     public function beforeSave()
     {
-        $value = $this->getValue();
+        $value = strtolower($this->getValue());
         try {
             if (!$this->_validateUnsecure($value) && !$this->_validateSecure($value)) {
                 $this->_validateFullyQualifiedUrl($value);
@@ -68,6 +68,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
             $error = new \Magento\Framework\Exception\LocalizedException($msg, $e);
             throw $error;
         }
+        $this->setValue($value);
     }
 
     /**
@@ -232,6 +233,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * Get URL Validator
      *
      * @deprecated 100.1.12
+     * @see Nothing
      * @return UrlValidator
      */
     private function getUrlValidator()

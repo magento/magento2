@@ -46,21 +46,25 @@ class DownloadableTest extends TestCase
             ->getMock();
         $this->purchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->itemsFactory = $this->getMockBuilder(
             CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
+
+        $purchasedLink = new \Magento\Downloadable\Model\Sales\Order\Link\Purchased(
+            $this->purchasedFactory,
+            $this->itemsFactory
+        );
 
         $this->block = $objectManager->getObject(
             Downloadable::class,
             [
                 'context' => $contextMock,
-                'purchasedFactory' => $this->purchasedFactory,
-                'itemsFactory' => $this->itemsFactory
+                'purchasedLink' => $purchasedLink
             ]
         );
     }
@@ -69,16 +73,16 @@ class DownloadableTest extends TestCase
     {
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $linkPurchased = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load'])
+            ->onlyMethods(['load'])
             ->getMock();
         $itemCollection =
             $this->getMockBuilder(Collection::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['addFieldToFilter'])
+                ->onlyMethods(['addFieldToFilter'])
                 ->getMock();
 
         $this->block->setData('item', $item);

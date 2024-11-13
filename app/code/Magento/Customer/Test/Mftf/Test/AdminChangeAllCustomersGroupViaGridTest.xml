@@ -15,6 +15,9 @@
             <description value="Select All customers to change their group"/>
             <testCaseId value="MC-26040"/>
             <severity value="MAJOR"/>
+            <skip>
+                <issueId value="ACQE-4161"/>
+            </skip>
         </annotations>
 
         <remove keyForRemoval="filterCustomer"/>

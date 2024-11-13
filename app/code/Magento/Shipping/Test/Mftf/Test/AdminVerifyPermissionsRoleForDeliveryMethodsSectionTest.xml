@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyPermissionsRoleForDeliveryMethodsSectionTest">
+        <annotations>
+            <stories value="Delivery Methods Section Admin Permissions Role"/>
+            <title value="Verify Delivery Methods Section permission role gives access to restricted admin"/>
+            <description value="Verify Delivery Methods Section permission role gives access to restricted admin"/>
+            <severity value="CRITICAL"/>
+            <group value="sales"/>
+            <testCaseId value="MC-42591" />
+            <useCaseId value="MC-41545"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create restricted role-->
+            <actionGroup ref="AdminCreateRoleWithoutScopeSelectionActionGroup" stepKey="createUserRole">
+                <argument name="restrictedRole" value="Delivery Methods Section"/>
+                <argument name="User" value="adminRole"/>
+            </actionGroup>
+            <!--Create new admin user-->
+            <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
+                <argument name="role" value="adminRole"/>
+                <argument name="User" value="NewAdminUser"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Delete created role-->
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="AdminDeleteRoleActionGroup">
+                <argument name="roleName" value="{{adminRole.name}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetUserRoleFilters"/>
+            <!--Delete created admin user -->
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteAdminUserActionGroup">
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetAdminUserFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+        </after>
+        <!--Log out-->
+        <actionGroup ref="SignOut" stepKey="SignOut"/>
+        <!--Log in as new user-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginActionGroup">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
+        </actionGroup>
+        <!--Check Delivery Methods configuration is accessible -->
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <!--Log Out-->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromRestrictedAdmin"/>
+    </test>
+</tests>

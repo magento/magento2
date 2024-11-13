@@ -12,7 +12,7 @@ define([
     return function (config) {
         var dataForm = $('#' + config.formId);
 
-        dataForm.submit(function () {
+        dataForm.on('submit', function () {
             $(this).find(':submit').attr('disabled', 'disabled');
 
             if (this.isValid === false) {
@@ -20,7 +20,7 @@ define([
             }
             this.isValid = true;
         });
-        dataForm.bind('invalid-form.validate', function () {
+        dataForm.on('invalid-form.validate', function () {
             $(this).find(':submit').prop('disabled', false);
             this.isValid = false;
         });

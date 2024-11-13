@@ -51,17 +51,17 @@ class JwtParserTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getApiKey', 'isDebugModeEnabled'])
+            ->onlyMethods(['getApiKey', 'isDebugModeEnabled'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->jwtManagementMock = $this->getMockBuilder(JwtManagement::class)
-            ->setMethods(['decode'])
+            ->onlyMethods(['decode'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->jwtPayloadValidatorMock = $this->getMockBuilder(JwtPayloadValidatorInterface::class)
-            ->setMethods(['validate'])
+            ->onlyMethods(['validate'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

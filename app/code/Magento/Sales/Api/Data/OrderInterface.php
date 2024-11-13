@@ -913,7 +913,10 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Gets the customer date-of-birth (DOB) for the order.
      *
-     * @return string|null Customer date-of-birth (DOB).
+     * @return string|null In keeping with current security and privacy best practices, be sure you are aware of any
+     * potential legal and security risks associated with the storage of customers’ full date of birth
+     * (month, day, year) along with other personal identifiers (e.g., full name) before collecting or processing
+     * such data.
      */
     public function getCustomerDob();
 

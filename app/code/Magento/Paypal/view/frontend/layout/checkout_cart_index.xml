@@ -14,12 +14,55 @@
                     <argument name="position" xsi:type="number">0</argument>
                 </arguments>
             </block>
+            <block class="Magento\Paypal\Block\PayLater\Banner" name="top.container.paylater"
+                   template="Magento_Paypal::paylater/banner.phtml">
+                <arguments>
+                    <argument name="placement" xsi:type="string">cart</argument>
+                    <argument name="position" xsi:type="string">header</argument>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="payLater" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="displayAmount" xsi:type="boolean">true</item>
+                                    <item name="amountComponentConfig" xsi:type="array">
+                                        <item name="component" xsi:type="string">
+                                            Magento_Paypal/js/view/amountProviders/checkout
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
         </referenceContainer>
         <referenceContainer name="checkout.cart.methods">
             <block class="Magento\Paypal\Block\Bml\Banners" name="bml.right.logo" after="checkout.cart.methods.onepage.bottom" template="Magento_Paypal::bml.phtml">
                 <arguments>
                     <argument name="section" xsi:type="string">checkout</argument>
                     <argument name="position" xsi:type="number">1</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Paypal\Block\PayLater\Banner" name="paylater.right.logo"
+                   after="checkout.cart.methods.onepage.bottom"
+                   template="Magento_Paypal::paylater/banner.phtml">
+                <arguments>
+                    <argument name="placement" xsi:type="string">cart</argument>
+                    <argument name="position" xsi:type="string">near_pp_button</argument>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="payLater" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="displayAmount" xsi:type="boolean">true</item>
+                                    <item name="amountComponentConfig" xsi:type="array">
+                                        <item name="component" xsi:type="string">
+                                            Magento_Paypal/js/view/amountProviders/checkout
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
                 </arguments>
             </block>
         </referenceContainer>

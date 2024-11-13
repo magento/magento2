@@ -16,6 +16,8 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -51,20 +53,28 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     private $makeSharedValid;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ObjectManagerFactory $objectManagerFactory
      * @param IndexerRegistry|null $indexerRegistry
      * @param DependencyInfoProvider|null $dependencyInfoProvider
      * @param MakeSharedIndexValid|null $makeSharedValid
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
         IndexerRegistry $indexerRegistry = null,
         DependencyInfoProvider $dependencyInfoProvider = null,
-        MakeSharedIndexValid $makeSharedValid = null
+        MakeSharedIndexValid $makeSharedValid = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
         $this->dependencyInfoProvider = $dependencyInfoProvider;
         $this->makeSharedValid = $makeSharedValid;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         parent::__construct($objectManagerFactory);
     }
 
@@ -83,7 +93,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         $returnValue = Cli::RETURN_SUCCESS;
         foreach ($this->getIndexers($input) as $indexer) {
@@ -92,7 +102,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
                 $output->write($indexer->getTitle() . ' index ');
 
-                $startTime = microtime(true);
+                $startTime = new \DateTimeImmutable();
                 $indexerConfig = $this->getConfig()->getIndexer($indexer->getId());
                 $sharedIndex = $indexerConfig['shared_index'] ?? null;
 
@@ -103,20 +113,24 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                         $this->sharedIndexesComplete[] = $sharedIndex;
                     }
                 }
-                $resultTime = microtime(true) - $startTime;
+                $endTime = new \DateTimeImmutable();
+                $interval = $startTime->diff($endTime);
+                $days = $interval->format('%d');
+                $hours = $days > 0 ? $days * 24 + $interval->format('%H') : $interval->format('%H');
+                $minutes = $interval->format('%I');
+                $seconds = $interval->format('%S');
 
                 $output->writeln(
-                    __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', $resultTime)])
+                    __('has been rebuilt successfully in %1:%2:%3', $hours, $minutes, $seconds)
                 );
-            } catch (LocalizedException $e) {
-                $output->writeln(__('exception: %message', ['message' => $e->getMessage()]));
-                $returnValue = Cli::RETURN_FAILURE;
-            } catch (\Exception $e) {
-                $output->writeln('process unknown error:');
+            } catch (\Throwable $e) {
+                $output->writeln('process error during indexation process:');
                 $output->writeln($e->getMessage());
 
                 $output->writeln($e->getTraceAsString(), OutputInterface::VERBOSITY_DEBUG);
                 $returnValue = Cli::RETURN_FAILURE;
+
+                $this->logger->critical($e->getMessage());
             }
         }
 
@@ -230,7 +244,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get config
      *
      * @return ConfigInterface
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 We don't recommend this approach anymore
+     * @see Add a new optional parameter to the constructor at the end of the arguments list instead
+     * and fetch the dependency using Magento\Framework\App\ObjectManager::getInstance() in the constructor body
      */
     private function getConfig()
     {
@@ -244,7 +260,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * Get dependency info provider
      *
      * @return DependencyInfoProvider
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 We don't recommend this approach anymore
+     * @see Add a new optional parameter to the constructor at the end of the arguments list instead
+     * and fetch the dependency using Magento\Framework\App\ObjectManager::getInstance() in the constructor body
      */
     private function getDependencyInfoProvider()
     {

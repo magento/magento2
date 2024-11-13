@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyAssociatedProductForGroupedProductActionGroup">
+        <annotations>
+            <description>Verify product data for the specified row in the Associated Grouped Products grid on the Edit
+                Product page in admin for a Grouped Product.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="Magento_Catalog/images/product/placeholder/thumbnail.jpg" type="string"/>
+            <argument name="name" defaultValue="{{_defaultProduct.name}}" type="string"/>
+            <argument name="attributeSet" defaultValue="Default" type="string"/>
+            <argument name="status" defaultValue="Enabled" type="string"/>
+            <argument name="sku" defaultValue="{{_defaultProduct.sku}}" type="string"/>
+            <argument name="price" defaultValue="${{_defaultProduct.price}}" type="string"/>
+            <argument name="defaultQuantity" defaultValue="0" type="string"/>
+            <argument name="position" defaultValue="0" type="string"/>
+            <argument name="index" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminGroupedProductOptionGridSection.productImage(index)}}" stepKey="waitForProductImage"/>
+        <grabAttributeFrom userInput="src" selector="{{AdminGroupedProductOptionGridSection.productImage(index)}}" stepKey="grabProductImageSrc"/>
+        <assertStringContainsString stepKey="assertProductImageSrc">
+            <expectedResult type="string">{{image}}</expectedResult>
+            <actualResult type="variable">$grabProductImageSrc</actualResult>
+        </assertStringContainsString>
+        <see userInput="{{name}}" selector="{{AdminGroupedProductOptionGridSection.productNameByRow(index)}}" stepKey="seeProductName"/>
+        <see userInput="{{attributeSet}}" selector="{{AdminGroupedProductOptionGridSection.productAttributeSet(index)}}" stepKey="seeProductAttributeSet"/>
+        <see userInput="{{status}}" selector="{{AdminGroupedProductOptionGridSection.productStatus(index)}}" stepKey="seeProductStatus"/>
+        <see userInput="{{sku}}" selector="{{AdminGroupedProductOptionGridSection.productSku(index)}}" stepKey="seeProductSku"/>
+        <see userInput="{{price}}" selector="{{AdminGroupedProductOptionGridSection.productPrice(index)}}" stepKey="seeProductPrice"/>
+        <seeInField userInput="{{defaultQuantity}}" selector="{{AdminGroupedProductOptionGridSection.productDefaultQuantity(index)}}" stepKey="seeProductDefaultQuantity"/>
+        <seeInField userInput="{{position}}" selector="{{AdminGroupedProductOptionGridSection.productPosition(index)}}" stepKey="seeProductPosition"/>
+    </actionGroup>
+</actionGroups>

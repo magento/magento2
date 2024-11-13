@@ -5,10 +5,10 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items;
 
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
  * Adminhtml sales order item renderer
@@ -19,8 +19,6 @@ use Magento\Catalog\Helper\Data as CatalogHelper;
 class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer
 {
     /**
-     * Serializer
-     *
      * @var Json
      */
     private $serializer;
@@ -205,13 +203,13 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
         if (!$this->isShipmentSeparately($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result = sprintf('%d', $attributes['qty']) . ' x ' . $result;
+                $result = (float) $attributes['qty'] . ' x ' . $result;
             }
         }
         if (!$this->isChildCalculated($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result .= " " . $this->getItem()->getOrder()->formatPrice($attributes['price']);
+                $result .= " " . $this->getItem()->getOrder()->formatBasePrice($attributes['price']);
             }
         }
         return $result;

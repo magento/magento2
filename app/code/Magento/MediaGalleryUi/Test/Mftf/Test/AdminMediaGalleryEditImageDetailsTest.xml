@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminMediaGalleryEditImageDetailsFromGridTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

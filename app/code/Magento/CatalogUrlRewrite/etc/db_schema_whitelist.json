@@ -9,6 +9,7 @@
             "CATALOG_URL_REWRITE_PRODUCT_CATEGORY_CATEGORY_ID_PRODUCT_ID": true
         },
         "constraint": {
+            "PRIMARY": true,
             "CAT_URL_REWRITE_PRD_CTGR_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
             "FK_BB79E64705D7F17FE181F23144528FC8": true,
             "CAT_URL_REWRITE_PRD_CTGR_CTGR_ID_CAT_CTGR_ENTT_ENTT_ID": true,

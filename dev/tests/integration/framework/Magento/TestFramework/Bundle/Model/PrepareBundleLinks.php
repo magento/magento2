@@ -61,14 +61,15 @@ class PrepareBundleLinks
         foreach ($product->getBundleOptionsData() as $key => $optionData) {
             $option = $this->optionLinkFactory->create(['data' => $optionData]);
             $option->setSku($product->getSku());
-            $option->setOptionId(null);
+            $optionId = $optionData['option_id'] ?? null;
+            $option->setOptionId($optionId);
             $links = [];
             $bundleLinks = $product->getBundleSelectionsData();
             foreach ($bundleLinks[$key] as $linkData) {
                 $link = $this->linkFactory->create(['data' => $linkData]);
                 $link->setQty($linkData['selection_qty']);
                 $priceType = $price = null;
-                if ($product->getPriceType() === Price::PRICE_TYPE_FIXED) {
+                if ((int)$product->getPriceType() === Price::PRICE_TYPE_FIXED) {
                     $priceType = $linkData['selection_price_type'] ?? null;
                     $price = $linkData['selection_price_value'] ?? null;
                 }

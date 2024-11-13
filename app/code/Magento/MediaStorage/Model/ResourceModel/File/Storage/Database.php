@@ -5,11 +5,22 @@
  */
 namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\ResourceConnection\ConnectionFactory;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Helper;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+
 /**
- * Class Database
+ * Class Database Media Storage
  *
  * @api
  * @since 100.0.2
+ *
+ * @deprecated Database Media Storage is deprecated
  */
 class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\AbstractStorage
 {
@@ -19,17 +30,46 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @var ConnectionFactory
+     */
+    private $connectionFactory;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var array
+     */
+    private array $filenameColumn = [
+        'name' => 'filename',
+        'type' => Table::TYPE_TEXT,
+        'length' => 255,
+        'nullable' => false,
+        'comment' => 'Filename',
+    ];
+
+    /**
+     * @param Context $context
+     * @param Helper $resourceHelper
      * @param string $connectionName
+     * @param ConnectionFactory|null $connectionFactory
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\DB\Helper $resourceHelper,
-        $connectionName = null
+        Context $context,
+        Helper $resourceHelper,
+        $connectionName = null,
+        ConnectionFactory $connectionFactory = null,
+        DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_resourceHelper = $resourceHelper;
+        $this->connectionFactory = $connectionFactory
+            ?? ObjectManager::getInstance()->get(ConnectionFactory::class);
+        $this->deploymentConfig = $deploymentConfig
+            ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -52,6 +92,7 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
         $connection = $this->getConnection();
         $table = $this->getMainTable();
         if ($connection->isTableExists($table)) {
+            $this->increaseFilenameColumnLength();
             return $this;
         }
 
@@ -79,11 +120,11 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
             ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Upload Timestamp'
         )->addColumn(
-            'filename',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            100,
-            ['nullable' => false],
-            'Filename'
+            $this->filenameColumn['name'],
+            $this->filenameColumn['type'],
+            $this->filenameColumn['length'],
+            ['nullable' => $this->filenameColumn['nullable']],
+            $this->filenameColumn['comment']
         )->addColumn(
             'directory_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -119,6 +160,46 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
 
         $connection->createTable($ddlTable);
         return $this;
+    }
+
+    /**
+     * Create new DB connection
+     *
+     * @param string $connectionName
+     * @return AdapterInterface
+     */
+    private function createResourceConnection(?string $connectionName): AdapterInterface
+    {
+        $connectionName = $connectionName ?: $this->connectionName;
+        $connectionConfig = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . $connectionName
+        );
+        return $this->connectionFactory->create($connectionConfig);
+    }
+
+    /**
+     * Increase length of filename column
+     *
+     * @return void
+     */
+    private function increaseFilenameColumnLength(): void
+    {
+        $connection = $this->createResourceConnection($this->connectionName);
+        $table = $this->getMainTable();
+        $columns = $connection->describeTable($table);
+        $filenameLength = $columns['filename']['LENGTH'] ?? null;
+        if ($filenameLength && $filenameLength < $this->filenameColumn['length']) {
+            $connection->modifyColumn(
+                $table,
+                $this->filenameColumn['name'],
+                [
+                    'type' => $this->filenameColumn['type'],
+                    'length' => $this->filenameColumn['length'],
+                    'nullable' => $this->filenameColumn['nullable'],
+                    'comment' => $this->filenameColumn['comment'],
+                ]
+            );
+        }
     }
 
     /**

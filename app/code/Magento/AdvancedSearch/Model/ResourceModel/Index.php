@@ -80,8 +80,10 @@ class Index extends AbstractDb
 
     /**
      * Implementation of abstract construct
+     *
      * @return void
      * @since 100.1.0
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {
@@ -118,7 +120,8 @@ class Index extends AbstractDb
 
         $result = [];
         foreach ($connection->fetchAll($catalogProductIndexPriceUnionSelect) as $row) {
-            $result[$row['website_id']][$row['entity_id']][$row['customer_group_id']] = round($row['min_price'], 2);
+            $result[$row['website_id']][$row['entity_id']][$row['customer_group_id']] =
+                round((float) $row['min_price'], 2);
         }
 
         return $result;

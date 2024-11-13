@@ -5,14 +5,14 @@
  */
 namespace Magento\Review\Ui\DataProvider\Product;
 
+use Magento\Framework\Api\Filter;
 use Magento\Framework\App\RequestInterface;
-use Magento\Ui\DataProvider\AbstractDataProvider;
-use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection;
-use Magento\Review\Model\Review;
+use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
- * Class ReviewDataProvider
+ * DataProvider for product reviews
  *
  * @api
  *
@@ -58,7 +58,7 @@ class ReviewDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getData()
@@ -79,24 +79,42 @@ class ReviewDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * Returns prepared field name
+     *
+     * @param string $name
+     * @return string
+     */
+    private function getPreparedField(string $name): string
+    {
+        $preparedName = '';
+
+        if (in_array($name, ['review_id', 'created_at', 'status_id'])) {
+            $preparedName = 'rt.' . $name;
+        } elseif (in_array($name, ['title', 'nickname', 'detail'])) {
+            $preparedName = 'rdt.' . $name;
+        } elseif ($name === 'review_created_at') {
+            $preparedName = 'rt.created_at';
+        }
+
+        return $preparedName ?: $name;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addOrder($field, $direction)
+    {
+        $this->getCollection()->setOrder($this->getPreparedField($field), $direction);
+    }
+
+    /**
+     * @inheritdoc
      * @since 100.1.0
      */
-    public function addFilter(\Magento\Framework\Api\Filter $filter)
+    public function addFilter(Filter $filter)
     {
         $field = $filter->getField();
-
-        if (in_array($field, ['review_id', 'created_at', 'status_id'])) {
-            $filter->setField('rt.' . $field);
-        }
-
-        if (in_array($field, ['title', 'nickname', 'detail'])) {
-            $filter->setField('rdt.' . $field);
-        }
-
-        if ($field === 'review_created_at') {
-            $filter->setField('rt.created_at');
-        }
+        $filter->setField($this->getPreparedField($field));
 
         parent::addFilter($filter);
     }

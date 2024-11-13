@@ -6,6 +6,8 @@
 
 namespace Magento\Theme\Block\Html\Header;
 
+use Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolverInterface;
+
 /**
  * Logo page header block
  *
@@ -124,16 +126,16 @@ class Logo extends \Magento\Framework\View\Element\Template
      */
     protected function _getLogoUrl()
     {
-        $folderName = \Magento\Config\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
-        $storeLogoPath = $this->_scopeConfig->getValue(
-            'design/header/logo_src',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        $path = $folderName . '/' . $storeLogoPath;
+        $path = null;
+        /** @var LogoPathResolverInterface $logoPathResolver */
+        $logoPathResolver = $this->getData('logoPathResolver');
+        if ($logoPathResolver instanceof LogoPathResolverInterface) {
+            $path = $logoPathResolver->getPath();
+        }
         $logoUrl = $this->_urlBuilder
                 ->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
 
-        if ($storeLogoPath !== null && $this->_isFile($path)) {
+        if ($path !== null && $this->_isFile($path)) {
             $url = $logoUrl;
         } elseif ($this->getLogoFile()) {
             $url = $this->getViewFileUrl($this->getLogoFile());

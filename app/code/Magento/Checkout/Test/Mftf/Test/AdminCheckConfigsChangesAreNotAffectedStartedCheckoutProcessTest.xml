@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckConfigsChangesAreNotAffectedStartedCheckoutProcessTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Changes in configs are not affecting checkout process"/>
+            <title value="Admin check configs changes are not affected started checkout process test"/>
+            <description value="Changes in admin for shipping rates are not affecting checkout process that has been started"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12599"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+
+            <!-- Enable free shipping method -->
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
+
+            <!-- Disable flat rate method -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+        </before>
+        <after>
+            <!-- Roll back configuration -->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
+
+            <!-- Delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Add product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Proceed to Checkout from mini shopping cart -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+
+        <!-- Fill all required fields -->
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillNewShippingAddress">
+            <argument name="customer" value="Simple_Customer_Without_Address" />
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+
+        <!-- Assert Free Shipping checkbox -->
+        <seeCheckboxIsChecked selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="freeShippingMethodCheckboxIsChecked"/>
+
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
+
+        <!-- Payment step is opened -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+
+        <!-- Order Summary block contains information about shipping -->
+        <actionGroup ref="CheckShippingMethodInCheckoutActionGroup" stepKey="guestCheckoutCheckShippingMethod">
+            <argument  name="shippingMethod" value="freeTitleDefault.value"/>
+        </actionGroup>
+
+        <!-- Open new browser's window and login as Admin -->
+        <openNewTab stepKey="openNewTab"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Go to Store > Configuration > Sales > Shipping Methods -->
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+
+        <!-- Enable "Flat Rate" -->
+        <actionGroup ref="AdminChangeFlatRateShippingMethodStatusActionGroup" stepKey="enableFlatRateShippingStatus"/>
+
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+        <!-- Back to the Checkout and refresh the page -->
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitPageReload"/>
+
+        <!-- Payment step is opened after refreshing -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSection"/>
+
+        <!-- Order Summary block contains information about free shipping -->
+        <actionGroup ref="CheckShippingMethodInCheckoutActionGroup" stepKey="guestCheckoutCheckFreeShippingMethod">
+            <argument  name="shippingMethod" value="freeTitleDefault.value"/>
+        </actionGroup>
+    </test>
+</tests>

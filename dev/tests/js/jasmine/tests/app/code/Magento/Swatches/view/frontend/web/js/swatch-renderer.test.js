@@ -9,7 +9,7 @@ define([
 ], function ($, SwatchRenderer) {
     'use strict';
 
-    describe('Testing "_RenderSwatchOptions" method of SwatchRenderer Widget', function () {
+    describe('Magento_Swatches/js/swatch-renderer.js', function () {
         var widget,
             html,
             optionConfig,
@@ -18,10 +18,18 @@ define([
             swathImageHeight = '60',
             swathImageWidth = '70',
             swathThumbImageHeight = '40',
-            swathThumbImageWidth = '50';
+            swathThumbImageWidth = '50',
+            options,
+            blockHtml = '<form id="cart"/>' +
+                '<input id="qty"/>' +
+                '</form>',
+            qtyElement,
+            formElement;
 
         beforeEach(function () {
-            widget = new SwatchRenderer();
+            $(blockHtml).appendTo('body');
+            qtyElement = $('#qty');
+            formElement = $('#cart');
             attribute = {
                 id: 1,
                 options: [{
@@ -29,7 +37,7 @@ define([
                 }]
             };
 
-            widget.options = {
+            options = {
                 classes: {
                     optionClass: 'swatch-option'
                 },
@@ -52,8 +60,14 @@ define([
                 }
             };
 
+            widget = new SwatchRenderer(options);
+
             optionConfig = widget.options.jsonSwatchConfig[attribute.id];
             html = $(widget._RenderSwatchOptions(attribute, 'option-label-control-id-1'))[0];
+        });
+
+        afterEach(function () {
+            formElement.remove();
         });
 
         it('check if swatch config has attribute id', function () {
@@ -80,23 +94,55 @@ define([
         });
 
         it('check udate price method', function () {
-            var productPriceMock = {
-                find: jasmine.createSpy().and.returnValue({
-                    hide: jasmine.createSpy(),
+            var productBlock, parentsResultMap, findResultMap;
+
+            parentsResultMap = {
+                '[data-role=priceBox]': {
                     priceBox: jasmine.createSpy().and.returnValue(''),
                     trigger: jasmine.createSpy(),
                     find: jasmine.createSpy().and.returnValue({
                         toggleClass: jasmine.createSpy()
                     })
+                },
+                '.normal-price .price-label': {
+                    hide: jasmine.createSpy(),
+                    show: jasmine.createSpy()
+                },
+                '.sly-old-price': {
+                    hide: jasmine.createSpy()
+                }
+            };
+
+            findResultMap = {
+                '.swatch-attribute-options': [
+                    $('<div class="swatch-attribute-options"><div class="swatch-option"></div></div>')
+                ]
+            };
+
+            productBlock = {
+                // eslint-disable-next-line max-nested-callbacks
+                find: jasmine.createSpy().and.callFake(function (selector) {
+                    return parentsResultMap[selector];
                 })
             };
 
             widget.element =  {
-                parents: jasmine.createSpy().and.returnValue(productPriceMock)
+                parents: jasmine.createSpy().and.returnValue(productBlock),
+                // eslint-disable-next-line max-nested-callbacks
+                find: jasmine.createSpy().and.callFake(function (selector) {
+                    return findResultMap[selector];
+                })
             };
             widget._getNewPrices  = jasmine.createSpy().and.returnValue(undefined);
             widget._UpdatePrice();
-            expect(productPriceMock.find().find.calls.count()).toBe(1);
+            expect(widget.element.parents).toHaveBeenCalledOnceWith('.product-info-main');
+            expect(widget.element.find).toHaveBeenCalledOnceWith('.swatch-attribute-options');
+            expect(parentsResultMap['[data-role=priceBox]'].find).toHaveBeenCalledOnceWith('span:first');
+            expect(parentsResultMap['.sly-old-price'].hide).toHaveBeenCalledTimes(1);
+            expect(parentsResultMap['.normal-price .price-label'].hide).toHaveBeenCalledTimes(1);
+            expect(parentsResultMap['.normal-price .price-label'].hide)
+                .toHaveBeenCalledBefore(parentsResultMap['.normal-price .price-label'].show);
+            expect(parentsResultMap['.normal-price .price-label'].show).toHaveBeenCalledTimes(1);
         });
 
         it('check getSelectedOptionPriceIndex', function () {
@@ -129,6 +175,28 @@ define([
             };
 
             expect(widget._getSelectedOptionPriceIndex()).toBe('p');
+        });
+
+        it('check that price is reloaded on qty change', function () {
+            var priceBox = {
+                    hide: jasmine.createSpy(),
+                    priceBox: jasmine.createSpy().and.returnValue({ prices: {}}),
+                    trigger: jasmine.createSpy(),
+                    find: jasmine.createSpy().and.returnValue({
+                        toggleClass: jasmine.createSpy()
+                    })
+                },
+                productPriceMock = {
+                    find: jasmine.createSpy().and.returnValue(priceBox)
+                };
+
+            widget.element =  {
+                parents: jasmine.createSpy().and.returnValue(productPriceMock)
+            };
+            widget._getNewPrices  = jasmine.createSpy().and.returnValue({});
+            widget._getPrices  = jasmine.createSpy().and.returnValue({});
+            qtyElement.trigger('input');
+            expect(priceBox.trigger).toHaveBeenCalledWith('updatePrice', { prices: {}});
         });
     });
 });

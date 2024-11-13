@@ -64,6 +64,14 @@ class MassUpdateProductAttribute
      * @var ProductRepositoryInterface
      */
     private $productRepository;
+
+    /**
+     * @var array
+     */
+    private $useConfigFieldMap = [
+        'enable_qty_increments' => 'use_config_enable_qty_inc'
+    ];
+
     /**
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
@@ -146,7 +154,9 @@ class MassUpdateProductAttribute
     {
         $options = $this->stockConfiguration->getConfigItemOptions();
         foreach ($options as $option) {
-            $useConfig = 'use_config_' . $option;
+            $useConfig = isset($this->useConfigFieldMap[$option])
+                ? $this->useConfigFieldMap[$option]
+                : 'use_config_' . $option;
             if (isset($inventoryData[$option]) && !isset($inventoryData[$useConfig])) {
                 $inventoryData[$useConfig] = 0;
             }

@@ -26,7 +26,7 @@ class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConf
      *
      * @return string
      */
-    protected function _getConfigFilePathGlob()
+    protected static function _getConfigFilePathGlob()
     {
         return 'etc/widget.xml';
     }
@@ -36,9 +36,9 @@ class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConf
      *
      * @return string
      */
-    protected function _getXsdPath()
+    protected static function _getXsdPath()
     {
-        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Widget')
+        return self::$componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Widget')
             . '/etc/widget_file.xsd';
     }
 }

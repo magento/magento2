@@ -15,51 +15,53 @@ use Magento\Customer\Api\GroupRepositoryInterface as CustomerGroupRepository;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 
 /**
  * Tax Calculation Model
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Calculation extends \Magento\Framework\Model\AbstractModel
+class Calculation extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Identifier constant for Tax calculation before discount excluding TAX
      */
-    const CALC_TAX_BEFORE_DISCOUNT_ON_EXCL = '0_0';
+    public const CALC_TAX_BEFORE_DISCOUNT_ON_EXCL = '0_0';
 
     /**
      * Identifier constant for Tax calculation before discount including TAX
      */
-    const CALC_TAX_BEFORE_DISCOUNT_ON_INCL = '0_1';
+    public const CALC_TAX_BEFORE_DISCOUNT_ON_INCL = '0_1';
 
     /**
      * Identifier constant for Tax calculation after discount excluding TAX
      */
-    const CALC_TAX_AFTER_DISCOUNT_ON_EXCL = '1_0';
+    public const CALC_TAX_AFTER_DISCOUNT_ON_EXCL = '1_0';
 
     /**
      * Identifier constant for Tax calculation after discount including TAX
      */
-    const CALC_TAX_AFTER_DISCOUNT_ON_INCL = '1_1';
+    public const CALC_TAX_AFTER_DISCOUNT_ON_INCL = '1_1';
 
     /**
      * Identifier constant for unit based calculation
      */
-    const CALC_UNIT_BASE = 'UNIT_BASE_CALCULATION';
+    public const CALC_UNIT_BASE = 'UNIT_BASE_CALCULATION';
 
     /**
      * Identifier constant for row based calculation
      */
-    const CALC_ROW_BASE = 'ROW_BASE_CALCULATION';
+    public const CALC_ROW_BASE = 'ROW_BASE_CALCULATION';
 
     /**
      * Identifier constant for total based calculation
      */
-    const CALC_TOTAL_BASE = 'TOTAL_BASE_CALCULATION';
+    public const CALC_TOTAL_BASE = 'TOTAL_BASE_CALCULATION';
 
     /**
      * Identifier constant for unit based calculation
@@ -168,22 +170,16 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $priceCurrency;
 
     /**
-     * Filter Builder
-     *
      * @var FilterBuilder
      */
     protected $filterBuilder;
 
     /**
-     * Search Criteria Builder
-     *
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * Tax Class Repository
-     *
      * @var TaxClassRepositoryInterface
      */
     protected $taxClassRepository;
@@ -249,6 +245,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Tax Calculation Model Contructor
+     *
      * @return void
      */
     protected function _construct()
@@ -494,7 +492,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param null|int $customerTaxClass
      * @param null|int|\Magento\Store\Model\Store $store
      * @param int $customerId
-     * @return  \Magento\Framework\DataObject
+     * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -529,11 +527,13 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                     //fallback to default address for registered customer
                     try {
                         $defaultBilling = $this->customerAccountManagement->getDefaultBillingAddress($customerId);
+                        // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                     } catch (NoSuchEntityException $e) {
                     }
 
                     try {
                         $defaultShipping = $this->customerAccountManagement->getDefaultShippingAddress($customerId);
+                        // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                     } catch (NoSuchEntityException $e) {
                     }
 
@@ -650,6 +650,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Calculate rated tax amount based on price and tax rate.
+     *
      * If you are using price including tax $priceIncludeTax should be true.
      *
      * @param   float $price
@@ -687,6 +688,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get Tax Rates
+     *
      * @param array $billingAddress
      * @param array $shippingAddress
      * @param int $customerTaxClassId
@@ -719,5 +722,17 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
             $productRates[$idKey] = $rate;
         }
         return $productRates;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_rates = [];
+        $this->_ctc = [];
+        $this->_ptc = [];
+        $this->_rateCache = [];
+        $this->_rateCalculationProcess = [];
     }
 }

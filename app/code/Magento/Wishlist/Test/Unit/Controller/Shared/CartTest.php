@@ -285,7 +285,7 @@ class CartTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderExecute()
+    public static function dataProviderExecute()
     {
         return [
             [1, 'product_name', false, true, 'referer_url', 'cart_url', 'cart_url'],

@@ -9,8 +9,11 @@ namespace Magento\User\Controller\Adminhtml\Auth;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Security\Model\SecurityManager;
 use Magento\Backend\App\Action\Context;
+use Magento\User\Model\Spi\NotificationExceptionInterface;
 use Magento\User\Model\UserFactory;
 use Magento\User\Model\ResourceModel\User\CollectionFactory;
 use Magento\Framework\Validator\EmailAddress;
@@ -79,7 +82,10 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
      * Forgot administrator password action
      *
      * @return void
+     * @throws ValidateException|NotificationExceptionInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function execute()
     {
@@ -90,7 +96,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
         $resultRedirect = $this->resultRedirectFactory->create();
         if (!empty($email) && !empty($params)) {
             // Validate received data to be an email address
-            if (\Zend_Validate::is($email, EmailAddress::class)) {
+            if (ValidatorChain::is($email, EmailAddress::class)) {
                 try {
                     $this->securityManager->performSecurityCheck(
                         PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,

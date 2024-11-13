@@ -34,9 +34,7 @@
             <createData entity="VirtualProduct" stepKey="virtualProduct4">
                 <field key="price">40.00</field>
             </createData>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteProduct1"/>

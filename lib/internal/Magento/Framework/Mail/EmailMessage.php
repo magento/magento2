@@ -78,10 +78,13 @@ class EmailMessage extends Message implements EmailMessageInterface
             $this->zendMessage->setSubject($subject);
         }
         if ($sender) {
-            $this->zendMessage->setSender($sender->getEmail(), $sender->getName());
+            $this->zendMessage->setSender(
+                $this->sanitiseEmail($sender->getEmail()),
+                $sender->getName()
+            );
         }
         if (count($to) < 1) {
-            throw new InvalidArgumentException('Email message must have at list one addressee');
+            throw new InvalidArgumentException('Email message must have at least one addressee');
         }
         if ($to) {
             $this->zendMessage->setTo($this->convertAddressArrayToAddressList($to));
@@ -120,6 +123,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws InvalidArgumentException
      */
     public function getFrom(): ?array
     {
@@ -128,6 +133,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws InvalidArgumentException
      */
     public function getTo(): array
     {
@@ -136,6 +143,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws InvalidArgumentException
      */
     public function getCc(): ?array
     {
@@ -144,6 +153,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws InvalidArgumentException
      */
     public function getBcc(): ?array
     {
@@ -152,6 +163,8 @@ class EmailMessage extends Message implements EmailMessageInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws InvalidArgumentException
      */
     public function getReplyTo(): ?array
     {
@@ -167,7 +180,6 @@ class EmailMessage extends Message implements EmailMessageInterface
         if (!$laminasSender = $this->zendMessage->getSender()) {
             return null;
         }
-
         return $this->addressFactory->create(
             [
                 'email' => $laminasSender->getEmail(),
@@ -207,6 +219,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param AddressList $addressList
      * @return Address[]
+     * @throws InvalidArgumentException
      */
     private function convertAddressListToAddressArray(AddressList $addressList): array
     {
@@ -215,7 +228,7 @@ class EmailMessage extends Message implements EmailMessageInterface
             $arrayList[] =
                 $this->addressFactory->create(
                     [
-                        'email' => $address->getEmail(),
+                        'email' => $this->sanitiseEmail($address->getEmail()),
                         'name' => $address->getName()
                     ]
                 );
@@ -229,13 +242,17 @@ class EmailMessage extends Message implements EmailMessageInterface
      *
      * @param Address[] $arrayList
      * @return AddressList
+     * @throws LaminasInvalidArgumentException|InvalidArgumentException
      */
     private function convertAddressArrayToAddressList(array $arrayList): AddressList
     {
         $laminasAddressList = new AddressList();
         foreach ($arrayList as $address) {
             try {
-                $laminasAddressList->add($address->getEmail(), $address->getName());
+                $laminasAddressList->add(
+                    $this->sanitiseEmail($address->getEmail()),
+                    $address->getName()
+                );
             } catch (LaminasInvalidArgumentException $e) {
                 $this->logger->warning(
                     'Could not add an invalid email address to the mailing queue',
@@ -246,5 +263,24 @@ class EmailMessage extends Message implements EmailMessageInterface
         }
 
         return $laminasAddressList;
+    }
+
+    /**
+     * Sanitise email address
+     *
+     * @param ?string $email
+     * @return ?string
+     * @throws InvalidArgumentException
+     */
+    private function sanitiseEmail(?string $email): ?string
+    {
+        if (!empty($email) && str_starts_with($email, '=?')) {
+            $decodedValue = iconv_mime_decode($email, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+            if (str_contains($decodedValue, ' ')) {
+                throw new InvalidArgumentException('Invalid email format');
+            }
+        }
+
+        return $email;
     }
 }

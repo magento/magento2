@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="SwatchesAreVisibleInLayeredNavigationTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Swatches are visible in Layered Navigation"/>
+            <title value="Swatches are visible in Layered Navigation"/>
+            <description value="Swatches are visible in Layered Navigation"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4154"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createConfigurableProduct1" stepKey="deleteConfigurableProduct1"/>
+            <deleteData createDataKey="createConfigurableProduct2" stepKey="deleteConfigurableProduct2"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createTextSwatchAttribute" stepKey="deleteTextSwatchAttribute"/>
+            <deleteData createDataKey="createVisualSwatchAttribute" stepKey="deleteVisualSwatchAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Create 2 Configurable products -->
+        <createData entity="_defaultCategory" stepKey="createCategory" />
+        <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct1">
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+        <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct2">
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+        <!-- Create product visual swatch attribute -->
+        <createData entity="VisualSwatchProductAttributeForm" stepKey="createVisualSwatchAttribute"/>
+        <createData entity="SwatchProductAttributeOption1" stepKey="visualSwatchAttributeOption">
+            <requiredEntity createDataKey="createVisualSwatchAttribute"/>
+        </createData>
+        <!-- Create product text swatch attribute -->
+        <createData entity="TextSwatchProductAttributeForm" stepKey="createTextSwatchAttribute"/>
+        <createData entity="SwatchProductAttributeOption1" stepKey="textSwatchAttributeOption">
+            <requiredEntity createDataKey="createTextSwatchAttribute"/>
+        </createData>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostCreating2Attributes">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostCreating2Attributes">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Go to the edit page for the visual Swatch attribute -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesToEditVisualSwatchAttribute"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillFilterToEditVisualSwatchAttribute"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearchToEditVisualSwatchAttribute"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode('$createVisualSwatchAttribute.attribute_code$')}}" stepKey="clickVisualSwatchRowToEdit"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindowEdit('1')}}" stepKey="clickSwatchButtonToEdit"/>
+        <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
+        <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
+        <waitForPageLoad stepKey="waitFileAttached1"/>
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEditForVisualSwatchAttribute"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessForVisualSwatchAttribute"/>
+        <!-- Go to the edit page for the text Swatch attribute -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesToEditTextSwatchAttribute"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="$createTextSwatchAttribute.attribute_code$" stepKey="fillFilterToEditTextSwatchAttribute"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearchToEditTextSwatchAttribute"/>
+        <click selector="{{AdminProductAttributeGridSection.AttributeCode('$createTextSwatchAttribute.attribute_code$')}}" stepKey="clickTextSwatchRowToEdit"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchText('1')}}" userInput="{{textSwatch1.name}}" stepKey="fillFirstOptionAdminName"/>
+        <fillField selector="{{AdminManageSwatchSection.updateDescriptionSwatchText('1')}}" userInput="{{textSwatch1.name}}" stepKey="fillFirstOptionDescription"/>
+        <fillField selector="{{AdminManageSwatchSection.updateSwatchText('2')}}" userInput="{{textSwatch1.name}}" stepKey="fillFirstOptionDefaultStoreViewName"/>
+        <fillField selector="{{AdminManageSwatchSection.updateDescriptionSwatchText('2')}}" userInput="{{textSwatch1.name}}" stepKey="fillFirstOptionDefaultStoreViewDescription"/>
+        <grabValueFrom selector="{{AdminManageSwatchSection.updateDescriptionSwatchText('2')}}" stepKey="grabTextValue"/>
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEditForTextSwatchAttribute"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessForTextSwatchAttribute"/>
+        <!-- Update Config product1 visual swatch attribute -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForConfigurableProduct1">
+            <argument name="product" value="$$createConfigurableProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductForConfigurableProduct1">
+            <argument name="product" value="$$createConfigurableProduct1$$"/>
+        </actionGroup>
+        <!-- Edit the configurable product 1 -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButtonForConfigProd1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadForConfigProd1"/>
+        <click selector="{{AdminGridRow.checkboxByValue('$createVisualSwatchAttribute.frontend_label[0]$')}}" stepKey="selectVisualSwatchAttributeForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStepForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="selectOption1ForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStepForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSKUsForConfigProd1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="fillPriceForEachSKUForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQtyToEachSKUsForConfigProd1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="10" stepKey="fillQuantityForEachSKUForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStepForConfigProd1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariationsForConfigProd1"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProductForConfigProd1"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProductForConfigProd1"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessageForConfigProd1"/>
+        <!-- Update Config product2 visual swatch attribute -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForConfigurableProduct2">
+            <argument name="product" value="$$createConfigurableProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductForConfigurableProduct2">
+            <argument name="product" value="$$createConfigurableProduct2$$"/>
+        </actionGroup>
+        <!-- Edit the configurable product 2 -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnTheCreateConfigurationsButtonForConfigProd2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadForConfigProd2"/>
+        <click selector="{{AdminGridRow.checkboxByValue('$createTextSwatchAttribute.frontend_label[0]$')}}" stepKey="selectVisualSwatchAttributeForConfigProd2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToSecondStepForConfigProd2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="selectOption1ForConfigProd2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToThirdStepForConfigProd2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSKUsForConfigProd2"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="fillPriceForEachSKUForConfigProd2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQtyToEachSKUsForConfigProd2"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="10" stepKey="fillQuantityForEachSKUForConfigProd2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="navigateToFourthStepForConfigProd2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="doneGeneratingConfigurableVariationsForConfigProd2"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProductForConfigProd2"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProductForConfigProd2"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessageForConfigProd2"/>
+        <!-- Go to the Storefront category page -->
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPage"/>
+        <!-- Verify swatches are present in the layered navigation -->
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="$createVisualSwatchAttribute.frontend_label[0]$" stepKey="seeVisualSwatchAttributeInLayeredNav"/>
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="$createTextSwatchAttribute.frontend_label[0]$" stepKey="seeTextSwatchAttributeInLayeredNav"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$createVisualSwatchAttribute.frontend_label[0]$')}}" stepKey="expandVisualSwatchAttribute"/>
+        <moveMouseOver selector="{{StorefrontCategorySidebarSection.expandedSwatchThumbnails('$createVisualSwatchAttribute.frontend_label[0]$','swatch-option')}}" stepKey="hoverOverSwatchAttribute"/>
+        <waitForPageLoad stepKey="waitForHoveredImageToLoad"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.swatchThumbnailsImgLayeredNav('swatch_thumb')}}" stepKey="seeSwatchImageOnHover"/>
+        <moveMouseOver selector="{{StorefrontMinicartSection.showCart}}" stepKey="moveAwayFromLayeredNav1"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$createTextSwatchAttribute.frontend_label[0]$')}}" stepKey="expandTextSwatchAttribute"/>
+        <moveMouseOver selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNav('${grabTextValue}')}}" stepKey="hoverOverTextAttribute"/>
+        <waitForPageLoad stepKey="waitForHoveredTextToLoad"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.swatchTextLayeredNavHover('${grabTextValue}')}}" stepKey="seeSwatchTextOnHover"/>
+        <moveMouseOver selector="{{StorefrontMinicartSection.showCart}}" stepKey="moveAwayFromLayeredNav2"/>
+        <!-- Verify the swatches on displayed product -->
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$createVisualSwatchAttribute.frontend_label[0]$')}}" stepKey="expandVisualSwatchAttributeToClick"/>
+        <click selector="{{StorefrontCategorySidebarSection.expandedSwatchThumbnails('$createVisualSwatchAttribute.frontend_label[0]$','swatch-option')}}" stepKey="clickOverSwatchAttribute"/>
+        <waitForPageLoad stepKey="waitForSwatchImageFilteredProductToLoad"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.swatchSelectedInFilteredProd('image')}}" stepKey="seeSwatchImageOnFilteredProduct"/>
+        <moveMouseOver selector="{{StorefrontCategorySidebarSection.swatchSelectedInFilteredProd('image')}}" stepKey="hoverOverSwatchImageOnFilteredProduct"/>
+        <waitForPageLoad stepKey="waitForHoveredImageToLoadForFilteredProduct"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.swatchThumbnailsImgLayeredNav('swatch_thumb')}}" stepKey="seeSwatchImageOnFilteredProductHover"/>
+        <moveMouseOver selector="{{StorefrontMinicartSection.showCart}}" stepKey="moveAwayFromLayeredNav3"/>
+        <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeFilter"/>
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle('$createTextSwatchAttribute.frontend_label[0]$')}}" stepKey="expandTextSwatchAttributeToClick"/>
+        <click selector="{{StorefrontCategorySidebarSection.expandedSwatchThumbnails('$createTextSwatchAttribute.frontend_label[0]$','swatch-option')}}" stepKey="clickOverTextAttribute"/>
+        <waitForPageLoad stepKey="waitForSwatchTextFilteredProductToLoad"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.swatchSelectedInFilteredProd('text')}}" stepKey="seeSwatchTextOnFilteredProduct"/>
+        <moveMouseOver selector="{{StorefrontCategorySidebarSection.swatchSelectedInFilteredProd('text')}}" stepKey="hoverOverSwatchTextOnFilteredProduct"/>
+        <waitForPageLoad stepKey="waitForHoveredTextToLoadForFilteredProduct"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.swatchTextFilteredProdHover('${grabTextValue}')}}" stepKey="seeSwatchTextOnFilteredProductHover"/>
+    </test>
+</tests>

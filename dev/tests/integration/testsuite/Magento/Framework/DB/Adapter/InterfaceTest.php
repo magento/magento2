@@ -181,7 +181,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function insertArrayDataProvider()
+    public static function insertArrayDataProvider()
     {
         return [
             'one column' => [
@@ -264,7 +264,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function insertDataProvider()
+    public static function insertDataProvider()
     {
         return ['column with identity field' => [['id' => 1, 'column1' => 10, 'column2' => 20]]];
     }

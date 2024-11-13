@@ -71,7 +71,7 @@ class AssignCouponDataAfterOrderCustomerAssignObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
@@ -80,7 +80,7 @@ class AssignCouponDataAfterOrderCustomerAssignObserverTest extends TestCase
 
         $this->updateCouponUsagesMock = $this->getMockBuilder(UpdateCouponUsages::class)
             ->disableOriginalConstructor()
-            ->setMethods(['execute'])
+            ->onlyMethods(['execute'])
             ->getMock();
 
         $this->observer = $this->objectManager->getObject(

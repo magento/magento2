@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUncheckesReturnToStockCheckboxTest" extends="CustomerOrderSimpleProductTest">
+        <annotations>
+            <features value="CatalogInventory"/>
+            <stories value="Sales restrictions"/>
+            <title value="Verify that Checkbox return to stock on creditmemo"/>
+            <description value="Verify that Checkbox return to stock on creditmemo"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="MC-27229"/>
+            <testCaseId value="MC-27229"/>
+            <group value="catalog"/>
+            <group value="catalogInventory"/>
+        </annotations>
+        <before>
+            <!-- Enabling Automatically Return Credit Memo Item to Stock -->
+            <magentoCLI command="config:set {{CatalogInventoryManageStockAutoReturnEnable.path}} {{CatalogInventoryManageStockAutoReturnEnable.value}}" stepKey="manageStockEnable"/>
+        </before>
+        <after>
+            <!-- Disabling Automatically Return Credit Memo Item to Stock -->
+            <magentoCLI command="config:set {{CatalogInventoryManageStockAutoReturnDisable.path}} {{CatalogInventoryManageStockAutoReturnDisable.value}}" stepKey="manageStockDisable"/>
+        </after>
+        <!-- Log in as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- go to orders page and validate the order details -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$getOrderNumber}"/>
+        </actionGroup>
+
+        <!--Create Invoice-->
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
+
+        <!--Create Credit Memo-->
+        <actionGroup ref="AdminCreateCreditMemoWithReturnToStockActionGroup" stepKey="createCreditMemo"/>
+
+
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedSimpleProduct"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchForProduct">
+            <argument name="product" value="SimpleProductQty100"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeQuantity">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Quantity"/>
+            <argument name="value" value="99"/>
+        </actionGroup>
+
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
+    </test>
+</tests>
+

@@ -16,5 +16,8 @@
         <element name="carriersFreeShippingSpecificErrMsg" type="input" selector="#carriers_freeshipping_specificerrmsg_inherit"/>
         <element name="carriersFreeShippingAllowSpecific" type="input" selector="#carriers_freeshipping_sallowspecific_inherit"/>
         <element name="carriersFreeShippingSpecificCountry" type="input" selector="#carriers_freeshipping_specificcountry"/>
+        <element name="carriersFreeShippingSectionHeadOpen" type="button" selector="#carriers_freeshipping-head.open"/>
+        <element name="carriersSelectFreeShippingActive" type="input" selector="#carriers_freeshipping_active"/>
+        <element name="carriersFreeShippingSelectAllowSpecific" type="input" selector="#carriers_freeshipping_sallowspecific"/>
     </section>
 </sections>

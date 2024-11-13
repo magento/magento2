@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\MessageQueue\MessageLockException;
@@ -56,12 +57,18 @@ class MassConsumerEnvelopeCallback
     private $operationProcessor;
 
     /**
+     * @var MessageControllerDecorator
+     */
+    private $messageControllerDecorator;
+
+    /**
      * @param ResourceConnection $resource
      * @param MessageController $messageController
      * @param ConsumerConfigurationInterface $configuration
      * @param OperationProcessorFactory $operationProcessorFactory
      * @param LoggerInterface $logger
      * @param QueueInterface $queue
+     * @param MessageControllerDecorator|null $messageControllerDecorator
      */
     public function __construct(
         ResourceConnection $resource,
@@ -69,7 +76,8 @@ class MassConsumerEnvelopeCallback
         ConsumerConfigurationInterface $configuration,
         OperationProcessorFactory $operationProcessorFactory,
         LoggerInterface $logger,
-        QueueInterface $queue
+        QueueInterface $queue,
+        ?MessageControllerDecorator $messageControllerDecorator = null
     ) {
         $this->resource = $resource;
         $this->messageController = $messageController;
@@ -81,6 +89,8 @@ class MassConsumerEnvelopeCallback
         );
         $this->logger = $logger;
         $this->queue = $queue;
+        $this->messageControllerDecorator = $messageControllerDecorator
+            ?: ObjectManager::getInstance()->get(MessageControllerDecorator::class);
     }
 
     /**
@@ -96,7 +106,7 @@ class MassConsumerEnvelopeCallback
         $lock = null;
         try {
             $topicName = $message->getProperties()['topic_name'];
-            $lock = $this->messageController->lock($message, $this->configuration->getConsumerName());
+            $lock = $this->messageControllerDecorator->lock($message, $this->configuration->getConsumerName());
 
             $allowedTopics = $this->configuration->getTopicNames();
             if (in_array($topicName, $allowedTopics)) {

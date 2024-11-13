@@ -37,7 +37,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewOne">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = store view-->
             <magentoCLI command="config:set {{RecentlyViewedProductScopeStore.path}} {{RecentlyViewedProductScopeStore.value}}" stepKey="RecentlyViewedProductScopeStore"/>
@@ -69,9 +71,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDeletion">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterDeletion"/>
         </after>
 
         <!--Create widget for recently viewed products-->
@@ -92,13 +92,11 @@
             <argument name="buttonToShowSection2" value="3"/>
         </actionGroup>
 
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterWidgetCreated">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterWidgetCreated"/>
 
         <!-- Navigate to product 3 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStore1ProductPage2"/>
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.name$)}}" stepKey="goToStore1ProductPage3"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToStore1ProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.custom_attributes[url_key]$)}}" stepKey="goToStore1ProductPage3"/>
         <!-- Go to Home Page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
         <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStore1RecentlyViewedProduct2">
@@ -116,8 +114,8 @@
             <argument name="storeView" value="customStoreEN"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct1.name$)}}" stepKey="goToStore2ProductPage1"/>
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStore2ProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct1.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage2"/>
 
         <!-- Go to Home Page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreViewHomePage"/>

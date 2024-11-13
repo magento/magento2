@@ -63,9 +63,8 @@ define([
          * @returns {Boolean}
          */
         update: function () {
-            var checkVideoID = this.element.find(this.options.container).find(
-                    '.' + this.options.videoClass
-                ).data('code'),
+            var checkVideoID =
+                this.element.find(this.options.container).find('.' + this.options.videoClass).data('code'),
                 eventVideoData = {
                     oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
                     newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
@@ -336,21 +335,21 @@ define([
             var self = this;
 
             self.element.on('finish_update_video finish_create_video', $.proxy(function (element, playerData) {
-                    if (!self._onlyVideoPlayer ||
-                        !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
-                        playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
-                    ) {
-                        self.element.updateInputFields({
-                            reset: false,
-                            data: {
-                                title: data.title,
-                                description: data.description
-                            }
-                        });
-                        this._loadRemotePreview(data.thumbnail);
-                    }
-                    self._onlyVideoPlayer = true;
-                }, this))
+                if (!self._onlyVideoPlayer ||
+                    !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
+                    playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
+                ) {
+                    self.element.updateInputFields({
+                        reset: false,
+                        data: {
+                            title: data.title,
+                            description: data.description
+                        }
+                    });
+                    this._loadRemotePreview(data.thumbnail);
+                }
+                self._onlyVideoPlayer = true;
+            }, this))
                 .createVideoPlayer({
                     videoId: data.videoId,
                     videoProvider: data.videoProvider,
@@ -601,7 +600,7 @@ define([
             $.each(this.element.find(this._videoFormSelector).serializeArray(), function (i, field) {
                 data[field.name] = field.value;
             });
-            data.disabled = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+            data.disabled = this.element.find(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.oldFile = oldFile;
 
@@ -616,21 +615,19 @@ define([
          * @private
          */
         _uploadFile: function (data, callback) {
-            var fu = this.element.find(this._videoPreviewInputSelector),
-                tmpInput = document.createElement('input'),
-                fileUploader = null;
+            let form = this.element.find(this._videoFormSelector).get(0),
+                formData = new FormData(form);
 
-            $(tmpInput).attr({
-                'name': fu.attr('name'),
-                'value': fu.val(),
-                'type': 'file',
-                'data-ui-ud': fu.attr('data-ui-ud')
-            }).css('display', 'none');
-            fu.parent().append(tmpInput);
-            fileUploader = $(tmpInput).fileupload();
-            fileUploader.fileupload('send', data).success(function (result, textStatus, jqXHR) {
-                tmpInput.remove();
-                callback.call(null, result, textStatus, jqXHR);
+            $.ajax({
+                type: 'post',
+                url: data.url,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (result, textStatus, jqXHR) {
+                    // eslint-disable-next-line no-useless-call
+                    callback.call(null, result, textStatus, jqXHR);
+                }
             });
         },
 
@@ -858,7 +855,8 @@ define([
                     }
 
                     nvs.removeClass(reqClass);
-                }, this
+                },
+                this
             ));
         },
 
@@ -895,10 +893,11 @@ define([
                             imageData[fieldName] = _field.val();
                         }
                     }.bind(this));
-                    flagChecked = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+                    flagChecked = this.element.find(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
                     this._gallery.find('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
                     this._gallery.find(_inputSelector).siblings('.image-fade').css(
-                        'visibility', flagChecked ? 'visible' : 'hidden'
+                        'visibility',
+                        flagChecked ? 'visible' : 'hidden'
                     );
                     imageData.disabled = flagChecked;
 
@@ -929,7 +928,8 @@ define([
                         this._replaceImage(imageData.file, imageData.file, imageData);
                         callback(0, imageData);
                     }
-                }, this
+                },
+                this
             ));
         },
 
@@ -1107,8 +1107,8 @@ define([
             newVideoForm = this.element.find(this._videoFormSelector);
 
             $(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
-            this._gallery.find('input[name*="' + this.element.find(
-                    this._itemIdSelector).val() + '"]'
+            this._gallery.find(
+                'input[name*="' + this.element.find(this._itemIdSelector).val() + '"]'
             ).parent().removeClass('active');
 
             try {
@@ -1152,7 +1152,7 @@ define([
                             self._videoFormSelector + ' input[value="' + imageType + '"]'
                         );
 
-                    self._changeRole(imageType, imageCheckbox.attr('checked'), imageData);
+                    self._changeRole(imageType, imageCheckbox.prop('checked'), imageData);
                 });
             }
         },
@@ -1265,7 +1265,7 @@ define([
                 });
 
                 flagChecked = container.find('input[name*="disabled"]').val() > 0;
-                self._gallery.find(self._videoDisableinputSelector).attr('checked', flagChecked);
+                self._gallery.find(self._videoDisableinputSelector).prop('checked', flagChecked);
 
                 file = self._gallery.find('#file_name').val(container.find('input[name*="file"]').val());
 

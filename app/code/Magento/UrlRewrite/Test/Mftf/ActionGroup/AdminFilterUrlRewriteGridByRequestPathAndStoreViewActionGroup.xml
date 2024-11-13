@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFilterUrlRewriteGridByRequestPathAndStoreViewActionGroup" extends="AdminSearchByRequestPathActionGroup">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid based on the provided Redirect Path and StoreView name. Validates that the provided Redirect Path, Type and Target Path are present and correct in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeView" type="string"/>
+        </arguments>
+        <selectOption selector="{{AdminDataGridHeaderSection.filterFieldSelect('store_id')}}" userInput="{{storeView}}" stepKey="fillStoreView" after="fillRedirectPathFilter"/>
+    </actionGroup>
+</actionGroups>

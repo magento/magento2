@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
+use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -13,8 +14,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-use Magento\Framework\Filesystem\Driver\File as FilesystemDriver;
 
 /**
  * Image operations
@@ -31,7 +30,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * Config path for the jpeg image quality value
      */
-    const XML_PATH_JPEG_QUALITY = 'system/upload_configuration/jpeg_quality';
+    public const XML_PATH_JPEG_QUALITY = 'system/upload_configuration/jpeg_quality';
 
     /**
      * @var int
@@ -47,7 +46,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Default quality value (for JPEG images only).
      *
      * @var int
-     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1
+     * @see Use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     protected $_quality = null;
 
@@ -103,7 +103,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var int
-     * @deprecated unused
+     * @deprecated
+     * @see Not used anymore
      */
     protected $_angle;
 
@@ -203,11 +204,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
-     * @var FilesystemDriver
-     */
-    private $filesystemDriver;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -227,7 +223,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      * @param SerializerInterface $serializer
      * @param ParamsBuilder $paramsBuilder
-     * @param FilesystemDriver $filesystemDriver
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -249,8 +244,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         SerializerInterface $serializer = null,
-        ParamsBuilder $paramsBuilder = null,
-        FilesystemDriver $filesystemDriver = null
+        ParamsBuilder $paramsBuilder = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -265,7 +259,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->paramsBuilder = $paramsBuilder ?: ObjectManager::getInstance()->get(ParamsBuilder::class);
-        $this->filesystemDriver = $filesystemDriver ?: ObjectManager::getInstance()->get(FilesystemDriver::class);
     }
 
     /**
@@ -317,7 +310,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $quality
      * @return $this
-     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1
+     * @see Use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     public function setQuality($quality)
     {
@@ -406,7 +400,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function setSize($size)
     {
         // determine width and height from string
-        list($width, $height) = explode('x', strtolower($size), 2);
+        list($width, $height) = explode('x', strtolower((string)$size), 2);
         foreach (['width', 'height'] as $wh) {
             ${$wh}
                 = (int)${$wh};
@@ -467,6 +461,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get new file
      *
      * @deprecated 102.0.0
+     * @see Image::getBaseFile
      * @return bool|string
      */
     public function getNewFile()
@@ -675,12 +670,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function isCached()
     {
         $path = $this->imageAsset->getPath();
-        try {
-            $isCached = is_array($this->loadImageInfoFromCache($path)) || $this->filesystemDriver->isExists($path);
-        } catch (FileSystemException $e) {
-            $isCached = false;
-        }
-        return $isCached;
+        return is_array($this->loadImageInfoFromCache($path)) || $this->_mediaDirectory->isExist($path);
     }
 
     /**
@@ -851,7 +841,15 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function clearCache()
     {
         $directory = $this->_catalogProductMediaConfig->getBaseMediaPath() . '/cache';
-        $this->_mediaDirectory->delete($directory);
+
+        // If the directory cannot be deleted, it is likely because it is not empty anymore due to lazy loading from
+        // the storefront triggering new cache file creation.
+        // This is expected behavior and is not a cause for concern. Deletable files were deleted as expected.
+        try {
+            $this->_mediaDirectory->delete($directory);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } catch (FileSystemException $e) {
+        }
 
         $this->_coreFileStorageDatabase->deleteFolder($this->_mediaDirectory->getAbsolutePath($directory));
         $this->clearImageInfoFromCache();
@@ -885,6 +883,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function getResizedImageInfo()
     {
         try {
+            $image = null;
             if ($this->isBaseFilePlaceholder() == true) {
                 $image = $this->imageAsset->getSourceFile();
             } else {
@@ -935,6 +934,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         $imageInfo = $this->loadImageInfoFromCache($imagePath);
         if (!isset($imageInfo['size'])) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $imageSize = getimagesize($imagePath);
             $this->saveImageInfoToCache(['size' => $imageSize], $imagePath);
             return $imageSize;
@@ -952,7 +952,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     private function saveImageInfoToCache(array $imageInfo, string $imagePath)
     {
-        $imagePath = $this->cachePrefix  . $imagePath;
+        $imagePath = $this->cachePrefix . $imagePath;
         $this->_cacheManager->save(
             $this->serializer->serialize($imageInfo),
             $imagePath,
@@ -968,7 +968,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     private function loadImageInfoFromCache(string $imagePath)
     {
-        $imagePath = $this->cachePrefix  . $imagePath;
+        $imagePath = $this->cachePrefix . $imagePath;
         $cacheData = $this->_cacheManager->load($imagePath);
         if (!$cacheData) {
             return false;

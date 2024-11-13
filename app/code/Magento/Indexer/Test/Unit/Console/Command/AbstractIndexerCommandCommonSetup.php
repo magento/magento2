@@ -71,7 +71,7 @@ class AbstractIndexerCommandCommonSetup extends TestCase
 
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->indexerCollectionMock = $this->getMockBuilder(Collection::class)
@@ -84,7 +84,7 @@ class AbstractIndexerCommandCommonSetup extends TestCase
 
         $this->indexerFactory = $this->getMockBuilder(IndexerInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->objectManager->expects($this->any())
@@ -137,7 +137,7 @@ class AbstractIndexerCommandCommonSetup extends TestCase
     {
         /** @var MockObject|IndexerInterface $indexer */
         $indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->setMethods(array_merge($methods, ['getId', 'getTitle']))
+            ->onlyMethods(array_merge($methods, ['getId', 'getTitle']))
             ->getMockForAbstractClass();
         $indexer->method('getId')
             ->willReturn($data['indexer_id'] ?? '');

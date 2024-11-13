@@ -4,6 +4,7 @@
             "customer_id": true
         },
         "constraint": {
+            "PRIMARY": true,
             "LOGIN_AS_CSTR_ASSISTANCE_ALLOWED_CSTR_ID_CSTR_ENTT_ENTT_ID": true,
             "LOGIN_AS_CUSTOMER_ASSISTANCE_ALLOWED_CUSTOMER_ID": true
         }

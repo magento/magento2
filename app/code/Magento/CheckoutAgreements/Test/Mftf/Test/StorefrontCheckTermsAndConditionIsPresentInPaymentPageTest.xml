@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckTermsAndConditionIsPresentInPaymentPageTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Check terms and condition options in payment page"/>
+            <title value="Terms and Conditions is presented on Storefront with Applied = Automatically"/>
+            <description value="Enable terms and condition option in all payment sections when checkout options is added as automatically"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4178"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- New Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="firstname">John1</field>
+                <field key="lastname">Doe1</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">1</field>
+            </createData>
+            <!-- Enable Terms And Condition-->
+            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
+            <!-- Open New Terms And Conditions Page-->
+            <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+            <!-- Fill the Required Details-->
+            <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
+                <argument name="term" value="termAndCondition"/>
+            </actionGroup>
+            <grabTextFrom selector="{{AdminNewTermFormSection.conditionName}}" stepKey="conditionName"/>
+            <!-- Save Details-->
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveFilledTerm"/>
+            <!--Enable Cash On Delivery Method -->
+            <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+            <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+                <argument name="product" value="$simpleProduct$"/>
+            </actionGroup>
+            <!--Go to Checkout-->
+            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingCheckoutPageWithShippingMethod"/>
+            <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+            <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+            <!-- Checkout select Check/Money Order payment -->
+            <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+            <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementLink('Check / Money order')}}" stepKey="waitForClickableForCheckAgreement"/>
+            <click selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementLink('Check / Money order')}}" stepKey="clickOnMoneyAgreement"/>
+            <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="waitForElementToCloseMoneyAgreement"/>
+            <click selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="closeMoneyAgreement"/>
+            <!-- Select Cash On Delivery payment method Again-->
+            <waitForElementClickable selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="waitForClickableSelectCashOnDeliveryMethodAgain"/>
+            <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethodAgain"/>
+            <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementLink('Cash On Delivery')}}" stepKey="waitForClickableForCashAgreement"/>
+            <click selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementLink('Cash On Delivery')}}" stepKey="clickOnCashAgreement"/>
+            <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="waitForElementToCloseCashAgreement"/>
+            <click selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="closeCashAgreement"/>
+            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+            <!--Check subtotal in created order-->
+            <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderById">
+                <argument name="orderId" value="$grabOrderNumber"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+    </test>
+</tests>

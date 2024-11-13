@@ -13,6 +13,8 @@ use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Page;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Message\Manager;
@@ -93,7 +95,7 @@ class ViewTest extends TestCase
     /**
      * @var MockObject
      */
-    protected $invoiceMock;
+    protected static $invoiceMock;
 
     /**
      * @var Config|MockObject
@@ -104,6 +106,16 @@ class ViewTest extends TestCase
      * @var Title|MockObject
      */
     protected $pageTitleMock;
+
+    /**
+     * @var RedirectFactory|MockObject
+     */
+    protected $resultRedirectFactoryMock;
+
+    /**
+     * @var Redirect|MockObject
+     */
+    protected $resultRedirectMock;
 
     /**
      * @var PageFactory|MockObject
@@ -130,15 +142,13 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->invoiceMock = $this->getMockBuilder(Invoice::class)
+        self::$invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId'])
+            ->addMethods(['cancel'])
+            ->onlyMethods(['getInvoice', 'getOrder', 'getId'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -157,12 +167,12 @@ class ViewTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(
+            ->addMethods(['getTitle'])
+            ->onlyMethods(
                 [
                     'getRequest',
                     'getResponse',
                     'getObjectManager',
-                    'getTitle',
                     'getSession',
                     'getHelper',
                     'getActionFlag',
@@ -189,7 +199,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
@@ -198,12 +208,18 @@ class ViewTest extends TestCase
             ForwardFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getSession')
             ->willReturn($this->sessionMock);
@@ -219,9 +235,6 @@ class ViewTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
-        $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($titleMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
@@ -239,7 +252,8 @@ class ViewTest extends TestCase
                 'context' => $this->contextMock,
                 'creditmemoLoader' => $this->loaderMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'resultForwardFactory' => $this->resultForwardFactoryMock
+                'resultForwardFactory' => $this->resultForwardFactoryMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }
@@ -252,16 +266,11 @@ class ViewTest extends TestCase
         $this->loaderMock->expects($this->once())
             ->method('load')
             ->willReturn(false);
-        $this->resultForwardFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->resultForwardMock);
-        $this->resultForwardMock->expects($this->once())
-            ->method('forward')
-            ->with('noroute')
-            ->willReturnSelf();
 
+        $this->prepareRedirect();
+        $this->setPath('sales/creditmemo');
         $this->assertInstanceOf(
-            Forward::class,
+            Redirect::class,
             $this->controller->execute()
         );
     }
@@ -315,11 +324,32 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [false],
-            [$this->invoiceMock]
+            [self::$invoiceMock]
         ];
+    }
+
+    /**
+     * prepareRedirect
+     */
+    protected function prepareRedirect()
+    {
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+    }
+
+    /**
+     * @param string $path
+     * @param array $params
+     */
+    protected function setPath($path, $params = [])
+    {
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with($path, $params);
     }
 }

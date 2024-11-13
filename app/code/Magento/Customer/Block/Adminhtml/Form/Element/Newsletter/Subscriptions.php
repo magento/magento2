@@ -152,7 +152,7 @@ class Subscriptions extends AbstractElement
         $data = $this->dataPersistor->get('customer_form');
         $currentCustomerId = $this->getData('customer_id');
         $sessionCustomerId = $data['customer']['entity_id'] ?? null;
-        if ($sessionCustomerId === null || $currentCustomerId !== (int)$sessionCustomerId) {
+        if ($sessionCustomerId === null || ((int) $currentCustomerId) !== (int)$sessionCustomerId) {
             return null;
         }
 

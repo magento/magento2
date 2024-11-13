@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Ui\Component\Listing\Column\Store;
 
 use Magento\Framework\Escaper;
@@ -11,19 +13,17 @@ use Magento\Store\Model\System\Store as SystemStore;
 
 /**
  * Ui stores options
+ *
+ * @api
  */
 class Options implements OptionSourceInterface
 {
     /**
-     * Escaper
-     *
      * @var Escaper
      */
     protected $escaper;
 
     /**
-     * System store
-     *
      * @var SystemStore
      */
     protected $systemStore;
@@ -78,9 +78,11 @@ class Options implements OptionSourceInterface
     protected function sanitizeName($name)
     {
         $matches = [];
-        preg_match('/\$[:]*{(.)*}/', $name, $matches);
+        preg_match('/\$[:]*{(.)*}/', $name ?: '', $matches);
         if (count($matches) > 0) {
             $name = $this->escaper->escapeHtml($this->escaper->escapeJs($name));
+        } elseif (preg_match("/^(?=.*')[a-zA-Z0-9' ]+$/", $name)) {
+            return $name;
         } else {
             $name = $this->escaper->escapeHtml($name);
         }

@@ -192,7 +192,7 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongRequestForCreating()
+    public static function dataProviderWrongRequestForCreating()
     {
         return [
             // if param 'google_experiment' is not array

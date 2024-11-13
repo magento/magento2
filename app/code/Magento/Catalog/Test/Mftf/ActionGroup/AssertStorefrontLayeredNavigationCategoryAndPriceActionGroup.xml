@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- On a category page with layered navigation, verify if the category filter item is present -->
+    <actionGroup name="AssertStorefrontLayeredNavigationCategoryAndPriceActionGroup">
+        <annotations>
+            <description>Layered Navigation Category And Price validation.</description>
+        </annotations>
+         <arguments>
+             <argument name="minPrice" type="string"/>
+             <argument name="maxPrice" type="string"/>
+             <argument name="count" type="string"/>
+             <argument name="minPrice2" type="string"/>
+             <argument name="maxPrice2" type="string"/>
+         </arguments>
+         <!-- Verify category  and price layered navigation item is present -->
+        <see selector="{{StorefrontCategorySidebarSection.layeredFilterBlock}}" userInput="Category" stepKey="seeCategoryFilterInLayeredNav"/>
+        <click selector="{{StorefrontCategorySidebarSection.expandCategoryLayeredNavigationButton}}" stepKey="expandCategoryLayeredNavigation"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategory}}" stepKey="verifyCat"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategoryProductQty}}" stepKey="verifyQuantity"/>
+        <click selector="{{StorefrontCategorySidebarSection.expandPriceLayeredNavigationButton}}" stepKey="expandPriceLayeredNavigation"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationFirstPriceRange(minPrice, maxPrice, count)}}" stepKey="verifyPriceRange1"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationSecondPriceRange(minPrice2,maxPrice2,count)}}" stepKey="verifyPriceRange2"/>
+    </actionGroup>
+</actionGroups>

@@ -3,12 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager as CategoryLayoutManager;
 use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager as ProductLayoutManager;
 use Magento\Framework\App\ObjectManager;
-use \Magento\Framework\TranslateInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TranslateInterface;
+use Magento\Framework\View\DesignInterface;
 
 /**
  * Catalog Custom Category design Model
@@ -28,12 +38,12 @@ class Design extends \Magento\Framework\Model\AbstractModel
     /**
      * Design package instance
      *
-     * @var \Magento\Framework\View\DesignInterface
+     * @var DesignInterface
      */
     protected $_design = null;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $_localeDate;
 
@@ -53,29 +63,43 @@ class Design extends \Magento\Framework\Model\AbstractModel
     private $productLayoutUpdates;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @var Session
+     */
+    private $catalogSession;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param TimezoneInterface $localeDate
+     * @param DesignInterface $design
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
      * @param TranslateInterface|null $translator
      * @param CategoryLayoutManager|null $categoryLayoutManager
      * @param ProductLayoutManager|null $productLayoutManager
+     * @param Session|null $catalogSession
+     * @param CategoryRepositoryInterface|null $categoryRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\View\DesignInterface $design,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        TimezoneInterface $localeDate,
+        DesignInterface $design,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
         TranslateInterface $translator = null,
         ?CategoryLayoutManager $categoryLayoutManager = null,
-        ?ProductLayoutManager $productLayoutManager = null
+        ?ProductLayoutManager $productLayoutManager = null,
+        ?Session $catalogSession = null,
+        ?CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->_localeDate = $localeDate;
         $this->_design = $design;
@@ -84,6 +108,10 @@ class Design extends \Magento\Framework\Model\AbstractModel
             ?? ObjectManager::getInstance()->get(CategoryLayoutManager::class);
         $this->productLayoutUpdates = $productLayoutManager
             ?? ObjectManager::getInstance()->get(ProductLayoutManager::class);
+        $this->catalogSession = $catalogSession
+            ?? ObjectManager::getInstance()->get(Session::class);
+        $this->categoryRepository = $categoryRepository
+            ?? ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -104,12 +132,23 @@ class Design extends \Magento\Framework\Model\AbstractModel
      * Get custom layout settings
      *
      * @param Category|Product $object
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getDesignSettings($object)
     {
         if ($object instanceof Product) {
             $currentCategory = $object->getCategory();
+            if (!$currentCategory) {
+                $lastId = $this->catalogSession->getLastVisitedCategoryId();
+                if ($object->canBeShowInCategory($lastId)) {
+                    $categoryId = $lastId;
+                    try {
+                        $currentCategory = $this->categoryRepository->get($categoryId);
+                    } catch (NoSuchEntityException $e) {
+                        $currentCategory = null;
+                    }
+                }
+            }
         } else {
             $currentCategory = $object;
         }
@@ -134,14 +173,17 @@ class Design extends \Magento\Framework\Model\AbstractModel
      * Extract custom layout settings from category or product object
      *
      * @param Category|Product $object
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     protected function _extractSettings($object)
     {
-        $settings = new \Magento\Framework\DataObject();
+        $settings = new DataObject();
         if (!$object) {
             return $settings;
         }
+        $settings->setPageLayout($object->getPageLayout());
+        $settings->setLayoutUpdates((array)$object->getCustomLayoutUpdate());
+
         $date = $object->getCustomDesignDate();
         if (array_key_exists(
             'from',
@@ -155,28 +197,28 @@ class Design extends \Magento\Framework\Model\AbstractModel
             $date['to']
         )
         ) {
-            $settings->setCustomDesign(
-                $object->getCustomDesign()
-            )->setPageLayout(
-                $object->getPageLayout()
-            )->setLayoutUpdates(
-                (array)$object->getCustomLayoutUpdate()
-            );
+            if ($object->getCustomDesign()) {
+                $settings->setCustomDesign($object->getCustomDesign());
+            }
+            if ($object->getCustomLayout()) {
+                $settings->setPageLayout($object->getCustomLayout());
+            }
             if ($object instanceof Category) {
                 $this->categoryLayoutUpdates->extractCustomSettings($object, $settings);
             } elseif ($object instanceof Product) {
                 $this->productLayoutUpdates->extractCustomSettings($object, $settings);
             }
         }
+
         return $settings;
     }
 
     /**
      * Merge custom design settings
      *
-     * @param \Magento\Framework\DataObject $categorySettings
-     * @param \Magento\Framework\DataObject $productSettings
-     * @return \Magento\Framework\DataObject
+     * @param DataObject $categorySettings
+     * @param DataObject $productSettings
+     * @return DataObject
      */
     protected function _mergeSettings($categorySettings, $productSettings)
     {
@@ -190,6 +232,21 @@ class Design extends \Magento\Framework\Model\AbstractModel
             $update = array_merge($categorySettings->getLayoutUpdates(), $productSettings->getLayoutUpdates());
             $categorySettings->setLayoutUpdates($update);
         }
+        if ($categorySettings->getPageLayoutHandles()) {
+            $handles = [];
+            foreach ($categorySettings->getPageLayoutHandles() as $key => $value) {
+                $handles[$key] = [
+                    'handle' => 'catalog_category_view',
+                    'value' => $value,
+                ];
+            }
+            $categorySettings->setPageLayoutHandles($handles);
+        }
+        if ($productSettings->getPageLayoutHandles()) {
+            $handle = array_merge($categorySettings->getPageLayoutHandles(), $productSettings->getPageLayoutHandles());
+            $categorySettings->setPageLayoutHandles($handle);
+        }
+
         return $categorySettings;
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminSalesOrderViewSection">
+        <element name="orderHistoryNoteListFirstComment" type="text" selector="#order_history_block .note-list-item:nth-child(1) .note-list-comment"/>
+        <element name="orderHistoryNoteListLastComment" type="text" selector="#order_history_block .note-list-item:nth-child(2) .note-list-comment"/>
+    </section>
+</sections>

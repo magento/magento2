@@ -12,7 +12,7 @@
             <span class="price-wrapper"
                   data-price-amount=""
                   data-price-type=""
-                  html="getPrice($row())['msrp_price']"/>
+                  html="getMsrpPriceUnsanitizedHtml($row())"></span>
         </span>
     </span>
 
@@ -21,15 +21,15 @@
                 class="action map-show-info"
                 data-role="msrp-popup-trigger"
                 aria-haspopup="true">
-            <span translate="'Click for price'"/>
+            <span translate="'Click for price'"></span>
         </button>
 
-        <render args="popupTmpl"/>
+        <render args="popupTmpl"></render>
     </if>
 
     <ifnot args="isShowPriceOnGesture($row())">
         <span class="msrp-message"
-              html="getMsrpPriceMessage($row())" />
+              html="getMsrpPriceMessageUnsanitizedHtml($row())"></span>
     </ifnot>
 </div>
 
@@ -38,7 +38,7 @@
          if="isAllowed()">
         <each args="data: getPrices($row()), as: '$price'">
             <with args="$price">
-                <render args="getBody()"/>
+                <render args="getBody()"></render>
             </with>
         </each>
     </div>

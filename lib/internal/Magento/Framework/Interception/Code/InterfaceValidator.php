@@ -7,13 +7,17 @@ namespace Magento\Framework\Interception\Code;
 
 use Magento\Framework\Code\Reader\ArgumentsReader;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\GetParameterClassTrait;
 use Magento\Framework\Phrase;
+use ReflectionParameter;
 
 /**
  * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class InterfaceValidator
 {
+    use GetParameterClassTrait;
+
     public const METHOD_BEFORE = 'before';
     public const METHOD_AROUND = 'around';
     public const METHOD_AFTER = 'after';
@@ -24,6 +28,16 @@ class InterfaceValidator
      * @var ArgumentsReader
      */
     protected $_argumentsReader;
+
+    /**
+     * List of optional packages
+     *
+     * @var array
+     */
+    public static array $optionalPackages = [
+        'Swoole',
+        'OpenSwoole'
+    ];
 
     /**
      * @param ArgumentsReader $argumentsReader
@@ -46,8 +60,14 @@ class InterfaceValidator
      */
     public function validate($pluginClass, $interceptedType)
     {
-        $interceptedType = '\\' . trim($interceptedType, '\\');
-        $pluginClass = '\\' . trim($pluginClass, '\\');
+        // check if $interceptedType is a part of optional package
+        $interceptedPackage = strstr(trim((string)$interceptedType), "\\", true);
+        if (in_array($interceptedPackage, self::$optionalPackages)) {
+            return;
+        }
+
+        $interceptedType = '\\' . trim((string)$interceptedType, '\\');
+        $pluginClass = '\\' . trim((string)$pluginClass, '\\');
         $plugin = new \ReflectionClass($pluginClass);
         $type = new \ReflectionClass($interceptedType);
 
@@ -162,14 +182,17 @@ class InterfaceValidator
     /**
      * Get parameters type
      *
-     * @param \ReflectionParameter $parameter
+     * @param ReflectionParameter $parameter
      *
      * @return string
      */
-    protected function getParametersType(\ReflectionParameter $parameter)
+    protected function getParametersType(ReflectionParameter $parameter)
     {
-        $parameterClass = $parameter->getClass();
-        return $parameterClass ? '\\' . $parameterClass->getName() : ($parameter->isArray() ? 'array' : null);
+        $parameterClass = $this->getParameterClass($parameter);
+        $parameterType = $parameter->getType();
+        return $parameterClass ?
+            '\\' . $parameterClass->getName() :
+            ($parameterType && $parameterType->getName() === 'array' ? 'array' : null);
     }
 
     /**

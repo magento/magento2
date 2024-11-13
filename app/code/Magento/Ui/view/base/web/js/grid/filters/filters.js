@@ -124,7 +124,10 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        initialize: function () {
+        initialize: function (config) {
+            if (typeof config.options !== 'undefined' && config.options.dateFormat) {
+                this.constructor.defaults.templates.filters.dateRange.dateFormat = config.options.dateFormat;
+            }
             _.bindAll(this, 'updateActive');
 
             this._super()
@@ -200,9 +203,10 @@ define([
          * @returns {Filters} Chainable.
          */
         apply: function () {
-            $('body').notification('clear');
+            if (typeof $('body').notification === 'function') {
+                $('body').notification('clear');
+            }
             this.set('applied', removeEmpty(this.filters));
-
             return this;
         },
 
@@ -417,7 +421,7 @@ define([
                          * @param {String} message
                          */
                         insertMethod: function (message) {
-                            var $wrapper = $('<div/>').html(message);
+                            var $wrapper = $('<div></div>').html(message);
 
                             $('.page-main-actions').after($wrapper);
                         }

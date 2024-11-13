@@ -11,16 +11,11 @@ use Magento\TestFramework\SkippableInterface;
 use Magento\TestFramework\Workaround\Override\Config;
 use Magento\TestFramework\Workaround\Override\WrapperGenerator;
 use PHPUnit\Framework\TestSuite;
-use PHPUnit\TextUI\Configuration\Configuration as LegacyConfiguration;
-use PHPUnit\TextUI\Configuration\Registry;
-use PHPUnit\TextUI\Configuration\TestSuite as LegacyTestSuiteConfiguration;
-use PHPUnit\TextUI\Configuration\TestSuiteCollection as LegacyTestSuiteCollection;
-use PHPUnit\TextUI\Configuration\TestSuiteMapper as LegacyTestSuiteMapper;
+use PHPUnit\TextUI\XmlConfiguration\TestSuiteMapper;
 use PHPUnit\TextUI\XmlConfiguration\Configuration;
 use PHPUnit\TextUI\XmlConfiguration\Loader;
-use PHPUnit\TextUI\XmlConfiguration\TestSuite as TestSuiteConfiguration;
-use PHPUnit\TextUI\XmlConfiguration\TestSuiteCollection;
-use PHPUnit\TextUI\XmlConfiguration\TestSuiteMapper;
+use PHPUnit\TextUI\Configuration\TestSuite as TestSuiteConfiguration;
+use PHPUnit\TextUI\Configuration\TestSuiteCollection;
 
 /**
  * Web API tests wrapper.
@@ -28,10 +23,11 @@ use PHPUnit\TextUI\XmlConfiguration\TestSuiteMapper;
 class WebApiTest extends TestSuite
 {
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param string $className
+     *
      * @return TestSuite
      * @throws \ReflectionException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public static function suite($className)
     {
@@ -39,19 +35,19 @@ class WebApiTest extends TestSuite
         $overrideConfig = Config::getInstance();
         $configuration = self::getConfiguration();
         $suitesConfig = $configuration->testSuite();
-        $suite = new TestSuite();
+        $suite = TestSuite::fromClassName($className);
         foreach ($suitesConfig as $suiteConfig) {
             $suites = self::getSuites($suiteConfig);
             /** @var TestSuite $testSuite */
             foreach ($suites as $testSuite) {
                 /** @var TestSuite $test */
                 foreach ($testSuite as $test) {
-                    $testName = $test->getName();
+                    $testName = $test->name();
 
                     if ($overrideConfig->hasSkippedTest($testName) && !$test instanceof SkippableInterface) {
                         $reflectionClass = new \ReflectionClass($testName);
                         $resultTest = $generator->generateTestWrapper($reflectionClass);
-                        $suite->addTest(new TestSuite($resultTest, $testName));
+                        $suite->addTest(TestSuite::fromClassName($resultTest));
                     } else {
                         $suite->addTest($test);
                     }
@@ -73,41 +69,30 @@ class WebApiTest extends TestSuite
         $longConfig = $params['configuration'] ?? '';
         $shortConfig = $params['c'] ?? '';
 
-        return $shortConfig ? $shortConfig : $longConfig;
+        return $shortConfig ?: $longConfig;
     }
 
     /**
-     * Retrieve configuration depends on used phpunit version
+     * Retrieve configuration.
      *
-     * @return Configuration|LegacyConfiguration
+     * @return Configuration
      */
     private static function getConfiguration()
     {
-        // Compatibility with phpunit < 9.3
-        if (!class_exists(Configuration::class)) {
-            // @phpstan-ignore-next-line
-            return Registry::getInstance()->get(self::getConfigurationFile());
-        }
-
-        // @phpstan-ignore-next-line
         return (new Loader())->load(self::getConfigurationFile());
     }
 
     /**
-     * Retrieve test suites by suite config depends on used phpunit version
+     * Retrieve test suites by suite config.
      *
-     * @param TestSuiteConfiguration|LegacyTestSuiteConfiguration $suiteConfig
+     * @param TestSuiteConfiguration $suiteConfig
+     *
      * @return TestSuite
      */
     private static function getSuites($suiteConfig)
     {
-        // Compatibility with phpunit < 9.3
-        if (!class_exists(Configuration::class)) {
-            // @phpstan-ignore-next-line
-            return (new LegacyTestSuiteMapper())->map(LegacyTestSuiteCollection::fromArray([$suiteConfig]), '');
-        }
-
-        // @phpstan-ignore-next-line
-        return (new TestSuiteMapper())->map(TestSuiteCollection::fromArray([$suiteConfig]), '');
+        return (new TestSuiteMapper())->map(self::getConfigurationFile(),
+            TestSuiteCollection::fromArray([$suiteConfig]),'', ''
+        );
     }
 }

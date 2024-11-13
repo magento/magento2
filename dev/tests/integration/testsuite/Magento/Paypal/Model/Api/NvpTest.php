@@ -156,6 +156,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
                 [],
                 $httpQuery
             );
+        $this->httpClient->method('read')->willReturn('');
 
         $this->nvpApi->callRefundTransaction();
     }

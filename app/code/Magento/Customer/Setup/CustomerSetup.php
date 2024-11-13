@@ -1,20 +1,43 @@
 <?php
 /**
- * Customer resource setup model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Setup;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\Attribute;
+use Magento\Customer\Model\Attribute\Backend\Data\Boolean;
+use Magento\Customer\Model\Attribute\Data\Postcode;
+use Magento\Customer\Model\Customer\Attribute\Backend\Billing;
+use Magento\Customer\Model\Customer\Attribute\Backend\Password;
+use Magento\Customer\Model\Customer\Attribute\Backend\Shipping;
+use Magento\Customer\Model\Customer\Attribute\Backend\Store;
+use Magento\Customer\Model\Customer\Attribute\Backend\Website;
+use Magento\Customer\Model\Customer\Attribute\Source\Group;
+use Magento\Customer\Model\ResourceModel\Address;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Collection;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country;
+use Magento\Customer\Model\ResourceModel\Customer;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Backend\Datetime;
+use Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
+use Magento\Eav\Model\Entity\Increment\NumericValue;
 use Magento\Eav\Model\Entity\Setup\Context;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 
 /**
+ * Customer resource setup model
+ *
+ * @api
  * @codeCoverageIgnore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -127,11 +150,11 @@ class CustomerSetup extends EavSetup
     {
         $entities = [
             'customer' => [
-                'entity_type_id' => \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
-                'entity_model' => \Magento\Customer\Model\ResourceModel\Customer::class,
-                'attribute_model' => \Magento\Customer\Model\Attribute::class,
+                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'entity_model' => Customer::class,
+                'attribute_model' => Attribute::class,
                 'table' => 'customer_entity',
-                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
+                'increment_model' => NumericValue::class,
                 'additional_attribute_table' => 'customer_eav_attribute',
                 'entity_attribute_collection' => \Magento\Customer\Model\ResourceModel\Attribute\Collection::class,
                 'attributes' => [
@@ -140,7 +163,7 @@ class CustomerSetup extends EavSetup
                         'label' => 'Associate to Website',
                         'input' => 'select',
                         'source' => \Magento\Customer\Model\Customer\Attribute\Source\Website::class,
-                        'backend' => \Magento\Customer\Model\Customer\Attribute\Backend\Website::class,
+                        'backend' => Website::class,
                         'sort_order' => 10,
                         'position' => 10,
                         'adminhtml_only' => 1,
@@ -150,7 +173,7 @@ class CustomerSetup extends EavSetup
                         'label' => 'Create In',
                         'input' => 'select',
                         'source' => \Magento\Customer\Model\Customer\Attribute\Source\Store::class,
-                        'backend' => \Magento\Customer\Model\Customer\Attribute\Backend\Store::class,
+                        'backend' => Store::class,
                         'sort_order' => 20,
                         'visible' => false,
                         'adminhtml_only' => 1,
@@ -223,7 +246,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'Group',
                         'input' => 'select',
-                        'source' => \Magento\Customer\Model\Customer\Attribute\Source\Group::class,
+                        'source' => Group::class,
                         'sort_order' => 25,
                         'position' => 25,
                         'adminhtml_only' => 1,
@@ -234,7 +257,7 @@ class CustomerSetup extends EavSetup
                         'label' => 'Date of Birth',
                         'input' => 'date',
                         'frontend' => \Magento\Eav\Model\Entity\Attribute\Frontend\Datetime::class,
-                        'backend' => \Magento\Eav\Model\Entity\Attribute\Backend\Datetime::class,
+                        'backend' => Datetime::class,
                         'required' => false,
                         'sort_order' => 90,
                         'visible' => false,
@@ -247,7 +270,7 @@ class CustomerSetup extends EavSetup
                     'password_hash' => [
                         'type' => 'static',
                         'input' => 'hidden',
-                        'backend' => \Magento\Customer\Model\Customer\Attribute\Backend\Password::class,
+                        'backend' => Password::class,
                         'required' => false,
                         'sort_order' => 81,
                         'visible' => false,
@@ -271,7 +294,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'Default Billing Address',
                         'input' => 'text',
-                        'backend' => \Magento\Customer\Model\Customer\Attribute\Backend\Billing::class,
+                        'backend' => Billing::class,
                         'required' => false,
                         'sort_order' => 82,
                         'visible' => false,
@@ -280,7 +303,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'Default Shipping Address',
                         'input' => 'text',
-                        'backend' => \Magento\Customer\Model\Customer\Attribute\Backend\Shipping::class,
+                        'backend' => Shipping::class,
                         'required' => false,
                         'sort_order' => 83,
                         'visible' => false,
@@ -318,7 +341,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'Gender',
                         'input' => 'select',
-                        'source' => \Magento\Eav\Model\Entity\Attribute\Source\Table::class,
+                        'source' => Table::class,
                         'required' => false,
                         'sort_order' => 110,
                         'visible' => false,
@@ -332,7 +355,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'Disable Automatic Group Change Based on VAT ID',
                         'input' => 'boolean',
-                        'backend' => \Magento\Customer\Model\Attribute\Backend\Data\Boolean::class,
+                        'backend' => Boolean::class,
                         'position' => 28,
                         'required' => false,
                         'adminhtml_only' => true
@@ -340,13 +363,12 @@ class CustomerSetup extends EavSetup
                 ],
             ],
             'customer_address' => [
-                'entity_type_id' => \Magento\Customer\Api\AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
-                'entity_model' => \Magento\Customer\Model\ResourceModel\Address::class,
-                'attribute_model' => \Magento\Customer\Model\Attribute::class,
+                'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'entity_model' => Address::class,
+                'attribute_model' => Attribute::class,
                 'table' => 'customer_address_entity',
                 'additional_attribute_table' => 'customer_eav_attribute',
-                'entity_attribute_collection' =>
-                    \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class,
+                'entity_attribute_collection' => Collection::class,
                 'attributes' => [
                     'prefix' => [
                         'type' => 'static',
@@ -407,7 +429,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'Street Address',
                         'input' => 'multiline',
-                        'backend' => \Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class,
+                        'backend' => DefaultBackend::class,
                         'sort_order' => 70,
                         'multiline_count' => 2,
                         'validate_rules' => '{"max_text_length":255,"min_text_length":1}',
@@ -425,7 +447,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'Country',
                         'input' => 'select',
-                        'source' => \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country::class,
+                        'source' => Country::class,
                         'sort_order' => 90,
                         'position' => 90,
                     ],
@@ -433,7 +455,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'State/Province',
                         'input' => 'text',
-                        'backend' => \Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region::class,
+                        'backend' => Region::class,
                         'required' => false,
                         'sort_order' => 100,
                         'position' => 100,
@@ -442,7 +464,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'State/Province',
                         'input' => 'hidden',
-                        'source' => \Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region::class,
+                        'source' => Address\Attribute\Source\Region::class,
                         'required' => false,
                         'sort_order' => 100,
                         'position' => 100,
@@ -453,7 +475,7 @@ class CustomerSetup extends EavSetup
                         'input' => 'text',
                         'sort_order' => 110,
                         'validate_rules' => '[]',
-                        'data' => \Magento\Customer\Model\Attribute\Data\Postcode::class,
+                        'data' => Postcode::class,
                         'position' => 110,
                         'required' => false,
                     ],

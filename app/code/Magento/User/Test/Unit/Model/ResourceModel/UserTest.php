@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Model\ResourceModel;
 
+use Laminas\Validator\Callback;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Framework\Acl\Data\CacheInterface;
@@ -65,42 +66,35 @@ class UserTest extends TestCase
     {
         $this->userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->roleFactoryMock = $this->getMockBuilder(RoleFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->roleMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->dbAdapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);
@@ -167,7 +161,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId'])
+            ->addMethods(['getUserId'])
             ->getMock();
         $returnData = [1, 2, 3];
         $uid = 1234;
@@ -338,7 +332,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getRoleId'])
+            ->addMethods(['getUserId', 'getRoleId'])
             ->getMock();
         $uid = 1234;
         $roleId = 44;
@@ -357,7 +351,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getRoleId'])
+            ->addMethods(['getUserId', 'getRoleId'])
             ->getMock();
         $uid = 1234;
         $roleId = 44;
@@ -376,7 +370,7 @@ class UserTest extends TestCase
 
     public function testGetValidationBeforeSave()
     {
-        $this->assertInstanceOf('\Zend_Validate_Callback', $this->model->getValidationRulesBeforeSave());
+        $this->assertInstanceOf(Callback::class, $this->model->getValidationRulesBeforeSave());
     }
 
     public function testUpdateFailure()
@@ -421,7 +415,7 @@ class UserTest extends TestCase
         $roleId = 123;
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasRoleId', 'getRoleId', 'getExtra', 'setExtra'])
+            ->addMethods(['hasRoleId', 'getRoleId', 'getExtra', 'setExtra'])
             ->getMock();
         $methodUserMock->expects($this->once())->method('hasRoleId')->willReturn(true);
         $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
@@ -461,7 +455,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtra', 'setExtra'])
+            ->addMethods(['getExtra', 'setExtra'])
             ->getMock();
         $extraData = ['user', 'extra', 'data'];
 
@@ -493,7 +487,7 @@ class UserTest extends TestCase
     {
         $methodUserMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtra', 'setExtra'])
+            ->addMethods(['getExtra', 'setExtra'])
             ->getMock();
         $extraData = null;
 

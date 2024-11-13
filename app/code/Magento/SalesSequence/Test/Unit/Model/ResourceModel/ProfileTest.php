@@ -60,7 +60,7 @@ class ProfileTest extends TestCase
     private $select;
 
     /**
-     * Initialization
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -92,7 +92,10 @@ class ProfileTest extends TestCase
         );
     }
 
-    public function testLoadActiveProfile()
+    /**
+     * @return void
+     */
+    public function testLoadActiveProfile(): void
     {
         $profileTableName = 'sequence_profile';
         $profileIdFieldName = 'profile_id';
@@ -110,30 +113,34 @@ class ProfileTest extends TestCase
             ->method('getTableName')
             ->willReturn($profileTableName);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
-        $this->select->expects($this->at(0))
-            ->method('from')
-            ->with($profileTableName, [$profileIdFieldName])
-            ->willReturn($this->select);
-        $this->select->expects($this->at(1))
-            ->method('where')
-            ->with('meta_id = :meta_id')
-            ->willReturn($this->select);
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('is_active = 1')
-            ->willReturn($this->select);
         $this->connectionMock->expects($this->once())
             ->method('fetchOne')
             ->with($this->select, ['meta_id' => $metaId])
             ->willReturn($profileId);
-        $this->select->expects($this->at(3))
+        $this->select
             ->method('from')
-            ->with($profileTableName, '*', null)
-            ->willReturn($this->select);
+            ->willReturnCallback(function ($arg1, $arg2) use ($profileTableName, $profileIdFieldName) {
+                if ($arg1 === $profileTableName && $arg2 === [$profileIdFieldName]) {
+                    return $this->select;
+                } elseif ($arg1 === $profileTableName && $arg2 == '*') {
+                    return $this->select;
+                }
+            });
+        $this->select
+            ->method('where')
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'meta_id = :meta_id') {
+                    return $this->select;
+                } elseif ($arg1 == 'is_active = 1') {
+                    return $this->select;
+                }
+            });
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($profileData);
-        $this->profile->expects($this->at(1))->method('setData')->with($profileData);
+        $this->profile
+            ->method('setData')
+            ->with($profileData);
         $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
     }
 }

@@ -23,7 +23,7 @@ class Config
     /**
      * @return array
      */
-    public function getProductAttributes()
+    public function getProductAttributes(): array
     {
         return $this->_attributeConfig->getAttributeNames('quote_item');
     }

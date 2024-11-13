@@ -13,6 +13,7 @@ use Magento\Downloadable\Model\Link\Purchased;
 use Magento\Downloadable\Model\Link\PurchasedFactory;
 use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection;
 use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order\Item;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -46,49 +47,55 @@ class DownloadableTest extends TestCase
             ->getMock();
         $this->purchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->itemsFactory = $this->getMockBuilder(
             CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
+
+        $purchasedLink = new \Magento\Downloadable\Model\Sales\Order\Link\Purchased(
+            $this->purchasedFactory,
+            $this->itemsFactory
+        );
 
         $this->block = $objectManager->getObject(
             Downloadable::class,
             [
                 'context' => $contextMock,
-                'purchasedFactory' => $this->purchasedFactory,
-                'itemsFactory' => $this->itemsFactory
+                'purchasedLink' => $purchasedLink
             ]
         );
     }
 
     public function testGetLinks()
     {
-        $item = $this->getMockBuilder(Item::class)
+        $orderItem = $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOrderItemId'])
+            ->onlyMethods(['getId'])
             ->getMock();
+        $orderItem->method('getId')
+            ->willReturn(1);
+        $item = new DataObject(['order_item' => $orderItem]);
         $linkPurchased = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load'])
+            ->onlyMethods(['load'])
             ->getMock();
         $itemCollection =
             $this->getMockBuilder(Collection::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['addFieldToFilter'])
+                ->onlyMethods(['addFieldToFilter'])
                 ->getMock();
 
         $this->block->setData('item', $item);
         $this->purchasedFactory->expects($this->once())->method('create')->willReturn($linkPurchased);
-        $linkPurchased->expects($this->once())->method('load')->with('orderItemId', 'order_item_id')->willReturnSelf();
-        $item->expects($this->any())->method('getOrderItemId')->willReturn('orderItemId');
+        $linkPurchased->expects($this->once())->method('load')->with(1, 'order_item_id')->willReturnSelf();
         $this->itemsFactory->expects($this->once())->method('create')->willReturn($itemCollection);
         $itemCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with('order_item_id', 'orderItemId')
+            ->with('order_item_id', 1)
             ->willReturnSelf();
 
         $this->assertEquals($linkPurchased, $this->block->getLinks());

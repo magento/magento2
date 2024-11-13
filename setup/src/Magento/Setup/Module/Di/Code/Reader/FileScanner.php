@@ -6,17 +6,62 @@
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
+use Laminas\Code\Exception\InvalidArgumentException;
+use Laminas\Code\Exception\RuntimeException;
+
 /**
  * FileScanner code reader
  *
  * @SuppressWarnings(PHPMD)
  */
-class FileScanner extends \Laminas\Code\Scanner\FileScanner
+class FileScanner
 {
+    /**
+     * @var string
+     */
+    protected $file;
+
+    /**
+     * @var bool
+     */
+    protected $isScanned = false;
+
+    /**
+     * @var array
+     */
+    protected $tokens = [];
+
+    /**
+     * @var array
+     */
+    protected $infos = [];
+
     /**
      * @var int
      */
     private $tokenType;
+
+    /**
+     * copied from laminas-code 3.5.1
+     *
+     * @param string $file
+     *
+     * @throws InvalidArgumentException
+     */
+    public function __construct(string $file)
+    {
+        $this->file = $file;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        if (!file_exists($file)) {
+            throw new InvalidArgumentException(sprintf(
+                'File "%s" not found',
+                $file
+            ));
+        }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $tokens = token_get_all(file_get_contents($file));
+        $this->tokens = $tokens;
+    }
 
     /**
      * @inheritDoc
@@ -28,7 +73,7 @@ class FileScanner extends \Laminas\Code\Scanner\FileScanner
         }
 
         if (!$this->tokens) {
-            throw new \Laminas\Code\Exception\RuntimeException('No tokens were provided');
+            throw new RuntimeException('No tokens were provided');
         }
 
         /**
@@ -37,6 +82,13 @@ class FileScanner extends \Laminas\Code\Scanner\FileScanner
         if (!defined('T_TRAIT')) {
             define('T_TRAIT', 42001);
         }
+
+        $namespaceContentTokenTypes = [
+            T_NS_SEPARATOR => T_NS_SEPARATOR,
+            T_STRING => T_STRING,
+            T_NAME_QUALIFIED => T_NAME_QUALIFIED,
+            T_NAME_FULLY_QUALIFIED => T_NAME_FULLY_QUALIFIED
+        ];
 
         /**
          * Variables & Setup
@@ -155,8 +207,7 @@ class FileScanner extends \Laminas\Code\Scanner\FileScanner
                 if ($this->tokenType === T_WHITESPACE) {
                     goto SCANNER_NAMESPACE_CONTINUE;
                 }
-
-                if ($this->tokenType === T_NS_SEPARATOR || $this->tokenType === T_STRING) {
+                if (isset($namespaceContentTokenTypes[$this->tokenType])) {
                     $infos[$infoIndex]['namespace'] .= $tokenContent;
                 }
 
@@ -213,7 +264,7 @@ class FileScanner extends \Laminas\Code\Scanner\FileScanner
                         goto SCANNER_USE_CONTINUE;
                     }
 
-                    if ($this->tokenType == T_NS_SEPARATOR || $this->tokenType == T_STRING) {
+                    if (\array_key_exists($this->tokenType, $namespaceContentTokenTypes)) {
                         if ($useAsContext == false) {
                             $infos[$infoIndex]['statements'][$useStatementIndex]['use'] .= $tokenContent;
                         } else {
@@ -323,10 +374,10 @@ class FileScanner extends \Laminas\Code\Scanner\FileScanner
                 }
 
                 if ($this->tokenType === null) {
-                    if ($tokenContent == '{') {
+                    if ($tokenContent === '{') {
                         $classBraceCount++;
                     }
-                    if ($tokenContent == '}') {
+                    if ($tokenContent === '}') {
                         $classBraceCount--;
                         if ($classBraceCount === 0) {
                             goto SCANNER_CLASS_END;
@@ -361,5 +412,56 @@ class FileScanner extends \Laminas\Code\Scanner\FileScanner
          */
         $this->isScanned = true;
         // phpcs:enable
+    }
+
+    /**
+     * Copied from laminas-code 3.5.1
+     *
+     * @param string|null $namespace
+     *
+     * @return array|null
+     */
+    public function getUses(string $namespace = null): ?array
+    {
+        $this->scan();
+
+        return $this->getUsesNoScan($namespace);
+    }
+
+    /**
+     * Copied from laminas-code 3.5.1
+     *
+     * @param string|null $namespace
+     *
+     * @return array|null
+     */
+    protected function getUsesNoScan(string $namespace = null): ?array
+    {
+        $namespaces = [];
+        foreach ($this->infos as $info) {
+            if ($info['type'] === 'namespace') {
+                $namespaces[] = $info['namespace'];
+            }
+        }
+
+        if ($namespace === null) {
+            $namespace = array_shift($namespaces);
+        } elseif (!in_array($namespace, $namespaces, true)) {
+            return null;
+        }
+
+        $uses = [];
+        foreach ($this->infos as $info) {
+            if ($info['type'] !== 'use') {
+                continue;
+            }
+            foreach ($info['statements'] as $statement) {
+                if ($info['namespace'] === $namespace) {
+                    $uses[] = $statement;
+                }
+            }
+        }
+
+        return $uses;
     }
 }

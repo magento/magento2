@@ -18,20 +18,18 @@
             <useCaseId value="MAGETWO-99691"/>
             <group value="sales"/>
             <group value="catalogRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
             <!--Create product-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRateShipping"/>
+            <magentoCLI command="config:set carriers/flatrate/price 5.00" stepKey="setFlatRateShippingPrice"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProductApi"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-            <!-- Clearing cache just in case -->
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage2"/>
             <!-- It sometimes is loading too long for default 10s -->
             <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded2"/>
@@ -59,12 +57,17 @@
         </after>
 
         <!--Open order by Id-->
-        <amOnPage url="{{AdminOrderPage.url($createGuestCart.return$)}}" stepKey="navigateToOrderPage"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="navigateToOrderPage">
+            <argument name="entityId" value="$createGuestCart.return$"/>
+        </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
         <!--Verify order item row-->
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" stepKey="waitOrderItemPriceToBeVisible"/>
         <see selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.subtotal}}" stepKey="seeOrderItemPrice"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache1">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Verify totals on Order page-->
         <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" stepKey="waitOrderSubtotalToBeVisible"/>
@@ -72,6 +75,6 @@
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Shipping')}}" stepKey="waitOrderShippingToBeVisible"/>
         <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.shipping}}" stepKey="seeOrderShipping"/>
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="waitOrderGrandTotalToBeVisible"/>
-        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.grandTotal}}" stepKey="seeCorrectGrandTotal"/>
+        <waitForText selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.grandTotal}}" stepKey="seeCorrectGrandTotal"/>
     </test>
 </tests>

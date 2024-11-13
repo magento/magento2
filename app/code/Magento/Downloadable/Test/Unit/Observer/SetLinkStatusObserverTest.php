@@ -71,19 +71,19 @@ class SetLinkStatusObserverTest extends TestCase
     {
         $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSetFlag', 'getValue'])
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMock();
 
         $this->itemsFactory = $this->getMockBuilder(
             CollectionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsAllowed'])
+            ->addMethods(['setIsAllowed'])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(DataObject::class)
@@ -92,17 +92,17 @@ class SetLinkStatusObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
+            ->addMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
             ->getMock();
 
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getStoreId', 'getState', 'isCanceled', 'getAllItems'])
+            ->onlyMethods(['getId', 'getStoreId', 'getState', 'isCanceled', 'getAllItems'])
             ->getMock();
 
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
+            ->onlyMethods(['getEvent'])
             ->getMock();
 
         $this->setLinkStatusObserver = (new ObjectManagerHelper($this))->getObject(
@@ -117,12 +117,12 @@ class SetLinkStatusObserverTest extends TestCase
     /**
      * @return array
      */
-    public function setLinkStatusPendingDataProvider()
+    public static function setLinkStatusPendingDataProvider()
     {
         return [
             [
                 'orderState' => Order::STATE_HOLDED,
-                'mapping' => [
+                'orderStateMapping' => [
                     Order::STATE_HOLDED => 'pending',
                     Order::STATE_PENDING_PAYMENT => 'payment_pending',
                     Order::STATE_PAYMENT_REVIEW => 'payment_review'
@@ -131,7 +131,7 @@ class SetLinkStatusObserverTest extends TestCase
             ],
             [
                 'orderState' => Order::STATE_PENDING_PAYMENT,
-                'mapping' => [
+                'orderStateMapping' => [
                     Order::STATE_HOLDED => 'pending',
                     Order::STATE_PENDING_PAYMENT => 'pending_payment',
                     Order::STATE_PAYMENT_REVIEW => 'payment_review'
@@ -140,7 +140,7 @@ class SetLinkStatusObserverTest extends TestCase
             ],
             [
                 'orderState' => Order::STATE_PAYMENT_REVIEW,
-                'mapping' => [
+                'orderStateMapping' => [
                     Order::STATE_HOLDED => 'pending',
                     Order::STATE_PENDING_PAYMENT => 'payment_pending',
                     Order::STATE_PAYMENT_REVIEW => 'payment_review'
@@ -428,7 +428,7 @@ class SetLinkStatusObserverTest extends TestCase
     ) {
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getId',
                 'getQtyOrdered',
                 'getQtyRefunded',
@@ -465,7 +465,7 @@ class SetLinkStatusObserverTest extends TestCase
             \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter'])
+            ->onlyMethods(['addFieldToFilter'])
             ->getMock();
         $linkItemCollection->expects($this->any())
             ->method('addFieldToFilter')
@@ -490,7 +490,7 @@ class SetLinkStatusObserverTest extends TestCase
     ) {
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getProductType', 'getRealProductType', 'getStatusId', 'getQtyOrdered'])
+            ->onlyMethods(['getId', 'getProductType', 'getRealProductType', 'getStatusId', 'getQtyOrdered'])
             ->getMock();
         $item->expects($this->any())
             ->method('getId')
@@ -522,7 +522,7 @@ class SetLinkStatusObserverTest extends TestCase
             \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter'])
+            ->onlyMethods(['addFieldToFilter'])
             ->getMock();
         $linkItemCollection->expects($this->any())
             ->method('addFieldToFilter')
@@ -543,7 +543,8 @@ class SetLinkStatusObserverTest extends TestCase
     {
         $linkItem = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getOrderItemId', 'setStatus', 'save', 'setNumberOfDownloadsBought'])
+            ->addMethods(['getStatus', 'getOrderItemId', 'setStatus','setNumberOfDownloadsBought'])
+            ->onlyMethods(['save'])
             ->getMock();
         $linkItem->expects($this->any())
             ->method('getStatus')

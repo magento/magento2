@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutMiniCartSubtotalMatchesAfterRemoveProductFromCartTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multiple Shipping"/>
+            <title value="Check mini shopping cart Subtotal Price matches with the View Cart subtotal price after remove product from cart"/>
+            <description value="Verify mini shopping cart Subtotal Price matches with the View Cart subtotal price after remove product from cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-42067"/>
+            <useCaseId value="MC-41924"/>
+            <group value="Multishipment"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createdSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Customer_US_UK_DE" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createdSimpleProduct" stepKey="deleteCreatedSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login to the Storefront as created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerWithMultipleAddresses$$"/>
+        </actionGroup>
+        <!-- Open the simple product page -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductPage">
+            <argument name="product" value="$$createdSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Add to Cart three times of the product -->
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createdSimpleProduct.name$$"/>
+            <argument name="productQty" value="3"/>
+        </actionGroup>
+        <waitForPageLoad time="120"  stepKey="waitForAddToCart"/>
+        <!-- Go to Cart Summary Section -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <!-- Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <!-- Remove first simple product from cart -->
+        <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeFirstProductFromCart"/>
+        <!-- Go back to the cart -->
+        <click selector="{{MultishippingSection.back}}" stepKey="backToCart"/>
+        <!-- Check and verify subtotals at mini cart summary section-->
+        <waitForPageLoad time="120"  stepKey="waitForCartSummaryPageToLoad"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createdSimpleProduct.name$$)}}" stepKey="grabTextFromProductsSubtotalField"/>
+        <grabTextFrom selector="{{CheckoutCartSummarySection.subTotal}}" stepKey="grabTextFromCartSubtotalField"/>
+        <assertEquals message="Subtotals should be equal" stepKey="assertSubtotalsFields">
+            <expectedResult type="variable">$grabTextFromProductsSubtotalField</expectedResult>
+            <actualResult type="variable">$grabTextFromCartSubtotalField</actualResult>
+        </assertEquals>
+    </test>
+</tests>

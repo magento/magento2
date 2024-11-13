@@ -6,30 +6,30 @@
 -->
 <div class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks" collapsible>
     <button class="admin__action-dropdown" type="button" toggleCollapsible>
-        <span class="admin__action-dropdown-text" translate="activeView.label"/>
+        <span class="admin__action-dropdown-text" translate="activeView.label"></span>
     </button>
     <ul class="admin__action-dropdown-menu">
         <!-- ko foreach: { data: viewsArray, as: '$view'}  -->
-            <li css="_edit: $parent.isEditing($view.index)" outerClick="$parent.endEdit.bind($parent, $view.index)" template="$parent.viewTmpl"/>
+            <li css="_edit: $parent.isEditing($view.index)" outerClick="$parent.endEdit.bind($parent, $view.index)" template="$parent.viewTmpl"></li>
         <!-- /ko -->
         <li visible="hasChanges" outerClick="hideCustom.bind($data)"
             css="
                 _edit: customVisible,
                 'action-dropdown-menu-action action-dropdown-menu-item-last': !customVisible">
-            <a href="" visible="!customVisible" click="showCustom" translate="'Save View As...'"/>
+            <a href="" visible="!customVisible" click="showCustom" translate="'Save View As...'"></a>
             <div class="action-dropdown-menu-item-edit" visible="customVisible">
                 <input class="admin__control-text" type="text"
                     data-bind="
+                        attr: {'aria-label': $t('New View')},
                         value: customLabel,
-                        autoselect,
                         hasFocus: isCustomVisible(),
                         keyboard: {
                             13: applyCustom.bind($data),
                             27: hideCustom.bind($data)
-                        }">
+                        }"/>
                 <div class="action-dropdown-menu-item-actions">
                    <button class="action-submit" type="button" click="applyCustom" attr="title: $t('Save all changes')">
-                        <span translate="'Submit'"/>
+                        <span translate="'Submit'"></span>
                     </button>
                 </div>
             </div>

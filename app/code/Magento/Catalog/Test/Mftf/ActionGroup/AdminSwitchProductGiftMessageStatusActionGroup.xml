@@ -16,6 +16,6 @@
         <waitForPageLoad stepKey="waitForGiftOptionsOpen"/>
         <uncheckOption selector="{{AdminProductGiftOptionsSection.useConfigSettingsMessage}}" stepKey="uncheckConfigSettingsMessage"/>
         <click selector="{{AdminProductGiftOptionsSection.toggleProductGiftMessage}}" stepKey="clickToGiftMessageSwitcher"/>
-        <seeElement selector="{{AdminProductGiftOptionsSection.giftMessageStatus('status')}}" stepKey="assertGiftMessageStatus"/>
+        <waitForElementVisible selector="{{AdminProductGiftOptionsSection.giftMessageStatus('status')}}" stepKey="assertGiftMessageStatus"/>
     </actionGroup>
 </actionGroups>

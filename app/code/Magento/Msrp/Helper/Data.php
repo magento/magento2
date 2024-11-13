@@ -52,6 +52,11 @@ class Data extends AbstractHelper
     private $msrpPriceCalculator;
 
     /**
+     * @var \Magento\Msrp\Model\Msrp
+     */
+    private $msrp;
+
+    /**
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Msrp\Model\Product\Options $productOptions

@@ -10,6 +10,8 @@ use Magento\Cms\Model\Page\DomValidationState;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Cms\Model\Page\CustomLayout\CustomLayoutValidator;
+use Magento\Framework\Filter\FilterInput;
 
 /**
  * Controller helper for user input.
@@ -37,22 +39,31 @@ class PostDataProcessor
     private $validationState;
 
     /**
+     * @var CustomLayoutValidator
+     */
+    private $customLayoutValidator;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Model\Layout\Update\ValidatorFactory $validatorFactory
-     * @param DomValidationState $validationState
+     * @param DomValidationState|null $validationState
+     * @param CustomLayoutValidator|null $customLayoutValidator
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Model\Layout\Update\ValidatorFactory $validatorFactory,
-        DomValidationState $validationState = null
+        DomValidationState $validationState = null,
+        CustomLayoutValidator $customLayoutValidator = null
     ) {
         $this->dateFilter = $dateFilter;
         $this->messageManager = $messageManager;
         $this->validatorFactory = $validatorFactory;
         $this->validationState = $validationState
             ?: ObjectManager::getInstance()->get(DomValidationState::class);
+        $this->customLayoutValidator = $customLayoutValidator
+            ?: ObjectManager::getInstance()->get(CustomLayoutValidator::class);
     }
 
     /**
@@ -71,15 +82,16 @@ class PostDataProcessor
             }
         }
 
-        return (new \Zend_Filter_Input($filterRules, [], $data))->getUnescaped();
+        return (new FilterInput($filterRules, [], $data))->getUnescaped();
     }
 
     /**
      * Validate post data
      *
      * @param array $data
-     * @return bool     Return FALSE if some item is invalid
+     * @return bool Return FALSE if some item is invalid
      * @deprecated 103.0.2
+     * @see no alternatives
      */
     public function validate($data)
     {
@@ -146,9 +158,10 @@ class PostDataProcessor
             ) {
                 return false;
             }
-        } catch (ValidationException $e) {
-            return false;
-        } catch (ValidationSchemaException $e) {
+            if (!$this->customLayoutValidator->validate($data)) {
+                return false;
+            }
+        } catch (ValidationException | ValidationSchemaException $e) {
             return false;
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e);

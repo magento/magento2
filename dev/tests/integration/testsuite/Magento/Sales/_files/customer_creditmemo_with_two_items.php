@@ -29,7 +29,6 @@ $creditMemo = $creditMemoFactory->createByOrder($order);
 $creditMemo->setAdjustment(1.23);
 $creditMemo->setBaseGrandTotal(10);
 $creditMemo->addComment('some_comment', false, true);
-$creditMemo->addComment('some_other_comment', false, true);
 $creditMemo->addComment('not_visible', false, false);
 
 $creditMemoService->refund($creditMemo);

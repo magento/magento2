@@ -8,6 +8,7 @@
 namespace Magento\Customer\Api;
 
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface for managing customers accounts.
@@ -19,10 +20,10 @@ interface AccountManagementInterface
     /**#@+
      * Constant for confirmation status
      */
-    const ACCOUNT_CONFIRMED = 'account_confirmed';
-    const ACCOUNT_CONFIRMATION_REQUIRED = 'account_confirmation_required';
-    const ACCOUNT_CONFIRMATION_NOT_REQUIRED = 'account_confirmation_not_required';
-    const MAX_PASSWORD_LENGTH = 256;
+    public const ACCOUNT_CONFIRMED = 'account_confirmed';
+    public const ACCOUNT_CONFIRMATION_REQUIRED = 'account_confirmation_required';
+    public const ACCOUNT_CONFIRMATION_NOT_REQUIRED = 'account_confirmation_not_required';
+    public const MAX_PASSWORD_LENGTH = 256;
     /**#@-*/
 
     /**
@@ -43,7 +44,6 @@ interface AccountManagementInterface
     /**
      * Create customer account using provided hashed password. Should not be exposed as a webapi.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $hash Password hash that we can save directly
      * @param string $redirectUrl URL fed to welcome email templates. Can be used by templates to, for example, direct
@@ -71,7 +71,6 @@ interface AccountManagementInterface
     /**
      * Check if customer can be deleted.
      *
-     * @api
      * @param int $customerId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
@@ -92,7 +91,6 @@ interface AccountManagementInterface
     /**
      * Activate a customer account using a key that was sent in a confirmation email.
      *
-     * @api
      * @param int $customerId
      * @param string $confirmationKey
      * @return \Magento\Customer\Api\Data\CustomerInterface
@@ -197,7 +195,7 @@ interface AccountManagementInterface
      * Check if given email is associated with a customer account in given website.
      *
      * @param string $customerEmail
-     * @param int $websiteId If not set, will use the current websiteId
+     * @param int|null $websiteId If not set, will use the current websiteId
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */

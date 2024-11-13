@@ -52,7 +52,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isIncludedInBasePricePriceIncludeTaxEnabledDataProvider()
+    public static function isIncludedInBasePricePriceIncludeTaxEnabledDataProvider()
     {
         return [
             [0, true],
@@ -63,7 +63,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isIncludedInBasePricePriceIncludeTaxDisabledDataProvider()
+    public static function isIncludedInBasePricePriceIncludeTaxDisabledDataProvider()
     {
         return [
             [0, false],

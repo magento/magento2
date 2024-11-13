@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ExportGroupedProductWithSpecialPriceTest" extends="AdminExportGroupedProductWithSpecialPriceTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Export Products"/>
+            <title value="S3 - Export Grouped Products with Special Price"/>
+            <description value="Verifies that a user can export a Grouped product with a special price and Simple child
+            products. Verifies that exported file and the downloadable copy of the exported file contain the expected
+            products. Note that MFTF cannot simply download a file and have access to it due to the test not having
+            access to the server that is running the test browser. Therefore, this test verifies that the Download
+            button can be successfully clicked, grabs the request URL from the Download button, executes the request on
+            the magento machine via a curl request, and verifies the contents of the downloaded file. Uses S3 for the
+            file system."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38558"/>
+            <group value="importExport"/>
+            <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
+        </annotations>
+
+        <before>
+            <comment userInput="BIC workaround" stepKey="enableRemoteStorage"/>
+        </before>
+
+        <after>
+            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">import_export/export</argument>
+            </helper>
+            <comment userInput="BIC workaround" stepKey="disableRemoteStorage"/>
+        </after>
+
+        <!-- Validate Export File on S3: Grouped Product with Special Price  -->
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFirstSimpleProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createSecondSimpleProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsGroupedProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createGroupedProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildGroupedProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFirstSimpleProduct.sku$$=$$createFirstSimpleProduct.quantity$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildGroupedProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createSecondSimpleProduct.sku$$=$$createSecondSimpleProduct.quantity$$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
+        <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+        </helper>
+    </test>
+</tests>

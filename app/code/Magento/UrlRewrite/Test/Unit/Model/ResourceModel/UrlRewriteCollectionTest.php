@@ -107,7 +107,7 @@ class UrlRewriteCollectionTest extends TestCase
     {
         $this->connectionMock->expects($this->once())
             ->method('prepareSqlCondition')
-            ->with('store_id', ['in' => $condition]);
+            ->with('main_table.store_id', ['in' => $condition]);
 
         $this->collection->addStoreFilter($storeId, $withAdmin);
     }
@@ -115,7 +115,7 @@ class UrlRewriteCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestAddStoreIfStoreIsArray()
+    public static function dataProviderForTestAddStoreIfStoreIsArray()
     {
         return [
             [[112, 113], false, [112, 113]],
@@ -138,7 +138,7 @@ class UrlRewriteCollectionTest extends TestCase
 
         $this->connectionMock->expects($this->once())
             ->method('prepareSqlCondition')
-            ->with('store_id', ['in' => $condition]);
+            ->with('main_table.store_id', ['in' => $condition]);
 
         $this->collection->addStoreFilter($storeId, $withAdmin);
     }
@@ -146,7 +146,7 @@ class UrlRewriteCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestAddStoreFilterIfStoreIsInt()
+    public static function dataProviderForTestAddStoreFilterIfStoreIsInt()
     {
         return [
             [112, false, [112]],

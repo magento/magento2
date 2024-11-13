@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDisableEnableShipmentCommentsAndVerifyNotifyCustomerByEmailCheckboxTest">
+        <annotations>
+            <stories value="There is no Notify Customer by Email checkbox available when shipment comments are disabled"/>
+            <title value="Disable shipment comments section and validate Notify Customer by Email is disabled"/>
+            <description value="Disable shipment comments section and validate Notify Customer by Email is disabled"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5678"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+
+            <!--create order for created product and create shipment also-->
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+            <createData entity="Shipment" stepKey="shipOrder">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <!-- disable Shipment comments-->
+            <magentoCLI command="config:set sales_email/shipment_comment/enabled 0" stepKey="disableShipmentComments"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--open created order and then open shipment for that order-->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openOrdersGrid"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="orderId"/>
+        <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterForNewlyCreatedShipment">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="selectShipmentFromGrid"/>
+
+       <!-- verify "Notify Customer by Email" checkbox should not be displayed.-->
+        <actionGroup ref="AssertAdminThereIsNoNotifyCustomerByEmailCheckboxActionGroup" stepKey="doNotSeeNotifyCustomerCheckbox"/>
+
+        <!-- enable Shipment comments-->
+        <magentoCLI command="config:set sales_email/shipment_comment/enabled 1" stepKey="enableShipmentComments"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="openOrdersGridSecondTime"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFiltersSecondTime"/>
+        <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterForNewlyCreatedShipmentSecondTime">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="selectShipmentFromGridSecondTime"/>
+
+        <!-- verify "Notify Customer by Email" checkbox should be displayed.-->
+        <seeElement selector="{{AdminShipmentMainActionsSection.notifyCustomerByEmail}}" stepKey="seeCheckbox"/>
+    </test>
+</tests>
+

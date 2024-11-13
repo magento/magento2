@@ -11,12 +11,16 @@
     <test name="StorefrontVerifyNoXssInjectionOnUpdateCustomerInformationAddAddressTest">
         <annotations>
             <stories value="Update Customer Address"/>
-            <title value="[Security] Verify No XSS Injection on Update Customer Information Add Address"/>
+            <title value="DEPRECATED [Security] Verify No XSS Injection on Update Customer Information Add Address"/>
             <description value="Test log in to Storefront and Verify No XSS Injection on Update Customer Information Add Address"/>
             <testCaseId value="MC-10910"/>
             <severity value="CRITICAL"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Test outdated</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -35,6 +39,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
                 <argument name="email" value="{{Colorado_US_Customer.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

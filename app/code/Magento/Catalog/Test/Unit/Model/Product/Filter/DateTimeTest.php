@@ -74,7 +74,7 @@ class DateTimeTest extends TestCase
      *
      * @return array
      */
-    public function provideFilter(): array
+    public static function provideFilter(): array
     {
         return [
             ['1999-12-31', '1999-12-31 00:00:00', 'en_US'],

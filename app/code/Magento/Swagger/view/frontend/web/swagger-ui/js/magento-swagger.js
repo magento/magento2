@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/*global SwaggerTranslator SwaggerUIBundle SwaggerUIStandalonePreset */
+/*global SwaggerUIBundle SwaggerUIStandalonePreset */
 
 /**
  * @api
@@ -11,22 +11,18 @@
 (function () {
     'use strict';
 
-    var elementBaseUrl = document.querySelector('#input_baseUrl'),
-        url = elementBaseUrl.value,
-        ui;
-
-    // Pre load translate...
-    if (SwaggerTranslator) {
-        SwaggerTranslator.translate();
-    }
+    var elementBaseUrl = document.querySelector('#swagger-ui'),
+        url = elementBaseUrl.dataset.baseUrl,
+        originalAuthorize,
+        originalLogout;
 
     /**
-     * Takes token from input and adds it to request header.
+     * Adds token to request header.
      */
-    function addApiKeyAuthorization(e) {
-        var key = encodeURIComponent(e.target.value).trim();
+    function addApiKeyAuthorization(key) {
+        if (key && typeof key !== 'undefined') {
+            key = key.trim();
 
-        if (key) {
             /**
              * Adds Auth token to request header.
              *
@@ -42,10 +38,31 @@
         }
     }
 
-    ui = new SwaggerUIBundle({
+    /**
+     * Remove token from request header.
+     */
+    function removeApiKeyAuthorization() {
+        /**
+         * Remove Auth token from request header.
+         *
+         * @param {Object} req
+         *
+         * @returns {Object} req
+         */
+        ui.getConfigs().requestInterceptor = function (req) {
+            delete req.headers.Authorization;
+
+            return req;
+        };
+    }
+
+    // Begin Swagger UI call region
+    const ui = SwaggerUIBundle({
         url: url,
         // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-        dom_id: '#swagger-ui-container',
+        dom_id: '#swagger-ui',
+        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+        deepLinking: true,
         presets: [
             SwaggerUIBundle.presets.apis,
             SwaggerUIStandalonePreset
@@ -53,17 +70,28 @@
         plugins: [
             SwaggerUIBundle.plugins.DownloadUrl
         ],
-        deepLinking: true,
-        // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
-        supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
         docExpansion: 'none',
-        apisSorter: 'alpha',
-        showRequestHeaders: false,
         layout: 'StandaloneLayout'
     });
+    // End Swagger UI call region
+    window.ui = ui;
 
-    document.querySelector('#input_apiKey').addEventListener('change', addApiKeyAuthorization);
-    document.querySelector('#explore').addEventListener('click', function () {
+    originalAuthorize = ui.authActions.authorize;
+    ui.authActions.authorize = function (payload) {
+        var apiKeyData = payload.api_key,
+            keyValue = typeof apiKeyData !== 'undefined' ? apiKeyData.value : '';
+
+        addApiKeyAuthorization(keyValue);
         ui.specActions.download();
-    });
+
+        return originalAuthorize(payload);
+    };
+
+    originalLogout = ui.authActions.logout;
+    ui.authActions.logout = function (payload) {
+        removeApiKeyAuthorization();
+        ui.specActions.download();
+
+        return originalLogout(payload);
+    };
 })();

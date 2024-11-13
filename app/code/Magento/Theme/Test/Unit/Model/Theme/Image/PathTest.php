@@ -50,6 +50,9 @@ class PathTest extends TestCase
      */
     protected $mediaDirectory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->filesystem = $this->createMock(Filesystem::class);
@@ -59,8 +62,8 @@ class PathTest extends TestCase
 
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
-            ->with('/theme/origin')
-            ->willReturn('/theme/origin');
+            ->with('theme/origin')
+            ->willReturn('theme/origin');
 
         $this->filesystem->expects($this->any())->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
@@ -71,8 +74,6 @@ class PathTest extends TestCase
             $this->_assetRepo,
             $this->_storeManager
         );
-
-        $this->_model = new Path($this->filesystem, $this->_assetRepo, $this->_storeManager);
     }
 
     public function testGetPreviewImageUrl()
@@ -149,8 +150,11 @@ class PathTest extends TestCase
      */
     public function testTemporaryDirectoryGetter()
     {
+        $this->mediaDirectory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('/foo/theme/origin');
         $this->assertEquals(
-            '/theme/origin',
+            '/foo/theme/origin',
             $this->model->getTemporaryDirectory()
         );
     }

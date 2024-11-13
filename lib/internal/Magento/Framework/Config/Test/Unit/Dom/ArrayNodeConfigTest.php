@@ -29,6 +29,9 @@ class ArrayNodeConfigTest extends TestCase
      */
     protected $nodePathMatcher;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->nodePathMatcher = $this->createMock(NodePathMatcher::class);
@@ -39,127 +42,87 @@ class ArrayNodeConfigTest extends TestCase
         );
     }
 
-    public function testIsNumericArrayMatched()
+    /**
+     * @return void
+     */
+    public function testIsNumericArrayMatched(): void
     {
         $xpath = '/root/numeric[@attr="value"]/two';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/one',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/two',
-            $xpath
-        )->willReturn(
-            true
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/numeric/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/numeric/two' && $arg2 == $xpath) {
+                        return true;
+                    }
+                }
+            );
         $this->assertTrue($this->object->isNumericArray($xpath));
     }
 
-    public function testIsNumericArrayNotMatched()
+    /**
+     * @return void
+     */
+    public function testIsNumericArrayNotMatched(): void
     {
         $xpath = '/root/numeric[@attr="value"]/four';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/one',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/two',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(2)
-        )->method(
-            'match'
-        )->with(
-            '/root/numeric/three',
-            $xpath
-        )->willReturn(
-            false
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/numeric/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/numeric/two' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/numeric/three' && $arg2 == $xpath) {
+                        return false;
+                    }
+                }
+            );
         $this->assertFalse($this->object->isNumericArray($xpath));
     }
 
-    public function testGetAssocArrayKeyAttributeMatched()
+    /**
+     * @return void
+     */
+    public function testGetAssocArrayKeyAttributeMatched(): void
     {
         $xpath = '/root/assoc[@attr="value"]/two';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/one',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/two',
-            $xpath
-        )->willReturn(
-            true
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/assoc/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/assoc/two' && $arg2 == $xpath) {
+                        return true;
+                    }
+                }
+            );
         $this->assertEquals('id', $this->object->getAssocArrayKeyAttribute($xpath));
     }
 
-    public function testGetAssocArrayKeyAttributeNotMatched()
+    /**
+     * @return void
+     */
+    public function testGetAssocArrayKeyAttributeNotMatched(): void
     {
         $xpath = '/root/assoc[@attr="value"]/four';
-        $this->nodePathMatcher->expects(
-            $this->at(0)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/one',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(1)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/two',
-            $xpath
-        )->willReturn(
-            false
-        );
-        $this->nodePathMatcher->expects(
-            $this->at(2)
-        )->method(
-            'match'
-        )->with(
-            '/root/assoc/three',
-            $xpath
-        )->willReturn(
-            false
-        );
+        $this->nodePathMatcher
+            ->method('match')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/assoc/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/assoc/two' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/assoc/three' && $arg2 == $xpath) {
+                        return false;
+                    }
+                }
+            );
         $this->assertNull($this->object->getAssocArrayKeyAttribute($xpath));
     }
 }

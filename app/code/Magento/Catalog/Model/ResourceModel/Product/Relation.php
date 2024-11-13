@@ -149,12 +149,19 @@ class Relation extends AbstractDb
         $select = $connection->select()
             ->from(
                 ['cpe' => $this->getTable('catalog_product_entity')],
-                'entity_id'
+                ['relation.child_id', 'cpe.entity_id']
             )->join(
                 ['relation' => $this->getTable('catalog_product_relation')],
                 'relation.parent_id = cpe.' . $linkField
             )->where('relation.child_id IN(?)', $childrenIds);
 
-        return $connection->fetchCol($select);
+        $result = $connection->fetchAll($select);
+        $parentIdsOfChildIds = [];
+
+        foreach ($result as $row) {
+            $parentIdsOfChildIds[$row['child_id']][] = $row['entity_id'];
+        }
+
+        return $parentIdsOfChildIds;
     }
 }

@@ -15,27 +15,35 @@ use Psr\Log\LoggerInterface;
 class Translate implements RendererInterface
 {
     /**
-     * @var \Magento\Framework\TranslateInterface
+     * @var TranslateInterface
      */
     protected $translator;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
+     * @var MessageFormatter
+     */
+    private $messageFormatter;
+
+    /**
      * Renderer construct
      *
-     * @param \Magento\Framework\TranslateInterface $translator
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param TranslateInterface $translator
+     * @param LoggerInterface $logger
+     * @param MessageFormatter $messageFormatter
      */
     public function __construct(
         TranslateInterface $translator,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        MessageFormatter $messageFormatter
     ) {
         $this->translator = $translator;
         $this->logger = $logger;
+        $this->messageFormatter = $messageFormatter;
     }
 
     /**
@@ -60,6 +68,8 @@ class Translate implements RendererInterface
             throw $e;
         }
 
-        return array_key_exists($text, $data) ? $data[$text] : end($source);
+        $source[] = array_key_exists($text, $data) ? $data[$text] : end($source);
+
+        return $this->messageFormatter->render($source, $arguments);
     }
 }

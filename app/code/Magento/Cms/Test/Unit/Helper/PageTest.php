@@ -153,21 +153,20 @@ class PageTest extends TestCase
             ->getMock();
         $this->pageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pageMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['setStoreId', 'getCustomPageLayout'])
+            ->onlyMethods(
                 [
                     'getId',
-                    'setStoreId',
                     'load',
                     'getCustomThemeFrom',
                     'getCustomThemeTo',
                     'getCustomTheme',
                     'getPageLayout',
                     'getIdentifier',
-                    'getCustomPageLayout',
                     'getCustomLayoutUpdateXml',
                     'getLayoutUpdateXml',
                     'getContentHeading',
@@ -203,7 +202,7 @@ class PageTest extends TestCase
         $this->layoutProcessorMock = $this->getMockBuilder(ProcessorInterface::class)
             ->getMockForAbstractClass();
         $this->blockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->setMethods(['setContentHeading'])
+            ->addMethods(['setContentHeading'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->messagesBlockMock = $this->getMockBuilder(Messages::class)
@@ -398,7 +397,7 @@ class PageTest extends TestCase
     /**
      * @return array
      */
-    public function renderPageExtendedDataProvider()
+    public static function renderPageExtendedDataProvider()
     {
         return [
             'ids NOT EQUAL BUT page->load() NOT SUCCESSFUL' => [
@@ -501,7 +500,7 @@ class PageTest extends TestCase
     /**
      * @return array
      */
-    public function getPageUrlDataProvider()
+    public static function getPageUrlDataProvider()
     {
         return [
             'ids NOT EQUAL BUT page->load() NOT SUCCESSFUL' => [

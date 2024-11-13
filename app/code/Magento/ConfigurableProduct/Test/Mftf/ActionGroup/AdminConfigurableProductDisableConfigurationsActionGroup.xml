@@ -12,8 +12,10 @@
         <arguments>
             <argument name="productName" type="string" defaultValue="{{SimpleProduct.name}}"/>
         </arguments>
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.currentVariations}}" stepKey="scrollToVariations" />
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtnByProductName(productName)}}" stepKey="clickToExpandActionsSelect"/>
-        <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisableChildProduct"/>
+        <click selector="{{AdminProductFormConfigurationsSection.disableProductBtnActive}}" stepKey="clickDisableChildProduct"/>
         <see selector="{{AdminProductFormConfigurationsSection.confProductOptionStatusCell(productName)}}" userInput="Disabled" stepKey="seeConfigDisabled"/>
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToSectionHeader" />
     </actionGroup>
 </actionGroups>

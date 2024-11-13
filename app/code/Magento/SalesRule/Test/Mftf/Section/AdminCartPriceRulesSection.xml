@@ -9,6 +9,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCartPriceRulesSection">
         <element name="addNewRuleButton" type="button" selector="#add" timeout="30"/>
+        <element name="editRuleButton" type="button" selector="//td[@class=' col-actions col-action  last']/a[text()='Edit']" timeout="30"/>
         <element name="messages" type="text" selector=".messages"/>
         <element name="filterByNameInput" type="input" selector="input[name='name']"/>
         <element name="searchButton" type="button" selector="#promo_quote_grid button[title='Search']" timeout="30"/>

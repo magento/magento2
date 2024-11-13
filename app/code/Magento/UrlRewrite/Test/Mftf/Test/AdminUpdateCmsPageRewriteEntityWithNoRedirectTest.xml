@@ -15,6 +15,7 @@
             <severity value="MINOR"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -28,6 +29,9 @@
 
         <!--Create Custom Store View-->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Open CMS Edit Page, Get the CMS ID and Modify Store View Option to All Store Views -->
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
@@ -85,6 +89,9 @@
             <argument name="requestPath" value="newrequestpath"/>
         </actionGroup>
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
     </test>
 </tests>

@@ -78,7 +78,7 @@
     <xs:complexType name="table">
         <xs:annotation>
             <xs:documentation>
-                Table definition. Here we can found column, constraints and indexes
+                Table definition. Here we can find column, constraints and indexes
             </xs:documentation>
         </xs:annotation>
         <xs:choice minOccurs="0" maxOccurs="unbounded">

@@ -73,6 +73,7 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
         /* Assert HTML contains html id */
         $this->assertStringContainsString('window.options_fieldset67a77e971a7c331b6eaefcaf2f596097', $result);
         /* Assert HTML contains required JS code */
-        $this->assertStringContainsString("VarienRulesForm('options_fieldset67a77e971a7c331b6eaefcaf2f596097", $result);
+        $this->assertStringContainsString("VarienRulesForm(
+        'options_fieldset67a77e971a7c331b6eaefcaf2f596097", $result);
     }
 }

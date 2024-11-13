@@ -41,17 +41,14 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
             ->willReturn(range(0, $data['view']['changelog']['list_size']-1));
 
         /** @var State|MockObject $stateMock */
-        $stateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->setMethods(null)
-            ->getMock();
+        $stateMock = $this->getStateMock();
 
         $stateMock->addData($data['view']['state']);
 
         /** @var View|MockObject $viewMock */
         $viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getChangelog', 'getState'])
+            ->onlyMethods(['getChangelog', 'getState'])
             ->getMock();
 
         $viewMock->expects($this->any())
@@ -65,6 +62,33 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
             ->willReturn($viewMock);
 
         return $indexerMock;
+    }
+
+    /**
+     * @return State
+     */
+    private function getStateMock()
+    {
+        $contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
+        $eventManagerMock = $this->getMockForAbstractClass(\Magento\Framework\Event\ManagerInterface::class);
+        $contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
+        $registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $resourceMock = $this->createMock(\Magento\Indexer\Model\ResourceModel\Mview\View\State::class);
+        $resourceCollectionMock = $this->createMock(
+            \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection::class
+        );
+        $lockManagerMock = $this->createMock(\Magento\Framework\Lock\LockManagerInterface::class);
+        $configReaderMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+
+        return new State(
+            $contextMock,
+            $registryMock,
+            $resourceMock,
+            $resourceCollectionMock,
+            [],
+            $lockManagerMock,
+            $configReaderMock
+        );
     }
 
     /**
@@ -154,7 +178,7 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * @return array
      */
-    public function executeAllDataProvider()
+    public static function executeAllDataProvider()
     {
         return [
             [

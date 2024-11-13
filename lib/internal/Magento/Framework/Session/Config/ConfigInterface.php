@@ -5,11 +5,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Session\Config;
 
 /**
  * Interface \Magento\Framework\Session\Config\ConfigInterface
  *
+ * @api
  */
 interface ConfigInterface
 {
@@ -174,4 +177,19 @@ interface ConfigInterface
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseCookies();
+
+    /**
+     * Set session.cookie_samesite
+     *
+     * @param string $cookieSameSite
+     * @return $this
+     */
+    public function setCookieSameSite(string $cookieSameSite): ConfigInterface;
+
+    /**
+     * Get session.cookie_samesite
+     *
+     * @return string
+     */
+    public function getCookieSameSite(): string;
 }

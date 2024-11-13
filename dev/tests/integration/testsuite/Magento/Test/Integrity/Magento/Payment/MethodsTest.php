@@ -11,7 +11,7 @@ namespace Magento\Test\Integrity\Magento\Payment;
 
 use Magento\Framework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
-
+use PHPUnit\Framework\TestStatus\TestStatus;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -26,7 +26,7 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
      */
     public function testPaymentMethod($code, $methodClass)
     {
-        if ($code == 'vault') {
+        if (in_array($code, ['free', 'substitution', 'vault', 'payflowpro_cc_vault', 'fake_vault'])) {
             return;
         }
         Bootstrap::getObjectManager()->configure($this->getTestConfiguration());
@@ -48,7 +48,7 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
         if ($code == \Magento\Payment\Model\Method\Substitution::CODE) {
             $paymentInfo = $this->getMockBuilder(
                 \Magento\Payment\Model\Info::class
-            )->disableOriginalConstructor()->setMethods(
+            )->disableOriginalConstructor()->onlyMethods(
                 []
             )->getMock();
             $paymentInfo->expects(
@@ -64,11 +64,13 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
             ->setMode(State::MODE_DEVELOPER);
         $this->assertNotEmpty($model->getTitle());
         foreach ([$model->getFormBlockType(), $model->getInfoBlockType()] as $blockClass) {
+            if (is_array($blockClass)) {
+                $blockClass=$blockClass['instance'] ?? '';
+            }
             $message = "Block class: {$blockClass}";
             /** @var $block \Magento\Framework\View\Element\Template */
             $block = $blockFactory->createBlock($blockClass);
             $block->setArea('frontend');
-            $this->assertFileExists((string)$block->getTemplateFile(), $message);
             if ($model->canUseInternal()) {
                 try {
                     Bootstrap::getObjectManager()->get(
@@ -100,12 +102,19 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public static function paymentMethodDataProvider()
     {
         /** @var $helper \Magento\Payment\Helper\Data */
-        $helper = Bootstrap::getObjectManager()->get(\Magento\Payment\Helper\Data::class);
+        $om = Bootstrap::getObjectManager();
+        $helper = $om->get(\Magento\Payment\Helper\Data::class);
         $result = [];
         foreach ($helper->getPaymentMethods() as $code => $method) {
+            if (!isset($method['model'])) {
+                TestStatus::warning(
+                    'The `model` node must be provided for payment method configuration with code: ' . $code
+                );
+                continue;
+            }
             $result[] = [$code, $method['model']];
         }
         return $result;

@@ -22,7 +22,7 @@ class CsvTest extends TestCase
     /**
      * @var string Destination file name
      */
-    private $destination = 'destinationFile';
+    private static $destination = 'destinationFile';
 
     /**
      * @var ObjectManagerInterface
@@ -48,7 +48,10 @@ class CsvTest extends TestCase
      */
     public function testDestruct(string $destination, bool $shouldBeDeleted): void
     {
-        $csv = $this->objectManager->create(Csv::class, ['destination' => $destination]);
+        $csv = $this->objectManager->create(Csv::class, [
+            'destination' => $destination,
+            'destinationDirectoryCode' => DirectoryList::VAR_DIR
+        ]);
         /** @var Filesystem $fileSystem */
         $fileSystem = $this->objectManager->get(Filesystem::class);
         $directoryHandle = $fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
@@ -71,11 +74,11 @@ class CsvTest extends TestCase
      *
      * @return array
      */
-    public function destructDataProvider(): array
+    public static function destructDataProvider(): array
     {
         return [
-            'temporary file' => [$this->destination, true],
-            'import history file' => [Import::IMPORT_HISTORY_DIR . $this->destination, false],
+            'temporary file' => [self::$destination, true],
+            'import history file' => [Import::IMPORT_HISTORY_DIR . self::$destination, false],
         ];
     }
 }

@@ -122,9 +122,12 @@
             <multiple>true</multiple>
         </settings>
     </checkboxset>
-    <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg" component="Magento_Ui/js/form/element/wysiwyg" template="ui/content/content">
+    <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg" component="Magento_Ui/js/form/element/wysiwyg" template="ui/form/wysiwyg">
         <settings>
             <elementTmpl>ui/content/content</elementTmpl>
+            <validation>
+                <rule name="validate-no-utf8mb4-characters" xsi:type="boolean">true</rule>
+            </validation>
         </settings>
     </wysiwyg>
     <actionDelete class="Magento\Ui\Component\Form\Element\ActionDelete" component="Magento_Ui/js/dynamic-rows/action-delete" template="ui/dynamic-rows/cells/action-delete"/>
@@ -141,7 +144,7 @@
         </settings>
     </multiselect>
     <textarea class="Magento\Ui\Component\Form\Element\Textarea" component="Magento_Ui/js/form/element/textarea" template="ui/form/field"/>
-    <multiline class="Magento\Ui\Component\Form\Element\Multiline" component="Magento_Ui/js/form/components/group"/>
+    <multiline class="Magento\Ui\Component\Form\Element\Multiline" component="Magento_Ui/js/form/components/multiline"/>
     <range class="Magento\Ui\Component\Form\Element\Range" component="Magento_Ui/js/grid/filters/range"/>
     <fileUploader class="Magento\Ui\Component\Form\Element\DataType\Media" component="Magento_Ui/js/form/element/file-uploader" template="ui/form/element/uploader/uploader"/>
     <imageUploader class="Magento\Ui\Component\Form\Element\DataType\Media\Image" component="Magento_Ui/js/form/element/image-uploader" template="ui/form/element/uploader/image">

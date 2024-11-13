@@ -72,6 +72,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
     /** @var MockObject */
     protected $mockAppliedTax;
 
+    /** @var DataObject */
     protected $addressRateRequest;
 
     /** @var  AppliedTaxRateInterface */
@@ -114,7 +115,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
 
         $this->mockCalculationTool = $this->getMockBuilder(Calculation::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['__wakeup', 'round', 'getRate', 'getStoreRate', 'getRateRequest', 'getAppliedRates']
             )
             ->getMock();
@@ -124,11 +125,11 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
 
         $this->mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'getUnitPrice'])
+            ->onlyMethods(['getExtensionAttributes', 'getUnitPrice'])
             ->getMockForAbstractClass();
         $this->quoteDetailsItemExtension = $this->getMockBuilder(QuoteDetailsItemExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceForTaxCalculation'])
+            ->addMethods(['getPriceForTaxCalculation'])
             ->getMockForAbstractClass();
         $this->mockItem->expects($this->any())->method('getExtensionAttributes')
             ->willReturn($this->quoteDetailsItemExtension);
@@ -268,7 +269,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
             ->method('round')
             ->willReturnCallback(
                 function ($price) {
-                    return round($price, 2);
+                    return round((float) $price, 2);
                 }
             );
     }

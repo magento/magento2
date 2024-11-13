@@ -32,7 +32,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_storeTable;
 
     /**
-     * Queue joined flag
+     * Flag for joined queue
      *
      * @var boolean
      */
@@ -82,8 +82,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Constructor
-     * Configures collection
+     * Constructor configures collection
      *
      * @return void
      */

@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class CreditmemoCommentSenderTest extends AbstractSenderTest
+class CreditmemoCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var CreditmemoCommentSender
@@ -49,12 +49,15 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
             $this->addressRenderer,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
     public function testSendFalse()
     {
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $billingAddress = $this->addressMock;
         $this->stepAddressFormat($billingAddress);
         $result = $this->sender->send($this->creditmemoMock);
@@ -92,6 +95,8 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepAddressFormat($billingAddress, true);
         $result = $this->sender->send($this->creditmemoMock);
         $this->assertFalse($result);
@@ -135,6 +140,8 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->creditmemoMock, true, $comment);
         $this->assertTrue($result);
@@ -181,6 +188,8 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
                     ]
                 ]
             );
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->creditmemoMock, false, $comment);
         $this->assertTrue($result);

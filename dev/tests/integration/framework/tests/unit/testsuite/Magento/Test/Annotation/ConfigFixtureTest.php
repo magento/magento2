@@ -7,11 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Test\Annotation;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\App\MutableScopeConfig;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Metadata\Annotation\Parser\Registry;
 
 /**
  * Test class for \Magento\TestFramework\Annotation\ConfigFixture.
@@ -28,6 +32,28 @@ class ConfigFixtureTest extends TestCase
      */
     protected function setUp(): void
     {
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->onlyMethods(['get', 'create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type) {
+                    return $this->createMock($type);
+                }
+            );
+
+        $objectManager->method('get')
+            ->willReturnCallback(
+                function (string $type) {
+                    return $this->createMock($type);
+                }
+            );
+
+        Bootstrap::setObjectManager($objectManager);
+
         $this->object = $this->createPartialMock(
             ConfigFixture::class,
             [
@@ -53,23 +79,25 @@ class ConfigFixtureTest extends TestCase
     public function testGlobalConfig(): void
     {
         $this->createResolverMock();
-        $this->object->expects(
-            $this->at(0)
-        )->method(
-            '_getConfigValue'
-        )->with(
-            'default/web/unsecure/base_url'
-        )->willReturn(
-            'http://localhost/'
-        );
-        $this->object->expects(
-            $this->at(1)
-        )->method(
-            '_setConfigValue'
-        )->with(
-            'default/web/unsecure/base_url',
-            'http://example.com/'
-        );
+        $this->object
+            ->method('_getConfigValue')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'web/unsecure/base_url') {
+                        return 'http://localhost/';
+                    }
+                }
+            );
+        $this->object
+            ->method('_setConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'web/unsecure/base_url' && $arg2 == 'http://example.com/') {
+                        return null;
+                    }
+                }
+            );
+
         $this->object->startTest($this);
 
         $this->object->expects(
@@ -77,7 +105,7 @@ class ConfigFixtureTest extends TestCase
         )->method(
             '_setConfigValue'
         )->with(
-            'default/web/unsecure/base_url',
+            'web/unsecure/base_url',
             'http://localhost/'
         );
         $this->object->endTest($this);
@@ -91,27 +119,29 @@ class ConfigFixtureTest extends TestCase
     public function testSpecificWebsiteConfig(): void
     {
         $this->createResolverMock();
-        $this->object->expects(
-            $this->at(0)
-        )->method(
-            'getScopeConfigValue'
-        )->with(
-            'web/unsecure/base_url',
-            ScopeInterface::SCOPE_WEBSITES,
-            'base'
-        )->willReturn(
-            'http://localhost/'
-        );
-        $this->object->expects(
-            $this->at(1)
-        )->method(
-            'setScopeConfigValue'
-        )->with(
-            'web/unsecure/base_url',
-            'http://example.com/',
-            ScopeInterface::SCOPE_WEBSITES,
-            'base'
-        );
+        $this->object
+            ->method('getScopeConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 == 'web/unsecure/base_url' &&
+                        $arg2 == ScopeInterface::SCOPE_WEBSITES &&
+                        $arg3 == 'base') {
+                        return 'http://localhost/';
+                    }
+                }
+            );
+        $this->object
+            ->method('setScopeConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3, $arg4) {
+                    if ($arg1 == 'web/unsecure/base_url' &&
+                        $arg2 == 'http://example.com/' &&
+                        $arg3 == ScopeInterface::SCOPE_WEBSITES &&
+                        $arg4 == 'base') {
+                        return null;
+                    }
+                }
+            );
         $this->object->startTest($this);
 
         $this->object->expects(
@@ -135,26 +165,28 @@ class ConfigFixtureTest extends TestCase
     public function testCurrentWebsiteConfig(): void
     {
         $this->createResolverMock();
-        $this->object->expects(
-            $this->at(0)
-        )->method(
-            'getScopeConfigValue'
-        )->with(
-            'web/unsecure/base_url',
-            ScopeInterface::SCOPE_WEBSITES
-        )->willReturn(
-            'http://localhost/'
-        );
-        $this->object->expects(
-            $this->at(1)
-        )->method(
-            'setScopeConfigValue'
-        )->with(
-            'web/unsecure/base_url',
-            'http://example.com/',
-            ScopeInterface::SCOPE_WEBSITES,
-            null
-        );
+        $this->object
+            ->method('getScopeConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'web/unsecure/base_url' && $arg2 == ScopeInterface::SCOPE_WEBSITES) {
+                        return 'http://localhost/';
+                    }
+                }
+            );
+
+        $this->object
+            ->method('setScopeConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3, $arg4) {
+                    if ($arg1 == 'web/unsecure/base_url' &&
+                        $arg2 == 'http://example.com/' &&
+                        $arg3 == ScopeInterface::SCOPE_WEBSITES &&
+                        $arg4 == null) {
+                        return null;
+                    }
+                }
+            );
         $this->object->startTest($this);
 
         $this->object->expects(
@@ -178,25 +210,25 @@ class ConfigFixtureTest extends TestCase
     public function testCurrentStoreConfig(): void
     {
         $this->createResolverMock();
-        $this->object->expects(
-            $this->at(0)
-        )->method(
-            '_getConfigValue'
-        )->with(
-            'dev/restrict/allow_ips',
-            ''
-        )->willReturn(
-            '127.0.0.1'
-        );
-        $this->object->expects(
-            $this->at(1)
-        )->method(
-            '_setConfigValue'
-        )->with(
-            'dev/restrict/allow_ips',
-            '192.168.0.1',
-            ''
-        );
+        $this->object
+            ->method('_getConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'dev/restrict/allow_ips' && $arg2 == '') {
+                        return '127.0.0.1';
+                    }
+                }
+            );
+
+        $this->object
+            ->method('_setConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 == 'dev/restrict/allow_ips' && $arg2 == '192.168.0.1' && $arg3 == '') {
+                        return null;
+                    }
+                }
+            );
         $this->object->startTest($this);
 
         $this->object->expects(
@@ -220,25 +252,24 @@ class ConfigFixtureTest extends TestCase
     public function testSpecificStoreConfig(): void
     {
         $this->createResolverMock();
-        $this->object->expects(
-            $this->at(0)
-        )->method(
-            '_getConfigValue'
-        )->with(
-            'dev/restrict/allow_ips',
-            'admin'
-        )->willReturn(
-            '192.168.0.1'
-        );
-        $this->object->expects(
-            $this->at(1)
-        )->method(
-            '_setConfigValue'
-        )->with(
-            'dev/restrict/allow_ips',
-            '192.168.0.2',
-            'admin'
-        );
+        $this->object
+            ->method('_getConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'dev/restrict/allow_ips' && $arg2 == 'admin') {
+                        return '192.168.0.1';
+                    }
+                }
+            );
+        $this->object
+            ->method('_setConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 == 'dev/restrict/allow_ips' && $arg2 == '192.168.0.2' && $arg3 == 'admin') {
+                        return null;
+                    }
+                }
+            );
         $this->object->startTest($this);
 
         $this->object->expects(
@@ -273,23 +304,24 @@ class ConfigFixtureTest extends TestCase
     {
         $this->createResolverMock();
         $this->object->startTest($this);
-        $this->object->expects(
-            $this->at(0)
-        )->method(
-            '_getConfigValue'
-        )->with(
-            'web/unsecure/base_url'
-        )->willReturn(
-            'http://localhost/'
-        );
-        $this->object->expects(
-            $this->at(1)
-        )->method(
-            '_setConfigValue'
-        )->with(
-            'web/unsecure/base_url',
-            'http://example.com/'
-        );
+        $this->object
+            ->method('_getConfigValue')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == 'web/unsecure/base_url') {
+                        return 'http://localhost/';
+                    }
+                }
+            );
+        $this->object
+            ->method('_setConfigValue')
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'web/unsecure/base_url' && $arg2 == 'http://example.com/') {
+                        return null;
+                    }
+                }
+            );
         $this->object->initStoreAfter();
     }
 
@@ -302,10 +334,14 @@ class ConfigFixtureTest extends TestCase
     {
         $mock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['applyConfigFixtures'])
+            ->onlyMethods(['applyConfigFixtures'])
             ->getMock();
+        $annotations = Registry::getInstance()->forMethod(
+            get_class($this),
+            $this->name()
+        )->symbolAnnotations();
         $mock->method('applyConfigFixtures')
-            ->willReturn($this->getAnnotations()['method'][$this->object::ANNOTATION]);
+            ->willReturn($annotations[$this->object::ANNOTATION]);
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
         $reflectionProperty->setAccessible(true);

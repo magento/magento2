@@ -26,6 +26,9 @@
         <fillField selector="{{AdminCreateUserSection.passwordTextField}}" userInput="{{user.password}}" stepKey="enterPassword"/>
         <fillField selector="{{AdminCreateUserSection.pwConfirmationTextField}}" userInput="{{user.password}}" stepKey="confirmPassword"/>
         <fillField selector="{{AdminCreateUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword"/>
+        <!-- Generate default value -->
+        <generateDate date="+75 year" format="m/j/Y g:i A" stepKey="generateExpireDate"/>
+        <fillField selector="{{AdminCreateUserSection.expireAtField}}" userInput="{$generateExpireDate}" stepKey="enterExpireAtField"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click stepKey="clickUserRole" selector="{{AdminCreateUserSection.userRoleTab}}"/>
         <click stepKey="chooseRole" selector="{{AdminStoreSection.createdRoleInUserPage(role.name)}}"/>

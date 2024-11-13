@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Store\Model\Config\Cache\Tag\Strategy\CompositeTagGenerator">
+        <arguments>
+            <argument name="tagGenerators" xsi:type="array">
+                <item name="store_config_tag_generator" xsi:type="object">
+                    Magento\StoreGraphQl\Model\Cache\Tag\Strategy\ConfigTagGenerator
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Store">
+        <plugin name="getStoreIdentities" type="Magento\StoreGraphQl\Plugin\Store" />
+    </type>
+    <type name="Magento\Store\Model\Website">
+        <plugin name="getWebsiteIdentities" type="Magento\StoreGraphQl\Plugin\Website" />
+    </type>
+    <type name="Magento\Store\Model\Group">
+        <plugin name="getGroupIdentities" type="Magento\StoreGraphQl\Plugin\Group" />
+    </type>
+</config>

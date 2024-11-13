@@ -13,4 +13,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Bundle\Api\ProductLinkManagementInterface">
+        <plugin name="reindex_after_add_child_by_sku" type="Magento\Bundle\Plugin\Api\ProductLinkManagement\ReindexAfterAddChildBySkuPlugin"/>
+        <plugin name="reindex_after_remove_child" type="Magento\Bundle\Plugin\Api\ProductLinkManagement\ReindexAfterRemoveChildPlugin"/>
+    </type>
 </config>

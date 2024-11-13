@@ -16,6 +16,8 @@
             <description value="Admin should be able to see the grid onn export page"/>
             <severity value="CRITICAL"/>
             <group value="importExport"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

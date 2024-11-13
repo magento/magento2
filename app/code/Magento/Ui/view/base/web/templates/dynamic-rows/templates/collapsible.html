@@ -6,7 +6,7 @@
 -->
 <div class="admin__field" css="element.setClasses(element)">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
-        <span translate="element.label"/>
+        <span translate="element.label"></span>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
@@ -37,9 +37,9 @@
 
                             <div class="admin__collapsible-title" data-role="collapsible-title" click="elem.toggleOpened">
                                 <render args="name: $parents[1].dndConfig.template, data: $parents[1].dnd"
-                                        if="$parents[1].dndConfig.enabled" />
+                                        if="$parents[1].dndConfig.enabled" ></render>
 
-                                <span translate="$parent.getLabel(elem)" />
+                                <span translate="$parent.getLabel(elem)"></span>
                             </div>
 
                             <button class="action-delete"
@@ -49,7 +49,7 @@
                                     click="function(){
                                             $parents[1].deleteHandler($parent.index, $parent.recordId)
                                         }">
-                                <span translate="'Delete'"/>
+                                <span translate="'Delete'"></span>
                             </button>
                         </div>
 
@@ -67,7 +67,7 @@
             <button attr="{disabled: disabled}"
                     type="button"
                     click="addChild.bind($data, false, false)">
-                <span translate="addButtonLabel"/>
+                <span translate="addButtonLabel"></span>
             </button>
         </div>
     </div>

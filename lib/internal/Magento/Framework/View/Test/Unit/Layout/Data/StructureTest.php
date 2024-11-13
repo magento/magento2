@@ -83,19 +83,19 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function reorderChildElementLogDataProvider()
+    public static function reorderChildElementLogDataProvider()
     {
         return [
             [
-                'loggerExpects' => $this->once(),
+                'loggerExpects' => self::once(),
                 'stateMode' => State::MODE_DEVELOPER
             ],
             [
-                'loggerExpects' => $this->never(),
+                'loggerExpects' => self::never(),
                 'stateMode' => State::MODE_DEFAULT
             ],
             [
-                'loggerExpects' => $this->never(),
+                'loggerExpects' => self::never(),
                 'stateMode' => State::MODE_PRODUCTION
             ]
         ];

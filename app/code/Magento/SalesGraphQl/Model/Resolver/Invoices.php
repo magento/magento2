@@ -41,10 +41,31 @@ class Invoices implements ResolverInterface
             $invoices[] = [
                 'id' => base64_encode($invoice->getEntityId()),
                 'number' => $invoice['increment_id'],
+                'comments' => $this->getInvoiceComments($invoice),
                 'model' => $invoice,
                 'order' => $orderModel
             ];
         }
         return $invoices;
+    }
+
+    /**
+     * Get invoice comments in proper format
+     *
+     * @param InvoiceInterface $invoice
+     * @return array
+     */
+    private function getInvoiceComments(InvoiceInterface $invoice): array
+    {
+        $comments = [];
+        foreach ($invoice->getComments() as $comment) {
+            if ($comment->getIsVisibleOnFront()) {
+                $comments[] = [
+                    'timestamp' => $comment->getCreatedAt(),
+                    'message' => $comment->getComment()
+                ];
+            }
+        }
+        return $comments;
     }
 }

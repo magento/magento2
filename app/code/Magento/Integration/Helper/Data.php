@@ -13,19 +13,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Make ACL resource array compatible with jQuery jsTree component.
      *
      * @param array $resources
+     * @param array $selectedResources
      * @return array
      */
-    public function mapResources(array $resources)
+    public function mapResources(array $resources, array $selectedResources = [])
     {
         $output = [];
         foreach ($resources as $resource) {
             $item = [];
-            $item['attr']['data-id'] = $resource['id'];
-            $item['data'] = __($resource['title']);
+            $item['id'] = $resource['id'];
+            $item['li_attr']['data-id'] = $resource['id'];
+            $item['text'] = __($resource['title']);
             $item['children'] = [];
+            $item['state']['selected'] = in_array($item['id'], $selectedResources) ?? false;
             if (isset($resource['children'])) {
-                $item['state'] = 'open';
-                $item['children'] = $this->mapResources($resource['children']);
+                $item['state']['opened'] = true;
+                $item['children'] = $this->mapResources($resource['children'], $selectedResources);
             }
             $output[] = $item;
         }

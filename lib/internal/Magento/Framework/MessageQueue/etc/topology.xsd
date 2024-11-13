@@ -100,7 +100,7 @@
         </xs:choice>
         <xs:attribute type="xs:string" name="name" use="required"/>
         <xs:attribute type="exchangeType" name="type" use="optional"/>
-        <xs:attribute name="connection" type="xs:string" use="required" />
+        <xs:attribute name="connection" type="xs:string" use="optional" />
         <xs:attribute type="xs:boolean" name="durable" use="optional"/>
         <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
         <xs:attribute type="xs:boolean" name="internal" use="optional"/>

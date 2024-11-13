@@ -123,12 +123,12 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
 
         if ($parentCategory->hasChildren()) {
             $parentChildren = $parentCategory->getChildren();
-            $categoryIds = explode(',', $parentChildren);
+            $categoryIds = $parentChildren !== null ? explode(',', $parentChildren) : [];
             $lastId = array_pop($categoryIds);
             $afterId = ($afterId === null || $afterId > $lastId) ? $lastId : $afterId;
         }
-        $parentPath = $parentCategory->getPath();
-        $path = $model->getPath();
+        $parentPath = $parentCategory->getPath() ?? '';
+        $path = $model->getPath() . '/';
         if ($path && strpos($parentPath, $path) === 0) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Operation do not allow to move a parent category to any of children category')

@@ -18,7 +18,7 @@
         <element name="redirectType" type="select" selector="//select[@id='redirect_type']"/>
         <element name="redirectTypeValue" type="select" selector="//select[@id='redirect_type']//option[contains(., '{{Var}}')]" parameterized="true"/>
         <element name="description" type="input" selector="#description"/>
-        <element name="categoryInTree" type="text" selector="//li[contains(@class,'active-category jstree-open')]/a[contains(., '{{categoryName}}')]" parameterized="true"/>
+        <element name="categoryInTree" type="text" selector="//li[contains(@class,'active-category jstree')]/a[contains(., '{{categoryName}}')]" parameterized="true"/>
         <element name="cmsPage" selector="//td[contains(text(), '{{cmsPageUrlKey}}')]" type="button" parameterized="true"/>
         <element name="saveButton" type="button" selector="#save" timeout="30"/>
         <element name="deleteButton" type="button" selector="#delete" timeout="30"/>

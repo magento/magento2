@@ -24,6 +24,7 @@
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{estimateAddress.state}}" stepKey="selectStateProvince"/>
         <waitForLoadingMaskToDisappear stepKey="waitForStateLoadingMaskDisappear"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{estimateAddress.zipCode}}" stepKey="fillZipPostalCodeField"/>
+        <click selector="{{CheckoutCartSummarySection.cartTotalsBlock}}" stepKey="moveFocusOutOfPostcode" />
         <waitForLoadingMaskToDisappear stepKey="waitForZipLoadingMaskDisappear"/>
     </actionGroup>
 </actionGroups>

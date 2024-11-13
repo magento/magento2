@@ -118,10 +118,15 @@ class ImageTest extends TestCase
         $selectMock = $this->getVisibleImagesSelectMock();
         $selectMock->expects($this->exactly(2))
             ->method('reset')
-            ->withConsecutive(
-                ['columns'],
-                ['distinct']
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) use ($selectMock) {
+                    if ($arg == 'columns') {
+                        return $selectMock;
+                    } elseif ($arg == 'distinct') {
+                        return $selectMock;
+                    }
+                }
+            );
         $selectMock->expects($this->once())
             ->method('columns')
             ->with(new \Zend_Db_Expr('count(distinct value)'))
@@ -158,10 +163,15 @@ class ImageTest extends TestCase
         $selectMock = $this->getUsedImagesSelectMock();
         $selectMock->expects($this->exactly(2))
             ->method('reset')
-            ->withConsecutive(
-                ['columns'],
-                ['distinct']
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) use ($selectMock) {
+                    if ($arg == 'columns') {
+                        return $selectMock;
+                    } elseif ($arg == 'distinct') {
+                        return $selectMock;
+                    }
+                }
+            );
         $selectMock->expects($this->once())
             ->method('columns')
             ->with(new \Zend_Db_Expr('count(distinct value)'))
@@ -230,8 +240,8 @@ class ImageTest extends TestCase
                 'batchSize' => $batchSize
             ]
         );
-
-        $this->assertCount($imagesCount, $imageModel->getAllProductImages());
+        $resultImagesCount = iterator_to_array($imageModel->getAllProductImages(), false);
+        $this->assertCount($imagesCount, $resultImagesCount);
     }
 
     /**
@@ -277,7 +287,8 @@ class ImageTest extends TestCase
             ]
         );
 
-        $this->assertCount($imagesCount, $imageModel->getUsedProductImages());
+        $resultImagesCount = iterator_to_array($imageModel->getUsedProductImages(), false);
+        $this->assertCount($imagesCount, $resultImagesCount);
     }
 
     /**
@@ -338,7 +349,7 @@ class ImageTest extends TestCase
      * Data Provider
      * @return array
      */
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [300, 300],

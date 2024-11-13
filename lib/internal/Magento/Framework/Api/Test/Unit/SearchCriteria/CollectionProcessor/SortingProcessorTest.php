@@ -105,11 +105,27 @@ class SortingProcessorTest extends TestCase
 
         $collectionMock->expects($this->exactly(3))
             ->method('addOrder')
-            ->withConsecutive(
-                [$orderOneFieldMapped, $orderOneDirection],
-                [$orderTwoField, $orderTwoDirection],
-                [$orderThreeField, Collection::SORT_ORDER_DESC]
-            )->willReturnSelf();
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2
+                ) use (
+                    $orderOneFieldMapped,
+                    $orderOneDirection,
+                    $orderTwoField,
+                    $orderTwoDirection,
+                    $orderThreeField,
+                    $collectionMock
+                ) {
+                    if ($arg1 == $orderOneFieldMapped && $arg2 == $orderOneDirection) {
+                        return $collectionMock;
+                    } elseif ($arg1 == $orderTwoField && $arg2 == $orderTwoDirection) {
+                        return $collectionMock;
+                    } elseif ($arg1 == $orderThreeField && $arg2 == Collection::SORT_ORDER_DESC) {
+                        return $collectionMock;
+                    }
+                }
+            );
 
         $model->process($searchCriteriaMock, $collectionMock);
     }
@@ -151,11 +167,25 @@ class SortingProcessorTest extends TestCase
 
         $collectionMock->expects($this->exactly(3))
             ->method('addOrder')
-            ->withConsecutive(
-                [$defaultOneFieldMapped, $defaultOneDirection],
-                [$defaultTwoField, $defaultTwoDirection],
-                [$defaultThreeField, Collection::SORT_ORDER_DESC]
-            )->willReturnSelf();
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $collectionMock,
+                $defaultOneFieldMapped,
+                $defaultOneDirection,
+                $defaultTwoField,
+                $defaultTwoDirection,
+                $defaultThreeField
+            ) {
+                if ($arg1 == $defaultOneFieldMapped && $arg2 == $defaultOneDirection) {
+                    return $collectionMock;
+                } elseif ($arg1 == $defaultTwoField && $arg2 == $defaultTwoDirection) {
+                    return $collectionMock;
+                } elseif ($arg1 == $defaultThreeField && $arg2 == Collection::SORT_ORDER_DESC) {
+                    return $collectionMock;
+                }
+            });
 
         $model->process($searchCriteriaMock, $collectionMock);
     }

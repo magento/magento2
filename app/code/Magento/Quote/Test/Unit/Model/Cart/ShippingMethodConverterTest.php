@@ -67,6 +67,9 @@ class ShippingMethodConverterTest extends TestCase
      */
     protected $taxHelper;
 
+    /**
+     * @inheriDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -111,7 +114,11 @@ class ShippingMethodConverterTest extends TestCase
         );
     }
 
-    public function testModelToDataObject()
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function testModelToDataObject(): void
     {
         $customerTaxClassId = 100;
         $shippingPriceExclTax = 1000;
@@ -126,12 +133,17 @@ class ShippingMethodConverterTest extends TestCase
         $this->rateModelMock->expects($this->once())->method('getCarrier')->willReturn('CARRIER_CODE');
         $this->rateModelMock->expects($this->once())->method('getMethod')->willReturn('METHOD_CODE');
         $this->rateModelMock->expects($this->any())->method('getPrice')->willReturn($price);
-        $this->currencyMock->expects($this->at(0))
-            ->method('convert')->with($price, 'USD')->willReturn(100.12);
-        $this->currencyMock->expects($this->at(1))
-            ->method('convert')->with($shippingPriceExclTax, 'USD')->willReturn($shippingPriceExclTax);
-        $this->currencyMock->expects($this->at(2))
-            ->method('convert')->with($shippingPriceInclTax, 'USD')->willReturn($shippingPriceInclTax);
+        $this->currencyMock
+            ->method('convert')
+            ->willReturnCallback(function ($arg1, $arg2) use ($price, $shippingPriceExclTax, $shippingPriceInclTax) {
+                if ($arg1 == $price && $arg2 == 'USD') {
+                    return 100.12;
+                } elseif ($arg1 == $shippingPriceExclTax && $arg2 == 'USD') {
+                    return $shippingPriceExclTax;
+                } elseif ($arg1 == $shippingPriceInclTax && $arg2 == 'USD') {
+                    return $shippingPriceInclTax;
+                }
+            });
 
         $this->rateModelMock->expects($this->once())
             ->method('getCarrierTitle')->willReturn('CARRIER_TITLE');
@@ -186,16 +198,17 @@ class ShippingMethodConverterTest extends TestCase
             ->with($shippingPriceInclTax)
             ->willReturn($this->shippingMethodMock);
 
-        $this->taxHelper->expects($this->at(0))
+        $this->taxHelper
             ->method('getShippingPrice')
-            ->with($price, false, $addressMock, $customerTaxClassId)
-            ->willReturn($shippingPriceExclTax);
-
-        $this->taxHelper->expects($this->at(1))
-            ->method('getShippingPrice')
-            ->with($price, true, $addressMock, $customerTaxClassId)
-            ->willReturn($shippingPriceInclTax);
-
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $arg4)
+ use ($price, $addressMock, $customerTaxClassId, $shippingPriceExclTax, $shippingPriceInclTax) {
+                if ($arg1 == $price && $arg2 == false && $arg3 == $addressMock && $arg4 == $customerTaxClassId) {
+                    return $shippingPriceExclTax;
+                } elseif ($arg1 == $price && $arg2 == true && $arg3 == $addressMock &&
+                        $arg4 == $customerTaxClassId) {
+                    return $shippingPriceInclTax;
+                }
+            });
         $this->assertEquals(
             $this->shippingMethodMock,
             $this->converter->modelToDataObject($this->rateModelMock, 'USD')

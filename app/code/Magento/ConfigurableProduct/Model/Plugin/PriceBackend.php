@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 /**
- * Class PriceBackend
- *
- *  Make price validation optional for configurable product
+ * Make price validation optional for configurable product
  */
 class PriceBackend
 {
     /**
+     * Around validate
+     *
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Price $subject
      * @param \Closure $proceed
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $object
@@ -26,12 +29,10 @@ class PriceBackend
         \Closure $proceed,
         $object
     ) {
-        if ($object instanceof \Magento\Catalog\Model\Product
-            && $object->getTypeId() == Configurable::TYPE_CODE
-        ) {
+        if ($object instanceof ProductInterface && $object->getTypeId() === Configurable::TYPE_CODE) {
             return true;
-        } else {
-            return $proceed($object);
         }
+
+        return $proceed($object);
     }
 }

@@ -26,7 +26,7 @@ class LibraryLocationTest extends \PHPUnit\Framework\TestCase
     public function testOldWebLibrariesLocation()
     {
         $oldLocation = self::$root . '/pub/lib';
-        $this->assertFileNotExists($oldLocation, "The web libraries have been moved from 'pub/lib' to 'lib/web'");
+        $this->assertFileDoesNotExist($oldLocation, "The web libraries have been moved from 'pub/lib' to 'lib/web'");
     }
 
     public function testOldPhpLibrariesLocation()

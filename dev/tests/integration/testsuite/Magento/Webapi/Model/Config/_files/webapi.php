@@ -13,7 +13,8 @@ return [
                         ],
                         'secure' => false,
                         'realMethod' => 'item',
-                        'parameters' => []
+                        'parameters' => [],
+                        'input-array-size-limit' => null,
                     ],
                     'create' => [
                         'resources' => [
@@ -21,7 +22,8 @@ return [
                         ],
                         'secure' => false,
                         'realMethod' => 'create',
-                        'parameters' => []
+                        'parameters' => [],
+                        'input-array-size-limit' => null,
                     ],
                 ],
             ],
@@ -34,7 +36,8 @@ return [
                         ],
                         'secure' => false,
                         'realMethod' => 'getPreconfiguredItem',
-                        'parameters' => []
+                        'parameters' => [],
+                        'input-array-size-limit' => null,
                     ],
                 ],
             ],
@@ -47,7 +50,8 @@ return [
                         ],
                         'secure' => false,
                         'realMethod' => 'item',
-                        'parameters' => []
+                        'parameters' => [],
+                        'input-array-size-limit' => null,
                     ],
                     'itemDefault' => [
                         'resources' => [
@@ -60,7 +64,8 @@ return [
                                 'force' => true,
                                 'value' => null,
                             ],
-                        ]
+                        ],
+                        'input-array-size-limit' => null,
                     ],
                     'create' => [
                         'resources' => [
@@ -73,7 +78,8 @@ return [
                                 'force' => true,
                                 'value' => null,
                             ],
-                        ]
+                        ],
+                        'input-array-size-limit' => null,
                     ],
                 ],
             ],
@@ -87,7 +93,8 @@ return [
                         ],
                         'secure' => false,
                         'realMethod' => 'item',
-                        'parameters' => []
+                        'parameters' => [],
+                        'input-array-size-limit' => null,
                     ],
                     'create' => [
                         'resources' => [
@@ -101,7 +108,8 @@ return [
                                 'force' => true,
                                 'value' => null,
                             ],
-                        ]
+                        ],
+                        'input-array-size-limit' => 50,
                     ],
                     'delete' => [
                         'resources' => [
@@ -110,7 +118,8 @@ return [
                         ],
                         'secure' => false,
                         'realMethod' => 'delete',
-                        'parameters' => []
+                        'parameters' => [],
+                        'input-array-size-limit' => null,
                     ],
                     'update' => [
                         'resources' => [
@@ -119,7 +128,8 @@ return [
                         ],
                         'secure' => false,
                         'realMethod' => 'update',
-                        'parameters' => []
+                        'parameters' => [],
+                        'input-array-size-limit' => null,
                     ],
                 ],
             ],
@@ -136,8 +146,8 @@ return [
                 'resources' => [
                     'Magento_TestModuleMSC::resource1' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => null,
             ],
         ],
         '/V1/testmoduleMSC' => [
@@ -150,8 +160,8 @@ return [
                 'resources' => [
                     'Magento_TestModuleMSC::resource3' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => null,
             ],
         ],
         '/V1/testmodule1/:id' => [
@@ -164,8 +174,8 @@ return [
                 'resources' => [
                     'Magento_Test1::resource1' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => null,
             ],
         ],
         '/V1/testmodule1' => [
@@ -184,6 +194,7 @@ return [
                         'value' => null,
                     ],
                 ],
+                'input-array-size-limit' => null,
             ],
             'POST' => [
                 'secure' => false,
@@ -200,6 +211,7 @@ return [
                         'value' => null,
                     ],
                 ],
+                'input-array-size-limit' => null,
             ],
         ],
         '/V2/testmodule1/:id' => [
@@ -213,8 +225,8 @@ return [
                     'Magento_Test1::resource1' => true,
                     'Magento_Test1::resource2' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => null,
             ],
             'DELETE' => [
                 'secure' => false,
@@ -226,8 +238,8 @@ return [
                     'Magento_Test1::resource1' => true,
                     'Magento_Test1::resource2' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => null,
             ],
             'PUT' => [
                 'secure' => false,
@@ -239,8 +251,8 @@ return [
                     'Magento_Test1::resource1' => true,
                     'Magento_Test1::resource2' => true,
                 ],
-                'parameters' => [
-                ],
+                'parameters' => [],
+                'input-array-size-limit' => null,
             ],
         ],
         '/V2/testmodule1' => [
@@ -260,6 +272,7 @@ return [
                         'value' => null,
                     ],
                 ],
+                'input-array-size-limit' => 50,
             ],
         ],
         '/V2/testmoduleMSC/itemPreconfigured' => [
@@ -274,6 +287,7 @@ return [
                     'Magento_TestModuleMSC::resource2' => true,
                 ],
                 'parameters' => [],
+                'input-array-size-limit' => null,
             ]
         ]
     ],

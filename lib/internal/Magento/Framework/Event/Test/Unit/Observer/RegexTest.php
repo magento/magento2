@@ -48,7 +48,7 @@ class RegexTest extends TestCase
     /**
      * @return array
      */
-    public function isValidForProvider()
+    public static function isValidForProvider()
     {
         return [
             ['~_name$~', 'event_name', true],

@@ -35,7 +35,7 @@ define([
                 productCurrentScope,
                 scopeId;
 
-            if (typeof this.data.productCurrentScope !== 'undefined') {
+            if (typeof this.data.productCurrentScope !== 'undefined' && window.checkout && window.checkout.baseUrl) {
                 productCurrentScope = this.data.productCurrentScope;
                 scopeId = productCurrentScope === 'store' ? window.checkout.storeId :
                     productCurrentScope === 'group' ? window.checkout.storeGroupId :

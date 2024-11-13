@@ -7,6 +7,9 @@
 -->
 
 <layout>
+    <head>
+        <title>Title</title>
+    </head>
     <node1 translate="description, label">
         <description>Phrase 1</description>
         <label>Phrase 2</label>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateRefundOrderPaidWithPayPalStandardTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Create Refund for Order Paid with PayPal Payments Standard"/>
+            <description value="Create Refund for Order Paid with PayPal Payments Standard"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5410"/>
+            <group value="paypalStandard"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <!-- Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">140.98</field>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState"/>
+        <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <!-- Click on PayPal payment radio button and click on continue btn -->
+        <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinuebtn"/>
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
+        <actionGroup ref="StorefrontLoginToPayPalStandardActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!-- Go to order page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Create Invoice for this Order-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <!-- Click 'Credit Memo'-->
+        <actionGroup ref="AdminClickOkbtnToProceedWithRefundActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="shippingRefund" value="5"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminCreditMemoItemsSection.refundbtn}}" stepKey="scrollToItemsToRefund"/>
+        <waitForElementVisible selector="{{AdminCreditMemoItemsSection.refundbtn}}" stepKey="waitForSuccesMessagea"/>
+        <click selector="{{AdminCreditMemoItemsSection.refundbtn}}" stepKey="clickRefundOffline"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccesMessage"/>
+        <!-- Check order status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Closed"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComments}}" userInput="We refunded $145.98 offline." stepKey="seeOrderHistoryNotes"/>
+        <!--Assert the authorization transaction is present in transaction grid-->
+        <actionGroup ref="AdminAssertTransitionTypeStatusActionGroup" stepKey="assertTransactionTypeHasAuthorization">
+            <argument name="transactionType" value="authorization"/>
+        </actionGroup>
+        <!--Assert the authorization transaction is present in transaction grid-->
+        <actionGroup ref="AdminAssertTransitionTypeStatusActionGroup" stepKey="assertTransactionTypeHasCapture">
+            <argument name="transactionType" value="capture"/>
+            <argument name="transitionTypeStatus" value="No"/>
+        </actionGroup>
+    </test>
+</tests>

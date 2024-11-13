@@ -10,15 +10,25 @@
     <policies>
         <policy id="script-src">
             <values>
-                <value id="youtube_cdn" type="host">s.ytimg.com</value>
-                <value id="google_video" type="host">www.googleapis.com</value>
+                <value id="youtube_script" type="host">s.ytimg.com</value>
+                <value id="google_apis" type="host">www.googleapis.com</value>
                 <value id="vimeo" type="host">vimeo.com</value>
                 <value id="www_vimeo" type="host">www.vimeo.com</value>
+                <value id="vimeo_cdn" type="host">*.vimeocdn.com</value>
+                <value id="youtube" type="host">*.youtube.com</value>
             </values>
         </policy>
         <policy id="img-src">
             <values>
                 <value id="vimeo_cdn" type="host">*.vimeocdn.com</value>
+                <value id="youtube_image" type="host">i.ytimg.com</value>
+                <value id="youtube" type="host">*.youtube.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="player_vimeo" type="host">player.vimeo.com</value>
+                <value id="player_youtube" type="host">*.youtube.com</value>
             </values>
         </policy>
     </policies>

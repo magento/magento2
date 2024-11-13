@@ -178,7 +178,7 @@ class GetPriceConfigurationObserverTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPriceConfigurationProvider()
+    public static function getPriceConfigurationProvider()
     {
         return [
             "basic" => [

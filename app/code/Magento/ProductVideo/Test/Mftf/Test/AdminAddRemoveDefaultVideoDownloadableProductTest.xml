@@ -23,6 +23,7 @@
             <skip>
                 <issueId value="MC-33903"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="static.magento.com" before="setYoutubeApiKeyConfig" stepKey="addDownloadableDomain"/>

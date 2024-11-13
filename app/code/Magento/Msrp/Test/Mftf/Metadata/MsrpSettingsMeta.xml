@@ -14,6 +14,9 @@
                     <object key="enabled" dataType="enabled">
                         <field key="value">string</field>
                     </object>
+                    <object key="display_price_type" dataType="display_price_type">
+                        <field key="value">string</field>
+                    </object>
                 </object>
             </object>
         </object>

@@ -19,6 +19,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -63,6 +64,9 @@ class AttributeMetadataCacheTest extends TestCase
      */
     private $storeManagerMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -86,7 +90,10 @@ class AttributeMetadataCacheTest extends TestCase
         );
     }
 
-    public function testLoadCacheDisabled()
+    /**
+     * @return void
+     */
+    public function testLoadCacheDisabled(): void
     {
         $entityType = 'EntityType';
         $suffix = 'none';
@@ -101,7 +108,10 @@ class AttributeMetadataCacheTest extends TestCase
         $this->attributeMetadataCache->load($entityType, $suffix);
     }
 
-    public function testLoadNoCache()
+    /**
+     * @return void
+     */
+    public function testLoadNoCache(): void
     {
         $entityType = 'EntityType';
         $suffix = 'none';
@@ -118,7 +128,10 @@ class AttributeMetadataCacheTest extends TestCase
         $this->assertFalse($this->attributeMetadataCache->load($entityType, $suffix));
     }
 
-    public function testLoad()
+    /**
+     * @return void
+     */
+    public function testLoad(): void
     {
         $entityType = 'EntityType';
         $suffix = 'none';
@@ -144,7 +157,7 @@ class AttributeMetadataCacheTest extends TestCase
             ->willReturn($attributesMetadataData);
         /** @var AttributeMetadataInterface|MockObject $attributeMetadataMock */
         $attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
-        $this->attributeMetadataHydratorMock->expects($this->at(0))
+        $this->attributeMetadataHydratorMock
             ->method('hydrate')
             ->with($attributeMetadataOneData)
             ->willReturn($attributeMetadataMock);
@@ -154,7 +167,10 @@ class AttributeMetadataCacheTest extends TestCase
         $this->assertInstanceOf(AttributeMetadataInterface::class, $attributesMetadata[0]);
     }
 
-    public function testSaveCacheDisabled()
+    /**
+     * @return void
+     */
+    public function testSaveCacheDisabled(): void
     {
         $entityType = 'EntityType';
         $suffix = 'none';
@@ -170,7 +186,10 @@ class AttributeMetadataCacheTest extends TestCase
         );
     }
 
-    public function testSave()
+    /**
+     * @return void
+     */
+    public function testSave(): void
     {
         $entityType = 'EntityType';
         $suffix = 'none';
@@ -205,7 +224,8 @@ class AttributeMetadataCacheTest extends TestCase
                 [
                     Type::CACHE_TAG,
                     Attribute::CACHE_TAG,
-                    System::CACHE_TAG
+                    System::CACHE_TAG,
+                    Store::CACHE_TAG
                 ]
             );
         $this->attributeMetadataCache->save($entityType, $attributesMetadata, $suffix);
@@ -215,7 +235,10 @@ class AttributeMetadataCacheTest extends TestCase
         );
     }
 
-    public function testCleanCacheDisabled()
+    /**
+     * @return void
+     */
+    public function testCleanCacheDisabled(): void
     {
         $this->stateMock->expects($this->once())
             ->method('isEnabled')
@@ -226,7 +249,10 @@ class AttributeMetadataCacheTest extends TestCase
         $this->attributeMetadataCache->clean();
     }
 
-    public function testClean()
+    /**
+     * @return void
+     */
+    public function testClean(): void
     {
         $this->stateMock->expects($this->once())
             ->method('isEnabled')

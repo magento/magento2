@@ -44,7 +44,7 @@ class AuthTest extends TestCase
         $this->_credentialStorage = $this->getMockBuilder(
             StorageInterface::class
         )
-            ->setMethods(['getId'])
+            ->addMethods(['getId'])
             ->getMockForAbstractClass();
         $this->_modelFactoryMock = $this->createMock(ModelFactory::class);
         $objectManager = new ObjectManager($this);

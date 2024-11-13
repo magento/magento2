@@ -19,24 +19,55 @@
             <severity value="MAJOR"/>
             <group value="media_gallery_ui"/>
         </annotations>
+
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminBefore"/>
+
+            <!-- Create Media Gallery Directory -->
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+                <argument name="name" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openCreateFolderForm"/>
+            <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openCreateFolderForm2"/>
+            <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createFolder2">
+                <argument name="name" value="{{AdminMediaGalleryFolder2Data.name}}"/>
+            </actionGroup>
         </before>
+
         <after>
+            <!-- Delete User & Role -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin1"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminAfter"/>
-            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
-            <waitForPageLoad stepKey="waitForRolesGridLoad" />
+            <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
+            <comment userInput="BIC workaround" stepKey="waitForRolesGridLoad"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
                 <argument name="role" value="adminRole"/>
             </actionGroup>
-            <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
-            <waitForPageLoad stepKey="waitForUsersGridLoad" />
+            <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="goToAllUsersPage"/>
+            <comment userInput="BIC workaround" stepKey="waitForUsersGridLoad"/>
             <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
                 <argument name="userName" value="{{admin2.username}}"/>
             </actionGroup>
+
+            <!-- Delete Created Directories -->
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
+        <!-- Create Admin User & Role -->
         <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Media Gallery"/>
@@ -46,29 +77,80 @@
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Delete folder"/>
         </actionGroup>
-
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryPagesResource">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Pages"/>
         </actionGroup>
         <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
-
         <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
             <argument name="role" value="adminRole"/>
             <argument name="User" value="admin2"/>
         </actionGroup>
-
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
 
+        <!-- Login as New User -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
             <argument name="username" value="{{admin2.username}}"/>
             <argument name="password" value="{{admin2.password}}"/>
         </actionGroup>
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertCreateButtonEnabledAllOthersDisabled">
+
+        <!-- Verify Cannot Delete Storage Root -->
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
+        <comment userInput="BIC workaround" stepKey="assertCreateButtonEnabledAllOthersDisabled"/>
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertAllButtonsDisabled">
+            <argument name="buttonName" value=""/>
+        </actionGroup>
+
+        <!-- Verify Cannot Delete Wysiwyg Directory -->
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertDeleteButtonEnabledAllOthersDisabled1">
             <argument name="buttonName" value="Delete Folder"/>
         </actionGroup>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="attemptDeleteWysiwygFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertAttentionModalActionGroup" stepKey="assertAttentionModalWysiwyg">
+            <argument name="action" value="delete"/>
+            <argument name="folderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryCloseAttentionModalActionGroup" stepKey="closeAttentionModalWysiwyg"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertWysiwygFolderNotDeleted">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+
+        <!-- Verify Cannot Delete Category Directory -->
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
+            <argument name="name" value="category"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertDeleteButtonEnabledAllOthersDisabled2">
+            <argument name="buttonName" value="Delete Folder"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="attemptDeleteCategoryFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertAttentionModalActionGroup" stepKey="assertAttentionModalCategory">
+            <argument name="action" value="delete"/>
+            <argument name="folderName" value="catalog/category"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryCloseAttentionModalActionGroup" stepKey="closeAttentionModalCategory"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertCategoryFolderNotDeleted">
+            <argument name="name" value="category"/>
+        </actionGroup>
+
+        <!-- Verify Can Delete Subdirectory -->
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandCreatedFolder">
+            <argument name="FolderName" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder2">
+            <argument name="name" value="{{AdminMediaGalleryFolder2Data.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
+            <argument name="name" value="{{AdminMediaGalleryFolder2Data.name}}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="logoutFromAdmin"/>
     </test>
 </tests>

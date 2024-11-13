@@ -118,7 +118,7 @@ class ExtensionAttributesProcessor
                 $value = $this->dataObjectProcessor->buildOutputDataArray($value, $returnType);
             } elseif (is_array($value)) {
                 $valueResult = [];
-                $arrayElementType = substr($returnType, 0, -2);
+                $arrayElementType = $returnType !== null ? substr($returnType, 0, -2) : '';
                 foreach ($value as $singleValue) {
                     if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
                         $singleValue = $this->dataObjectProcessor->buildOutputDataArray(

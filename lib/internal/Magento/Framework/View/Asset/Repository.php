@@ -6,11 +6,12 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * A repository service for view assets
@@ -18,13 +19,14 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @api
  * @since 100.0.2
+ * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
  */
-class Repository
+class Repository implements ResetAfterRequestInterface
 {
     /**
      * Scope separator for module notation of file ID
      */
-    const FILE_ID_SEPARATOR = '::';
+    public const FILE_ID_SEPARATOR = '::';
 
     /**
      * @var \Magento\Framework\UrlInterface
@@ -48,12 +50,12 @@ class Repository
     private $assetSource;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface[]
+     * @var \Magento\Framework\View\Asset\ContextInterface[]|null
      */
     private $fallbackContext;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface[]
+     * @var \Magento\Framework\View\Asset\ContextInterface[]|null
      */
     private $fileContext;
 
@@ -83,9 +85,14 @@ class Repository
     private $remoteFactory;
 
     /**
-     * @var ThemeProviderInterface
+     * @var ThemeProviderInterface|null
      */
     private $themeProvider;
+
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
 
     /**
      * @param \Magento\Framework\UrlInterface $baseUrl
@@ -438,7 +445,7 @@ class Repository
      */
     public static function extractModule($fileId)
     {
-        if (strpos($fileId, self::FILE_ID_SEPARATOR) === false) {
+        if (!$fileId || strpos($fileId, self::FILE_ID_SEPARATOR) === false) {
             return ['', $fileId];
         }
         $result = explode(self::FILE_ID_SEPARATOR, $fileId, 2);
@@ -461,5 +468,16 @@ class Repository
     {
         $repositoryMap = ObjectManager::getInstance()->get(RepositoryMap::class);
         return $repositoryMap->getMap($fileId, $params);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->fallbackContext = null;
+        $this->fileContext = null;
+        $this->defaults = null;
+        $this->themeProvider = null;
     }
 }

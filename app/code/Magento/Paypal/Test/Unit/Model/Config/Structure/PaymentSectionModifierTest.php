@@ -178,7 +178,7 @@ class PaymentSectionModifierTest extends TestCase
     /**
      * @return mixed
      */
-    public function caseProvider()
+    public static function caseProvider()
     {
         return include __DIR__ . '/_files/payment_section_structure_variations.php';
     }

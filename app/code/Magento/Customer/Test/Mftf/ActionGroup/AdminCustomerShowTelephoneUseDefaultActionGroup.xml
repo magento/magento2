@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCustomerShowTelephoneUseDefaultActionGroup">
+        <annotations>
+            <description>Goes to the customer configuration. Check "Use system value" or "Use Default".</description>
+        </annotations>
+        <scrollTo selector="{{AdminCustomerConfigSection.showTelephone}}" x="0" y="-100" stepKey="scrollToShowTelephone"/>
+        <checkOption selector="{{AdminCustomerConfigSection.showTelephoneInherit}}" stepKey="uncheckUseSystem"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

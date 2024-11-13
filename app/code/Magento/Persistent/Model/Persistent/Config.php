@@ -106,7 +106,7 @@ class Config
     protected function _getConfigDomXPath()
     {
         if ($this->_configDomXPath === null) {
-            $dir = explode("/", $this->_configFilePath);
+            $dir = $this->_configFilePath !== null ? explode("/", $this->_configFilePath) : [];
             array_pop($dir);
             $dir = implode("/", $dir);
             $directoryRead = $this->readFactory->create($dir);

@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\SearchAdapter;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Response Factory
+ * Query Response Factory
  * @api
  * @since 100.1.0
  */
@@ -23,7 +23,7 @@ class ResponseFactory
     protected $objectManager;
 
     /**
-     * Document Factory
+     * Document Factory to create Search Document instance
      *
      * @var DocumentFactory
      * @since 100.1.0
@@ -31,7 +31,7 @@ class ResponseFactory
     protected $documentFactory;
 
     /**
-     * Aggregation Factory
+     * Aggregation Factory to create Aggregation instance
      *
      * @var AggregationFactory
      * @since 100.1.0
@@ -64,6 +64,10 @@ class ResponseFactory
     {
         $documents = [];
         foreach ($response['documents'] as $rawDocument) {
+            if (!array_key_exists('_id', $rawDocument) && isset($rawDocument['fields']['_id'][0])) {
+                $rawDocument['_id'] = $rawDocument['fields']['_id'][0];
+                unset($rawDocument['fields']);
+            }
             /** @var \Magento\Framework\Api\Search\Document[] $documents */
             $documents[] = $this->documentFactory->create(
                 $rawDocument

@@ -71,7 +71,7 @@ class SendFriendTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider(): array
+    public static function validateDataProvider(): array
     {
         return [
             'valid_data' => [
@@ -88,7 +88,7 @@ class SendFriendTest extends TestCase
                         'recipient_email@example.com',
                     ],
                 ],
-                'expected_result' => true,
+                'expectedResult' => true,
             ],
             'empty_message' => [
                 'sender' => [
@@ -104,7 +104,7 @@ class SendFriendTest extends TestCase
                         'recipient_email@example.com',
                     ],
                 ],
-                'expected_result' => 'Please enter a message.',
+                'expectedResult' => 'Please enter a message.',
             ],
             'empty_sender_name' => [
                 'sender' => [
@@ -120,7 +120,7 @@ class SendFriendTest extends TestCase
                         'recipient_email@example.com',
                     ],
                 ],
-                'expected_result' => 'Please enter a sender name.',
+                'expectedResult' => 'Please enter a sender name.',
             ],
             'empty_recipients' => [
                 'sender' => [
@@ -132,7 +132,7 @@ class SendFriendTest extends TestCase
                     'name' => [],
                     'email' => [],
                 ],
-                'expected_result' => 'Please specify at least one recipient.',
+                'expectedResult' => 'Please specify at least one recipient.',
             ],
             'wrong_recipient_email' => [
                 'sender' => [
@@ -148,7 +148,7 @@ class SendFriendTest extends TestCase
                         '123123',
                     ],
                 ],
-                'expected_result' => 'Please enter a correct recipient email address.',
+                'expectedResult' => 'Please enter a correct recipient email address.',
             ],
             'to_much_recipients' => [
                 'sender' => [
@@ -166,7 +166,7 @@ class SendFriendTest extends TestCase
                         'recipient2_email@example.com',
                     ],
                 ],
-                'expected_result' => 'No more than 1 emails can be sent at a time.',
+                'expectedResult' => 'No more than 1 emails can be sent at a time.',
             ],
         ];
     }

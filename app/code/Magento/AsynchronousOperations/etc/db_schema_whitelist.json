@@ -11,7 +11,8 @@
         },
         "index": {
             "MAGENTO_BULK_USER_ID_ADMIN_USER_USER_ID": true,
-            "MAGENTO_BULK_USER_ID": true
+            "MAGENTO_BULK_USER_ID": true,
+            "MAGENTO_BULK_START_TIME": true
         },
         "constraint": {
             "PRIMARY": true,
@@ -29,10 +30,12 @@
             "result_serialized_data": true,
             "status": true,
             "error_code": true,
-            "result_message": true
+            "result_message": true,
+            "started_at": true
         },
         "index": {
-            "MAGENTO_OPERATION_BULK_UUID_ERROR_CODE": true
+            "MAGENTO_OPERATION_BULK_UUID_ERROR_CODE": true,
+            "MAGENTO_OPERATION_STATUS_STARTED_AT": true
         },
         "constraint": {
             "PRIMARY": true,

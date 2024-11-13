@@ -6,10 +6,12 @@
 
 namespace Magento\Paypal\Model;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Payment\Gateway\Command\CommandException;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
@@ -36,62 +38,65 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     /**
      * Transaction action codes
      */
-    const TRXTYPE_AUTH_ONLY = 'A';
+    public const TRXTYPE_AUTH_ONLY = 'A';
 
-    const TRXTYPE_SALE = 'S';
+    public const TRXTYPE_SALE = 'S';
 
-    const TRXTYPE_CREDIT = 'C';
+    public const TRXTYPE_CREDIT = 'C';
 
-    const TRXTYPE_DELAYED_CAPTURE = 'D';
+    public const TRXTYPE_DELAYED_CAPTURE = 'D';
 
-    const TRXTYPE_DELAYED_VOID = 'V';
+    public const TRXTYPE_DELAYED_VOID = 'V';
 
-    const TRXTYPE_DELAYED_VOICE = 'F';
+    public const TRXTYPE_DELAYED_VOICE = 'F';
 
-    const TRXTYPE_DELAYED_INQUIRY = 'I';
+    public const TRXTYPE_DELAYED_INQUIRY = 'I';
 
-    const TRXTYPE_ACCEPT_DENY       = 'U';
+    public const TRXTYPE_ACCEPT_DENY       = 'U';
 
-    const UPDATEACTION_APPROVED = 'APPROVE';
+    public const UPDATEACTION_APPROVED = 'APPROVE';
 
-    const UPDATEACTION_DECLINED_BY_MERCHANT = 'FPS_MERCHANT_DECLINE';
+    public const UPDATEACTION_DECLINED_BY_MERCHANT = 'FPS_MERCHANT_DECLINE';
 
     /**
      * Tender type codes
      */
-    const TENDER_CC = 'C';
+    public const TENDER_CC = 'C';
 
     /**
      * Gateway request URLs
      */
-    const TRANSACTION_URL = 'https://payflowpro.paypal.com/transaction';
+    public const TRANSACTION_URL = 'https://payflowpro.paypal.com/transaction';
 
-    const TRANSACTION_URL_TEST_MODE = 'https://pilot-payflowpro.paypal.com/transaction';
+    public const TRANSACTION_URL_TEST_MODE = 'https://pilot-payflowpro.paypal.com/transaction';
 
     /**#@+
      * Response code
      */
-    const RESPONSE_CODE_APPROVED = 0;
+    public const RESPONSE_CODE_APPROVED = 0;
 
-    const RESPONSE_CODE_INVALID_AMOUNT = 4;
+    public const RESPONSE_CODE_INVALID_AMOUNT = 4;
 
-    const RESPONSE_CODE_FRAUDSERVICE_FILTER = 126;
+    public const RESPONSE_CODE_FRAUDSERVICE_FILTER = 126;
 
-    const RESPONSE_CODE_DECLINED = 12;
+    public const RESPONSE_CODE_DECLINED = 12;
 
-    const RESPONSE_CODE_DECLINED_BY_FILTER = 125;
+    public const RESPONSE_CODE_DECLINED_BY_FILTER = 125;
 
-    const RESPONSE_CODE_DECLINED_BY_MERCHANT = 128;
+    public const RESPONSE_CODE_DECLINED_BY_MERCHANT = 128;
 
-    const RESPONSE_CODE_CAPTURE_ERROR = 111;
+    public const RESPONSE_CODE_CAPTURE_ERROR = 111;
 
-    const RESPONSE_CODE_VOID_ERROR = 108;
+    public const RESPONSE_CODE_VOID_ERROR = 108;
 
     private const RESPONSE_CODE_AUTHORIZATION_EXPIRED = 10601;
 
-    const PNREF = 'pnref';
-
+    public const PNREF = 'pnref';
     /**#@-*/
+
+    /**
+     * @var string[]
+     */
     protected $_responseParamsMappings = [
         'firstname' => 'billtofirstname',
         'lastname' => 'billtolastname',
@@ -601,13 +606,15 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
 
     /**
      * @inheritdoc
+     *
+     * @throws ClientException
      */
     public function postRequest(DataObject $request, ConfigInterface $config)
     {
         try {
             return $this->gateway->postRequest($request, $config);
-        } catch (\Zend_Http_Client_Exception $e) {
-            throw new LocalizedException(
+        } catch (RuntimeException $e) {
+            throw new ClientException(
                 __('Payment Gateway is unreachable at the moment. Please use another payment option.'),
                 $e
             );
@@ -626,7 +633,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request = $this->buildBasicRequest();
         $request->setAmt($this->formatPrice($amount));
         $request->setAcct($payment->getCcNumber());
-        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . substr($payment->getCcExpYear(), -2, 2));
+        $expYear = $payment->getCcExpYear() !== null ? substr($payment->getCcExpYear(), -2, 2) : '';
+        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . $expYear);
         $request->setCvv2($payment->getCcCid());
 
         $order = $payment->getOrder();

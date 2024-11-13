@@ -16,6 +16,7 @@
                 check the created attribute is available on the page."/>
             <severity value="MAJOR"/>
             <group value="swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -32,7 +33,9 @@
             <deleteData createDataKey="createTextSwatchConfigProductAttribute" stepKey="deleteAttribute"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Open the new simple product page -->

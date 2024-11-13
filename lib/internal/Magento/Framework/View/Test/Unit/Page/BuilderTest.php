@@ -24,7 +24,7 @@ class BuilderTest extends \Magento\Framework\View\Test\Unit\Layout\BuilderTest
 
     /**
      * @param array $arguments
-     * @return \Magento\Framework\View\Layout\Builder
+     * @return object
      */
     protected function getBuilder($arguments)
     {
@@ -57,10 +57,11 @@ class BuilderTest extends \Magento\Framework\View\Test\Unit\Layout\BuilderTest
     /**
      * @return array
      */
-    protected function getLayoutMockMethods()
+    protected function getLayoutMockMethods(): array
     {
         $result = parent::getLayoutMockMethods();
         $result[] = 'getReaderContext';
+
         return $result;
     }
 }

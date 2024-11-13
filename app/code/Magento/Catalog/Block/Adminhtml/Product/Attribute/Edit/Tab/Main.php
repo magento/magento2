@@ -6,8 +6,6 @@
 
 /**
  * Product attribute add/edit form main tab
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
@@ -113,7 +111,7 @@ class Main extends AbstractMain
         $fieldsToRemove = ['attribute_code', 'is_unique', 'frontend_class'];
         foreach ($fieldset->getElements() as $element) {
             /** @var AbstractElement $element */
-            if (substr($element->getId(), 0, strlen('default_value')) === 'default_value') {
+            if ($element->getId() && substr($element->getId(), 0, strlen('default_value')) === 'default_value') {
                 $fieldsToRemove[] = $element->getId();
             }
         }

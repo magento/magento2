@@ -104,15 +104,21 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
                     ) ? $option['print_value'] : $this->filterManager->stripTags(
                         $option['value']
                     );
+                    $printValue = str_replace(PHP_EOL, ', ', $printValue);
                     $values = explode(', ', $printValue);
+                    $text = [];
                     foreach ($values as $value) {
-                        $lines[][] = ['text' => $this->string->split($value, 50, true, true), 'feed' => 115];
+                        foreach ($this->string->split($value, 50, true, true) as $subValue) {
+                            $text[] = $subValue;
+                        }
                     }
+
+                    $lines[][] = ['text' => $text, 'feed' => 115];
                 }
             }
         }
 
-        $lineBlock = ['lines' => $lines, 'height' => 20];
+        $lineBlock = ['lines' => $lines, 'height' => 20, 'shift' => 5];
 
         $page = $pdf->drawLineBlocks($page, [$lineBlock], ['table_header' => true]);
         $this->setPage($page);

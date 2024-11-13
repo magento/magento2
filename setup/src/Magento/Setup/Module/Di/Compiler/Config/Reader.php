@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Module\Di\Compiler\Config;
 
 use Magento\Framework\App;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\Phrase;
 use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory;
 use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
 /**
- * Class Reader
+ * DI Confir Reader
  *
- * @package Magento\Setup\Module\Di\Compiler\Config
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Reader
@@ -92,6 +93,42 @@ class Reader
         foreach ($definitionsCollection->getInstancesNamesList() as $instanceName) {
             $preference = $areaConfig->getPreference($instanceName);
             if ($instanceName !== $preference) {
+                if (array_key_exists($preference, $areaConfig->getVirtualTypes())) {
+                    // Special handling is required for virtual types.
+                    $config['preferences'][$instanceName] = $preference;
+                    continue;
+                }
+
+                if (!class_exists($preference)) {
+                    throw new LocalizedException(new Phrase(
+                        'Preference declared for "%instanceName" as "%preference", but the latter does not exist.',
+                        [
+                            'instanceName' => $instanceName,
+                            'preference' => $preference,
+                        ]
+                    ));
+                }
+
+                // Classes defined by PHP extensions are allowed.
+                $reflection = new \ReflectionClass($preference);
+                if ($reflection->getExtension()) {
+                    $config['preferences'][$instanceName] = $preference;
+                    continue;
+                }
+
+                if (!$definitionsCollection->hasInstance($preference)) {
+                    // See 'excludePatterns' in Magento\Setup\Module\Di\Code\Reader\ClassesScanner,
+                    // populated via Magento\Setup\Console\Command\DiCompileCommand
+                    throw new LocalizedException(new Phrase(
+                        'Preference declared for "%instanceName" as "%preference", but the latter'
+                            . ' has not been included in dependency injection compilation.',
+                        [
+                            'instanceName' => $instanceName,
+                            'preference' => $preference,
+                        ]
+                    ));
+                }
+
                 $config['preferences'][$instanceName] = $preference;
             }
         }
@@ -99,11 +136,6 @@ class Reader
         foreach (array_keys($areaConfig->getVirtualTypes()) as $virtualType) {
             $config['instanceTypes'][$virtualType] = $areaConfig->getInstanceType($virtualType);
         }
-
-        // sort configuration to have it in the same order on every build
-        ksort($config['arguments']);
-        ksort($config['preferences']);
-        ksort($config['instanceTypes']);
 
         return $config;
     }

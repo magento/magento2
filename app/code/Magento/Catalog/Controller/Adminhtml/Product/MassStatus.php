@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Helper\Product\Edit\Action\Attribute as AttributeHelper;
 
 /**
  * Updates status for a batch of products.
@@ -42,12 +43,18 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
     private $productAction;
 
     /**
+     * @var AttributeHelper
+     */
+    private $attributeHelper;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Model\Product\Action $productAction
+     * @param AttributeHelper $attributeHelper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -55,13 +62,16 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         Filter $filter,
         CollectionFactory $collectionFactory,
-        \Magento\Catalog\Model\Product\Action $productAction = null
+        \Magento\Catalog\Model\Product\Action $productAction = null,
+        AttributeHelper $attributeHelper = null
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->productAction = $productAction ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\Product\Action::class);
+        $this->attributeHelper = $attributeHelper ?: ObjectManager::getInstance()
+            ->get(AttributeHelper::class);
         parent::__construct($context, $productBuilder);
     }
 
@@ -93,6 +103,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product implement
     {
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $productIds = $collection->getAllIds();
+        $this->attributeHelper->setProductIds($productIds);
         $requestStoreId = $storeId = $this->getRequest()->getParam('store', null);
         $filterRequest = $this->getRequest()->getParam('filters', null);
         $status = (int) $this->getRequest()->getParam('status');

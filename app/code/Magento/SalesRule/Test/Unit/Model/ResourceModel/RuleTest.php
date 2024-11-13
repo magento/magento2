@@ -12,10 +12,13 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\SalesRule\Model\Rule\Condition\Product;
@@ -78,6 +81,11 @@ class RuleTest extends TestCase
      */
     protected $relationProcessorMock;
 
+    /**
+     * @var MockObject
+     */
+    private $metadataPoolMock;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -111,7 +119,7 @@ class RuleTest extends TestCase
             ->willReturn($this->resourcesMock);
 
         $this->entityManager = $this->getMockBuilder(EntityManager::class)
-            ->setMethods(['load', 'save', 'delete'])
+            ->onlyMethods(['load', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -154,6 +162,12 @@ class RuleTest extends TestCase
                     ],
                 ]
             );
+        $serializerMock = $this->getMockBuilder(Json::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             Rule::class,
@@ -161,7 +175,9 @@ class RuleTest extends TestCase
                 'context' => $context,
                 'connectionName' => $connectionName,
                 'entityManager' => $this->entityManager,
-                'associatedEntityMapInstance' => $associatedEntitiesMap
+                'associatedEntityMapInstance' => $associatedEntitiesMap,
+                'serializer' => $serializerMock,
+                'metadataPool' => $this->metadataPoolMock
             ]
         );
     }
@@ -213,9 +229,26 @@ class RuleTest extends TestCase
     }
 
     /**
+     * Checks that linked field is used for rule labels
+     */
+    public function testSaveStoreLabels()
+    {
+        $entityMetadataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $entityMetadataInterfaceMock->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('fieldName');
+        $this->metadataPoolMock->expects($this->once())
+            ->method('getMetadata')
+            ->willReturn($entityMetadataInterfaceMock);
+        $this->model->saveStoreLabels(1, ['test']);
+    }
+
+    /**
      * @return array
      */
-    public function dataProviderForProductAttributes()
+    public static function dataProviderForProductAttributes()
     {
         return [
             [

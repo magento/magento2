@@ -23,4 +23,9 @@
         <var key="quote_id" entityKey="return" entityType="GuestCart"/>
         <var key="sku" entityKey="sku" entityType="product"/>
     </entity>
+    <entity name="FourCartItems" type="CartItem">
+        <data key="qty">4</data>
+        <var key="quote_id" entityKey="return" entityType="GuestCart"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
 </entities>

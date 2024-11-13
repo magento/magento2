@@ -177,7 +177,7 @@ define([
                                     'products[]': request,
                                     'form_key': widget.options.formKey
                                 }, function ($data) {
-                                    $.parseJSON($data).each(function (el) {
+                                    $.each(JSON.parse($data), function (el) {
                                         var i;
 
                                         el.id = widget.getFreeOptionId(el.id);
@@ -437,7 +437,7 @@ define([
             this.refreshSortableElements();
             this.options.selectionItemCount[data.id] = parseInt(this.options.selectionItemCount[data.id], 10) + 1;
 
-            $('#' + this.options.fieldId + '_' + data.id + '_select_' + data['select_id'] + '_title').focus();
+            $('#' + this.options.fieldId + '_' + data.id + '_select_' + data['select_id'] + '_title').trigger('focus');
         },
 
         /**

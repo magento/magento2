@@ -42,7 +42,10 @@ class XsdTest extends TestCase
     protected function _loadDataForTest($schemaName, $xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_xsdSchemaPath . $schemaName, $xmlString);
-        $this->assertEquals($expectedError, $actualError);
+        $this->assertEquals(false, empty($actualError));
+        foreach ($expectedError as $error) {
+            $this->assertContains($error, $actualError);
+        }
     }
 
     /**
@@ -81,7 +84,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with valid xml array according to schema
      */
-    public function schemaCorrectlyIdentifiesValidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesValidXmlDataProvider()
     {
         return [
             'product_options' => ['product_options.xsd', 'product_options_valid.xml'],
@@ -92,7 +95,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to schema
      */
-    public function schemaCorrectlyIdentifiesInvalidProductOptionsDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidProductOptionsDataProvider()
     {
         return include __DIR__ . '/_files/invalidProductOptionsXmlArray.php';
     }
@@ -100,7 +103,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to schema
      */
-    public function schemaCorrectlyIdentifiesInvalidProductOptionsMergedXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidProductOptionsMergedXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidProductOptionsMergedXmlArray.php';
     }

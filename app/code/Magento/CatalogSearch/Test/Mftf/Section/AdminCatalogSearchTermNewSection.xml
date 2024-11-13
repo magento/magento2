@@ -15,6 +15,6 @@
         <element name="numberOfUses" type="button" selector="#popularity"/>
         <element name="redirectUrl" type="text" selector="//div[@class='admin__field-control control']/input[@id='redirect']"/>
         <element name="displayInSuggestedTerm" type="select" selector="//select[@name='display_in_terms']"/>
-        <element name="saveSearchButton" type="button" selector="//button[@id='save']/span[@class='ui-button-text']" timeout="30"/>
+        <element name="saveSearchButton" type="button" selector="//button[@id='save']/span" timeout="30"/>
     </section>
 </sections>

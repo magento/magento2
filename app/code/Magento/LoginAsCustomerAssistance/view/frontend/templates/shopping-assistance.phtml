@@ -11,20 +11,18 @@ use Magento\LoginAsCustomerAssistance\ViewModel\ShoppingAssistanceViewModel;
 /** @var Escaper $escaper */
 /** @var ShoppingAssistanceViewModel $viewModel */
 $viewModel = $block->getViewModel();
-?>
 
-<script type="text/x-magento-init">
-{
-    ".form-create-account, .form-edit-account": {
-        "Magento_LoginAsCustomerAssistance/js/opt-in": {
-            "allowAccess": "<?= /* @noEscape */ IsAssistanceEnabledInterface::ALLOWED ?>",
-            "denyAccess": "<?= /* @noEscape */ IsAssistanceEnabledInterface::DENIED ?>"
+if ($viewModel->isLoginAsCustomerEnabled()): ?>
+    <script type="text/x-magento-init">
+    {
+        ".form-create-account, .form-edit-account": {
+            "Magento_LoginAsCustomerAssistance/js/opt-in": {
+                "allowAccess": "<?= /* @noEscape */ IsAssistanceEnabledInterface::ALLOWED ?>",
+                "denyAccess": "<?= /* @noEscape */ IsAssistanceEnabledInterface::DENIED ?>"
+            }
         }
     }
-}
-</script>
-
-<?php if ($viewModel->isLoginAsCustomerEnabled()): ?>
+    </script>
     <div class="field choice">
         <input type="checkbox"
                name="assistance_allowed_checkbox"

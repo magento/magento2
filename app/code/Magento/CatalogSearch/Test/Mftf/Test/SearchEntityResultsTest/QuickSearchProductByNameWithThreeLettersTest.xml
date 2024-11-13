@@ -15,7 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-15034"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="mtf_migrated"/>
         </annotations>
         <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,3); return ret;" stepKey="getFirstThreeLetters" before="searchStorefront"/>

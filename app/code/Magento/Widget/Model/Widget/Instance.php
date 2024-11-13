@@ -5,20 +5,42 @@
  */
 namespace Magento\Widget\Model\Widget;
 
+use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\Dom\ValidationException;
+use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Simplexml\Element;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
+use Magento\Widget\Helper\Conditions;
+use Magento\Widget\Model\Config\Reader;
+use Magento\Widget\Model\NamespaceResolver;
+use Magento\Widget\Model\Widget;
 
 /**
  * Widget Instance Model
  *
  * @api
  * @method string getTitle()
- * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
- * @method \Magento\Widget\Model\Widget\Instance setWidgetParameters(string|array $value)
+ * @method Instance setTitle(string $value)
+ * @method Instance setStoreIds(string $value)
+ * @method Instance setWidgetParameters(string|array $value)
  * @method int getSortOrder()
- * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
- * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
+ * @method Instance setSortOrder(int $value)
+ * @method Instance setThemeId(int $value)
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -27,28 +49,28 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
 {
-    const SPECIFIC_ENTITIES = 'specific';
+    public const SPECIFIC_ENTITIES = 'specific';
 
-    const ALL_ENTITIES = 'all';
+    public const ALL_ENTITIES = 'all';
 
-    const DEFAULT_LAYOUT_HANDLE = 'default';
+    public const DEFAULT_LAYOUT_HANDLE = 'default';
 
-    const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
+    public const PRODUCT_LAYOUT_HANDLE = 'catalog_product_view';
 
     /**
      * @deprecated see self::SINGLE_PRODUCT_LAYOUT_HANDLE
      */
-    const SINGLE_PRODUCT_LAYOUT_HANLDE = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
-    
-    const SINGLE_PRODUCT_LAYOUT_HANDLE = 'catalog_product_view_id_{{ID}}';
+    public const SINGLE_PRODUCT_LAYOUT_HANLDE = self::SINGLE_PRODUCT_LAYOUT_HANDLE;
 
-    const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
+    public const SINGLE_PRODUCT_LAYOUT_HANDLE = 'catalog_product_view_id_{{ID}}';
 
-    const ANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_layered';
+    public const PRODUCT_TYPE_LAYOUT_HANDLE = 'catalog_product_view_type_{{TYPE}}';
 
-    const NOTANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_default';
+    public const ANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_layered';
 
-    const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_id_{{ID}}';
+    public const NOTANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_default';
+
+    public const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_id_{{ID}}';
 
     /**
      * @var array
@@ -61,7 +83,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_specificEntitiesLayoutHandles = [];
 
     /**
-     * @var \Magento\Framework\Simplexml\Element
+     * @var Element
      */
     protected $_widgetConfigXml = null;
 
@@ -78,17 +100,17 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_viewFileSystem;
 
     /**
-     * @var \Magento\Widget\Model\Widget
+     * @var Widget
      */
     protected $_widgetModel;
 
     /**
-     * @var \Magento\Widget\Model\NamespaceResolver
+     * @var NamespaceResolver
      */
     protected $_namespaceResolver;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @var TypeListInterface
      */
     protected $_cacheTypeList;
 
@@ -98,34 +120,34 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     protected $_relatedCacheTypes;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type
+     * @var Type
      * @since 101.0.4
      */
     protected $_productType;
 
     /**
-     * @var \Magento\Widget\Model\Config\Reader
+     * @var Reader
      * @since 101.0.4
      */
     protected $_reader;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $_escaper;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $_directory;
 
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var Conditions
      */
     protected $conditionsHelper;
 
@@ -135,43 +157,51 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Escaper $escaper
+     * @var ValidatorFactory
+     */
+    private $xmlValidatorFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param Escaper $escaper
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Catalog\Model\Product\Type $productType
-     * @param \Magento\Widget\Model\Config\Reader $reader
-     * @param \Magento\Widget\Model\Widget $widgetModel
-     * @param \Magento\Widget\Model\NamespaceResolver $namespaceResolver
-     * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param TypeListInterface $cacheTypeList
+     * @param Type $productType
+     * @param Reader $reader
+     * @param Widget $widgetModel
+     * @param NamespaceResolver $namespaceResolver
+     * @param Random $mathRandom
+     * @param Filesystem $filesystem
+     * @param Conditions $conditionsHelper
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param Json|null $serializer
+     * @param ValidatorFactory|null $xmlValidatorFactory
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Escaper $escaper,
+        Context $context,
+        Registry $registry,
+        Escaper $escaper,
         \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Catalog\Model\Product\Type $productType,
-        \Magento\Widget\Model\Config\Reader $reader,
-        \Magento\Widget\Model\Widget $widgetModel,
-        \Magento\Widget\Model\NamespaceResolver $namespaceResolver,
-        \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Widget\Helper\Conditions $conditionsHelper,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        TypeListInterface $cacheTypeList,
+        Type $productType,
+        Reader $reader,
+        Widget $widgetModel,
+        NamespaceResolver $namespaceResolver,
+        Random $mathRandom,
+        Filesystem $filesystem,
+        Conditions $conditionsHelper,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        ValidatorFactory $xmlValidatorFactory = null
     ) {
         $this->_escaper = $escaper;
         $this->_viewFileSystem = $viewFileSystem;
@@ -184,7 +214,8 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->conditionsHelper = $conditionsHelper;
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_namespaceResolver = $namespaceResolver;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->xmlValidatorFactory = $xmlValidatorFactory ?? ObjectManager::getInstance()->get(ValidatorFactory::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -192,6 +223,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Internal Constructor
      *
      * @return void
+     * @throws LocalizedException
      */
     protected function _construct()
     {
@@ -221,6 +253,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     public function beforeSave()
     {
@@ -254,10 +287,10 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     ];
                     if ($pageGroupData['for'] == self::SPECIFIC_ENTITIES) {
                         $layoutHandleUpdates = [];
-                        foreach (explode(',', $pageGroupData['entities']) as $entity) {
+                        foreach (explode(',', $pageGroupData['entities'] ?? '') as $entity) {
                             $layoutHandleUpdates[] = str_replace(
                                 '{{ID}}',
-                                $entity,
+                                trim($entity),
                                 $this->_specificEntitiesLayoutHandles[$pageGroup['page_group']]
                             );
                         }
@@ -276,7 +309,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             if (array_key_exists('show_pager', $parameters) && !array_key_exists('page_var_name', $parameters)) {
                 $parameters['page_var_name'] = 'p' . $this->mathRandom->getRandomString(
                     5,
-                    \Magento\Framework\Math\Random::CHARS_LOWERS
+                    Random::CHARS_LOWERS
                 );
             }
 
@@ -291,7 +324,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate widget instance data
      *
-     * @return \Magento\Framework\Phrase|bool
+     * @return Phrase|bool
      */
     public function validate()
     {
@@ -363,7 +396,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      */
     public function getType()
     {
-        return $this->_getData('instance_type');
+        return (string) $this->_getData('instance_type');
     }
 
     /**
@@ -377,7 +410,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     {
         //TODO Shouldn't we get "area" from theme model which we can load using "theme_id"?
         if (!$this->_getData('area')) {
-            return \Magento\Framework\View\DesignInterface::DEFAULT_AREA;
+            return DesignInterface::DEFAULT_AREA;
         }
         return $this->_getData('area');
     }
@@ -477,24 +510,36 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                 $isReadable = $configFile
                     && $this->_directory->isReadable($this->_directory->getRelativePath($configFile));
                 if ($isReadable) {
-                    $config = $this->_reader->readFile($configFile);
-                    $widgetName = isset($this->_widgetConfigXml['name']) ? $this->_widgetConfigXml['name'] : null;
-                    $themeWidgetConfig = null;
-                    if ($widgetName !== null) {
-                        foreach ($config as $widget) {
-                            if (isset($widget['name']) && $widgetName === $widget['name']) {
-                                $themeWidgetConfig = $widget;
-                                break;
-                            }
-                        }
-                    }
-                    if ($themeWidgetConfig) {
-                        $this->_widgetConfigXml = array_replace_recursive($this->_widgetConfigXml, $themeWidgetConfig);
-                    }
+                    $this->addThemeWidgetConfig($configFile);
                 }
             }
         }
         return $this->_widgetConfigXml;
+    }
+
+    /**
+     * Add config data from theme config xml.
+     *
+     * @param string $configFile
+     */
+    private function addThemeWidgetConfig(string $configFile): void
+    {
+        $config = $this->_reader->readFile($configFile);
+        $widgetName = isset($this->_widgetConfigXml['name']) ? $this->_widgetConfigXml['name'] : null;
+        $themeWidgetConfig = null;
+
+        if ($widgetName !== null) {
+            foreach ($config as $widget) {
+                if (isset($widget['name']) && $widgetName === $widget['name']) {
+                    $themeWidgetConfig = $widget;
+                    break;
+                }
+            }
+        }
+
+        if ($themeWidgetConfig) {
+            $this->_widgetConfigXml = array_replace_recursive($this->_widgetConfigXml, $themeWidgetConfig);
+        }
     }
 
     /**
@@ -548,29 +593,49 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      */
     public function getWidgetSupportedTemplatesByContainer($containerName)
     {
-        $templates = [];
         $widgetTemplates = $this->getWidgetTemplates();
         $widgetConfig = $this->getWidgetConfigAsArray();
         if (isset($widgetConfig)) {
-            if (!isset($widgetConfig['supported_containers'])) {
-                return $widgetTemplates;
-            }
-            $configNodes = $widgetConfig['supported_containers'];
-            foreach ($configNodes as $node) {
-                if (isset($node['container_name']) && (string)$node['container_name'] == $containerName) {
-                    if (isset($node['template'])) {
-                        $templateChildren = $node['template'];
-                        foreach ($templateChildren as $template) {
-                            if (isset($widgetTemplates[(string)$template])) {
-                                $templates[] = $widgetTemplates[(string)$template];
-                            }
+            return $this->getWidgetTemplatesFromConfig($widgetConfig, $widgetTemplates, $containerName);
+        } else {
+            return $widgetTemplates;
+        }
+    }
+
+    /**
+     * Return widget templates from widget config.
+     *
+     * @param array $widgetConfig
+     * @param array $widgetTemplates
+     * @param string $containerName
+     * @return array
+     */
+    private function getWidgetTemplatesFromConfig(
+        array $widgetConfig,
+        array $widgetTemplates,
+        string $containerName
+    ): array {
+        $templates = [];
+
+        if (!isset($widgetConfig['supported_containers'])) {
+            return $widgetTemplates;
+        }
+
+        $configNodes = $widgetConfig['supported_containers'];
+
+        foreach ($configNodes as $node) {
+            if (isset($node['container_name']) && (string)$node['container_name'] == $containerName) {
+                if (isset($node['template'])) {
+                    $templateChildren = $node['template'];
+                    foreach ($templateChildren as $template) {
+                        if (isset($widgetTemplates[(string)$template])) {
+                            $templates[] = $widgetTemplates[(string)$template];
                         }
                     }
                 }
             }
-        } else {
-            return $widgetTemplates;
         }
+
         return $templates;
     }
 
@@ -582,6 +647,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {
@@ -593,11 +659,12 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                 'module' => \Magento\Framework\View\Element\AbstractBlock::extractModuleName($this->getType())
             ]
         );
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!$this->getId() && !$this->isCompleteToCreate() || $templatePath && !is_readable($templateFilename)) {
             return '';
         }
         $parameters = $this->getWidgetParameters();
-        $xml = '<body><referenceContainer name="' . $container . '">';
+        $xml = '<body><referenceContainer name="' . $this->_escaper->escapeHtmlAttr($container) . '">';
         $template = '';
         if (isset($parameters['template'])) {
             unset($parameters['template']);
@@ -615,7 +682,9 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             } elseif (is_array($value)) {
                 $value = implode(',', $value);
             }
+            $this->validateWidgetParameters($name);
             if ($name && strlen((string)$value)) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $value = html_entity_decode($value);
                 $xml .= '<action method="setData">' .
                     '<argument name="name" xsi:type="string">' .
@@ -629,7 +698,46 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         }
         $xml .= '</block></referenceContainer></body>';
 
+        $this->validateLayoutUpdateXml($xml);
+
         return $xml;
+    }
+
+    /**
+     * Check if generated layout update xml is valid.
+     *
+     * @param string $xml
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateLayoutUpdateXml(string $xml): void
+    {
+        $xmlValidator = $this->xmlValidatorFactory->create();
+
+        try {
+            if (!$xmlValidator->isValid($xml)) {
+                throw new LocalizedException(__('Layout update is invalid'));
+            }
+        } catch (ValidationException|ValidationSchemaException $e) {
+            throw new LocalizedException(__('Layout update is invalid'));
+        }
+    }
+
+    /**
+     * Check if widget parameter doesn't contains payload
+     *
+     * @param string $param
+     * @throws LocalizedException
+     */
+    private function validateWidgetParameters(string $param): void
+    {
+        try {
+            if (!preg_match('/^\w+$/', $param)) {
+                throw new LocalizedException(__('Layout update is invalid'));
+            }
+        } catch (ValidationException|ValidationSchemaException $e) {
+            throw new LocalizedException(__('Layout update is invalid'));
+        }
     }
 
     /**
@@ -662,6 +770,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * Invalidate related cache if instance contain layout updates
      *
      * @return $this
+     * @throws LocalizedException
      */
     public function beforeDelete()
     {

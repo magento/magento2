@@ -21,6 +21,11 @@ class SimpleProductsAssert
     private $productRepository;
 
     /**
+     * @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface
+     */
+    private $optionRepository;
+
+    /**
      * @var \Magento\Setup\Fixtures\FixturesAsserts\ProductAssert
      */
     private $productAssert;

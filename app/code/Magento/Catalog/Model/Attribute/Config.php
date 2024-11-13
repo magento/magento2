@@ -28,8 +28,8 @@ class Config
      * @param string $groupName Name of an attribute group
      * @return array
      */
-    public function getAttributeNames($groupName)
+    public function getAttributeNames($groupName): array
     {
-        return $this->_dataStorage->get($groupName, []);
+        return (array) $this->_dataStorage->get($groupName, []);
     }
 }

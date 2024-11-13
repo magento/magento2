@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ZeroTaxSubtotalActionGroup">
+        <annotations>
+            <description>Zero tax subtotal should not be displayed on frontend after admin config setting</description>
+        </annotations>
+        <arguments>
+            <argument name="optionValue" type="string" defaultValue="{{DefaultTotalFlagZero.value}}"/>
+        </arguments>
+        <amOnPage url="{{AdminTaxConfigurationPage.url}}" stepKey="navigateToAdminStoreTaxConfiguration"/>
+        <scrollTo selector="{{AdminZeroTaxFormSection.label}}" stepKey="scrollToDropdownSelection" />
+        <selectOption selector="{{AdminZeroTaxFormSection.optionvalue}}" userInput="{{optionValue}}" stepKey="setSelectorValue"/>
+        <click selector="{{AdminZeroTaxFormSection.saveConfig}}" stepKey="clickSave"/>
+    </actionGroup>
+</actionGroups>

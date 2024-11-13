@@ -12,6 +12,11 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Price;
 class CompositeProductRelationsCalculator
 {
     /**
+     * @var DefaultPrice
+     */
+    private $indexerResource;
+
+    /**
      * @param DefaultPrice $indexerResource
      */
     public function __construct(DefaultPrice $indexerResource)

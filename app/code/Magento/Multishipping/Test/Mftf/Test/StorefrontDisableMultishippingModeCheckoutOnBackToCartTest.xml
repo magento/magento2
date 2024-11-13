@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDisableMultishippingModeCheckoutOnBackToCartTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multishipping"/>
+            <title value="Disable multishipping checkout on backing to cart"/>
+            <description value="Cart page summary block should count virtual product price after backing back to the cart from multishipping checkout."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-39007"/>
+            <useCaseId value="MC-38825"/>
+            <group value="multishipping"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$createCustomerWithMultipleAddresses$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openVirtualProductPage">
+            <argument name="product" value="$createVirtualProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addVirtualProductToCart">
+            <argument name="product" value="$createVirtualProduct$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$createSimpleProduct$"/>
+            <argument name="productCount" value="2"/>
+        </actionGroup>
+
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalElement"/>
+        <waitForPageLoad stepKey="waitForGrandTotalToLoad"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="grabTotal"/>
+
+        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goBackToShoppingCartPage"/>
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="updateShippingAndTaxEstimator" />
+        <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotal">
+            <argument name="orderTotal" value="{$grabTotal}"/>
+        </actionGroup>
+    </test>
+</tests>

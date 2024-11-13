@@ -65,24 +65,24 @@ class RecurringDataTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->state = $this->getMockBuilder(StateInterface::class)
-            ->setMethods(['getStatus'])
+            ->onlyMethods(['getStatus'])
             ->getMockForAbstractClass();
         $this->indexer = $this->getMockBuilder(IndexerInterface::class)
-            ->setMethods(['getState', 'reindexAll'])
+            ->onlyMethods(['getState', 'reindexAll'])
             ->getMockForAbstractClass();
         $this->indexer->expects($this->any())
             ->method('getState')
             ->willReturn($this->state);
         $this->indexerRegistry = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $this->indexerRegistry->expects($this->any())
             ->method('get')
             ->with(Customer::CUSTOMER_GRID_INDEXER_ID)
             ->willReturn($this->indexer);
         $this->setup = $this->getMockBuilder(ModuleDataSetupInterface::class)
-            ->setMethods(['tableExists'])
+            ->onlyMethods(['tableExists'])
             ->getMockForAbstractClass();
         $this->context = $this->getMockBuilder(ModuleContextInterface::class)
             ->getMockForAbstractClass();
@@ -119,7 +119,7 @@ class RecurringDataTest extends TestCase
     /**
      * @return array
      */
-    public function installDataProvider() : array
+    public static function installDataProvider() : array
     {
         return [
             [true, StateInterface::STATUS_INVALID, 1],

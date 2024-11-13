@@ -47,11 +47,42 @@ class UpdateCartItemsTest extends GraphQlAbstract
         $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
         $quantity = 0.5;
-        $this->expectExceptionMessage(
-            "Could not update the product with SKU simple_product: The fewest you may purchase is 1"
+        $query = $this->getMutation($maskedQuoteId, $itemId, $quantity);
+        $response = $this->graphQlMutation($query);
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('errors', $response['updateCartItems']);
+
+        $responseError = $response['updateCartItems']['errors'][0];
+        $this->assertEquals(
+            "Could not update the product with SKU simple_product: The fewest you may purchase is 1.",
+            $responseError['message']
         );
-        $query = $this->getQuery($maskedQuoteId, $itemId, $quantity);
-        $this->graphQlMutation($query);
+        $this->assertEquals('INVALID_PARAMETER_VALUE', $responseError['code']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testUpdateCartItemSetUnavailableQuantity()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
+
+        $quantity = 100;
+        $query = $this->getMutation($maskedQuoteId, $itemId, $quantity);
+        $response = $this->graphQlMutation($query);
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('errors', $response['updateCartItems']);
+
+        $responseError = $response['updateCartItems']['errors'][0];
+        $this->assertEquals(
+            "Could not update the product with SKU simple_product: Not enough items for sale",
+            $responseError['message']
+        );
+        $this->assertEquals('INSUFFICIENT_STOCK', $responseError['code']);
     }
 
     /**
@@ -60,9 +91,9 @@ class UpdateCartItemsTest extends GraphQlAbstract
      * @param float $quantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, int $itemId, float $quantity): string
+    private function getMutation(string $maskedQuoteId, int $itemId, float $quantity): string
     {
-        return <<<QUERY
+        return <<<MUTATION
 mutation {
   updateCartItems(input: {
     cart_id: "{$maskedQuoteId}"
@@ -79,8 +110,12 @@ mutation {
         quantity
       }
     }
+    errors {
+      message
+      code
+    }
   }
 }
-QUERY;
+MUTATION;
     }
 }

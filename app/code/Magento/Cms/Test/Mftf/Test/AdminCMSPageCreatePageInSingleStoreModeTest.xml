@@ -19,6 +19,7 @@
             <group value="Cms"/>
             <group value="mtf_migrated"/>
             <group value="WYSIWYGDisabled"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontSingleStoreModeEnabledConfigData.path}} {{StorefrontSingleStoreModeEnabledConfigData.value}}" stepKey="enableSingleStoreMode" />

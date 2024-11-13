@@ -54,7 +54,6 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     public function execute($ids)
     {
         $this->_productStockIndexerRows->execute($ids);
-        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
     }
 
     /**
@@ -102,6 +101,7 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
      *
      * @return \Magento\Framework\Indexer\CacheContext
      * @deprecated 100.0.7
+     * @see we don't add dependecies this way anymore
      */
     protected function getCacheContext()
     {

@@ -44,6 +44,9 @@ class ChartTest extends TestCase
      */
     private $collectionMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
@@ -78,22 +81,21 @@ class ChartTest extends TestCase
      * @param string $period
      * @param string $chartParam
      * @param array $result
+     *
+     * @return void
      * @dataProvider getByPeriodDataProvider
      */
-    public function testGetByPeriod($period, $chartParam, $result)
+    public function testGetByPeriod(string $period, string $chartParam, array $result): void
     {
-        $this->orderHelperMock->expects($this->at(0))
+        $this->orderHelperMock
             ->method('setParam')
-            ->with('store', null);
-        $this->orderHelperMock->expects($this->at(1))
-            ->method('setParam')
-            ->with('website', null);
-        $this->orderHelperMock->expects($this->at(2))
-            ->method('setParam')
-            ->with('group', null);
-        $this->orderHelperMock->expects($this->at(3))
-            ->method('setParam')
-            ->with('period', $period);
+            ->willReturnCallback(function ($arg1, $arg2) use ($period) {
+                if ($arg1 == 'period' && $arg2 == $period) {
+                    return $this;
+                } elseif ($arg1 == 'store' || $arg1=='website' || $arg1 == 'group') {
+                    return $this;
+                }
+            });
 
         $this->dateRetrieverMock->expects($this->once())
             ->method('getByPeriod')
@@ -129,7 +131,10 @@ class ChartTest extends TestCase
         );
     }
 
-    public function getByPeriodDataProvider(): array
+    /**
+     * @return array
+     */
+    public static function getByPeriodDataProvider(): array
     {
         return [
             [

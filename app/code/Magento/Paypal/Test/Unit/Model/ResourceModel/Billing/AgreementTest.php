@@ -57,7 +57,7 @@ class AgreementTest extends TestCase
         ]);
         $this->collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSelect'])
+            ->onlyMethods(['getSelect'])
             ->getMockForAbstractClass();
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->selectMock = $this->createMock(Select::class);
@@ -88,11 +88,15 @@ class AgreementTest extends TestCase
             ->willReturnSelf();
         $this->selectMock->expects($this->exactly(2))
             ->method('where')
-            ->withConsecutive(
-                ['pbao.agreement_id IN(?)', [100]],
-                ['main_table.entity_id IN (?)', [500]]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'pbao.agreement_id IN(?)' && $arg2 == [100]) {
+                        return $this->selectMock;
+                    } elseif ($arg1 == 'main_table.entity_id IN (?)' && $arg2 == [500]) {
+                        return $this->selectMock;
+                    }
+                }
+            );
         $this->connectionMock->expects($this->once())
             ->method('fetchCol')
             ->with($this->selectMock, [])

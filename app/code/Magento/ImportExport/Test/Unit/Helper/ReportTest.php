@@ -11,11 +11,17 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Helper\Data;
@@ -25,6 +31,8 @@ use Magento\ImportExport\Model\History;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Config;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\LocaleEmulatorInterface;
+use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -46,11 +54,6 @@ class ReportTest extends TestCase
     protected $context;
 
     /**
-     * @var Timezone|MockObject
-     */
-    protected $timezone;
-
-    /**
      * @var Filesystem|MockObject
      */
     protected $filesystem;
@@ -59,6 +62,11 @@ class ReportTest extends TestCase
      * @var Write|MockObject
      */
     protected $varDirectory;
+
+    /**
+     * @var Read|MockObject
+     */
+    protected $importHistoryDirectory;
 
     /**
      * @var Report
@@ -80,27 +88,56 @@ class ReportTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
-        $this->timezone = $this->getMockBuilder(Timezone::class)
-            ->addMethods(['diff', 'format'])
-            ->onlyMethods(['date', 'getConfigTimezone'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->varDirectory = $this->createPartialMock(
             Write::class,
-            ['getRelativePath', 'readFile', 'isFile', 'stat']
+            ['getRelativePath', 'getAbsolutePath', 'readFile', 'isFile', 'stat']
         );
-        $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
-        $this->varDirectory->expects($this->any())->method('getRelativePath')->willReturn('path');
-        $this->varDirectory->expects($this->any())->method('readFile')->willReturn('contents');
-        $this->varDirectory->expects($this->any())->method('isFile')->willReturn(true);
-        $this->varDirectory->expects($this->any())->method('stat')->willReturn(false);
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->varDirectory);
+        $this->importHistoryDirectory = $this->createPartialMock(
+            Read::class,
+            ['getAbsolutePath']
+        );
+
+        $this->filesystem = $this->createPartialMock(
+            Filesystem::class,
+            ['getDirectoryWrite', 'getDirectoryReadByPath']
+        );
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('getRelativePath')
+            ->willReturn('path');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('path');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('readFile')
+            ->willReturn('contents');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('isFile')
+            ->willReturn(true);
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('stat')
+            ->willReturn(false);
+        $this->filesystem
+            ->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->varDirectory);
+        $this->importHistoryDirectory
+            ->expects($this->any())->method('getAbsolutePath')
+            ->willReturnArgument(0);
+        $this->filesystem
+            ->expects($this->any())
+            ->method('getDirectoryReadByPath')
+            ->willReturn($this->importHistoryDirectory);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->report = $this->objectManagerHelper->getObject(
             Report::class,
             [
                 'context' => $this->context,
-                'timeZone' => $this->timezone,
+                'timeZone' => $this->getTimezone(),
                 'filesystem' =>$this->filesystem
             ]
         );
@@ -111,7 +148,7 @@ class ReportTest extends TestCase
      */
     public function testGetExecutionTime()
     {
-        $this->markTestIncomplete('Invalid mocks used for DateTime object. Investigate later.');
+        $this->markTestSkipped('Invalid mocks used for DateTime object. Investigate later.');
 
         $startDate = '2000-01-01 01:01:01';
         $endDate = '2000-01-01 02:03:04';
@@ -119,11 +156,30 @@ class ReportTest extends TestCase
 
         $startDateMock = $this->createTestProxy(\DateTime::class, ['time' => $startDate]);
         $endDateMock = $this->createTestProxy(\DateTime::class, ['time' => $endDate]);
-        $this->timezone->method('date')
-            ->withConsecutive([$startDate], [])
-            ->willReturnOnConsecutiveCalls($startDateMock, $endDateMock);
+        $this->getTimezone()->method('date')
+            ->willReturnCallback(function ($arg1, $arg2) use ($startDate, $startDateMock, $endDateMock) {
+                if ($arg1 == $startDate) {
+                    return $startDateMock;
+                } elseif ($arg2 == null) {
+                    return $endDateMock;
+                }
+            });
 
         $this->assertEquals($executionTime, $this->report->getExecutionTime($startDate));
+    }
+
+    /**
+     * Assert the report update execution time with default UTC timezone.
+     *
+     * @return void
+     */
+    public function testGetExecutionTimeDefaultTimezone()
+    {
+        $this->assertEquals(
+            '00:00:03',
+            $this->report->getExecutionTime((new \DateTime('now - 3seconds'))->format('Y-m-d H:i:s')),
+            'Report update execution time is not a match.'
+        );
     }
 
     /**
@@ -144,9 +200,15 @@ class ReportTest extends TestCase
             Product::class,
             ['getEntityTypeCode', 'setParameters']
         );
-        $product->expects($this->any())->method('getEntityTypeCode')->willReturn('catalog_product');
-        $product->expects($this->any())->method('setParameters')->willReturn('');
-        $entityFactory->expects($this->any())->method('create')->willReturn($product);
+        $product->expects($this->any())
+            ->method('getEntityTypeCode')
+            ->willReturn('catalog_product');
+        $product->expects($this->any())
+            ->method('setParameters')
+            ->willReturn('');
+        $entityFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($product);
         $importData = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
         $csvFactory = $this->createMock(CsvFactory::class);
         $httpFactory = $this->createMock(FileTransferFactory::class);
@@ -155,6 +217,11 @@ class ReportTest extends TestCase
         $indexerRegistry = $this->createMock(IndexerRegistry::class);
         $importHistoryModel = $this->createMock(History::class);
         $localeDate = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        $upload = $this->createMock(Upload::class);
+        $localeEmulator = $this->getMockForAbstractClass(LocaleEmulatorInterface::class);
+        $localeEmulator->method('emulate')
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->objectManagerHelper->prepareObjectManager();
         $import = new Import(
             $logger,
             $filesystem,
@@ -169,7 +236,12 @@ class ReportTest extends TestCase
             $behaviorFactory,
             $indexerRegistry,
             $importHistoryModel,
-            $localeDate
+            $localeDate,
+            [],
+            null,
+            null,
+            $upload,
+            $localeEmulator
         );
         $import->setData('entity', 'catalog_product');
         $message = $this->report->getSummaryStats($import);
@@ -184,7 +256,10 @@ class ReportTest extends TestCase
     public function testImportFileExistsException($fileName)
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Filename has not permitted symbols in it');
+        $this->expectExceptionMessage('File not found');
+        $this->importHistoryDirectory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->throwException(new ValidatorException(__("Error"))));
         $this->report->importFileExists($fileName);
     }
 
@@ -201,7 +276,7 @@ class ReportTest extends TestCase
      *
      * @return array
      */
-    public function importFileExistsDataProvider()
+    public static function importFileExistsDataProvider()
     {
         return [
             [
@@ -244,5 +319,35 @@ class ReportTest extends TestCase
             $testDelimiter,
             $this->report->getDelimiter()
         );
+    }
+
+    /**
+     * Returns Timezone, UTC by default
+     *
+     * @param string $timezone
+     * @return Timezone|MockObject
+     */
+    private function getTimezone(string $timezone = 'UTC'): Timezone|MockObject
+    {
+        $localeResolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMock();
+        $dateTime = $this->getMockBuilder(DateTime::class)->getMock();
+        $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
+        $timezoneMock = $this->getMockBuilder(Timezone::class)
+            ->addMethods(['diff', 'format'])
+            ->onlyMethods(['getConfigTimezone'])
+            ->setConstructorArgs([
+                'scopeResolver' => $scopeResolver,
+                'localeResolver' => $localeResolver,
+                'dateTime' => $dateTime,
+                'scopeConfig' => $scopeConfig,
+                'scopeType' => 'default',
+                'defaultTimezonePath' => 'general/locale/timezone',
+                'dateFormatterFactory' => (new DateFormatterFactory())
+            ])->getMock();
+
+        $timezoneMock->method('getConfigTimezone')->willReturn($timezone);
+
+        return $timezoneMock;
     }
 }

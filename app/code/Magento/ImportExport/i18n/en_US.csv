@@ -82,6 +82,7 @@ Status,Status
 "This file does not contain any data.","This file does not contain any data."
 "Begin import of ""%1"" with ""%2"" behavior","Begin import of ""%1"" with ""%2"" behavior"
 "The import was successful.","The import was successful."
+"The import was not successful.","The import was not successful."
 "The file you uploaded has no extension.","The file you uploaded has no extension."
 "The source file moving process failed.","The source file moving process failed."
 "Begin data validation","Begin data validation"

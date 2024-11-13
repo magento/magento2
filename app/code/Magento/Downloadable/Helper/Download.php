@@ -22,17 +22,17 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Link type for url
      */
-    const LINK_TYPE_URL = 'url';
+    public const LINK_TYPE_URL = 'url';
 
     /**
      * Link type for file
      */
-    const LINK_TYPE_FILE = 'file';
+    public const LINK_TYPE_FILE = 'file';
 
     /**
      * Config path to content disposition
      */
-    const XML_PATH_CONTENT_DISPOSITION = 'catalog/downloadable/content_disposition';
+    public const XML_PATH_CONTENT_DISPOSITION = 'catalog/downloadable/content_disposition';
 
     /**
      * Type of link
@@ -42,8 +42,6 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_linkType = self::LINK_TYPE_FILE;
 
     /**
-     * Resource file
-     *
      * @var string
      */
     protected $_resourceFile = null;
@@ -70,8 +68,6 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_contentType = 'application/octet-stream';
 
     /**
-     * File name
-     *
      * @var string
      */
     protected $_fileName = 'download';
@@ -84,8 +80,6 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_coreFileStorageDb;
 
     /**
-     * Downloadable file
-     *
      * @var \Magento\Downloadable\Helper\File
      */
     protected $_downloadableFile;
@@ -255,7 +249,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if (self::LINK_TYPE_FILE == $linkType) {
             //check LFI protection
-            if (preg_match('#\.\.[\\\/]#', $resourceFile)) {
+            if ($resourceFile && preg_match('#\.\.[\\\/]#', $resourceFile)) {
                 throw new \InvalidArgumentException(
                     'Requested file may not include parent directory traversal ("../", "..\\" notation)'
                 );

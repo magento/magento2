@@ -165,10 +165,10 @@
             <scrollToTopOfPage stepKey="scrollToTop"/>
             <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveTaxOptions"/>
 
-            <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
+            <waitForText userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+                <argument name="indices" value="cataloginventory_stock catalog_product_price"/>
             </actionGroup>
         </before>
         <after>
@@ -210,7 +210,7 @@
         </after>
 
         <!-- Go to storefront category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
 
         <see userInput="From $7.33" selector="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct.id$$)}}" stepKey="seePriceFromInCategoryBundle1"/>

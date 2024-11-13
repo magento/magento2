@@ -69,10 +69,10 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
         $adminUsernameFromFixture = 'adminUserNotExpired';
         $this->loginUser($adminUsernameFromFixture);
         $user = $this->loadUserByUsername($adminUsernameFromFixture);
-        $sessionId = $this->authSession->getSessionId();
+        $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
         $this->expireUser($user);
         $this->userExpirationManager->deactivateExpiredUsersById([$user->getId()]);
-        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $this->adminSessionInfo->load($adminSessionInfoId, 'id');
         $user->reload();
         $userExpirationModel = $this->loadExpiredUserModelByUser($user);
         static::assertEquals(0, $user->getIsActive());
@@ -89,11 +89,11 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
         $adminUsernameFromFixture = 'adminUserNotExpired';
         $this->loginUser($adminUsernameFromFixture);
         $user = $this->loadUserByUsername($adminUsernameFromFixture);
-        $sessionId = $this->authSession->getSessionId();
+        $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
         $this->userExpirationManager->deactivateExpiredUsersById([$user->getId()]);
         $user->reload();
         $userExpirationModel = $this->loadExpiredUserModelByUser($user);
-        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $this->adminSessionInfo->load($adminSessionInfoId, 'id');
         static::assertEquals(1, $user->getIsActive());
         static::assertEquals($user->getId(), $userExpirationModel->getId());
         static::assertEquals(AdminSessionInfo::LOGGED_IN, (int)$this->adminSessionInfo->getStatus());

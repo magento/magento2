@@ -38,12 +38,12 @@ class ShippingProcessorTest extends TestCase
     {
         $this->shippingAddressManagement = $this->getMockBuilder(ShippingAddressManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['assign'])
+            ->onlyMethods(['assign'])
             ->getMock();
 
         $this->shippingMethodManagement = $this->getMockBuilder(ShippingMethodManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['apply'])
+            ->onlyMethods(['apply'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);
@@ -99,7 +99,7 @@ class ShippingProcessorTest extends TestCase
      * Get variations for save method testing
      * @return array
      */
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         return [
             ['carrier_Global_World_Economy', 'carrier', 'Global_World_Economy'],

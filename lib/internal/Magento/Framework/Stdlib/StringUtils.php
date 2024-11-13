@@ -16,7 +16,7 @@ class StringUtils
     /**
      * Default charset
      */
-    const ICONV_CHARSET = 'UTF-8';
+    public const ICONV_CHARSET = 'UTF-8';
 
     /**
      * Capitalize first letters and convert separators if needed
@@ -28,6 +28,9 @@ class StringUtils
      */
     public function upperCaseWords($str, $sourceSeparator = '_', $destinationSeparator = '_')
     {
+        $destinationSeparator = $destinationSeparator !== null ? $destinationSeparator : '';
+        $sourceSeparator = $sourceSeparator !== null ? $sourceSeparator : '';
+        $str = $str !== null ? $str : '';
         return str_replace(' ', $destinationSeparator, ucwords(str_replace($sourceSeparator, ' ', $str)));
     }
 
@@ -79,6 +82,7 @@ class StringUtils
         if (!$strLen || !is_int($length) || $length <= 0) {
             return $result;
         }
+        $value = $value !== null ? $value : '';
         if ($trim) {
             $value = trim(preg_replace('/\s{2,}/siu', ' ', $value));
         }
@@ -89,7 +93,7 @@ class StringUtils
             }
         } else {
             // split smartly, keeping words
-            $split = preg_split('/(' . $wordSeparatorRegex . '+)/siu', $value, null, PREG_SPLIT_DELIM_CAPTURE);
+            $split = preg_split('/(' . $wordSeparatorRegex . '+)/siu', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
             $index = 0;
             $space = '';
             $spaceLen = 0;
@@ -149,7 +153,7 @@ class StringUtils
      */
     public function strlen($string)
     {
-        return mb_strlen($string, self::ICONV_CHARSET);
+        return $string !== null ? mb_strlen($string, self::ICONV_CHARSET) : 0;
     }
 
     /**
@@ -160,7 +164,7 @@ class StringUtils
      */
     public function cleanString($string)
     {
-        return mb_convert_encoding($string, self::ICONV_CHARSET);
+        return $string !== null ? mb_convert_encoding($string, self::ICONV_CHARSET) : '';
     }
 
     /**
@@ -209,6 +213,6 @@ class StringUtils
      */
     public function strpos($haystack, $needle, $offset = null)
     {
-        return mb_strpos($haystack, $needle, $offset, self::ICONV_CHARSET);
+        return mb_strpos((string)$haystack, (string)$needle, $offset ?? 0, self::ICONV_CHARSET);
     }
 }

@@ -167,7 +167,7 @@ abstract class AbstractAction
         )->join(
             ['relation' => $this->_getTable('catalog_product_relation')],
             'relation.parent_id = cpe.' . $linkField
-        )->where('child_id IN(?)', $childIds);
+        )->where('child_id IN(?)', $childIds, \Zend_Db::INT_TYPE);
         return $connection->fetchCol($select);
     }
 
@@ -262,7 +262,7 @@ abstract class AbstractAction
         // retrieve product types by processIds
         $select = $connection->select()
             ->from($this->_getTable('catalog_product_entity'), ['entity_id', 'type_id'])
-            ->where('entity_id IN(?)', $productIds);
+            ->where('entity_id IN(?)', $productIds, \Zend_Db::INT_TYPE);
         $pairs = $connection->fetchPairs($select);
 
         $byType = [];

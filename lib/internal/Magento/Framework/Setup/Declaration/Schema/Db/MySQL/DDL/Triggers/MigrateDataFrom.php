@@ -22,7 +22,7 @@ class MigrateDataFrom implements DDLTriggerInterface
     /**
      * Pattern with which we can match whether we can apply and use this trigger or not.
      */
-    const MATCH_PATTERN = '/migrateDataFrom\(([^\)]+)\)/';
+    public const MATCH_PATTERN = '/migrateDataFrom\(([^\)]+)\)/';
 
     /**
      * @var ResourceConnection
@@ -54,7 +54,7 @@ class MigrateDataFrom implements DDLTriggerInterface
     {
         /** @var Column $column */
         $column = $columnHistory->getNew();
-        preg_match(self::MATCH_PATTERN, $column->getOnCreate(), $matches);
+        preg_match(self::MATCH_PATTERN, $column->getOnCreate() ?? '', $matches);
         return function () use ($column, $matches) {
             $tableName = $column->getTable()->getName();
             $adapter = $this->resourceConnection->getConnection(

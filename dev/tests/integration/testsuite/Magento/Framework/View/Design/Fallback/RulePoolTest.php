@@ -82,7 +82,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getPatternDirsExceptionDataProvider()
+    public static function getPatternDirsExceptionDataProvider()
     {
         $exceptions = [
             'no theme' => [
@@ -138,7 +138,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPatternDirsDataProvider()
+    public static function getPatternDirsDataProvider()
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar */

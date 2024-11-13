@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Module\Di\App\Task\Operation;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
@@ -17,7 +16,7 @@ class ApplicationCodeGenerator implements OperationInterface
     /**
      * @var array
      */
-    private $data = [];
+    private $data;
 
     /**
      * @var ClassesScanner
@@ -53,7 +52,7 @@ class ApplicationCodeGenerator implements OperationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function doOperation()
     {
@@ -66,15 +65,10 @@ class ApplicationCodeGenerator implements OperationInterface
             if (!is_array($paths)) {
                 $paths = (array)$paths;
             }
-            $files = [];
-            foreach ($paths as $path) {
-                $this->classesScanner->getList($path);
-                $files = array_merge_recursive(
-                    $files,
-                    $this->directoryScanner->scan($path, $this->data['filePatterns'], $this->data['excludePatterns'])
-                );
-            }
-            $entities = $this->phpScanner->collectEntities($files['php']);
+
+            $files = $this->getFiles($paths);
+
+            $entities = $this->phpScanner->collectEntities($files['php'] ?? []);
             foreach ($entities as $entityName) {
                 class_exists($entityName);
             }
@@ -89,5 +83,29 @@ class ApplicationCodeGenerator implements OperationInterface
     public function getName()
     {
         return 'Application code generator';
+    }
+
+    /**
+     * Get list if files.
+     *
+     * @param string[] $paths
+     * @return array
+     * @throws FileSystemException
+     */
+    private function getFiles(array $paths): array
+    {
+        $files = [];
+
+        foreach ($paths as $path) {
+            $this->classesScanner->getList($path);
+
+            $files[] = $this->directoryScanner->scan(
+                $path,
+                $this->data['filePatterns'],
+                $this->data['excludePatterns']
+            );
+        }
+
+        return array_merge_recursive([], ...$files);
     }
 }

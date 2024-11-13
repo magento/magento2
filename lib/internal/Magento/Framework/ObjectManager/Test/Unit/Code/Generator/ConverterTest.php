@@ -12,6 +12,8 @@ use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
+use Magento\Framework\ObjectManager\Code\Generator\Sample;
+use Magento\Framework\ObjectManager\Code\Generator\SampleConverter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -48,10 +50,13 @@ class ConverterTest extends TestCase
      */
     private $definedClassesMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->sourceClassName = '\\' . \Magento\Framework\ObjectManager\Code\Generator\Sample::class;
-        $this->resultClassName = '\\' . \Magento\Framework\ObjectManager\Code\Generator\SampleConverter::class;
+        $this->sourceClassName = '\\' . Sample::class;
+        $this->resultClassName = '\\' . SampleConverter::class;
 
         $this->ioObjectMock = $this->createMock(Io::class);
         $this->classGenerator = $this->createMock(ClassGenerator::class);
@@ -73,13 +78,16 @@ class ConverterTest extends TestCase
         );
     }
 
-    public function testGenerate()
+    /**
+     * @return void
+     */
+    public function testGenerate(): void
     {
         $generatedCode = 'Generated code';
         $resultFileName = 'SampleConverter.php';
 
         //Mocking _validateData call
-        $this->definedClassesMock->expects($this->at(0))
+        $this->definedClassesMock
             ->method('isClassLoadable')
             ->willReturn(true);
 

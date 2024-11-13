@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddOptionsForProductAttributeActionGroup">
+        <annotations>
+            <description>Click on new value of selector attribute and fill the values for storefront view, and admin product edit page</description>
+        </annotations>
+        <arguments>
+            <argument name="adminAttributeFirstRowValue" defaultValue="Blue" type="string" />
+            <argument name="adminAttributeSecondRowValue" defaultValue="Yellow" type="string" />
+            <argument name="storeViewAttributeFirstRowValue" defaultValue="Blau" type="string" />
+            <argument name="storeViewAttributeSecondRowValue" defaultValue="Gelb" type="string" />
+            <argument name="firstRow" defaultValue="0" type="string"/>
+            <argument name="secondRow" defaultValue="1" type="string"/>
+        </arguments>
+        <scrollTo selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="scrollToOption"/>
+        <waitForElementClickable selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="waitForAddButtonToBeClickable"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="clickOnAddValueButton"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.adminOption(firstRow)}}" stepKey="waitForFirstAdminAttributeFieldToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.adminOption(firstRow)}}" userInput="{{adminAttributeFirstRowValue}}" stepKey="fillFirstRowAdminField"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.firstOptionStoreView}}" stepKey="waitForFirstRowCustomAttributeFieldToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.firstOptionStoreView}}" userInput="{{storeViewAttributeFirstRowValue}}" stepKey="fillFirstRowCustomField"/>
+        <waitForElementClickable selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="againWaitForAddButtonToBeClickable"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.addValue}}" stepKey="againClickOnAddValueButton"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.adminOption(secondRow)}}" stepKey="waitForSecondRowAdminAttributeFieldToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.adminOption(secondRow)}}" userInput="{{adminAttributeSecondRowValue}}" stepKey="fillSecondRowAdminField"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.secondOptionStoreView}}" stepKey="waitForSecondRowCustomAttributeFieldToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.secondOptionStoreView}}" userInput="{{storeViewAttributeSecondRowValue}}" stepKey="fillSecondRowCustomField"/>
+    </actionGroup>
+</actionGroups>

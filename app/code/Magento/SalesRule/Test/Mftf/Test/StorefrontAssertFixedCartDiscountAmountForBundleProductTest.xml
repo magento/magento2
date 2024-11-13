@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertFixedCartDiscountAmountForBundleProductTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Fixed Amount Cart Price Rule"/>
+            <title value="Checking Fixed Amount Cart Price Rule is correctly applied to bundle products"/>
+            <description value="Checking Fixed Amount Cart Price Rule is correctly applied to bundle products"/>
+            <severity value="AVERAGE"/>
+            <group value="SalesRule"/>
+            <testCaseId value="MC-39480"/>
+        </annotations>
+        <before>
+            <createData entity="SalesRuleNoCouponWithFixedDiscountWholeCart" stepKey="createSalesRule"/>
+            <actionGroup ref="AdminCreateApiDynamicBundleProductAllOptionTypesActionGroup" stepKey="createBundleProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCatalogInventory">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <deleteData createDataKey="createBundleProductCreateBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="simpleProduct1CreateBundleProduct" stepKey="deleteSimpleProduct1"/>
+        </after>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createBundleProductCreateBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct2CreateBundleProduct.name$$ +$$$simpleProduct2CreateBundleProduct.price$$.00" stepKey="selectOption0Product1"/>
+        <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Drop-down Option')}}" userInput="$$simpleProduct2CreateBundleProduct.name$$ +$$$simpleProduct2CreateBundleProduct.price$$.00" stepKey="checkOption0Product1"/>
+        <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Radio Buttons Option', '1')}}" stepKey="selectOption1Product0"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Radio Buttons Option', '1')}}" stepKey="checkOption1Product0"/>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Checkbox Option', '1')}}" stepKey="selectOption2Product0"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Checkbox Option', '1')}}" stepKey="checkOption2Product0"/>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Checkbox Option', '2')}}" stepKey="selectOption2Product1"/>
+        <seeCheckboxIsChecked selector="{{StorefrontBundledSection.checkboxOptionThreeProducts('Checkbox Option', '1')}}" stepKey="checkOption2Product1"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssert" after="openShoppingCartPage">
+            <argument name="subtotal" value="60.00"/>
+            <argument name="shipping" value="5.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="15.00"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -7,8 +7,10 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -17,6 +19,7 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
@@ -28,14 +31,20 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Store\Model\Store;
+use Magento\Catalog\Api\Data\EavAttributeInterface;
 
 /**
  * @inheritdoc
  *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure.InvalidDeprecatedTagUsage
  */
-class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
+class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
@@ -56,11 +65,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @var Product[]
      */
     protected $instancesById = [];
-
-    /**
-     * @var \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper
-     */
-    protected $initializationHelper;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory
@@ -179,9 +183,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $linkManagement;
 
     /**
+     * @var ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
-     * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -205,12 +213,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param int $cacheLimit [optional]
      * @param ReadExtensions $readExtensions
      * @param CategoryLinkManagementInterface $linkManagement
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ProductFactory $productFactory,
-        \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
         \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -233,11 +241,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
         ReadExtensions $readExtensions = null,
-        CategoryLinkManagementInterface $linkManagement = null
+        CategoryLinkManagementInterface $linkManagement = null,
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
-        $this->initializationHelper = $initializationHelper;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
@@ -260,6 +268,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             ->get(ReadExtensions::class);
         $this->linkManagement = $linkManagement ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(CategoryLinkManagementInterface::class);
+        $this->scopeOverriddenValue = $scopeOverriddenValue ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ScopeOverriddenValue::class);
     }
 
     /**
@@ -267,7 +277,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
-        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
+        $cacheKey = $this->getCacheKey([$editMode, $storeId === null ? $storeId : (int) $storeId]);
         $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
         if ($cachedProduct === null || $forceReload) {
             $product = $this->productFactory->create();
@@ -282,7 +292,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('_edit_mode', true);
             }
             if ($storeId !== null) {
-                $product->setData('store_id', $storeId);
+                $product->setData('store_id', (int) $storeId);
             }
             $product->load($productId);
             $this->cacheProduct($cacheKey, $product);
@@ -297,7 +307,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function getById($productId, $editMode = false, $storeId = null, $forceReload = false)
     {
-        $cacheKey = $this->getCacheKey([$editMode, $storeId]);
+        $cacheKey = $this->getCacheKey([$editMode, $storeId === null ? $storeId : (int) $storeId]);
         if (!isset($this->instancesById[$productId][$cacheKey]) || $forceReload) {
             $product = $this->productFactory->create();
             if ($editMode) {
@@ -509,14 +519,24 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(ProductInterface $product, $saveOptions = false)
     {
         $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
+        $productDataToChange = $product->getData();
+
+        if (!$product->getSku()) {
+            throw new CouldNotSaveException(
+                __("The \"%1\" attribute value is empty. Set the attribute and try again.", "sku")
+            );
+        }
 
         try {
-            $existingProduct = $product->getId() ? $this->getById($product->getId()) : $this->get($product->getSku());
+            $existingProduct = $product->getId() ?
+                $this->getById($product->getId()) :
+                $this->get($product->getSku());
 
             $product->setData(
                 $this->resourceModel->getLinkField(),
@@ -548,7 +568,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productDataArray['store_id'] = (int) $this->storeManager->getStore()->getId();
         }
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
-
         $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery'])) {
             $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
@@ -567,6 +586,67 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         if ($tierPrices !== null) {
             $product->setData('tier_price', $tierPrices);
+        }
+
+        try {
+            $stores = $product->getStoreIds();
+            $websites = $product->getWebsiteIds();
+        } catch (NoSuchEntityException $exception) {
+            $stores = null;
+            $websites = null;
+        }
+
+        if (!empty($existingProduct) && is_array($stores) && is_array($websites)) {
+            $hasDataChanged = false;
+            $productAttributes = $product->getAttributes();
+            if ($productAttributes !== null
+                && $product->getStoreId() !== Store::DEFAULT_STORE_ID
+                && (count($stores) > 1 || count($websites) === 1)
+            ) {
+                $imageRoles = ['image', 'small_image', 'thumbnail'];
+                foreach ($productAttributes as $attribute) {
+                    $attributeCode = $attribute->getAttributeCode();
+                    $value = $product->getData($attributeCode);
+                    if (!in_array($attributeCode, $imageRoles)
+                        && $existingProduct->getData($attributeCode) === $value
+                        && $existingProduct->getOrigData($attributeCode) === $value
+                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                        && !is_array($value)
+                        && !$attribute->isStatic()
+                        && $value !== null
+                        && !$this->scopeOverriddenValue->containsValue(
+                            ProductInterface::class,
+                            $product,
+                            $attributeCode,
+                            $product->getStoreId()
+                        )
+                    ) {
+                        $product->setData(
+                            $attributeCode,
+                            $attributeCode === ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY ? false : null
+                        );
+                        $hasDataChanged = true;
+                    } elseif (in_array($attributeCode, $imageRoles)
+                        && $existingProduct->getData($attributeCode) === $value
+                        && !array_key_exists($attributeCode, $productDataToChange)
+                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                        && $value !== null
+                        && !$this->scopeOverriddenValue->containsValue(
+                            ProductInterface::class,
+                            $product,
+                            $attributeCode,
+                            $product->getStoreId()
+                        )
+
+                    ) {
+                        $product->setData($attributeCode, null);
+                        $hasDataChanged = true;
+                    }
+                }
+                if ($hasDataChanged) {
+                    $product->setData('_edit_mode', true);
+                }
+            }
         }
 
         $this->saveProduct($product);
@@ -619,7 +699,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * @inheritdoc
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
@@ -628,6 +708,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $this->joinPositionField($collection, $searchCriteria);
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
@@ -731,6 +812,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
+     * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
      * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
@@ -738,7 +820,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                // phpstan:ignore "Class Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor not found."
+                // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
                 \Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor::class
             );
         }
@@ -855,5 +937,47 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $e
             );
         }
+    }
+
+    /**
+     * Join category position field to make sorting by position possible.
+     *
+     * @param Collection $collection
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return void
+     */
+    private function joinPositionField(
+        Collection $collection,
+        SearchCriteriaInterface $searchCriteria
+    ): void {
+        $categoryIds = [[]];
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                if ($filter->getField() === 'category_id') {
+                    $filterValue = $filter->getValue();
+                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue);
+                }
+            }
+        }
+        $categoryIds = array_unique(array_merge(...$categoryIds));
+        if (count($categoryIds) === 1) {
+            $collection->joinField(
+                'position',
+                'catalog_category_product',
+                'position',
+                'product_id=entity_id',
+                ['category_id' => current($categoryIds)],
+                'left'
+            );
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->instances = [];
+        $this->instancesById = [];
     }
 }

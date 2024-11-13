@@ -1,20 +1,30 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Checkout\Controller\Cart;
+use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filter\LocalizedToNormalized;
+use Magento\Framework\Locale\ResolverInterface;
+use Psr\Log\LoggerInterface;
 
-class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
+/**
+ * Process updating product options in a cart item.
+ */
+class UpdateItemOptions extends Cart implements HttpPostActionInterface
 {
     /**
-     * Update product configuration for a cart item
+     * Update product configuration for a cart item.
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -28,27 +38,27 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements Htt
         }
         try {
             if (isset($params['qty'])) {
-                $filter = new \Zend_Filter_LocalizedToNormalized(
-                    ['locale' => $this->_objectManager->get(
-                        \Magento\Framework\Locale\ResolverInterface::class
-                    )->getLocale()]
+                $inputFilter = new LocalizedToNormalized(
+                    [
+                        'locale' => $this->_objectManager->get(ResolverInterface::class)->getLocale(),
+                    ]
                 );
-                $params['qty'] = $filter->filter($params['qty']);
+                $params['qty'] = $inputFilter->filter($params['qty']);
             }
 
             $quoteItem = $this->cart->getQuote()->getItemById($id);
             if (!$quoteItem) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __("The quote item isn't found. Verify the item and try again.")
                 );
             }
 
-            $item = $this->cart->updateItem($id, new \Magento\Framework\DataObject($params));
+            $item = $this->cart->updateItem($id, new DataObject($params));
             if (is_string($item)) {
-                throw new \Magento\Framework\Exception\LocalizedException(__($item));
+                throw new LocalizedException(__($item));
             }
             if ($item->getHasError()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
+                throw new LocalizedException(__($item->getMessage()));
             }
 
             $related = $this->getRequest()->getParam('related_product');
@@ -73,7 +83,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements Htt
                 }
                 return $this->_goBack($this->_url->getUrl('checkout/cart'));
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             if ($this->_checkoutSession->getUseNotice(true)) {
                 $this->messageManager->addNoticeMessage($e->getMessage());
             } else {
@@ -87,14 +97,15 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart implements Htt
             if ($url) {
                 return $this->resultRedirectFactory->create()->setUrl($url);
             } else {
-                $cartUrl = $this->_objectManager->get(\Magento\Checkout\Helper\Cart::class)->getCartUrl();
-                return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
+                $cartUrl = $this->_objectManager->get(CartHelper::class)->getCartUrl();
+                return $this->resultRedirectFactory->create()->setUrl($cartUrl);
             }
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t update the item right now.'));
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             return $this->_goBack();
         }
+
         return $this->resultRedirectFactory->create()->setPath('*/*');
     }
 }

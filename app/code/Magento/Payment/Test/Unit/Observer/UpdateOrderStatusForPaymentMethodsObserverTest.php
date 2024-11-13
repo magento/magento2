@@ -62,20 +62,29 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
 
         $this->observerMock = $this->getMockBuilder(
             Observer::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+        )->disableOriginalConstructor()->getMock();
     }
 
     public function testUpdateOrderStatusForPaymentMethodsNotNewState()
     {
-        $this->_prepareEventMockWithMethods(['getState']);
+        $this->eventMock = $this->getMockBuilder(
+            Event::class
+        )->disableOriginalConstructor()
+            ->addMethods(['getState'])->getMock();
+        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
+
         $this->eventMock->expects($this->once())->method('getState')->willReturn('NotNewState');
         $this->updateOrderStatusForPaymentMethodsObserver->execute($this->observerMock);
     }
 
     public function testUpdateOrderStatusForPaymentMethodsNewState()
     {
-        $this->_prepareEventMockWithMethods(['getState', 'getStatus']);
+        $this->eventMock = $this->getMockBuilder(
+            Event::class
+        )->disableOriginalConstructor()
+            ->addMethods(['getState', 'getStatus'])->getMock();
+        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
+
         $this->eventMock->expects($this->once())->method('getState')->willReturn(
             Order::STATE_NEW
         );
@@ -99,20 +108,6 @@ class UpdateOrderStatusForPaymentMethodsObserverTest extends TestCase
             0
         );
         $this->updateOrderStatusForPaymentMethodsObserver->execute($this->observerMock);
-    }
-
-    /**
-     * Prepares EventMock with set of methods
-     *
-     * @param $methodsList
-     */
-    private function _prepareEventMockWithMethods($methodsList)
-    {
-        $this->eventMock = $this->getMockBuilder(
-            Event::class
-        )->disableOriginalConstructor()
-            ->setMethods($methodsList)->getMock();
-        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($this->eventMock);
     }
 
     /**

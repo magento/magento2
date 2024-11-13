@@ -16,8 +16,6 @@ use Magento\Framework\ObjectManagerInterface;
 class BlockFactory
 {
     /**
-     * Object manager
-     *
      * @var ObjectManagerInterface
      */
     protected $objectManager;

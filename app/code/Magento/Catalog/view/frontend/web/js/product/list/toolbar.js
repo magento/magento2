@@ -145,6 +145,10 @@ define([
                 currentPage = this.getCurrentPage(),
                 form, params, key, input, formKey, newPage;
 
+            if (currentPage > 1 && paramName === this.options.mode) {
+                delete paramData[this.options.page];
+            }
+
             if (currentPage > 1 && paramName === this.options.limit) {
                 newPage = Math.floor(this.getCurrentLimit() * (currentPage - 1) / paramValue) + 1;
 

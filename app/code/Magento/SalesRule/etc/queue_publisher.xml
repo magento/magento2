@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
-    <publisher topic="sales_rule.codegenerator">
-        <connection name="db" exchange="magento-db" />
-    </publisher>
+    <publisher topic="sales_rule.codegenerator"/>
+    <publisher topic="sales.rule.update.coupon.usage"/>
+    <publisher topic="sales.rule.quote.trigger.recollect"/>
 </config>

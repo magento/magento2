@@ -61,23 +61,23 @@ class HtmlTransactionIdObserverTest extends TestCase
     public function testObserveHtmlTransactionId()
     {
         $observerMock = $this->getMockBuilder(Observer::class)
-            ->setMethods(['getDataObject'])
+            ->addMethods(['getDataObject'])
             ->disableOriginalConstructor()
             ->getMock();
         $transactionMock = $this->getMockBuilder(Transaction::class)
-            ->setMethods(['getOrder', 'getTxnId', 'setData'])
+            ->onlyMethods(['getOrder', 'getTxnId', 'setData'])
             ->disableOriginalConstructor()
             ->getMock();
         $orderMock = $this->getMockBuilder(Order::class)
-            ->setMethods(['getPayment'])
+            ->onlyMethods(['getPayment'])
             ->disableOriginalConstructor()
             ->getMock();
         $paymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods(['getMethodInstance'])
+            ->onlyMethods(['getMethodInstance'])
             ->disableOriginalConstructor()
             ->getMock();
         $methodInstanceMock = $this->getMockBuilder(MethodInterface::class)
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
 
         $observerMock->expects($this->once())

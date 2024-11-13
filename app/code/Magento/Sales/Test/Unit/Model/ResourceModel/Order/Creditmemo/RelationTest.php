@@ -52,7 +52,7 @@ class RelationTest extends TestCase
     {
         $this->itemResourceMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'save'
                 ]
@@ -62,7 +62,7 @@ class RelationTest extends TestCase
             CreditMemoComment::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'save'
                 ]
@@ -70,7 +70,7 @@ class RelationTest extends TestCase
             ->getMock();
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getItems',
@@ -80,7 +80,7 @@ class RelationTest extends TestCase
             ->getMock();
         $this->itemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'setParentId'
                 ]

@@ -278,11 +278,11 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function arrayParamTypeDataProvider()
+    public static function arrayParamTypeDataProvider()
     {
         return [
-            ['method name' => 'addData', 'type' => 'array[]'],
-            ['method name' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
+            ['methodName' => 'addData', 'type' => 'array[]'],
+            ['methodName' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
         ];
     }
 
@@ -312,11 +312,11 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function methodParamsDataProvider()
+    public static function methodParamsDataProvider()
     {
         return [
-            ['method name' => 'setName', 'descriptions' => ['Name of the attribute']],
-            ['method name' => 'setData', 'descriptions' => ['Key is used as index', null]],
+            ['methodName' => 'setName', 'descriptions' => ['Name of the attribute']],
+            ['methodName' => 'setData', 'descriptions' => ['Key is used as index', null]],
         ];
     }
 
@@ -330,20 +330,50 @@ class TypeProcessorTest extends TestCase
 
     /**
      * Checks a case when method has only `@inheritdoc` annotation.
+     *
+     * @dataProvider getReturnTypeWithInheritDocBlockDataProvider
+     * @param string $methodName
+     * @param array $returnTypeData
      */
-    public function testGetReturnTypeWithInheritDocBlock()
+    public function testGetReturnTypeWithInheritDocBlock(string $methodName, array $returnTypeData)
     {
-        $expected = [
-            'type' => 'string',
-            'isRequired' => true,
-            'description' => null,
-            'parameterCount' => 0
-        ];
-
         $classReflection = new ClassReflection(TSample::class);
-        $methodReflection = $classReflection->getMethod('getPropertyName');
+        $methodReflection = $classReflection->getMethod($methodName);
 
-        self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
+        self::assertEquals($returnTypeData, $this->typeProcessor->getGetterReturnType($methodReflection));
+    }
+
+    public static function getReturnTypeWithInheritDocBlockDataProvider(): array
+    {
+        return [
+            [
+                'getPropertyName',
+                [
+                    'type' => 'string',
+                    'isRequired' => true,
+                    'description' => null,
+                    'parameterCount' => 0,
+                ],
+            ],
+            [
+                'getData',
+                [
+                    'type' => 'array',
+                    'isRequired' => true,
+                    'description' => null,
+                    'parameterCount' => 0,
+                ],
+            ],
+            [
+                'getDataOverridden',
+                [
+                    'type' => 'array',
+                    'isRequired' => true,
+                    'description' => null,
+                    'parameterCount' => 0,
+                ],
+            ],
+        ];
     }
 
     /**
@@ -382,7 +412,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function simpleAndComplexDataProvider(): array
+    public static function simpleAndComplexDataProvider(): array
     {
         return [
             ['string', true],
@@ -411,7 +441,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function basicClassNameProvider(): array
+    public static function basicClassNameProvider(): array
     {
         return [
             ['SomeClass[]', 'SomeClass'],
@@ -440,7 +470,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function isFullyQualifiedClassNamesDataProvider(): array
+    public static function isFullyQualifiedClassNamesDataProvider(): array
     {
         return [
             ['SomeClass', false],
@@ -480,7 +510,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function resolveFullyQualifiedClassNamesDataProvider(): array
+    public static function resolveFullyQualifiedClassNamesDataProvider(): array
     {
         return [
             [UseSample::class, 'string', 'string'],

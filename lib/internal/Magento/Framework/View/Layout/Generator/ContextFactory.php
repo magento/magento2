@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\View\Layout\Generator;
 
+/**
+ * @api
+ */
 class ContextFactory
 {
     /**

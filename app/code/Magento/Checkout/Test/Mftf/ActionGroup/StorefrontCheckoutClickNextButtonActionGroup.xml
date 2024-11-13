@@ -14,6 +14,9 @@
         </annotations>
 
         <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButtonClickable"/>
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
     </actionGroup>
 </actionGroups>

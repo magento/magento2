@@ -29,7 +29,7 @@ define([
             $t: $t
         });
 
-        ko.utils.arrayForEach(el.childNodes, ko.cleanNode);
+        ko.utils.arrayForEach(ko.virtualElements.childNodes(el), ko.cleanNode);
 
         ko.applyBindingsToDescendants(component, el);
     }

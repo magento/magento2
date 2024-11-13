@@ -75,7 +75,7 @@ class ImageTest extends TestCase
         $this->attribute = $this->getMockForAbstractClass(
             AbstractAttribute::class,
             [],
-            'TestAttribute',
+            '',
             false,
             false,
             true,
@@ -85,7 +85,7 @@ class ImageTest extends TestCase
         $this->logger = $this->getMockForAbstractClass(
             LoggerInterface::class,
             [],
-            'TestLogger',
+            '',
             false,
             false,
             true,
@@ -115,7 +115,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function deletedValueDataProvider()
+    public static function deletedValueDataProvider()
     {
         return [
             [false],
@@ -147,7 +147,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function invalidValueDataProvider()
+    public static function invalidValueDataProvider()
     {
         $closure = function () {
             return false;
@@ -325,6 +325,7 @@ class ImageTest extends TestCase
      */
     public function testBeforeSaveAttributeStringValue()
     {
+        $this->attribute->method('getName')->willReturn('test_attribute_name');
         $model = $this->objectManager->getObject(Image::class);
         $model->setAttribute($this->attribute);
 
@@ -374,7 +375,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function attributeValueDataProvider()
+    public static function attributeValueDataProvider()
     {
         return [
             [[['name' => 'test1234.jpg']]],
@@ -392,6 +393,7 @@ class ImageTest extends TestCase
      */
     public function testBeforeSaveWithAdditionalData($value)
     {
+        $this->attribute->method('getName')->willReturn('test_attribute_name');
         $model = $this->setUpModelForTests();
 
         $this->imageUploader->expects($this->never())
@@ -416,6 +418,7 @@ class ImageTest extends TestCase
      */
     public function testBeforeSaveWithoutAdditionalData($value)
     {
+        $this->attribute->method('getName')->willReturn('test_attribute_name');
         $model = $this->setUpModelForTests();
 
         $this->imageUploader->expects($this->never())

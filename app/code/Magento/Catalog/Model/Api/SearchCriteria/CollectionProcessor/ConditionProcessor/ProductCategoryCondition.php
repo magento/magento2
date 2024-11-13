@@ -10,7 +10,6 @@ namespace Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\Condition
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Filter;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\NoSuchEntityException as CategoryDoesNotExistException;
 
 /**
@@ -63,12 +62,12 @@ class ProductCategoryCondition implements CustomConditionInterface
             )->where(
                 $this->resourceConnection->getConnection()->prepareSqlCondition(
                     'cat.category_id',
-                    [$this->mapConditionType($filter->getConditionType()) => $this->getCategoryIds($filter)]
+                    ['in' => $this->getCategoryIds($filter)]
                 )
             );
 
         $selectCondition = [
-            'in' => $categorySelect
+            $this->mapConditionType($filter->getConditionType()) => $categorySelect
         ];
 
         return $this->resourceConnection->getConnection()
@@ -85,7 +84,7 @@ class ProductCategoryCondition implements CustomConditionInterface
      */
     private function getCategoryIds(Filter $filter): array
     {
-        $categoryIds = explode(',', $filter->getValue());
+        $categoryIds = $filter->getValue() !== null ? explode(',', $filter->getValue()) : [];
         $childCategoryIds = [];
 
         foreach ($categoryIds as $categoryId) {
@@ -116,12 +115,7 @@ class ProductCategoryCondition implements CustomConditionInterface
      */
     private function mapConditionType(string $conditionType): string
     {
-        $conditionsMap = [
-            'eq' => 'in',
-            'neq' => 'nin',
-            'like' => 'in',
-            'nlike' => 'nin',
-        ];
-        return $conditionsMap[$conditionType] ?? $conditionType;
+        $ninConditions = ['nin', 'neq', 'nlike'];
+        return in_array($conditionType, $ninConditions, true) ? 'nin' : 'in';
     }
 }

@@ -9,12 +9,11 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class responsive for sending order and invoice emails when it's created through storefront.
+ * Class responsive for sending order emails when it's created through storefront.
  */
 class SubmitObserver implements ObserverInterface
 {
@@ -29,27 +28,19 @@ class SubmitObserver implements ObserverInterface
     private $orderSender;
 
     /**
-     * @var InvoiceSender
-     */
-    private $invoiceSender;
-
-    /**
      * @param LoggerInterface $logger
      * @param OrderSender $orderSender
-     * @param InvoiceSender $invoiceSender
      */
     public function __construct(
         LoggerInterface $logger,
-        OrderSender $orderSender,
-        InvoiceSender $invoiceSender
+        OrderSender $orderSender
     ) {
         $this->logger = $logger;
         $this->orderSender = $orderSender;
-        $this->invoiceSender = $invoiceSender;
     }
 
     /**
-     * Send order and invoice email.
+     * Send order email.
      *
      * @param Observer $observer
      *
@@ -69,11 +60,7 @@ class SubmitObserver implements ObserverInterface
         if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
             try {
                 $this->orderSender->send($order);
-                $invoice = current($order->getInvoiceCollection()->getItems());
-                if ($invoice) {
-                    $this->invoiceSender->send($invoice);
-                }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->logger->critical($e);
             }
         }

@@ -106,9 +106,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 
         $info = $this->getInfoInstance();
         $errorMsg = false;
-        $availableTypes = explode(',', $this->getConfigData('cctypes'));
+        $availableTypes = explode(',', $this->getConfigData('cctypes') ?? '');
 
-        $ccNumber = $info->getCcNumber();
+        $ccNumber = $info->getCcNumber() ?? '';
 
         // remove credit card number delimiters such as "-" and space
         $ccNumber = preg_replace('/[\-\s]+/', '', $ccNumber);
@@ -286,7 +286,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             [
                 'cc_type' => $additionalData->getCcType(),
                 'cc_owner' => $additionalData->getCcOwner(),
-                'cc_last_4' => substr($additionalData->getCcNumber(), -4),
+                'cc_last_4' => $additionalData->getCcNumber() !== null ?
+                    substr($additionalData->getCcNumber(), -4) : '',
                 'cc_number' => $additionalData->getCcNumber(),
                 'cc_cid' => $additionalData->getCcCid(),
                 'cc_exp_month' => $additionalData->getCcExpMonth(),
@@ -321,10 +322,11 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function validateCcNum($ccNumber)
     {
-        $cardNumber = strrev($ccNumber);
+        $cardNumber = $ccNumber !== null ? strrev($ccNumber) : '';
         $numSum = 0;
+        $length = strlen($cardNumber);
 
-        for ($i = 0; $i < strlen($cardNumber); $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $currentNum = substr($cardNumber, $i, 1);
 
             /**
@@ -361,7 +363,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function validateCcNumOther($ccNumber)
     {
-        return preg_match('/^\\d+$/', $ccNumber);
+        return preg_match('/^\\d+$/', (string)$ccNumber);
     }
 
     /**

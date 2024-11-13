@@ -10,6 +10,8 @@ namespace Magento\Eav\Test\Unit\Model\Entity\VersionControl;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
+use Magento\Eav\Model\Entity\AttributeLoaderInterface;
 use Magento\Eav\Model\Entity\VersionControl\AbstractEntity;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
@@ -45,6 +47,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         );
 
         parent::setUp();
+
     }
 
     /**
@@ -124,11 +127,23 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
                 ]
             ]
         );
+        $objects = [
+            [
+                Factory::class,
+                $this->createMock(UniqueValidationInterface::class)
+            ],
+            [
+                SerializerInterface::class,
+                $this->createMock(AttributeLoaderInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         /** @var AbstractEntity|MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
-            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
+            ->addMethods(['_getValue'])
+            ->onlyMethods(['beginTransaction', 'commit', 'rollback', 'getConnection'])
             ->getMock();
 
         $model->expects($this->any())->method('_getValue')->willReturn($eavConfig);
@@ -162,7 +177,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
         /** @var AbstractEntity|MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
-            ->setMethods(['beginTransaction', 'commit'])
+            ->onlyMethods(['beginTransaction', 'commit'])
             ->getMock();
 
         $this->entitySnapshot->expects($this->once())->method('isModified')->willReturn(false);

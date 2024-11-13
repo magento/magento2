@@ -18,6 +18,7 @@
             <testCaseId value="MC-14076"/>
             <group value="importExport"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Simple Product2 -->
@@ -34,6 +35,11 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
         </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+        </after>
 
         <!-- Import products with replace behavior -->
         <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProducts">

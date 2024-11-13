@@ -23,7 +23,14 @@ class PluginListGeneratorTest extends TestCase
     /**
      * Generated plugin list config for frontend scope
      */
-    const CACHE_ID = 'primary|global|frontend|plugin-list';
+    const CACHE_ID_FRONTEND = 'primary|global|frontend|plugin-list';
+
+    /**
+     * Generated plugin list config for dummy scope
+     */
+    const CACHE_ID_DUMMY = 'primary|global|dummy|plugin-list';
+
+    private $cacheIds = [self::CACHE_ID_FRONTEND, self::CACHE_ID_DUMMY];
 
     /**
      * @var PluginListGenerator
@@ -90,30 +97,50 @@ class PluginListGeneratorTest extends TestCase
      */
     public function testPluginListConfigGeneration()
     {
-        $scopes = ['frontend'];
+        $scopes = ['global', 'frontend', 'dummy'];
+        $globalPlugin = 'genericHeaderPlugin';
+        $frontendPlugin = 'response-http-page-cache';
         $this->model->write($scopes);
-        $configData = $this->model->load(self::CACHE_ID);
-        $this->assertNotEmpty($configData[0]);
-        $this->assertNotEmpty($configData[1]);
-        $this->assertNotEmpty($configData[2]);
-        $expected = [
+        $configDataFrontend = $this->model->load(self::CACHE_ID_FRONTEND);
+        $this->assertNotEmpty($configDataFrontend[0]);
+        $this->assertNotEmpty($configDataFrontend[1]);
+        $this->assertNotEmpty($configDataFrontend[2]);
+        $expectedFrontend = [
             1 => [
-                0 => 'genericHeaderPlugin',
-                1 => 'response-http-page-cache'
+                0 => $globalPlugin,
+                1 => $frontendPlugin
             ]
         ];
         // Here in test is assumed that this class below has 3 plugins. But the amount of plugins and class itself
         // may vary. If it is changed, please update these assertions.
         $this->assertArrayHasKey(
             'Magento\\Framework\\App\\Response\\Http_sendResponse___self',
-            $configData[2],
+            $configDataFrontend[2],
             'Processed plugin does not exist in the processed plugins array.'
         );
 
         $this->assertSame(
-            $expected,
-            $configData[2]['Magento\\Framework\\App\\Response\\Http_sendResponse___self'],
+            $expectedFrontend,
+            $configDataFrontend[2]['Magento\\Framework\\App\\Response\\Http_sendResponse___self'],
             'Plugin configurations are not equal'
+        );
+
+        $configDataDummy = $this->model->load(self::CACHE_ID_DUMMY);
+        /**
+         * Make sure "dummy" scope with no plugins in system should not contain plugins from "frontend" scope
+         */
+        $this->assertNotContains(
+            $frontendPlugin,
+            $configDataDummy[2]['Magento\\Framework\\App\\Response\\Http_sendResponse___self'][1],
+            'Plugin configurations are not equal. "dummy" scope should not contain plugins from "frontend" scope'
+        );
+        /**
+         * Make sure "dummy" scope with no plugins in system should contain plugins from "global" scope
+         */
+        $this->assertContains(
+            $globalPlugin,
+            $configDataDummy[2]['Magento\\Framework\\App\\Response\\Http_sendResponse___self'][1],
+            'Plugin configurations are not equal. "dummy" scope should contain plugins from "global" scope'
         );
     }
 
@@ -137,11 +164,13 @@ class PluginListGeneratorTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $filePath = $this->directoryList->getPath(DirectoryList::GENERATED_METADATA)
-            . '/' . self::CACHE_ID . '.' . 'php';
+        foreach ($this->cacheIds as $cacheId) {
+            $filePath = $this->directoryList->getPath(DirectoryList::GENERATED_METADATA)
+                . '/' . $cacheId . '.' . 'php';
 
-        if (file_exists($filePath)) {
-            $this->file->deleteFile($filePath);
+            if (file_exists($filePath)) {
+                $this->file->deleteFile($filePath);
+            }
         }
     }
 }

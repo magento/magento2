@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigPaymentAdvancedThroughCLIActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal credentials and other details. Clicks on Save</description>
+        </annotations>
+        <magentoCLI command="config:set {{EnterPaypalPayAdvancedPartner.path}} {{EnterPaypalPayAdvancedPartner.value}}" stepKey="enterInputForPartner"/>
+        <magentoCLI command="config:set {{EnterPaypalPayAdvancedVendor.path}} {{EnterPaypalPayAdvancedVendor.value}}" stepKey="enterInputForVendor"/>
+        <magentoCLI command="config:set {{EnterPaypalPayAdvancedUser.path}} {{EnterPaypalPayAdvancedUser.value}}" stepKey="enterInputForUser"/>
+        <magentoCLI command="config:set {{EnterPaymentAdvancedPassword.path}} {{EnterPaymentAdvancedPassword.value}}" stepKey="enterInputForPwd"/>
+        <magentoCLI command="config:set {{EnablePaymentAdvancedSandbox.path}} {{EnablePaymentAdvancedSandbox.value}}" stepKey="enableSandboxMode"/>
+        <magentoCLI command="config:set {{EnablePaymentAdvancedSolution.path}} {{EnablePaymentAdvancedSolution.value}}" stepKey="enablePaymentAdvancedSolution"/>
+        <magentoCLI command="config:set {{EnablePaymentAdvancedPaypalCredit.path}} {{EnablePaymentAdvancedPaypalCredit.value}}" stepKey="enablePaypalCredit"/>
+        <magentoCLI command="config:set payment/payflow_express/active 1" stepKey="enablePaypalExpress"/>
+    </actionGroup>
+</actionGroups>

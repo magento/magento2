@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertDownloadableSampleLinkInformationActionGroup">
+        <annotations>
+            <description>Verifies the data for a downloadable sample link on the Edit Product page in admin.</description>
+        </annotations>
+        <arguments>
+            <argument name="title" defaultValue="{{downloadableSampleFile.title}}" type="string"/>
+            <argument name="fileType" defaultValue="{{downloadableSampleFile.file_type}}" type="string"/>
+            <argument name="fileNameOrUrl" defaultValue="{{downloadableSampleFile.file}}" type="string"/>
+            <argument name="index" defaultValue="0" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductDownloadableSection.sectionHeader}}" dependentSelector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" visible="false" stepKey="expandDownloadableSection"/>
+        <waitForElementVisible selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" stepKey="waitForDownloadableLinks"/>
+        <seeInField userInput="{{title}}" selector="{{AdminProductDownloadableSection.addSampleTitleInput(index)}}" stepKey="seeTitle"/>
+        <seeInField userInput="{{fileType}}" selector="{{AdminProductDownloadableSection.addSampleFileTypeSelector(index)}}" stepKey="seeFileType"/>
+        <executeJS function="
+                    var element = document.evaluate(&quot;{{AdminProductDownloadableSection.sampleFileNameOrUrl(index)}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+                    if ( typeof element.singleNodeValue.value !== &quot;undefined&quot; ) {
+                        return element.singleNodeValue.value; }
+                    else {
+                        return element.singleNodeValue.innerText; };"
+                   stepKey="grabFileNameOrUrl"/>
+        <assertStringContainsString stepKey="assertFileNameOrUrl">
+            <actualResult type="variable">grabFileNameOrUrl</actualResult>
+            <expectedResult type="string">{{fileNameOrUrl}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

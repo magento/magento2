@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\PageLayout;
 
 /**
  * Page layouts configuration
+ *
+ * @api
  */
 class Config extends \Magento\Framework\Config\AbstractXml
 {
@@ -75,6 +78,8 @@ class Config extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
+     * Get options
+     *
      * @param bool $withEmpty
      * @return array
      */
@@ -106,7 +111,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
 
         /** @var \DOMElement $layout */
         foreach ($dom->getElementsByTagName('layout') as $layout) {
-            $result[$layout->getAttribute('id')] = trim($layout->nodeValue);
+            $result[$layout->getAttribute('id')] = $layout->nodeValue !== null ? trim($layout->nodeValue) : '';
         }
         return $result;
     }

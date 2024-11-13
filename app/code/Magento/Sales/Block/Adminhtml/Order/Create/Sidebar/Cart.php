@@ -59,6 +59,16 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
         $collection = $this->getData('item_collection');
         if ($collection === null) {
             $collection = $this->getCreateOrderModel()->getCustomerCart()->getAllVisibleItems();
+            $transferredItems = $this->getCreateOrderModel()->getSession()->getTransferredItems() ?? [];
+            $transferredItems = $transferredItems[$this->getDataId()] ?? [];
+            if (!empty($transferredItems)) {
+                foreach ($collection as $key => $item) {
+                    if (in_array($item->getId(), $transferredItems)) {
+                        unset($collection[$key]);
+                    }
+                }
+            }
+
             $this->setData('item_collection', $collection);
         }
         return $collection;
@@ -71,9 +81,10 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
     public function getItemPrice(Product $product)
     {
         $customPrice = $this->getCartItemCustomPrice($product);
-        $price = $customPrice ?? $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
 
-        return $this->convertPrice($price);
+        return $customPrice !== null
+            ? $this->convertPrice($customPrice)
+            : $this->priceCurrency->format($product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue());
     }
 
     /**
