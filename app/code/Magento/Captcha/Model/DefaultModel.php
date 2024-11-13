@@ -25,17 +25,17 @@ class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Mo
     /**
      * Key in session for captcha code
      */
-    const SESSION_WORD = 'word';
+    public const SESSION_WORD = 'word';
 
     /**
      * Min captcha lengths default value
      */
-    const DEFAULT_WORD_LENGTH_FROM = 3;
+    public const DEFAULT_WORD_LENGTH_FROM = 3;
 
     /**
      * Max captcha lengths default value
      */
-    const DEFAULT_WORD_LENGTH_TO = 5;
+    public const DEFAULT_WORD_LENGTH_TO = 5;
 
     /**
      * @var Data
@@ -576,7 +576,9 @@ class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Mo
      */
     protected function gc()
     {
+        // @codingStandardsIgnoreStart
         return; // required for static testing to pass
+        // @codingStandardsIgnoreEnd
     }
 
     /**
