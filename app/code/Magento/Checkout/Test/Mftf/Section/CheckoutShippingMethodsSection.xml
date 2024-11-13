@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -36,6 +36,6 @@
         <element name="shippingMethodDhlMedicalExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Q']"/>
         <element name="shippingMethodFreeShippingLabel" type="text" selector="#label_carrier_freeshipping_freeshipping"/>
         <element name="shippingDHLErrorMessage" type="text" selector="#checkout-shipping-method-load .table-checkout-shipping-method tr.row-error .error div"/>
-        <element name="smartPostShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_GROUND']"/>
+        <element name="smartPostShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_SMART_POST']"/>
     </section>
 </sections>

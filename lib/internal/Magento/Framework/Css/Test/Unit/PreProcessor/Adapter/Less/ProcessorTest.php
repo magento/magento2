@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\Adapter\Less;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\Less\Processor;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
@@ -18,15 +19,15 @@ use Psr\Log\LoggerInterface;
 
 class ProcessorTest extends TestCase
 {
-    const TEST_CONTENT = 'test-content';
+    private const TEST_CONTENT = 'test-content';
 
-    const ASSET_PATH = 'test-path';
+    private const ASSET_PATH = 'test-path';
 
-    const TMP_PATH_LESS = '_file/test.less';
+    private const TMP_PATH_LESS = '_file/test.less';
+    private const TMP_PATH_CSS_PRODUCTION = '_file/test-production.css';
+    private const TMP_PATH_CSS_DEVELOPER = '_file/test-developer.css';
 
-    const TMP_PATH_CSS = '_file/test.css';
-
-    const ERROR_MESSAGE = 'Test exception';
+    private const ERROR_MESSAGE = 'Test exception';
 
     /**
      * @var Processor
@@ -52,6 +53,10 @@ class ProcessorTest extends TestCase
      * @var Temporary|MockObject
      */
     private $temporaryFileMock;
+    /**
+     * @var DirectoryList|MockObject
+     */
+    private $directoryListMock;
 
     /**
      * Set up
@@ -69,12 +74,16 @@ class ProcessorTest extends TestCase
         $this->temporaryFileMock = $this->getMockBuilder(Temporary::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->directoryListMock = $this->getMockBuilder(DirectoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->processor = new Processor(
             $this->loggerMock,
             $this->appStateMock,
             $this->assetSourceMock,
-            $this->temporaryFileMock
+            $this->temporaryFileMock,
+            $this->directoryListMock,
         );
     }
 
@@ -89,7 +98,7 @@ class ProcessorTest extends TestCase
 
         $this->appStateMock->expects(self::once())
             ->method('getMode')
-            ->willReturn(State::MODE_DEVELOPER);
+            ->willReturn(State::MODE_PRODUCTION);
 
         $this->assetSourceMock->expects(self::once())
             ->method('getContent')
@@ -120,7 +129,7 @@ class ProcessorTest extends TestCase
 
         $this->appStateMock->expects(self::once())
             ->method('getMode')
-            ->willReturn(State::MODE_DEVELOPER);
+            ->willReturn(State::MODE_PRODUCTION);
 
         $this->assetSourceMock->expects(self::once())
             ->method('getContent')
@@ -141,9 +150,52 @@ class ProcessorTest extends TestCase
     }
 
     /**
-     * Test for processContent method (not empty content)
+     * Test for processContent method in production mode (not empty content)
      */
     public function testProcessContentNotEmpty()
+    {
+        $assetMock = $this->getAssetMock();
+
+        $this->appStateMock->expects(self::once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+
+        $this->assetSourceMock->expects(self::once())
+            ->method('getContent')
+            ->with($assetMock)
+            ->willReturn(self::TEST_CONTENT);
+
+        $this->temporaryFileMock->expects(self::once())
+            ->method('createFile')
+            ->with(self::ASSET_PATH, self::TEST_CONTENT)
+            ->willReturn(__DIR__ . '/' . self::TMP_PATH_LESS);
+
+        $assetMock->expects(self::once())
+            ->method('getPath')
+            ->willReturn(self::ASSET_PATH);
+
+        $this->loggerMock->expects(self::never())
+            ->method('critical');
+
+        $clearSymbol = ["\n", "\r", "\t", ' '];
+        self::assertEquals(
+            trim(str_replace(
+                $clearSymbol,
+                '',
+                file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS_PRODUCTION)
+            )),
+            trim(str_replace(
+                $clearSymbol,
+                '',
+                $this->processor->processContent($assetMock)
+            ))
+        );
+    }
+
+    /**
+     * Test for processContent method in developer mode (not empty content)
+     */
+    public function testProcessContentNotEmptyInDeveloperMode()
     {
         $assetMock = $this->getAssetMock();
 
@@ -170,8 +222,16 @@ class ProcessorTest extends TestCase
 
         $clearSymbol = ["\n", "\r", "\t", ' '];
         self::assertEquals(
-            trim(str_replace($clearSymbol, '', file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS))),
-            trim(str_replace($clearSymbol, '', $this->processor->processContent($assetMock)))
+            trim(str_replace(
+                $clearSymbol,
+                '',
+                file_get_contents(__DIR__ . '/' . self::TMP_PATH_CSS_DEVELOPER)
+            )),
+            trim(str_replace(
+                $clearSymbol,
+                '',
+                $this->normalizeInlineSourceMap($this->processor->processContent($assetMock))
+            ))
         );
     }
 
@@ -185,5 +245,35 @@ class ProcessorTest extends TestCase
             ->getMock();
 
         return $assetMock;
+    }
+
+    /**
+     * - find json part of sourcemap
+     * - url decode it
+     * - replace \/ with / in source filenames
+     * - remove absolute path in filename, make it a relative path
+     */
+    private function normalizeInlineSourceMap(string $css): string
+    {
+        $regexBegin = 'sourceMappingURL=data:application/json,';
+        $regexEnd = '*/';
+        $regex = '@' . preg_quote($regexBegin, '@') . '([^\*]+)' . preg_quote($regexEnd, '@') . '@';
+
+        if (preg_match($regex, $css, $matches) === 1) {
+            $inlineSourceMapJson = $matches[1];
+            $inlineSourceMapJson = urldecode($inlineSourceMapJson);
+            $inlineSourceMapJson = json_decode($inlineSourceMapJson, true, 512, JSON_UNESCAPED_SLASHES);
+
+            $relativeFilenames = [];
+            foreach ($inlineSourceMapJson['sources'] as $filename) {
+                $relativeFilenames[] = str_replace(sprintf('%s/', BP), '', $filename);
+            }
+            $inlineSourceMapJson['sources'] = $relativeFilenames;
+            $inlineSourceMapJson = json_encode($inlineSourceMapJson, JSON_UNESCAPED_SLASHES);
+
+            $css = preg_replace($regex, sprintf('%s%s%s', $regexBegin, $inlineSourceMapJson, $regexEnd), $css);
+        }
+
+        return $css;
     }
 }
