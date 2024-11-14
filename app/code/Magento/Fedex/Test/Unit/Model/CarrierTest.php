@@ -421,7 +421,17 @@ class CarrierTest extends TestCase
         $rateResponse = $this->getRateResponse($amount, $currencyCode, $rateType);
 
         $this->serializer->method('serialize')
-            ->willReturn('CollectRateString' . $amount);
+            ->willReturn(
+                json_encode(
+                    [
+                        'accountNumber' => '123456789',
+                        'requestedShipment' =>
+                            ['rateRequestTypes' =>
+                                ['LIST', 'ACCOUNT']
+                            ]
+                    ]
+                ) .'CollectRateString' . $amount
+            );
 
         $rateCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
@@ -454,6 +464,7 @@ class CarrierTest extends TestCase
             ->addMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
+
         $request->method('getBaseCurrency')
             ->willReturn($baseCurrency);
 
@@ -465,6 +476,7 @@ class CarrierTest extends TestCase
             ->willReturnOnConsecutiveCalls($accessTokenResponse, $rateResponse);
 
         $allRates1 = $this->carrier->collectRates($request)->getAllRates();
+
         foreach ($allRates1 as $rate) {
             $this->assertEquals($expected, $rate->getData('cost'));
         }
