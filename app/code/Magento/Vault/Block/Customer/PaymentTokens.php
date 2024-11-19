@@ -21,11 +21,6 @@ abstract class PaymentTokens extends Template
     private $customerTokens;
 
     /**
-     * @var CustomerTokenManagement
-     */
-    private $customerTokenManagement;
-
-    /**
      * PaymentTokens constructor.
      * @param Template\Context $context
      * @param CustomerTokenManagement $customerTokenManagement
@@ -33,11 +28,10 @@ abstract class PaymentTokens extends Template
      */
     public function __construct(
         Template\Context $context,
-        CustomerTokenManagement $customerTokenManagement,
+        private readonly CustomerTokenManagement $customerTokenManagement,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->customerTokenManagement = $customerTokenManagement;
     }
 
     /**

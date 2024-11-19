@@ -6,6 +6,7 @@
 
 namespace Magento\Vault\Model;
 
+use LogicException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -18,24 +19,14 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 class PaymentTokenFactory implements PaymentTokenFactoryInterface
 {
     /**
-     * @var array
-     */
-    private $tokenTypes = [];
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * PaymentTokenFactory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param array $tokenTypes
      */
-    public function __construct(ObjectManagerInterface $objectManager, array $tokenTypes = [])
-    {
-        $this->objectManager = $objectManager;
-        $this->tokenTypes = $tokenTypes;
+    public function __construct(
+        private readonly ObjectManagerInterface $objectManager,
+        private readonly array $tokenTypes = []
+    ) {
     }
 
     /**
@@ -58,7 +49,7 @@ class PaymentTokenFactory implements PaymentTokenFactoryInterface
         }
 
         if ($type !== null && !in_array($type, $this->tokenTypes, true)) {
-            throw new \LogicException('There is no such payment token type: ' . $type);
+            throw new LogicException('There is no such payment token type: ' . $type);
         }
 
         return $this->objectManager->create(

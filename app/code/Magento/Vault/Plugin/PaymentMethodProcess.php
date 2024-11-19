@@ -14,17 +14,11 @@ use Magento\Vault\Model\VaultPaymentInterface;
 class PaymentMethodProcess
 {
     /**
-     * @var TokensConfigProvider
-     */
-    private TokensConfigProvider $tokensConfigProvider;
-
-    /**
      * @param TokensConfigProvider $tokensConfigProvider
      */
     public function __construct(
-        TokensConfigProvider $tokensConfigProvider
+        private readonly TokensConfigProvider $tokensConfigProvider
     ) {
-        $this->tokensConfigProvider = $tokensConfigProvider;
     }
 
     /**

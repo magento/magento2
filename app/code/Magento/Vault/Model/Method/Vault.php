@@ -5,7 +5,10 @@
  */
 namespace Magento\Vault\Model\Method;
 
+use DomainException;
 use Exception;
+use LogicException;
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Command;
@@ -15,6 +18,8 @@ use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
@@ -51,64 +56,9 @@ class Vault implements VaultPaymentInterface
     private static $titleKey = 'title';
 
     /**
-     * @var ConfigFactoryInterface
-     */
-    private $configFactory;
-
-    /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var MethodInterface
-     */
-    private $vaultProvider;
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var int
      */
     private $storeId;
-
-    /**
-     * @var ValueHandlerPoolInterface
-     */
-    private $valueHandlerPool;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $eventManager;
-
-    /**
-     * @var Command\CommandManagerPoolInterface
-     */
-    private $commandManagerPool;
-
-    /**
-     * @var PaymentTokenManagementInterface
-     */
-    private $tokenManagement;
-
-    /**
-     * @var OrderPaymentExtensionInterfaceFactory
-     */
-    private $paymentExtensionFactory;
-
-    /**
-     * @var string
-     */
-    private $code;
-
-    /**
-     * @var Json
-     */
-    private $jsonSerializer;
 
     /**
      * Constructor
@@ -128,28 +78,18 @@ class Vault implements VaultPaymentInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ConfigInterface $config,
-        ConfigFactoryInterface $configFactory,
-        ObjectManagerInterface $objectManager,
-        MethodInterface $vaultProvider,
-        ManagerInterface $eventManager,
-        ValueHandlerPoolInterface $valueHandlerPool,
-        Command\CommandManagerPoolInterface $commandManagerPool,
-        PaymentTokenManagementInterface $tokenManagement,
-        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
-        $code,
-        Json $jsonSerializer = null
+        private readonly ConfigInterface $config,
+        private readonly ConfigFactoryInterface $configFactory,
+        private readonly ObjectManagerInterface $objectManager,
+        private readonly MethodInterface $vaultProvider,
+        private readonly ManagerInterface $eventManager,
+        private readonly ValueHandlerPoolInterface $valueHandlerPool,
+        private readonly Command\CommandManagerPoolInterface $commandManagerPool,
+        private readonly PaymentTokenManagementInterface $tokenManagement,
+        private readonly OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
+        private $code,
+        private ?Json $jsonSerializer = null
     ) {
-        $this->config = $config;
-        $this->configFactory = $configFactory;
-        $this->objectManager = $objectManager;
-        $this->valueHandlerPool = $valueHandlerPool;
-        $this->vaultProvider = $vaultProvider;
-        $this->eventManager = $eventManager;
-        $this->commandManagerPool = $commandManagerPool;
-        $this->tokenManagement = $tokenManagement;
-        $this->paymentExtensionFactory = $paymentExtensionFactory;
-        $this->code = $code;
         $this->jsonSerializer = $jsonSerializer ?: $this->objectManager->get(Json::class);
     }
 
@@ -334,7 +274,7 @@ class Vault implements VaultPaymentInterface
      */
     public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**
@@ -422,19 +362,19 @@ class Vault implements VaultPaymentInterface
      * @inheritdoc
      * @since 100.1.0
      */
-    public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function order(InfoInterface $payment, $amount)
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**
      * @inheritdoc
      * @since 100.1.0
      */
-    public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function authorize(InfoInterface $payment, $amount)
     {
         if (!$payment instanceof OrderPaymentInterface) {
-            throw new \DomainException('Not implemented');
+            throw new DomainException('Not implemented');
         }
         /** @var $payment OrderPaymentInterface */
 
@@ -462,15 +402,15 @@ class Vault implements VaultPaymentInterface
      * @inheritdoc
      * @since 100.1.0
      */
-    public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function capture(InfoInterface $payment, $amount)
     {
         if (!$payment instanceof OrderPaymentInterface) {
-            throw new \DomainException('Not implemented');
+            throw new DomainException('Not implemented');
         }
         /** @var $payment Payment */
 
         if ($payment->getAuthorizationTransaction()) {
-            throw new \DomainException('Capture can not be performed through vault');
+            throw new DomainException('Capture can not be performed through vault');
         }
 
         $this->attachTokenExtensionAttribute($payment);
@@ -500,7 +440,7 @@ class Vault implements VaultPaymentInterface
     {
         $additionalInformation = $orderPayment->getAdditionalInformation();
         if (empty($additionalInformation[PaymentTokenInterface::PUBLIC_HASH])) {
-            throw new \LogicException('Public hash should be defined');
+            throw new LogicException('Public hash should be defined');
         }
 
         $customerId = isset($additionalInformation[PaymentTokenInterface::CUSTOMER_ID]) ?
@@ -511,7 +451,7 @@ class Vault implements VaultPaymentInterface
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
 
         if ($paymentToken === null) {
-            throw new \LogicException("No token found");
+            throw new LogicException("No token found");
         }
 
         $extensionAttributes = $this->getPaymentExtensionAttributes($orderPayment);
@@ -522,7 +462,7 @@ class Vault implements VaultPaymentInterface
      * Returns Payment's extension attributes.
      *
      * @param OrderPaymentInterface $payment
-     * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface
+     * @return OrderPaymentExtensionInterface
      */
     private function getPaymentExtensionAttributes(OrderPaymentInterface $payment)
     {
@@ -566,27 +506,27 @@ class Vault implements VaultPaymentInterface
      * @inheritdoc
      * @since 100.1.0
      */
-    public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function refund(InfoInterface $payment, $amount)
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**
      * @inheritdoc
      * @since 100.1.0
      */
-    public function cancel(\Magento\Payment\Model\InfoInterface $payment)
+    public function cancel(InfoInterface $payment)
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**
      * @inheritdoc
      * @since 100.1.0
      */
-    public function void(\Magento\Payment\Model\InfoInterface $payment)
+    public function void(InfoInterface $payment)
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**
@@ -595,7 +535,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canReviewPayment()
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**
@@ -604,7 +544,7 @@ class Vault implements VaultPaymentInterface
      */
     public function acceptPayment(InfoInterface $payment)
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**
@@ -613,7 +553,7 @@ class Vault implements VaultPaymentInterface
      */
     public function denyPayment(InfoInterface $payment)
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**
@@ -629,7 +569,7 @@ class Vault implements VaultPaymentInterface
      * @inheritdoc
      * @since 100.1.0
      */
-    public function assignData(\Magento\Framework\DataObject $data)
+    public function assignData(DataObject $data)
     {
         $this->eventManager->dispatch(
             'payment_method_assign_data_vault',
@@ -656,7 +596,7 @@ class Vault implements VaultPaymentInterface
      * @inheritdoc
      * @since 100.1.0
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(CartInterface $quote = null)
     {
         return $this->vaultProvider->isAvailable($quote)
             && $this->config->getValue(self::$activeKey, $this->getStore() ?: ($quote ? $quote->getStoreId() : null));
@@ -678,7 +618,7 @@ class Vault implements VaultPaymentInterface
      */
     public function initialize($paymentAction, $stateObject)
     {
-        throw new \DomainException("Not implemented");
+        throw new DomainException("Not implemented");
     }
 
     /**

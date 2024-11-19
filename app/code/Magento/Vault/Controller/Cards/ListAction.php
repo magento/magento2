@@ -8,16 +8,13 @@ namespace Magento\Vault\Controller\Cards;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Vault\Controller\CardsManagement;
 
 class ListAction extends CardsManagement
 {
-    /**
-     * @var PageFactory
-     */
-    private $pageFactory;
-
     /**
      * @param Context $context
      * @param Session $customerSession
@@ -26,17 +23,16 @@ class ListAction extends CardsManagement
     public function __construct(
         Context $context,
         Session $customerSession,
-        PageFactory $pageFactory
+        private readonly PageFactory $pageFactory
     ) {
         parent::__construct($context, $customerSession);
-        $this->pageFactory = $pageFactory;
     }
 
     /**
      * Dispatch request
      *
-     * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @return ResultInterface|ResponseInterface
+     * @throws NotFoundException
      */
     public function execute()
     {
