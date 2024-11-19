@@ -5,6 +5,7 @@
  */
 namespace Magento\SalesInventory\Model\Plugin\Order\Validation;
 
+use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
@@ -19,18 +20,12 @@ use Magento\Sales\Model\ValidatorResultInterface;
 class InvoiceRefundCreationArguments
 {
     /**
-     * @var ReturnValidator
-     */
-    private $returnValidator;
-
-    /**
      * InvoiceRefundCreationArguments constructor.
      * @param ReturnValidator $returnValidator
      */
     public function __construct(
-        ReturnValidator $returnValidator
+        private readonly ReturnValidator $returnValidator
     ) {
-        $this->returnValidator = $returnValidator;
     }
 
     /**
@@ -43,8 +38,8 @@ class InvoiceRefundCreationArguments
      * @param bool $isOnline
      * @param bool $notify
      * @param bool $appendComment
-     * @param \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface|null $comment
-     * @param \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface|null $arguments
+     * @param CreditmemoCommentCreationInterface|null $comment
+     * @param CreditmemoCreationArgumentsInterface|null $arguments
      * @return ValidatorResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -59,8 +54,8 @@ class InvoiceRefundCreationArguments
         $isOnline = false,
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+        CreditmemoCommentCreationInterface $comment = null,
+        CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         if ($this->isReturnToStockItems($arguments)) {
             return $validationResults;
