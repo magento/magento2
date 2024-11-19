@@ -11,23 +11,13 @@ namespace Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\AsynchronousOperations\Model\ConfigInterface as WebApiAsyncConfig;
 use Magento\Framework\Communication\Config\ReflectionGenerator;
+use Magento\Framework\Config\ReaderInterface;
 
 /**
  * Remote service reader with auto generated configuration for communication.xml
  */
-class Communication implements \Magento\Framework\Config\ReaderInterface
+class Communication implements ReaderInterface
 {
-
-    /**
-     * @var WebApiAsyncConfig
-     */
-    private $webapiAsyncConfig;
-
-    /**
-     * @var \Magento\Framework\Communication\Config\ReflectionGenerator
-     */
-    private $reflectionGenerator;
-
     /**
      * Initialize dependencies.
      *
@@ -35,11 +25,9 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      * @param ReflectionGenerator $reflectionGenerator
      */
     public function __construct(
-        WebApiAsyncConfig $webapiAsyncConfig,
-        ReflectionGenerator $reflectionGenerator
+        private readonly WebApiAsyncConfig $webapiAsyncConfig,
+        private readonly ReflectionGenerator $reflectionGenerator
     ) {
-        $this->webapiAsyncConfig = $webapiAsyncConfig;
-        $this->reflectionGenerator = $reflectionGenerator;
     }
 
     /**

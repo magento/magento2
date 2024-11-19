@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model\ServiceConfig;
 
+use Magento\Framework\Config\SchemaLocatorInterface;
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Module\Dir\Reader as DirReader;
 
 /**
  * Web API Async config schema locator.
  */
-class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
+class SchemaLocator implements SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for merged config
@@ -30,10 +32,11 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     private $perFileSchema = null;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param DirReader $moduleReader
      */
-    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
-    {
+    public function __construct(
+        DirReader $moduleReader
+    ) {
         $this->schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_WebapiAsync') . '/webapi_async.xsd';
     }
 

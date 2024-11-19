@@ -10,6 +10,7 @@ namespace Magento\WebapiAsync\Model;
 use Magento\AsynchronousOperations\Model\ConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
 use Magento\Webapi\Model\Config as WebapiConfig;
 use Magento\Webapi\Model\Config\Converter;
@@ -19,21 +20,6 @@ use Magento\Webapi\Model\Config\Converter;
  */
 class Config implements ConfigInterface
 {
-    /**
-     * @var WebapiCache
-     */
-    private $cache;
-
-    /**
-     * @var WebapiConfig
-     */
-    private $webApiConfig;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
     /**
      * @var array
      */
@@ -47,13 +33,10 @@ class Config implements ConfigInterface
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        WebapiCache $cache,
-        WebapiConfig $webApiConfig,
-        SerializerInterface $serializer
+        private readonly WebapiCache $cache,
+        private readonly WebapiConfig $webApiConfig,
+        private readonly SerializerInterface $serializer
     ) {
-        $this->cache = $cache;
-        $this->webApiConfig = $webApiConfig;
-        $this->serializer = $serializer;
     }
 
     /**
@@ -108,7 +91,7 @@ class Config implements ConfigInterface
         $services = [];
         foreach ($webApiConfig as $routeUrl => $routeData) {
             foreach ($routeData as $httpMethod => $httpMethodData) {
-                if ($httpMethod !== \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET) {
+                if ($httpMethod !== Request::HTTP_METHOD_GET) {
                     $serviceInterface = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS];
                     $serviceMethod = $httpMethodData[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD];
 
