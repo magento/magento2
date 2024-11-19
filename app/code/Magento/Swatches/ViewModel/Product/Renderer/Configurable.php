@@ -10,9 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class Configurable
- */
 class Configurable implements ArgumentInterface
 {
     /**
@@ -21,18 +18,13 @@ class Configurable implements ArgumentInterface
     private const XML_PATH_SHOW_SWATCH_TOOLTIP = 'catalog/frontend/show_swatch_tooltip';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * Configurable constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
+    public function __construct(
+        private readonly ScopeConfigInterface $scopeConfig
+    ) {
     }
 
     /**

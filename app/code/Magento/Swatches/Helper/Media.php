@@ -5,10 +5,25 @@
  */
 namespace Magento\Swatches\Helper;
 
+use Exception;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Config\CatalogMediaConfig;
+use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Image as FrameworkImage;
+use Magento\Framework\Image\Factory as ImageFactory;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\ConfigInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database as FileStorageDatabase;
+use Magento\MediaStorage\Model\File\Uploader;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 
 /**
  * Helper to move images from tmp to catalog directory
@@ -16,48 +31,20 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Media extends \Magento\Framework\App\Helper\AbstractHelper
+class Media extends AbstractHelper
 {
     /**
      * Swatch area inside media folder
-     *
      */
     public const  SWATCH_MEDIA_PATH = 'attribute/swatch';
 
     /**
-     * @var \Magento\Catalog\Model\Product\Media\Config
-     */
-    protected $mediaConfig;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     protected $mediaDirectory;
 
     /**
-     * Core file storage database
-     *
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     */
-    protected $fileStorageDb = null;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Framework\Image\Factory
-     */
-    protected $imageFactory;
-
-    /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection
-     */
-    protected $themeCollection;
-
-    /**
-     * @var \Magento\Framework\View\ConfigInterface
+     * @var ConfigInterface
      */
     protected $viewConfig;
 
@@ -77,32 +64,27 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     private $mediaUrlFormat;
 
     /**
-     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Image\Factory $imageFactory
-     * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
-     * @param \Magento\Framework\View\ConfigInterface $configInterface
-     * @param CatalogMediaConfig $catalogMediaConfig
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @param MediaConfig $mediaConfig
+     * @param Filesystem $filesystem
+     * @param FileStorageDatabase $fileStorageDb Core file storage database
+     * @param StoreManagerInterface $storeManager
+     * @param ImageFactory $imageFactory
+     * @param ThemeCollection $themeCollection
+     * @param ConfigInterface $configInterface
+     * @param null|CatalogMediaConfig $catalogMediaConfig
+     * @throws FileSystemException
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Image\Factory $imageFactory,
-        \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection,
-        \Magento\Framework\View\ConfigInterface $configInterface,
+        protected readonly MediaConfig $mediaConfig,
+        Filesystem $filesystem,
+        protected readonly FileStorageDatabase $fileStorageDb,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly ImageFactory $imageFactory,
+        protected readonly ThemeCollection $themeCollection,
+        ConfigInterface $configInterface,
         CatalogMediaConfig $catalogMediaConfig = null
     ) {
-        $this->mediaConfig = $mediaConfig;
-        $this->fileStorageDb = $fileStorageDb;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->storeManager = $storeManager;
-        $this->imageFactory = $imageFactory;
-        $this->themeCollection = $themeCollection;
         $this->viewConfig = $configInterface;
 
         $catalogMediaConfig = $catalogMediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
@@ -127,7 +109,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             if (!$this->mediaDirectory->isExist(($absoluteImagePath))) {
                 try {
                     $this->generateSwatchVariations($file);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     return '';
                 }
             }
@@ -144,7 +126,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $swatchType
      * @param string $file
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function getRelativeTransformationParametersPath($swatchType, $file)
     {
@@ -170,7 +152,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $destinationFile = $this->getUniqueFileName($file);
 
-        /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
+        /** @var FileStorageDatabase $storageHelper */
         $storageHelper = $this->fileStorageDb;
 
         if ($storageHelper->checkDbUsage()) {
@@ -208,7 +190,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             );
         } else {
             //phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $destFile = dirname($file) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+            $destFile = dirname($file) . '/' . Uploader::getNewFileName(
                 $this->getOriginalFilePath($file)
             );
         }
@@ -254,11 +236,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Setup base image properties for resize
      *
-     * @param \Magento\Framework\Image $image
+     * @param FrameworkImage $image
      * @param bool $isSwatch
      * @return $this
      */
-    protected function setupImageProperties(\Magento\Framework\Image $image, $isSwatch = false)
+    protected function setupImageProperties(FrameworkImage $image, $isSwatch = false)
     {
         $image->quality(100);
         $image->constrainOnly(true);
@@ -344,7 +326,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->storeManager
             ->getStore()
-            ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $this->getSwatchMediaPath();
+            ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $this->getSwatchMediaPath();
     }
 
     /**

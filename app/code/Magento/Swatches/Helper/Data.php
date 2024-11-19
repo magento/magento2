@@ -14,9 +14,13 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Swatches\Model\ResourceModel\Swatch\Collection as SwatchCollection;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory as SwatchCollectionFactory;
 use Magento\Swatches\Model\Swatch;
 use Magento\Swatches\Model\SwatchAttributesProvider;
@@ -38,36 +42,11 @@ class Data
     public const DEFAULT_STORE_ID = 0;
 
     /**
-     * @var CollectionFactory
-     */
-    protected $productCollectionFactory;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var SwatchCollectionFactory
-     */
-    protected $swatchCollectionFactory;
-
-    /**
      * Product metadata pool
      *
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     private $metadataPool;
-
-    /**
-     * @var SwatchAttributesProvider
-     */
-    private $swatchAttributesProvider;
 
     /**
      * Data key which should populated to Attribute entity from "additional_data" field
@@ -86,16 +65,6 @@ class Data
     private $swatchesCache = [];
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @var SwatchAttributeType
-     */
-    private $swatchTypeChecker;
-
-    /**
      * @var UrlBuilder
      */
     private $imageUrlBuilder;
@@ -111,19 +80,15 @@ class Data
      * @param SwatchAttributeType|null $swatchTypeChecker
      */
     public function __construct(
-        CollectionFactory $productCollectionFactory,
-        ProductRepositoryInterface $productRepository,
-        StoreManagerInterface $storeManager,
-        SwatchCollectionFactory $swatchCollectionFactory,
+        protected readonly CollectionFactory $productCollectionFactory,
+        protected readonly ProductRepositoryInterface $productRepository,
+        protected readonly StoreManagerInterface $storeManager,
+        protected readonly SwatchCollectionFactory $swatchCollectionFactory,
         UrlBuilder $urlBuilder,
-        Json $serializer = null,
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        SwatchAttributeType $swatchTypeChecker = null
+        private ?Json $serializer = null,
+        private ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        private ?SwatchAttributeType $swatchTypeChecker = null
     ) {
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->productRepository = $productRepository;
-        $this->storeManager = $storeManager;
-        $this->swatchCollectionFactory = $swatchCollectionFactory;
         $this->imageUrlBuilder = $urlBuilder;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->create(Json::class);
         $this->swatchAttributesProvider = $swatchAttributesProvider
@@ -248,7 +213,7 @@ class Data
         $productCollection = $this->productCollectionFactory->create();
 
         $productLinkedFiled = $this->getMetadataPool()
-            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getMetadata(ProductInterface::class)
             ->getLinkField();
         $parentId = $parentProduct->getData($productLinkedFiled);
 
@@ -322,7 +287,7 @@ class Data
      * @param Product $product
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getProductMediaGallery(Product $product): array
     {
@@ -396,7 +361,7 @@ class Data
      * Retrieve collection of Swatch attributes
      *
      * @param ProductInterface|Product $product
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
+     * @return Attribute[]
      */
     private function getSwatchAttributes(ProductInterface $product)
     {
@@ -407,7 +372,7 @@ class Data
      * Retrieve collection of Eav Attributes from Configurable product
      *
      * @param ProductInterface|Product $product
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
+     * @return Attribute[]
      */
     public function getAttributesFromConfigurable(ProductInterface $product)
     {
@@ -415,9 +380,9 @@ class Data
         $typeInstance = $product->getTypeInstance();
         if ($typeInstance instanceof Configurable) {
             $configurableAttributes = $typeInstance->getConfigurableAttributes($product);
-            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
+            /** @var ConfigurableAttribute $configurableAttribute */
             foreach ($configurableAttributes as $configurableAttribute) {
-                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+                /** @var Attribute $attribute */
                 $attribute = $configurableAttribute->getProductAttribute();
                 $result[] = $attribute;
             }
@@ -459,7 +424,7 @@ class Data
 
         if (count($swatches) !== count($optionIds)) {
             $swatchOptionIds = array_diff($optionIds, array_keys($swatches));
-            /** @var \Magento\Swatches\Model\ResourceModel\Swatch\Collection $swatchCollection */
+            /** @var SwatchCollection $swatchCollection */
             $swatchCollection = $this->swatchCollectionFactory->create();
             $swatchCollection->addFilterByOptionsIds($swatchOptionIds);
 
@@ -582,14 +547,14 @@ class Data
     /**
      * Get product metadata pool.
      *
-     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @return MetadataPool
      * @deprecared
      */
     protected function getMetadataPool()
     {
         if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = ObjectManager::getInstance()
+                ->get(MetadataPool::class);
         }
         return $this->metadataPool;
     }

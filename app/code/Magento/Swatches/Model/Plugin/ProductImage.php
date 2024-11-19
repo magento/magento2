@@ -23,8 +23,8 @@ class ProductImage
      * Determine context of creation image block
      * which defined in catalog/product/list.phtml
      */
-    const CATEGORY_PAGE_GRID_LOCATION = 'category_page_grid';
-    const CATEGORY_PAGE_LIST_LOCATION = 'category_page_list';
+    public const CATEGORY_PAGE_GRID_LOCATION = 'category_page_grid';
+    public const CATEGORY_PAGE_LIST_LOCATION = 'category_page_list';
 
     /**
      * Data helper to get child product image
@@ -34,28 +34,16 @@ class ProductImage
     protected $swatchHelperData;
 
     /**
-     * @var Config
-     */
-    protected $eavConfig;
-
-    /**
-     * @var Http
-     */
-    protected $request;
-
-    /**
      * @param Data $swatchesHelperData
      * @param Config $eavConfig
      * @param Http $request
      */
     public function __construct(
         Data $swatchesHelperData,
-        Config $eavConfig,
-        Http $request
+        protected readonly Config $eavConfig,
+        protected readonly Http $request
     ) {
         $this->swatchHelperData = $swatchesHelperData;
-        $this->eavConfig = $eavConfig;
-        $this->request = $request;
     }
 
     /**
@@ -88,6 +76,8 @@ class ProductImage
     }
 
     /**
+     * Load image when child product does not have image or exists.
+     *
      * @param Product $parentProduct
      * @param array $filterArray
      * @return bool|Product
@@ -108,7 +98,7 @@ class ProductImage
      * Get filters from request
      *
      * @param array $request
-     * @param \Magento\Catalog\Model\Product $product
+     * @param ProductModel $product
      * @return array
      */
     private function getFilterArray(array $request, Product $product)

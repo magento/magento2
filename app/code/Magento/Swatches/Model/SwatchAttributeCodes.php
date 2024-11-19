@@ -8,6 +8,7 @@ namespace Magento\Swatches\Model;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
+use Zend_Db_Expr;
 
 /**
  * Class SwatchAttributeCodes for getting codes of swatch attributes.
@@ -15,31 +16,11 @@ use Magento\Framework\DB\Select;
 class SwatchAttributeCodes
 {
     /**
-     * @var string
-     */
-    private $cacheKey;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
      * Key is attribute_id, value is attribute_code
      *
      * @var array
      */
     private $swatchAttributeCodes;
-
-    /**
-     * @var array
-     */
-    private $cacheTags;
 
     /**
      * SwatchAttributeList constructor.
@@ -50,19 +31,16 @@ class SwatchAttributeCodes
      * @param array $cacheTags
      */
     public function __construct(
-        CacheInterface $cache,
-        ResourceConnection $resourceConnection,
-        $cacheKey,
-        array $cacheTags
+        private readonly CacheInterface $cache,
+        private readonly ResourceConnection $resourceConnection,
+        private $cacheKey,
+        private readonly array $cacheTags
     ) {
-        $this->cache = $cache;
-        $this->resourceConnection = $resourceConnection;
-        $this->cacheKey = $cacheKey;
-        $this->cacheTags = $cacheTags;
     }
 
     /**
      * Returns list of known swatch attribute codes. Check cache and database.
+     *
      * Key is attribute_id, value is attribute_code
      *
      * @return array
@@ -101,7 +79,7 @@ class SwatchAttributeCodes
                 ]
             )->where(
                 'a.attribute_id IN (?)',
-                new \Zend_Db_Expr($this->getAttributeIdsSelect())
+                new Zend_Db_Expr($this->getAttributeIdsSelect())
             );
         $result = $this->resourceConnection->getConnection()->fetchPairs($select);
         return $result;
