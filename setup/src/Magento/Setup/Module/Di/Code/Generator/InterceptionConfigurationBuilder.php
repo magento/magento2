@@ -11,6 +11,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\Interception\Config\Config as InterceptionConfig;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use Magento\Framework\ObjectManager\InterceptableValidator;
 
@@ -49,24 +50,32 @@ class InterceptionConfigurationBuilder
     private $interceptableValidator;
 
     /**
+     * @var ConfigInterface
+     */
+    private $omConfig;
+
+    /**
      * @param InterceptionConfig $interceptionConfig
      * @param PluginList $pluginList
      * @param Type $typeReader
      * @param Manager $cacheManager
      * @param InterceptableValidator $interceptableValidator
+     * @param ConfigInterface $omConfig
      */
     public function __construct(
         InterceptionConfig $interceptionConfig,
         PluginList $pluginList,
         Type $typeReader,
         Manager $cacheManager,
-        InterceptableValidator $interceptableValidator
+        InterceptableValidator $interceptableValidator,
+        ConfigInterface $omConfig
     ) {
         $this->interceptionConfig = $interceptionConfig;
         $this->pluginList = $pluginList;
         $this->typeReader = $typeReader;
         $this->cacheManager = $cacheManager;
         $this->interceptableValidator = $interceptableValidator;
+        $this->omConfig = $omConfig;
     }
 
     /**
@@ -159,10 +168,11 @@ class InterceptionConfigurationBuilder
 
             $pluginInstances = [];
             foreach ($plugins as $plugin) {
-                if (in_array($plugin['instance'], $pluginInstances)) {
+                $pluginInstance = $this->omConfig->getOriginalInstanceType($plugin['instance']);
+                if (in_array($pluginInstance, $pluginInstances, true)) {
                     continue;
                 }
-                $pluginInstances[] = $plugin['instance'];
+                $pluginInstances[] = $pluginInstance;
             }
             $filteredData[$instance] = $pluginInstances;
         }
@@ -197,16 +207,25 @@ class InterceptionConfigurationBuilder
      */
     private function getInterceptedMethods($interceptionConfiguration)
     {
-        $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
         foreach ($interceptionConfiguration as &$plugins) {
-            $pluginsMethods = [];
-            foreach ($plugins as $plugin) {
-                $pluginsMethods = array_unique(
-                    array_merge($pluginsMethods, array_keys($pluginDefinitionList->getMethodList($plugin)))
-                );
-            }
-            $plugins = $pluginsMethods;
+            $plugins = $this->getPluginsMethods($plugins);
         }
         return $interceptionConfiguration;
+    }
+
+    /**
+     * Returns plugins methods
+     *
+     * @param array $plugins
+     * @return array
+     */
+    private function getPluginsMethods(array $plugins)
+    {
+        $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
+        $pluginsMethodsToMerge = [];
+        foreach ($plugins as $plugin) {
+            $pluginsMethodsToMerge[] = array_keys($pluginDefinitionList->getMethodList($plugin));
+        }
+        return array_unique(array_merge(...$pluginsMethodsToMerge));
     }
 }
