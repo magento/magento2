@@ -8,9 +8,8 @@ define([
     'jquery',
     'mageUtils',
     'uiRegistry',
-    './types',
-    '../../lib/logger/console-logger'
-], function (_, $, utils, registry, types, consoleLogger) {
+    './types'
+], function (_, $, utils, registry, types) {
     'use strict';
 
     var templates = registry.create(),
@@ -71,25 +70,7 @@ define([
      * @returns {jQueryPromise}
      */
     function loadDeps(node) {
-        var loaded = $.Deferred(),
-            loggerUtils = consoleLogger.utils;
-
-        if (node.deps) {
-            consoleLogger.utils.asyncLog(
-                loaded,
-                {
-                    data: {
-                        component: node.name,
-                        deps: node.deps
-                    },
-                    messages: loggerUtils.createMessages(
-                        'depsStartRequesting',
-                        'depsFinishRequesting',
-                        'depsLoadingFail'
-                    )
-                }
-            );
-        }
+        var loaded = $.Deferred();
 
         registry.get(node.deps, function (deps) {
             node.provider = node.extendProvider ? deps && deps.name : node.provider;
@@ -109,17 +90,18 @@ define([
         var loaded = $.Deferred(),
             source = node.component;
 
-        consoleLogger.info('componentStartLoading', {
+        console.info('componentStartLoading', {
             component: node.component
         });
 
         require([source], function (constr) {
-            consoleLogger.info('componentFinishLoading', {
+            console.info('componentFinishLoading', {
                 component: node.component
             });
             loaded.resolve(node, constr);
-        }, function () {
-            consoleLogger.error('componentLoadingFail', {
+        }, function (e) {
+            console.log(e);
+            console.error('componentLoadingFail', {
                 component: node.component
             });
         });
@@ -136,7 +118,7 @@ define([
     function initComponent(node, Constr) {
         var component = new Constr(_.omit(node, 'children'));
 
-        consoleLogger.info('componentStartInitialization', {
+        console.info('componentStartInitialization', {
             component: node.component,
             componentName: node.name
         });
