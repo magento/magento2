@@ -19,18 +19,17 @@ namespace Magento\OrderCancellationGraphQl\Model;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\OrderCancellation\Model\CancelOrder as CancelOrderAction;
-use Magento\OrderCancellation\Model\ResourceModel\SalesOrderConfirmCancel
-    as SalesOrderConfirmCancelResourceModel;
+use Magento\OrderCancellation\Model\ResourceModel\SalesOrderConfirmCancel as SalesOrderConfirmCancelResourceModel;
 use Magento\Sales\Model\Order;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 
 /**
  * Class for Guest order cancellation confirmation
  */
-class ConfirmCancelOrderGuest
+class ConfirmCancelOrder
 {
     /**
-     * ConfirmCancelOrderGuest Constructor
+     * ConfirmCancelOrder Constructor
      *
      * @param OrderFormatter $orderFormatter
      * @param CancelOrderAction $cancelOrderAction

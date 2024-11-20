@@ -1,13 +1,13 @@
 <?php
 /**
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ *
  * Obsolete classes
  *
  * Format: array(<class_name>[, <replacement>])
  *
  * @codingStandardsIgnoreFile
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
  */
 return [
     ['Mage_Admin_Helper_Data', 'Magento\Backend\Helper\Data'],
@@ -2845,7 +2845,7 @@ return [
     ['Magento\Framework\Stdlib\CookieManager', 'Magento\Framework\Stdlib\CookieManagerInterface'],
     ['Magento\Framework\Interception\PluginList', 'Magento\Framework\Interception\PluginListInterface'],
     ['Magento\Framework\Interception\Config', 'Magento\Framework\Interception\ConfigInterface'],
-    ['Magento\Framework\Interception\Chain', 'Magento\Framework\Interception\ChainInterface'],
+    ['Magento\Framework\Interception\Chain'],
     ['Magento\Framework\Interception\Definition', 'Magento\Framework\Interception\DefinitionInterface'],
     ['Magento\Framework\ObjectManager\Factory', 'Magento\Framework\ObjectManager\FactoryInterface'],
     ['Magento\Framework\ObjectManager\Config', 'Magento\Framework\ObjectManager\ConfigInterface'],
