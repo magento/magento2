@@ -14,7 +14,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\OrderCancellationGraphQl\Model\Validator\GuestOrder;
+namespace Magento\OrderCancellationGraphQl\Model\Validator;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\OrderCancellation\Model\GetConfirmationKey;
@@ -22,7 +22,7 @@ use Magento\OrderCancellation\Model\GetConfirmationKey;
 /**
  * Ensure all conditions to cancel guest order are met
  */
-class ValidateRequest
+class ValidateConfirmRequest
 {
     /**
      * Ensure the input to cancel guest order is valid
@@ -59,27 +59,6 @@ class ValidateRequest
                     'Required parameter "%field" is missing or incorrect.',
                     [
                         'field' => 'confirmation_key'
-                    ]
-                )
-            );
-        }
-    }
-
-    /**
-     * Validate cancel guest order input
-     *
-     * @param array $input
-     * @return void
-     * @throws GraphQlInputException
-     */
-    public function validateCancelGuestOrderInput(array $input): void
-    {
-        if (!$input['reason'] || !is_string($input['reason'])) {
-            throw new GraphQlInputException(
-                __(
-                    'Required parameter "%field" is missing or incorrect.',
-                    [
-                        'field' => 'reason'
                     ]
                 )
             );
