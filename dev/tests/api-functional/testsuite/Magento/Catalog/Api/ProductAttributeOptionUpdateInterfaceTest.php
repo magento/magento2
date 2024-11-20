@@ -76,7 +76,7 @@ class ProductAttributeOptionUpdateInterfaceTest extends WebapiAbstract
      */
     public function testUpdateWithAlreadyExistsException()
     {
-        $this->expectExceptionMessage("Admin store attribute option label '%1' is already exists.");
+        $this->expectExceptionMessage("Admin store attribute option label '%1' for attribute '%2' already exists.");
         $testAttributeCode = 'select_attribute';
 
         $newOptionData = [
