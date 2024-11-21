@@ -1,8 +1,19 @@
 <?xml version="1.0"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -2067,5 +2078,21 @@
         <index referenceId="SALES_ORDER_STATUS_LABEL_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+    </table>
+    <table name="sales_order_status_change_history" resource="default" engine="innodb" comment="Save the updated order status with timestamp">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
+                comment="Order ID"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="32"
+                comment="Order Status"/>
+        <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Order status updated at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STATUS_CHANGE_HISTORY_ORDER_ID_SALES_ORDER_ENTITY_ID"
+                    table="sales_order_status_change_history" column="order_id"
+                    referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE" />
     </table>
 </schema>
