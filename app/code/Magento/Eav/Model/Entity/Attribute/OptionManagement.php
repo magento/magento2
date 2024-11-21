@@ -75,7 +75,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
                 __(
                     'Admin store attribute option label "%1" for attribute \'%2\' already exists.',
                     $option->getLabel(),
-                    $$attribute->getAttributeCode()
+                    $attribute->getAttributeCode()
                 )
             );
         }
