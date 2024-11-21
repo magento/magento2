@@ -227,10 +227,10 @@ class BulkManagementTest extends TestCase
             ->method('beginTransaction')
             ->willReturnSelf();
         $bulkSummary = $this->createMock(BulkSummaryInterface::class);
-        $this->bulkSummaryFactory->expects($this->once())
+        $this->bulkSummaryFactory->expects($this->exactly(2))
             ->method('create')
             ->willReturn($bulkSummary);
-        $this->entityManager->expects($this->once())
+        $this->entityManager->expects($this->exactly(2))
             ->method('load')
             ->with($bulkSummary, $bulkUuid)
             ->willReturn($bulkSummary);
@@ -261,14 +261,17 @@ class BulkManagementTest extends TestCase
             ->method('save')
             ->with($bulkSummary)
             ->willReturn($bulkSummary);
+        $connection->expects($this->once())
+            ->method('commit')
+            ->willReturnSelf();
+        $connection->expects($this->never())
+            ->method('rollBack');
         $this->publisher->expects($this->once())
             ->method('publish')
             ->willThrowException(new \Exception($exceptionMessage));
-        $connection->expects($this->never())
-            ->method('commit');
-        $connection->expects($this->once())
-            ->method('rollBack')
-            ->willReturnSelf();
+        $this->entityManager->expects($this->once())
+            ->method('delete')
+            ->with($bulkSummary);
         $this->logger->expects($this->once())
             ->method('critical')
             ->with($exceptionMessage);
