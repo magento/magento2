@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckOfflineRefundWarningForPayPalExpressCheckoutTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Checking offline refund warning while refunding with credit memo"/>
+            <title value="Admin verify refund warning message"/>
+            <description value="Admin Checking offline refund warning for PayPal Express Checkout orders"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-4375"/>
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Roll back configuration -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState"/>
+        <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <!-- Click on PayPal payment radio button -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
+        <!--Assert order in orders grid -->
+        <!-- Go to order page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Check status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <!-- Create invoice with capture online amount -->
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="waitForInvoicebtn"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoicePage"/>
+        <scrollTo selector="{{AdminInvoiceMainActionsSection.selectModeOfAmount}}" x="0" y="-80" stepKey="scrollToAmount"/>
+        <selectOption userInput="Capture Online" selector="{{AdminInvoiceMainActionsSection.selectModeOfAmount}}" stepKey="selectCaptureOnlineUnderAmount"/>
+        <waitForElementVisible selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="waitForSubmitInvoicebtn"/>
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="submitInvoice"/>
+        <waitForPageLoad stepKey="waitForLoadPage"/>
+        <waitForText userInput="The invoice has been created." stepKey="seeMessageInvoiceCreated"/>
+        <!-- Admin verify offline refund warning after clicking on credit memo  -->
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="waitForCreditMemobtn"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickOnCreditMemobtn"/>
+        <waitForText userInput="This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?" selector="{{AdminOrderDetailsMainActionsSection.creditMemoWarning}}" stepKey="waitForOfflineRefundWarning"/>
+    </test>
+</tests>

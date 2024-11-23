@@ -34,6 +34,11 @@ class SaveTest extends AbstractInvoiceControllerTest
     private $orderItemResource;
 
     /**
+     * @var string
+     */
+    protected $resource = "Magento_Sales::invoice";
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void

@@ -1,8 +1,19 @@
 <?xml version="1.0"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -104,7 +115,7 @@
     <type name="Magento\Framework\GraphQl\Query\QueryComplexityLimiter">
         <arguments>
             <argument name="queryDepth" xsi:type="number">20</argument>
-            <argument name="queryComplexity" xsi:type="number">300</argument>
+            <argument name="queryComplexity" xsi:type="number">1000</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">

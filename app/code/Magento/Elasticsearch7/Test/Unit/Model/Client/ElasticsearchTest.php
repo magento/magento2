@@ -10,7 +10,6 @@ namespace Magento\Elasticsearch7\Test\Unit\Model\Client;
 
 use Elasticsearch\Client;
 use Elasticsearch\Namespaces\IndicesNamespace;
-use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField;
 use Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\IntegerMapper;
 use Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\PositionMapper;
@@ -25,11 +24,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class ElasticsearchTest to test Elasticsearch 7
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ElasticsearchTest extends TestCase
 {
     /**
-     * @var ElasticsearchClient
+     * @var Elasticsearch
      */
     private $model;
 
@@ -65,6 +66,8 @@ class ElasticsearchTest extends TestCase
                     'search',
                     'scroll',
                     'info',
+                    'openPointInTime',
+                    'closePointInTime',
                 ]
             )
             ->disableOriginalConstructor()
@@ -707,5 +710,26 @@ class ElasticsearchTest extends TestCase
             'username' => 'user',
             'password' => 'passwd',
         ];
+    }
+
+    public function testOpenPointInTime(): void
+    {
+        $params = ['keep_alive' => '1m'];
+        $pit = ['id' => 'abc'];
+        $this->elasticsearchClientMock->expects($this->once())
+            ->method('openPointInTime')
+            ->with($params)
+            ->willReturn($pit);
+        $this->assertEquals($pit, $this->model->openPointInTime($params));
+    }
+
+    public function testClosePointInTime(): void
+    {
+        $params = ['body' => ['id' => 'abc']];
+        $this->elasticsearchClientMock->expects($this->once())
+            ->method('closePointInTime')
+            ->with($params)
+            ->willReturn([]);
+        $this->model->closePointInTime($params);
     }
 }

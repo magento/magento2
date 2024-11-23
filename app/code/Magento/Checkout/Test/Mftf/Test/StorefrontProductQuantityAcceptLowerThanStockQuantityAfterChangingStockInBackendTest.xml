@@ -14,7 +14,7 @@
             <description value="Verify if lower than stock product quantity is accepted after changing stock qty in backend"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5987"/>
-            <group value="mtf_migrated"/> 
+            <group value="mtf_migrated"/>
         </annotations>
 
         <before>
@@ -61,14 +61,14 @@
         <waitForAjaxLoad stepKey="waitForAjaxLoad1"/>
 
         <!--Assert "The requested qty is not available"-->
-        <see selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="The requested qty is not available" stepKey="seeTheErrorMessageDisplayed"/>
+        <see selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="Not enough items for sale" stepKey="seeTheErrorMessageDisplayed"/>
 
         <fillField selector="{{CheckoutCartProductSection.qty($$simpleProduct.sku$$)}}" userInput="8" stepKey="updateProductQty"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
         <waitForAjaxLoad stepKey="waitForPageLoad2"/>
 
-        <dontSee userInput="The requested qty is not available" stepKey="dontSeeTheErrorMessageDisplayed"/>
+        <dontSee userInput="Not enough items for sale" stepKey="dontSeeTheErrorMessageDisplayed"/>
 
     </test>
 </tests>
