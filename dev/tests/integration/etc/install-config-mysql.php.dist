@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 return [
     'db-host' => 'localhost',
     'db-user' => 'root',
-    'db-password' => '123123q',
+    'db-password' => '1234512345q!',
     'db-name' => 'magento_integration_tests',
     'db-prefix' => '',
     'backend-frontname' => 'backend',

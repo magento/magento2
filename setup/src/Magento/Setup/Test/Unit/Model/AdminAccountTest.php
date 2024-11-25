@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class AdminAccountTest extends TestCase
             AdminAccount::KEY_FIRST_NAME => 'John',
             AdminAccount::KEY_LAST_NAME => 'Doe',
             AdminAccount::KEY_EMAIL => 'john.doe@test.com',
-            AdminAccount::KEY_PASSWORD => '123123q',
+            AdminAccount::KEY_PASSWORD => '1234512345q!',
             AdminAccount::KEY_USER => 'admin',
             AdminAccount::KEY_PREFIX => 'pre_'
         ];

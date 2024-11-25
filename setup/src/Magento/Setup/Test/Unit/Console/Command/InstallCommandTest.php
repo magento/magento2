@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -175,7 +175,7 @@ class InstallCommandTest extends TestCase
     public function testExecute()
     {
         $this->input['--' . AdminAccount::KEY_USER] = 'user';
-        $this->input['--' . AdminAccount::KEY_PASSWORD] = '123123q';
+        $this->input['--' . AdminAccount::KEY_PASSWORD] = '1234512345q!';
         $this->input['--' . AdminAccount::KEY_EMAIL] = 'test@test.com';
         $this->input['--' . AdminAccount::KEY_FIRST_NAME] = 'John';
         $this->input['--' . AdminAccount::KEY_LAST_NAME] = 'Doe';

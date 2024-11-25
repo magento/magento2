@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 return [
@@ -14,7 +14,7 @@ return [
         'db-prefix' => '',
         'backend-frontname' => 'admin',
         'admin-user' => 'admin',
-        'admin-password' => '123123q',
+        'admin-password' => '1234512345q!',
         'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
         'admin-firstname' => \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME,
         'admin-lastname' => \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME,

@@ -78,7 +78,7 @@ class AdminUsersFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -105,7 +105,7 @@ class AdminUsersFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -113,7 +113,7 @@ class AdminUsersFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {

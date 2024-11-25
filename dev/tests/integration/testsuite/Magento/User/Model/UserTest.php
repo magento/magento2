@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Model;
@@ -392,11 +392,11 @@ class UserTest extends TestCase
         )->setEmail(
             'jdoe@example.com'
         )->setPassword(
-            '123123q'
+            '1234512345q!'
         );
         $this->_model->save();
         $this->assertStringNotContainsString(
-            '123123q',
+            '1234512345q!',
             $this->_model->getPassword(),
             'Password is expected to be hashed'
         );
@@ -486,9 +486,9 @@ class UserTest extends TestCase
         )->setEmail(
             'jdoe@example.com'
         )->setPassword(
-            '1234abc'
+            '1234512345q!'
         )->setPasswordConfirmation(
-            '1234abc'
+            '1234512345q!'
         );
         $this->_model->save();
     }

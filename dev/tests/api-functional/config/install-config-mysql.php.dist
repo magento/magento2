@@ -2,8 +2,8 @@
 /**
  * Magento console installer options for Web API functional tests. Are used in functional tests bootstrap.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 return [
     'language'                     => 'en_US',
@@ -21,7 +21,7 @@ return [
     'admin-firstname'              => 'Admin',
     'admin-email'                  => 'admin@example.com',
     'admin-user'                   => 'admin',
-    'admin-password'               => '123123q',
+    'admin-password'               => '1234512345q!',
     'admin-use-security-key'       => '0',
     /* PayPal has limitation for order number - 20 characters. 10 digits prefix + 8 digits number is good enough */
     'sales-order-increment-prefix' => time(),
