@@ -9,14 +9,15 @@ declare(strict_types=1);
 namespace Magento\Theme\Block\Html\Header;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\File\NotFoundException;
+use Magento\Framework\View\Element\Template\Context;
 
 /**
- * This ViewModel will add inline critical css in case dev/css/use_css_critical_path is enabled.
+ * This Block will add inline critical css in case dev/css/use_css_critical_path is enabled.
  */
-class CriticalCss implements ArgumentInterface
+class CriticalCss extends Template
 {
     /**
      * @var Repository
@@ -24,20 +25,17 @@ class CriticalCss implements ArgumentInterface
     private $assetRepo;
 
     /**
-     * @var $filePath
-     */
-    private $filePath;
-
-    /**
+     * @param Context $context
      * @param Repository $assetRepo
-     * @param string $filePath
+     * @param array $data
      */
     public function __construct(
+        Context $context,
         Repository $assetRepo,
-        string $filePath = ''
+        array $data = []
     ) {
         $this->assetRepo = $assetRepo;
-        $this->filePath = $filePath;
+        parent::__construct($context, $data);
     }
 
     /**
@@ -48,7 +46,10 @@ class CriticalCss implements ArgumentInterface
     public function getCriticalCssData()
     {
         try {
-            $asset = $this->assetRepo->createAsset($this->filePath, ['_secure' => 'false']);
+            $asset = $this->assetRepo->createAsset(
+                (string)$this->getFilePath(),
+                ['_secure' => 'false']
+            );
             $content = $asset->getContent();
         } catch (LocalizedException | NotFoundException $e) {
             $content = '';
