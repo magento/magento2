@@ -5,16 +5,13 @@
   * All Rights Reserved.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminLoginWithCustomUrlActionGroup" extends="AdminLoginActionGroup">
+    <actionGroup name="AdminSetDefaultCatalogPriceActionGroup">
         <annotations>
-            <description>Login to specific backend URL.</description>
+            <description> Admin set catalog price scope to default.</description>
         </annotations>
-        <arguments>
-            <argument name="customUrl" type="string"/>
-        </arguments>
-
-        <amOnPage url="{{customUrl}}" stepKey="navigateToAdmin"/>
+        <magentoCLI command="config:set {{GlobalCatalogPriceScopeConfigData.path}} {{GlobalCatalogPriceScopeConfigData.value}}" stepKey="setSetCatalogPriceToWebsite"/>
     </actionGroup>
 </actionGroups>
