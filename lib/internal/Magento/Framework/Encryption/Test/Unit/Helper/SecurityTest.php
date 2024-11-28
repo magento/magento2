@@ -36,7 +36,7 @@ class SecurityTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             ['a@fzsd434sdfqw24', 'a@fzsd434sdfqw24', true],

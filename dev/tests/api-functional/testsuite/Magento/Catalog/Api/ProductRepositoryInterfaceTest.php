@@ -209,11 +209,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function productCreationProvider()
+    public static function productCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -1134,7 +1134,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function testGetListWithFilteringByStoreDataProvider()
+    public static function testGetListWithFilteringByStoreDataProvider()
     {
         return [
             [
@@ -1226,7 +1226,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function productPaginationDataProvider()
+    public static function productPaginationDataProvider()
     {
         return [
             'expect-all-items' => [
@@ -1370,11 +1370,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array[]
      */
-    public function getListSortingByPositionDataProvider(): array
+    public static function getListSortingByPositionDataProvider(): array
     {
         return [
             'sort_by_position_descending' => [
-                'direction' => SortOrder::SORT_DESC,
+                'sortOrder' => SortOrder::SORT_DESC,
                 'expectedItems' => [
                     'search_product_5',
                     'search_product_4',
@@ -1384,7 +1384,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 ],
             ],
             'sort_by_position_ascending' => [
-                'direction' => SortOrder::SORT_ASC,
+                'sortOrder' => SortOrder::SORT_ASC,
                 'expectedItems' => [
                     'search_product_1',
                     'search_product_2',
@@ -1463,7 +1463,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    protected function getSimpleProductData($productData = [])
+    protected static function getSimpleProductData($productData = [])
     {
         return [
             ProductInterface::SKU => isset($productData[ProductInterface::SKU])

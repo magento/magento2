@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyOrderInformationBeforePlacingOrderActionGroup">
+        <annotations>
+            <description>Before placing order verifying the shipping method is selected correct with respect to address.</description>
+        </annotations>
+        <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.reviewOrderInfo('Culver City', 'Ground')}}" stepKey="waitForFirstProductReviewOrderInformation"/>
+        <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.reviewOrderInfo('Germany', 'Express easy')}}" stepKey="waitForSecondProductReviewOrderInformation"/>
+        <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.reviewOrderInfo('London', 'UPS Worldwide Expedited')}}" stepKey="waitForThirdProductReviewOrderInformation"/>
+        <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.reviewOrderInfo('New York', 'Library Mail Parcel')}}" stepKey="waitForFourthProductReviewOrderInformation"/>
+        <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.placeOrder}}" stepKey="waitForPlaceOrder"/>
+    </actionGroup>
+</actionGroups>

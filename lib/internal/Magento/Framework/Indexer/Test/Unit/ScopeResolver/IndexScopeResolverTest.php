@@ -90,37 +90,37 @@ class IndexScopeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider()
+    public static function resolveDataProvider()
     {
         return [
             [
-                'index' => 'some_index',
+                'indexName' => 'some_index',
                 'dimensions' => [],
                 'expected' => 'some_index'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [['scope', 'name']],
                 'expected' => 'index_name_scope1'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [['index', 20]],
                 'expected' => 'index_name_index20'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [['first', 10], ['second', 20]],
                 // actually you will get exception here thrown in ScopeResolverInterface
                 'expected' => 'index_name_first10_second20'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [['second', 10], ['first', 20]],
                 'expected' => 'index_name_first20_second10'
             ],
             [
-                'index' => 'index_name',
+                'indexName' => 'index_name',
                 'dimensions' => [[-1, 10], ['first', 20]],
                 'expected' => 'index_name_-110_first20'
             ]

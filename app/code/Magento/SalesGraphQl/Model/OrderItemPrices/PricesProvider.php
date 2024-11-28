@@ -9,6 +9,7 @@ namespace Magento\SalesGraphQl\Model\OrderItemPrices;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Item;
+use Magento\QuoteGraphQl\Model\GetOptionsRegularPrice;
 
 /**
  * Prices data provider for order item
@@ -16,10 +17,14 @@ use Magento\Sales\Model\Order\Item;
 class PricesProvider
 {
     /**
+     * PricesProvider constructor.
+     *
      * @param PriceCurrencyInterface $priceCurrency
+     * @param GetOptionsRegularPrice $getOptionsRegularPrice
      */
     public function __construct(
-        private readonly PriceCurrencyInterface $priceCurrency
+        private readonly PriceCurrencyInterface $priceCurrency,
+        private readonly GetOptionsRegularPrice $getOptionsRegularPrice
     ) {
     }
 
@@ -117,17 +122,20 @@ class PricesProvider
     private function getOptionsPrice(Item $orderItem): float
     {
         $price = 0.0;
-        $optionIds = $orderItem->getProduct()->getCustomOption('option_ids');
-        if (!$optionIds) {
+        $productOptions = $orderItem->getProductOptions();
+        if (empty($productOptions['options'])) {
             return $price;
         }
-        foreach (explode(',', $optionIds->getValue() ?? '') as $optionId) {
-            $option = $orderItem->getProduct()->getOptionById($optionId);
-            if ($option) {
-                $price += $option->getRegularPrice();
+
+        foreach ($productOptions['options'] as $option) {
+            $productOption = $orderItem->getProduct()->getOptionById($option['option_id']);
+            if ($productOption->getRegularPrice()) {
+                $price += $productOption->getRegularPrice();
+            } elseif (!empty($option['option_value'])) {
+                $price += $this->getOptionsRegularPrice
+                    ->execute(explode(",", $option['option_value']), $productOption);
             }
         }
-
         return $price;
     }
 }

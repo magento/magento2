@@ -77,7 +77,7 @@ class TypeCasterTest extends TestCase
     /**
      * @return array
      */
-    public function typeCastValueProvider()
+    public static function typeCastValueProvider()
     {
         return [
             'null' => [null, 'int', null],
@@ -102,7 +102,7 @@ class TypeCasterTest extends TestCase
      *
      * @return array
      */
-    public function arraysDataProvider()
+    public static function arraysDataProvider()
     {
         return [
             [['type' => 'VI', 'masked' => 1111], 'string', '{"type":"VI","masked":1111}'],

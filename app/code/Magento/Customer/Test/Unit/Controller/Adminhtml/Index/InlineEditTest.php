@@ -171,12 +171,9 @@ class InlineEditTest extends TestCase
             '',
             false
         );
-        $this->address = $this->getMockForAbstractClass(
-            AddressInterface::class,
-            [],
-            'address',
-            false
-        );
+
+        $this->address = $this->getMock(AddressInterface::class, 'address');
+
         $this->addressMapper = $this->createMock(Mapper::class);
         $this->customerMapper = $this->createMock(\Magento\Customer\Model\Customer\Mapper::class);
         $this->resultJsonFactory = $this->createPartialMock(
@@ -253,6 +250,22 @@ class InlineEditTest extends TestCase
                 'billing_postcode' => '07294'
             ]
         ];
+    }
+
+    /**
+     * @param string $class
+     * @param string $mockClassName
+     * @return mixed|MockObject
+     */
+    private function getMock(string $class, string $mockClassName): MockObject
+    {
+        if (class_exists($mockClassName)) {
+            return new $mockClassName();
+        }
+
+        $mockBuilder = $this->getMockBuilder($class);
+        $mockBuilder->setMockClassName($mockClassName);
+        return $mockBuilder->getMockForAbstractClass();
     }
 
     /**

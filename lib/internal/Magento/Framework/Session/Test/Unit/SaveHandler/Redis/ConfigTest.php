@@ -114,6 +114,16 @@ class ConfigTest extends TestCase
         $this->assertEquals($this->config->getTimeout(), $expected);
     }
 
+    public function testGetRetries()
+    {
+        $expected = 10;
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->willReturn(Config::PARAM_RETRIES)
+            ->willReturn($expected);
+        $this->assertEquals($this->config->getRetries(), $expected);
+    }
+
     public function testGetPersistentIdentifier()
     {
         $expected = 'sess01';

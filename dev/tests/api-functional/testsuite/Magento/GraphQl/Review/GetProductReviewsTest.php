@@ -341,7 +341,7 @@ QUERY;
     /**
      * @return array
      */
-    public function storesDataProvider(): array
+    public static function storesDataProvider(): array
     {
         return [
             ['default'],

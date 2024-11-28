@@ -1,7 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
  */
 declare(strict_types=1);
 
@@ -9,14 +18,13 @@ namespace Magento\OrderCancellationGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\OrderCancellation\Model\CancelOrder as CancelOrderAction;
-use Magento\OrderCancellation\Model\CustomerCanCancel;
-use Magento\OrderCancellation\Model\Config\Config;
-use Magento\OrderCancellationGraphQl\Model\ValidateRequest;
+use Magento\OrderCancellationGraphQl\Model\Validator\ValidateOrder;
+use Magento\OrderCancellationGraphQl\Model\Validator\ValidateRequest;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 
 /**
@@ -25,57 +33,21 @@ use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 class CancelOrder implements ResolverInterface
 {
     /**
-     * @var ValidateRequest $validateRequest
-     */
-    private ValidateRequest $validateRequest;
-
-    /**
-     * @var CancelOrderAction $cancelOrderAction
-     */
-    private CancelOrderAction $cancelOrderAction;
-
-    /**
-     * @var OrderFormatter
-     */
-    private OrderFormatter $orderFormatter;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private OrderRepositoryInterface $orderRepository;
-
-    /**
-     * @var Config
-     */
-    private Config $config;
-
-    /**
-     * @var CustomerCanCancel
-     */
-    private CustomerCanCancel $customerCanCancel;
-
-    /**
+     * CancelOrder Constructor
+     *
      * @param ValidateRequest $validateRequest
      * @param OrderFormatter $orderFormatter
      * @param OrderRepositoryInterface $orderRepository
-     * @param Config $config
      * @param CancelOrderAction $cancelOrderAction
-     * @param CustomerCanCancel $customerCanCancel
+     * @param ValidateOrder $validateOrder
      */
     public function __construct(
-        ValidateRequest $validateRequest,
-        OrderFormatter $orderFormatter,
-        OrderRepositoryInterface $orderRepository,
-        Config $config,
-        CancelOrderAction $cancelOrderAction,
-        CustomerCanCancel $customerCanCancel
+        private readonly ValidateRequest          $validateRequest,
+        private readonly OrderFormatter           $orderFormatter,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly CancelOrderAction        $cancelOrderAction,
+        private readonly ValidateOrder            $validateOrder
     ) {
-        $this->validateRequest = $validateRequest;
-        $this->orderFormatter = $orderFormatter;
-        $this->orderRepository = $orderRepository;
-        $this->config = $config;
-        $this->cancelOrderAction = $cancelOrderAction;
-        $this->customerCanCancel = $customerCanCancel;
     }
 
     /**
@@ -91,33 +63,15 @@ class CancelOrder implements ResolverInterface
         $this->validateRequest->execute($context, $args['input'] ?? []);
 
         try {
-            /** @var Order $order */
             $order = $this->orderRepository->get($args['input']['order_id']);
 
-            if ((int) $order->getCustomerId() !== $context->getUserId()) {
-                return [
-                    'error' => __('Current user is not authorized to cancel this order')
-                ];
+            if ((int)$order->getCustomerId() !== $context->getUserId()) {
+                throw new GraphQlAuthorizationException(__('Current user is not authorized to cancel this order'));
             }
 
-            if (!$this->customerCanCancel->execute($order)) {
-                return [
-                    'error' => __('Order already closed, complete, cancelled or on hold'),
-                    'order' => $this->orderFormatter->format($order)
-                ];
-            }
-
-            if ($order->hasShipments()) {
-                return [
-                    'error' => __('Order with one or more items shipped cannot be cancelled'),
-                    'order' => $this->orderFormatter->format($order)
-                ];
-            }
-
-            if (!$this->config->isOrderCancellationEnabledForStore((int)$order->getStoreId())) {
-                return [
-                    'error' =>  __('Order cancellation is not enabled for requested store.')
-                ];
+            $errors = $this->validateOrder->execute($order);
+            if ($errors) {
+                return $errors;
             }
 
             $order = $this->cancelOrderAction->execute($order, $args['input']['reason']);
@@ -125,6 +79,7 @@ class CancelOrder implements ResolverInterface
             return [
                 'order' => $this->orderFormatter->format($order)
             ];
+
         } catch (LocalizedException $e) {
             return [
                 'error' => __($e->getMessage())

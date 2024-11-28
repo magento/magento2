@@ -37,6 +37,9 @@
             <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </updateData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Disable configuration -->

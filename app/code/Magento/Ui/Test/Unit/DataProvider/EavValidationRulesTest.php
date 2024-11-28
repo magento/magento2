@@ -64,7 +64,7 @@ class EavValidationRulesTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider()
+    public static function buildDataProvider()
     {
         return [
             ['', '', [], []],

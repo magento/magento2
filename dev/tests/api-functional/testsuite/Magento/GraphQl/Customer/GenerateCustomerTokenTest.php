@@ -116,7 +116,7 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderInvalidCustomerInfo(): array
+    public static function dataProviderInvalidCustomerInfo(): array
     {
         return [
             'invalid_email' => [

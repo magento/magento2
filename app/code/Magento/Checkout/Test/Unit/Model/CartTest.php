@@ -335,14 +335,17 @@ class CartTest extends TestCase
     /**
      * Test successful scenarios for AddProduct.
      *
-     * @param int|Product $productInfo
-     * @param DataObject|int|array $requestInfo
+     * @param int|Product|null $productInfo
+     * @param DataObject|int|array|\Closure $requestInfo
      *
      * @return void
      * @dataProvider addProductDataProvider
      */
-    public function testAddProduct($productInfo, $requestInfo): void
+    public function testAddProduct(int|Product|null $productInfo, DataObject|int|array|\Closure $requestInfo): void
     {
+        if (is_callable($requestInfo)) {
+            $requestInfo = $requestInfo($this);
+        }
         $product = $this->createPartialMock(
             Product::class,
             ['getStore', 'getWebsiteIds', 'getProductUrl', 'getId']
@@ -468,34 +471,36 @@ class CartTest extends TestCase
         $this->cart->addProduct(4, 'bad');
     }
 
+    protected function getObjectForDataObject($data)
+    {
+        $obj = new ObjectManagerHelper($this);
+        return $obj->getObject(
+            DataObject::class,
+            ['data' => $data]
+        );
+    }
+
     /**
      * Data provider for testAddProduct.
      *
      * @return array
      */
-    public function addProductDataProvider(): array
+    public static function addProductDataProvider(): array
     {
-        $obj = new ObjectManagerHelper($this);
         $data = ['qty' => 5.5, 'sku' => 'prod'];
-
+        $object = static fn (self $testCase) => $testCase->getObjectForDataObject($data);
         return [
             'prod_int_info_int' => [4, 4],
             'prod_int_info_array' => [ 4, $data],
             'prod_int_info_object' => [
                 4,
-                $obj->getObject(
-                    DataObject::class,
-                    ['data' => $data]
-                )
+                $object
             ],
             'prod_obj_info_int' => [null, 4],
             'prod_obj_info_array' => [ null, $data],
             'prod_obj_info_object' => [
                 null,
-                $obj->getObject(
-                    DataObject::class,
-                    ['data' => $data]
-                )
+                $object
             ]
         ];
     }

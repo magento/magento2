@@ -296,7 +296,7 @@ class ReorderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'test case when reorder is allowed and customer is logged in' =>

@@ -115,7 +115,9 @@ class BundleProductCartPricesTest extends GraphQlAbstract
 
         // price is the bundle product price as in this case the options don't have prices
         // specialPrice is the bundle product price * bundle product special price %
-        $expectedResponse = $this->getExpectedResponse(15, 30, 30, 13.5, 27);
+        // originalItemPriceProduct1 is the bundle product price
+        // originalItemPriceProduct1 is with 10% discount as the special price
+        $expectedResponse = $this->getExpectedResponse(15, 30, 30, 13.5, 27, 15, 13.5);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -185,7 +187,9 @@ class BundleProductCartPricesTest extends GraphQlAbstract
 
         // price is the bundle product price + option fixed price
         // specialPrice is the bundle product price + option fixed price * bundle product special price %
-        $expectedResponse = $this->getExpectedResponse(25, 50, 50, 22.5, 45);
+        // originalItemPriceProduct1 is the bundle product price
+        // originalItemPriceProduct1 is with 10% discount as the special price
+        $expectedResponse = $this->getExpectedResponse(25, 50, 50, 22.5, 45, 25, 22.5);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -263,7 +267,9 @@ class BundleProductCartPricesTest extends GraphQlAbstract
 
         // price is the bundle product price + options fixed prices
         // specialPrice is the bundle product price + options fixed prices * bundle product special price %
-        $expectedResponse = $this->getExpectedResponse(45, 90, 90, 40.50, 81);
+        // originalItemPriceProduct1 is the bundle product price
+        // originalItemPriceProduct1 is with 10% discount as the special price
+        $expectedResponse = $this->getExpectedResponse(45, 90, 90, 40.50, 81, 45, 40.5);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -334,7 +340,9 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         // price is the (bundle product price * option percent price) + bundle product price
         // specialPrice is the (bundle product price * option percent price) +
         // bundle product price * bundle product special price %
-        $expectedResponse = $this->getExpectedResponse(18, 36, 36, 16.20, 32.40);
+        // originalItemPriceProduct1 is the bundle product price
+        // originalItemPriceProduct1 is with 10% discount as the special price
+        $expectedResponse = $this->getExpectedResponse(18, 36, 36, 16.20, 32.40, 18, 16.2);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -413,7 +421,9 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         // price is the (bundle product price * options percent price) + bundle product price
         // specialPrice is the (bundle product price * options percent price) +
         // bundle product price * bundle product special price %
-        $expectedResponse = $this->getExpectedResponse(19.5, 39, 39, 17.55, 35.10);
+        // originalItemPriceProduct1 is the bundle product price
+        // originalItemPriceProduct1 is with 10% discount as the special price
+        $expectedResponse = $this->getExpectedResponse(19.5, 39, 39, 17.55, 35.10, 19.5, 17.55);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -492,7 +502,9 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         // price is the (bundle product price * option percent price) + bundle product price + option fixed price
         // specialPrice is the (bundle product price * option percent price) + bundle product price +
         // option fixed price * bundle product special price %
-        $expectedResponse = $this->getExpectedResponse(28, 56, 56, 25.20, 50.40);
+        // originalItemPriceProduct1 is the bundle product price
+        // originalItemPriceProduct1 is with 10% discount as the special price
+        $expectedResponse = $this->getExpectedResponse(28, 56, 56, 25.20, 50.40, 28, 25.2);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -545,6 +557,10 @@ class BundleProductCartPricesTest extends GraphQlAbstract
                             ],
                             "original_row_total" => [
                                 "value" => 60,
+                                "currency" => "USD"
+                            ],
+                            "original_item_price" => [
+                                "value" => 30,
                                 "currency" => "USD"
                             ]
                         ]
@@ -605,6 +621,10 @@ class BundleProductCartPricesTest extends GraphQlAbstract
                             "original_row_total" => [
                                 "value" => 60,
                                 "currency" => "USD"
+                            ],
+                            "original_item_price" => [
+                                "value" => 25, // product 1 special_price(15) + product 2 price (10)
+                                "currency" => "USD"
                             ]
                         ]
                     ]
@@ -640,6 +660,10 @@ class BundleProductCartPricesTest extends GraphQlAbstract
             value
             currency
         }
+        original_item_price {
+            value
+            currency
+        }
       }
     }
   }
@@ -653,6 +677,8 @@ QUERY;
      * @param $originalRowTotal
      * @param $specialPrice
      * @param $specialRowTotal
+     * @param $originalItemPriceProduct1
+     * @param $originalItemPriceProduct2
      * @return array[]
      */
     private function getExpectedResponse(
@@ -660,7 +686,9 @@ QUERY;
         $rowTotal,
         $originalRowTotal,
         $specialPrice,
-        $specialRowTotal
+        $specialRowTotal,
+        $originalItemPriceProduct1,
+        $originalItemPriceProduct2
     ): array {
         return [
             "cart" =>  [
@@ -678,6 +706,10 @@ QUERY;
                             "original_row_total" => [
                                 "value" => $originalRowTotal,
                                 "currency" => "USD"
+                            ],
+                            "original_item_price" => [
+                                "value" => $originalItemPriceProduct1,
+                                "currency" => "USD"
                             ]
                         ]
                     ],
@@ -693,6 +725,10 @@ QUERY;
                             ],
                             "original_row_total" => [
                                 "value" => $originalRowTotal,
+                                "currency" => "USD"
+                            ],
+                            "original_item_price" => [
+                                "value" => $originalItemPriceProduct2,
                                 "currency" => "USD"
                             ]
                         ]

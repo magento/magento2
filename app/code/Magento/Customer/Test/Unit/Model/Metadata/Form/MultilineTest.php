@@ -47,7 +47,7 @@ class MultilineTest extends TextTest
     /**
      * @return array
      */
-    public function validateValueRequiredDataProvider()
+    public static function validateValueRequiredDataProvider()
     {
         return array_merge(
             parent::validateValueRequiredDataProvider(),
@@ -74,7 +74,7 @@ class MultilineTest extends TextTest
     /**
      * @return array
      */
-    public function validateValueLengthDataProvider()
+    public static function validateValueLengthDataProvider()
     {
         return array_merge(
             parent::validateValueLengthDataProvider(),
@@ -109,7 +109,7 @@ class MultilineTest extends TextTest
     /**
      * @return array
      */
-    public function compactValueDataProvider()
+    public static function compactValueDataProvider()
     {
         return [
             [

@@ -184,7 +184,13 @@ class TierPriceValidatorTest extends TestCase
         $websiteId = 0;
         $invalidWebsiteId = 4;
         $this->tierPrice->expects($this->atLeastOnce())->method('getWebsiteId')
-            ->willReturnOnConsecutiveCalls($websiteId, $websiteId, $websiteId, $invalidWebsiteId, $websiteId);
+            ->willReturnCallback(function () use (&$callCount, $websiteId, $invalidWebsiteId) {
+                $callCount++;
+                if ($callCount === 4) {
+                    return $invalidWebsiteId;
+                }
+                return $websiteId;
+            });
         $this->tierPrice->expects($this->atLeastOnce())->method('getCustomerGroup')
             ->willReturn($returned['tierPrice_getCustomerGroup']);
         $skuDiff = [$sku];
@@ -245,6 +251,11 @@ class TierPriceValidatorTest extends TestCase
      */
     public function testRetrieveValidationResult(array $returned)
     {
+        if (!empty($returned['customerGroupSearchResults_getItems'])) {
+            $groupSearchResult = $returned['customerGroupSearchResults_getItems'][0];
+            $returned['customerGroupSearchResults_getItems'][0] = $groupSearchResult($this);
+        }
+
         $sku = 'ASDF234234';
         $prices = [$this->tierPrice];
         $existingPrices = [$this->tierPrice];
@@ -261,14 +272,8 @@ class TierPriceValidatorTest extends TestCase
         );
     }
 
-    /**
-     * Data provider for retrieveValidationResult() test.
-     *
-     * @return array
-     */
-    public function retrieveValidationResultDataProvider()
+    protected function getMockForCustomerGroup($customerGroupName)
     {
-        $customerGroupName = 'test_Group';
         $customerGroup = $this->getMockBuilder(GroupInterface::class)
             ->onlyMethods(['getCode', 'getId'])
             ->disableOriginalConstructor()
@@ -276,6 +281,18 @@ class TierPriceValidatorTest extends TestCase
         $customerGroup->expects($this->atLeastOnce())->method('getCode')->willReturn($customerGroupName);
         $customerGroupId = 23;
         $customerGroup->expects($this->atLeastOnce())->method('getId')->willReturn($customerGroupId);
+        return $customerGroup;
+    }
+
+    /**
+     * Data provider for retrieveValidationResult() test.
+     *
+     * @return array
+     */
+    public static function retrieveValidationResultDataProvider()
+    {
+        $customerGroupName = 'test_Group';
+        $customerGroup = static fn (self $testCase) => $testCase->getMockForCustomerGroup($customerGroupName);
 
         return [
             [

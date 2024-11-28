@@ -105,7 +105,7 @@ class GetterSetterTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderGettersSetters()
+    public static function dataProviderGettersSetters()
     {
         // Test each class that implements the Tax Api Data Interfaces
         return [

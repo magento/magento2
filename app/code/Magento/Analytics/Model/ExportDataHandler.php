@@ -90,7 +90,7 @@ class ExportDataHandler implements ExportDataHandlerInterface
     public function prepareExportData()
     {
         try {
-            $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
+            $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
             $this->prepareDirectory($tmpDirectory, $this->getTmpFilesDirRelativePath());
             $this->reportWriter->write($tmpDirectory, $this->getTmpFilesDirRelativePath());
 
@@ -122,7 +122,17 @@ class ExportDataHandler implements ExportDataHandlerInterface
      */
     private function getTmpFilesDirRelativePath()
     {
-        return $this->subdirectoryPath . 'tmp/';
+        return $this->subdirectoryPath . 'tmp/' . $this->getInstanceIdentifier() . '/';
+    }
+
+    /**
+     * Return unique identifier for an instance.
+     *
+     * @return string
+     */
+    private function getInstanceIdentifier()
+    {
+        return hash('sha256', BP);
     }
 
     /**

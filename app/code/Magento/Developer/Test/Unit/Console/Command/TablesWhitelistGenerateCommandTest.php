@@ -86,7 +86,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      *
      * @return array
      */
-    public function successDataProvider()
+    public static function successDataProvider()
     {
         return [
             [
@@ -106,7 +106,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      *
      * @return array
      */
-    public function failureDataProvider()
+    public static function failureDataProvider()
     {
         return [
             [

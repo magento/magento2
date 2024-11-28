@@ -75,4 +75,9 @@
         <data key="quantity">6</data>
         <data key="weight">1</data>
     </entity>
+    <entity name="sizeAttribute" type="attribute">
+        <data key="default_label" unique="suffix">Size</data>
+        <data key="input_type">Dropdown</data>
+        <data key="attribute_code">size</data>
+    </entity>
 </entities>

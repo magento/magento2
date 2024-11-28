@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+// phpcs:ignoreFile
 namespace Magento\TestSetupDeclarationModule1\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
@@ -36,7 +36,9 @@ class InstallSchema implements InstallSchemaInterface
                 ['primary' => true, 'identity' => true, 'nullable' => false],
                 'Smallint'
             )
-            ->setComment('Reference table');
+            ->setComment('Reference table')
+            ->setOption('charset', 'utf8mb4')
+            ->setOption('collate', 'utf8mb4_general_ci');
         $installer->getConnection()->createTable($table);
 
         $testTable = $installer->getConnection()->newTable('test_table')
@@ -117,7 +119,9 @@ class InstallSchema implements InstallSchemaInterface
                 'smallint_ref',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
-            ->setComment('Test Table');
+            ->setComment('Test Table')
+            ->setOption('charset', 'utf8mb4')
+            ->setOption('collate', 'utf8mb4_general_ci');
         $installer->getConnection()->createTable($testTable);
 
         $installer->endSetup();

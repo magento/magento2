@@ -41,7 +41,7 @@ class RuntimeTest extends TestCase
     /**
      * @return array
      */
-    public function getParentsDataProvider()
+    public static function getParentsDataProvider()
     {
         return [
             [DiInterface::class, []],

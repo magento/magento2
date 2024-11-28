@@ -55,7 +55,7 @@ class GenericTest extends TestCase
     /**
      * @return array expected result and return of \Magento\Usps\Model\Carrier::getCode
      */
-    public function getCodeDataProvider()
+    public static function getCodeDataProvider()
     {
         return [
             [[['value' => 'Val', 'label' => 'Label']], ['Val' => 'Label']],

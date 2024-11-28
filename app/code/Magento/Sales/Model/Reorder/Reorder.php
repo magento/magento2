@@ -64,6 +64,8 @@ class Reorder
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
+        'Not enough items for sale' => self::ERROR_INSUFFICIENT_STOCK,
+        'Only %s of %s available' => self::ERROR_INSUFFICIENT_STOCK,
     ];
 
     /**
@@ -358,7 +360,7 @@ class Reorder
     private function getErrorCode(string $message): string
     {
         $code = self::ERROR_UNDEFINED;
-
+        $message = preg_replace('/\d+/', '%s', $message);
         $matchedCodes = array_filter(
             self::MESSAGE_CODES,
             function ($key) use ($message) {

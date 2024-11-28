@@ -152,7 +152,7 @@ class CustomizationTest extends TestCase
     /**
      * @return array
      */
-    public function getThemeFilesPathDataProvider()
+    public static function getThemeFilesPathDataProvider()
     {
         return [
             'physical' => [ThemeInterface::TYPE_PHYSICAL, 'getThemeFilesPath'],
@@ -213,14 +213,14 @@ class CustomizationTest extends TestCase
      *
      * @return array
      */
-    public function customFileContent()
+    public static function customFileContent()
     {
         return [
             [
                 'sequence' => [3, 2, 1],
                 'filesContent' => [
                     [
-                        'isCalled' => $this->once(),
+                        'isCalled' => self::once(),
                         'content' => [
                             'id' => 1,
                             'theme_id' => 123,
@@ -230,7 +230,7 @@ class CustomizationTest extends TestCase
                         ],
                     ],
                     [
-                        'isCalled' => $this->never(),
+                        'isCalled' => self::never(),
                         'content' => [
                             'id' => 2,
                             'theme_id' => 123,
@@ -240,7 +240,7 @@ class CustomizationTest extends TestCase
                         ]
                     ],
                     [
-                        'isCalled' => $this->once(),
+                        'isCalled' => self::once(),
                         'content' => [
                             'id' => 3,
                             'theme_id' => 123,

@@ -160,7 +160,7 @@ class TemplateFileTest extends TestCase
      *
      * @return array
      */
-    public function getMinifiedDataProvider()
+    public static function getMinifiedDataProvider()
     {
         return [
             'default with on demand' => [State::MODE_DEFAULT, 1, 1, 'getMinified'],

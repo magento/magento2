@@ -9,6 +9,10 @@ use Magento\Framework\Search\Request\Filter\Range as RangeFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
+/**
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
+ */
 class Range implements FilterInterface
 {
     /**

@@ -120,7 +120,7 @@ class StorageTest extends TestCase
         $this->plugin->afterReplace($this->storage, $newUrlRewrites, $newUrlRewrites);
     }
 
-    public function afterReplaceDataProvider(): array
+    public static function afterReplaceDataProvider(): array
     {
         return [
             [

@@ -80,7 +80,7 @@ class TemplateTest extends TestCase
     /**
      * @return array
      */
-    public function tagDataProvider(): array
+    public static function tagDataProvider(): array
     {
         return [
             ['-1', '-1'],

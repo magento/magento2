@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
@@ -426,7 +427,7 @@ class TierPriceValidator implements ResetAfterRequestInterface
             foreach ($prices[$tierPrice->getSku()] as $price) {
                 if ($price !== $tierPrice) {
                     $checkWebsiteValue = $isExistingPrice ? $this->compareWebsiteValue($price, $tierPrice)
-                        : ($price->getWebsiteId() == $tierPrice->getWebsiteId());
+                        : $this->compareWebsiteValueNewPrice($price, $tierPrice);
                     if (strtolower($price->getCustomerGroup()) === strtolower($tierPrice->getCustomerGroup())
                         && $price->getQuantity() == $tierPrice->getQuantity()
                         && $checkWebsiteValue
@@ -545,6 +546,29 @@ class TierPriceValidator implements ResetAfterRequestInterface
                     || $tierPrice->getWebsiteId() == $this->allWebsitesValue
                 )
                 && $price->getWebsiteId() != $tierPrice->getWebsiteId();
+    }
+
+    /**
+     * Compare Website Values between for new price records
+     *
+     * @param TierPriceInterface $price
+     * @param TierPriceInterface $tierPrice
+     * @return bool
+     */
+    private function compareWebsiteValueNewPrice(TierPriceInterface $price, TierPriceInterface $tierPrice): bool
+    {
+        if ($price->getWebsiteId() == $this->allWebsitesValue ||
+            $tierPrice->getWebsiteId() == $this->allWebsitesValue
+        ) {
+            $baseCurrency = $this->scopeConfig->getValue(Currency::XML_PATH_CURRENCY_BASE, 'default');
+            $websiteId = max($price->getWebsiteId(), $tierPrice->getWebsiteId());
+            $website = $this->websiteRepository->getById($websiteId);
+            $websiteCurrency = $website->getBaseCurrencyCode();
+
+            return $baseCurrency == $websiteCurrency;
+        }
+
+        return $price->getWebsiteId() == $tierPrice->getWebsiteId();
     }
 
     /**

@@ -18,10 +18,8 @@ use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
-use Magento\Search\Model\Search\PageSizeProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,11 +39,6 @@ class SearchTest extends TestCase
      * @var SearchResultFactory|MockObject
      */
     private $searchResultFactory;
-
-    /**
-     * @var PageSizeProvider|MockObject
-     */
-    private $pageSizeProvider;
 
     /**
      * @var FieldSelection|MockObject
@@ -94,9 +87,6 @@ class SearchTest extends TestCase
         $this->searchResultFactory = $this->getMockBuilder(SearchResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageSizeProvider = $this->getMockBuilder(PageSizeProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->fieldSelection = $this->getMockBuilder(FieldSelection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,7 +108,6 @@ class SearchTest extends TestCase
         $this->model = new Search(
             $this->search,
             $this->searchResultFactory,
-            $this->pageSizeProvider,
             $this->fieldSelection,
             $this->productsProvider,
             $this->searchCriteriaBuilder,
@@ -130,7 +119,7 @@ class SearchTest extends TestCase
 
     public function testPopulateSearchQueryStats(): void
     {
-        $args = ['search' => 'test'];
+        $args = ['search' => 'test', 'pageSize' => 10, 'currentPage' => 1];
         $context = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

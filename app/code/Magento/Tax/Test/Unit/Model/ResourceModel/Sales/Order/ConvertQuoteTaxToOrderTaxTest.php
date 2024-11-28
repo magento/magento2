@@ -232,14 +232,14 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             //one item with shipping
             //three tax rates: state and national tax rates of 6 and 5 percent with priority 0
             //city tax rate of 3 percent with priority 1
             'item_with_shipping_three_tax' => [
-                'applied_taxes' => [
+                'appliedTaxes' => [
                     [
                         'amount' => 0.66,
                         'base_amount' => 0.66,
@@ -276,7 +276,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'item_applied_taxes' => [
+                'itemAppliedTaxes' => [
                     //item tax, three tax rates
                     [
                         //first two taxes are combined
@@ -368,7 +368,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'expected_order_taxes' => [
+                'expectedTaxes' => [
                     //state tax
                     '35' => [
                         'order_id' => self::ORDERID,
@@ -412,7 +412,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'base_real_amount' => 0.18018018018018017 //this number is meaningless since this is single rate
                     ]
                 ],
-                'expected_item_taxes' => [
+                'expectedItemTaxes' => [
                     [
                         //state tax for item
                         'item_id' => self::ORDER_ITEM_ID,
@@ -486,10 +486,10 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'taxable_item_type' => 'shipping'
                     ]
                 ],
-                'item_id' => self::ORDER_ITEM_ID
+                'itemId' => self::ORDER_ITEM_ID
             ],
             'associated_item_with_empty_order_quote_item' => [
-                'applied_taxes' => [
+                'appliedTaxes' => [
                     [
                         'amount' => 0.66,
                         'base_amount' => 0.66,
@@ -526,7 +526,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'item_applied_taxes' => [
+                'itemAppliedTaxes' => [
                     //item tax, three tax rates
                     [
                         //first two taxes are combined
@@ -618,7 +618,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         ]
                     ]
                 ],
-                'expected_order_taxes' => [
+                'expectedTaxes' => [
                     //state tax
                     '35' => [
                         'order_id' => self::ORDERID,
@@ -662,7 +662,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'base_real_amount' => 0.18018018018018017 //this number is meaningless since this is single rate
                     ]
                 ],
-                'expected_item_taxes' => [
+                'expectedItemTaxes' => [
                     [
                         //state tax for item
                         'item_id' => null,
@@ -736,7 +736,7 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
                         'taxable_item_type' => 'shipping'
                     ]
                 ],
-                'item_id' => null
+                'itemId' => null
             ]
         ];
     }

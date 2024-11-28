@@ -55,7 +55,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getIdsDataProvider()
+    public static function getIdsDataProvider()
     {
         return [
             'empty db' => [[], []],
@@ -77,7 +77,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getTagsDataProvider()
+    public static function getTagsDataProvider()
     {
         return ['no tags' => [[]], 'multiple tags' => [['tag1', 'tag2']]];
     }
@@ -108,7 +108,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getIdsMatchingTagsDataProvider()
+    public static function getIdsMatchingTagsDataProvider()
     {
         return [
             'getIdsMatchingTags() - one tag' => [
@@ -189,7 +189,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function getMetadatasDataProvider()
+    public static function getMetadatasDataProvider()
     {
         $time = time();
         return [
@@ -259,7 +259,7 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return ['test validity' => [false], 'do not test validity' => [true]];
     }
@@ -347,10 +347,10 @@ class MongoDbTest extends TestCase
     /**
      * @return array
      */
-    public function cleanDataProvider()
+    public static function cleanDataProvider()
     {
         return [
-            'clean expired' => [\Zend_Cache::CLEANING_MODE_OLD, [], $this->arrayHasKey('expire')],
+            'clean expired' => [\Zend_Cache::CLEANING_MODE_OLD, [], self::arrayHasKey('expire')],
             'clean cache matching all tags (string)' => [
                 \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
                 'tag1',

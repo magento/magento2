@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model;
@@ -60,6 +60,7 @@ use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
 use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
 use ReflectionException;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -259,6 +260,16 @@ class Installer
      */
     private $triggerCleaner;
 
+    /***
+     * Old Charset for cl tables
+     */
+    private const OLDCHARSET = 'utf8|utf8mb3';
+
+    /***
+     * @var DtoFactoriesTable
+     */
+    private $columnConfig;
+
     /**
      * Constructor
      *
@@ -283,6 +294,7 @@ class Installer
      * @param State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
+     * @param DtoFactoriesTable|null $dtoFactoriesTable
      * @throws Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -307,7 +319,8 @@ class Installer
         DataSetupFactory $dataSetupFactory,
         State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
-        PhpReadinessCheck $phpReadinessCheck
+        PhpReadinessCheck $phpReadinessCheck,
+        ?DtoFactoriesTable $dtoFactoriesTable = null
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -338,6 +351,8 @@ class Installer
          * from that ObjectManager gets reset as different steps in the installer will write to the deployment config.
          */
         $this->firstDeploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->columnConfig = $dtoFactoriesTable ?: ObjectManager::getInstance()->get(DtoFactoriesTable::class);
+        ;
     }
 
     /**
@@ -388,7 +403,7 @@ class Installer
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
         if (empty($request['magento-init-params'])) {
-            $script[] = ['Enabling Update by Schedule Indexer Mode...', 'setIndexerModeSchedule', []];
+            $script[] = ['Indexing...', 'reindexAll', []];
         }
         $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 4 * count(array_filter($estimatedModules));
@@ -644,6 +659,16 @@ class Installer
                     'Data Version'
                 )->setComment('Module versions registry');
             $connection->createTable($table);
+        } else {
+            // Set default collation to utf8mb4 for MySQL
+            $getTableSchema = $connection->getCreateTable($setup->getTable('setup_module')) ?? '';
+            if (preg_match('/\b('. self::OLDCHARSET .')\b/', $getTableSchema)) {
+                $tableName = $setup->getTable('setup_module');
+                $columns = ['module' => ['varchar(50)',''],
+                            'schema_version' => ['varchar(50)',''],
+                            'data_version' => ['varchar(50)','']];
+                $this->setDefaultCharsetAndCollation($tableName, $columns, $connection);
+            }
         }
     }
 
@@ -703,6 +728,14 @@ class Installer
                 'Database Sessions Storage'
             );
             $connection->createTable($table);
+        } else {
+            // Set default collation to utf8mb4 for MySQL
+            $getTableSchema = $connection->getCreateTable($setup->getTable('session')) ?? '';
+            if (preg_match('/\b('. self::OLDCHARSET .')\b/', $getTableSchema)) {
+                $tableName = $setup->getTable('session');
+                $columns = ['session_id' => ['varchar(255)','']];
+                $this->setDefaultCharsetAndCollation($tableName, $columns, $connection);
+            }
         }
     }
 
@@ -758,6 +791,14 @@ class Installer
                 'Caches'
             );
             $connection->createTable($table);
+        } else {
+            // change the charset to utf8mb4
+            $getTableSchema = $connection->getCreateTable($setup->getTable('cache')) ?? '';
+            if (preg_match('/\b('. self::OLDCHARSET .')\b/', $getTableSchema)) {
+                $tableName = $setup->getTable('cache');
+                $columns = ['id' => ['varchar(200)','']];
+                $this->setDefaultCharsetAndCollation($tableName, $columns, $connection);
+            }
         }
     }
 
@@ -795,6 +836,14 @@ class Installer
                 'Tag Caches'
             );
             $connection->createTable($table);
+        } else {
+            // Set default collation to utf8mb4 for MySQL
+            $getTableSchema = $connection->getCreateTable($setup->getTable('cache_tag')) ?? '';
+            if (preg_match('/\b('. self::OLDCHARSET .')\b/', $getTableSchema)) {
+                $tableName = $setup->getTable('cache_tag');
+                $columns = ['tag' => ['varchar(100)',''],'cache_id' => ['varchar(200)','']];
+                $this->setDefaultCharsetAndCollation($tableName, $columns, $connection);
+            }
         }
     }
 
@@ -853,6 +902,12 @@ class Installer
             $connection->createTable($table);
         } else {
             $this->updateColumnType($connection, $tableName, 'flag_data', 'mediumtext');
+            // change the charset to utf8mb4
+            $getTableSchema = $connection->getCreateTable($tableName) ?? '';
+            if (preg_match('/\b('. self::OLDCHARSET .')\b/', $getTableSchema)) {
+                $columns = ['flag_code' => ['varchar(255)','NOT NULL'],'flag_data' => ['mediumtext','']];
+                $this->setDefaultCharsetAndCollation($tableName, $columns, $connection);
+            }
         }
     }
 
@@ -1736,12 +1791,12 @@ class Installer
                 return in_array(
                     $key,
                     [
-                        AdminAccount::KEY_EMAIL,
-                        AdminAccount::KEY_FIRST_NAME,
-                        AdminAccount::KEY_LAST_NAME,
-                        AdminAccount::KEY_USER,
-                        AdminAccount::KEY_PASSWORD,
-                    ]
+                            AdminAccount::KEY_EMAIL,
+                            AdminAccount::KEY_FIRST_NAME,
+                            AdminAccount::KEY_LAST_NAME,
+                            AdminAccount::KEY_USER,
+                            AdminAccount::KEY_PASSWORD,
+                        ]
                 ) && $value !== null;
             },
             ARRAY_FILTER_USE_BOTH
@@ -1801,14 +1856,14 @@ class Installer
     }
 
     /**
-     * Set Index mode as 'Update by Schedule'
+     * Reindexing
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
      * @throws LocalizedException
      * @throws \Exception
      */
-    private function setIndexerModeSchedule(): void
+    private function reindexAll(): void
     {
         /** @var Collection $indexCollection */
         $indexCollection = $this->objectManagerProvider->get()->get(Collection::class);
@@ -1818,13 +1873,34 @@ class Installer
                 /** @var IndexerInterface $model */
                 $model = $this->objectManagerProvider->get()->get(IndexerRegistry::class)
                     ->get($indexerId);
-                $model->setScheduled(true);
+                $model->reindexAll();
             }
-            $this->log->log(__('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds)));
+            $this->log->log(__('%1 indexer(s) are indexed.', count($indexerIds)));
         } catch (LocalizedException $e) {
             $this->log->log($e->getMessage());
         } catch (\Exception $e) {
-            $this->log->log(__("We couldn't change indexer(s)' mode because of an error: ".$e->getMessage()));
+            $this->log->log(__("Indexing Error: ".$e->getMessage()));
         }
+    }
+
+    /**
+     * Set default collation & charset (e.g. utf8mb4_general_ci and utf8mb4) for core setup tables
+     *
+     * @param string $tableName
+     * @param array $columns
+     * @param AdapterInterface $connection
+     * @return void
+     */
+    private function setDefaultCharsetAndCollation(string $tableName, array $columns, $connection) : void
+    {
+        $charset = $this->columnConfig->getDefaultCharset();
+        $collate = $this->columnConfig->getDefaultCollation();
+        $encoding = " CHARACTER SET ".$charset." COLLATE ".$collate;
+        $qry = sprintf('ALTER TABLE %s ', $tableName);
+        foreach ($columns as $key => $prop) {
+            $qry .= "MODIFY COLUMN `$key` $prop[0] $encoding $prop[1], ";
+        }
+        $qry .= sprintf('DEFAULT CHARSET=%s, DEFAULT COLLATE=%s', $charset, $collate);
+        $connection->query($qry);
     }
 }

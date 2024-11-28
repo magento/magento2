@@ -73,7 +73,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function evaluateDataProvider()
+    public static function evaluateDataProvider()
     {
         return [
             'no value' => [[], ''],
@@ -106,7 +106,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function evaluateExceptionDataProvider()
+    public static function evaluateExceptionDataProvider()
     {
         return ['not a string' => [['value' => 123]]];
     }

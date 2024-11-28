@@ -6,7 +6,6 @@
 
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites as CountryWithWebsitesSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
@@ -274,7 +273,6 @@ class Address extends AbstractCustomer
      * @param CountryWithWebsitesSource|null $countryWithWebsites
      * @param AddressStorage|null $addressStorage
      * @param Processor|null $indexerProcessor
-     * @param Share|null $configShare
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -299,8 +297,7 @@ class Address extends AbstractCustomer
         array $data = [],
         ?CountryWithWebsitesSource $countryWithWebsites = null,
         ?AddressStorage $addressStorage = null,
-        ?Processor $indexerProcessor = null,
-        ?Share $configShare = null
+        ?Processor $indexerProcessor = null
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_addressFactory = $addressFactory;
@@ -328,8 +325,7 @@ class Address extends AbstractCustomer
             $collectionFactory,
             $eavConfig,
             $storageFactory,
-            $data,
-            $configShare
+            $data
         );
 
         $this->_entityTable = isset(

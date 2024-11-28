@@ -15,6 +15,8 @@
             <description value="Checkout with invalid credit card details through Paypal payflow credit card payment method"/>
             <severity value="MINOR"/>
             <testCaseId value="AC-8920"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

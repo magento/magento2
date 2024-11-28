@@ -40,4 +40,9 @@
     <entity name="RegionUKGL" type="region">
         <data key="region">Greater London</data>
     </entity>
+    <entity name="RegionBER" type="region">
+        <data key="region">Berlin</data>
+        <data key="region_code">BER</data>
+        <data key="region_id">82</data>
+    </entity>
 </entities>

@@ -227,7 +227,7 @@ class IntervalTest extends TestCase
     /**
      * @return array
      */
-    public function loadParamsProvider(): array
+    public static function loadParamsProvider(): array
     {
         return [
             [
@@ -254,13 +254,13 @@ class IntervalTest extends TestCase
     /**
      * @return array
      */
-    public function loadPrevParamsProvider(): array
+    public static function loadPrevParamsProvider(): array
     {
         return [
             [
                 'data' => '24',
-                'rightIndex' => '1',
-                'upper' => '24',
+                'index' => '1',
+                'lower' => '24',
                 'queryResult' => [
                     'hits' => [
                         'total'=> '1',
@@ -277,8 +277,8 @@ class IntervalTest extends TestCase
             ],
             [
                 'data' => '24',
-                'rightIndex' => '1',
-                'upper' => '24',
+                'index' => '1',
+                'lower' => '24',
                 'queryResult' => [
                     'hits' => ['total'=> '0'],
                 ],
@@ -290,7 +290,7 @@ class IntervalTest extends TestCase
     /**
      * @return array
      */
-    public function loadNextParamsProvider(): array
+    public static function loadNextParamsProvider(): array
     {
         return [
             [

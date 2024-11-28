@@ -150,7 +150,7 @@ class GeneralTest extends AbstractModifierTestCase
     /**
      * @return array
      */
-    public function modifyDataOfExistingProductDataProvider(): array
+    public static function modifyDataOfExistingProductDataProvider(): array
     {
         return [
             'With enable status value' => [
@@ -203,12 +203,12 @@ class GeneralTest extends AbstractModifierTestCase
     /**
      * @return array
      */
-    public function modifyDataDataProvider(): array
+    public static function modifyDataDataProvider(): array
     {
         return [
             'With default status value' => [
                 'data' => [],
-                'defaultStatusAttributeValue' => 5,
+                'defaultStatusValue' => 5,
                 'expectedResult' => [
                     null => [
                         General::DATA_SOURCE_DEFAULT => [
@@ -219,7 +219,7 @@ class GeneralTest extends AbstractModifierTestCase
             ],
             'Without default status value' => [
                 'data' => [],
-                'defaultStatusAttributeValue' => 0,
+                'defaultStatusValue' => 0,
                 'expectedResult' => [
                     null => [
                         General::DATA_SOURCE_DEFAULT => [

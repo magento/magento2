@@ -64,7 +64,10 @@ class IndexerSetModeCommandTest extends AbstractIndexerCommandCommonSetup
 
         $indexerOne->expects($this->exactly(2))
             ->method('isScheduled')
-            ->willReturnOnConsecutiveCalls([true, false]);
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                return $callCount === 1 ? true : false;
+            });
 
         $indexerOne->expects($this->once())->method('setScheduled')->with(false);
 

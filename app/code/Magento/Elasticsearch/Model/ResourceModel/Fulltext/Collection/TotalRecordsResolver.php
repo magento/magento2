@@ -11,6 +11,8 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Resolve total records count.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class TotalRecordsResolver implements TotalRecordsResolverInterface
 {

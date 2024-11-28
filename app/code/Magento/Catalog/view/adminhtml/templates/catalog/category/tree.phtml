@@ -18,9 +18,9 @@
     </div>
     <div class="tree-actions">
         <?php if ($root):?>
-            <a id="colapseAll" href="#"><?= $block->escapeHtml(__('Collapse All')) ?></a>
+            <a id="colapseAll" href="#"><?= $escaper->escapeHtml(__('Collapse All')) ?></a>
             <span class="separator">|</span>
-            <a id="expandAll" href="#"><?= $block->escapeHtml(__('Expand All')) ?></a>
+            <a id="expandAll" href="#"><?= $escaper->escapeHtml(__('Expand All')) ?></a>
         <?php endif; ?>
     </div>
     <?php if ($root):?>
@@ -39,11 +39,11 @@
     </div>
 </div>
 
-<div data-id="information-dialog-tree" class="messages">
-    <div class="message message-notice">
-        <div><?= $block->escapeHtml(__('This operation can take a long time')) ?></div>
+    <div data-id="information-dialog-tree" class="messages">
+        <div class="message message-notice">
+            <div><?= $escaper->escapeHtml(__('This operation can take a long time')) ?></div>
+        </div>
     </div>
-</div>
 
         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
             'display: none;',
@@ -73,7 +73,7 @@
                 treeInstance,
 script;
         $scriptString .= 'currentNodeId = ' . (int)$block->getCategoryId() . ',
-
+         defaultTree = '. $block->getTreeJson() .',
          defaultParams = {
                 text: ' . /* @noEscape */ json_encode(htmlentities($root->getName())) . ',
                 allowDrop: ' . ($root->getIsVisible() ? 'true' : 'false') . ',
@@ -93,6 +93,32 @@ script;
                      */
                     treeDiv.jstree({
                         core: {
+                            'data' : function (obj, callback) {
+                                if(obj.id != '#' && obj.children.length === 0){
+                                    let data = {
+                                        id: obj.id,
+                                        store: defaultParams.store_id,
+                                        form_key: FORM_KEY
+                                    };
+
+                                    $.ajax({
+                                        url: '{$block->escapeJs($block->getLoadTreeUrl())}',
+                                        type: "POST",
+                                        data: data,
+                                        dataType: 'json',
+                                        success: function (response) {
+                                            TreeConfig.updateChildrenKey(response);
+                                            callback.call(this, response);
+                                        },
+                                        error: function (jqXHR, status, error) {
+                                            console.log(status + ': ' + error);
+                                        }
+                                    });
+                                }else{
+                                    TreeConfig.updateChildrenKey(defaultTree);
+                                    callback.call(this, defaultTree);
+                                }
+                            },
                             check_callback: function (operation, node) {
                                //Draggable false for root categories
                                 return !(operation === 'move_node' &&
@@ -102,57 +128,10 @@ script;
                         plugins: ['dnd'],
                     }).bind('move_node.jstree', function (e, data) {
                         TreeConfig.categoryMove(data);
+                    }).bind('ready.jstree', function(e, data) {
+                        TreeConfig.selectNode(data);
                     });
-
                     treeInstance = treeDiv.jstree(true);
-                    let root = treeInstance.get_node('#');
-                    this.buildCategoryTree(treeDiv, root, '{$block->getTreeJson()}', true);
-
-                    let catId = treeInstance.get_node(defaultParams.category_id);
-                    if (catId) {
-                        currentNodeId = defaultParams.category_id;
-                    } else if (defaultParams.parent > 0 && defaultParams.category_id === 0) {
-                        currentNodeId = defaultParams.parent;
-                    }
-
-                    // select and open child node
-                    if (defaultParams.expanded) {
-                        treeInstance.open_all();
-                    } else {
-                        let selectedNode = treeInstance.get_node(currentNodeId);
-                        treeInstance.select_node(selectedNode, true);
-
-                        setTimeout(function () {
-                            treeInstance.open_node(selectedNode);
-                        }, 15);
-                    }
-                },
-
-                buildCategoryTree: function(treeDiv, parent, config, firstLoad){
-                    if (!config) return;
-
-                    if(firstLoad){
-                        config = $.parseJSON(config);
-                    }
-
-                    for (let i = 0; i < config.length; i++) {
-                        let nodeConfig = config[i],
-                        newNode = {
-                            text: nodeConfig.text,
-                            id: nodeConfig.id,
-                            allowDrag: nodeConfig.allowDrag,
-                            allowDrop: nodeConfig.allowDrop,
-                            cls: nodeConfig.cls,
-                            store: nodeConfig.store,
-                            li_attr: { class: nodeConfig.cls}
-                        };
-
-                        const parentTree = treeInstance.create_node(parent, newNode, 'last');
-
-                        if (nodeConfig.children) {
-                            this.buildCategoryTree(treeDiv, parentTree, nodeConfig.children, false);
-                        }
-                    }
                 },
 
                 categoryMove : function (obj){
@@ -237,10 +216,33 @@ script;
                      treeDiv.on('changed.jstree', function (e, data) {
                         TreeConfig.categoryClick(data);
                      });
+                },
 
-                     treeDiv.on("open_node.jstree", function (e, data) {
-                       TreeConfig.handleOpenNode(data);
-                     });
+                updateChildrenKey : function(treeJson) {
+                    treeJson.forEach(node => {
+                        if (Array.isArray(node.children) && node.children.length === 0) {
+                            node.children = true;
+                        } else if (Array.isArray(node.children)) {
+                            TreeConfig.updateChildrenKey(node.children);
+                        }
+                    });
+                },
+
+                selectNode : function(data){
+                    if (defaultParams.expanded) {
+                        treeInstance.open_all();
+                    } else {
+                        let catId = treeInstance.get_node(defaultParams.category_id);
+                        if (catId) {
+                            currentNodeId = defaultParams.category_id;
+                        } else if (defaultParams.parent > 0 && defaultParams.category_id === 0) {
+                            currentNodeId = defaultParams.parent;
+                        }
+
+                        let selectedNode = treeInstance.get_node(currentNodeId);
+                        treeInstance.select_node(selectedNode, true);
+                        treeInstance.open_node(selectedNode);
+                    }
                 },
 
                 categoryClick : function(data){
@@ -254,63 +256,6 @@ script;
                         }
                         let url = baseUrl + 'id/' + id + '/';
                         setLocation(url);
-                    }
-                },
-
-                handleOpenNode : function(data){
-                    let parentNode = data.node;
-                    if (parentNode && parentNode.children.length > 0) {
-
-                        parentNode.children.forEach(function(childId) {
-
-                            let childNode = data.instance.get_node(childId, false);
-
-                            // Check if the child node has no children (is not yet loaded)
-                            if (childNode.children && childNode.children.length === 0
-                                && childNode.original && !childNode.original.lastNode) {
-
-                                $.ajax({
-                                    url: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}',
-                                    type: "POST",
-                                    data: {
-                                        id: childNode.original.id,
-                                        store: childNode.original.store,
-                                        form_key: FORM_KEY
-                                    },
-                                    dataType: 'json',
-                                    success: function (response) {
-                                        TreeConfig.handleSuccessResponse(response, childNode, data);
-                                    },
-                                    error: function (jqXHR, status, error) {
-                                        console.log(status + ': ' + error);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                },
-
-                handleSuccessResponse : function(response, childNode, data){
-                    if (response.length > 0) {
-                        response.forEach(newNode => {
-                            TreeConfig.addLastNodeFlag(newNode);
-
-                            // Create the new node and execute node callback
-                            data.instance.create_node(childNode, newNode, 'last');
-                        });
-
-                        // open all node if, expand all link clicked
-                        if(expandAll === true){
-                            data.instance.open_all();
-                        }
-                    }
-                },
-
-                addLastNodeFlag : function(treeData) {
-                    if (treeData.children) {
-                        treeData.children.forEach(child => TreeConfig.addLastNodeFlag(child));
-                    } else {
-                        treeData.lastNode = true;
                     }
                 },
 
@@ -341,13 +286,6 @@ script;
          */
         treeDiv.on('changed.jstree', function (e, data) {
              TreeConfig.categoryClick(data);
-        });
-
-        /**
-         * jstree handle open node
-         */
-        treeDiv.on('open_node.jstree', function (e, data) {
-             TreeConfig.handleOpenNode(data);
         });
 
         /**

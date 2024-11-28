@@ -26,6 +26,8 @@ use Magento\AdvancedSearch\Helper\Data;
  * Elasticsearch adapter
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Elasticsearch
 {

@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Controller\Adminhtml\Bookmark;
 
 use Magento\Authorization\Model\UserContextInterface;
@@ -246,17 +248,32 @@ class Save extends AbstractAction implements HttpPostActionInterface
                 $bookmarkConfig = $bookmark->getConfig();
                 $existingConfig = $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] ?? null;
                 $currentConfig = $data[self::CURRENT_IDENTIFIER] ?? null;
-                if ($existingConfig && $currentConfig) {
-                    if ($existingConfig['filters'] === $currentConfig['filters']
-                        && $existingConfig['positions'] !== $currentConfig['positions']
-                    ) {
-                        $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $data[self::CURRENT_IDENTIFIER];
-                        $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
-                        $this->bookmarkRepository->save($bookmark);
-                    }
+                if ($existingConfig && $currentConfig && $this->isPositionChanged($existingConfig, $currentConfig)) {
+                    $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $data[self::CURRENT_IDENTIFIER];
+                    $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
+                    $this->bookmarkRepository->save($bookmark);
                 }
                 break;
             }
         }
+    }
+
+    /**
+     * Check if the positions for identical filters has changed
+     *
+     * @param array $existingConfig The existing configuration
+     * @param array $currentConfig The current configuration
+     * @return bool True if positions have changed, false otherwise
+     */
+    private function isPositionChanged(array $existingConfig, array $currentConfig): bool
+    {
+        foreach (['filters', 'positions'] as $key) {
+            if (!array_key_exists($key, $existingConfig) || !array_key_exists($key, $currentConfig)) {
+                return false;
+            }
+        }
+
+        return $existingConfig['filters'] === $currentConfig['filters']
+            && $existingConfig['positions'] !== $currentConfig['positions'];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\AdminOrder;
@@ -12,6 +12,8 @@ use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\Checks\SpecificationFactory;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
 use Magento\Quote\Model\Quote\Item;
@@ -272,6 +274,26 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $request;
 
     /**
+     * @var SpecificationFactory
+     */
+    private $paymentMethodSpecificationFactory;
+
+    /**
+     * List of payment method specifications
+     *
+     * array(
+     *    array(
+     *       'type' => 'zero_total',
+     *       'sortOrder' => 100,
+     *       'disabled' => false
+     *   )
+     * )
+     *
+     * @var array
+     */
+    private $paymentMethodSpecifications;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -306,6 +328,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param CustomAttributeListInterface|null $customAttributeList
      * @param OrderRepositoryInterface|null $orderRepositoryInterface
      * @param HttpRequest|null $request
+     * @param SpecificationFactory|null $paymentMethodSpecificationFactory
+     * @param array $paymentMethodSpecifications
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -342,7 +366,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         StoreManagerInterface $storeManager = null,
         CustomAttributeListInterface $customAttributeList = null,
         OrderRepositoryInterface $orderRepositoryInterface = null,
-        HttpRequest $request = null
+        HttpRequest $request = null,
+        ?SpecificationFactory $paymentMethodSpecificationFactory = null,
+        array $paymentMethodSpecifications = []
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -383,6 +409,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             ->get(OrderRepositoryInterface::class);
         $this->request = $request ?: ObjectManager::getInstance()
             ->get(HttpRequest::class);
+        $this->paymentMethodSpecificationFactory = $paymentMethodSpecificationFactory ?: ObjectManager::getInstance()
+            ->get(SpecificationFactory::class);
+        $this->paymentMethodSpecifications = $paymentMethodSpecifications;
     }
 
     /**
@@ -2185,7 +2214,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->_errors[] = __("The payment method isn't selected. Enter the payment method and try again.");
         } else {
             $method = $this->getQuote()->getPayment()->getMethodInstance();
-            if (!$method->isAvailable($this->getQuote())) {
+            if (!$this->isPaymentMethodApplicable($method, $this->getQuote())) {
                 $this->_errors[] = __('This payment method is not available.');
             } else {
                 try {
@@ -2350,5 +2379,50 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
             $this->getSession()->setTransferredItems($removeCartTransferredItems);
         }
+    }
+
+    /**
+     * Check if payment method is applicable to quote
+     *
+     * @param MethodInterface $method
+     * @param Quote $quote
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isPaymentMethodApplicable(MethodInterface $method, Quote $quote): bool
+    {
+        if (!$method->isAvailable($this->getQuote())) {
+            return false;
+        }
+
+        $specifications = $this->getPaymentMethodSpecifications();
+
+        if (!empty($specifications)) {
+            return $this->paymentMethodSpecificationFactory->create($specifications)->isApplicable($method, $quote);
+        }
+
+        return true;
+    }
+
+    /**
+     * Get payment method specifications
+     *
+     * @return array
+     */
+    private function getPaymentMethodSpecifications(): array
+    {
+        $specifications = array_filter(
+            $this->paymentMethodSpecifications,
+            fn (array $spec) => !isset($spec['disabled']) || $spec['disabled'] === false
+        );
+
+        usort(
+            $specifications,
+            fn (array $a, array $b) => ($a['sortOrder'] ?? 0) <=> ($b['sortOrder'] ?? 0)
+        );
+
+        $specifications = array_column($specifications, 'type', 'type');
+
+        return array_values($specifications);
     }
 }

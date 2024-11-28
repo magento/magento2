@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertTransitionTypeStatusActionGroup" extends="AdminOpenTransactionsTabActionGroup">
         <annotations>
-            <description>Admin assert transition type status under sales</description>
+            <description>Click open Transactions Tab on the Order Details page and Check Transition Status</description>
         </annotations>
         <arguments>
             <argument name="transitionTypeStatus" type="string" defaultValue="Yes"/>

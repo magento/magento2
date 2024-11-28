@@ -66,7 +66,7 @@ class AbstractWidgetTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return [['key', 'value'], [null, null]];
     }
@@ -128,7 +128,7 @@ class AbstractWidgetTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldIdDataProvider()
+    public static function getFieldIdDataProvider()
     {
         return [
             [self::FORMAT_S, 'Id', 'Id', 'is_string'],
@@ -158,7 +158,7 @@ class AbstractWidgetTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameDataProvider()
+    public static function getFieldNameDataProvider()
     {
         return [
             [self::FORMAT_S, 'Name', 'Name', 'is_string'],

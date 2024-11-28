@@ -286,7 +286,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function isCategoryProperForGeneratingDataProvider()
+    public static function isCategoryProperForGeneratingDataProvider()
     {
         return [
             [['0'], false],

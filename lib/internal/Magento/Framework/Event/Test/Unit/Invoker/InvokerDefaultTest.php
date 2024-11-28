@@ -211,7 +211,7 @@ class InvokerDefaultTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForMethodIsNotDefined()
+    public static function dataProviderForMethodIsNotDefined()
     {
         return ['shared' => [true], 'non shared' => [false]];
     }

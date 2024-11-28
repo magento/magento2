@@ -421,7 +421,17 @@ class CarrierTest extends TestCase
         $rateResponse = $this->getRateResponse($amount, $currencyCode, $rateType);
 
         $this->serializer->method('serialize')
-            ->willReturn('CollectRateString' . $amount);
+            ->willReturn(
+                json_encode(
+                    [
+                        'accountNumber' => '123456789',
+                        'requestedShipment' =>
+                            ['rateRequestTypes' =>
+                                ['LIST', 'ACCOUNT']
+                            ]
+                    ]
+                ) .'CollectRateString' . $amount
+            );
 
         $rateCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
@@ -454,6 +464,7 @@ class CarrierTest extends TestCase
             ->addMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
+
         $request->method('getBaseCurrency')
             ->willReturn($baseCurrency);
 
@@ -465,6 +476,7 @@ class CarrierTest extends TestCase
             ->willReturnOnConsecutiveCalls($accessTokenResponse, $rateResponse);
 
         $allRates1 = $this->carrier->collectRates($request)->getAllRates();
+
         foreach ($allRates1 as $rate) {
             $this->assertEquals($expected, $rate->getData('cost'));
         }
@@ -939,51 +951,51 @@ class CarrierTest extends TestCase
         return [
             'tracking1' => [
                 'tracking1',
-                'shipTimestamp' => '2020-08-15T02:06:35+03:00',
+                'shipTimeStamp' => '2020-08-15T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
                 0,
             ],
             'tracking1-again' => [
                 'tracking1',
-                'shipTimestamp' => '2014-01-09T02:06:35+03:00',
+                'shipTimeStamp' => '2014-01-09T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
                 0,
             ],
             'tracking2' => [
                 'tracking2',
-                'shipTimestamp' => '2014-01-09T02:06:35+03:00',
+                'shipTimeStamp' => '2014-01-09T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '23:06:35',
             ],
             'tracking3' => [
                 'tracking3',
-                'shipTimestamp' => '2014-01-09T14:06:35',
+                'shipTimeStamp' => '2014-01-09T14:06:35',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
             ],
             'tracking4' => [
                 'tracking4',
-                'shipTimestamp' => '2016-08-05 14:06:35',
+                'shipTimeStamp' => '2016-08-05 14:06:35',
                 'expectedDate' => null,
                 null,
             ],
             'tracking5' => [
                 'tracking5',
-                'shipTimestamp' => '2016-08-05 14:06:35+00:00',
+                'shipTimeStamp' => '2016-08-05 14:06:35+00:00',
                 'expectedDate' => null,
                 null,
             ],
             'tracking6' => [
                 'tracking6',
-                'shipTimestamp' => '2016-08-05',
+                'shipTimeStamp' => '2016-08-05',
                 'expectedDate' => null,
                 null,
             ],
             'tracking7' => [
                 'tracking7',
-                'shipTimestamp' => '2016/08/05',
+                'shipTimeStamp' => '2016/08/05',
                 'expectedDate' => null,
                 null
             ],

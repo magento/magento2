@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddtoCartInManageStockForAllProductsTest">
+        <annotations>
+            <stories value="Enabling Manage Stock During Product Creation"/>
+            <title value="Product Status is updated to Out Of Stock when Manage Stock is set No in configuration"/>
+            <description value="Customer shouldn't be able to see add to cart button in the storefront if product is Out Of Stock"/>
+            <testCaseId value="AC-4167"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{CatalogInventoryManageStockDisable.path}} {{CatalogInventoryManageStockDisable.value}}" stepKey="manageStockdisableProducts"/>
+            <!-- Login to Admin Panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct3"  stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <!-- Create downloadable product -->
+            <createData entity="DownloadableProduct" stepKey="createDownloadableProduct"/>
+
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createChildProduct"/>
+            <createData entity="ApiGroupedProduct2" stepKey="createGroupedProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addFirstProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createChildProduct"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createBundleSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createBundleSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createBundleSimpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createBundleSimpleProduct2"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createFirstConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createFirstConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createFirstConfigProductAttributeFirstOption">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createFirstConfigProductAttributeSecondOption">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addFirstProductToAttributeSet">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getFirstConfigAttributeFirstOption">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </getData>
+            <!-- Create one child product for configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createFirstConfigFirstChildProduct">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+                <requiredEntity createDataKey="getFirstConfigAttributeFirstOption"/>
+            </createData>
+            <createData entity="ConfigurableProductOneOption" stepKey="createFirstConfigProductOption">
+                <requiredEntity createDataKey="createFirstConfigProduct"/>
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+                <requiredEntity createDataKey="getFirstConfigAttributeFirstOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createFirstConfigProductAddFirstChild">
+                <requiredEntity createDataKey="createFirstConfigProduct"/>
+                <requiredEntity createDataKey="createFirstConfigFirstChildProduct"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="initialVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
+            <deleteData createDataKey="createChildProduct" stepKey="deleteSimpleChildGroupedProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+            <deleteData createDataKey="createBundleSimpleProduct1" stepKey="deleteSimpleChildBundledProduct"/>
+            <deleteData createDataKey="createBundleSimpleProduct2" stepKey="deleteSimpleChildBundleProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createFirstConfigFirstChildProduct" stepKey="deleteChildConfigProduct"/>
+            <deleteData createDataKey="createFirstConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData stepKey="deleteSubCategory" createDataKey="createCategory"/>
+            <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex1">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <magentoCLI command="config:set {{CatalogInventoryManageStockDisable.path}} 1" stepKey="manageStockEnable"/>
+            <!--Logout From Admin Panel -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup"  stepKey="openSimpleProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink1"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig1">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty1">
+            <argument name="qty" value="500"/>
+        </actionGroup>
+        <!-- Save Advanced Inventory Section-->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton1"/>
+        <!-- Save Product Page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <!-- ManageStock For Virtual Product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openVirtualProductEditPage">
+            <argument name="productId" value="$initialVirtualProduct.id$"/>
+        </actionGroup>
+        <!-- Manage Stock Advanced Inventory Section-->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink2"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig2">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty2">
+            <argument name="qty" value="500"/>
+        </actionGroup>
+        <!-- Save Advanced Inventory Section-->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton3"/>
+        <!-- Save Product Page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProduct"/>
+        <!-- Manage Stock For Downloadable Product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openDownloadableProductEditPage">
+            <argument name="productId" value="$createDownloadableProduct.id$"/>
+        </actionGroup>
+        <!-- Manage Stock Advanced Inventory Section-->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink3"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig3">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty3">
+            <argument name="qty" value="500"/>
+        </actionGroup>
+        <!-- Save Advanced Inventory Section-->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneBtn2"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillDownloadCategory"/>
+        <!-- Save Product Page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDownloadableProduct"/>
+        <!-- Manage Stock For Grouped Product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openGroupedProductEditPage">
+            <argument name="productId" value="$createGroupedProduct.id$"/>
+        </actionGroup>
+        <!-- Manage Stock Advanced Inventory Section-->
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink4"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig4">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <!-- Save Advanced Inventory Section-->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton2"/>
+        <!-- Save Product Page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveGroupedProduct"/>
+        <!-- Manage Stock For Bundle Product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openBundleProductEditPage">
+            <argument name="productId" value="$createBundleProduct.id$"/>
+        </actionGroup>
+        <!-- Manage Stock Advanced Inventory Section-->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink5"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig5">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <!-- Save Advanced Inventory Section-->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneBtn1"/>
+        <!-- Save Product Page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveBundleProduct"/>
+        <!-- Manage Stock For Configurable Product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openConfigurableProductEditPage">
+            <argument name="productId" value="$createFirstConfigProduct.id$"/>
+        </actionGroup>
+        <!-- Manage Stock Advanced Inventory Section-->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink6"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig6">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillAdvancedInventoryQtyActionGroup" stepKey="fillProductQty6">
+            <argument name="qty" value="500"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneBtn"/>
+        <!-- Save Product Page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProduct"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performreIndex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanMagentoCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Navigate to Storefront -->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Should  see Simple products in category -->
+        <waitForText userInput="$createSimpleProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeProductInCategory"/>
+        <!-- Should  see Virtual products in category -->
+        <waitForText userInput="$initialVirtualProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeVirtualProductInCategory"/>
+        <!-- Should  see downloadable products in category -->
+        <waitForText userInput="$createDownloadableProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeDownloadableProductInCategory"/>
+        <!-- Should  see grouped product in category -->
+        <waitForText userInput="$createGroupedProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeGroupedProductInCategory"/>
+        <!-- Should  see bundle product in category -->
+        <waitForText userInput="$createBundleProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeBundleProductInCategory"/>
+        <!-- Should  see configurable products in category -->
+        <waitForText userInput="$createFirstConfigProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="seeConfigurableProductInCategory"/>
+        <!-- Navigate Admin  To Set Stock Status as Out of Stock For Simple Product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAgainSimpleProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <!-- Set Stock Status of Simple Product to Out Of Stock-->
+        <waitForPageLoad stepKey="waitForstockTobeLoaded2"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfSimpleItemStockStatus">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct1"/>
+        <!-- Navigate Admin  To Set Stock Status as Out of Stock For Virtual Product-->
+        <waitForPageLoad stepKey="waitForItemPageTobeLoaded1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAgainVirtualProductEditPage">
+            <argument name="productId" value="$initialVirtualProduct.id$"/>
+        </actionGroup>
+        <!-- Set Stock Status of Virtual Product to Out Of Stock-->
+        <waitForPageLoad stepKey="waitForstockTobeLoaded4"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatusVirtualItem">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProduct1"/>
+        <!-- Navigate Admin  To Set Stock Status as Out of Stock For Downloadable Product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAgainDownloadableProductEditPage">
+            <argument name="productId" value="$createDownloadableProduct.id$"/>
+        </actionGroup>
+        <!-- Set Stock Status of Downloadable Product to Out Of Stock-->
+        <waitForPageLoad stepKey="waitForstockTobeLoaded5"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatusDownloadItem">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDownloadProduct1"/>
+        <!-- Navigate Admin  To Set Stock Status as Out of Stock For Grouped Product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAgainGroupedProductEditPage">
+            <argument name="productId" value="$createGroupedProduct.id$"/>
+        </actionGroup>
+        <!-- Set Stock Status of Grouped Product to Out Of Stock-->
+        <waitForPageLoad stepKey="waitForstockOptionToLoad"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatusGroupedProduct">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveGroupedProduct1"/>
+        <!-- Navigate Admin  To Set Stock Status as Out of Stock For Bundle Product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAgainBundleProductEditPage">
+            <argument name="productId" value="$createBundleProduct.id$"/>
+        </actionGroup>
+        <!-- Set Stock Status of Product to Out Of Stock-->
+        <waitForPageLoad stepKey="waitForstockStatusTobeLoaded"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatusForBundleProduct">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveBundleProduct1"/>
+        <!-- Navigate Admin  To Set Stock Status as Out of Stock For Configurable Product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAgainConfigurableProductEditPage">
+            <argument name="productId" value="$createFirstConfigProduct.id$"/>
+        </actionGroup>
+        <!-- Set Stock Status of Configurable Product to Out Of Stock-->
+        <waitForElementClickable selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="waitForAdvancedInventoryLinkToClickable"/>
+        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="goToAdvancedInventory"/>
+        <!-- Uncheck Manage Stock Use Config Settings-->
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="uncheckManangeStockConfigCheckbox"/>
+        <!-- Set Manage Stock to Yes-->
+        <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}"  userInput="Yes" stepKey="changeManageStockToYes"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatusConfigItem">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <!-- Save Advanced Inventory Section-->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneBtn"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProduct1"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReIndex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushMagentoCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Navigate to storefront category to assert simple product -->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="openCategoryPage1">
+                <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Should not see Simple products in category -->
+        <dontSee userInput="$createSimpleProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage2">
+                <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductActionSection.addToCart}}" stepKey="dontSeeAddToCartBtn1"/>
+        <!-- Should not see Virtual products in category -->
+        <dontSee userInput="$initialVirtualProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeVirtualProductInCategory"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage4">
+            <argument name="productUrl" value="$initialVirtualProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductActionSection.addToCart}}" stepKey="dontSeeAddToCartBtn4"/>
+        <!-- Should not see downloadable products in category -->
+        <dontSee userInput="$createDownloadableProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeDownloadableProductInCategory"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage8">
+            <argument name="productUrl" value="$createDownloadableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductActionSection.addToCart}}" stepKey="dontSeeAddToCartBtn8"/>
+        <!-- Should not see grouped product in category -->
+        <dontSee userInput="$createGroupedProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeGroupedProductInCategory"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductListingPage">
+            <argument name="productUrl" value="$createGroupedProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductActionSection.addToCart}}" stepKey="dontSeeAddToCart1"/>
+        <!-- Should not see bundle product in category -->
+        <dontSee userInput="$createBundleProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeBundleProductInCategory"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage1">
+            <argument name="productUrl" value="$createBundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductActionSection.addToCart}}" stepKey="dontSeeAddToCartBtn3"/>
+        <!-- Should not see configurable products in category -->
+        <dontSee userInput="$createFirstConfigProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeConfigurableProductInCategory"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigProductPage1">
+            <argument name="productUrl" value="$createFirstConfigProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductActionSection.addToCart}}" stepKey="dontSeeAddToCart"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanMagentoCache1">
+            <argument name="tags" value=""/>
+        </actionGroup>
+    </test>
+</tests>

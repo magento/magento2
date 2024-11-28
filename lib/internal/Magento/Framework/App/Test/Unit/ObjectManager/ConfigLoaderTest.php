@@ -109,7 +109,7 @@ class ConfigLoaderTest extends TestCase
      *
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return [
             'global files' => ['global'],

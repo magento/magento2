@@ -62,7 +62,7 @@ class HostCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function isOwnOriginDataProvider()
+    public static function isOwnOriginDataProvider()
     {
         return [
             ['http://www.example.com/some/page/', true],

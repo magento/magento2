@@ -78,7 +78,7 @@ class ImageTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderForIsValid()
+    public static function dataProviderForIsValid()
     {
         return [
             'x-icon' => [dirname(__FILE__) . '/_files/favicon-x-icon.ico',

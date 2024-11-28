@@ -147,7 +147,7 @@ class DbStatusValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function aroundDispatchExceptionDataProvider()
+    public static function aroundDispatchExceptionDataProvider()
     {
         return [
             'schema is outdated' => [

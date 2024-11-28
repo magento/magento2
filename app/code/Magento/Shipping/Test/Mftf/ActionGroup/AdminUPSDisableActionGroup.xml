@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUPSDisableActionGroup">
+        <annotations>
+            <description>Disable UPS shipping method in the configuration section.</description>
+        </annotations>
+        <magentoCLI command="config:set {{AdminDisableUPSConfigData.path}} {{AdminDisableUPSConfigData.value}}" stepKey="disableUPS"/>
+        <magentoCLI command="config:set {{AdminDisableDebugUPSConfigData.path}} {{AdminDisableDebugUPSConfigData.value}}" stepKey="disableDebug"/>
+        <magentoCLI command="config:set {{AdminDisableShowMethodUPSConfigData.path}} {{AdminDisableShowMethodUPSConfigData.value}}" stepKey="disableShowMethod"/>
+    </actionGroup>
+</actionGroups>

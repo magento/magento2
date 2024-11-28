@@ -73,7 +73,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public static function isAllowedDataProvider()
     {
         return [
             [true],

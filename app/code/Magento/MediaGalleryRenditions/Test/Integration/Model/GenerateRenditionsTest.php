@@ -148,7 +148,7 @@ class GenerateRenditionsTest extends TestCase
     /**
      * @return array
      */
-    public function renditionsImageProvider(): array
+    public static function renditionsImageProvider(): array
     {
         return [
             'rendition_image_not_generated' => [

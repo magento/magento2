@@ -204,7 +204,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function getDisplayAmountDataProvider()
+    public static function getDisplayAmountDataProvider()
     {
         return [[true], [false]];
     }
@@ -251,7 +251,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function buildIdWithPrefixDataProvider()
+    public static function buildIdWithPrefixDataProvider()
     {
         return [
             ['some_prefix_', null, '_suffix', 'some_prefix__suffix'],
@@ -378,7 +378,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function dataPriceTypeDataProvider(): array
+    public static function dataPriceTypeDataProvider(): array
     {
         return [['finalPrice', 'basePrice'], [null, '']];
     }
