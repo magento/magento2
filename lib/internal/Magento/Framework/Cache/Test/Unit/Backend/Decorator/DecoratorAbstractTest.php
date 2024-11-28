@@ -63,6 +63,10 @@ class DecoratorAbstractTest extends TestCase
      */
     public function testConstructorException($options)
     {
+        if (!empty($options)) {
+           $options['concrete_backend'] = $options['concrete_backend']($this);
+        }
+
         $this->expectException('Zend_Cache_Exception');
         $this->getMockForAbstractClass(AbstractDecorator::class, [$options]);
     }
@@ -70,11 +74,11 @@ class DecoratorAbstractTest extends TestCase
     /**
      * @return array
      */
-    public function constructorExceptionDataProvider()
+    public static function constructorExceptionDataProvider()
     {
         return [
             'empty' => [[]],
-            'wrong_class' => [['concrete_backend' => $this->getMockBuilder('Test_Class')
+            'wrong_class' => [['concrete_backend' => static fn (self $testCase) => $testCase->getMockBuilder('Test_Class')
                 ->getMock()]]
         ];
     }
@@ -97,7 +101,7 @@ class DecoratorAbstractTest extends TestCase
     /**
      * @return array
      */
-    public function allMethodsDataProvider()
+    public static function allMethodsDataProvider()
     {
         $return = [];
         $allMethods = [

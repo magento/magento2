@@ -67,7 +67,7 @@ class RateTest extends TestCase
      *
      * @return array
      */
-    public function exceptionOfValidationDataProvider()
+    public static function exceptionOfValidationDataProvider()
     {
         return [
             'fill all required fields 1' => [

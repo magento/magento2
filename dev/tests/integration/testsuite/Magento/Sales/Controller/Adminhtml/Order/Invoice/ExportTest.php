@@ -70,27 +70,27 @@ class ExportTest extends ExportBase
     /**
      * @return array
      */
-    public function exportInvoiceDataProvider(): array
+    public static function exportInvoiceDataProvider(): array
     {
         return [
             'invoice_grid_in_csv' => [
                 'format' => ExportBase::CSV_FORMAT,
-                'add_id_to_url' => false,
+                'addIdToUrl' => false,
                 'namespace' => 'sales_order_invoice_grid',
             ],
             'invoice_grid_in_csv_from_order_view' => [
                 'format' => ExportBase::CSV_FORMAT,
-                'add_id_to_url' => true,
+                'addIdToUrl' => true,
                 'namespace' => 'sales_order_view_invoice_grid',
             ],
             'invoice_grid_in_xml' => [
                 'format' => ExportBase::XML_FORMAT,
-                'add_id_to_url' => false,
+                'addIdToUrl' => false,
                 'namespace' => 'sales_order_invoice_grid',
             ],
             'invoice_grid_in_xml_from_order_view' => [
                 'format' => ExportBase::XML_FORMAT,
-                'add_id_to_url' => true,
+                'addIdToUrl' => true,
                 'namespace' => 'sales_order_view_invoice_grid',
             ],
         ];

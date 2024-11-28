@@ -82,7 +82,7 @@ class ErrorTest extends TestCase
     /**
      * @return array
      */
-    public function isDisplayedDataProvider()
+    public static function isDisplayedDataProvider()
     {
         return [
             [true, ['has_errors' => 1]],

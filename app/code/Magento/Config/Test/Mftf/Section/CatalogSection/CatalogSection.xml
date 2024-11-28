@@ -27,5 +27,7 @@
         <element name="productsPerPageOnGridAllowedValues" type="input" selector="//input[@id='catalog_frontend_grid_per_page_values']"/>
         <element name="productsPerPageOnGridDefaultValue" type="input" selector="//input[@id='catalog_frontend_grid_per_page']"/>
         <element name="productsPerPageOnGridDefaultValueUseConfigCheckbox" type="checkbox" selector="//input[@id='catalog_frontend_grid_per_page_inherit']"/>
+        <element name="dateAndTimeCustomOptions" type="select" selector="#catalog_custom_options-head"/>
+        <element name="CheckIfTabExpandForDateAndTimeCustomOptions" type="button" selector="#catalog_custom_options-head:not(.open)"/>
     </section>
 </sections>

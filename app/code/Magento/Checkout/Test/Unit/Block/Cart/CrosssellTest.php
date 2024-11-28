@@ -176,7 +176,7 @@ class CrosssellTest extends TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider(): array
+    public static function getItemsDataProvider(): array
     {
         $links = [
             1001 => [
@@ -190,12 +190,12 @@ class CrosssellTest extends TestCase
         return [
             [
                 'productLinks' => $links,
-                'cartProducts' => [
+                'cartProductIds' => [
                     1001,
                     1006,
                 ],
-                'lastAddedProduct' => 1006,
-                'cross-sells' => [
+                'lastAddedProductId' => 1006,
+                'expected' => [
                     1002,
                     1003,
                     1005
@@ -203,12 +203,12 @@ class CrosssellTest extends TestCase
             ],
             [
                 'productLinks' => $links,
-                'cartProducts' => [
+                'cartProductIds' => [
                     1001,
                     1006,
                 ],
-                'lastAddedProduct' => null,
-                'cross-sells' => [
+                'lastAddedProductId' => null,
+                'expected' => [
                     1003,
                     1005,
                     1002,
@@ -216,23 +216,23 @@ class CrosssellTest extends TestCase
             ],
             [
                 'productLinks' => $links,
-                'cartProducts' => [
+                'cartProductIds' => [
                     1001,
                     1005,
                 ],
-                'lastAddedProduct' => null,
-                'cross-sells' => [
+                'lastAddedProductId' => null,
+                'expected' => [
                     1003
                 ]
             ],
             [
                 'productLinks' => $links,
-                'cartProducts' => [
+                'cartProductIds' => [
                     1002,
                     1003,
                 ],
-                'lastAddedProduct' => null,
-                'cross-sells' => [
+                'lastAddedProductId' => null,
+                'expected' => [
                 ]
             ]
         ];

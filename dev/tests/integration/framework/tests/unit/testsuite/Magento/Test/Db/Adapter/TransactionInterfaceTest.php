@@ -60,7 +60,7 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function transparentTransactionDataProvider()
+    public static function transparentTransactionDataProvider()
     {
         $result = [];
         $path = '/../../../../../../../Magento/TestFramework/Db/Adapter';

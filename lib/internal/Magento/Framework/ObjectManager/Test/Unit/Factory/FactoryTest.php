@@ -17,6 +17,7 @@ use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Polymorphous;
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic;
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two;
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
@@ -151,7 +152,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function circularDataProvider()
+    public static function circularDataProvider()
     {
         $prefix = 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\\';
         return [
@@ -215,6 +216,28 @@ class FactoryTest extends TestCase
         $expectedArg0,
         $expectedArg1
     ) {
+        if (isset($createArgs['oneScalars'])) {
+            if (is_array($createArgs['oneScalars'])) {
+                foreach ($createArgs['oneScalars'] as &$args) {
+                    if (is_callable($args)) {
+                        $args = $args($this);
+                    }
+                }
+            } else {
+                if (is_callable($createArgs['oneScalars'])) {
+                    $createArgs['oneScalars'] = $createArgs['oneScalars']($this);
+                }
+            }
+        }
+
+        if (is_callable($expectedArg0)) {
+            $expectedArg0 = $expectedArg0($this);
+        }
+
+        if (is_callable($expectedArg1)) {
+            $expectedArg1 = $expectedArg1($this);
+        }
+
         $type = Variadic::class;
         $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
 
@@ -238,17 +261,17 @@ class FactoryTest extends TestCase
             ? $factory->create($type)
             : $factory->create($type, $createArgs);
 
-        $this->assertSame($expectedArg0, $variadic->getOneScalarByKey(0));
-        $this->assertSame($expectedArg1, $variadic->getOneScalarByKey(1));
+        $this->assertEquals($expectedArg0, $variadic->getOneScalarByKey(0));
+        $this->assertEquals($expectedArg1, $variadic->getOneScalarByKey(1));
     }
 
     /**
      * @return array
      */
-    public function testCreateUsingVariadicDataProvider()
+    public static function testCreateUsingVariadicDataProvider()
     {
-        $oneScalar1 = $this->createMock(OneScalar::class);
-        $oneScalar2 = $this->createMock(OneScalar::class);
+        $oneScalar1 = static fn (self $testCase) => $testCase->createScalarMock();
+        $oneScalar2 = static fn (self $testCase) => $testCase->createScalarMock();
 
         return [
             'without_args'    => [
@@ -333,6 +356,28 @@ class FactoryTest extends TestCase
         $expectedArg0,
         $expectedArg1
     ) {
+        if (isset($createArgs['oneScalars'])) {
+            if (is_array($createArgs['oneScalars'])) {
+                foreach ($createArgs['oneScalars'] as &$args) {
+                    if (is_callable($args)) {
+                        $args = $args($this);
+                    }
+                }
+            } else {
+                if (is_callable($createArgs['oneScalars'])) {
+                    $createArgs['oneScalars'] = $createArgs['oneScalars']($this);
+                }
+            }
+        }
+
+        if (is_callable($expectedArg0)) {
+            $expectedArg0 = $expectedArg0($this);
+        }
+
+        if (is_callable($expectedArg1)) {
+            $expectedArg1 = $expectedArg1($this);
+        }
+
         $type = SemiVariadic::class;
         $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
 
@@ -363,18 +408,18 @@ class FactoryTest extends TestCase
             ? $factory->create($type)
             : $factory->create($type, $createArgs);
 
-        $this->assertSame($expectedFooValue, $semiVariadic->getFoo());
-        $this->assertSame($expectedArg0, $semiVariadic->getOneScalarByKey(0));
-        $this->assertSame($expectedArg1, $semiVariadic->getOneScalarByKey(1));
+        $this->assertEquals($expectedFooValue, $semiVariadic->getFoo());
+        $this->assertEquals($expectedArg0, $semiVariadic->getOneScalarByKey(0));
+        $this->assertEquals($expectedArg1, $semiVariadic->getOneScalarByKey(1));
     }
 
     /**
      * @return array
      */
-    public function testCreateUsingSemiVariadicDataProvider()
+    public static function testCreateUsingSemiVariadicDataProvider()
     {
-        $oneScalar1 = $this->createMock(OneScalar::class);
-        $oneScalar2 = $this->createMock(OneScalar::class);
+        $oneScalar1 = static fn (self $testCase) => $testCase->createScalarMock();
+        $oneScalar2 = static fn (self $testCase) => $testCase->createScalarMock();
 
         return [
             'without_args'    => [
@@ -449,5 +494,13 @@ class FactoryTest extends TestCase
                 $oneScalar2,
             ],
         ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function createScalarMock()
+    {
+        return $this->createMock(OneScalar::class);
     }
 }

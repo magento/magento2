@@ -105,7 +105,7 @@ class CsvTest extends TestCase
     /**
      * @return array
      */
-    public function optionalArgsDataProvider()
+    public static function optionalArgsDataProvider()
     {
         return [
             [',', '"', ['column1', 'column2']],

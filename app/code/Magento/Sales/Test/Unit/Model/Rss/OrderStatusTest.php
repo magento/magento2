@@ -296,7 +296,7 @@ class OrderStatusTest extends TestCase
      *
      * @return array
      */
-    public function getCacheKeyDataProvider()
+    public static function getCacheKeyDataProvider()
     {
         // phpcs:disable
         return [

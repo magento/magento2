@@ -57,7 +57,7 @@ class ShippingTest extends TestCase
     /**
      * @return array
      */
-    public function displayShippingDataProvider()
+    public static function displayShippingDataProvider()
     {
         return [
             ["flatrate_flatrate", true],

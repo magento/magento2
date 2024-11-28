@@ -16,6 +16,8 @@ use Magento\Framework\Api\Search\DocumentInterface;
  * Document Factory to create Search Document instance
  * @api
  * @since 100.1.0
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DocumentFactory
 {

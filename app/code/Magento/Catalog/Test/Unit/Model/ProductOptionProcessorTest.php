@@ -110,6 +110,9 @@ class ProductOptionProcessorTest extends TestCase
         $options,
         $requestData
     ) {
+        if (!empty($options)) {
+            $options[0] = $options[0]($this);
+        }
         $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
@@ -133,10 +136,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->assertEquals($this->dataObject, $this->processor->convertToBuyRequest($productOptionMock));
     }
 
-    /**
-     * @return array
-     */
-    public function dataProviderConvertToBuyRequest()
+    protected function getOptionsDataForprovider()
     {
         $objectManager = new ObjectManager($this);
 
@@ -144,6 +144,17 @@ class ProductOptionProcessorTest extends TestCase
         $option = $objectManager->getObject(CustomOption::class);
         $option->setOptionId(1);
         $option->setOptionValue(1);
+        return $option;
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderConvertToBuyRequest()
+    {
+
+        /** @var CustomOption $option */
+        $option = static fn (self $testCase) => $testCase->getOptionsDataForprovider();
 
         return [
             [

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelPaypalExpressCheckoutTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Cancel an order with paypal express checkout"/>
+            <title value="Cancel an order with paypal express checkout with valid credentials"/>
+            <description value="Cancel an order with paypal express checkout as payment method"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6116"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create Product -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <field key="price">10</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Configure Paypal Express Checkout -->
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <!-- Click on PayPal payment button -->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!-- display PayPal popup and close the PayPal popup-->
+        <switchToNextTab stepKey="switchToDownloadedLinkTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <closeTab stepKey="closeStorefrontTab"/>
+        <waitForPageLoad stepKey="waitForPageLoadAgain" time="30"/>
+        <!-- Goes to Shopping Cart page  and Product  is added to cart -->
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20"/>
+        <!--  Again Click on PayPal payment button  -->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnAgain">
+            <argument name="elementNumber" value="1"/>
+            <argument name="frameName" value="myFrame2"/>
+        </actionGroup>
+        <!-- Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>
+        <!-- I see order successful Page -->
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+    </test>
+</tests>

@@ -127,7 +127,7 @@ class RequestValidatorTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderSecureRequestSecureRoute()
+    public static function dataProviderSecureRequestSecureRoute()
     {
         // Each array contains return type for isSecure method of route and request objects.
         return [[true, true], [false, true], [false, false]];

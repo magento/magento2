@@ -73,7 +73,7 @@ class HeaderTest extends TestCase
     /**
      * @return array
      */
-    public function methodsDataProvider()
+    public static function methodsDataProvider()
     {
         return [
             'getHttpHost clean true' => [
@@ -154,7 +154,7 @@ class HeaderTest extends TestCase
     /**
      * @return array
      */
-    public function getRequestUriDataProvider()
+    public static function getRequestUriDataProvider()
     {
         return [
             'getRequestUri clean true' => ['clean' => true, 'expectedValue' => 'converted value'],

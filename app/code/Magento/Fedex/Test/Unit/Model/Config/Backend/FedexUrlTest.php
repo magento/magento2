@@ -102,7 +102,7 @@ class FedexUrlTest extends TestCase
      *
      * @return array
      */
-    public function validDataProvider(): array
+    public static function validDataProvider(): array
     {
         return [
             [],
@@ -117,7 +117,7 @@ class FedexUrlTest extends TestCase
     /**
      * @return \string[][]
      */
-    public function invalidDataProvider(): array
+    public static function invalidDataProvider(): array
     {
         return [
             ['http://fedexfoo.com'],

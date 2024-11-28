@@ -43,7 +43,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function existsDataProvider()
+    public static function existsDataProvider()
     {
         return [
             0 => [
@@ -86,7 +86,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function getDataProvider()
+    public static function getDataProvider()
     {
         return [
             0 => [
@@ -122,7 +122,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function setDataProvider()
+    public static function setDataProvider()
     {
         return [
             0 => [
@@ -213,7 +213,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function moveDataProvider()
+    public static function moveDataProvider()
     {
         return [
             0 => [
@@ -269,7 +269,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function mergeDataProvider()
+    public static function mergeDataProvider()
     {
         return [
             0 => [
@@ -313,7 +313,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function populateDataProvider()
+    public static function populateDataProvider()
     {
         return [
             0 => [
@@ -348,7 +348,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function removeDataProvider()
+    public static function removeDataProvider()
     {
         return [
             0 => [
@@ -390,7 +390,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function findPathsDataProvider()
+    public static function findPathsDataProvider()
     {
         $data = [
             'element1' => [
@@ -470,7 +470,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function findPathDataProvider()
+    public static function findPathDataProvider()
     {
         $data = [
             'element1' => [
@@ -549,7 +549,7 @@ class ArrayManagerTest extends TestCase
     /**
      * @return array
      */
-    public function slicePathDataProvider()
+    public static function slicePathDataProvider()
     {
         $path = 'some/very/very/long/path/0/goes/1/3/here';
 

@@ -87,7 +87,7 @@ class SamplesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function productSamplesTitleDataProvider()
+    public static function productSamplesTitleDataProvider()
     {
         return [
             ['simple', null, 'Samples Title Test'],

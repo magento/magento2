@@ -455,7 +455,7 @@ class UserTest extends TestCase
         $this->_model->save();
     }
 
-    public function beforeSavePasswordInsecureDataProvider()
+    public static function beforeSavePasswordInsecureDataProvider()
     {
         return ['alpha chars only' => ['aaaaaaaa'], 'digits only' => ['1234567']];
     }

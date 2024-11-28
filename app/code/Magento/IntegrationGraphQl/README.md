@@ -1,6 +1,6 @@
 # Magento_IntegrationGraphQl module
 
-This module provides GraphQl resolvers for Integartion module. 
+This module provides GraphQl resolvers for Integration module.
 
 ## Installation
 

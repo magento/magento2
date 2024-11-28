@@ -166,7 +166,7 @@ class FileResolverTest extends TestCase
      *
      * @return array
      */
-    public function providerGet(): array
+    public static function providerGet(): array
     {
         return [
             ['di.xml', ['di.xml', 'anotherfolder/di.xml']],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,10 @@ class AbstractItemTest extends TestCase
      */
     public function testGetTotalDiscountAmount($expectedDiscountAmount, $children, $calculated, $myDiscountAmount)
     {
+        $finalChildMock = [];
+        foreach ($children as $child) {
+            $finalChildMock[] = $child($this);
+        }
         $abstractItemMock = $this->getMockForAbstractClass(
             AbstractItem::class,
             [],
@@ -34,7 +38,7 @@ class AbstractItemTest extends TestCase
         );
         $abstractItemMock->expects($this->any())
             ->method('getChildren')
-            ->willReturn($children);
+            ->willReturn($finalChildMock);
         $abstractItemMock->expects($this->any())
             ->method('isChildrenCalculated')
             ->willReturn($calculated);
@@ -46,40 +50,40 @@ class AbstractItemTest extends TestCase
         $this->assertEquals($expectedDiscountAmount, $totalDiscountAmount);
     }
 
+    protected function getMockForAbstractItem($childDiscountAmount)
+    {
+        $childItemMock = $this->getMockForAbstractClass(
+            AbstractItem::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getDiscountAmount']
+        );
+        $childItemMock->expects($this->any())
+            ->method('getDiscountAmount')
+            ->willReturn($childDiscountAmount);
+
+        return $childItemMock;
+    }
+
     /**
      * @return array
      */
-    public function dataProviderGetTotalDiscountAmount()
+    public static function dataProviderGetTotalDiscountAmount()
     {
         $childOneDiscountAmount = 1000;
-        $childOneItemMock = $this->getMockForAbstractClass(
-            AbstractItem::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getDiscountAmount']
-        );
-        $childOneItemMock->expects($this->any())
-            ->method('getDiscountAmount')
-            ->willReturn($childOneDiscountAmount);
+
+        $childOneItemMock = static fn (self $testCase) =>
+        $testCase->getMockForAbstractItem($childOneDiscountAmount);
 
         $childTwoDiscountAmount = 50;
-        $childTwoItemMock = $this->getMockForAbstractClass(
-            AbstractItem::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getDiscountAmount']
-        );
-        $childTwoItemMock->expects($this->any())
-            ->method('getDiscountAmount')
-            ->willReturn($childTwoDiscountAmount);
+        $childTwoItemMock = static fn (self $testCase) =>
+        $testCase->getMockForAbstractItem($childTwoDiscountAmount);
 
         $valueHasNoEffect = 0;
+        $parentDiscountAmount = 10;
 
         $data = [
             'no_children' => [
@@ -95,10 +99,10 @@ class AbstractItemTest extends TestCase
                 10,
             ],
             'one_kid' => [
-                $childOneDiscountAmount,
+                $childOneDiscountAmount + $parentDiscountAmount,
                 [$childOneItemMock],
                 true,
-                $valueHasNoEffect,
+                $parentDiscountAmount,
             ],
             'two_kids' => [
                 $childOneDiscountAmount + $childTwoDiscountAmount,

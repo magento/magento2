@@ -440,7 +440,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
             ]
         ];
         $actual = $this->getActualResults($productFilter);
-        $this->assertEqualsCanonicalizing($expected, $actual);
+        $this->assertEqualsCanonicalizing($expected, array_values($actual));
 
         /** @var Product $product*/
         $store4Product = $this->objectManager->get(ProductFactory::class)->create();
@@ -508,7 +508,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
             ],
         ];
         $actual = $this->getActualResults($productFilter);
-        $this->assertEqualsCanonicalizing($expected, $actual);
+        $this->assertEqualsCanonicalizing($expected, array_values($actual));
     }
 
     /**

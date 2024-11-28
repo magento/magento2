@@ -46,7 +46,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['someone@magento.com', 'someone@magento.com'],

@@ -18,6 +18,7 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\AttributeLoaderInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Locale\Format;
@@ -335,5 +336,39 @@ class ProductTest extends TestCase
             'stringOperation' => [false, '1,500.03', '{}'],
             'smallPrice' => [false, '1,500.03', '>=', 1000],
         ];
+    }
+
+    public function testValidateWhenAttributeValueIsMissingInTheProduct(): void
+    {
+        $attributeCode = 'test_attr';
+        $attribute = new DataObject();
+        $attribute->setBackendType('varchar');
+        $attribute->setFrontendInput('text');
+
+        $newResource = $this->createPartialMock(Product::class, ['getAttribute']);
+        $newResource->expects($this->any())
+            ->method('getAttribute')
+            ->with($attributeCode)
+            ->willReturn($attribute);
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId', 'load', 'getResource'])
+            ->getMock();
+        $product->method('getId')
+            ->willReturn(1);
+        $product->expects($this->never())
+            ->method('load')
+            ->willReturnSelf();
+        $product->expects($this->atLeastOnce())
+            ->method('getResource')
+            ->willReturn($newResource);
+
+        $item = $this->createMock(AbstractItem::class);
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($product);
+        $this->model->setAttribute($attributeCode);
+        $this->model->validate($item);
     }
 }

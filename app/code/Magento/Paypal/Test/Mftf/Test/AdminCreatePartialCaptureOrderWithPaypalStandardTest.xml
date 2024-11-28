@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialCaptureOrderWithPaypalStandardTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Create Partial Capture for Order Paid with PayPal Payments Standard"/>
+            <description value="Create Partial Capture for Order Paid with PayPal Payments Standard"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5161"/>
+            <group value="paypalStandard"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <!-- Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">125.15</field>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Reindexing and flushing Cache-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfig">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!-- Open Product Page to add product in the cart -->
+            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnProductPage">
+                <argument name="product" value="$createProduct$"/>
+            </actionGroup>
+            <scrollTo selector="{{StorefrontProductActionSection.quantity}}" stepKey="scrollToQuantityField"/>
+            <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+                <argument name="productName" value="$$createProduct.name$$"/>
+                <argument name="productQty" value="2"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+            <!--Fill Shipping Address-->
+            <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
+            <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState"/>
+            <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+            <!-- Click Next button -->
+            <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+            <!-- Click on PayPal payment radio button and click on continue btn -->
+            <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinuebtn"/>
+            <!-- Login to Paypal in-context and verify order total on paypal page-->
+            <actionGroup ref="DummyDataActionGroup" stepKey="loginToPayPal"/>
+            <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+            <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!-- Go to order page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Submit invoice-->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
+        <!--Update qty as 1 and assert the status of the order-->
+        <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillInvoiceQuantity">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickUpdateQtyAfterUpdatingInvoiceBtn"/>
+        <waitForPageLoad stepKey="waitPageToBeLoaded" after="clickUpdateQtyAfterUpdatingInvoiceBtn"/>
+        <seeOptionIsSelected userInput="Capture Online" selector="{{AdminInvoiceTotalSection.amount}}" stepKey="seeOptionType" after="waitPageToBeLoaded"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForOrderInformationTabLoadingMask"/>
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForLastTransactionIDFieldToBeAppearedAfterSubmittingInvoice"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionIDForCaptured"/>
+        <waitForPageLoad stepKey="waitUntilInvoiceTabIsOpened"/>
+        <!--Open invoice tab and verify the invoice is present-->
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask" />
+        <see selector="{{AdminOrderInvoicesTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderInvoiceInTabGrid"/>
+        <waitForElementClickable selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="waitForClickToViewInvoiceRow"/>
+        <conditionalClick selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" dependentSelector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" visible="true" stepKey="clickToViewInvoiceRow"/>
+        <see selector="{{AdminInvoiceOrderInformationSection.orderId}}" userInput="{$grabOrderNumber}" stepKey="seeOrderIdOnInvoice" />
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openAgainOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Open the comment history tab and assert the comment-->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterSubmittingInvoice"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $135.15 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
+        <!-- Check the last transaction of the order and validate the details for Captured and Authorization-->
+        <actionGroup ref="AdminViewAuthorizationTransactionsInOrderActionGroup" stepKey="validateAuthTransaction"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="No" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForCapture">
+            <argument name="transactionType" value="capture"/>
+            <argument name="transitionTypeStatus" value="No"/>
+        </actionGroup>
+    </test>
+</tests>

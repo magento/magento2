@@ -381,4 +381,26 @@ class Elasticsearch implements ClientInterface
         }
         return $properties;
     }
+
+    /**
+     * Open point in time
+     *
+     * @param array $params
+     * @return array
+     */
+    public function openPointInTime(array $params = []): array
+    {
+        return $this->getElasticsearchClient()->openPointInTime($params);
+    }
+
+    /**
+     * Close point in time
+     *
+     * @param array $params
+     * @return array
+     */
+    public function closePointInTime(array $params = []): array
+    {
+        return $this->getElasticsearchClient()->closePointInTime($params);
+    }
 }

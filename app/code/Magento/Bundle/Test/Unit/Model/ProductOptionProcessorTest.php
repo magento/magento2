@@ -96,6 +96,9 @@ class ProductOptionProcessorTest extends TestCase
         $options,
         $requestData
     ) {
+        if (!empty($options) && is_callable($options[0])) {
+            $options[0] = $options[0]($this);
+        }
         $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
@@ -119,10 +122,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->assertEquals($this->dataObject, $this->processor->convertToBuyRequest($productOptionMock));
     }
 
-    /**
-     * @return array
-     */
-    public function dataProviderConvertToBuyRequest()
+    protected function getObjectForBundleOptionClass()
     {
         $objectManager = new ObjectManager($this);
 
@@ -131,7 +131,15 @@ class ProductOptionProcessorTest extends TestCase
         $option->setOptionId(1);
         $option->setOptionQty(1);
         $option->setOptionSelections(['selection']);
+        return $option;
+    }
 
+    /**
+     * @return array
+     */
+    public static function dataProviderConvertToBuyRequest()
+    {
+        $option = static fn (self $testCase) => $testCase->getObjectForBundleOptionClass();
         return [
             [
                 [$option],
@@ -210,19 +218,19 @@ class ProductOptionProcessorTest extends TestCase
                     3 => [],
                     4 => '',
                 ],
-                'options_qty' => [
+                'optionsQty' => [
                     1 => 1,
                 ],
                 'expected' => 'bundle_options',
             ],
             [
                 'options' => [],
-                'options_qty' => 0,
+                'optionsQty' => 0,
                 'expected' => null,
             ],
             [
                 'options' => 'is not array',
-                'options_qty' => 0,
+                'optionsQty' => 0,
                 'expected' => null,
             ],
         ];

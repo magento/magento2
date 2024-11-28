@@ -4,6 +4,7 @@
 interface ProductInterface {
     only_x_left_in_stock: Float @doc(description: "Remaining stock if it is below the value assigned to the Only X Left Threshold option in the Admin.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\OnlyXLeftInStockResolver")
     stock_status: ProductStockStatus @doc(description: "The stock status of the product.") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\StockStatusProvider")
+    quantity: Float @doc(description: "Amount of available stock") @resolver(class: "Magento\\CatalogInventoryGraphQl\\Model\\Resolver\\QuantityResolver")
 }
 
 enum ProductStockStatus @doc(description: "States whether a product stock status is in stock or out of stock.") {

@@ -25,5 +25,6 @@
         <element name="attributeOptionByAttributeID" type="select" selector="//div[@class='fieldset']//div[//span[text()='{{attribute_code}}']]//option[text()='{{optionName}}']" parameterized="true"/>
         <element name="tierPriceExcludingPrice" type="text" selector=".item [data-label='Excl. Tax']"/>
         <element name="tierPriceContainsExcludingTax" type="text" selector=".item .price"/>
+        <element name="productSwatchText" type="text" selector="//div[@class='swatch-option text' and contains(text(),'{{swatchName}}')]" parameterized="true"/>
     </section>
 </sections>

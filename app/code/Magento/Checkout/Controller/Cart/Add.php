@@ -6,10 +6,11 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Checkout\Model\AddProductToCart;
+use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
@@ -34,6 +35,11 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     private $quantityProcessor;
 
     /**
+     * @var AddProductToCart
+     */
+    private AddProductToCart $addProductToCart;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -42,6 +48,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      * @param CustomerCart $cart
      * @param ProductRepositoryInterface $productRepository
      * @param RequestQuantityProcessor|null $quantityProcessor
+     * @param AddProductToCart|null $addProductToCart
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -52,7 +59,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
         ProductRepositoryInterface $productRepository,
-        ?RequestQuantityProcessor $quantityProcessor = null
+        ?RequestQuantityProcessor $quantityProcessor = null,
+        ?AddProductToCart $addProductToCart = null
     ) {
         parent::__construct(
             $context,
@@ -65,6 +73,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         $this->productRepository = $productRepository;
         $this->quantityProcessor = $quantityProcessor
             ?? ObjectManager::getInstance()->get(RequestQuantityProcessor::class);
+        $this->addProductToCart = $addProductToCart
+            ?? ObjectManager::getInstance()->get(AddProductToCart::class);
     }
 
     /**
@@ -123,11 +133,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                 return $this->goBack();
             }
 
-            $this->cart->addProduct($product, $params);
-            if (!empty($related)) {
-                $this->cart->addProductsByIds(explode(',', $related));
-            }
-            $this->cart->save();
+            $this->addProductToCart->execute($this->cart, $product, $params, $related ? explode(',', $related) : []);
 
             /**
              * @todo remove wishlist observer \Magento\Wishlist\Observer\AddToCart

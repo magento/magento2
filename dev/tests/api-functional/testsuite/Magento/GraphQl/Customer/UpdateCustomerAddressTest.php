@@ -424,7 +424,7 @@ MUTATION;
     /**
      * @return array
      */
-    public function invalidInputDataProvider()
+    public static function invalidInputDataProvider()
     {
         return [
             ['', '"input" value must be specified'],

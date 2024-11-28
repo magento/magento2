@@ -93,7 +93,7 @@ class PageIdsListTest extends TestCase
      *
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             [[1, 2, 3], [1], ['test1', 'test2', 'test3']],

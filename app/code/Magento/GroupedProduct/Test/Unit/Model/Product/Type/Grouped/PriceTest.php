@@ -78,7 +78,20 @@ class PriceTest extends TestCase
         $expectedPriceCall,
         $expectedFinalPrice
     ): void {
+        $newOptions = [];
+        foreach ($options as $option) {
+            if (!empty($option)) {
+                if (is_callable($option[1])) {
+                    $option[1] = $option[1]($this);
+                }
+            }
+            $newOptions[] = $option;
+        }
         $rawFinalPrice = 10;
+
+        if (!empty($associatedProducts) && is_callable($associatedProducts[0])) {
+            $associatedProducts = $associatedProducts[0]($this);
+        }
 
         $this->productMock->expects(
             $this->any()
@@ -162,17 +175,12 @@ class PriceTest extends TestCase
             $associatedProducts
         );
 
-        $this->productMock->expects($this->any())->method('getCustomOption')->willReturnMap($options);
+        $this->productMock->expects($this->any())->method('getCustomOption')->willReturnMap($newOptions);
 
         $this->assertEquals($rawFinalPrice, $this->finalPriceModel->getFinalPrice(1, $this->productMock));
     }
 
-    /**
-     * Data provider for testGetFinalPrice.
-     *
-     * @return array
-     */
-    public function getFinalPriceDataProvider(): array
+    protected function getMockForOptionsClass()
     {
         $optionMock = $this->getMockBuilder(Option::class)
             ->addMethods(['getValue'])
@@ -181,7 +189,17 @@ class PriceTest extends TestCase
             ->getMock();
         /* quantity of options */
         $optionMock->expects($this->any())->method('getValue')->willReturn(5);
+        return $optionMock;
+    }
 
+    /**
+     * Data provider for testGetFinalPrice.
+     *
+     * @return array
+     */
+    public static function getFinalPriceDataProvider(): array
+    {
+        $optionMock = static fn (self $testCase) => $testCase->getMockForOptionsClass();
         return [
             'custom_option_null' => [
                 'associatedProducts' => [],
@@ -190,7 +208,7 @@ class PriceTest extends TestCase
                 'expectedFinalPrice' => 10 /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
             ],
             'custom_option_exist' => [
-                'associatedProducts' => $this->generateAssociatedProducts(),
+                'associatedProducts' => [static fn (self $testCase) => $testCase->generateAssociatedProducts()],
                 'options' => [
                     ['associated_product_1', false],
                     ['associated_product_2', $optionMock],

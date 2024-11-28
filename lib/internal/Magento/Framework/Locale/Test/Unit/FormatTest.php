@@ -101,7 +101,7 @@ class FormatTest extends TestCase
      *
      * @return array
      */
-    public function getPriceFormatDataProvider(): array
+    public static function getPriceFormatDataProvider(): array
     {
         $swissGroupSymbol = INTL_ICU_VERSION >= 59.1 ? '’' : '\'';
         return [
@@ -131,7 +131,7 @@ class FormatTest extends TestCase
      *
      * @return array
      */
-    public function provideNumbers(): array
+    public static function provideNumbers(): array
     {
         return [
             ['  2345.4356,1234', 23454356.1234],

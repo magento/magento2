@@ -18,13 +18,15 @@ use PHPUnit\Framework\TestCase;
 class StatusResolverTest extends TestCase
 {
     /**
-     * @param OrderInterface|MockObject $order
+     * @param \Closure $order
      * @param string $expectedReturn
      *
      * @dataProvider statesDataProvider
      */
     public function testGetOrderStatusByState($order, $expectedReturn)
     {
+        $order = $order($this);
+
         $actualReturn = (new StatusResolver())->getOrderStatusByState($order, 'new');
 
         self::assertEquals($expectedReturn, $actualReturn);
@@ -33,15 +35,15 @@ class StatusResolverTest extends TestCase
     /**
      * @return array
      */
-    public function statesDataProvider()
+    public static function statesDataProvider()
     {
         return [
             [
-                $this->getOrder('pending', ['pending' => 'pending']),
+                static fn (self $testCase) => $testCase->getOrder('pending', ['pending' => 'pending']),
                 'pending'
             ],
             [
-                $this->getOrder('processing', ['pending' => 'pending']),
+                static fn (self $testCase) => $testCase->getOrder('processing', ['pending' => 'pending']),
                 'processing'
             ],
         ];

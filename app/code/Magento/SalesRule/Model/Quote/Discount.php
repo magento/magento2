@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Quote;
 
@@ -188,15 +188,30 @@ class Discount extends AbstractTotal
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
-        $totalDiscount = 0;
         $address->setBaseDiscountAmount(0);
         /** @var Rule $rule */
         foreach ($rules as $rule) {
+            $ruleTotalDiscount = 0;
             /** @var Item $item */
             foreach ($itemsToApplyRules as $key => $item) {
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
                     continue;
                 }
+
+                switch ($rule->getSimpleAction()) {
+                    case Rule::BY_PERCENT_ACTION:
+                    case Rule::BY_FIXED_ACTION:
+                        if ($rule->getDiscountStep() > $item->getQty()) {
+                            continue 2;
+                        }
+                        break;
+                    case Rule::BUY_X_GET_Y_ACTION:
+                        if ($rule->getDiscountStep() >= $item->getQty()) {
+                            continue 2;
+                        }
+                        break;
+                }
+
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
 
@@ -206,9 +221,14 @@ class Discount extends AbstractTotal
                     unset($itemsToApplyRules[$key]);
                 }
 
-                $totalDiscount += $item->getBaseDiscountAmount();
+                if ($item->getChildren() && $item->isChildrenCalculated()) {
+                    foreach ($item->getChildren() as $child) {
+                        $ruleTotalDiscount += $child->getBaseDiscountAmount();
+                    }
+                }
+                $ruleTotalDiscount += $item->getBaseDiscountAmount();
             }
-            $address->setBaseDiscountAmount($totalDiscount);
+            $address->setBaseDiscountAmount($ruleTotalDiscount);
         }
         $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {

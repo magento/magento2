@@ -89,4 +89,9 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="AdminPoundsUnitOfMeasureDHL">
+        <data key="path">carriers/dhl/unit_of_measure</data>
+        <data key="label">Pounds</data>
+        <data key="value">L</data>
+    </entity>
 </entities>

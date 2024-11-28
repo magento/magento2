@@ -408,7 +408,7 @@ class ArgumentsReaderTest extends TestCase
     /**
      * @return array
      */
-    public function testIsCompatibleTypeDataProvider()
+    public static function testIsCompatibleTypeDataProvider()
     {
         return [
             ['array', 10, false],

@@ -66,4 +66,9 @@
     <type name="Magento\Customer\Model\ResourceModel\Customer">
         <plugin name="recollect_quote_on_customer_group_change" type="Magento\Checkout\Model\Plugin\RecollectQuoteOnCustomerGroupChange"/>
     </type>
+    <type name="Magento\Checkout\Model\AddProductToCart">
+        <arguments>
+            <argument name="quoteMutex" xsi:type="object">Magento\Quote\Model\ResourceModel\LoadQuoteByIdMutex</argument>
+        </arguments>
+    </type>
 </config>

@@ -49,7 +49,6 @@ class CartItemsPaginated implements ResolverInterface
 
         $pageSize = $args['pageSize'];
         $currentPage = $args['currentPage'];
-        $offset = ($currentPage - 1) * $pageSize;
         $order = CartItemsPaginated::SORT_ORDER;
         $orderBy = CartItemsPaginated::SORT_ORDER_BY;
 
@@ -59,7 +58,7 @@ class CartItemsPaginated implements ResolverInterface
         }
 
         $allVisibleItems = $cart->getAllVisibleItems();
-        $paginatedCartItems = $this->pagination->execute($cart, $pageSize, (int) $offset, $orderBy, $order);
+        $paginatedCartItems = $this->pagination->execute($cart, $pageSize, (int) $currentPage, $orderBy, $order);
 
         $cartItems = [];
         /** @var CartItemInterface $cartItem */

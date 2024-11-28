@@ -47,15 +47,15 @@ class JwtPayloadValidatorTest extends TestCase
      *
      * @return array
      */
-    public function validateSuccessDataProvider()
+    public static function validateSuccessDataProvider()
     {
-        $expTimestamp = $this->getValidExpTimestamp();
+        $expTimestamp = self::getValidExpTimestamp();
 
         return [
-            1 => $this->createToken('05', '0', 'SUCCESS', $expTimestamp),
-            2 => $this->createToken('06', '0', 'NOACTION', $expTimestamp),
-            3 => $this->createToken('02', '0', 'SUCCESS', $expTimestamp),
-            4 => $this->createToken('01', '0', 'NOACTION', $expTimestamp),
+            1 => self::createToken('05', '0', 'SUCCESS', $expTimestamp),
+            2 => self::createToken('06', '0', 'NOACTION', $expTimestamp),
+            3 => self::createToken('02', '0', 'SUCCESS', $expTimestamp),
+            4 => self::createToken('01', '0', 'NOACTION', $expTimestamp),
         ];
     }
 
@@ -80,12 +80,12 @@ class JwtPayloadValidatorTest extends TestCase
      * @case 2. MasterCard
      * @return array
      */
-    public function validationEciFailsDataProvider(): array
+    public static function validationEciFailsDataProvider(): array
     {
-        $expTimestamp = $this->getValidExpTimestamp();
+        $expTimestamp = self::getValidExpTimestamp();
         return [
-            1 => $this->createToken('07', '0', 'NOACTION', $expTimestamp),
-            2 => $this->createToken('00', '0', 'NOACTION', $expTimestamp),
+            1 => self::createToken('07', '0', 'NOACTION', $expTimestamp),
+            2 => self::createToken('00', '0', 'NOACTION', $expTimestamp),
         ];
     }
 
@@ -108,12 +108,12 @@ class JwtPayloadValidatorTest extends TestCase
      *
      * @return array
      */
-    public function validationActionCodeFailsDataProvider(): array
+    public static function validationActionCodeFailsDataProvider(): array
     {
-        $expTimestamp = $this->getValidExpTimestamp();
+        $expTimestamp = self::getValidExpTimestamp();
         return [
-            $this->createToken('05', '0', 'FAILURE', $expTimestamp),
-            $this->createToken('05', '0', 'ERROR', $expTimestamp),
+            self::createToken('05', '0', 'FAILURE', $expTimestamp),
+            self::createToken('05', '0', 'ERROR', $expTimestamp),
         ];
     }
 
@@ -154,7 +154,7 @@ class JwtPayloadValidatorTest extends TestCase
      *
      * @return array
      */
-    private function createToken(string $eciFlag, string $errorNumber, string $actionCode, int $expTimestamp): array
+    private static function createToken(string $eciFlag, string $errorNumber, string $actionCode, int $expTimestamp): array // @codingStandardsIgnoreLine
     {
         return [
             [
@@ -177,7 +177,7 @@ class JwtPayloadValidatorTest extends TestCase
      *
      * @return int
      */
-    private function getValidExpTimestamp()
+    private static function getValidExpTimestamp()
     {
         $dateTimeFactory = new DateTimeFactory();
         $currentDate = $dateTimeFactory->create('now', new \DateTimeZone('UTC'));

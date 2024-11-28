@@ -101,7 +101,7 @@ class InstructionsConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetConfig()
+    public static function dataProviderGetConfig()
     {
         $oneCode = Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
         $twoCode = Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE;

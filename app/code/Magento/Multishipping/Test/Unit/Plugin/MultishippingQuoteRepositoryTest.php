@@ -292,7 +292,7 @@ class MultishippingQuoteRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function pluginForAfterGetMultiShippingModeDataProvider(): array
+    public static function pluginForAfterGetMultiShippingModeDataProvider(): array
     {
         $productData = [
             'productType' => Type::TYPE_SIMPLE,

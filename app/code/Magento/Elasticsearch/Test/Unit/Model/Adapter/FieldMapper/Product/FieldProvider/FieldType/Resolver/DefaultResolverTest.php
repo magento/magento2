@@ -74,7 +74,7 @@ class DefaultResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldTypeProvider()
+    public static function getFieldTypeProvider()
     {
         return [
             ['something'],

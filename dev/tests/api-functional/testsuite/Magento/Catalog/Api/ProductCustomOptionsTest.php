@@ -245,7 +245,7 @@ class ProductCustomOptionsTest extends WebapiAbstract
      *
      * @return array
      */
-    public function optionDataProvider(): array
+    public static function optionDataProvider(): array
     {
         $fixtureOptions = [];
         $fixture = include '_files/product_options.php';

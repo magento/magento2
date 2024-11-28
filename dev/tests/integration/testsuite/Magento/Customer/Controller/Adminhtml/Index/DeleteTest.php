@@ -58,11 +58,11 @@ class DeleteTest extends AbstractBackendController
      *
      * @return array
      */
-    public function deleteCustomerProvider(): array
+    public static function deleteCustomerProvider(): array
     {
         return [
             'delete_customer_success' => [
-                'params_data' => [
+                'paramsData' => [
                     'id' => 1,
                 ],
                 'expected' => [
@@ -71,7 +71,7 @@ class DeleteTest extends AbstractBackendController
                 ],
             ],
             'not_existing_customer_error' => [
-                'params_data' => [
+                'paramsData' => [
                     'id' => 2,
                 ],
                 'expected' => [

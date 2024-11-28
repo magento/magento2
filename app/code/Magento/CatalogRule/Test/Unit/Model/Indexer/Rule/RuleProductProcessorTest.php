@@ -185,7 +185,7 @@ class RuleProductProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function reindexListDataProvider(): array
+    public static function reindexListDataProvider(): array
     {
         return [
             [[1, 2, 3], false, true, false, false, []],
@@ -199,7 +199,7 @@ class RuleProductProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function reindexRowDataProvider(): array
+    public static function reindexRowDataProvider(): array
     {
         return [
             [1, false, true, false, false, []],

@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\History;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Controller\Adminhtml\History\Download;
@@ -177,12 +177,11 @@ class DownloadTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'Normal file name' => ['filename.csv', 'filename.csv'],
-            'Relative file name' => ['../../../../../../../../etc/passwd', 'passwd'],
-            'Empty file name' => ['', ''],
+            'Relative file name' => ['../../../../../../../../etc/passwd', 'passwd']
         ];
     }
 
@@ -195,5 +194,28 @@ class DownloadTest extends TestCase
         $this->reportHelper->method('importFileExists')->willReturn(false);
         $this->resultRaw->expects($this->never())->method('setContents');
         $this->downloadController->execute();
+    }
+
+    /**
+     * Test execute() with return Redirect
+     * @param string|null $requestFilename
+     * @dataProvider executeWithRedirectDataProvider
+     */
+    public function testExecuteWithRedirect(?string $requestFilename): void
+    {
+        $this->request->method('getParam')->with('filename')->willReturn($requestFilename);
+        $this->resultRaw->expects($this->never())->method('setContents');
+        $this->assertSame($this->redirect, $this->downloadController->execute());
+    }
+
+    /**
+     * @return array
+     */
+    public function executeWithRedirectDataProvider(): array
+    {
+        return [
+            'null file name' => [null],
+            'empty file name' => [''],
+        ];
     }
 }

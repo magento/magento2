@@ -47,12 +47,14 @@ class NotAvailableMessageResolver implements ResolverInterface
         }
 
         if ((int) $this->scopeConfig->getValue('cataloginventory/options/not_available_message') === 1) {
+            $requiredItemQty = ($cartItem->getQtyToAdd() ?? $cartItem->getQty()) + ($cartItem->getPreviousQty() ?? 0);
             return sprintf(
-                'Only %s available for sale. Please adjust the quantity to continue',
-                (string) $this->productStock->getProductAvailableStock($cartItem)
+                'Only %s of %s available',
+                (string) $this->productStock->getProductSaleableQty($cartItem),
+                (string) $requiredItemQty
             );
         }
 
-        return 'Not enough items for sale. Please adjust the quantity to continue';
+        return 'Not enough items for sale';
     }
 }

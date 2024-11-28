@@ -149,7 +149,7 @@ class MethodsMapTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodValidForDataFieldProvider()
+    public static function isMethodValidForDataFieldProvider()
     {
         return [
             'MethodsMap#isMethodValidForDataField' => [MethodsMap::class,
@@ -181,7 +181,7 @@ class MethodsMapTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodReturnValueRequiredProvider()
+    public static function isMethodReturnValueRequiredProvider()
     {
         return [
             'DataObject#getAttrName' => [DataObject::class,

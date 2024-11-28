@@ -101,7 +101,7 @@ class QueryResolverTest extends TestCase
     /**
      * @return array
      */
-    public function isSingleQueryWhenDataNotCachedDataProvider()
+    public static function isSingleQueryWhenDataNotCachedDataProvider()
     {
         return [
             ['default', true],

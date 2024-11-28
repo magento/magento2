@@ -246,7 +246,7 @@ class ColumnTest extends TestCase
         $method->invokeArgs($column, []);
     }
 
-    public function sortingDataProvider()
+    public static function sortingDataProvider()
     {
         return [
             [['dataType' => 'test_type', 'sortable' => true], 'ASC', 1],

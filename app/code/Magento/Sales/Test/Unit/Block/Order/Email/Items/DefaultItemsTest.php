@@ -126,7 +126,7 @@ class DefaultItemsTest extends TestCase
     /**
      * @return array
      */
-    public function getItemPriceDataProvider()
+    public static function getItemPriceDataProvider()
     {
         return [
             'get default item price' => [34.28,'$34.28',1.0],

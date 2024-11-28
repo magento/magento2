@@ -68,7 +68,7 @@ class RemoteAddressTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getRemoteAddressProvider()
+    public static function getRemoteAddressProvider()
     {
         return [
             [

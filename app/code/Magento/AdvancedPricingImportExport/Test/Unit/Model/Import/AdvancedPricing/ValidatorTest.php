@@ -88,12 +88,12 @@ class ValidatorTest extends TestCase
     {
         return [
             [
-                '$validatorResult' => true,
-                '$expectedResult' => true,
+                'validatorResult' => true,
+                'expectedResult' => true,
             ],
             [
-                '$validatorResult' => false,
-                '$expectedResult' => false,
+                'validatorResult' => false,
+                'expectedResult' => false,
             ]
         ];
     }

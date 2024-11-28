@@ -85,7 +85,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             [['adj1'], ['adj1']],
@@ -113,7 +113,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getItemByCodeDataProvider()
+    public static function getItemByCodeDataProvider()
     {
         return [
             [['adj1'], 'adj1', 10],
