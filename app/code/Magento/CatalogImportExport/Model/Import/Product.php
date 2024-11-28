@@ -1894,6 +1894,7 @@ class Product extends AbstractEntity
         $rowSku = $rowData[self::COL_SKU];
         $rowSkuNormalized = mb_strtolower($rowSku);
         $rowExistingImages = $existingImages[$storeId][$rowSkuNormalized] ?? [];
+        $rowStoreMediaGalleryValues = $rowExistingImages;
         $rowExistingImages += $existingImages[Store::DEFAULT_STORE_ID][$rowSkuNormalized] ?? [];
         list($rowImages, $rowLabels) = $this->getImagesFromRow($rowData);
         $imageHiddenStates = $this->getImagesHiddenStates($rowData);
@@ -1955,16 +1956,18 @@ class Product extends AbstractEntity
                     continue;
                 }
                 $uploadedFileNormalized = ltrim($uploadedFile, '/\\');
+                $storeMediaGalleryValueExists = isset($rowStoreMediaGalleryValues[$uploadedFileNormalized]);
                 if (isset($rowExistingImages[$uploadedFileNormalized])) {
                     $currentFileData = $rowExistingImages[$uploadedFileNormalized];
                     $currentFileData['store_id'] = $storeId;
                     if ($imageHideColumnExist) {
                         $imagesForChangeVisibility[] = [
                             'disabled' => array_key_exists(
-                                $uploadedFile, $imageHiddenStates
+                                $uploadedFile,
+                                $imageHiddenStates
                             ) ? $imageHiddenStates[$uploadedFile] : '0',
                             'imageData' => $currentFileData,
-                            'exists' => true
+                            'exists' => $storeMediaGalleryValueExists
                         ];
                     }
                     if (isset($rowLabels[$column][$columnImageKey])
@@ -1973,7 +1976,7 @@ class Product extends AbstractEntity
                         $labelsForUpdate[] = [
                             'label' => $rowLabels[$column][$columnImageKey],
                             'imageData' => $currentFileData,
-                            'exists' => true
+                            'exists' => $storeMediaGalleryValueExists
                         ];
                     }
                 } else {
