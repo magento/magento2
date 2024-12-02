@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\ObjectManager;
@@ -30,8 +31,7 @@ use Magento\Framework\Console\Cli;
  */
 class DiCompileCommand extends Command
 {
-    /** Command name */
-    const NAME = 'setup:di:compile';
+    public const NAME = 'setup:di:compile';
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
@@ -79,8 +79,6 @@ class DiCompileCommand extends Command
     private $file;
 
     /**
-     * Constructor
-     *
      * @param DeploymentConfig $deploymentConfig
      * @param DirectoryList $directoryList
      * @param Manager $taskManager
@@ -89,6 +87,7 @@ class DiCompileCommand extends Command
      * @param DriverInterface $fileDriver
      * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      * @param File|null $file
+     *
      * @throws \Magento\Setup\Exception
      */
     public function __construct(
@@ -151,6 +150,7 @@ class DiCompileCommand extends Command
             foreach ($errors as $line) {
                 $output->writeln($line);
             }
+
             // we must have an exit code higher than zero to indicate something was wrong
             return Cli::RETURN_FAILURE;
         }
@@ -224,6 +224,7 @@ class DiCompileCommand extends Command
             // we must have an exit code higher than zero to indicate something was wrong
             return Cli::RETURN_FAILURE;
         }
+
         return Cli::RETURN_SUCCESS;
     }
 
@@ -231,6 +232,7 @@ class DiCompileCommand extends Command
      * Build list of module path regexps which should be excluded from compilation
      *
      * @param string[] $modulePaths
+     *
      * @return string[]
      */
     private function getExcludedModulePaths(array $modulePaths)
@@ -251,6 +253,7 @@ class DiCompileCommand extends Command
                 $vendorPathsRegExps[] = $vendorDir
                     . '/(?:' . join('|', $vendorModules) . ')';
             }
+
             $basePathsRegExps[] = preg_quote($basePath, '#')
                 . '/(?:' . join('|', $vendorPathsRegExps) . ')';
         }
@@ -266,6 +269,7 @@ class DiCompileCommand extends Command
      * Build list of library path regexps which should be excluded from compilation
      *
      * @param string[] $libraryPaths
+     *
      * @return string[]
      */
     private function getExcludedLibraryPaths(array $libraryPaths)
@@ -288,6 +292,7 @@ class DiCompileCommand extends Command
      * Get excluded setup application paths
      *
      * @param string $setupPath
+     *
      * @return string[]
      */
     private function getExcludedSetupPaths($setupPath)
@@ -301,6 +306,7 @@ class DiCompileCommand extends Command
      * Delete directories by their code from "var" directory
      *
      * @param array $directoryCodeList
+     *
      * @return void
      */
     private function cleanupFilesystem($directoryCodeList)
@@ -314,6 +320,7 @@ class DiCompileCommand extends Command
      * Configure Object Manager
      *
      * @param OutputInterface $output
+     *
      * @return void
      */
     private function configureObjectManager(OutputInterface $output)
@@ -365,6 +372,7 @@ class DiCompileCommand extends Command
      * Returns operations configuration
      *
      * @param array $compiledPathsList
+     *
      * @return array
      */
     private function getOperationsConfiguration(
@@ -399,6 +407,7 @@ class DiCompileCommand extends Command
             OperationFactory::AREA_CONFIG_GENERATOR => [
                 $compiledPathsList['application'],
                 $compiledPathsList['library'],
+                $compiledPathsList['setup'],
                 $compiledPathsList['generated_helpers'],
             ],
             OperationFactory::INTERCEPTION_CACHE => [

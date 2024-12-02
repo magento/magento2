@@ -1,8 +1,19 @@
 <?xml version="1.0"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -164,6 +175,23 @@
     <type name="Magento\Quote\Model\Quote\Item\Repository">
         <arguments>
             <argument name="quoteMutex" xsi:type="object">Magento\Quote\Model\QuoteIdMutex</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Quote\Api\ErrorInterface" type="Magento\Quote\Model\Cart\Data\Error" />
+    <type name="Magento\Quote\Model\Cart\AddProductsToCartError">
+        <arguments>
+            <argument name="errorMessageCodesMapper" xsi:type="array">
+                <item name="Could not find a product with SKU" xsi:type="string">PRODUCT_NOT_FOUND</item>
+                <item name="The required options you selected are not available" xsi:type="string">NOT_SALABLE</item>
+                <item name="Product that you are trying to add is not available." xsi:type="string">NOT_SALABLE</item>
+                <item name="This product is out of stock" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="There are no source items" xsi:type="string">NOT_SALABLE</item>
+                <item name="The fewest you may purchase is" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="The most you may purchase is" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="The requested qty is not available" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="Not enough items for sale" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="Only %s of %s available" xsi:type="string">INSUFFICIENT_STOCK</item>
+            </argument>
         </arguments>
     </type>
 </config>
