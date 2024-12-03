@@ -1574,4 +1574,10 @@
         <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="productWithTwoCustomOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDropDownFor2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
+    </entity>
 </entities>
