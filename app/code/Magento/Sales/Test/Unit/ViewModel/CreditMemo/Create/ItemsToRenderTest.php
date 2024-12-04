@@ -92,7 +92,7 @@ class ItemsToRenderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderItem = $this->getMockBuilder(OrderItem::class)
-            ->onlyMethods(['getParentItem','getQtyInvoiced','getQtyRefunded'])
+            ->onlyMethods(['getParentItem', 'getQtyInvoiced', 'getQtyRefunded'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderItemParent = $this->getMockBuilder(OrderItem::class)
@@ -114,9 +114,19 @@ class ItemsToRenderTest extends TestCase
      * Test the behavior of getItems when the invoicing status changes.
      *
      * @dataProvider itemInvoicingDataProvider
+     *
+     * @param float $qtyInvoiced
+     * @param float $qtyRefunded
+     * @param int $expectedCount
+     * @param bool $shouldContainItem
+     * @return void
      */
-    public function testGetItemsBasedOnInvoicing($qtyInvoiced, $qtyRefunded, $expectedCount, $shouldContainItem): void
-    {
+    public function testGetItemsBasedOnInvoicing(
+        float $qtyInvoiced,
+        float $qtyRefunded,
+        int $expectedCount,
+        bool $shouldContainItem
+    ): void {
         $this->blockItems->method('getCreditmemo')
             ->willReturn($this->creditmemo);
         $this->creditmemo->method('getAllItems')
@@ -155,11 +165,8 @@ class ItemsToRenderTest extends TestCase
     public static function itemInvoicingDataProvider(): array
     {
         return [
-            // Test case: Item is invoiced, should be included
-            [1.0, 0.0, 1, true],
-
-            // Test case: Item is not invoiced, should not be included
-            [0.0, 0.0, 0, false],
+            'Item is invoiced, should be included' => [1.0, 0.0, 1, true],
+            'Item is not invoiced, should not be included' => [0.0, 0.0, 0, false],
         ];
     }
 }
