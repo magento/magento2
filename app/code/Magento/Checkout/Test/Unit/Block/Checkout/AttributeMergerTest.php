@@ -13,6 +13,7 @@ use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use PHPUnit\Framework\TestCase;
+use Magento\Directory\Model\AllowedCountries;
 
 class AttributeMergerTest extends TestCase
 {
@@ -42,6 +43,11 @@ class AttributeMergerTest extends TestCase
     private $attributeMerger;
 
     /**
+     * @var AllowedCountries
+     */
+    private $allowedCountryReader;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -50,12 +56,14 @@ class AttributeMergerTest extends TestCase
         $this->customerSession = $this->createMock(CustomerSession::class);
         $this->addressHelper = $this->createMock(AddressHelper::class);
         $this->directoryHelper = $this->createMock(DirectoryHelper::class);
+        $this->allowedCountryReader = $this->createMock(AllowedCountries::class);
 
         $this->attributeMerger = new AttributeMerger(
             $this->addressHelper,
             $this->customerSession,
             $this->customerRepository,
-            $this->directoryHelper
+            $this->directoryHelper,
+            $this->allowedCountryReader
         );
     }
 
@@ -104,7 +112,7 @@ class AttributeMergerTest extends TestCase
      *
      * @return array
      */
-    public function validationRulesDataProvider(): array
+    public static function validationRulesDataProvider(): array
     {
         return [
             ['alpha', 'validate-alpha'],

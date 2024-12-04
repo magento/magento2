@@ -11,7 +11,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
-class OrderCommentSenderTest extends AbstractSenderTest
+class OrderCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var OrderCommentSender

@@ -101,8 +101,12 @@
             <waitForElement selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitGenerateConfigurationsButton"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickToGenerateConfigurations"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
-            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete all created data -->
@@ -117,7 +121,9 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributesFilter"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="openCategoryPage">
             <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>

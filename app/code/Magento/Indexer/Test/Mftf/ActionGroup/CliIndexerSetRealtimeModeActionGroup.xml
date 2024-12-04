@@ -11,7 +11,10 @@
         <annotations>
             <description>Set indexers to realtime mode.</description>
         </annotations>
+        <arguments>
+            <argument name="indices" type="string"/>
+        </arguments>
 
-        <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeIndexerMode"/>
+        <magentoCLI command="indexer:set-mode" arguments="realtime {{indices}}" stepKey="setRealtimeIndexerMode"/>
     </actionGroup>
 </actionGroups>

@@ -1,0 +1,7 @@
+#  Copyright 2024 Adobe
+#  All Rights Reserved.
+
+
+type Discount {
+    coupon: AppliedCoupon @resolver(class: "Magento\\SalesRuleGraphQl\\Model\\Resolver\\Coupon") @doc(description:"The coupon related to the discount.")
+}

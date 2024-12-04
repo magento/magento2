@@ -48,14 +48,13 @@ class StoreTest extends TestCase
         );
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['where'])
+            ->onlyMethods([
                 'isTableExists',
                 'select',
                 'fetchAll',
                 'fetchOne',
-                'from',
                 'getCheckSql',
-                'where',
                 'quoteIdentifier',
                 'quote'
             ])

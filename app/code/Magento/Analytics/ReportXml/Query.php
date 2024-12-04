@@ -33,6 +33,11 @@ class Query implements \JsonSerializable
     private $config;
 
     /**
+     * @var Select
+     */
+    private $selectCount;
+
+    /**
      * Query constructor.
      *
      * @param Select $select
@@ -93,5 +98,33 @@ class Query implements \JsonSerializable
             'select_parts' => $this->selectHydrator->extract($this->getSelect()),
             'config' => $this->getConfig()
         ];
+    }
+
+    /**
+     * Get SQL for get record count
+     *
+     * @return Select
+     * @throws \Zend_Db_Select_Exception
+     */
+    public function getSelectCountSql(): Select
+    {
+        if (!$this->selectCount) {
+            $this->selectCount = clone $this->getSelect();
+            $this->selectCount->reset(\Magento\Framework\DB\Select::ORDER);
+            $this->selectCount->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+            $this->selectCount->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+            $this->selectCount->reset(\Magento\Framework\DB\Select::COLUMNS);
+
+            $part = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
+            if (!is_array($part) || !count($part)) {
+                $this->selectCount->columns(new \Zend_Db_Expr('COUNT(*)'));
+                return $this->selectCount;
+            }
+
+            $this->selectCount->reset(\Magento\Framework\DB\Select::GROUP);
+            $group = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
+            $this->selectCount->columns(new \Zend_Db_Expr(("COUNT(DISTINCT ".implode(", ", $group).")")));
+        }
+        return $this->selectCount;
     }
 }

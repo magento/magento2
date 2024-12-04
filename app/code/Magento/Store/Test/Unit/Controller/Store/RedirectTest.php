@@ -118,44 +118,44 @@ class RedirectTest extends TestCase
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['redirect'])
+            ->onlyMethods(['redirect'])
             ->getMockForAbstractClass();
         $this->storeResolverMock = $this->getMockBuilder(StoreResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentStoreId'])
+            ->onlyMethods(['getCurrentStoreId'])
             ->getMockForAbstractClass();
         $this->storeRepositoryMock = $this->getMockBuilder(StoreRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getById', 'get'])
+            ->onlyMethods(['getById', 'get'])
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addErrorMessage'])
+            ->onlyMethods(['addErrorMessage'])
             ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->fromStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
         $this->targetStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMockForAbstractClass();
         $this->sidResolverMock = $this->getMockBuilder(SidResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUseSessionInUrl'])
+            ->onlyMethods(['getUseSessionInUrl'])
             ->getMockForAbstractClass();
         $this->hashGeneratorMock = $this->createMock(HashGenerator::class);
 
         $this->currentStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseUrl'])
+            ->onlyMethods(['getBaseUrl'])
             ->getMock();
         $this->storeRepositoryMock
             ->expects($this->once())
@@ -210,14 +210,16 @@ class RedirectTest extends TestCase
         $this->requestMock
             ->expects($this->exactly(3))
             ->method('getParam')
-            ->withConsecutive(
-                [StoreResolver::PARAM_NAME],
-                ['___from_store'],
-                [ActionInterface::PARAM_NAME_URL_ENCODED]
-            )->willReturnOnConsecutiveCalls(
-                $storeCode,
-                $defaultStoreViewCode,
-                $defaultStoreViewCode
+            ->willReturnCallback(
+                function ($param) use ($storeCode, $defaultStoreViewCode) {
+                    if ($param === StoreResolver::PARAM_NAME) {
+                        return $storeCode;
+                    } elseif ($param === '___from_store') {
+                        return $defaultStoreViewCode;
+                    } elseif ($param === ActionInterface::PARAM_NAME_URL_ENCODED) {
+                        return $defaultStoreViewCode;
+                    }
+                }
             );
         $this->storeRepositoryMock
             ->expects($this->exactly(2))
@@ -268,13 +270,16 @@ class RedirectTest extends TestCase
         $this->requestMock
             ->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(
-                [StoreResolver::PARAM_NAME],
-                ['___from_store']
-            )->willReturnOnConsecutiveCalls(
-                $storeCode,
-                $defaultStoreViewCode
+            ->willReturnCallback(
+                function ($param) use ($storeCode, $defaultStoreViewCode) {
+                    if ($param === StoreResolver::PARAM_NAME) {
+                        return $storeCode;
+                    } elseif ($param === '___from_store') {
+                        return $defaultStoreViewCode;
+                    }
+                }
             );
+
         $this->storeRepositoryMock
             ->expects($this->once())
             ->method('get')
@@ -308,12 +313,12 @@ class RedirectTest extends TestCase
         $this->requestMock
             ->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(
-                [StoreResolver::PARAM_NAME],
-                ['___from_store']
-            )->willReturnOnConsecutiveCalls(
-                null,
-                null
+            ->willReturnCallback(
+                function ($param) {
+                    if ($param === StoreResolver::PARAM_NAME || $param === '___from_store') {
+                        return null;
+                    }
+                }
             );
         $this->storeRepositoryMock
             ->expects($this->never())
@@ -327,7 +332,7 @@ class RedirectTest extends TestCase
      *
      * @return array
      */
-    public function getConfigDataProvider(): array
+    public static function getConfigDataProvider(): array
     {
         return [
             [self::STUB_DEFAULT_STORE_VIEW_CODE, self::STUB_STORE_CODE]

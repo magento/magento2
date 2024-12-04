@@ -48,7 +48,7 @@ class ContextPlugin
     {
         $this->httpContext->setValue(
             Context::CONTEXT_GROUP,
-            $this->customerSession->getCustomerGroupId(),
+            (string)$this->customerSession->getCustomerGroupId(),
             GroupManagement::NOT_LOGGED_IN_ID
         );
         $this->httpContext->setValue(

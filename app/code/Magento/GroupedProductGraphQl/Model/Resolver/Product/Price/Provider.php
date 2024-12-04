@@ -23,7 +23,7 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
     /**
      * Cache product prices so only fetch once
      *
-     * @var AmountInterface[]
+     * @var AmountInterface[]|null
      */
     private $minimalProductAmounts;
 
@@ -100,6 +100,6 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->minimalProductAmounts = [];
+        $this->minimalProductAmounts = null;
     }
 }

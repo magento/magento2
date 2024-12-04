@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenTaxRuleActionGroup">
+        <annotations>
+            <description>Admin Open tax rule page</description>
+        </annotations>
+        <arguments>
+            <argument name="code" type="string" defaultValue="{{SimpleTaxRule.code}}"/>
+        </arguments>
+
+        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleGridPage"/>
+        <waitForPageLoad stepKey="waitForTaxGridPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForPageLoadedToClearFilters"/>
+        <waitForElementVisible selector="{{AdminTaxRuleGridSection.code}}" stepKey="waitForTaxIdentifierFieldToVisible"/>
+        <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{code}}" stepKey="fillTaxRuleCode"/>
+        <waitForElementClickable selector="{{AdminTaxRuleGridSection.search}}" stepKey="waitForSearchButtonToBeClickable"/>
+        <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSearch"/>
+        <waitForElementClickable selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="waitForRowToBeClickable"/>
+        <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForTaxRulePageToOpen"/>
+    </actionGroup>
+</actionGroups>

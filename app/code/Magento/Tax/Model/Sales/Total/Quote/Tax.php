@@ -20,11 +20,7 @@ use Magento\Tax\Model\Calculation;
  */
 class Tax extends CommonTaxCollector
 {
-    /**
-     * Counter
-     *
-     * @var int
-     */
+    /** @var int */
     protected $counter = 0;
 
     /**
@@ -89,6 +85,15 @@ class Tax extends CommonTaxCollector
             $customerAddressFactory,
             $customerAddressRegionFactory
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode('tax');
     }
 
     /**
@@ -311,13 +316,12 @@ class Tax extends CommonTaxCollector
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
-     * @return array|null
+     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $totals = [];
         $store = $quote->getStore();
         $applied = $total->getAppliedTaxes();
         if (is_string($applied)) {
@@ -329,20 +333,17 @@ class Tax extends CommonTaxCollector
             $amount = $total->getTaxAmount();
         }
         $taxAmount = $amount + $total->getTotalAmount('discount_tax_compensation');
-
         $area = null;
         if ($this->_config->displayCartTaxWithGrandTotal($store) && $total->getGrandTotal()) {
             $area = 'taxes';
         }
-
-        $totals[] = [
+        $totals = [[
             'code' => $this->getCode(),
             'title' => __('Tax'),
             'full_info' => $applied ? $applied : [],
             'value' => $amount,
             'area' => $area,
-        ];
-
+        ]];
         /**
          * Modify subtotal
          */
@@ -352,7 +353,6 @@ class Tax extends CommonTaxCollector
             } else {
                 $subtotalInclTax = $total->getSubtotal() + $taxAmount - $total->getShippingTaxAmount();
             }
-
             $totals[] = [
                 'code' => 'subtotal',
                 'title' => __('Subtotal'),
@@ -360,10 +360,6 @@ class Tax extends CommonTaxCollector
                 'value_incl_tax' => $subtotalInclTax,
                 'value_excl_tax' => $total->getSubtotal(),
             ];
-        }
-
-        if (empty($totals)) {
-            return null;
         }
         return $totals;
     }
@@ -373,7 +369,7 @@ class Tax extends CommonTaxCollector
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
-     * @return null
+     * @return void
      */
     protected function enhanceTotalData(
         \Magento\Quote\Model\Quote $quote,
@@ -382,13 +378,11 @@ class Tax extends CommonTaxCollector
         $taxAmount = 0;
         $shippingTaxAmount = 0;
         $discountTaxCompensation = 0;
-
         $subtotalInclTax = $total->getSubtotalInclTax();
         $computeSubtotalInclTax = true;
         if ($total->getSubtotalInclTax() > 0) {
             $computeSubtotalInclTax = false;
         }
-
         /** @var \Magento\Quote\Model\Quote\Address $address */
         foreach ($quote->getAllAddresses() as $address) {
             $taxAmount += $address->getTaxAmount();
@@ -398,7 +392,6 @@ class Tax extends CommonTaxCollector
                 $subtotalInclTax += $address->getSubtotalInclTax();
             }
         }
-
         $total->setTaxAmount($taxAmount);
         $total->setShippingTaxAmount($shippingTaxAmount);
         $total->setDiscountTaxCompensationAmount($discountTaxCompensation); // accessed via 'discount_tax_compensation'

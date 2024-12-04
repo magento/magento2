@@ -6,13 +6,10 @@
  */
 namespace Magento\Rss\Controller\Feed;
 
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NotFoundException;
 
-/**
- * Class Index
- * @package Magento\Rss\Controller\Feed
- */
-class Index extends \Magento\Rss\Controller\Feed
+class Index extends \Magento\Rss\Controller\Feed implements \Magento\Framework\App\Action\HttpGetActionInterface
 {
     /**
      * Index action
@@ -46,6 +43,11 @@ class Index extends \Magento\Rss\Controller\Feed
         $rss->setDataProvider($provider);
 
         $this->getResponse()->setHeader('Content-type', 'text/xml; charset=UTF-8');
+        $tags = ['rss'];
+        if ($provider instanceof IdentityInterface) {
+            $tags = array_merge($tags, $provider->getIdentities());
+        }
+        $this->getResponse()->setHeader('X-Magento-Tags', implode(',', $tags));
         $this->getResponse()->setBody($rss->createRssXml());
     }
 }

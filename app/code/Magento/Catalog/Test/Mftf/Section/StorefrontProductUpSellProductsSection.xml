@@ -11,5 +11,6 @@
     <section name="StorefrontProductUpSellProductsSection">
         <element name="upSellHeading" type="text" selector="#block-upsell-heading"/>
         <element name="upSellProducts" type="text" selector="div.upsell .product-item-name"/>
+        <element name="upSellSection" type="text" selector=".upsell"/>
     </section>
 </sections>

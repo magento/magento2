@@ -22,13 +22,17 @@
             <createData entity="SimpleProductWithNewFromDate" stepKey="createProduct"/>
             <magentoCLI command="config:set rss/config/active 1" stepKey="enableRss"/>
             <magentoCLI command="config:set rss/catalog/new 1" stepKey="enableRssForCatalogNewProducts"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <magentoCLI command="config:set rss/config/active 0" stepKey="disableRss"/>
             <magentoCLI command="config:set rss/catalog/new 0" stepKey="disableRssForCatalogNewProducts"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <amOnPage url="{{StorefrontRssPage.url}}" stepKey="goToRssPage"/>

@@ -45,7 +45,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getCodeDataProvider()
+    public static function getCodeDataProvider()
     {
         return [
             [false],

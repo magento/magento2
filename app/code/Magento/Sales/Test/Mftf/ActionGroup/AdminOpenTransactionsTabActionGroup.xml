@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenTransactionsTabActionGroup">
+        <annotations>
+            <description>Click open Transactions Tab on the Order Details page</description>
+        </annotations>
+        <arguments>
+            <argument name="transactionType" type="string"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="waitForTransactionsTabToBeClicked"/>
+        <click selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="clickTransactionsTab"/>
+        <waitForElementVisible selector="{{AdminTransactionsGridSection.orderTxnTable}}" stepKey="orderTransactionsTableIsVisible"/>
+        <selectOption selector="{{AdminTransactionsGridSection.orderTxnTableTypeFilter}}" userInput="{{transactionType}}" stepKey="selectVoidTypeTxn" />
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="waitToClickSearch"/>
+        <click selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForFilterToLoad"/>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickOnVoidTransaction"/>
+        <click selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickFirstRow"/>
+    </actionGroup>
+</actionGroups>

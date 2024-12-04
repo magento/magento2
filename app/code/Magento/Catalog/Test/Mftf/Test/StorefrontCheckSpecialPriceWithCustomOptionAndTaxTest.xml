@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2023 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckSpecialPriceWithCustomOptionAndTaxTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Check special price with custom option and tax" />
+            <title value="Regular price should include tax for custom option"/>
+            <description value="Regular price should include tax for custom option when product has special price"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-10576"/>
+            <useCaseId value="ACP2E-2245"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- log in as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">110</field>
+            </createData>
+            <updateData createDataKey="createSimpleProduct" entity="productWithCustomOptions" stepKey="updateProductWithCustomOption"/>
+
+            <!-- Create tax rate for US -->
+            <createData entity="USFullTaxRate" stepKey="createTaxRateUS"/>
+            <!-- Create Tax Rule -->
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule">
+                <argument name="taxRate" value="$$createTaxRateUS$$"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+
+            <!-- Set up catalog to store product price including tax -->
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 1" stepKey="enableCatalogIncludingTax"/>
+
+            <!-- Display product price including tax in catalog -->
+            <magentoCLI command="config:set tax/display/type 2" stepKey="enableShowIncludingTax"/>
+
+            <!-- Display product price including tax in shopping cart -->
+            <magentoCLI command="config:set tax/cart_display/price 2" stepKey="enableShowIncludingTaxInCart"/>
+
+            <!-- Set Origin Country as Great Britain -->
+           <magentoCLI command="config:set shipping/origin/country_id GB" stepKey="setOriginCountryToGB"/>
+        </before>
+        <after>
+            <!-- Set Origin Country as United States -->
+           <magentoCLI command="config:set shipping/origin/country_id US" stepKey="setOriginCountryToUS"/>
+
+            <!-- Display product price excluding tax in shopping cart -->
+            <magentoCLI command="config:set tax/cart_display/price 0" stepKey="disableShowIncludingTaxInCart"/>
+
+            <!-- Display product price excluding tax in catalog -->
+            <magentoCLI command="config:set tax/display/type 0" stepKey="disableShowIncludingTax"/>
+
+            <!-- Set up catalog to store product price excluding tax -->
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 0" stepKey="disableCatalogIncludingTax"/>
+
+            <!-- Delete Tax Rule -->
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}"/>
+            </actionGroup>
+
+            <!--Delete Tax Rate -->
+            <deleteData createDataKey="createTaxRateUS" stepKey="deleteTaxRate"/>
+
+            <!-- Delete product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!-- Add special price to product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceToProduct">
+            <argument name="price" value="100.00"/>
+        </actionGroup>
+
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+
+        <!-- Navigate to the created product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Assert regular and special price for product -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceValue}}" stepKey="grabSpecialPrice"/>
+        <assertEquals stepKey="assertSpecialPrice">
+            <actualResult type="const">$grabSpecialPrice</actualResult>
+            <expectedResult type="string">$110.00</expectedResult>
+        </assertEquals>
+
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" stepKey="grabOldPrice"/>
+        <assertEquals stepKey="assertOldPrice">
+            <actualResult type="const">$grabOldPrice</actualResult>
+            <expectedResult type="string">$121.00</expectedResult>
+        </assertEquals>
+
+        <!-- Assert regular and special price for product after selecting Product Option -->
+        <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertProduct1Prices">
+            <argument name="customOption" value="{{ProductOptionValueDropdown3.title}} +$11.00"/>
+            <argument name="productPrice" value="$133.10"/>
+            <argument name="productFinalPrice" value="$121.00"/>
+        </actionGroup>
+    </test>
+</tests>

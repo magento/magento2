@@ -13,17 +13,21 @@ use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Eav\Model\ResourceModel\AttributeValue;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Json\Helper\Data;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Product\Image\RemoveDeletedImagesFromCache;
 
 /**
  * Update handler for catalog product gallery.
  *
  * @api
  * @since 101.0.0
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateHandler extends CreateHandler
@@ -31,7 +35,12 @@ class UpdateHandler extends CreateHandler
     /**
      * @var AttributeValue
      */
-    private $attributeValue;
+    private AttributeValue $attributeValue;
+
+    /**
+     * @var RemoveDeletedImagesFromCache
+     */
+    private RemoveDeletedImagesFromCache $removeDeletedImagesFromCache;
 
     /**
      * @param MetadataPool $metadataPool
@@ -43,6 +52,8 @@ class UpdateHandler extends CreateHandler
      * @param Database $fileStorageDb
      * @param StoreManagerInterface|null $storeManager
      * @param AttributeValue|null $attributeValue
+     * @param RemoveDeletedImagesFromCache|null $removeDeletedImagesFromCache
+     * @throws FileSystemException
      */
     public function __construct(
         MetadataPool $metadataPool,
@@ -53,7 +64,8 @@ class UpdateHandler extends CreateHandler
         Filesystem $filesystem,
         Database $fileStorageDb,
         StoreManagerInterface $storeManager = null,
-        ?AttributeValue $attributeValue = null
+        ?AttributeValue $attributeValue = null,
+        ?RemoveDeletedImagesFromCache $removeDeletedImagesFromCache = null
     ) {
         parent::__construct(
             $metadataPool,
@@ -66,6 +78,8 @@ class UpdateHandler extends CreateHandler
             $storeManager
         );
         $this->attributeValue = $attributeValue ?: ObjectManager::getInstance()->get(AttributeValue::class);
+        $this->removeDeletedImagesFromCache = $removeDeletedImagesFromCache ?:
+            ObjectManager::getInstance()->get(RemoveDeletedImagesFromCache::class);
     }
 
     /**
@@ -102,6 +116,7 @@ class UpdateHandler extends CreateHandler
         $this->deleteMediaAttributeValues($product, $imagesToDelete);
         $this->resourceModel->deleteGallery($recordsToDelete);
         $this->removeDeletedImages($filesToDelete);
+        $this->removeDeletedImagesFromCache->removeDeletedImagesFromCache($filesToDelete);
     }
 
     /**
@@ -181,6 +196,7 @@ class UpdateHandler extends CreateHandler
      *
      * @param array $files
      * @return null
+     * @throws FileSystemException
      * @since 101.0.0
      */
     protected function removeDeletedImages(array $files)
@@ -198,6 +214,7 @@ class UpdateHandler extends CreateHandler
      *
      * @param Product $product
      * @param string[] $images
+     * @throws LocalizedException
      */
     private function deleteMediaAttributeValues(Product $product, array $images): void
     {

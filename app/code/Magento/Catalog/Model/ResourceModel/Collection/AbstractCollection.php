@@ -81,8 +81,8 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      */
     public function _resetState(): void
     {
-        parent::_resetState();
         $this->_storeId = null;
+        parent::_resetState();
     }
 
     /**

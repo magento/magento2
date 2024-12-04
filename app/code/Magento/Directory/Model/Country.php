@@ -6,6 +6,8 @@
 
 namespace Magento\Directory\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Country model
  *
@@ -16,7 +18,7 @@ namespace Magento\Directory\Model;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Country extends \Magento\Framework\Model\AbstractModel
+class Country extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * @var array

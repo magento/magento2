@@ -275,8 +275,12 @@ class RepositoryTest extends TestCase
 
         $originalValue1
             ->method('getData')
-            ->withConsecutive(['option_type_id'])
-            ->willReturnOnConsecutiveCalls(10);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'option_type_id') {
+                    return 10;
+                }
+            });
+
         $originalValue1->expects($this->once())->method('setData')->with('is_delete', 1);
         $originalValue2->expects($this->once())->method('getData')->with('option_type_id')->willReturn(4);
         $originalValue3->expects($this->once())->method('getData')->with('option_type_id')->willReturn(5);

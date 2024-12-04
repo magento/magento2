@@ -390,7 +390,7 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
      */
     public function _resetState(): void
     {
-        $this->keyedItems = [];
-        $this->parentToChildren = [];
+        $this->keyedItems = null;
+        $this->parentToChildren = null;
     }
 }

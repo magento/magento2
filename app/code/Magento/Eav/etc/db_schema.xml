@@ -463,6 +463,10 @@
         <constraint xsi:type="foreign" referenceId="EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_STORE_STORE_ID"
                     table="eav_attribute_option_value" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="EAV_ATTRIBUTE_OPTION_VALUE_STORE_ID_OPTION_ID">
+            <column name="store_id"/>
+            <column name="option_id"/>
+        </constraint>
         <index referenceId="EAV_ATTRIBUTE_OPTION_VALUE_OPTION_ID" indexType="btree">
             <column name="option_id"/>
         </index>

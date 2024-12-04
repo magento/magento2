@@ -16,7 +16,7 @@
         <arguments>
             <argument name="value" defaultValue="Selected shipping method is not available. Please select another shipping method for this order." type="string"/>
         </arguments>
-        <waitForElementVisible selector="{{CheckoutOrderSummarySection.shippingTotalNotYetCalculated}}" time="30" stepKey="waitForShippingTotalToBeVisible"/>
+        <waitForElementVisible selector="{{CheckoutOrderSummarySection.shippingTotalNotYetCalculated}}" stepKey="waitForShippingTotalToBeVisible"/>
         <see selector="{{CheckoutOrderSummarySection.shippingTotalNotYetCalculated}}" userInput="{{value}}" stepKey="assertShippingTotalIsNotYetCalculated"/>
     </actionGroup>
 </actionGroups>

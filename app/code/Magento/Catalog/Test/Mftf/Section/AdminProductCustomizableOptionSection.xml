@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductCustomizableOptionSection">
+        <element name="customizableOptionsToggle" type="button" selector="//span[text()='Customizable Options']"/>
+        <element name="addButtonOption" type="button" selector="button[data-index='button_add']"/>
+        <element name="customOptionXTitle" type="input" selector="[name='product[options][0][title]']"/>
+        <element name="customOptionSelectType" type="select" selector="[data-index='container_common'] .admin__action-multiselect-text"/>
+        <element name="customOptionSelectField" type="select" selector="//label[contains(text(),'Date')]" />
+        <element name="uncheckRequired" type="checkbox" selector="//span[contains(text(),'Required')]"/>
+        <element name="customizableOptionPrice" type="input" selector=".//*[@name='product[options][0][price]']" />
+        <element name="save" type="button" selector="//*[@id='save-button']" timeout="30"/>
+        <element name="successMessage" type="text" selector=".message.message-success.success"/>
+    </section>
+</sections>

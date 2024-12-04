@@ -579,7 +579,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
+    public static function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
             'missed_region' => [

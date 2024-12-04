@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCheckCurrencyDefaultSystemValuesActionGroup">
+        <annotations>
+            <description> Admin check default currency system values.</description>
+        </annotations>
+        <waitForElementClickable selector="{{CurrencySetupSection.currencyOptions}}" stepKey="waitForCurrencyOptionsHeaderToBeClickable"/>
+        <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.CheckCurrencyOptionsIfTabExpand}}" stepKey="checkCurrencyTabOpen" visible="true"/>
+        <conditionalClick selector="{{CurrencySetupSection.baseCurrencyUseDefault}}" dependentSelector="{{CurrencySetupSection.baseCurrencyUseDefault}}" stepKey="checkBaseCurrencySystemValue" visible="true"/>
+        <waitForElementClickable selector="{{CurrencySetupSection.defaultdisplayCurrency}}" stepKey="waitForDisplayCurrencySystemToBeClickable"/>
+        <checkOption selector="{{CurrencySetupSection.defaultdisplayCurrency}}" stepKey="checkDisplayCurrencySystemValue"/>
+        <waitForElementClickable selector="{{CurrencySetupSection.allowcurrenciescheckbox}}" stepKey="waitForAllowedCurrencySystemToBeClickable"/>
+        <checkOption selector="{{CurrencySetupSection.allowcurrenciescheckbox}}" stepKey="checkAllowedCyCurrencySystemValue"/>
+    </actionGroup>
+</actionGroups>

@@ -36,7 +36,7 @@ class ModeInputArgument extends InputArgument
     /**
      * @inheritDoc
      */
-    public function getDescription()
+    public function getDescription():string
     {
         if (null !== $this->callableDescription) {
             $description = ($this->callableDescription)();

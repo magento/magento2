@@ -92,8 +92,11 @@ class EmailNotificationTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive([Observer::XML_PATH_ERROR_TEMPLATE, ScopeInterface::SCOPE_STORE])
-            ->willReturn(['error-recipient@example.com']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == Observer::XML_PATH_ERROR_TEMPLATE && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return ['error-recipient@example.com'];
+                }
+            });
 
         $this->inlineTranslationMock->expects($this->once())
             ->method('suspend');

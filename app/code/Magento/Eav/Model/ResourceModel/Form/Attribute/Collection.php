@@ -101,9 +101,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _resetState(): void
     {
-        parent::_resetState();
         $this->_store = null;
         $this->_entityType = null;
+        parent::_resetState();
     }
 
     /**

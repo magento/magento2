@@ -15,7 +15,6 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Customer Show Customer Model
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class Customer extends \Magento\Framework\App\Config\Value

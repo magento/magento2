@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCustomerWishlistItemTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Wishlist items deleting"/>
+            <title value="Admin deletes an item from customer wishlist"/>
+            <description value="Admin Should be able delete items from customer wishlist"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-35170"/>
+            <group value="wishlist"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="resetCustomerFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
+            <argument name="productVar" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogoutBeforeCheck"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AdminNavigateCustomerWishlistTabActionGroup" stepKey="navigateToWishlistTab"/>
+        <actionGroup ref="AdminCustomerFindWishlistItemActionGroup" stepKey="findWishlistItem">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCustomerDeleteWishlistItemActionGroup" stepKey="deleteItem"/>
+        <actionGroup ref="AssertAdminCustomerNoItemsInWishlistActionGroup" stepKey="assertNoItems"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginOnStoreFront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="NavigateThroughCustomerTabsActionGroup" stepKey="navigateToWishlist">
+            <argument name="navigationItemName" value="My Wish List"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="assertNoItemsInWishlist"/>
+    </test>
+</tests>

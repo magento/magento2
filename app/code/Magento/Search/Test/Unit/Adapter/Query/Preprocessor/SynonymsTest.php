@@ -31,7 +31,7 @@ class SynonymsTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->synonymAnalyzer = $this->getMockBuilder(SynonymAnalyzer::class)
-            ->setMethods(['getSynonymsForPhrase'])
+            ->onlyMethods(['getSynonymsForPhrase'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -23,7 +23,9 @@
         </annotations>
 
         <before>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <magentoCLI command="config:set {{DisplayProductCountDefaultValue.path}} {{DisplayProductCountDefaultValue.value}}" stepKey="enableDisplayProductCount"/>
             <magentoCLI command="config:set {{PriceNavigationStepCalculationDefaultValue.path}} {{PriceNavigationStepCalculationDefaultValue.value}}" stepKey="setPriceNavigationStepCalculationDefaultValue"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -312,7 +314,9 @@
             <deleteData createDataKey="createConfigChildProduct14" stepKey="deleteConfigChildProduct14"/>
             <deleteData createDataKey="createConfigChildProduct15" stepKey="deleteConfigChildProduct15"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategory">

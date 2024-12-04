@@ -22,9 +22,6 @@ use Magento\Framework\Phrase;
  */
 class BackupRollback
 {
-    /**
-     * Default backup directory
-     */
     public const DEFAULT_BACKUP_DIRECTORY = 'backups';
 
     /**
@@ -42,7 +39,7 @@ class BackupRollback
     /**
      * Logger
      *
-     * @var LoggerInterface
+     * @var ConsoleLoggerInterface
      */
     private $log;
 
@@ -69,14 +66,14 @@ class BackupRollback
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param LoggerInterface $log
+     * @param ConsoleLoggerInterface $log
      * @param DirectoryList $directoryList
      * @param File $file
      * @param Helper $fsHelper
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        LoggerInterface $log,
+        ConsoleLoggerInterface $log,
         DirectoryList $directoryList,
         File $file,
         Helper $fsHelper

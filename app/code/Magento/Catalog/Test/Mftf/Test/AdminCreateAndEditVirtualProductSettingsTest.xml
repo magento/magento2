@@ -27,7 +27,9 @@
 
             <!-- Create website -->
             <createData entity="secondCustomWebsite" stepKey="createWebsite"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -43,7 +45,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="$createWebsite.website[name]$"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Delete related products -->
             <deleteData createDataKey="createFirstRelatedProduct" stepKey="deleteFirstRelatedProduct"/>

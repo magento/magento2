@@ -35,4 +35,16 @@
             <item>United Kingdom</item>
         </array>
     </entity>
+    <entity name="EuropeanCountry" type="countryArray">
+        <array key="country">
+            <item>France</item>
+            <item>Germany</item>
+            <item>United Kingdom</item>
+        </array>
+    </entity>
+    <entity name="WesternEurope" type="countryArray">
+        <array key="country">
+            <item>Belgium</item>
+        </array>
+    </entity>
 </entities>

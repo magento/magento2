@@ -59,7 +59,7 @@ class CmsPageTest extends TestCase
     /**
      * @return array
      */
-    public function pageProvider()
+    public static function pageProvider()
     {
         return [
             [
@@ -80,7 +80,7 @@ class CmsPageTest extends TestCase
     private function getItemFactoryMock()
     {
         $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -102,7 +102,7 @@ class CmsPageTest extends TestCase
     private function getCmsPageFactoryMock($returnValue)
     {
         $cmsPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -136,7 +136,7 @@ class CmsPageTest extends TestCase
     private function getCmsPageCollectionMock($returnValue)
     {
         $sitemapCmsPageMock = $this->getMockBuilder(CmsPageResource::class)
-            ->setMethods(['getCollection'])
+            ->onlyMethods(['getCollection'])
             ->disableOriginalConstructor()
             ->getMock();
 

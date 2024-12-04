@@ -77,7 +77,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function prepareOptionValueForRequestDataProvider()
+    public static function prepareOptionValueForRequestDataProvider()
     {
         return [
             // Variation 1
@@ -154,7 +154,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function testPrepareForCartDataProvider()
+    public static function testPrepareForCartDataProvider()
     {
         return [
             [

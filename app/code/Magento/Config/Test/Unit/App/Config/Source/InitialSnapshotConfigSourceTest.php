@@ -48,7 +48,7 @@ class InitialSnapshotConfigSourceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectMock = $this->getMockBuilder(DataObject::class)

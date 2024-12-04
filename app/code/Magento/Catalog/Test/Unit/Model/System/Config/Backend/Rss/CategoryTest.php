@@ -95,7 +95,7 @@ class CategoryTest extends TestCase
         $this->model->afterSave();
     }
 
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
             ['0', '1', false, true],

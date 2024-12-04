@@ -132,7 +132,7 @@ class CompositeTest extends TestCase
     /**
      * @return array
      */
-    public function productTypesDataProvider()
+    public static function productTypesDataProvider()
     {
         return [
             ['typeId' => DownloadableType::TYPE_DOWNLOADABLE],
@@ -161,7 +161,7 @@ class CompositeTest extends TestCase
     protected function initModifiers()
     {
         $this->modifierMock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['modifyData', 'modifyMeta'])
+            ->addMethods(['modifyData', 'modifyMeta'])
             ->getMock();
         $this->modifierFactoryMock->expects($this->once())
             ->method('create')

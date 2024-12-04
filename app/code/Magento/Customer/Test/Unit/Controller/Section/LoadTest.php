@@ -99,15 +99,20 @@ class LoadTest extends TestCase
             ->willReturn($this->resultJsonMock);
         $this->resultJsonMock->expects($this->exactly(2))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store'],
-                ['Pragma', 'no-cache']
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === 'Cache-Control' && $arg2 === 'max-age=0, must-revalidate, no-cache, no-store') {
+                    return null;
+                } elseif ($arg1 === 'Pragma' && $arg2 === 'no-cache') {
+                    return null;
+                }
+            });
 
         $this->httpRequestMock->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(['sections'], ['force_new_section_timestamp'])
-            ->willReturnOnConsecutiveCalls($sectionNames, $forceNewSectionTimestamp);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['sections'] => $sectionNames,
+                ['force_new_section_timestamp'] => $forceNewSectionTimestamp
+            });
 
         $this->sectionPoolMock->expects($this->once())
             ->method('getSectionsData')
@@ -131,7 +136,7 @@ class LoadTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [
@@ -162,10 +167,13 @@ class LoadTest extends TestCase
             ->willReturn($this->resultJsonMock);
         $this->resultJsonMock->expects($this->exactly(2))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store'],
-                ['Pragma', 'no-cache']
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === 'Cache-Control' && $arg2 === 'max-age=0, must-revalidate, no-cache, no-store') {
+                    return null;
+                } elseif ($arg1 === 'Pragma' && $arg2 === 'no-cache') {
+                    return null;
+                }
+            });
 
         $this->httpRequestMock->expects($this->once())
             ->method('getParam')

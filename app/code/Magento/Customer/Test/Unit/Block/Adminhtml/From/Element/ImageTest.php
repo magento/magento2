@@ -10,8 +10,10 @@ namespace Magento\Customer\Test\Unit\Block\Adminhtml\From\Element;
 use Magento\Backend\Helper\Data;
 use Magento\Customer\Block\Adminhtml\Form\Element\Image;
 use Magento\Framework\Data\Form;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,6 +40,17 @@ class ImageTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->backendHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();

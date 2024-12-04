@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="GuestCheckoutUsingPayPalExpressCheckoutTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal express checkout configuration"/>
+            <title value="Paypal Express Checkout configuration with valid credentials"/>
+            <description value="As a customer I want to be able to buy goods using PayPal express with Free Shipping"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6150"/>
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Add new tax rates. Go to tax rule page -->
+            <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
+            <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRule.name}}"/>
+            <!-- Adding product rate tax for NY -->
+            <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addProductTaxRateForCA">
+                <argument name="taxCode" value="SimpleTaxTexas"/>
+            </actionGroup>
+            <!-- Save Tax Rule -->
+            <actionGroup ref="ClickSaveButtonActionGroup" stepKey="saveAnotherTaxRule">
+                <argument name="message" value="You saved the tax rule."/>
+            </actionGroup>
+            <!-- Enable free shipping method -->
+            <magentoCLI command="config:set {{EnableFreeShippingConfigData.path}} {{EnableFreeShippingConfigData.value}}" stepKey="enableFreeShipping"/>
+            <!-- Disable flat rate method -->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+        </before>
+        <after>
+            <!-- Roll back configuration -->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Go to the tax rule page and delete the row created-->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPageA"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="{{TaxRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Deleting Tax zones and rate for Product Tax -->
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresTaxZonesAndRatesPage">
+                <argument name="menuUiId" value="{{AdminMenuStores.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuStoresTaxZonesAndRates.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteProductTaxRule1">
+                <argument name="name" value="{{SimpleTaxTexas.identifier}}-{{SimpleTaxTexas.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState"/>
+        <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <!-- Click on PayPal payment radio button -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
+        <!--Assert order in orders grid -->
+        <!-- Go to order page -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Check status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$10.83" stepKey="checkGrandTotal"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $10.83." stepKey="seeOrderHistoryNotes"/>
+    </test>
+</tests>

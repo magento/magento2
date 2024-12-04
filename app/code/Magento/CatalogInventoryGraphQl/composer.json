@@ -3,11 +3,13 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-store": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
+        "magento/module-quote": "*",
+        "magento/module-quote-graph-ql": "*",
         "magento/module-graph-ql": "*"
     },
     "license": [

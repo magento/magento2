@@ -854,5 +854,9 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
     {
         parent::_resetState();
         $this->availableCategoryIdsCache = [];
+        $this->_type = null;
+        $this->_entityTable = null;
+        $this->_entityIdField = null;
+        $this->linkIdField = null;
     }
 }

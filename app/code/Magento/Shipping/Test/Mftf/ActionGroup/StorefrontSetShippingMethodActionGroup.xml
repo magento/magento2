@@ -16,6 +16,7 @@
             <argument name="shippingMethodName" type="string" defaultValue="Flat Rate"/>
         </arguments>
         <waitForPageLoad stepKey="waitForShippingToLoad"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethodName)}}" stepKey="waitForShippingButtonToLoad" />
         <waitForElementClickable selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethodName)}}" stepKey="waitForShippingButton"/>
         <checkOption selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName(shippingMethodName)}}" stepKey="selectFlatRateShippingMethod"/>
         <waitForPageLoad stepKey="waitForLoadingMaskForNextButton"/>

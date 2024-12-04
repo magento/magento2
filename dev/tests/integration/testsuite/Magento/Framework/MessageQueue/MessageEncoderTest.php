@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Communication\Config;
@@ -119,10 +120,9 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
      */
     public function testDecodeInvalidMessage()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(LocalizedException::class);
 
-        $message = 'Property "NotExistingField" does not have accessor method "getNotExistingField" in class '
-            . '"Magento\Customer\Api\Data\CustomerInterface".';
+        $message = 'customer.created" must be an instance of "Magento\Customer\Api\Data\CustomerInterface".';
         $this->expectExceptionMessage($message);
         $this->encoder->decode('customer.created', '{"not_existing_field": "value"}');
     }

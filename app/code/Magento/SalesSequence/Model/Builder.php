@@ -7,18 +7,17 @@ namespace Magento\SalesSequence\Model;
 
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
- * Class Builder
- *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Builder
+class Builder implements ResetAfterRequestInterface
 {
     /**
      * @var resourceMetadata
@@ -109,6 +108,8 @@ class Builder
     }
 
     /**
+     * Set entity type data
+     *
      * @param string $entityType
      * @return $this
      */
@@ -119,6 +120,8 @@ class Builder
     }
 
     /**
+     * Set store id data
+     *
      * @param int $storeId
      * @return $this
      */
@@ -129,6 +132,8 @@ class Builder
     }
 
     /**
+     * Set prefix data
+     *
      * @param string $prefix
      * @return $this
      */
@@ -139,6 +144,8 @@ class Builder
     }
 
     /**
+     * Set suffix data
+     *
      * @param string $suffix
      * @return $this
      */
@@ -149,6 +156,8 @@ class Builder
     }
 
     /**
+     * Set start value data
+     *
      * @param int $startValue
      * @return $this
      */
@@ -159,6 +168,8 @@ class Builder
     }
 
     /**
+     * Set step data
+     *
      * @param int $step
      * @return $this
      */
@@ -169,6 +180,8 @@ class Builder
     }
 
     /**
+     * Set max value data
+     *
      * @param int $maxValue
      * @return $this
      */
@@ -179,6 +192,8 @@ class Builder
     }
 
     /**
+     * Set warning value data
+     *
      * @param int $warningValue
      * @return $this
      */
@@ -263,5 +278,13 @@ class Builder
             throw $e;
         }
         $this->data = array_flip($this->pattern);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
     }
 }

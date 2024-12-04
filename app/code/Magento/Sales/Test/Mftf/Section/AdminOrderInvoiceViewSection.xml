@@ -11,5 +11,6 @@
     <section name="AdminOrderInvoiceViewSection">
         <element name="invoiceQty" type="input" selector=".input-text.admin__control-text.qty-input" timeout="30"/>
         <element name="updateInvoiceBtn" type="button" selector=".update-button" timeout="30"/>
+        <element name="transactionID" type="button" selector=".invoice-information > div > table > tbody > tr:nth-child(2) > td" timeout="30"/>
     </section>
 </sections>

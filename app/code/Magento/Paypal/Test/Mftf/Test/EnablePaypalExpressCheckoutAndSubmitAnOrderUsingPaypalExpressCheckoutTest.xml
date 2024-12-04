@@ -37,6 +37,7 @@
             <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

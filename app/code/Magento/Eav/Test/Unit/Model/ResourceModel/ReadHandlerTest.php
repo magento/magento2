@@ -124,7 +124,8 @@ class ReadHandlerTest extends TestCase
             ->willReturn('linkField');
 
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getAttributeCode', 'isScopeWebsite', 'isStatic', 'getBackend', 'getAttributeId'])
+            ->addMethods(['isScopeWebsite'])
+            ->onlyMethods(['getAttributeCode', 'isStatic', 'getBackend', 'getAttributeId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attributeMock->method('isStatic')
@@ -194,10 +195,12 @@ class ReadHandlerTest extends TestCase
             ->willReturn('linkField');
 
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods([
-                'getAttributeCode',
+            ->addMethods([
                 'isScopeWebsite',
-                'getIsGlobal',
+                'getIsGlobal'
+            ])
+            ->onlyMethods([
+                'getAttributeCode',
                 'isStatic',
                 'getBackend',
                 'getAttributeId'
@@ -228,7 +231,7 @@ class ReadHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'null entity type' => [null, 0, ['linkField' => 'theLinkField']],
@@ -248,7 +251,7 @@ class ReadHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function executeGlobalScopeDataProvider()
+    public static function executeGlobalScopeDataProvider()
     {
         return [
             'null entity type' => [null, 0, ['linkField' => 'theLinkField']],

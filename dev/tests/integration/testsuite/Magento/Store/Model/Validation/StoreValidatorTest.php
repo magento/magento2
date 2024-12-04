@@ -34,7 +34,7 @@ class StoreValidatorTest extends TestCase
         $this->assertEquals($isValid, $result);
     }
 
-    public function isValidDataProvider(): array
+    public static function isValidDataProvider(): array
     {
         $validStore = Bootstrap::getObjectManager()->create(Store::class);
         $validStore->setName('name');

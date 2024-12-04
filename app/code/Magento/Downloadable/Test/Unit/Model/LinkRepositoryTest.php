@@ -94,7 +94,7 @@ class LinkRepositoryTest extends TestCase
         $this->repositoryMock = $this->createMock(ProductRepository::class);
         $this->productTypeMock = $this->createMock(Type::class);
         $this->linkDataObjectFactory = $this->getMockBuilder(LinkInterfaceFactory::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'create',
                 ]
@@ -168,7 +168,12 @@ class LinkRepositoryTest extends TestCase
     protected function getLinkMock(array $linkData)
     {
         $linkMock = $this->getMockBuilder(LinkInterface::class)
-            ->setMethods(
+            ->addMethods(
+                [
+                    'hasSampleType'
+                ]
+            )
+            ->onlyMethods(
                 [
                     'getLinkType',
                     'getId',
@@ -178,8 +183,7 @@ class LinkRepositoryTest extends TestCase
                     'getNumberOfDownloads',
                     'getIsShareable',
                     'getLinkUrl',
-                    'getLinkFile',
-                    'hasSampleType',
+                    'getLinkFile'
                 ]
             )
             ->getMockForAbstractClass();

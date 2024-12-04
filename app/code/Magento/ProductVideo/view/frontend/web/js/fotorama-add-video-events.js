@@ -122,7 +122,7 @@ define([
         isFullscreen: false,
         FTCF: '[data-gallery-role="fotorama__fullscreen-icon"]',
         Base: 0, //on check for video is base this setting become true if there is any video with base role
-        MobileMaxWidth: 768,
+        MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
         videoData: null,
         videoDataPlaceholder: [{

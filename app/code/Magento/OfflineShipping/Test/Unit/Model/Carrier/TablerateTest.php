@@ -73,7 +73,8 @@ class TablerateTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'isSetFlag', 'getValue'])
+            ->addMethods(['create'])
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMockForAbstractClass();
 
         $this->errorFactoryMock = $this
@@ -87,19 +88,20 @@ class TablerateTest extends TestCase
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->methodFactoryMock = $this
             ->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->tablerateFactoryMock = $this
             ->getMockBuilder(TablerateFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'getRate'])
+            ->addMethods([ 'getRate'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->helper = new ObjectManager($this);
@@ -118,10 +120,11 @@ class TablerateTest extends TestCase
 
     /**
      * @param bool $freeshipping
+     * @param bool $isShipSeparately
      * @dataProvider collectRatesWithGlobalFreeShippingDataProvider
      * @return void
      */
-    public function testCollectRatesWithGlobalFreeShipping($freeshipping)
+    public function testCollectRatesWithGlobalFreeShipping($freeshipping, $isShipSeparately)
     {
         $rate = [
             'price' => 15,
@@ -130,19 +133,17 @@ class TablerateTest extends TestCase
 
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
+            ->addMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
             ->getMock();
 
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getHasChildren', 'getChildren',  'getQty'])
+            ->onlyMethods(
                 [
                     'getProduct',
                     'getParentItem',
-                    'getHasChildren',
                     'isShipSeparately',
-                    'getChildren',
-                    'getQty',
                     'getFreeShipping',
                     'getBaseRowTotal'
                 ]
@@ -151,12 +152,12 @@ class TablerateTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isVirtual'])
+            ->onlyMethods(['isVirtual'])
             ->getMock();
 
         $tablerate = $this->getMockBuilder(Tablerate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRate'])
+            ->onlyMethods(['getRate'])
             ->getMock();
 
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(true);
@@ -166,22 +167,29 @@ class TablerateTest extends TestCase
 
         $method = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setPrice', 'setCost'])
+            ->onlyMethods([ 'setPrice'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setCost'])
             ->getMock();
         $this->methodFactoryMock->expects($this->once())->method('create')->willReturn($method);
 
         $result = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->setMethods(['append'])
+            ->onlyMethods(['append'])
             ->getMock();
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($result);
 
         $product->expects($this->any())->method('isVirtual')->willReturn(false);
-
         $item->expects($this->any())->method('getProduct')->willReturn($product);
-        $item->expects($this->any())->method('getFreeShipping')->willReturn(1);
         $item->expects($this->any())->method('getQty')->willReturn(1);
-
+        if ($isShipSeparately) {
+            $freeShippingReturnValue = true;
+            $item->expects($this->any())->method('getHasChildren')->willReturn(1);
+            $item->expects($this->any())->method('isShipSeparately')->willReturn(1);
+            $item->expects($this->any())->method('getChildren')->willReturn([$item]);
+        } else {
+            $freeShippingReturnValue = "1";
+        }
+        $item->expects($this->any())->method('getFreeShipping')->willReturn($freeShippingReturnValue);
         $request->expects($this->any())->method('getAllItems')->willReturn([$item]);
         $request->expects($this->any())->method('getPackageQty')->willReturn(1);
 
@@ -222,11 +230,12 @@ class TablerateTest extends TestCase
     /**
      * @return array
      */
-    public function collectRatesWithGlobalFreeShippingDataProvider()
+    public static function collectRatesWithGlobalFreeShippingDataProvider()
     {
         return [
-            ['freeshipping' => true],
-            ['freeshipping' => false]
+            ['freeshipping' => true, 'isShipSeparately' => false],
+            ['freeshipping' => false, 'isShipSeparately' => false],
+            ['freeshipping' => true, 'isShipSeparately' => true]
         ];
     }
 }

@@ -41,6 +41,7 @@
             <magentoCLI command="downloadable:domains:remove" arguments="example.com static.magento.com" stepKey="removeDownloadableDomain"/>
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
@@ -93,7 +94,7 @@
         <!-- Click and open order summary tab-->
         <conditionalClick selector="{{CheckoutOrderSummarySection.miniCartTab}}" dependentSelector="{{CheckoutOrderSummarySection.miniCartTabClosed}}" visible="true" stepKey="clickOnOrderSummaryTab"/>
         <waitForPageLoad stepKey="waitForPageToLoad5"/>
-
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Assert Product displayed in Order Summary -->
         <actionGroup ref="StorefrontAssertProductDetailsInOrderSummaryActionGroup" stepKey="assertProduct3InOrderSummary">
             <argument name="productName" value="$$virtualProduct.name$$"/>
@@ -104,6 +105,7 @@
         <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
 
         <!-- Place the order and Verify Success message -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->

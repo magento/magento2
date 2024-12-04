@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
 
 use Magento\Catalog\Api\Data\TierPriceInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
 use Magento\Catalog\Model\Product\Price\Validation\Result;
 use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
@@ -80,6 +81,11 @@ class TierPriceValidatorTest extends TestCase
     private $tierPrice;
 
     /**
+     * @var ProductRepositoryInterface|MockObject
+     */
+    private $productRepository;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -109,6 +115,9 @@ class TierPriceValidatorTest extends TestCase
         $this->tierPrice = $this->getMockBuilder(TierPriceInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
         $this->tierPriceValidator = $objectManagerHelper->getObject(
@@ -120,7 +129,8 @@ class TierPriceValidatorTest extends TestCase
                 'customerGroupRepository' => $this->customerGroupRepository,
                 'websiteRepository' => $this->websiteRepository,
                 'validationResult' => $this->validationResult,
-                'invalidSkuProcessor' => $this->invalidSkuProcessor
+                'invalidSkuProcessor' => $this->invalidSkuProcessor,
+                'productRepository' => $this->productRepository
             ]
         );
     }
@@ -174,7 +184,13 @@ class TierPriceValidatorTest extends TestCase
         $websiteId = 0;
         $invalidWebsiteId = 4;
         $this->tierPrice->expects($this->atLeastOnce())->method('getWebsiteId')
-            ->willReturnOnConsecutiveCalls($websiteId, $websiteId, $websiteId, $invalidWebsiteId, $websiteId);
+            ->willReturnCallback(function () use (&$callCount, $websiteId, $invalidWebsiteId) {
+                $callCount++;
+                if ($callCount === 4) {
+                    return $invalidWebsiteId;
+                }
+                return $websiteId;
+            });
         $this->tierPrice->expects($this->atLeastOnce())->method('getCustomerGroup')
             ->willReturn($returned['tierPrice_getCustomerGroup']);
         $skuDiff = [$sku];
@@ -187,6 +203,27 @@ class TierPriceValidatorTest extends TestCase
         ];
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')
             ->willReturn($idsBySku);
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $type = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
+            ->onlyMethods(['canUseQtyDecimals'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->productRepository->expects($this->once())
+            ->method('get')
+            ->with($sku)
+            ->willReturn($product);
+
+        $product->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($type);
+
+        $type->expects($this->once())
+            ->method('canUseQtyDecimals')
+            ->willReturn(true);
     }
 
     /**
@@ -214,6 +251,11 @@ class TierPriceValidatorTest extends TestCase
      */
     public function testRetrieveValidationResult(array $returned)
     {
+        if (!empty($returned['customerGroupSearchResults_getItems'])) {
+            $groupSearchResult = $returned['customerGroupSearchResults_getItems'][0];
+            $returned['customerGroupSearchResults_getItems'][0] = $groupSearchResult($this);
+        }
+
         $sku = 'ASDF234234';
         $prices = [$this->tierPrice];
         $existingPrices = [$this->tierPrice];
@@ -230,21 +272,27 @@ class TierPriceValidatorTest extends TestCase
         );
     }
 
-    /**
-     * Data provider for retrieveValidationResult() test.
-     *
-     * @return array
-     */
-    public function retrieveValidationResultDataProvider()
+    protected function getMockForCustomerGroup($customerGroupName)
     {
-        $customerGroupName = 'test_Group';
         $customerGroup = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customerGroup->expects($this->atLeastOnce())->method('getCode')->willReturn($customerGroupName);
         $customerGroupId = 23;
         $customerGroup->expects($this->atLeastOnce())->method('getId')->willReturn($customerGroupId);
+        return $customerGroup;
+    }
+
+    /**
+     * Data provider for retrieveValidationResult() test.
+     *
+     * @return array
+     */
+    public static function retrieveValidationResultDataProvider()
+    {
+        $customerGroupName = 'test_Group';
+        $customerGroup = static fn (self $testCase) => $testCase->getMockForCustomerGroup($customerGroupName);
 
         return [
             [

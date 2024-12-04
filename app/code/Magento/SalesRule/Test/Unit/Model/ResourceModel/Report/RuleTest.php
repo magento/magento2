@@ -39,7 +39,7 @@ class RuleTest extends TestCase
     public function testGetUniqRulesNamesList()
     {
         $dbAdapterMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['_connect', 'quote'])
+            ->onlyMethods(['_connect', 'quote'])
             ->disableOriginalConstructor()
             ->getMock();
         $dbAdapterMock
@@ -55,7 +55,7 @@ class RuleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $select = $this->getMockBuilder(Select::class)
-            ->setMethods(['from'])
+            ->onlyMethods(['from'])
             ->setConstructorArgs([$dbAdapterMock, $selectRenderer])
             ->getMock();
         $select->expects(

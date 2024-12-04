@@ -180,7 +180,8 @@ class Resolver implements ResolverInterface, ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->locale = null;
-        $this->emulatedLocales = [];
+        while (!empty($this->emulatedLocales)) {
+            $this->revert();
+        }
     }
 }

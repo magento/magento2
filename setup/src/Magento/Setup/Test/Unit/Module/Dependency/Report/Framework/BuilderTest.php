@@ -40,7 +40,7 @@ class BuilderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionConfigFiles()
+    public static function dataProviderWrongOptionConfigFiles()
     {
         return [
             [

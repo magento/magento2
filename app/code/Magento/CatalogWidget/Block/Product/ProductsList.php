@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
@@ -131,6 +132,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private $categoryRepository;
 
     /**
+     * @var OptionsData
+     */
+    private OptionsData $optionsData;
+
+    /**
      * @param Context $context
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
@@ -143,6 +149,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param LayoutFactory|null $layoutFactory
      * @param EncoderInterface|null $urlEncoder
      * @param CategoryRepositoryInterface|null $categoryRepository
+     * @param OptionsData|null $optionsData
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -158,7 +165,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Json $json = null,
         LayoutFactory $layoutFactory = null,
         EncoderInterface $urlEncoder = null,
-        CategoryRepositoryInterface $categoryRepository = null
+        CategoryRepositoryInterface $categoryRepository = null,
+        OptionsData $optionsData = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -171,6 +179,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
                 ->get(CategoryRepositoryInterface::class);
+        $this->optionsData = $optionsData ?: ObjectManager::getInstance()->get(OptionsData::class);
         parent::__construct(
             $context,
             $data
@@ -301,9 +310,21 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
+                'options' => $this->optionsData->getOptionsData($product),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ]
         ];
+    }
+
+    /**
+     * Return product options
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getOptionsData(Product $product): array
+    {
+        return $this->optionsData->getOptionsData($product);
     }
 
     /**
@@ -324,14 +345,25 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function createCollection()
     {
-        /** @var $collection Collection */
-        $collection = $this->productCollectionFactory->create();
+        $collection = $this->getBaseCollection();
 
+        $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
+
+        return $collection;
+    }
+
+    /**
+     * Prepare and return product collection without visibility filter
+     *
+     * @return Collection
+     * @throws LocalizedException
+     */
+    public function getBaseCollection(): Collection
+    {
+        $collection = $this->productCollectionFactory->create();
         if ($this->getData('store_id') !== null) {
             $collection->setStoreId($this->getData('store_id'));
         }
-
-        $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
         /**
          * Change sorting attribute to entity_id because created_at can be the same for products fastly created

@@ -116,7 +116,7 @@ class TimezoneTest extends TestCase
      *
      * @return array
      */
-    public function dateIncludeTimeDataProvider(): array
+    public static function dateIncludeTimeDataProvider(): array
     {
         /**
          * Greek locale needs to be installed on the system, to pass.
@@ -216,7 +216,7 @@ class TimezoneTest extends TestCase
     /**
      * @return array
      */
-    public function getDatetimeFormatDataProvider(): array
+    public static function getDatetimeFormatDataProvider(): array
     {
         return [
             ['en_US', \IntlDateFormatter::SHORT, 'M/d/yy h:mm a'],
@@ -240,7 +240,7 @@ class TimezoneTest extends TestCase
     /**
      * @return array
      */
-    public function getDateFormatWithLongYearDataProvider(): array
+    public static function getDateFormatWithLongYearDataProvider(): array
     {
         return [
             ['en_US', 'M/d/y'],
@@ -265,7 +265,7 @@ class TimezoneTest extends TestCase
      *
      * @return array
      */
-    public function getConvertConfigTimeToUtcFixtures(): array
+    public static function getConvertConfigTimeToUtcFixtures(): array
     {
         return [
             'string' => [
@@ -306,7 +306,7 @@ class TimezoneTest extends TestCase
      *
      * @return array
      */
-    public function getConvertConfigTimeToUTCDataFixtures()
+    public static function getConvertConfigTimeToUTCDataFixtures()
     {
         return [
             'datetime' => [
@@ -330,7 +330,7 @@ class TimezoneTest extends TestCase
      *
      * @return array
      */
-    public function getDateFixtures(): array
+    public static function getDateFixtures(): array
     {
         return [
             'now_datetime_utc' => [
@@ -429,7 +429,7 @@ class TimezoneTest extends TestCase
     /**
      * @return array
      */
-    public function scopeDateDataProvider(): array
+    public static function scopeDateDataProvider(): array
     {
         $utcTz = new \DateTimeZone('UTC');
 

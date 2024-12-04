@@ -61,42 +61,35 @@ class HeadTest extends TestCase
             ->willReturn($structureMock);
         $structureMock
             ->method('addAssets')
-            ->withConsecutive(
-                [
-                    'path/file-3.css',
-                    ['src' => 'path/file-3.css', 'media' => 'all', 'content_type' => 'css']
-                ],
-                [
-                    'path/file.js',
-                    ['src' => 'path/file.js', 'defer' => 'defer', 'content_type' => 'js']
-                ],
-                [
-                    'http://url.com',
-                    ['src' => 'http://url.com', 'src_type' => 'url']
-                ],
-                [
-                    'path/file-1.css',
-                    ['src' => 'path/file-1.css', 'media' => 'all', 'content_type' => 'css', 'order' => 10]
-                ],
-                [
-                    'path/file-2.css',
-                    ['src' => 'path/file-2.css', 'media' => 'all', 'content_type' => 'css', 'order' => 30]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $structureMock,
-                $structureMock,
-                $structureMock,
-                $structureMock,
-                $structureMock
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($structureMock) {
+                if ($arg1 == 'path/file-3.css' &&
+                    $arg2 == ['src' => 'path/file-3.css', 'media' => 'all', 'content_type' => 'css']) {
+                    return $structureMock;
+                } elseif ($arg1 == 'path/file.js' &&
+                    $arg2 == ['src' => 'path/file.js', 'defer' => 'defer', 'content_type' => 'js']) {
+                    return $structureMock;
+                } elseif ($arg1 == 'http://url.com' &&
+                    $arg2 == ['src' => 'http://url.com', 'src_type' => 'url']) {
+                    return $structureMock;
+                } elseif ($arg1 == 'path/file-1.css' &&
+                    $arg2 == ['src' => 'path/file-1.css', 'media' => 'all', 'content_type' => 'css', 'order' => 10]) {
+                    return $structureMock;
+                } elseif ($arg1 == 'path/file-2.css' &&
+                    $arg2 == ['src' => 'path/file-2.css', 'media' => 'all', 'content_type' => 'css', 'order' => 30]) {
+                    return $structureMock;
+                }
+            });
         $structureMock
             ->method('setMetaData')
-            ->withConsecutive(
-                ['meta_name', 'meta_content'],
-                ['og:video:secure_url', 'https://secure.example.com/movie.swf'],
-                ['og:locale:alternate', 'uk_UA']
-            )->willReturnOnConsecutiveCalls($structureMock, $structureMock, $structureMock);
+            ->willReturnCallback(function ($arg1, $arg2) use ($structureMock) {
+                if ($arg1 == 'meta_name' && $arg2 == 'meta_content') {
+                    return $structureMock;
+                } elseif ($arg1 == 'og:video:secure_url' && $arg2 == 'https://secure.example.com/movie.swf') {
+                    return $structureMock;
+                } elseif ($arg1 == 'og:locale:alternate' && $arg2 == 'uk_UA') {
+                    return $structureMock;
+                }
+            });
 
         $this->assertEquals($this->model, $this->model->interpret($readerContextMock, $element->children()[0]));
     }

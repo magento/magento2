@@ -2,10 +2,10 @@
     "name": "magento/module-remote-storage",
     "description": "N/A",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "league/flysystem": "^2.4",
-        "league/flysystem-aws-s3-v3": "^2.4"
+        "league/flysystem": "^3.0",
+        "league/flysystem-aws-s3-v3": "^3.0"
     },
     "suggest": {
         "magento/module-backend": "*",

@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "lib-libxml": "*",
         "magento/framework": "*",
         "magento/module-authorization": "*",
@@ -24,7 +24,8 @@
         "magento/module-tax": "*",
         "magento/module-theme": "*",
         "magento/module-ui": "*",
-        "magento/module-vault": "*"
+        "magento/module-vault": "*",
+        "magento/module-csp": "*"
     },
     "suggest": {
         "magento/module-checkout-agreements": "*"

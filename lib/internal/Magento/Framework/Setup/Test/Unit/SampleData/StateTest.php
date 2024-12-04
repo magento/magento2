@@ -39,7 +39,7 @@ class StateTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->setMethods(['getDirectoryWrite'])
+            ->onlyMethods(['getDirectoryWrite'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->writeInterface = $this->getMockForAbstractClass(

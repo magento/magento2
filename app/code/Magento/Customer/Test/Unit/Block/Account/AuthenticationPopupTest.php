@@ -111,7 +111,7 @@ class AuthenticationPopupTest extends TestCase
 
         /** @var StoreInterface||\PHPUnit\Framework\MockObject\MockObject $storeMock */
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseUrl'])
+            ->addMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
 
         $this->storeManagerMock->expects($this->any())
@@ -139,7 +139,7 @@ class AuthenticationPopupTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetConfig()
+    public static function dataProviderGetConfig()
     {
         return [
             [
@@ -226,7 +226,7 @@ class AuthenticationPopupTest extends TestCase
 
         /** @var StoreInterface||\PHPUnit\Framework\MockObject\MockObject $storeMock */
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseUrl'])
+            ->addMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
 
         $this->storeManagerMock->expects($this->any())

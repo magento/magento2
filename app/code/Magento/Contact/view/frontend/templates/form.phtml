@@ -8,40 +8,47 @@
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var \Magento\Contact\Block\ContactForm $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
+/** @var $escaper \Magento\Framework\Escaper */
 /** @var \Magento\Contact\ViewModel\UserDataProvider $viewModel */
 
 $viewModel = $block->getViewModel();
 ?>
 <form class="form contact"
-      action="<?= $block->escapeUrl($block->getFormAction()) ?>"
+      action="<?= $escaper->escapeUrl($block->getFormAction()) ?>"
       id="contact-form"
       method="post"
-      data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+      data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>"
       data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset">
-        <legend class="legend"><span><?= $block->escapeHtml(__('Write Us')) ?></span></legend><br />
+        <legend class="legend"><span><?= $escaper->escapeHtml(__('Write Us')) ?></span></legend><br />
         <div class="field note no-label">
-            <?= $block->escapeHtml(__('Jot us a note and we’ll get back to you as quickly as possible.')) ?>
+            <?= $escaper->escapeHtml(__('Jot us a note and we’ll get back to you as quickly as possible.')) ?>
         </div>
         <div class="field name required">
-            <label class="label" for="name"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
+            <label class="label" for="name"><span><?= $escaper->escapeHtml(__('Name')) ?></span></label>
             <div class="control">
                 <input name="name"
                        id="name"
-                       title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
-                       value="<?= $block->escapeHtmlAttr($viewModel->getUserName()) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
+                       value="<?= $escaper->escapeHtmlAttr($viewModel->getUserName()) ?>"
                        class="input-text"
                        type="text"
                        data-validate="{required:true}"/>
             </div>
         </div>
         <div class="field email required">
-            <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
+            <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
                 <input name="email"
                        id="email"
-                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
-                       value="<?= $block->escapeHtmlAttr($viewModel->getUserEmail()) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                       value="<?= $escaper->escapeHtmlAttr($viewModel->getUserEmail()) ?>"
                        class="input-text"
                        type="email"
                        data-validate="{required:true, 'validate-email':true}"
@@ -50,29 +57,29 @@ $viewModel = $block->getViewModel();
             </div>
         </div>
         <div class="field telephone">
-            <label class="label" for="telephone"><span><?= $block->escapeHtml(__('Phone Number')) ?></span></label>
+            <label class="label" for="telephone"><span><?= $escaper->escapeHtml(__('Phone Number')) ?></span></label>
             <div class="control">
                 <input name="telephone"
                        id="telephone"
-                       title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-                       value="<?= $block->escapeHtmlAttr($viewModel->getUserTelephone()) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
+                       value="<?= $escaper->escapeHtmlAttr($viewModel->getUserTelephone()) ?>"
                        class="input-text"
                        type="tel" />
             </div>
         </div>
         <div class="field comment required">
             <label class="label" for="comment">
-                <span><?= $block->escapeHtml(__('What’s on your mind?')) ?></span>
+                <span><?= $escaper->escapeHtml(__('What’s on your mind?')) ?></span>
             </label>
             <div class="control">
                 <textarea name="comment"
                           id="comment"
-                          title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
+                          title="<?= $escaper->escapeHtmlAttr(__('What’s on your mind?')) ?>"
                           class="input-text"
                           cols="5"
                           rows="3"
                           data-validate="{required:true}"
-                ><?= $block->escapeHtml($viewModel->getUserComment()) ?></textarea>
+                ><?= $escaper->escapeHtml($viewModel->getUserComment()) ?></textarea>
             </div>
         </div>
         <?= $block->getChildHtml('form.additional.info') ?>
@@ -80,12 +87,12 @@ $viewModel = $block->getViewModel();
     <div class="actions-toolbar">
         <div class="primary">
             <input type="hidden" name="hideit" id="hideit" value="" />
-            <button type="submit" title="<?= $block->escapeHtmlAttr(__('Submit')) ?>" class="action submit primary"
+            <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Submit')) ?>" class="action submit primary"
                     id="send2"
                 <?php if ($block->getButtonLockManager()->isDisabled('contact_us_form_submit')): ?>
                     disabled="disabled"
                 <?php endif; ?>>
-                <span><?= $block->escapeHtml(__('Submit')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Submit')) ?></span>
             </button>
         </div>
     </div>

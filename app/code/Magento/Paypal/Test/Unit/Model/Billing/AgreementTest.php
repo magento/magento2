@@ -39,20 +39,22 @@ class AgreementTest extends TestCase
 
         $this->paymentDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethodInstance'])
+            ->onlyMethods(['getMethodInstance'])
             ->getMock();
 
         $this->paymentMethodInstanceMock = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
+                'initBillingAgreementToken',
+                'getBillingAgreementTokenInfo',
+                'placeBillingAgreement'
+            ])
+            ->onlyMethods([
                 'setStore',
                 'getCode',
                 'getFormBlockType',
                 'getTitle',
-                'getStore',
-                'initBillingAgreementToken',
-                'getBillingAgreementTokenInfo',
-                'placeBillingAgreement'
+                'getStore'
             ])
             ->getMock();
 
@@ -114,7 +116,8 @@ class AgreementTest extends TestCase
     {
         $paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBillingAgreementData', 'getMethodInstance', 'getOrder'])
+            ->addMethods(['getBillingAgreementData'])
+            ->onlyMethods(['getMethodInstance', 'getOrder'])
             ->getMock();
 
         $storeId = null;
@@ -122,7 +125,7 @@ class AgreementTest extends TestCase
 
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId'])
+            ->onlyMethods(['getCustomerId'])
             ->getMock();
 
         $order->expects($this->once())

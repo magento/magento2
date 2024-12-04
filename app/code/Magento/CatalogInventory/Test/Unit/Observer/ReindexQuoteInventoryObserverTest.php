@@ -116,15 +116,14 @@ class ReindexQuoteInventoryObserverTest extends TestCase
 
         $this->quoteItem->expects($this->exactly(6))
             ->method('getData')
-            ->withConsecutive(
-                ['product_id'],
-                ['product_id'],
-                ['children_items'],
-                ['product_id'],
-                ['product_id'],
-                ['product_id']
-            )->willReturnOnConsecutiveCalls(1, 1, [$this->quoteItem], 1, 1, 1);
-
+        ->willReturnCallback(fn($param) => match ([$param]) {
+                ['product_id']=> 1,
+                ['product_id'] => 1,
+                ['children_items']=> [$this->quoteItem],
+                ['product_id']=> 1,
+                ['product_id']=> 1,
+                ['product_id']=> 1,
+        });
         $this->stockIndexerProcessor->expects($this->once())
             ->method('reindexList')
             ->with([1 => 1]);
@@ -167,11 +166,11 @@ class ReindexQuoteInventoryObserverTest extends TestCase
 
         $this->quoteItem->expects($this->exactly(3))
             ->method('getData')
-            ->withConsecutive(
-                ['product_id'],
-                ['product_id'],
-                ['children_items']
-            )->willReturnOnConsecutiveCalls(1, 1, []);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['product_id']=> 1,
+                ['product_id'] => 1,
+                ['children_items']=> []
+            });
 
         $this->stockIndexerProcessor->expects($this->once())
             ->method('reindexList')

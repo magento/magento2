@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model\ResourceModel\Query;
 
@@ -150,9 +150,9 @@ class Collection extends AbstractCollection
 
         $storeIds = $storeIds ?: $this->_storeManager->getStore()->getId();
         $this->addStoreFilter($storeIds);
-        $this->getSelect()->where('num_results > 0');
+        $this->getSelect()->where('main_table.num_results > 0');
 
-        $this->getSelect()->order(['popularity desc']);
+        $this->getSelect()->order(['main_table.popularity desc']);
 
         return $this;
     }
@@ -171,11 +171,10 @@ class Collection extends AbstractCollection
         $select = $this->getSelect();
         $select->reset(\Magento\Framework\DB\Select::FROM);
         $select->reset(\Magento\Framework\DB\Select::COLUMNS);
-        $select->distinct(true);
         $select->from(['main_table' => $this->getTable('search_query')], ['query_text']);
         $select->where('main_table.store_id IN (?)', $storeId);
-        $select->where('num_results > 0');
-        $select->order(['popularity desc']);
+        $select->where('main_table.num_results > 0');
+        $select->order(['main_table.popularity desc']);
 
         $select->limit($maxCountCacheableSearchTerms);
 
@@ -208,7 +207,7 @@ class Collection extends AbstractCollection
     public function addStoreFilter($storeIds)
     {
         $condition = is_array($storeIds) ? 'main_table.store_id IN (?)' : 'main_table.store_id = ?';
-        $this->getSelect()->where($condition, $storeIds);
+        $this->getSelect()->where($condition, $storeIds, \Zend_Db::INT_TYPE);
 
         return $this;
     }

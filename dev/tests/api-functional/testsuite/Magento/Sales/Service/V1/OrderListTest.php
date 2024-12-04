@@ -7,17 +7,13 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-/**
- * Class OrderListTest
- * @package Magento\Sales\Service\V1
- */
 class OrderListTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/orders';
+    private const RESOURCE_PATH = '/V1/orders';
 
-    const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
+    private const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -89,9 +85,21 @@ class OrderListTest extends WebapiAbstract
         $appliedTaxes = $result['items'][0]['extension_attributes']['item_applied_taxes'];
         $this->assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
         $this->assertNotEmpty($appliedTaxes[0]['applied_taxes']);
-        $this->assertTrue($result['items'][0]['extension_attributes']['converting_from_quote']);
+        $this->assertFalse($result['items'][0]['extension_attributes']['converting_from_quote']);
         $this->assertArrayHasKey('payment_additional_info', $result['items'][0]['extension_attributes']);
         $this->assertNotEmpty($result['items'][0]['extension_attributes']['payment_additional_info']);
+        $taxes = $result['items'][0]['extension_attributes']['taxes'];
+        $this->assertCount(1, $taxes);
+        $this->assertEquals('US-NY-*-Rate 1', $taxes[0]['code']);
+        $this->assertEquals(8.37, $taxes[0]['percent']);
+        $this->assertCount(1, $result['items'][0]['extension_attributes']['additional_itemized_taxes']);
+        $shippingTaxItem = $result['items'][0]['extension_attributes']['additional_itemized_taxes'][0];
+        $this->assertEquals(8.37, $shippingTaxItem['tax_percent']);
+        $this->assertEquals(45, $shippingTaxItem['amount']);
+        $this->assertEquals(45, $shippingTaxItem['base_amount']);
+        $this->assertEquals(45, $shippingTaxItem['real_amount']);
+        $this->assertEquals('shipping', $shippingTaxItem['taxable_item_type']);
+        $this->assertEquals('US-NY-*-Rate 1', $shippingTaxItem['tax_code']);
     }
 
     /**

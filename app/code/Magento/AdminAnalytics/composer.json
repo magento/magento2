@@ -5,13 +5,14 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-config": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*",
-        "magento/module-release-notification": "*"
+        "magento/module-release-notification": "*",
+        "magento/module-csp": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -7,8 +7,6 @@ namespace Magento\Tax\Model\ResourceModel\Calculation\Rule;
 
 /**
  * Tax rule collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -170,7 +168,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 break;
             default:
                 throw new \Magento\Framework\Exception\LocalizedException(__('Invalid type supplied'));
-                break;
         }
 
         $this->joinCalculationData('cd');

@@ -74,7 +74,7 @@ class DepersonalizeCheckerTest extends TestCase
     /**
      * return array
      */
-    public function checkIfDepersonalizeDataProvider()
+    public static function checkIfDepersonalizeDataProvider()
     {
         return [
             [['ajax' => false, 'get' => true, 'head' => false], true, true, true, true],

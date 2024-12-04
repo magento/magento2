@@ -15,14 +15,14 @@ use Magento\Framework\Search\RequestInterface;
 class Mapper
 {
     /**
-     * @var \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper
+     * @var \Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Mapper
      */
     private $mapper;
 
     /**
-     * @param \Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper $mapper
+     * @param \Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Mapper $mapper
      */
-    public function __construct(\Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper $mapper)
+    public function __construct(\Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Mapper $mapper)
     {
         $this->mapper = $mapper;
     }

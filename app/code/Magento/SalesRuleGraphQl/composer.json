@@ -1,0 +1,25 @@
+{
+    "name": "magento/module-sales-rule-graph-ql",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.2.0||~8.3.0",
+        "magento/framework": "*",
+        "magento/module-sales-rule": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\SalesRuleGraphQl\\": ""
+        }
+    }
+}

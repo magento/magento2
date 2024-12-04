@@ -3,38 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/** @var $escaper \Magento\Framework\Escaper */
 ?>
-<?php if ($item = $block->getItem()) : ?>
+<?php if ($item = $block->getItem()): ?>
     <table class="qty-table">
         <tr>
-            <th><?= $block->escapeHtml(__('Ordered')); ?></th>
+            <th><?= $escaper->escapeHtml(__('Ordered')); ?></th>
             <td><?= (float) $item->getQtyOrdered() ?></td>
         </tr>
 
-        <?php if ((float)$item->getQtyInvoiced()) : ?>
+        <?php if ((float)$item->getQtyBackordered()): ?>
             <tr>
-                <th><?= $block->escapeHtml(__('Invoiced')); ?></th>
+                <th><?= $escaper->escapeHtml(__('Backordered')); ?></th>
+                <td><?= (float) $item->getQtyBackordered() ?></td>
+            </tr>
+        <?php endif; ?>
+
+        <?php if ((float)$item->getQtyInvoiced()): ?>
+            <tr>
+                <th><?= $escaper->escapeHtml(__('Invoiced')); ?></th>
                 <td><?= (float) $item->getQtyInvoiced() ?></td>
             </tr>
         <?php endif; ?>
 
-        <?php if ((float)$item->getQtyShipped()) : ?>
+        <?php if ((float)$item->getQtyShipped()): ?>
             <tr>
-                <th><?= $block->escapeHtml(__('Shipped')); ?></th>
+                <th><?= $escaper->escapeHtml(__('Shipped')); ?></th>
                 <td><?= (float) $item->getQtyShipped() ?></td>
             </tr>
         <?php endif; ?>
 
-        <?php if ((float)$item->getQtyRefunded()) : ?>
+        <?php if ((float)$item->getQtyRefunded()): ?>
             <tr>
-                <th><?= $block->escapeHtml(__('Refunded')); ?></th>
+                <th><?= $escaper->escapeHtml(__('Refunded')); ?></th>
                 <td><?= (float) $item->getQtyRefunded() ?></td>
             </tr>
         <?php endif; ?>
 
-        <?php if ((float)$item->getQtyCanceled()) : ?>
+        <?php if ((float)$item->getQtyCanceled()): ?>
             <tr>
-                <th><?= $block->escapeHtml(__('Canceled')); ?></th>
+                <th><?= $escaper->escapeHtml(__('Canceled')); ?></th>
                 <td><?= (float) $item->getQtyCanceled() ?></td>
             </tr>
         <?php endif; ?>

@@ -37,16 +37,18 @@ class Cli extends Console\Application
     /**
      * Name of input option.
      */
-    const INPUT_KEY_BOOTSTRAP = 'bootstrap';
+    public const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
     /**#@+
      * Cli exit codes.
      */
-    const RETURN_SUCCESS = 0;
-    const RETURN_FAILURE = 1;
+    public const RETURN_SUCCESS = 0;
+    public const RETURN_FAILURE = 1;
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var $serviceManager
+     */
     private $serviceManager;
 
     /**
@@ -57,8 +59,6 @@ class Cli extends Console\Application
     private $initException;
 
     /**
-     * Object Manager.
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -88,8 +88,10 @@ class Cli extends Console\Application
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
+            // phpcs:disable
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(static::RETURN_FAILURE);
+            // phpcs:enable
         }
 
         if ($version == 'UNKNOWN') {
@@ -130,7 +132,7 @@ class Cli extends Console\Application
     /**
      * @inheritdoc
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands():array
     {
         return array_merge(parent::getDefaultCommands(), $this->getApplicationCommands());
     }

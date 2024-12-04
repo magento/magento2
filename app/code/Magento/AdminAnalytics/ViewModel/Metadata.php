@@ -9,7 +9,9 @@ declare(strict_types=1);
 namespace Magento\AdminAnalytics\ViewModel;
 
 use Magento\Config\Model\Config\Backend\Admin\Custom;
+use Magento\Csp\Helper\CspNonceProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\State;
@@ -21,6 +23,11 @@ use Magento\Store\Model\Information;
  */
 class Metadata implements ArgumentInterface
 {
+    /**
+     * @var string
+     */
+    private $nonce;
+
     /**
      * @var State
      */
@@ -42,21 +49,32 @@ class Metadata implements ArgumentInterface
     private $config;
 
     /**
+     * @var CspNonceProvider
+     */
+    private $nonceProvider;
+
+    /**
      * @param ProductMetadataInterface $productMetadata
      * @param Session $authSession
      * @param State $appState
      * @param ScopeConfigInterface $config
+     * @param CspNonceProvider|null $nonceProvider
      */
     public function __construct(
         ProductMetadataInterface $productMetadata,
         Session $authSession,
         State $appState,
-        ScopeConfigInterface $config
+        ScopeConfigInterface $config,
+        CspNonceProvider $nonceProvider = null
     ) {
         $this->productMetadata = $productMetadata;
         $this->authSession = $authSession;
         $this->appState = $appState;
         $this->config = $config;
+
+        $this->nonceProvider = $nonceProvider ?: ObjectManager::getInstance()->get(CspNonceProvider::class);
+
+        $this->nonce = $this->nonceProvider->generateNonce();
     }
 
     /**
@@ -155,5 +173,15 @@ class Metadata implements ArgumentInterface
     public function getCurrentUserRoleName(): string
     {
         return $this->authSession->getUser()->getRole()->getRoleName();
+    }
+
+    /**
+     * Get a random nonce for each request.
+     *
+     * @return string
+     */
+    public function getNonce(): string
+    {
+        return $this->nonce;
     }
 }

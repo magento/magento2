@@ -99,7 +99,8 @@ FOUND,FOUND
 "NOT FOUND","NOT FOUND"
 "If an item is %1 in the cart with %2 of these conditions true:","If an item is %1 in the cart with %2 of these conditions true:"
 "total quantity","total quantity"
-"total amount","total amount"
+"total amount (excl. tax)","total amount (excl. tax)"
+"total amount (incl. tax)","total amount (incl. tax)"
 is,is
 "is not","is not"
 "equals or greater than","equals or greater than"
@@ -169,3 +170,6 @@ Apply,Apply
 "Sorry, something went wrong while triggering recollect totals for affected quotes. Please see log for details.","Sorry, something went wrong while triggering recollect totals for affected quotes. Please see log for details."
 "When coupon quantity exceeds %1, the coupon code length must be minimum %2", "When coupon quantity exceeds %1, the coupon code length must be minimum %2"
 "Discount amount is distributed among subtotal and shipping amount. Cases when multiple discounts applied to shipping amount are not supported. The option is going to be removed in future releases.ly","Discount amount is distributed among subtotal and shipping amount. Cases when multiple discounts applied to shipping amount are not supported. The option is going to be removed in future releases."
+"Coupon quantity should be less than or equal to the coupon quantity in the store configuration.","Coupon quantity should be less than or equal to the coupon quantity in the store configuration."
+"Code Quantity Limit","Code Quantity Limit"
+"For better performance max value allowed is 250,000. Set 0 to disable it.","For better performance max value allowed is 250,000. Set 0 to disable it."

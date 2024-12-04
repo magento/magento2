@@ -11,4 +11,11 @@
             <argument name="structure" xsi:type="object">Magento\Config\Model\Config\Structure\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="encryption_update_key_command" xsi:type="object">Magento\EncryptionKey\Console\Command\UpdateEncryptionKeyCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

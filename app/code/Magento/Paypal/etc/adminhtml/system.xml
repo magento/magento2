@@ -82,7 +82,7 @@
                     <label>Payments Pro</label>
                     <attribute type="activity_path">payment/paypal_payment_pro/active</attribute>
                     <group id="configuration_details">
-                        <comment>https://docs.magento.com/user-guide/payment/paypal-payments-pro.html</comment>
+                        <comment>https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/payments/paypal/paypal-payments-pro.html</comment>
                     </group>
                     <group id="paypal_payflow_required" showInDefault="1" showInWebsite="1" sortOrder="10">
                         <field id="enable_paypal_payflow">
@@ -102,7 +102,7 @@
                     <comment>Accept credit card and PayPal payments securely.</comment>
                     <attribute type="activity_path">payment/wps_express/active</attribute>
                     <group id="configuration_details">
-                        <comment>https://docs.magento.com/user-guide/payment/paypal-payments-standard.html</comment>
+                        <comment>https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/payments/paypal/paypal-payments-standard.html</comment>
                     </group>
                     <group id="express_checkout_required">
                         <group id="express_checkout_required_express_checkout">
@@ -184,7 +184,7 @@
                     <comment>Accept credit card and PayPal payments securely.</comment>
                     <attribute type="activity_path">payment/wps_express/active</attribute>
                     <group id="configuration_details">
-                        <comment>https://docs.magento.com/user-guide/payment/paypal-payments-standard.html</comment>
+                        <comment>https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/payments/paypal/paypal-payments-standard.html</comment>
                     </group>
                     <group id="express_checkout_required">
                         <group id="express_checkout_required_express_checkout" translate="label">
@@ -259,7 +259,7 @@
                     <comment>Accept credit card and PayPal payments securely.</comment>
                     <attribute type="activity_path">payment/wps_express/active</attribute>
                     <group id="configuration_details">
-                        <comment>https://docs.magento.com/user-guide/payment/paypal-payments-standard.html</comment>
+                        <comment>https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/payments/paypal/paypal-payments-standard.html</comment>
                     </group>
                     <group id="express_checkout_required">
                         <group id="express_checkout_required_express_checkout" translate="label">
@@ -306,7 +306,7 @@
                     <label>Website Payments Pro</label>
                     <attribute type="activity_path">payment/paypal_payment_pro/active</attribute>
                     <group id="configuration_details">
-                        <comment>https://docs.magento.com/user-guide/payment/paypal-payments-pro.html</comment>
+                        <comment>https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/payments/paypal/paypal-payments-pro.html</comment>
                     </group>
                     <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                         <group id="paypal_payflow_api_settings">

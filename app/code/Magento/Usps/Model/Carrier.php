@@ -94,13 +94,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_request = null;
 
     /**
-     * Rate result data
-     *
-     * @var Result|null
-     */
-    protected $_result = null;
-
-    /**
      * Default cgi gateway url
      *
      * @var string
@@ -815,6 +808,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
                 'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
                 'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
+                '1058' => __('Ground Advantage™'),
+                '4058' => __('Ground Advantage™ HAZMAT'),
+                '6058' => __('Ground Advantage™ Parcel locker'),
+                '2058' => __('Ground Advantage™ Hold for pickup'),
+                '4096' => __('Ground Advantage™ Cubic HAZMAT'),
+                '1096' => __('Ground Advantage™ Cubic'),
+                '2096' => __('Ground Advantage™ Cubic Hold for pickup'),
+                '6096' => __('Ground Advantage™ Cubic Parcel locker')
             ],
             'service_to_code' => [
                 '0_FCLE' => 'First Class',
@@ -891,6 +892,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_24' => 'Priority',
                 'INT_25' => 'Priority',
                 'INT_27' => 'Priority Express',
+                '1058' => 'Ground Advantage',
+                '4058' => 'Ground Advantage',
+                '6058' => 'Ground Advantage',
+                '2058' => 'Ground Advantage',
+                '4096' => 'Ground Advantage',
+                '1096' => 'Ground Advantage',
+                '2096' => 'Ground Advantage',
+                '6096' => 'Ground Advantage',
             ],
             'method_to_code' => [
                 'First-Class Mail Large Envelope' => '0_FCLE',

@@ -18,7 +18,7 @@ class Time extends AbstractBase
     /**
      * @inheritdoc
      */
-    protected function getType(): string
+    protected static function getType(): string
     {
         return ProductCustomOptionInterface::OPTION_TYPE_TIME;
     }

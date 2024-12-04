@@ -169,7 +169,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderSetPaymentOnCartWithException(): array
+    public static function dataProviderSetPaymentOnCartWithException(): array
     {
         return [
             'place_order_with_out_of_stock_products' => [
@@ -185,7 +185,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderSetPaymentOnCartWithExceptionWithDisabledInventoryCheck(): array
+    public static function dataProviderSetPaymentOnCartWithExceptionWithDisabledInventoryCheck(): array
     {
         return [
             'place_order_with_out_of_stock_products' => [

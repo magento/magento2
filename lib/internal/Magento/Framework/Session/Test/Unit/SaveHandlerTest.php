@@ -63,12 +63,12 @@ class SaveHandlerTest extends TestCase
 
         $this->sessionMaxSizeConfigMock = $this->getMockBuilder(SaveHandlerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSessionMaxSize'])
+            ->addMethods(['getSessionMaxSize'])
             ->getMock();
 
         $this->saveHandlerAdapterMock = $this->getMockBuilder(SaveHandlerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['write'])
+            ->onlyMethods(['write'])
             ->getMockForAbstractClass();
 
         $this->saveHandlerAdapterMock->expects($this->any())
@@ -77,7 +77,7 @@ class SaveHandlerTest extends TestCase
 
         $this->saveHandlerFactoryMock = $this->getMockBuilder(SaveHandlerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->saveHandlerFactoryMock->expects($this->any())

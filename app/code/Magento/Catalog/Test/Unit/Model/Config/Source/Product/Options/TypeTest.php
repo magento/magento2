@@ -28,7 +28,7 @@ class TypeTest extends TestCase
     protected function setUp(): void
     {
         $this->productOptionConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->setMethods(['getAll'])
+            ->onlyMethods(['getAll'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

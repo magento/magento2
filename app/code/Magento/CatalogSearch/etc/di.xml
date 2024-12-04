@@ -38,9 +38,6 @@
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="catalogsearchFulltextMassAction" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action"/>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Product\Category\Action\Rows">
-        <plugin name="catalogsearchFulltextCategoryAssignment" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Category\Action\Rows"/>
-    </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="catalogsearchFulltextIndexerStoreView" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View" />
     </type>
@@ -162,13 +159,6 @@
     <type name="Magento\Catalog\Model\Layer\Search">
         <arguments>
             <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\Context</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Search\Model\Autocomplete">
-        <arguments>
-            <argument name="dataProviders" xsi:type="array">
-                <item name="10" xsi:type="object">Magento\CatalogSearch\Model\Autocomplete\DataProvider</item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver">

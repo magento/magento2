@@ -16,9 +16,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Test\Fixture\AttributeOption as AttributeOptionFixture;
-use Magento\EavGraphQl\Model\Uid as EAVUid;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -127,16 +125,6 @@ class GetAddressesWithCustomAttributesTest extends GraphQlAbstract
     private $objectManager;
 
     /**
-     * @var EAVUid $eavUid
-     */
-    private $eavUid;
-
-    /**
-     * @var Uid $uid
-     */
-    private $uid;
-
-    /**
      * @var AttributeInterface|null
      */
     private $varcharCustomerAddressAttribute;
@@ -170,8 +158,6 @@ class GetAddressesWithCustomAttributesTest extends GraphQlAbstract
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
-        $this->uid = $this->objectManager->get(Uid::class);
-        $this->eavUid = $this->objectManager->get(EAVUid::class);
 
         $this->varcharCustomerAddressAttribute = DataFixtureStorageManager::getStorage()->get(
             'varchar_customer_address_attribute'
@@ -212,14 +198,12 @@ query {
         addresses {
             country_id
             custom_attributesV2 {
-                uid
                 code
                 ... on AttributeValue {
                     value
                 }
                 ... on AttributeSelectedOptions {
                     selected_options {
-                        uid
                         label
                         value
                     }
@@ -248,31 +232,17 @@ QUERY;
                             'country_id' => 'US',
                             'custom_attributesV2' => [
                                 [
-                                    'uid' => $this->eavUid->encode(
-                                        AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
-                                        $this->varcharCustomerAddressAttribute->getAttributeCode()
-                                    ),
                                     'code' => $this->varcharCustomerAddressAttribute->getAttributeCode(),
                                     'value' => 'Earth'
                                 ],
                                 [
-                                    'uid' => $this->eavUid->encode(
-                                        AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
-                                        $this->multiselectCustomerAddressAttribute->getAttributeCode()
-                                    ),
                                     'code' => $this->multiselectCustomerAddressAttribute->getAttributeCode(),
                                     'selected_options' => [
                                         [
-                                            'uid' => $this->uid->encode(
-                                                $this->multiselectCustomerAttributeOption2->getValue()
-                                            ),
                                             'label' => $this->multiselectCustomerAttributeOption2->getLabel(),
                                             'value' => $this->multiselectCustomerAttributeOption2->getValue(),
                                         ],
                                         [
-                                            'uid' => $this->uid->encode(
-                                                $this->multiselectCustomerAttributeOption1->getValue()
-                                            ),
                                             'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
                                             'value' => $this->multiselectCustomerAttributeOption1->getValue(),
                                         ]
@@ -297,15 +267,13 @@ query {
         email
         addresses {
             country_id
-            custom_attributesV2(uids: ["%s"]) {
-                uid
+            custom_attributesV2(attributeCodes: ["%s"]) {
                 code
                 ... on AttributeValue {
                     value
                 }
                 ... on AttributeSelectedOptions {
                     selected_options {
-                        uid
                         label
                         value
                     }
@@ -317,10 +285,7 @@ query {
 QUERY;
 
         $response = $this->graphQlQuery(
-            sprintf($query, $this->eavUid->encode(
-                AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
-                $this->multiselectCustomerAddressAttribute->getAttributeCode()
-            )),
+            sprintf($query, $this->multiselectCustomerAddressAttribute->getAttributeCode()),
             [],
             '',
             $this->getCustomerAuthHeaders($this->customer->getEmail(), $this->currentPassword)
@@ -337,23 +302,13 @@ QUERY;
                             'country_id' => 'US',
                             'custom_attributesV2' => [
                                 [
-                                    'uid' => $this->eavUid->encode(
-                                        AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
-                                        $this->multiselectCustomerAddressAttribute->getAttributeCode()
-                                    ),
                                     'code' => $this->multiselectCustomerAddressAttribute->getAttributeCode(),
                                     'selected_options' => [
                                         [
-                                            'uid' => $this->uid->encode(
-                                                $this->multiselectCustomerAttributeOption2->getValue()
-                                            ),
                                             'label' => $this->multiselectCustomerAttributeOption2->getLabel(),
                                             'value' => $this->multiselectCustomerAttributeOption2->getValue(),
                                         ],
                                         [
-                                            'uid' => $this->uid->encode(
-                                                $this->multiselectCustomerAttributeOption1->getValue()
-                                            ),
                                             'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
                                             'value' => $this->multiselectCustomerAttributeOption1->getValue(),
                                         ]

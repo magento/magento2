@@ -34,6 +34,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
         </after>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">

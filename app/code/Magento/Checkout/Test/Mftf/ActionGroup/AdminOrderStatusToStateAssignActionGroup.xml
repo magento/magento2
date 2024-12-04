@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/************************************************************************
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderStatusToStateAssignActionGroup" extends="AdminGoToOrderStatusPageActionGroup">
+        <annotations>
+            <description>Order Default Status assignation to Order State.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderStatus" type="string"/>
+            <argument name="orderState" type="string" />
+        </arguments>
+        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn" after="waitForPageLoaded"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{orderStatus}}" stepKey="selectOrderStatus"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{orderState}}" stepKey="selectOrderState"/>
+        <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
+        <checkOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
+        <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatus"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageVisible"/>
+        <see userInput="You assigned the order status." selector="{{AdminMessagesSection.success}}" stepKey="assertSaveSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -154,10 +154,9 @@ class CategoryManagementTest extends TestCase
     {
         $depth = null;
         $categoriesMock = $this->createMock(Collection::class);
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $categoryMock = $this->getMock(Category::class, 'categoryMock');
+
         $categoriesMock
             ->expects($this->once())
             ->method('getFirstItem')
@@ -199,15 +198,33 @@ class CategoryManagementTest extends TestCase
         $this->model->getTree();
     }
 
+    /**
+     * @param string $class
+     * @param string $mockClassName
+     * @return MockObject
+     */
+    private function getMock(string $class, string $mockClassName): MockObject
+    {
+        if (class_exists($mockClassName)) {
+            return new $mockClassName();
+        }
+
+        $mockBuilder = $this->getMockBuilder($class);
+        $mockBuilder->setMockClassName($mockClassName);
+        $mockBuilder->disableOriginalConstructor();
+        return $mockBuilder->getMockForAbstractClass();
+    }
+
     public function testMove()
     {
         $categoryId = 4;
         $parentId = 40;
         $afterId = null;
+
         $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
             ->disableOriginalConstructor()
             ->getMock();
+
         $parentCategoryMock = $this->getMockBuilder(Category::class)
             ->setMockClassName('parentCategoryMock')
             ->disableOriginalConstructor()
@@ -228,7 +245,11 @@ class CategoryManagementTest extends TestCase
         $parentCategoryMock->expects($this->exactly(3))->method('getPath')
             ->willReturnOnConsecutiveCalls('2/40', '2/3/40', '2/3/44/40');
         $categoryMock->expects($this->exactly(3))->method('move')
-            ->withConsecutive([$parentId, '7'], [$parentId, null], [$parentId, null]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($parentId) {
+                if ($arg1 == $parentId && ($arg2 == 7 || is_null($arg2))) {
+                    return null;
+                }
+            });
 
         $this->assertTrue($this->model->move($categoryId, $parentId, $afterId));
         $this->assertTrue($this->model->move($categoryId, $parentId));
@@ -243,11 +264,9 @@ class CategoryManagementTest extends TestCase
         $parentId = 1;
         $afterId = null;
         $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
             ->disableOriginalConstructor()
             ->getMock();
         $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('parentCategoryMock')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -272,11 +291,9 @@ class CategoryManagementTest extends TestCase
         $afterId = null;
         $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMockClassName('categoryMock')
             ->getMock();
         $parentCategoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMockClassName('parentCategoryMock')
             ->getMock();
 
         $this->categoryRepositoryMock

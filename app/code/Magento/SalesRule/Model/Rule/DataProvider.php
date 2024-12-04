@@ -11,7 +11,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 use Magento\SalesRule\Model\Rule;
 
 /**
- * Class DataProvider
+ * Data Provider for sales rule form
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
@@ -26,8 +26,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
@@ -103,6 +101,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $rule->setDiscountQty($rule->getDiscountQty() * 1);
 
             $this->loadedData[$rule->getId()] = $rule->getData();
+            $labels = $rule->getStoreLabels();
+            $this->loadedData[$rule->getId()]['store_labels'] = $labels;
         }
         $data = $this->dataPersistor->get('sale_rule');
         if (!empty($data)) {

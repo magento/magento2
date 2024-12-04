@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\I18n\Dictionary\Phrase;
 use Magento\Setup\Module\I18n\Parser\Adapter\Js;
@@ -33,8 +34,8 @@ class JsTest extends TestCase
     {
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/file.js';
         $this->_stringsCount = count(file($this->_testFile));
-
-        $this->_adapter = (new ObjectManager($this))->getObject(Js::class);
+        $filesystem = new File();
+        $this->_adapter = (new ObjectManager($this))->getObject(Js::class, ['filesystem' => $filesystem]);
     }
 
     public function testParse()
@@ -43,31 +44,31 @@ class JsTest extends TestCase
             [
                 'phrase' => 'Phrase 1',
                 'file' => $this->_testFile,
-                'line' => $this->_stringsCount - 4,
+                'line' => 1,
                 'quote' => Phrase::QUOTE_SINGLE,
             ],
             [
                 'phrase' => 'Phrase 2 %1',
                 'file' => $this->_testFile,
-                'line' => $this->_stringsCount - 3,
+                'line' => 1,
                 'quote' => Phrase::QUOTE_DOUBLE
             ],
             [
                 'phrase' => 'Field ',
                 'file' => $this->_testFile,
-                'line' => $this->_stringsCount - 2,
+                'line' => 1,
                 'quote' => Phrase::QUOTE_SINGLE
             ],
             [
                 'phrase' => ' is required.',
                 'file' => $this->_testFile,
-                'line' => $this->_stringsCount - 2,
+                'line' => 1,
                 'quote' => Phrase::QUOTE_SINGLE
             ],
             [
                 'phrase' => 'Welcome, %1!',
                 'file' => $this->_testFile,
-                'line' => $this->_stringsCount - 1,
+                'line' => 1,
                 'quote' => Phrase::QUOTE_SINGLE
             ]
         ];

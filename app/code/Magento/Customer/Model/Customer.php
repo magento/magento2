@@ -17,6 +17,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
@@ -45,7 +46,7 @@ use Magento\Framework\Indexer\IndexerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Customer extends \Magento\Framework\Model\AbstractModel
+class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Configuration paths for email templates and identities
@@ -341,13 +342,17 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getDataModel()
     {
         $customerData = $this->getData();
-        $addressesData = [];
+        $regularAddresses = $defaultAddresses = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
             if (!isset($this->storedAddress[$address->getId()])) {
                 $this->storedAddress[$address->getId()] = $address->getDataModel();
             }
-            $addressesData[] = $this->storedAddress[$address->getId()];
+            if ($this->storedAddress[$address->getId()]->isDefaultShipping()) {
+                $defaultAddresses[] = $this->storedAddress[$address->getId()];
+            } else {
+                $regularAddresses[] = $this->storedAddress[$address->getId()];
+            }
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -355,7 +360,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $customerDataObject->setAddresses($addressesData)
+        $customerDataObject->setAddresses(array_merge($defaultAddresses, $regularAddresses))
             ->setId($this->getId());
         return $customerDataObject;
     }
@@ -1402,5 +1407,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getPassword()
     {
         return (string) $this->getData('password');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_errors = [];
     }
 }

@@ -9,8 +9,10 @@ namespace Magento\User\Test\Unit\Block\Role\Tab;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
 use Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Acl\AclResource\ProviderInterface;
 use Magento\Framework\Acl\RootResource;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Helper\Data;
@@ -49,37 +51,44 @@ class EditTest extends TestCase
     {
         $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->rulesCollectionFactoryMock = $this
             ->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->aclRetrieverMock = $this->getMockBuilder(AclRetriever::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->aclResourceProviderMock = $this->getMockBuilder(
             ProviderInterface::class
         )->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->integrationDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
         $this->model = $this->objectManagerHelper->getObject(
             Edit::class,
             [
@@ -142,7 +151,7 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBoolValues()
+    public static function dataProviderBoolValues()
     {
         return [[true], [false]];
     }

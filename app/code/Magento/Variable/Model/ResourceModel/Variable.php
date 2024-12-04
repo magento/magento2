@@ -8,8 +8,6 @@ namespace Magento\Variable\Model\ResourceModel;
 
 /**
  * Custom variable resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Variable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

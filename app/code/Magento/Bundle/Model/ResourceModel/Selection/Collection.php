@@ -316,6 +316,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addPriceFilter($product, $searchMin, $useRegularPrice = false)
     {
         if ($product->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+            if (!$this->getStoreId()) {
+                $this->setStoreId($this->_storeManager->getStore()->getId());
+            }
             $this->addPriceData();
             if ($useRegularPrice) {
                 $minimalPriceExpression = self::INDEX_TABLE_ALIAS . '.price';

@@ -6,8 +6,6 @@
 declare(strict_types=1);
 /**
  * Widget Instance Main tab block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 

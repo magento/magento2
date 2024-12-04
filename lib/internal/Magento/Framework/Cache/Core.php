@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Cache;
 
+use Magento\Framework\Cache\Backend\Redis;
+use Zend_Cache;
+use Zend_Cache_Exception;
+
 class Core extends \Zend_Cache_Core
 {
     /**
@@ -114,6 +118,34 @@ class Core extends \Zend_Cache_Core
     {
         $tags = $this->_tags($tags);
         return parent::getIdsNotMatchingTags($tags);
+    }
+
+    /**
+     * Validate a cache id or a tag (security, reliable filenames, reserved prefixes...)
+     *
+     * Throw an exception if a problem is found
+     *
+     * @param  string $string Cache id or tag
+     * @throws Zend_Cache_Exception
+     * @return void
+     */
+    protected function _validateIdOrTag($string)
+    {
+        if ($this->_backend instanceof Redis) {
+            if (!is_string($string)) {
+                Zend_Cache::throwException('Invalid id or tag : must be a string');
+            }
+            if (substr($string, 0, 9) == 'internal-') {
+                Zend_Cache::throwException('"internal-*" ids or tags are reserved');
+            }
+            if (!preg_match('~^[a-zA-Z0-9_{}]+$~D', $string)) {
+                Zend_Cache::throwException("Invalid id or tag '$string' : must use only [a-zA-Z0-9_{}]");
+            }
+
+            return;
+        }
+
+        parent::_validateIdOrTag($string);
     }
 
     /**

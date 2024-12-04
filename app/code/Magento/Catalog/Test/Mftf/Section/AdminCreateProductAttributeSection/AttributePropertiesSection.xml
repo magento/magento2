@@ -33,5 +33,6 @@
         <element name="dropdownNthOptionDelete" type="button" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) button[title='Delete']" parameterized="true"/>
         <element name="attributeLabelValidationError" type="text" selector=".field-attribute_label .mage-error"/>
         <element name="AttributeCode" type="input" selector="#attribute_code"/>
+        <element name="defaultRadioButton" type="radio" selector="//*[@id='swatch_window_option_option_{{position}}']/parent::td/parent::tr/td[@class='col-default']" parameterized="true"/>
     </section>
 </sections>

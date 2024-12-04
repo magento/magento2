@@ -3,7 +3,7 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-sales": "*",
         "magento/module-store": "*",
@@ -11,7 +11,9 @@
         "magento/module-tax": "*",
         "magento/module-quote": "*",
         "magento/module-graph-ql": "*",
-        "magento/module-shipping": "*"
+        "magento/module-shipping": "*",
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-quote-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",

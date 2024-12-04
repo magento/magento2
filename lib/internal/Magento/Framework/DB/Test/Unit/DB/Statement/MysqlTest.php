@@ -143,9 +143,33 @@ class MysqlTest extends TestCase
             ->willReturn($this->pdoStatementMock);
         $this->pdoStatementMock->expects($this->exactly(2))
             ->method('bindParam')
-            ->withConsecutive(
-                [':param1', $param1Value, $param1DataType, $param1Length, $param1DriverOptions],
-                [':param2', 'value2', \PDO::PARAM_STR, 6, null]
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2,
+                    $arg3,
+                    $arg4,
+                    $arg5
+                ) use (
+                    $param1Value,
+                    $param1DataType,
+                    $param1Length,
+                    $param1DriverOptions
+                ) {
+                    if ($arg1 == ':param1' &&
+                        $arg2 == $param1Value &&
+                        $arg3 == $param1DataType &&
+                        $arg4 == $param1Length &&
+                        $arg5 == $param1DriverOptions) {
+                        return true;
+                    } elseif ($arg1 == ':param2' &&
+                        $arg2 == 'value2' &&
+                        $arg3 == \PDO::PARAM_STR &&
+                        $arg4 == 6 &&
+                        $arg5 == null) {
+                        return true;
+                    }
+                }
             );
         $this->pdoStatementMock->expects($this->once())
             ->method('execute');

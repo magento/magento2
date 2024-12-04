@@ -300,7 +300,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      * @dataProvider taxDataProvider
      * @return void
      */
-    public function testTaxCalculation($configData, $quoteData, $expectedResults)
+    public function testTaxCalculation($config_data, $quote_data, $expected_results)
     {
         $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -310,12 +310,12 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
         }
         $db->restoreFromDbDump();
         //Setup tax configurations
-        $this->setupUtil->setupTax($configData);
+        $this->setupUtil->setupTax($config_data);
 
-        $quote = $this->setupUtil->setupQuote($quoteData);
+        $quote = $this->setupUtil->setupQuote($quote_data);
         $quoteAddress = $quote->getShippingAddress();
         $this->totalsCollector->collectAddressTotals($quote, $quoteAddress);
-        $this->verifyResult($quoteAddress, $expectedResults);
+        $this->verifyResult($quoteAddress, $expected_results);
 
         $skus = array_map(function ($item) {
             return $item['sku'];
@@ -329,7 +329,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return array
      */
-    public function taxDataProvider()
+    public static function taxDataProvider()
     {
         global $taxCalculationData;
         return $taxCalculationData;

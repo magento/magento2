@@ -72,7 +72,7 @@
                 </validation>
                 <dataType>text</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/user-guide/stores/websites-stores-views.html</link>
+                    <link>https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html</link>
                     <description translate="true">You can adjust the scope of this synonym group by selecting an option from the list.</description>
                 </tooltip>
                 <label translate="true">Scope</label>

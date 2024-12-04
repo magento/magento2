@@ -14,7 +14,7 @@
 .lib-font-size-value(
     @_value
 ) when not (@_value = false) and not (@_value = '') and (@font-size-unit-convert) {
-    @fontValue: unit(((@_value) * 1), @font-size-unit) / @font-size-unit-ratio;
+    @fontValue: (unit(((@_value) * 1), @font-size-unit) / @font-size-unit-ratio);
 }
 .lib-font-size-value(
     @_value

@@ -37,6 +37,7 @@
             <!--Revert persistent configuration to default-->
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

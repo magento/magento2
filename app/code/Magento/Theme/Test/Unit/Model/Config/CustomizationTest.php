@@ -54,7 +54,7 @@ class CustomizationTest extends TestCase
 
         $this->themeProviderMock = $this->getMockBuilder(ThemeProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getThemeCustomizations', 'getThemeByFullPath'])
+            ->onlyMethods(['getThemeCustomizations', 'getThemeByFullPath'])
             ->getMock();
 
         $this->storeThemesResolver = $this->createMock(StoreThemesResolverInterface::class);

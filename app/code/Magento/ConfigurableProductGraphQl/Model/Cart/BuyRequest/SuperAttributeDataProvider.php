@@ -12,24 +12,30 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\StockStateException;
 use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Stdlib\ArrayManagerFactory;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 
 /**
  * DataProvider for building super attribute options in buy requests
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 {
     /**
-     * @var ArrayManager
+     * @var ArrayManagerFactory
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $arrayManager;
+    private readonly ArrayManagerFactory $arrayManagerFactory;
 
     /**
      * @var ProductRepositoryInterface
@@ -52,20 +58,24 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
     private $stockState;
 
     /**
-     * @param ArrayManager $arrayManager
+     * @param ArrayManager $arrayManager @deprecated @see $arrayManagerFactory
      * @param ProductRepositoryInterface $productRepository
      * @param OptionCollection $optionCollection
      * @param MetadataPool $metadataPool
      * @param StockStateInterface $stockState
+     * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ArrayManager $arrayManager,
         ProductRepositoryInterface $productRepository,
         OptionCollection $optionCollection,
         MetadataPool $metadataPool,
-        StockStateInterface $stockState
+        StockStateInterface $stockState,
+        ?ArrayManagerFactory $arrayManagerFactory = null,
     ) {
-        $this->arrayManager = $arrayManager;
+        $this->arrayManagerFactory = $arrayManagerFactory
+            ?? ObjectManager::getInstance()->get(ArrayManagerFactory::class);
         $this->productRepository = $productRepository;
         $this->optionCollection = $optionCollection;
         $this->metadataPool = $metadataPool;
@@ -77,13 +87,13 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(array $cartItemData): array
     {
-        $parentSku = $this->arrayManager->get('parent_sku', $cartItemData);
+        $parentSku = $this->arrayManagerFactory->create()->get('parent_sku', $cartItemData);
         if ($parentSku === null) {
             return [];
         }
-        $sku = $this->arrayManager->get('data/sku', $cartItemData);
-        $qty = $this->arrayManager->get('data/quantity', $cartItemData);
-        $cart = $this->arrayManager->get('model', $cartItemData);
+        $sku = $this->arrayManagerFactory->create()->get('data/sku', $cartItemData);
+        $qty = $this->arrayManagerFactory->create()->get('data/quantity', $cartItemData);
+        $cart = $this->arrayManagerFactory->create()->get('model', $cartItemData);
         if (!$cart instanceof Quote) {
             throw new LocalizedException(__('"model" value should be specified'));
         }

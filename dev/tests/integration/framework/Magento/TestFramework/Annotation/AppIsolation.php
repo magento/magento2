@@ -92,7 +92,7 @@ class AppIsolation
             ExceptionHandler::handle(
                 'Unable to parse annotations',
                 get_class($test),
-                $test->getName(false),
+                $test->name(),
                 $exception
             );
         }

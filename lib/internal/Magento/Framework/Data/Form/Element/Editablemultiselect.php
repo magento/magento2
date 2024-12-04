@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,8 +9,6 @@
  * Form editable select element
  *
  * Element allows inline modification of textual data within select
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Data\Form\Element;
 
@@ -70,7 +69,7 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
      *
      * This class must define init() method and receive configuration in the constructor
      */
-    const DEFAULT_ELEMENT_JS_CLASS = 'EditableMultiselect';
+    public const DEFAULT_ELEMENT_JS_CLASS = 'EditableMultiselect';
 
     /**
      * Retrieve HTML markup of the element
@@ -142,11 +141,12 @@ script
      *
      * @param array $option
      * @param string[] $selected
+     *
      * @return string
      */
     protected function _optionToHtml($option, $selected)
     {
-        $optionId = 'optId' .$this->random->getRandomString(8);
+        $optionId = 'optId' . $this->random->getRandomString(8);
         $html = '<option value="' . $this->_escape($option['value']) . '" id="' . $optionId . '" ';
         $html .= isset($option['title']) ? 'title="' . $this->_escape($option['title']) . '"' : '';
         if (in_array((string)$option['value'], $selected)) {

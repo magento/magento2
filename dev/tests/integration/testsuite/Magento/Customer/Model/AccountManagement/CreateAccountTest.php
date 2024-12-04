@@ -168,77 +168,77 @@ class CreateAccountTest extends TestCase
     /**
      * @return array
      */
-    public function createInvalidAccountDataProvider(): array
+    public static function createInvalidAccountDataProvider(): array
     {
         return [
             'empty_firstname' => [
-                'customer_data' => ['firstname' => ''],
+                'customerData' => ['firstname' => ''],
                 'password' => '_aPassword1',
-                'error_type' =>  Exception::class,
-                'error_message' => ['"%1" is a required value.', 'First Name'],
+                'errorType' =>  Exception::class,
+                'errorMessage' => ['"%1" is a required value.', 'First Name'],
             ],
             'empty_lastname' => [
-                'customer_data' => ['lastname' => ''],
+                'customerData' => ['lastname' => ''],
                 'password' => '_aPassword1',
-                'error_type' =>  Exception::class,
-                'error_message' => ['"%1" is a required value.', 'Last Name'],
+                'errorType' =>  Exception::class,
+                'errorMessage' => ['"%1" is a required value.', 'Last Name'],
             ],
             'empty_email' => [
-                'customer_data' => ['email' => ''],
+                'customerData' => ['email' => ''],
                 'password' => '_aPassword1',
-                'error_type' => Exception::class,
-                'error_message' => ['The customer email is missing. Enter and try again.'],
+                'errorType' => Exception::class,
+                'errorMessage' => ['The customer email is missing. Enter and try again.'],
             ],
             'invalid_email' => [
-                'customer_data' => ['email' => 'zxczxczxc'],
+                'customerData' => ['email' => 'zxczxczxc'],
                 'password' => '_aPassword1',
-                'error_type' => Exception::class,
-                'error_message' => ['"%1" is not a valid email address.', 'Email'],
+                'errorType' => Exception::class,
+                'errorMessage' => ['"%1" is not a valid email address.', 'Email'],
             ],
             'empty_password' => [
-                'customer_data' => [],
+                'customerData' => [],
                 'password' => '',
-                'error_type' => InputException::class,
-                'error_message' => ['The password needs at least 8 characters. Create a new password and try again.'],
+                'errorType' => InputException::class,
+                'errorMessage' => ['The password needs at least 8 characters. Create a new password and try again.'],
             ],
             'invalid_password_minimum_length' => [
-                'customer_data' => [],
+                'customerData' => [],
                 'password' => 'test',
-                'error_type' => InputException::class,
-                'error_message' => ['The password needs at least 8 characters. Create a new password and try again.'],
+                'errorType' => InputException::class,
+                'errorMessage' => ['The password needs at least 8 characters. Create a new password and try again.'],
             ],
             'invalid_password_maximum_length' => [
-                'customer_data' => [],
-                'password' => $this->getRandomNumericString(257),
-                'error_type' => InputException::class,
-                'error_message' => ['Please enter a password with at most 256 characters.'],
+                'customerData' => [],
+                'password' => self::getRandomNumericString(257),
+                'errorType' => InputException::class,
+                'errorMessage' => ['Please enter a password with at most 256 characters.'],
             ],
             'invalid_password_without_minimum_characters_classes' => [
-                'customer_data' => [],
+                'customerData' => [],
                 'password' => 'test_password',
-                'error_type' => InputException::class,
-                'error_message' => [
+                'errorType' => InputException::class,
+                'errorMessage' => [
                     'Minimum of different classes of characters in password is %1.'
                     . ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
                     3,
                 ],
             ],
             'password_same_as_email' => [
-                'customer_data' => ['email' => 'test1@test.com'],
+                'customerData' => ['email' => 'test1@test.com'],
                 'password' => 'test1@test.com',
-                'error_type' => LocalizedException::class,
-                'error_message' => [
+                'errorType' => LocalizedException::class,
+                'errorMessage' => [
                     'The password can\'t be the same as the email address. Create a new password and try again.',
                 ],
             ],
             'send_email_store_id_not_match_website' => [
-                'customer_data' => [
+                'customerData' => [
                     CustomerInterface::WEBSITE_ID => 1,
                     CustomerInterface::STORE_ID => 5,
                 ],
                 'password' => '_aPassword1',
-                'error_type' => LocalizedException::class,
-                'error_message' => [
+                'errorType' => LocalizedException::class,
+                'errorMessage' => [
                     'The store view is not in the associated website.',
                 ],
             ],
@@ -421,6 +421,8 @@ class CreateAccountTest extends TestCase
         $customerData = $this->customerRepository->getById($customerId);
         $customerData->getAddresses()[1]->setRegion(null)->setCountryId($allowedCountryIdForSecondWebsite)
             ->setRegionId(null);
+        $customerData->getAddresses()[1]->setIsDefaultBilling(true);
+        $customerData->getAddresses()[1]->setIsDefaultShipping(true);
         $customerData->setStoreId($store->getId())->setWebsiteId($store->getWebsiteId())->setId(null);
         $password = $this->random->getRandomString(8);
         $passwordHash = $this->encryptor->getHash($password, true);
@@ -649,7 +651,7 @@ class CreateAccountTest extends TestCase
      * @param int $length
      * @return string
      */
-    private function getRandomNumericString(int $length): string
+    private static function getRandomNumericString(int $length): string
     {
         $string = '';
         for ($i = 0; $i <= $length; $i++) {

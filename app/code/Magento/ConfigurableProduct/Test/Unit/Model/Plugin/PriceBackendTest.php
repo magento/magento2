@@ -53,7 +53,8 @@ class PriceBackendTest extends TestCase
             ->getMock();
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getPriceType'])
+            ->onlyMethods(['getTypeId'])
+            ->addMethods(['getPriceType'])
             ->getMock();
     }
 
@@ -81,11 +82,11 @@ class PriceBackendTest extends TestCase
      *
      * @return array
      */
-    public function aroundValidateDataProvider()
+    public static function aroundValidateDataProvider()
     {
         return [
-            ['type' => Configurable::TYPE_CODE, 'result' => true],
-            ['type' => Type::TYPE_VIRTUAL, 'result' => static::CLOSURE_VALUE],
+            ['typeId' => Configurable::TYPE_CODE, 'expectedResult' => true],
+            ['typeId' => Type::TYPE_VIRTUAL, 'expectedResult' => static::CLOSURE_VALUE],
         ];
     }
 }

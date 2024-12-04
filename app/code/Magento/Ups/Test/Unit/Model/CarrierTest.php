@@ -36,9 +36,9 @@ use Psr\Log\LoggerInterface;
  */
 class CarrierTest extends TestCase
 {
-    const FREE_METHOD_NAME = 'free_method';
+    public const FREE_METHOD_NAME = 'free_method';
 
-    const PAID_METHOD_NAME = 'paid_method';
+    public const PAID_METHOD_NAME = 'paid_method';
 
     /**
      * @var Error|MockObject
@@ -137,7 +137,6 @@ class CarrierTest extends TestCase
         $this->countryFactory->method('create')
             ->willReturn($this->country);
 
-        $xmlFactory = $this->getXmlFactory();
         $httpClientFactory = $this->getHttpClientFactory();
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -154,7 +153,6 @@ class CarrierTest extends TestCase
                 'rateErrorFactory' => $this->errorFactory,
                 'countryFactory' => $this->countryFactory,
                 'rateFactory' => $rateFactory,
-                'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
                 'httpClientFactory' => $httpClientFactory,
                 'configHelper' => $this->configHelper
@@ -178,11 +176,9 @@ class CarrierTest extends TestCase
             'carriers/ups/title' => 'ups Title',
             'carriers/ups/specificerrmsg' => 'ups error message',
             'carriers/ups/min_package_weight' => 2,
-            'carriers/ups/type' => 'UPS',
             'carriers/ups/debug' => 1,
             'carriers/ups/username' => 'user',
-            'carriers/ups/password' => 'pass',
-            'carriers/ups/access_license_number' => 'acn'
+            'carriers/ups/password' => 'pass'
         ];
 
         return $pathMap[$path] ?? null;
@@ -223,7 +219,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function getMethodPriceProvider(): array
+    public static function getMethodPriceProvider(): array
     {
         return [
             [3, self::FREE_METHOD_NAME, true, 6, 0],
@@ -275,80 +271,6 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @param string $data
-     * @param array $maskFields
-     * @param string $expected
-     *
-     * @return void
-     * @dataProvider logDataProvider
-     */
-    public function testFilterDebugData($data, array $maskFields, $expected): void
-    {
-        $refClass = new \ReflectionClass(Carrier::class);
-        $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
-        $property->setAccessible(true);
-        $property->setValue($this->model, $maskFields);
-
-        $refMethod = $refClass->getMethod('filterDebugData');
-        $refMethod->setAccessible(true);
-        $result = $refMethod->invoke($this->model, $data);
-        $expectedXml = new \SimpleXMLElement($expected);
-        $resultXml = new \SimpleXMLElement($result);
-        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
-    }
-
-    /**
-     * Get list of variations.
-     *
-     * @return array
-     */
-    public function logDataProvider(): array
-    {
-        return [
-            [
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <UserId>42121</UserId>
-                    <Password>TestPassword</Password>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-                ['UserId', 'Password'],
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <UserId>****</UserId>
-                    <Password>****</Password>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>'
-            ],
-            [
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <Auth>
-                        <UserId>1231</UserId>
-                    </Auth>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-                ['UserId'],
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <Auth>
-                        <UserId>****</UserId>
-                    </Auth>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>'
-            ]
-        ];
-    }
-
-    /**
      * @param array $requestData
      * @param array $rawRequestData
      *
@@ -372,7 +294,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function countryDataProvider(): array
+    public static function countryDataProvider(): array
     {
         return [
             [
@@ -469,7 +391,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function requestToShipmentDataProvider(): array
+    public static function requestToShipmentDataProvider(): array
     {
         return [
             [
@@ -505,7 +427,7 @@ class CarrierTest extends TestCase
                     'recipient_address_country_code' => 'US',
                     'shipper_address_state_or_province_code' => 'PR',
                     'shipper_address_postal_code' => '00968',
-                    'shipper_address_country_code' => 'PR',
+                    'shipper_address_country_code' => 'US',
                 ]
             ],
             [
@@ -520,7 +442,7 @@ class CarrierTest extends TestCase
                 [
                     'recipient_address_state_or_province_code' => 'PR',
                     'recipient_address_postal_code' => '00968',
-                    'recipient_address_country_code' => 'PR',
+                    'recipient_address_country_code' => 'US',
                     'shipper_address_state_or_province_code' => 'CA',
                     'shipper_address_postal_code' => '90230',
                     'shipper_address_country_code' => 'US',
@@ -597,7 +519,7 @@ class CarrierTest extends TestCase
     /**
      * @return array
      */
-    public function allowedMethodsDataProvider(): array
+    public static function allowedMethodsDataProvider(): array
     {
         return [
             [
@@ -623,38 +545,16 @@ class CarrierTest extends TestCase
                 'UPS Next Day Air',
                 '01,02,03',
                 ['01' => 'UPS Next Day Air']
+            ],
+            [
+                'UPS_REST',
+                'originShipment',
+                '03',
+                'UPS Ground',
+                '01,02,03',
+                ['03' => 'UPS Ground']
             ]
         ];
-    }
-
-    /**
-     * Creates mock for XML factory.
-     *
-     * @return ElementFactory|MockObject
-     */
-    private function getXmlFactory(): MockObject
-    {
-        $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $xmlElFactory->method('create')
-            ->willReturnCallback(
-                function ($data) {
-                    $helper = new ObjectManager($this);
-
-                    if (empty($data['data'])) {
-                        $data['data'] = '<?xml version = "1.0" ?><ShipmentAcceptRequest/>';
-                    }
-
-                    return $helper->getObject(
-                        Element::class,
-                        ['data' => $data['data']]
-                    );
-                }
-            );
-
-        return $xmlElFactory;
     }
 
     /**

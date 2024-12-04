@@ -40,11 +40,11 @@ class ReportProductDeletedToNewRelicTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCustomParameter'])
+            ->onlyMethods(['addCustomParameter'])
             ->getMock();
 
         $this->model = new ReportProductDeletedToNewRelic(

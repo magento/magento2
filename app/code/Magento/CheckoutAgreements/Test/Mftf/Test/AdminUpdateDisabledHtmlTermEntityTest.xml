@@ -23,7 +23,9 @@
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
 
             <createData entity="SimpleTwo" stepKey="createProduct"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>

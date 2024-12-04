@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangePriceDisplaySettingsActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Change the data for 'Price Display Settings'.</description>
+        </annotations>
+        <!-- change display setting configurations -->
+        <scrollTo selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" stepKey="scrollToTaxPricesDisplaySection"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" visible="true" stepKey="openPriceDisplaySettings"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
+        <selectOption userInput="Including and Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayProductPrices}}" stepKey="clickDisplayProductPrices"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayShippingPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayShippingPricesInherit}}" visible="true" stepKey="clickDisplayShippingPricesCheckBox"/>
+        <selectOption userInput="Including and Excluding Tax" selector="{{AdminConfigureTaxSection.taxDisplayShippingPrices}}" stepKey="clickDisplayShippingPrices"/>
+    </actionGroup>
+</actionGroups>

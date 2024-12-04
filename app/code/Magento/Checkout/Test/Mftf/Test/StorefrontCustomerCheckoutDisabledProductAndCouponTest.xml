@@ -34,6 +34,7 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createUSCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductListing"/>

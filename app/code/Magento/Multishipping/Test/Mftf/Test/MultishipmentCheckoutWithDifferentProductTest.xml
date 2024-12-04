@@ -97,6 +97,7 @@
             <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteAllProducts"/>
 
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete the Created Color attribute-->
             <actionGroup ref="AdminDeleteCreatedColorSpecificAttributeActionGroup" stepKey="deleteWhiteColorAttribute">

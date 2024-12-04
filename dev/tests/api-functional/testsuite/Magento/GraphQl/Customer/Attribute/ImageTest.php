@@ -10,7 +10,6 @@ namespace Magento\GraphQl\Customer\Attribute;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Test\Fixture\CustomerAttribute;
-use Magento\EavGraphQl\Model\Uid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -25,7 +24,6 @@ class ImageTest extends GraphQlAbstract
 {
   customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
       code
       label
       entity_type
@@ -64,11 +62,6 @@ QRY;
         /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
-        );
-
         $formattedValidationRules = Bootstrap::getObjectManager()->get(FormatValidationRulesCommand::class)->execute(
             $attribute->getValidationRules()
         );
@@ -80,7 +73,6 @@ QRY;
                 'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER',

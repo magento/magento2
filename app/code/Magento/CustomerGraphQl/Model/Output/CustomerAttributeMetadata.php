@@ -11,27 +11,15 @@ use Magento\Customer\Api\MetadataInterface;
 use Magento\Customer\Model\Data\ValidationRule;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\EavGraphQl\Model\Output\GetAttributeDataInterface;
-use Magento\EavGraphQl\Model\Uid as AttributeUid;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
-use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Format attributes metadata for GraphQL output
  */
 class CustomerAttributeMetadata implements GetAttributeDataInterface
 {
-    /**
-     * @var AttributeUid
-     */
-    private AttributeUid $attributeUid;
-
-    /**
-     * @var Uid
-     */
-    private Uid $uid;
-
     /**
      * @var EnumLookup
      */
@@ -48,21 +36,15 @@ class CustomerAttributeMetadata implements GetAttributeDataInterface
     private string $entityType;
 
     /**
-     * @param AttributeUid $attributeUid
-     * @param Uid $uid
      * @param EnumLookup $enumLookup
      * @param MetadataInterface $metadata
      * @param string $entityType
      */
     public function __construct(
-        AttributeUid $attributeUid,
-        Uid $uid,
         EnumLookup $enumLookup,
         MetadataInterface $metadata,
         string $entityType
     ) {
-        $this->attributeUid = $attributeUid;
-        $this->uid = $uid;
         $this->enumLookup = $enumLookup;
         $this->metadata = $metadata;
         $this->entityType = $entityType;
@@ -103,8 +85,7 @@ class CustomerAttributeMetadata implements GetAttributeDataInterface
 
         if ($attributeMetadata->isVisible()) {
             $data = [
-                'input_filter' =>
-                    empty($attributeMetadata->getInputFilter())
+                'input_filter' => empty($attributeMetadata->getInputFilter())
                         ? 'NONE'
                         : $this->enumLookup->getEnumValueFromField(
                             'InputFilterEnum',

@@ -157,7 +157,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function getPrepareDataProvider(): array
+    public static function getPrepareDataProvider(): array
     {
         return [
             [
@@ -289,16 +289,22 @@ class DateTest extends TestCase
         }
         $this->filterBuilderMock
             ->method('setConditionType')
-            ->withConsecutive(...$setConditionTypeWithArgs)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$setConditionTypeWithArgs) {
+                return $this->filterBuilderMock;
+            });
+
         $this->filterBuilderMock
             ->method('setField')
-            ->withConsecutive(...$setFieldWithArgs)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$setFieldWithArgs) {
+                return $this->filterBuilderMock;
+            });
+
         $this->filterBuilderMock
             ->method('setValue')
-            ->withConsecutive(...$setValueWithArgs)
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$setFieldWithArgs) {
+                return $this->filterBuilderMock;
+            });
+
         $this->filterBuilderMock
             ->method('create')
             ->willReturnOnConsecutiveCalls(...$createReturnArgs);

@@ -11,7 +11,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Mail;
+use Magento\Indexer\Model\Indexer\Collection;
 use Magento\TestFramework;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Psr\Log\LoggerInterface;
@@ -567,9 +569,11 @@ class Application
         );
 
         $this->runPostInstallCommands();
+        $this->makeIndexStatusRealtime();
 
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();
+
         $this->_shell->execute(
             PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
             [BP . '/bin/magento', $initParamsQuery]
@@ -745,7 +749,7 @@ class Application
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             mkdir($dir, 0777, true);
             umask($old);
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
         }
@@ -824,5 +828,91 @@ class Application
             DirectoryList::VAR_IMPORT_EXPORT => [$path => "{$this->installDir}/var"],
         ];
         return $customDirs;
+    }
+
+    /**
+     * Initialize the application and set the index status to realtime.
+     *
+     * @return void
+     */
+    private function makeIndexStatusRealtime(): void
+    {
+        $overriddenParams = $this->getOverriddenParams();
+        $directoryList = $this->getDirectoryList($overriddenParams);
+        $objectManager = $this->getObjectManagers($overriddenParams, $directoryList);
+        Helper\Bootstrap::setObjectManager($objectManager);
+        $objectManagerConfiguration = [
+            'preferences' => [
+                \Magento\Framework\App\State::class => TestFramework\App\State::class
+            ]
+        ];
+        $objectManager->configure($objectManagerConfiguration);
+        $this->setIndexerToRealtime($objectManager);
+    }
+
+    /**
+     * Retrieves the overridden parameters.
+     *
+     * @return array
+     */
+    private function getOverriddenParams(): array
+    {
+        $overriddenParams[\Magento\Framework\App\State::PARAM_MODE] = $this->_appMode;
+        return $this->_customizeParams($overriddenParams);
+    }
+
+    /**
+     * Retrieves the directory list.
+     *
+     * @param array $overriddenParams
+     * @return DirectoryList
+     */
+    private function getDirectoryList($overriddenParams): DirectoryList
+    {
+        $directories = isset($overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
+            ? $overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
+            : [];
+        return new DirectoryList(BP, $directories);
+    }
+
+    /**
+     * Retrieves the object manager.
+     *
+     * @param array $overriddenParams
+     * @param DirectoryList $directoryList The directory list.
+     * @return ObjectManager
+     */
+    private function getObjectManagers($overriddenParams, $directoryList): ObjectManager
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        if (!$objectManager) {
+            $objectManager = $this->_factory->create($overriddenParams);
+            $objectManager->addSharedInstance($directoryList, DirectoryList::class);
+            $objectManager->addSharedInstance($directoryList, \Magento\Framework\Filesystem\DirectoryList::class);
+        } else {
+            $objectManager = $this->_factory->restore($objectManager, $directoryList, $overriddenParams);
+        }
+        return $objectManager;
+    }
+
+    /**
+     * Sets the indexer mode to realtime.
+     *
+     * @param ObjectManager $objectManager
+     * @return void
+     */
+    private function setIndexerToRealtime($objectManager): void
+    {
+        /** @var Collection $indexCollection */
+        $indexCollection = $objectManager->get(Collection::class);
+        $indexerIds = $indexCollection->getAllIds();
+        if (!empty($indexerIds)) {
+            foreach ($indexerIds as $indexerId) {
+                /** @var IndexerInterface $model */
+                $model = $objectManager->get(IndexerRegistry::class)
+                    ->get($indexerId);
+                $model->setScheduled(false);
+            }
+        }
     }
 }

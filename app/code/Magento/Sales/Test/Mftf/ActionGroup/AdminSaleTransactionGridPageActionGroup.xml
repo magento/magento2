@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSaleTransactionGridPageActionGroup">
+        <arguments>
+            <argument name="orderId" type="string"/>
+            <argument name="txnType" type="string"/>
+            <argument name="closed" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminSaleTransactionGridSection.searchOrderId}}" stepKey="waitForOrderIdFieldVisible"/>
+        <fillField userInput="{{orderId}}" selector="{{AdminSaleTransactionGridSection.searchOrderId}}" stepKey="fillOrderIdField"/>
+        <waitForElementVisible selector="{{AdminSaleTransactionGridSection.selectTxnType}}" stepKey="waitForTransactionTypeVisible"/>
+        <selectOption userInput="{{txnType}}" selector="{{AdminSaleTransactionGridSection.selectTxnType}}" stepKey="selectTransactionType"/>
+        <waitForElementClickable selector="{{AdminSaleTransactionGridSection.searchButton}}" stepKey="waitForSearchButtonVisible"/>
+        <click selector="{{AdminSaleTransactionGridSection.searchButton}}" stepKey="clickOnSearchButtonForFilter"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminSaleTransactionGridSection.gridTransactionFirstRowForType}}" stepKey="waitForTxnType"/>
+        <grabTextFrom selector="{{AdminSaleTransactionGridSection.gridTransactionFirstRowForType}}" stepKey="grabTextFromTxnTypeGrid"/>
+        <grabTextFrom selector="{{AdminSaleTransactionGridSection.gridTransactionFirstRowForClosed}}" stepKey="grabTextFromClosedGrid"/>
+        <assertEquals message="compareTxnType" stepKey="assertCompareTxnType">
+            <actualResult type="variable">grabTextFromTxnTypeGrid</actualResult>
+            <expectedResult type="string">{{txnType}}</expectedResult>
+        </assertEquals>
+        <assertEquals message="compareClosedType" stepKey="assertCompareClosedType">
+            <actualResult type="variable">grabTextFromClosedGrid</actualResult>
+            <expectedResult type="string">{{closed}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

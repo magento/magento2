@@ -11,6 +11,7 @@ use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Framework\Serialize\SerializerInterface;
 
@@ -45,7 +46,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Default quality value (for JPEG images only).
      *
      * @var int
-     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1
+     * @see Use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     protected $_quality = null;
 
@@ -101,7 +103,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var int
-     * @deprecated unused
+     * @deprecated
+     * @see Not used anymore
      */
     protected $_angle;
 
@@ -307,7 +310,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $quality
      * @return $this
-     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1
+     * @see Use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     public function setQuality($quality)
     {
@@ -457,6 +461,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Get new file
      *
      * @deprecated 102.0.0
+     * @see Image::getBaseFile
      * @return bool|string
      */
     public function getNewFile()
@@ -836,37 +841,15 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function clearCache()
     {
         $directory = $this->_catalogProductMediaConfig->getBaseMediaPath() . '/cache';
-        $directoryToDelete = $directory;
-        // Fixes issue when deleting cache directory at the same time that images are being
-        // lazy-loaded on storefront leading to new directories and files generation in the cache directory
-        // that would prevent deletion of the cache directory.
-        // RCA: the method delete() recursively enumerates and delete all subdirectories and files before deleting
-        // the target directory, which gives other processes time to create directories and files in the same directory.
-        // Solution: Rename the directory to simulate deletion and delete the destination directory afterward
 
+        // If the directory cannot be deleted, it is likely because it is not empty anymore due to lazy loading from
+        // the storefront triggering new cache file creation.
+        // This is expected behavior and is not a cause for concern. Deletable files were deleted as expected.
         try {
-            //generate name in format: \.[0-9A-ZA-z-_]{3} (e.g .QX3)
-            $tmpDirBasename = strrev(strtr(base64_encode(random_bytes(2)), '+/=', '-_.'));
-            $tmpDirectory = $this->_catalogProductMediaConfig->getBaseMediaPath() . '/' . $tmpDirBasename;
-            //delete temporary directory if exists
-            if ($this->_mediaDirectory->isDirectory($tmpDirectory)) {
-                $this->_mediaDirectory->delete($tmpDirectory);
-            }
-            //rename the directory to simulate deletion and delete the destination directory
-            if ($this->_mediaDirectory->isDirectory($directory) &&
-                true === $this->_mediaDirectory->getDriver()->rename(
-                    $this->_mediaDirectory->getAbsolutePath($directory),
-                    $this->_mediaDirectory->getAbsolutePath($tmpDirectory)
-                )
-            ) {
-                $directoryToDelete = $tmpDirectory;
-            }
-        } catch (\Throwable $exception) {
-            //ignore exceptions thrown during renaming
-            $directoryToDelete = $directory;
+            $this->_mediaDirectory->delete($directory);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+        } catch (FileSystemException $e) {
         }
-
-        $this->_mediaDirectory->delete($directoryToDelete);
 
         $this->_coreFileStorageDatabase->deleteFolder($this->_mediaDirectory->getAbsolutePath($directory));
         $this->clearImageInfoFromCache();

@@ -128,8 +128,14 @@ class SequenceTest extends TestCase
 
         $this->connectionMock
             ->method('lastInsertId')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function (...$withArgs) use ($willReturnArgs) {
+                if (!empty($withArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount];
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->nextIncrementStep(780);
         $this->nextIncrementStep(1557);

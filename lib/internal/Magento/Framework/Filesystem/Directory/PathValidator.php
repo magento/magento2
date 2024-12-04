@@ -54,8 +54,11 @@ class PathValidator implements PathValidatorInterface
             $actualPath = $this->driver->getRealPathSafety($path);
         }
 
-        if (mb_strpos($actualPath, $realDirectoryPath) !== 0
-            && rtrim($path, DIRECTORY_SEPARATOR) !== $realDirectoryPath
+        if (preg_match('/(?:^-|\s-\S|[\t\r\n\f])/', $path)
+            || (
+                mb_strpos($actualPath, $realDirectoryPath) !== 0
+                && rtrim($path, DIRECTORY_SEPARATOR) !== $realDirectoryPath
+            )
         ) {
             throw new ValidatorException(
                 new Phrase(

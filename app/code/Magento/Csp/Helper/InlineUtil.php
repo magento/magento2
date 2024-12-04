@@ -45,6 +45,14 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
      */
     private $configCollector;
 
+    /**
+     * @var CspNonceProvider
+     */
+    private CspNonceProvider $nonceProvider;
+
+    /**
+     * @var array[]
+     */
     private static $tagMeta = [
         'script' => ['id' => 'script-src', 'remote' => ['src'], 'hash' => true],
         'style' => ['id' => 'style-src', 'remote' => [], 'hash' => true],
@@ -67,17 +75,20 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
      * @param bool $useUnsafeHashes Use 'unsafe-hashes' policy (not supported by CSP v2).
      * @param HtmlRenderer|null $htmlRenderer
      * @param ConfigCollector|null $configCollector
+     * @param CspNonceProvider|null $nonceProvider
      */
     public function __construct(
         DynamicCollector $dynamicCollector,
         bool $useUnsafeHashes = false,
         ?HtmlRenderer $htmlRenderer = null,
-        ?ConfigCollector $configCollector = null
+        ?ConfigCollector $configCollector = null,
+        ?CspNonceProvider $nonceProvider = null
     ) {
         $this->dynamicCollector = $dynamicCollector;
         $this->useUnsafeHashes = $useUnsafeHashes;
         $this->htmlRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(HtmlRenderer::class);
         $this->configCollector = $configCollector ?? ObjectManager::getInstance()->get(ConfigCollector::class);
+        $this->nonceProvider = $nonceProvider ?? ObjectManager::getInstance()->get(CspNonceProvider::class);
     }
 
     /**
@@ -200,19 +211,34 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
                 && !empty(self::$tagMeta[$tagData->getTag()]['hash'])
                 && $this->isInlineDisabled(self::$tagMeta[$tagData->getTag()]['id'])
             ) {
-                $this->dynamicCollector->add(
-                    new FetchPolicy(
-                        $policyId,
-                        false,
-                        [],
-                        [],
-                        false,
-                        false,
-                        false,
-                        [],
-                        $this->generateHashValue($tagData->getContent())
-                    )
-                );
+                /** create new tagData with a nonce */
+                if ($tagData->getTag() === 'script') {
+                    $nonce = $this->nonceProvider->generateNonce();
+                    $tagAttributes = $tagData->getAttributes();
+                    $tagAttributes['nonce'] = $nonce;
+                    $newTagData = new TagData(
+                        $tagData->getTag(),
+                        $tagAttributes,
+                        $tagData->getContent(),
+                        $tagData->isTextContent()
+                    );
+
+                    $tagData = $newTagData;
+                } else {
+                    $this->dynamicCollector->add(
+                        new FetchPolicy(
+                            $policyId,
+                            false,
+                            [],
+                            [],
+                            false,
+                            false,
+                            false,
+                            [],
+                            $this->generateHashValue($tagData->getContent())
+                        )
+                    );
+                }
             }
         }
 

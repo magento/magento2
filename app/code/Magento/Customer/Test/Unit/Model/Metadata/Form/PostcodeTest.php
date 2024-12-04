@@ -85,7 +85,7 @@ class PostcodeTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             ['', ['"Zip/Postal Code" is a required value.'], 'US', false],
@@ -104,7 +104,7 @@ class PostcodeTest extends AbstractFormTestCase
     {
         $minTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
         $minTextLengthRule->expects($this->any())
             ->method('getName')
@@ -115,7 +115,7 @@ class PostcodeTest extends AbstractFormTestCase
 
         $maxTextLengthRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
         $maxTextLengthRule->expects($this->any())
             ->method('getName')
@@ -126,7 +126,7 @@ class PostcodeTest extends AbstractFormTestCase
 
         $inputValidationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
         $inputValidationRule->expects($this->any())
             ->method('getName')
@@ -174,7 +174,7 @@ class PostcodeTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueLengthDataProvider(): array
+    public static function validateValueLengthDataProvider(): array
     {
         return [
             'false' => [false, ['"" is a required value.', '"" length must be equal or greater than 5 characters.']],

@@ -154,7 +154,7 @@ class ConsumerWebsiteAssignTest extends TestCase
     /**
      * @return array
      */
-    public function errorProvider(): array
+    public static function errorProvider(): array
     {
         return [
             'with_dead_lock_exception' => [

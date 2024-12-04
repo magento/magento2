@@ -98,11 +98,11 @@ class AfterAddressSaveObserverTest extends TestCase
         $this->appState = $this->createMock(AppState::class);
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->group = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->group->expects($this->any())->method('getId')->willReturn(1);
         $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->setMethods(['getDefaultGroup'])
+            ->onlyMethods(['getDefaultGroup'])
             ->getMockForAbstractClass();
         $this->groupManagement->expects($this->any())->method('getDefaultGroup')->willReturn($this->group);
 
@@ -147,7 +147,8 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDefaultBilling', 'getStore', 'getDefaultShipping', 'getGroupId'])
+            ->addMethods(['getDefaultBilling', 'getDefaultShipping'])
+            ->onlyMethods(['getStore', 'getGroupId'])
             ->getMock();
         $customer->expects($this->any())
             ->method('getStore')
@@ -164,18 +165,17 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
-                    'getId',
                     'getIsDefaultBilling',
                     'getIsDefaultShipping',
                     'setForceProcess',
                     'getIsPrimaryBilling',
                     'getIsPrimaryShipping',
-                    'getCustomer',
                     'getForceProcess'
                 ]
             )
+            ->onlyMethods(['getId', 'getCustomer'])
             ->getMock();
         $address->expects($this->any())
             ->method('getId')
@@ -201,7 +201,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -231,7 +231,7 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveRestricted()
+    public static function dataProviderAfterAddressSaveRestricted()
     {
         return [
             [false, false, false, 1, null, null],
@@ -257,11 +257,8 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getCustomer',
-                'getForceProcess',
-                'getVatId',
-            ])
+            ->addMethods(['getForceProcess', 'getVatId'])
+            ->onlyMethods(['getCustomer'])
             ->getMock();
         $address->expects($this->any())
             ->method('getCustomer')
@@ -275,7 +272,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -331,12 +328,11 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getDisableAutoGroupChange', 'setGroupId'])
+            ->onlyMethods([
                 'getStore',
-                'getDisableAutoGroupChange',
                 'getGroupId',
-                'setGroupId',
-                'save',
+                'save'
             ])
             ->getMock();
         $customer->expects($this->exactly(2))
@@ -358,10 +354,9 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getForceProcess', 'getVatId'])
+            ->onlyMethods([
                 'getCustomer',
-                'getForceProcess',
-                'getVatId',
                 'getCountry',
             ])
             ->getMock();
@@ -380,7 +375,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -409,7 +404,7 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveDefaultGroup()
+    public static function dataProviderAfterAddressSaveDefaultGroup()
     {
         return [
             'when vatId is empty, non EU country and disable auto group false' => ['', 1, false, 1, 1, false],
@@ -455,7 +450,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $validationResult = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getIsValid',
                 'getRequestSuccess',
             ])
@@ -469,11 +464,10 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getDisableAutoGroupChange', 'setGroupId'])
+            ->onlyMethods([
                 'getStore',
-                'getDisableAutoGroupChange',
                 'getGroupId',
-                'setGroupId',
                 'save',
             ])
             ->getMock();
@@ -501,13 +495,10 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getForceProcess', 'getVatId', 'setVatValidationResult', 'getCountryId'])
+            ->onlyMethods([
                 'getCustomer',
-                'getForceProcess',
-                'getVatId',
-                'getCountryId',
-                'getCountry',
-                'setVatValidationResult',
+                'getCountry'
             ])
             ->getMock();
         $address->expects($this->any())
@@ -532,7 +523,7 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getCustomerAddress',
             ])
             ->getMock();
@@ -604,73 +595,73 @@ class AfterAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterAddressSaveNewGroup()
+    public static function dataProviderAfterAddressSaveNewGroup()
     {
         return [
             [
-                'vat_id' => 1,
-                'vat_class' => null,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_ADMINHTML,
-                'is_vat_valid' => false,
-                'request_sucess' => false,
-                'valid_message' => '',
-                'invalid_message' => '',
-                'error_message' => '',
+                'vatId' => 1,
+                'vatClass' => null,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_ADMINHTML,
+                'resultVatIsValid' => false,
+                'resultRequestSuccess' => false,
+                'resultValidMessage' => '',
+                'resultInvalidMessage' => '',
+                'resultErrorMessage' => '',
             ],
             [
-                'vat_id' => 1,
-                'vat_class' => Vat::VAT_CLASS_DOMESTIC,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_FRONTEND,
-                'is_vat_valid' => true,
-                'request_sucess' => false,
-                'valid_message' => 'Your VAT ID was successfully validated. You will be charged tax.',
-                'invalid_message' => '',
-                'error_message' => '',
+                'vatId' => 1,
+                'vatClass' => Vat::VAT_CLASS_DOMESTIC,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_FRONTEND,
+                'resultVatIsValid' => true,
+                'resultRequestSuccess' => false,
+                'resultValidMessage' => 'Your VAT ID was successfully validated. You will be charged tax.',
+                'resultInvalidMessage' => '',
+                'resultErrorMessage' => '',
             ],
             [
-                'vat_id' => 1,
-                'vat_class' => Vat::VAT_CLASS_INTRA_UNION,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_FRONTEND,
-                'is_vat_valid' => true,
-                'request_sucess' => false,
-                'valid_message' => 'Your VAT ID was successfully validated. You will not be charged tax.',
-                'invalid_message' => '',
-                'error_message' => '',
+                'vatId' => 1,
+                'vatClass' => Vat::VAT_CLASS_INTRA_UNION,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_FRONTEND,
+                'resultVatIsValid' => true,
+                'resultRequestSuccess' => false,
+                'resultValidMessage' => 'Your VAT ID was successfully validated. You will not be charged tax.',
+                'resultInvalidMessage' => '',
+                'resultErrorMessage' => '',
             ],
             [
-                'vat_id' => 1,
-                'vat_class' => Vat::VAT_CLASS_INTRA_UNION,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_FRONTEND,
-                'is_vat_valid' => false,
-                'request_sucess' => true,
-                'valid_message' => '',
-                'invalid_message' => 'The VAT ID entered (1) is not a valid VAT ID. You will be charged tax.',
-                'error_message' => '',
+                'vatId' => 1,
+                'vatClass' => Vat::VAT_CLASS_INTRA_UNION,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_FRONTEND,
+                'resultVatIsValid' => false,
+                'resultRequestSuccess' => true,
+                'resultValidMessage' => '',
+                'resultInvalidMessage' => 'The VAT ID entered (1) is not a valid VAT ID. You will be charged tax.',
+                'resultErrorMessage' => '',
             ],
             [
-                'vat_id' => 1,
-                'vat_class' => Vat::VAT_CLASS_INTRA_UNION,
-                'country_id' => 1,
-                'country_code' => 'US',
-                'group_id' => 1,
-                'area_code' => Area::AREA_FRONTEND,
-                'is_vat_valid' => false,
-                'request_sucess' => false,
-                'valid_message' => '',
-                'invalid_message' => '',
-                'error_message' => 'Your Tax ID cannot be validated. You will be charged tax. '
+                'vatId' => 1,
+                'vatClass' => Vat::VAT_CLASS_INTRA_UNION,
+                'countryId' => 1,
+                'country' => 'US',
+                'newGroupId' => 1,
+                'areaCode' => Area::AREA_FRONTEND,
+                'resultVatIsValid' => false,
+                'resultRequestSuccess' => false,
+                'resultValidMessage' => '',
+                'resultInvalidMessage' => '',
+                'resultErrorMessage' => 'Your Tax ID cannot be validated. You will be charged tax. '
                     . 'If you believe this is an error, please contact us at admin@example.com',
             ],
         ];

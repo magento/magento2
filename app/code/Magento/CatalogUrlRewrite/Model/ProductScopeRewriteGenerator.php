@@ -85,6 +85,11 @@ class ProductScopeRewriteGenerator
     private $productRepository;
 
     /**
+     * @var GetVisibleForStores|mixed
+     */
+    private mixed $visibleForStores;
+
+    /**
      * @param StoreViewService $storeViewService
      * @param StoreManagerInterface $storeManager
      * @param ObjectRegistryFactory $objectRegistryFactory
@@ -92,10 +97,11 @@ class ProductScopeRewriteGenerator
      * @param CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator
      * @param CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator
      * @param AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator
-     * @param \Magento\UrlRewrite\Model\MergeDataProviderFactory|null $mergeDataProviderFactory
+     * @param MergeDataProviderFactory|null $mergeDataProviderFactory
      * @param CategoryRepositoryInterface|null $categoryRepository
      * @param ScopeConfigInterface|null $config
      * @param ProductRepositoryInterface|null $productRepository
+     * @param GetVisibleForStores|null $visibleForStores
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -109,7 +115,8 @@ class ProductScopeRewriteGenerator
         MergeDataProviderFactory $mergeDataProviderFactory = null,
         CategoryRepositoryInterface $categoryRepository = null,
         ScopeConfigInterface $config = null,
-        ProductRepositoryInterface $productRepository = null
+        ProductRepositoryInterface $productRepository = null,
+        GetVisibleForStores $visibleForStores = null
     ) {
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;
@@ -127,6 +134,8 @@ class ProductScopeRewriteGenerator
         $this->config = $config ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->productRepository = $productRepository ?:
             ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->visibleForStores = $visibleForStores ??
+            ObjectManager::getInstance()->get(GetVisibleForStores::class);
     }
 
     /**
@@ -152,6 +161,7 @@ class ProductScopeRewriteGenerator
     {
         $productId = $product->getEntityId();
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
+        $visibleForStores = $this->visibleForStores->execute($product);
 
         foreach ($product->getStoreIds() as $id) {
             if (!$this->isGlobalScope($id)) {
@@ -160,20 +170,30 @@ class ProductScopeRewriteGenerator
                     $productId,
                     Product::ENTITY
                 )) {
-                    $mergeDataProvider->merge(
-                        $this->generateForSpecificStoreView($id, $productCategories, $product, $rootCategoryId, true)
-                    );
+                    if (count($visibleForStores) === 0 || in_array((int)$id, $visibleForStores)) {
+                        $mergeDataProvider->merge(
+                            $this->generateForSpecificStoreView(
+                                $id,
+                                $productCategories,
+                                $product,
+                                $rootCategoryId,
+                                true
+                            )
+                        );
+                    }
                 } else {
-                    $scopedProduct = $this->productRepository->getById($productId, false, $id);
-                    $mergeDataProvider->merge(
-                        $this->generateForSpecificStoreView(
-                            $id,
-                            $productCategories,
-                            $scopedProduct,
-                            $rootCategoryId,
-                            true
-                        )
-                    );
+                    if (count($visibleForStores) === 0 || in_array((int)$id, $visibleForStores)) {
+                        $scopedProduct = $this->productRepository->getById($productId, false, $id);
+                        $mergeDataProvider->merge(
+                            $this->generateForSpecificStoreView(
+                                $id,
+                                $productCategories,
+                                $scopedProduct,
+                                $rootCategoryId,
+                                true
+                            )
+                        );
+                    }
                 }
             }
         }

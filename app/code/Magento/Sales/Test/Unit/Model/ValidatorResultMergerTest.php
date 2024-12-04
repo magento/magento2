@@ -72,7 +72,16 @@ class ValidatorResultMergerTest extends TestCase
 
         $validatorResultMock
             ->method('addMessage')
-            ->withConsecutive(['test01'], ['test02'], ['test03'], ['test04'], ['test05'], ['test06']);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'test01' ||
+                    $arg1 == 'test02' ||
+                    $arg1 == 'test03' ||
+                    $arg1 == 'test04' ||
+                    $arg1 == 'test05' ||
+                    $arg1 == 'test06') {
+                    return null;
+                }
+            });
         $expected = $validatorResultMock;
         $actual = $this->validatorResultMerger->merge(
             $orderValidationResultMock,

@@ -59,6 +59,9 @@ class LogData
         try {
             $complexity = $this->getFieldCount($data['parsedQuery'] ?? $data['query'] ?? '');
             $logData[LoggerInterface::COMPLEXITY] = $complexity;
+            $logData[LoggerInterface::TOP_LEVEL_OPERATION_NAME] =
+                $this->getOperationName($data['parsedQuery'] ?? $data['query'] ?? '')
+                    ?: 'operationNameNotFound';
             if ($schema) {
                 $logData = array_merge($logData, $this->gatherQueryInformation($schema));
             }
@@ -96,12 +99,12 @@ class LogData
     private function gatherQueryInformation(Schema $schema) : array
     {
         $schemaConfig = $schema->getConfig();
-        $mutationOperations = $schemaConfig->getMutation()->getFields();
-        $queryOperations = $schemaConfig->getQuery()->getFields();
+        $mutationOperations = array_keys($schemaConfig->getMutation()->getFields());
+        $queryOperations = array_keys($schemaConfig->getQuery()->getFields());
         $queryInformation[LoggerInterface::HAS_MUTATION] = count($mutationOperations) > 0 ? 'true' : 'false';
         $queryInformation[LoggerInterface::NUMBER_OF_OPERATIONS] =
             count($mutationOperations) + count($queryOperations);
-        $operationNames = array_merge(array_keys($mutationOperations), array_keys($queryOperations));
+        $operationNames = array_merge($mutationOperations, $queryOperations);
         $queryInformation[LoggerInterface::OPERATION_NAMES] =
             count($operationNames) > 0 ? implode(",", $operationNames) : 'operationNameNotFound';
         return $queryInformation;
@@ -153,5 +156,38 @@ class LogData
             return $totalFieldCount;
         }
         return 0;
+    }
+
+    /**
+     * Gets top level OperationName
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @param DocumentNode|string $query
+     * @return string
+     * @throws SyntaxError
+     * @throws \Exception
+     */
+    private function getOperationName(DocumentNode|string $query): string
+    {
+        if (!empty($query)) {
+            $queryName = '';
+            if (is_string($query)) {
+                $query = $this->queryParser->parse($query);
+            }
+            Visitor::visit(
+                $query,
+                [
+                    'enter' => [
+                        NodeKind::NAME => function (Node $node) use (&$queryName) {
+                            $queryName = $node->value;
+                            return Visitor::stop();
+                        }
+                    ]
+                ]
+            );
+            return $queryName;
+        }
+        return '';
     }
 }

@@ -152,7 +152,7 @@ class GuestValidationTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [[]],

@@ -11,7 +11,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\AttributeSet as AttributeSetFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Model\Group;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -193,7 +195,7 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function skuDataProvider(): array
+    public static function skuDataProvider(): array
     {
         return [
             ['sku' => 'simple'],
@@ -343,7 +345,7 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function productUpdateDataProvider(): array
+    public static function productUpdateDataProvider(): array
     {
         return [
             'Updating for global store' => [
@@ -425,6 +427,94 @@ class ProductRepositoryTest extends TestCase
         $this->assertEquals($product1Store1Name, $product1->getName());
         $this->assertEquals($product2Store1Name, $product2->getName());
         $this->assertEquals($product2Store1Price, $product2->getPrice());
+    }
+
+    #[
+        AppArea('adminhtml'),
+        DataFixture(AttributeSetFixture::class, as: 'attribute_set2'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'tier_prices' => [
+                    [
+                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                        'qty' => 2,
+                        'value' => 7.5
+                    ]
+                ]
+            ],
+            'product1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'attribute_set_id' => '$attribute_set2.attribute_set_id$',
+                'tier_prices' => [
+                    [
+                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                        'qty' => 4,
+                        'value' => 8
+                    ]
+                ]
+            ],
+            'product2'
+        ),
+    ]
+    public function testConsecutiveProductsUpdateWithDifferentAttributeSets(): void
+    {
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $store1 = $this->storeManager->getStore('default')->getId();
+        $this->storeManager->setCurrentStore($store1);
+        $product1UpdatedName = $product1->getName() . ' for default store view';
+        $product2UpdatedName = $product2->getName() . ' for default store view';
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product1->getSku(),
+                    'name' => $product1UpdatedName,
+                ]
+            )
+        );
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product2->getSku(),
+                    'name' => $product2UpdatedName,
+                ]
+            )
+        );
+        $product1 = $this->productRepository->get($product1->getSku(), true, $store1, true);
+        $this->assertEquals($product1UpdatedName, $product1->getName());
+        $this->assertCount(1, $product1->getTierPrices());
+        $this->assertEquals(
+            [
+                'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                'qty' => 2,
+                'value' => 7.5
+            ],
+            [
+                'customer_group_id' => $product1->getTierPrices()[0]->getCustomerGroupId(),
+                'qty' => $product1->getTierPrices()[0]->getQty(),
+                'value' => $product1->getTierPrices()[0]->getValue()
+            ]
+        );
+
+        $product2 = $this->productRepository->get($product2->getSku(), true, $store1, true);
+        $this->assertEquals($product2UpdatedName, $product2->getName());
+        $this->assertCount(1, $product2->getTierPrices());
+        $this->assertEquals(
+            [
+                'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                'qty' => 4,
+                'value' => 8
+            ],
+            [
+                'customer_group_id' => $product2->getTierPrices()[0]->getCustomerGroupId(),
+                'qty' => $product2->getTierPrices()[0]->getQty(),
+                'value' => $product2->getTierPrices()[0]->getValue()
+            ]
+        );
     }
 
     /**

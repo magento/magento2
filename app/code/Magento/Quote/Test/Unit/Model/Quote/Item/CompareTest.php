@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class CompareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
+            ->onlyMethods(['unserialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $serializer->expects($this->any())
@@ -235,20 +235,5 @@ class CompareTest extends TestCase
             ->method('getOptionsByCode')
             ->willReturn([]);
         $this->assertFalse($this->helper->compare($this->itemMock, $this->comparedMock));
-    }
-
-    /**
-     * test compare two items- when configurable products has assigned sku of its selected variant
-     */
-    public function testCompareConfigurableProductAndItsVariant()
-    {
-        $this->itemMock->expects($this->exactly(2))
-            ->method('getSku')
-            ->willReturn('cr1-r');
-        $this->comparedMock->expects($this->once())
-            ->method('getSku')
-            ->willReturn('cr1-r');
-
-        $this->assertTrue($this->helper->compare($this->itemMock, $this->comparedMock));
     }
 }

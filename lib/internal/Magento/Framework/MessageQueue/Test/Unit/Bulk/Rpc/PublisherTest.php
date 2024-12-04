@@ -82,7 +82,7 @@ class PublisherTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->envelopeFactory = $this->getMockBuilder(EnvelopeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)

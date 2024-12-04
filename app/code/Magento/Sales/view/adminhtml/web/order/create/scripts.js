@@ -191,7 +191,7 @@
             }
             this.selectAddressEvent = false;
 
-            var data = this.serializeData(container);
+            let data = this.serializeData(container).toObject();
             data[el.name] = id;
 
             this.resetPaymentMethod();
@@ -326,12 +326,26 @@
 
             if (this.isBillingField(fieldName)) {
                 syncName = fieldName.replace('billing', 'shipping');
+
+                if (fieldName.indexOf('country')) {
+                    jQuery('#order-shipping_address_region').css(
+                        'display',
+                        jQuery('#order-billing_address_region').css('display')
+                    );
+                    jQuery('#order-shipping_address_region_id').css(
+                        'display',
+                        jQuery('#order-billing_address_region_id').css('display')
+                    );
+                }
             }
 
             $(container).select('[name="' + syncName + '"]').each(function (element) {
                 if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
                     if (element.type === "checkbox") {
                         element.checked = fieldValue.checked;
+                    } else if (element.type === "select" || element.type === "select-one") {
+                        element.innerHTML = fieldValue.innerHTML;
+                        element.value = fieldValue.value;
                     } else {
                         element.value = fieldValue.value;
                     }
@@ -592,6 +606,19 @@
         applyCoupon: function (code) {
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
                 'order[coupon][code]': code,
+                'order[coupon][append]': code,
+                reset_shipping: true
+            });
+            this.orderItemChanged = false;
+            jQuery('html, body').animate({
+                scrollTop: 0
+            });
+        },
+
+        removeCoupon: function (code) {
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
+                'order[coupon][code]': '',
+                'order[coupon][remove]': code,
                 reset_shipping: true
             });
             this.orderItemChanged = false;

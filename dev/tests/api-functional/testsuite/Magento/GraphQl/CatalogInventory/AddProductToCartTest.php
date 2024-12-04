@@ -37,7 +37,7 @@ class AddProductToCartTest extends GraphQlAbstract
     public function testAddProductIfQuantityIsNotAvailable()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The requested qty is not available');
+        $this->expectExceptionMessage('Not enough items for sale');
 
         $sku = 'simple';
         $quantity = 200;

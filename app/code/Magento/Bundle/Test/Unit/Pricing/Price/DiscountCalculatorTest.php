@@ -11,7 +11,9 @@ use Magento\Bundle\Pricing\Price\DiscountCalculator;
 use Magento\Bundle\Pricing\Price\DiscountProviderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\Price\PriceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,20 +45,30 @@ class DiscountCalculatorTest extends TestCase
     protected $priceMock;
 
     /**
+     * @var PriceCurrencyInterface|MockObject
+     */
+    private $priceCurrencyMock;
+
+    /**
      * Test setUp
      */
     protected function setUp(): void
     {
         $this->productMock = $this->createMock(Product::class);
-        $this->priceInfoMock = $this->createPartialMock(
-            Base::class,
-            ['getPrice', 'getPrices']
-        );
+        $this->priceInfoMock =  $this->getMockBuilder(Base::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getPrice', 'getPrices'])
+            ->addMethods(['getValue'])
+            ->getMock();
         $this->finalPriceMock = $this->createMock(FinalPrice::class);
         $this->priceMock = $this->getMockForAbstractClass(
             DiscountProviderInterface::class
         );
-        $this->calculator = new DiscountCalculator();
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['roundPrice'])
+            ->getMockForAbstractClass();
+        $this->calculator = new DiscountCalculator($this->priceCurrencyMock);
     }
 
     /**
@@ -98,26 +110,52 @@ class DiscountCalculatorTest extends TestCase
                     $this->getPriceMock(40),
                 ]
             );
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('roundPrice')
+            ->willReturn(20);
         $this->assertEquals(20, $this->calculator->calculateDiscount($this->productMock));
     }
 
     /**
      * test method calculateDiscount with custom price amount
+     *
+     * @dataProvider providerForWithDifferentAmount
      */
-    public function testCalculateDiscountWithCustomAmount()
+    public function testCalculateDiscountWithCustomAmount(mixed $discount, mixed $value, float $expectedResult)
     {
-        $this->productMock->expects($this->once())
+        $this->productMock->expects($this->any())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
-        $this->priceInfoMock->expects($this->once())
+        $this->priceInfoMock->expects($this->any())
             ->method('getPrices')
-            ->willReturn(
-                [
-                    $this->getPriceMock(30),
-                    $this->getPriceMock(20),
-                    $this->getPriceMock(40),
-                ]
+            ->willReturn([$this->getPriceMock($discount)]);
+        if ($value === null) {
+            $abstractPriceMock = $this->getMockForAbstractClass(
+                PriceInterface::class
             );
-        $this->assertEquals(10, $this->calculator->calculateDiscount($this->productMock, 50));
+            $this->priceInfoMock->expects($this->any())
+                ->method('getPrice')
+                ->willReturn($abstractPriceMock);
+            $abstractPriceMock->expects($this->any())
+                ->method('getValue')
+                ->willReturn($expectedResult);
+        }
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('roundPrice')
+            ->willReturn($expectedResult);
+        $this->assertEquals($expectedResult, $this->calculator->calculateDiscount($this->productMock, $value));
+    }
+
+    /**
+     * @return array
+     */
+    public static function providerForWithDifferentAmount()
+    {
+        return [
+            'test case 1 with discount amount' => [20, 50, 10],
+            'test case 2 for null discount amount' => [null, 30, 30],
+            'test case 3 with discount amount' => [99, 5.5, 5.45],
+            'test case 4 with null value' => [50, null, 50]
+        ];
     }
 }

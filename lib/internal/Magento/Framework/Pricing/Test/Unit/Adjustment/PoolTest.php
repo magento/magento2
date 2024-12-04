@@ -32,7 +32,7 @@ class PoolTest extends TestCase
         /** @var Factory|MockObject $adjustmentFactory */
         $adjustmentFactory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $adjustmentFactory->expects($this->any())->method('create')->willReturnCallback(
             function ($className, $data) {
@@ -71,7 +71,7 @@ class PoolTest extends TestCase
     /**
      * @return array
      */
-    public function getAdjustmentByCodeDataProvider()
+    public static function getAdjustmentByCodeDataProvider()
     {
         return [
             ['adj1', 'adj1_class|10'],

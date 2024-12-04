@@ -9,11 +9,12 @@ namespace Magento\Catalog\Setup\Patch\Data;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\NonTransactionableInterface;
 
-class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
+class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface, NonTransactionableInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -23,6 +24,11 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
+
+    /**
+     * @var array
+     */
+    private $triggersRestoreQueries = [];
 
     /**
      * MigrateMultiselectAttributesData constructor.
@@ -61,6 +67,7 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
         $this->dataSetup->startSetup();
         $setup = $this->dataSetup;
         $connection = $setup->getConnection();
+        $this->triggersRestoreQueries = [];
 
         $attributeTable = $setup->getTable('eav_attribute');
         /** @var EavSetup $eavSetup */
@@ -74,26 +81,31 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
                 ->where('backend_type = ?', 'varchar')
                 ->where('frontend_input = ?', 'multiselect')
         );
+        $attributesToMigrate = array_map('intval', $attributesToMigrate);
 
         $varcharTable = $setup->getTable('catalog_product_entity_varchar');
         $textTable = $setup->getTable('catalog_product_entity_text');
-        $varcharTableDataSql = $connection
-            ->select()
-            ->from($varcharTable)
-            ->where('attribute_id in (?)', $attributesToMigrate);
 
         $columns = $connection->describeTable($varcharTable);
         unset($columns['value_id']);
-        $connection->query(
-            $connection->insertFromSelect(
-                $connection->select()
-                    ->from($varcharTable, array_keys($columns))
-                    ->where('attribute_id in (?)', $attributesToMigrate),
-                $textTable,
-                array_keys($columns)
-            )
-        );
-        $connection->query($connection->deleteFromSelect($varcharTableDataSql, $varcharTable));
+        $this->dropTriggers($textTable);
+        $this->dropTriggers($varcharTable);
+        try {
+            $connection->query(
+                $connection->insertFromSelect(
+                    $connection->select()
+                        ->from($varcharTable, array_keys($columns))
+                        ->where('attribute_id in (?)', $attributesToMigrate, \Zend_Db::INT_TYPE),
+                    $textTable,
+                    array_keys($columns),
+                    AdapterInterface::INSERT_ON_DUPLICATE
+                )
+            );
+            $connection->delete($varcharTable, ['attribute_id IN (?)' => $attributesToMigrate]);
+        } finally {
+            $this->restoreTriggers($textTable);
+            $this->restoreTriggers($varcharTable);
+        }
 
         foreach ($attributesToMigrate as $attributeId) {
             $eavSetup->updateAttribute($entityTypeId, $attributeId, 'backend_type', 'text');
@@ -102,5 +114,49 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
         $this->dataSetup->endSetup();
 
         return $this;
+    }
+
+    /**
+     * Drop table triggers
+     *
+     * @param string $tableName
+     * @return void
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function dropTriggers(string $tableName): void
+    {
+        $triggers = $this->dataSetup->getConnection()
+            ->query('SHOW TRIGGERS LIKE \''. $tableName . '\'')
+            ->fetchAll();
+
+        if (!$triggers) {
+            return;
+        }
+
+        foreach ($triggers as $trigger) {
+            $triggerData = $this->dataSetup->getConnection()
+                ->query('SHOW CREATE TRIGGER '. $trigger['Trigger'])
+                ->fetch();
+            $this->triggersRestoreQueries[$tableName][] =
+                preg_replace('/DEFINER=[^\s]*/', '', $triggerData['SQL Original Statement']);
+            // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
+            $this->dataSetup->getConnection()->query('DROP TRIGGER IF EXISTS ' . $trigger['Trigger']);
+        }
+    }
+
+    /**
+     * Restore table triggers.
+     *
+     * @param string $tableName
+     * @return void
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function restoreTriggers(string $tableName): void
+    {
+        if (array_key_exists($tableName, $this->triggersRestoreQueries)) {
+            foreach ($this->triggersRestoreQueries[$tableName] as $query) {
+                $this->dataSetup->getConnection()->multiQuery($query);
+            }
+        }
     }
 }

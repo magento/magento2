@@ -17,6 +17,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Catalog search indexer plugin for catalog category products assignment.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Rows
 {
@@ -86,7 +88,7 @@ class Rows
 
             $productIds = array_merge([], ...$productIds);
             if (!empty($productIds)) {
-                $indexer->reindexList(array_unique($productIds));
+                $indexer->getView()->getChangelog()->addList($productIds);
             }
         }
 

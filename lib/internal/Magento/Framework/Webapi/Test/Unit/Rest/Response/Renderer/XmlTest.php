@@ -59,7 +59,7 @@ class XmlTest extends TestCase
      *
      * @return array
      */
-    public function providerXmlRender()
+    public static function providerXmlRender()
     {
         return [
             // Each array consists of data to render, expected XML and assert message

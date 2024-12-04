@@ -86,7 +86,7 @@ class LogoutAllTest extends TestCase
 
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
+            ->onlyMethods(['addSuccessMessage', 'addErrorMessage', 'addExceptionMessage'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
@@ -94,7 +94,7 @@ class LogoutAllTest extends TestCase
 
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsUrlNotice'])
+            ->addMethods(['setIsUrlNotice'])
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getSession')
@@ -107,7 +107,7 @@ class LogoutAllTest extends TestCase
 
         $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getActionFlag')
@@ -115,7 +115,7 @@ class LogoutAllTest extends TestCase
 
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())
             ->method('getResponse')

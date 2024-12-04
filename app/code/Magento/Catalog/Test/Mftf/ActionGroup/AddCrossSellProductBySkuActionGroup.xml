@@ -19,13 +19,18 @@
         <!--Scroll up to avoid error-->
         <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" x="0" y="-100" stepKey="scrollTo"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedUpSellCrossSell"/>
+        <waitForElementClickable selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddCrossSellProductsButton}}" stepKey="waitForAddCrossSellButtonClickable" />
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddCrossSellProductsButton}}" stepKey="clickAddCrossSellButton"/>
         <conditionalClick selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForElementClickable selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.filters}}" stepKey="waitForProductFiltersClickable" />
         <click selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <waitForElementVisible selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.skuFilter}}" stepKey="waitForSkuFilterVisible" />
         <fillField selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
         <click selector="{{AdminProductCrossSellModalSection.Modal}} {{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <waitForElementClickable selector="{{AdminProductCrossSellModalSection.Modal}}{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="waitForProductClickable" />
         <click selector="{{AdminProductCrossSellModalSection.Modal}}{{AdminProductModalSlideGridSection.productGridXRowYColumnButton('1', '1')}}" stepKey="selectProduct"/>
+        <waitForElementClickable selector="{{AdminProductCrossSellModalSection.addSelectedProducts}}" stepKey="waitForAddRelatedProductClickable" />
         <click selector="{{AdminProductCrossSellModalSection.addSelectedProducts}}" stepKey="addRelatedProductSelected"/>
         <waitForPageLoad stepKey="waitForModalDisappear"/>
     </actionGroup>

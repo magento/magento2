@@ -100,7 +100,9 @@
                 <argument name="useInLayeredNavigationValue" value="Filterable (no results)"/>
             </actionGroup>
             <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveDropdownAttribute"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -111,7 +113,9 @@
             <deleteData createDataKey="createDropdownAttribute" stepKey="deleteDropdownAttribute"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

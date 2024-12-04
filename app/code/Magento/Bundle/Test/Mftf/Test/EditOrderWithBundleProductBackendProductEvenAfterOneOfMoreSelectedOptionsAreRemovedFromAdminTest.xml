@@ -57,6 +57,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete the simple product -->
             <deleteData createDataKey="SimpleProduct1" stepKey="DeleteSimpleProduct1"/>

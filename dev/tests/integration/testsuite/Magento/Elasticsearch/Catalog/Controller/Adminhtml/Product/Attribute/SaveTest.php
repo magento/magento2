@@ -59,7 +59,7 @@ class SaveTest extends AbstractSaveAttributeTest
     /**
      * @return array
      */
-    public function createAttributeWithErrorDataProvider(): array
+    public static function createAttributeWithErrorDataProvider(): array
     {
         return [
             'should not create attribute with reserved code "category_name"' => [

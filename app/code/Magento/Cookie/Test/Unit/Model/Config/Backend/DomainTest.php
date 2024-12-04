@@ -105,7 +105,7 @@ class DomainTest extends TestCase
     /**
      * Data Provider for testBeforeSave
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'not string' => [['array'], false, 1, 1],

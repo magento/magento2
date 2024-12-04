@@ -22,7 +22,7 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     private $configurable;
 
     /**
-     * @var ProductInterface[]
+     * @var ProductInterface[]|null
      */
     private $products;
 
@@ -63,6 +63,6 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
      */
     public function _resetState(): void
     {
-        $this->products = [];
+        $this->products = null;
     }
 }

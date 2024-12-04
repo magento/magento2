@@ -37,7 +37,7 @@ class RendererTest extends TestCase
 
         $this->itemPriceRenderer = $this->getMockBuilder(\Magento\Tax\Block\Item\Price\Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'displayPriceInclTax',
                     'displayPriceExclTax',
@@ -51,7 +51,7 @@ class RendererTest extends TestCase
         $this->defaultColumnRenderer = $this->getMockBuilder(
             DefaultColumn::class
         )->disableOriginalConstructor()
-            ->setMethods(['displayPrices'])
+            ->onlyMethods(['displayPrices'])
             ->getMock();
 
         $this->renderer = $objectManager->getObject(

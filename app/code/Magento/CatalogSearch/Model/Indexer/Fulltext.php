@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer;
@@ -12,6 +12,7 @@ use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Framework\Indexer\SaveHandler\StackedActionsIndexerInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
@@ -39,6 +40,13 @@ class Fulltext implements
      * Default batch size
      */
     private const BATCH_SIZE = 1000;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
 
     /**
      * @var array index structure
@@ -95,13 +103,6 @@ class Fulltext implements
     private $deploymentConfig;
 
     /**
-     * Deployment config path
-     *
-     * @var string
-     */
-    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
-
-    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
@@ -122,7 +123,7 @@ class Fulltext implements
         IndexSwitcherInterface $indexSwitcher,
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
-        array $data,
+        array $data = [],
         ProcessManager $processManager = null,
         ?int $batchSize = null,
         ?DeploymentConfig $deploymentConfig = null
@@ -156,7 +157,7 @@ class Fulltext implements
     /**
      * @inheritdoc
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException|\Exception
      * @since 101.0.0
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
@@ -206,6 +207,7 @@ class Fulltext implements
      * @param IndexerInterface $saveHandler
      * @param array $dimensions
      * @param array $entityIds
+     * @throws \Exception
      */
     private function processBatch(
         IndexerInterface $saveHandler,
@@ -216,9 +218,24 @@ class Fulltext implements
         $productIds = array_unique(
             array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
         );
+
         if ($saveHandler->isAvailable($dimensions)) {
-            $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
-            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            if (in_array(StackedActionsIndexerInterface::class, class_implements($saveHandler))) {
+                try {
+                    $saveHandler->enableStackedActions();
+                    $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+                    $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+                    $saveHandler->triggerStackedActions();
+                    $saveHandler->disableStackedActions();
+                } catch (\Throwable $exception) {
+                    $saveHandler->disableStackedActions();
+                    $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+                    $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+                }
+            } else {
+                $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+                $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            }
         }
     }
 

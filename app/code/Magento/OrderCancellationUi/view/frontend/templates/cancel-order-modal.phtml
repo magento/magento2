@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+?>
+<?php
+/** @var $escaper Magento\Framework\Escaper */
+?>
+<div id="cancel-order-modal-<?=/* @noEscape */ $block->getOrder()->getId() ?>">
+    <div class="modal-body-content">
+        <h3><?= $escaper->escapeHtml(__('Cancel order')) ?>
+            <span class="cancel-order-id"><?=/* @noEscape */ $block->getOrder()->getRealOrderId() ?></span>
+        </h3>
+        <p><?= $escaper->escapeHtml(__('Provide a cancellation reason:')) ?></p>
+        <form>
+            <select id="cancel-order-reason-<?=/* @noEscape */ $block->getOrder()->getId() ?>"
+                    class="cancel-order-reason" name="reason">
+                <?php foreach ($block->getReasons() as $key => $description): ?>
+                    <option value="<?= $escaper->escapeHtml(__($description)) ?>">
+                        <?= $escaper->escapeHtml(__($description)) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </form>
+    </div>
+</div>

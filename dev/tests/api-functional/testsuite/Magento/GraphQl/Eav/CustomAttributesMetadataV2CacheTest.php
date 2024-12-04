@@ -12,7 +12,6 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Test\Fixture\Attribute;
-use Magento\EavGraphQl\Model\Uid;
 use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -36,17 +35,11 @@ class CustomAttributesMetadataV2CacheTest extends GraphQLPageCacheAbstract
     private $attributeRepository;
 
     /**
-     * @var UId
-     */
-    private $uid;
-
-    /**
      * @inheritdoc
      */
     public function setUp(): void
     {
         $this->attributeRepository = Bootstrap::getObjectManager()->get(AttributeRepository::class);
-        $this->uid = Bootstrap::getObjectManager()->get(Uid::class);
         parent::setUp();
     }
 
@@ -66,12 +59,9 @@ class CustomAttributesMetadataV2CacheTest extends GraphQLPageCacheAbstract
         /** @var AttributeInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
-        $uidCode = $this->uid->encode('customer', $attribute->getAttributeCode());
-
         $query = $this->getAttributeQuery($attribute->getAttributeCode(), "customer");
         $response = $this->assertCacheMissAndReturnResponse($query, []);
         $assertionMap = [
-            ['response_field' => 'uid', 'expected_value' => $uidCode],
             ['response_field' => 'code', 'expected_value' => $attribute->getAttributeCode()],
             ['response_field' => 'entity_type', 'expected_value' => 'CUSTOMER'],
             ['response_field' => 'frontend_input', 'expected_value' => 'TEXT']
@@ -102,12 +92,10 @@ class CustomAttributesMetadataV2CacheTest extends GraphQLPageCacheAbstract
 
         /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
-        $uidCode = $this->uid->encode('customer', $attribute->getAttributeCode());
 
         $query = $this->getAttributeQuery($attribute->getAttributeCode(), "customer");
         $response = $this->assertCacheMissAndReturnResponse($query, []);
         $assertionMap = [
-            ['response_field' => 'uid', 'expected_value' => $uidCode],
             ['response_field' => 'code', 'expected_value' => $attribute->getAttributeCode()],
             ['response_field' => 'entity_type', 'expected_value' => 'CUSTOMER'],
             ['response_field' => 'frontend_input', 'expected_value' => 'TEXT']
@@ -183,7 +171,6 @@ class CustomAttributesMetadataV2CacheTest extends GraphQLPageCacheAbstract
     {
         /** @var AttributeInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
-        $uidCode = $this->uid->encode('customer', $attribute->getAttributeCode());
         $attributeCode = $attribute->getAttributeCode();
 
         $query = $this->getAttributeQuery($attributeCode, "customer");
@@ -191,7 +178,6 @@ class CustomAttributesMetadataV2CacheTest extends GraphQLPageCacheAbstract
         // check cache missed on first query
         $response = $this->assertCacheMissAndReturnResponse($query, []);
         $assertionMap = [
-            ['response_field' => 'uid', 'expected_value' => $uidCode],
             ['response_field' => 'code', 'expected_value' => $attributeCode],
             ['response_field' => 'entity_type', 'expected_value' => 'CUSTOMER'],
             ['response_field' => 'frontend_input', 'expected_value' => 'TEXT']
@@ -299,7 +285,6 @@ class CustomAttributesMetadataV2CacheTest extends GraphQLPageCacheAbstract
 {
   customAttributeMetadataV2(attributes: [{attribute_code:"{$code}", entity_type:"{$entityType}"}]) {
     items {
-      uid
       code
       label
       entity_type
@@ -308,7 +293,6 @@ class CustomAttributesMetadataV2CacheTest extends GraphQLPageCacheAbstract
       default_value
       is_unique
       options {
-        uid
         label
         value
       }

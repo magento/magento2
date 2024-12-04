@@ -45,7 +45,6 @@ class RemoveImagesFromGalleryAfterRemovingProduct
      * @param callable $proceed
      * @param ProductInterface $product
      * @return bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
         ProductRepositoryInterface $subject,

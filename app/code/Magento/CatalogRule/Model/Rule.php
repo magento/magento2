@@ -605,13 +605,8 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
             return parent::afterSave();
         }
 
-        if ($this->isObjectNew() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
-            $productIds = $this->getMatchingProductIds();
-            if (!empty($productIds) && is_array($productIds)) {
-                $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
-            }
-        } else {
-            $this->_ruleProductProcessor->getIndexer()->invalidate();
+        if (!$this->_ruleProductProcessor->isIndexerScheduled()) {
+            $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
         }
 
         return parent::afterSave();
@@ -624,15 +619,7 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
      */
     public function reindex()
     {
-        $productIds = $this->_productIds ? array_keys(
-            array_filter(
-                $this->_productIds,
-                function (array $data) {
-                    return array_filter($data);
-                }
-            )
-        ) : [];
-        $this->_ruleProductProcessor->reindexList($productIds);
+        $this->_ruleProductProcessor->reindexRow($this->getRuleId());
     }
 
     /**
@@ -642,7 +629,9 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
      */
     public function afterDelete()
     {
-        $this->_ruleProductProcessor->getIndexer()->invalidate();
+        if ($this->getIsActive() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
+            $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
+        }
         return parent::afterDelete();
     }
 

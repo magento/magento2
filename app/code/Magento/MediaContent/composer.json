@@ -2,7 +2,7 @@
     "name": "magento/module-media-content",
     "description": "Magento module provides the implementation for managing relations between content and media files used in that content",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-media-content-api": "*",
         "magento/module-media-gallery-api": "*"

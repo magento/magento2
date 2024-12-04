@@ -2,7 +2,7 @@
     "name": "magento/module-media-gallery-ui-api",
     "description": "Magento module responsible for the media gallery UI implementation API",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*"
     },
     "suggest": {

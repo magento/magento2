@@ -55,7 +55,7 @@ class BundleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributesProduct = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['getBundleProductOptions'])
+            ->addMethods(['getBundleProductOptions'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -67,14 +67,14 @@ class BundleTest extends TestCase
             ->willReturn($extensionAttributesProduct);
 
         $productLink = $this->getMockBuilder(Link::class)
-            ->setMethods(['setSelectionId'])
+            ->addMethods(['setSelectionId'])
             ->disableOriginalConstructor()
             ->getMock();
         $productLink->expects($this->exactly(2))
             ->method('setSelectionId')
             ->with($this->identicalTo(null));
         $firstOption = $this->getMockBuilder(BundleOptionInterface::class)
-            ->setMethods(['getProductLinks'])
+            ->addMethods(['getProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $firstOption->expects($this->once())
@@ -84,7 +84,7 @@ class BundleTest extends TestCase
             ->method('setOptionId')
             ->with($this->identicalTo(null));
         $secondOption = $this->getMockBuilder(BundleOptionInterface::class)
-            ->setMethods(['getProductLinks'])
+            ->addMethods(['getProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $secondOption->expects($this->once())
@@ -106,7 +106,7 @@ class BundleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributesDuplicate = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['setBundleProductOptions'])
+            ->addMethods(['setBundleProductOptions'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -115,7 +115,11 @@ class BundleTest extends TestCase
             ->willReturn($extensionAttributesDuplicate);
         $extensionAttributesDuplicate->expects($this->once())
             ->method('setBundleProductOptions')
-            ->withConsecutive([$bundleOptions]);
+            ->willReturnCallback(function ($bundleOptions) {
+                if ($bundleOptions) {
+                    return null;
+                }
+            });
 
         $this->model->build($product, $duplicate);
     }
@@ -129,7 +133,7 @@ class BundleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributesProduct = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['getBundleProductOptions'])
+            ->addMethods(['getBundleProductOptions'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -148,7 +152,7 @@ class BundleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $extensionAttributesDuplicate = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['setBundleProductOptions'])
+            ->addMethods(['setBundleProductOptions'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

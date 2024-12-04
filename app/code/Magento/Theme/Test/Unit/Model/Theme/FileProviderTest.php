@@ -28,7 +28,7 @@ class FileProviderTest extends TestCase
     protected function setUp(): void
     {
         $fileFactory = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->file = $this->getMockBuilder(Collection::class)

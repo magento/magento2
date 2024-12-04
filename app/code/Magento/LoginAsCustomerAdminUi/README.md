@@ -8,4 +8,4 @@ This module provides UI for Admin Panel for Login As Customer functionality.
 
 This module is a part of Login As Customer feature.
 
-[Learn more about Login As Customer feature](https://docs.magento.com/user-guide/customers/login-as-customer.html).
+[Learn more about Login As Customer feature](https://experienceleague.adobe.com/docs/commerce-admin/customers/customer-accounts/manage/login-as-customer.html).

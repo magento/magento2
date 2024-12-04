@@ -86,9 +86,10 @@
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSecondSimpleProductProductToCart6">
             <argument name="product" value="$$createProduct6$$"/>
         </actionGroup>
-
+        
         <!--Place the order-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>

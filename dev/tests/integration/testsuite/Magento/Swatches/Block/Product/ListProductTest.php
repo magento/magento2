@@ -114,32 +114,32 @@ class ListProductTest extends TestCase
     /**
      * @return array
      */
-    public function getImageDataProvider(): array
+    public static function getImageDataProvider(): array
     {
         return [
             'without_images_and_display_grid' => [
                 'images' => [],
-                'display_area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
+                'area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
                 'expectation' => ['image_url' => 'placeholder/small_image.jpg', 'label' => 'Configurable Product'],
             ],
             'without_images_and_display_list' => [
                 'images' => [],
-                'display_area' => ProductImage::CATEGORY_PAGE_LIST_LOCATION,
+                'area' => ProductImage::CATEGORY_PAGE_LIST_LOCATION,
                 'expectation' => ['image_url' => 'placeholder/small_image.jpg', 'label' => 'Configurable Product'],
             ],
             'with_image_on_configurable_and_display_grid' => [
                 'images' => ['configurable' => '/m/a/magento_image.jpg'],
-                'display_area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
+                'area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
                 'expectation' => ['image_url' => '/m/a/magento_image.jpg', 'label' => 'Image Alt Text'],
             ],
             'with_image_on_configurable_and_display_list' => [
                 'images' => ['configurable' => '/m/a/magento_image.jpg'],
-                'display_area' => ProductImage::CATEGORY_PAGE_LIST_LOCATION,
+                'area' => ProductImage::CATEGORY_PAGE_LIST_LOCATION,
                 'expectation' => ['image_url' => '/m/a/magento_image.jpg', 'label' => 'Image Alt Text'],
             ],
             'with_image_on_simple' => [
                 'images' => ['simple_option_1' => '/m/a/magento_small_image.jpg'],
-                'display_area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
+                'area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
                 'expectation' => ['image_url' => '/m/a/magento_small_image.jpg', 'label' => 'Image Alt Text'],
             ],
             'with_image_on_simple_and_configurable' => [
@@ -147,7 +147,7 @@ class ListProductTest extends TestCase
                     'configurable' => '/m/a/magento_image.jpg',
                     'simple_option_1' => '/m/a/magento_small_image.jpg',
                 ],
-                'display_area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
+                'area' => ProductImage::CATEGORY_PAGE_GRID_LOCATION,
                 'expectation' => ['image_url' => '/m/a/magento_small_image.jpg', 'label' => 'Image Alt Text'],
             ],
         ];

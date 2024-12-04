@@ -321,6 +321,7 @@ abstract class EntityAbstract
     /**
      * Extract parameter type
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param \ReflectionParameter $parameter
      * @return null|string
      */
@@ -355,8 +356,9 @@ abstract class EntityAbstract
             $typeName = $parameterType;
         }
 
+        // Type "?array|string|null" is a union type, and therefore cannot be also marked nullable with the "?" prefix
         if ($parameter->allowsNull() && $typeName !== 'mixed') {
-            $typeName = '?' . $typeName;
+            $typeName = str_contains($typeName, "null") ? $typeName : '?' . $typeName;
         }
 
         return $typeName;

@@ -103,7 +103,7 @@ class ObjectTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'only "field_one" is invalid' => [

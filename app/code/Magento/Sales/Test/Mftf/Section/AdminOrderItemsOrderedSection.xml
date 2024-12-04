@@ -37,5 +37,7 @@
         <element name="taxPercentColumn" type="text" selector=".edit-order-table .col-tax-percent"/>
         <element name="discountAmountColumn" type="text" selector=".edit-order-table .col-discont .price"/>
         <element name="totalColumn" type="text" selector=".edit-order-table .col-total .price"/>
+        <element name="customOption" type="text" selector=". //dl[@class='item-options']/dt[text()='{{optionValue1}}']/../dd[{{optionValue2}}]" parameterized="true"/>
+        <element name="nameOfProduct" type="text" selector="//div[@class='product-title' and contains(text(), '{{productName}}')]" parameterized="true"/>
     </section>
 </sections>

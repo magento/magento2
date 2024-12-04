@@ -46,7 +46,7 @@ class FulltextGridSearchTest extends AbstractBackendController
      *
      * @return array
      */
-    public function queryDataProvider(): array
+    public static function queryDataProvider(): array
     {
         return [
             [

@@ -53,7 +53,7 @@ class ResolverTest extends TestCase
     {
         $mock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getComponentRegistrar'])
+            ->addMethods(['getComponentRegistrar'])
             ->getMock();
         $mock->method('getComponentRegistrar')->willReturn(new ComponentRegistrar());
         $reflection = new \ReflectionClass(Resolver::class);

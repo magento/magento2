@@ -24,6 +24,7 @@
         <after>
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" before="goToProductAttributes" stepKey="deleteCustomer"/>
             <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
         </after>

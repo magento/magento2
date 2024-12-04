@@ -100,7 +100,7 @@ class AdditionalTest extends TestCase
     /**
      * @return array
      */
-    public function isInProductionModeDataProvider()
+    public static function isInProductionModeDataProvider()
     {
         return [
             [State::MODE_DEFAULT, false],

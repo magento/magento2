@@ -10,7 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontPanelHeaderSection">
         <element name="welcomeMessage" type="text" selector="header>.panel .greet.welcome" />
-        <element name="createAnAccountLink" type="select" selector="//div[@class='panel wrapper']//li/a[contains(.,'Create an Account')]" timeout="30"/>
+        <element name="createAnAccountLink" type="select" selector="//div[@class='panel wrapper']//div[@class='panel header']//li/a[contains(.,'Create an Account')]" timeout="30"/>
         <element name="notYouLink" type="button" selector=".greet.welcome span a"/>
         <element name="customerWelcome" type="text" selector=".panel.header .greet.welcome"/>
         <element name="customerWelcomeMenu" type="text" selector=".panel.header .customer-welcome .customer-name"/>

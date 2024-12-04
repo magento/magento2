@@ -24,8 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class StockTest extends TestCase
 {
-    const PRODUCT_TABLE = 'testProductTable';
-    const ITEM_TABLE = 'testItemTableName';
+    private const PRODUCT_TABLE = 'testProductTable';
+    private const ITEM_TABLE = 'testItemTableName';
 
     /**
      * @var Stock|MockObject
@@ -123,6 +123,8 @@ class StockTest extends TestCase
      *
      * @return void
      * @dataProvider productsDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testLockProductsStock(
         int $websiteId,
@@ -137,21 +139,29 @@ class StockTest extends TestCase
         }
         $this->selectMock->expects($this->exactly(3))
             ->method('from')
-            ->withConsecutive(
-                [$this->identicalTo(self::ITEM_TABLE)],
-                [$this->identicalTo(['si' => self::ITEM_TABLE])],
-                [$this->identicalTo(['p' => self::PRODUCT_TABLE]), $this->identicalTo([])]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === self::ITEM_TABLE) {
+                    return $this->selectMock;
+                } elseif ($arg1 === ['si' => self::ITEM_TABLE]) {
+                    return $this->selectMock;
+                } elseif ($arg1 === ['p' => self::PRODUCT_TABLE] && empty($arg2)) {
+                    return $this->selectMock;
+                }
+            });
+
         $this->selectMock->expects($this->exactly(4))
             ->method('where')
-            ->withConsecutive(
-                [$this->identicalTo('website_id = ?'), $this->identicalTo($websiteId)],
-                [$this->identicalTo('product_id IN(?)'), $this->identicalTo($productIds)],
-                [$this->identicalTo('item_id IN (?)'), $this->identicalTo($itemIds)],
-                [$this->identicalTo('entity_id IN (?)'), $this->identicalTo($productIds)]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($websiteId, $productIds, $itemIds) {
+                if ($arg1 === 'website_id = ?' && $arg2 === $websiteId) {
+                    return $this->selectMock;
+                } elseif ($arg1 === 'product_id IN(?)' && $arg2 === $productIds) {
+                    return $this->selectMock;
+                } elseif ($arg1 === 'item_id IN (?)' && $arg2 === $itemIds) {
+                    return $this->selectMock;
+                } elseif ($arg1 === 'entity_id IN (?)' && $arg2 === $productIds) {
+                    return $this->selectMock;
+                }
+            });
         $this->selectMock->expects($this->once())
             ->method('forUpdate')
             ->with($this->identicalTo(true))
@@ -176,13 +186,13 @@ class StockTest extends TestCase
             ->willReturn($result);
         $this->stock->expects($this->exactly(2))
             ->method('getTable')
-            ->withConsecutive(
-                [$this->identicalTo('cataloginventory_stock_item')],
-                [$this->identicalTo('catalog_product_entity')]
-            )->will($this->onConsecutiveCalls(
-                self::ITEM_TABLE,
-                self::PRODUCT_TABLE
-            ));
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'cataloginventory_stock_item') {
+                    return self::ITEM_TABLE;
+                } elseif ($arg1 == 'catalog_product_entity') {
+                    return self::PRODUCT_TABLE;
+                }
+            });
         $this->stock->expects($this->exactly(6))
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -195,7 +205,7 @@ class StockTest extends TestCase
     /**
      * @return array
      */
-    public function productsDataProvider(): array
+    public static function productsDataProvider(): array
     {
         return [
             [

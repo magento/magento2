@@ -60,12 +60,13 @@ interface ViewInterface
     public function subscribe();
 
     /**
-     * Remove subscriptions
+     * Remove subscriptions and optionally drop the changelog table
      *
+     * @param bool $dropTable
      * @throws \Exception
      * @return ViewInterface
      */
-    public function unsubscribe();
+    public function unsubscribe(bool $dropTable = true): ViewInterface;
 
     /**
      * Materialize view by IDs in changelog

@@ -47,8 +47,12 @@
         <createData entity="SwatchProductAttributeOption1" stepKey="textSwatchAttributeOption">
             <requiredEntity createDataKey="createTextSwatchAttribute"/>
         </createData>
-        <magentoCLI stepKey="reindexPostCreating2Attributes" command="indexer:reindex"/>
-        <magentoCLI stepKey="flushCachePostCreating2Attributes" command="cache:flush"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostCreating2Attributes">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostCreating2Attributes">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Go to the edit page for the visual Swatch attribute -->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesToEditVisualSwatchAttribute"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillFilterToEditVisualSwatchAttribute"/>

@@ -35,6 +35,7 @@
             <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="disableBankTransferPayment"/>
             <!-- Delete entities -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Logout from Admin page -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>

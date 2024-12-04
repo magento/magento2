@@ -58,6 +58,7 @@
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch1">
             <argument name="index" value="0"/>
         </actionGroup>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="waitToClickChooseColor1"/>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('1')}}" stepKey="clickChooseColor1"/>
         <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex1">
             <argument name="nthColorPicker" value="1"/>
@@ -69,6 +70,7 @@
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch2">
             <argument name="index" value="1"/>
         </actionGroup>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="waitToClickChooseColor2"/>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('2')}}" stepKey="clickChooseColor2"/>
         <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex2">
             <argument name="nthColorPicker" value="2"/>
@@ -80,6 +82,7 @@
         <actionGroup ref="OpenSwatchMenuByIndexActionGroup" stepKey="clickSwatch3">
             <argument name="index" value="2"/>
         </actionGroup>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthChooseColor('3')}}" stepKey="waitToClickChooseColor3"/>
         <click selector="{{AdminManageSwatchSection.nthChooseColor('3')}}" stepKey="clickChooseColor3"/>
         <actionGroup ref="SetColorPickerByHexActionGroup" stepKey="fillHex3">
             <argument name="nthColorPicker" value="3"/>

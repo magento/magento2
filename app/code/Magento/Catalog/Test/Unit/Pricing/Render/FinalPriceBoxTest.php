@@ -413,8 +413,13 @@ class FinalPriceBoxTest extends TestCase
 
         $this->priceInfo
             ->method('getPrice')
-            ->withConsecutive([RegularPrice::PRICE_CODE], [FinalPrice::PRICE_CODE])
-            ->willReturnOnConsecutiveCalls($regularPriceType, $finalPriceType);
+            ->willReturnCallback(function ($arg) use ($regularPriceType, $finalPriceType) {
+                if ($arg == RegularPrice::PRICE_CODE) {
+                    return $regularPriceType;
+                } elseif ($arg == FinalPrice::PRICE_CODE) {
+                    return $finalPriceType;
+                }
+            });
 
         $this->assertEquals($expectedResult, $this->object->hasSpecialPrice());
     }
@@ -422,7 +427,7 @@ class FinalPriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function hasSpecialPriceProvider(): array
+    public static function hasSpecialPriceProvider(): array
     {
         return [
             [10.0, 20.0, false],
@@ -555,7 +560,7 @@ class FinalPriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function isProductListDataProvider(): array
+    public static function isProductListDataProvider(): array
     {
         return [
             'is_not_product_list' => [false],

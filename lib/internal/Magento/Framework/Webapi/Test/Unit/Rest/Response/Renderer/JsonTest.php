@@ -26,7 +26,7 @@ class JsonTest extends TestCase
         /** Prepare mocks and objects for SUT constructor. */
         $this->encoderMock = $this->getMockBuilder(Encoder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['encode'])
+            ->onlyMethods(['encode'])
             ->getMock();
         /** Initialize SUT. */
         $this->_restJsonRenderer = new Json($this->encoderMock);

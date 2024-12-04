@@ -2,7 +2,7 @@
     "name": "magento/module-media-gallery-synchronization",
     "description": "Magento module provides implementation of the media gallery data synchronization.",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-media-gallery-synchronization-api": "*",

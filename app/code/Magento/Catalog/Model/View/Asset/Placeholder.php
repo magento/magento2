@@ -7,10 +7,15 @@
 namespace Magento\Catalog\Model\View\Asset;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\File\NotFoundException;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Catalog\Model\Product\Media\ConfigInterface;
 
 /**
  * A locally available image placeholder file asset that can be referred with a file type
@@ -54,27 +59,48 @@ class Placeholder implements LocalInterface
     private $scopeConfig;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $directoryMedia;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $mediaConfig;
+
+    /**
      * Placeholder constructor.
      *
      * @param ContextInterface $context
      * @param ScopeConfigInterface $scopeConfig
      * @param Repository $assetRepo
      * @param string $type
+     * @param Filesystem|null $filesystem
+     * @param ConfigInterface|null $mediaConfig
+     *
      */
     public function __construct(
         ContextInterface $context,
         ScopeConfigInterface $scopeConfig,
         Repository $assetRepo,
-        $type
+        $type,
+        ?Filesystem $filesystem = null,
+        ?ConfigInterface $mediaConfig = null
     ) {
         $this->context = $context;
         $this->scopeConfig = $scopeConfig;
         $this->assetRepo = $assetRepo;
         $this->type = $type;
+        $filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
+        $this->mediaConfig = $mediaConfig ?? ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->directoryMedia = $filesystem->getDirectoryWrite(
+            DirectoryList::MEDIA,
+            DriverPool::FILE
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUrl()
     {
@@ -88,7 +114,7 @@ class Placeholder implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContentType()
     {
@@ -96,12 +122,12 @@ class Placeholder implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getPath()
     {
         if ($this->getFilePath() !== null) {
-            $result = $this->getContext()->getPath()
+            $result = $this->getLocalMediaPath()
                 . DIRECTORY_SEPARATOR . $this->getModule()
                 . DIRECTORY_SEPARATOR . $this->getFilePath();
         } else {
@@ -119,7 +145,35 @@ class Placeholder implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get path for local media
+     *
+     * @return string
+     */
+    private function getLocalMediaPath()
+    {
+        return $this->directoryMedia->getAbsolutePath($this->mediaConfig->getBaseMediaPath());
+    }
+
+    /**
+     * Get relative placeholder path
+     *
+     * @return string|null
+     */
+    public function getRelativePath()
+    {
+        $result = null;
+        //will use system placeholder unless another specified in the config
+        if ($this->getFilePath() !== null) {
+            $result = DIRECTORY_SEPARATOR . DirectoryList::MEDIA
+                . DIRECTORY_SEPARATOR . $this->directoryMedia->getRelativePath($this->mediaConfig->getBaseMediaPath())
+                . DIRECTORY_SEPARATOR . $this->getModule()
+                . DIRECTORY_SEPARATOR . $this->getFilePath();
+        }
+        return $result;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getSourceFile()
     {
@@ -137,7 +191,7 @@ class Placeholder implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getContent()
     {
@@ -145,7 +199,7 @@ class Placeholder implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFilePath()
     {
@@ -163,7 +217,8 @@ class Placeholder implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return ContextInterface
      */
     public function getContext()
@@ -172,7 +227,7 @@ class Placeholder implements LocalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getModule()
     {

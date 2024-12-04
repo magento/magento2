@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use Magento\TestFramework\Event\Magento;
 use Magento\TestFramework\Fixture\Parser\Config as ConfigFixtureParser;
 use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -271,6 +272,16 @@ class ConfigFixture
      */
     public function startTest(TestCase $test)
     {
+        if ($eventObj = Magento::getCurrentEventObject()) {
+            $testData = $eventObj->test()->testData();
+
+            if ($testData->hasDataFromDataProvider()) {
+                $dataFromDataProvider = $testData->dataFromDataProvider();
+                $dataSetName = $dataFromDataProvider->dataSetName();
+                $test->setData($dataSetName, ['']);
+            }
+        }
+
         $this->_currentTest = $test;
         $this->_assignConfigData($test);
     }

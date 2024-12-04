@@ -18,6 +18,7 @@
         </arguments>
 
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="waitForBillingAddressFirstNameVisible"/>
         <see userInput="{{customerVar.firstName}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressFirstName"/>
         <see userInput="{{customerVar.lastName}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressLastName"/>
         <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.billingAddress}}" stepKey="assertBillingAddressStreet"/>

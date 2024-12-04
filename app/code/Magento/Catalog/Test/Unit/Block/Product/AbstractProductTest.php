@@ -191,7 +191,7 @@ class AbstractProductTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetMinimalQty()
+    public static function dataProviderGetMinimalQty()
     {
         return [
             [

@@ -8,6 +8,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 use Magento\Backend\Model\Session\Quote;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Eav\Model\AttributeDataFactory;
@@ -219,6 +220,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     protected function _prepareForm()
     {
@@ -229,6 +231,12 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
         $addressForm = $this->_customerFormFactory->create('customer_address', 'adminhtml_customer_address');
         $attributes = $addressForm->getAttributes();
+        uasort(
+            $attributes,
+            function ($attr1, $attr2) {
+                return $attr1->getSortOrder() <=> $attr2->getSortOrder();
+            }
+        );
         $this->_addAttributesToForm($attributes, $fieldset);
 
         $prefixElement = $this->_form->getElement('prefix');

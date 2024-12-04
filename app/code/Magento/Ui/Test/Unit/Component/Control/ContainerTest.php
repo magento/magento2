@@ -55,7 +55,7 @@ class ContainerTest extends TestCase
 
         $abstractContextMock = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getNameInLayout'])
+            ->onlyMethods(['getNameInLayout'])
             ->getMockForAbstractClass();
         $abstractContextMock->expects($this->any())->method('getNameInLayout')->willReturn($nameInLayout);
 

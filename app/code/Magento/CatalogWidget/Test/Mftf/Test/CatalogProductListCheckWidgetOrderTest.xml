@@ -68,8 +68,8 @@
         <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam" />
         <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
-        <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$simplecategory.name$')}}" stepKey="waitForCategoryVisible" />
-        <click selector="{{WidgetSection.PreCreateCategory('$simplecategory.name$')}}" stepKey="selectCategory" />
+        <waitForElementVisible selector="{{WidgetSection.CreateCategory('$simplecategory.name$')}}" stepKey="waitForCategoryVisible" />
+        <click selector="{{WidgetSection.CreateCategory('$simplecategory.name$')}}" stepKey="selectCategory" />
         <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
         <!--Save cms page and go to Storefront-->
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveCmsPage"/>

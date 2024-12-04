@@ -18,6 +18,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,7 +32,7 @@ class DefaultTest extends TestCase
     /**
      * Expiration frame
      */
-    const EXPIRE_FRAME = 86400;
+    private const EXPIRE_FRAME = 86400;
 
     /**
      * Captcha default config data
@@ -118,19 +119,6 @@ class DefaultTest extends TestCase
             'getStore'
         )->willReturn(
             $this->_getStoreStub()
-        );
-
-        // \Magento\Customer\Model\Session
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->_objectManager->expects(
-            $this->any()
-        )->method(
-            'get'
-        )->willReturnMap(
-            [
-                Data::class => $this->_getHelperStub(),
-                Session::class => $this->session,
-            ]
         );
 
         $this->_resLogFactory = $this->createPartialMock(
@@ -284,12 +272,20 @@ class DefaultTest extends TestCase
     protected function _getSessionStub()
     {
         $helper = new ObjectManager($this);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $sessionArgs = $helper->getConstructArguments(
             Session::class,
             ['storage' => new Storage()]
         );
         $session = $this->getMockBuilder(Session::class)
-            ->setMethods(['isLoggedIn', 'getUserCreateWord'])
+            ->addMethods(['getUserCreateWord'])
+            ->onlyMethods(['isLoggedIn'])
             ->setConstructorArgs($sessionArgs)
             ->getMock();
         $session->expects($this->any())->method('isLoggedIn')->willReturn(false);
@@ -315,7 +311,7 @@ class DefaultTest extends TestCase
         $helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
             )->getMock();
 
@@ -415,7 +411,7 @@ class DefaultTest extends TestCase
     /**
      * @return array
      */
-    public function isShownToLoggedInUserDataProvider()
+    public static function isShownToLoggedInUserDataProvider()
     {
         return [
             [true, 'contact_us'],
@@ -449,7 +445,7 @@ class DefaultTest extends TestCase
     /**
      * @return array
      */
-    public function generateWordProvider()
+    public static function generateWordProvider()
     {
         return [
             ['ABC123'],

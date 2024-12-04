@@ -10,18 +10,12 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\EavGraphQl\Model\GetAttributeSelectedOptionComposite;
 use Magento\EavGraphQl\Model\GetAttributeValueInterface;
-use Magento\EavGraphQl\Model\Uid;
 
 /**
  * Custom attribute value provider for customer
  */
 class GetCustomAttributes implements GetAttributeValueInterface
 {
-    /**
-     * @var Uid
-     */
-    private Uid $uid;
-
     /**
      * @var AttributeRepository
      */
@@ -38,18 +32,15 @@ class GetCustomAttributes implements GetAttributeValueInterface
     private array $frontendInputs;
 
     /**
-     * @param Uid $uid
      * @param AttributeRepository $attributeRepository
      * @param GetAttributeSelectedOptionComposite $attributeSelectedOptionComposite
      * @param array $frontendInputs
      */
     public function __construct(
-        Uid $uid,
         AttributeRepository $attributeRepository,
         GetAttributeSelectedOptionComposite $attributeSelectedOptionComposite,
         array $frontendInputs = []
     ) {
-        $this->uid = $uid;
         $this->attributeRepository = $attributeRepository;
         $this->frontendInputs = $frontendInputs;
         $this->attributeSelectedOptionComposite = $attributeSelectedOptionComposite;
@@ -66,10 +57,7 @@ class GetCustomAttributes implements GetAttributeValueInterface
         );
 
         $result = [
-            'uid' => $this->uid->encode(
-                $entityType,
-                $customAttribute['attribute_code']
-            ),
+            'entity_type' => $entityType,
             'code' => $customAttribute['attribute_code'],
             'sort_order' => $attr->getSortOrder() ?? ''
         ];

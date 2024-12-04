@@ -37,7 +37,7 @@ class ConstraintTest extends TestCase
     {
         $this->_validatorMock = $this->getMockBuilder(
             AbstractValidator::class
-        )->setMethods(
+        )->onlyMethods(
             ['isValid', 'getMessages']
         )->getMock();
         $this->_constraint = new Constraint($this->_validatorMock);
@@ -96,7 +96,7 @@ class ConstraintTest extends TestCase
      *
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [['test', true], ['test', false, ['foo']]];
     }

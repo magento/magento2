@@ -44,12 +44,12 @@ class RuleTest extends TestCase
 
         $this->coupon = $this->getMockBuilder(Coupon::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadPrimaryByRule', 'setRule', 'setIsPrimary', 'getCode', 'getUsageLimit'])
+            ->onlyMethods(['loadPrimaryByRule', 'setRule', 'setIsPrimary', 'getCode', 'getUsageLimit'])
             ->getMock();
 
         $couponFactory = $this->getMockBuilder(CouponFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $couponFactory->expects($this->any())
             ->method('create')
@@ -58,13 +58,13 @@ class RuleTest extends TestCase
         $this->conditionCombineFactoryMock = $this->getMockBuilder(
             CombineFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->condProdCombineFactoryMock = $this->getMockBuilder(
             \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->model = $objectManager->getObject(
@@ -131,7 +131,8 @@ class RuleTest extends TestCase
     {
         $prodConditionMock = $this->getMockBuilder(Combine::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRule', 'setId', 'loadArray', 'getConditions'])
+            ->addMethods(['setRule', 'setId'])
+            ->onlyMethods(['loadArray', 'getConditions'])
             ->getMock();
 
         $prodConditionMock->expects($this->any())
@@ -154,7 +155,8 @@ class RuleTest extends TestCase
     {
         $conditionMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Condition\Combine::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRule', 'setId', 'loadArray', 'getConditions'])
+            ->addMethods(['setRule', 'setId'])
+            ->onlyMethods(['loadArray', 'getConditions'])
             ->getMock();
         $conditionMock->expects($this->any())
             ->method('setRule')

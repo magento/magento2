@@ -5,9 +5,11 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-require-js": "*",
+        "magento/module-deploy": "*"
     },
     "type": "magento2-module",
     "license": [

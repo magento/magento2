@@ -187,7 +187,7 @@ class TitleTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderShouldTranslateTitle(): array
+    public static function dataProviderShouldTranslateTitle(): array
     {
         return [
             [

@@ -211,7 +211,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         } else {
             $this->_httpContext->setValue(
                 Context::CONTEXT_GROUP,
-                $customer->getGroupId(),
+                (string)$customer->getGroupId(),
                 \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
             );
             $this->setCustomerId($customer->getId());
@@ -271,7 +271,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_customerModel = $customerModel;
         $this->_httpContext->setValue(
             Context::CONTEXT_GROUP,
-            $customerModel->getGroupId(),
+            (string)$customerModel->getGroupId(),
             \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
         );
         $this->setCustomerId($customerModel->getId());

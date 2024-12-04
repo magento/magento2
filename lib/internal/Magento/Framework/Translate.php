@@ -610,5 +610,7 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
         $this->_config = [];
         $this->_data = [];
         $this->_localeCode = null;
+        $this->_cacheId = null;
+        $this->serializer = null;
     }
 }

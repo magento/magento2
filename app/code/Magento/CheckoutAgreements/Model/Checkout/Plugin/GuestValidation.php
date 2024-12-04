@@ -6,7 +6,17 @@
 
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
+use Magento\Checkout\Api\AgreementsValidatorInterface;
+use Magento\Checkout\Api\GuestPaymentInformationManagementInterface;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Api\GuestCartRepositoryInterface;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
 
@@ -40,62 +50,85 @@ class GuestValidation
     private $activeStoreAgreementsFilter;
 
     /**
-     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
-     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList
+     * @var GuestCartRepositoryInterface
+     */
+    private GuestCartRepositoryInterface $quoteRepository;
+
+    /**
+     * @var Emulation
+     */
+    private Emulation $storeEmulation;
+
+    /**
+     * @param AgreementsValidatorInterface $agreementsValidator
+     * @param ScopeConfigInterface $scopeConfiguration
+     * @param CheckoutAgreementsListInterface $checkoutAgreementsList
      * @param ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
+     * @param GuestCartRepositoryInterface $quoteRepository
+     * @param Emulation $storeEmulation
      */
     public function __construct(
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList,
-        \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter $activeStoreAgreementsFilter
+        \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter $activeStoreAgreementsFilter,
+        GuestCartRepositoryInterface $quoteRepository,
+        Emulation $storeEmulation
     ) {
         $this->agreementsValidator = $agreementsValidator;
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsList = $checkoutAgreementsList;
         $this->activeStoreAgreementsFilter = $activeStoreAgreementsFilter;
+        $this->quoteRepository = $quoteRepository;
+        $this->storeEmulation = $storeEmulation;
     }
 
     /**
      * Validates agreements before save payment information and  order placing.
      *
-     * @param \Magento\Checkout\Api\GuestPaymentInformationManagementInterface $subject
+     * @param GuestPaymentInformationManagementInterface $subject
      * @param string $cartId
      * @param string $email
-     * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
-     * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @param PaymentInterface $paymentMethod
+     * @param AddressInterface|null $billingAddress
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws CouldNotSaveException|NoSuchEntityException
      */
     public function beforeSavePaymentInformationAndPlaceOrder(
-        \Magento\Checkout\Api\GuestPaymentInformationManagementInterface $subject,
+        GuestPaymentInformationManagementInterface $subject,
         $cartId,
         $email,
-        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        PaymentInterface $paymentMethod,
+        AddressInterface $billingAddress = null
     ) {
         if ($this->isAgreementEnabled()) {
-            $this->validateAgreements($paymentMethod);
+            $quote = $this->quoteRepository->get($cartId);
+            $storeId = $quote->getStoreId();
+            $this->validateAgreements($paymentMethod, $storeId);
         }
     }
 
     /**
      * Validates agreements.
      *
-     * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @param PaymentInterface $paymentMethod
+     * @param int $storeId
      * @return void
+     * @throws CouldNotSaveException
      */
-    private function validateAgreements(\Magento\Quote\Api\Data\PaymentInterface $paymentMethod)
+    private function validateAgreements(PaymentInterface $paymentMethod, int $storeId)
     {
         $agreements = $paymentMethod->getExtensionAttributes() === null
             ? []
             : $paymentMethod->getExtensionAttributes()->getAgreementIds();
 
-        if (!$this->agreementsValidator->isValid($agreements)) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
+        $this->storeEmulation->startEnvironmentEmulation($storeId);
+        $isValid = $this->agreementsValidator->isValid($agreements);
+        $this->storeEmulation->stopEnvironmentEmulation();
+
+        if (!$isValid) {
+            throw new CouldNotSaveException(
                 __(
                     "The order wasn't placed. "
                     . "First, agree to the terms and conditions, then try placing your order again."

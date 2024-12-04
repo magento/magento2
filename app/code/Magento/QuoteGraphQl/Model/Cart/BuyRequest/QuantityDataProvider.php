@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Stdlib\ArrayManagerFactory;
 
 /**
  * Provides QTY buy request data for adding products to cart
@@ -16,17 +18,23 @@ use Magento\Framework\Stdlib\ArrayManager;
 class QuantityDataProvider implements BuyRequestDataProviderInterface
 {
     /**
-     * @var ArrayManager
+     * @var ArrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $arrayManager;
+    private readonly ArrayManagerFactory $arrayManagerFactory;
 
     /**
-     * @param ArrayManager $arrayManager
+     * @param ArrayManager $arrayManager @deprecated @see $arrayManagerFactory
+     * @param ArrayManagerFactory|null $arrayManagerFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        ?ArrayManagerFactory $arrayManagerFactory = null,
     ) {
-        $this->arrayManager = $arrayManager;
+        $this->arrayManagerFactory = $arrayManagerFactory
+            ?? ObjectManager::getInstance()->get(ArrayManagerFactory::class);
     }
 
     /**
@@ -34,7 +42,7 @@ class QuantityDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(array $cartItemData): array
     {
-        $quantity = $this->arrayManager->get('data/quantity', $cartItemData);
+        $quantity = $this->arrayManagerFactory->create()->get('data/quantity', $cartItemData);
         if (!isset($quantity)) {
             throw new GraphQlInputException(__('Missing key "quantity" in cart item data'));
         }

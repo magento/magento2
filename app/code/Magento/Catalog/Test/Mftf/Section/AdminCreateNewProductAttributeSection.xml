@@ -15,6 +15,9 @@
         <element name="inputType" type="select" selector="select[name='frontend_input']" timeout="30"/>
         <element name="addValue" type="button" selector="//button[contains(@data-action,'add_new_row')]" timeout="30"/>
         <element name="defaultStoreView" type="input" selector="//input[contains(@name,'option[value][option_{{row}}][1]')]" parameterized="true"/>
+        <element name="firstOptionStoreView" type="input" selector="//td[@class='col-option_0'][3]/input"/>
+        <element name="secondOptionStoreView" type="input" selector="//td[@class='col-option_1'][3]/input"/>
+        <element name="customStoreViewField" type="input" selector="input[value='{{fieldValue}}']" parameterized="true"/>
         <element name="adminOption" type="input" selector="//input[contains(@name,'option[value][option_{{row}}][0]')]" parameterized="true"/>
         <element name="defaultRadioButton" type="radio" selector="//tr[{{row}}]//input[contains(@name,'default[]')]" parameterized="true"/>
         <element name="isRequired" type="checkbox" selector="//input[contains(@name,'is_required')]/..//label"/>

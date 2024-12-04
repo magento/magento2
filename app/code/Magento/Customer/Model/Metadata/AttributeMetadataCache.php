@@ -13,6 +13,7 @@ use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -36,7 +37,7 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
     private $state;
 
     /**
-     * @var AttributeMetadataInterface[]
+     * @var AttributeMetadataInterface[]|null
      */
     private $attributes;
 
@@ -138,7 +139,8 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
                 [
                     Type::CACHE_TAG,
                     Attribute::CACHE_TAG,
-                    System::CACHE_TAG
+                    System::CACHE_TAG,
+                    Store::CACHE_TAG
                 ]
             );
         }
@@ -156,7 +158,7 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
             $this->cache->clean(
                 [
                     Type::CACHE_TAG,
-                    Attribute::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }
@@ -180,6 +182,6 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->attributes = [];
+        $this->attributes = null;
     }
 }

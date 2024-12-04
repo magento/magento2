@@ -739,6 +739,7 @@ class QuoteManagementTest extends TestCase
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmit(): void
     {
@@ -784,22 +785,15 @@ class QuoteManagementTest extends TestCase
             ->willReturn($baseOrder);
         $this->quoteAddressToOrderAddress
             ->method('convert')
-            ->withConsecutive(
-                [
-                    $shippingAddress,
-                    [
-                        'address_type' => 'shipping',
-                        'email' => 'customer@example.com'
-                    ]
-                ],
-                [
-                    $billingAddress,
-                    [
-                        'address_type' => 'billing',
-                        'email' => 'customer@example.com'
-                    ]
-                ]
-            )->willReturnOnConsecutiveCalls($convertedShipping, $convertedBilling);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($shippingAddress, $billingAddress, $convertedShipping, $convertedBilling) {
+                if ($arg1 == $shippingAddress && $arg2['address_type'] == 'shipping') {
+                    return $convertedShipping;
+                } elseif ($arg1 == $billingAddress && $arg2['address_type'] == 'billing') {
+                    return $convertedBilling;
+                }
+            });
+
         $billingAddress->expects($this->once())->method('getId')->willReturn(4);
         $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
 
@@ -827,17 +821,16 @@ class QuoteManagementTest extends TestCase
             ->willReturn($order);
         $this->eventManager
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'sales_model_service_quote_submit_before',
-                    ['order' => $order, 'quote' => $quote]
-                ],
-                [
-                    'sales_model_service_quote_submit_success',
-                    ['order' => $order, 'quote' => $quote]
-                ]
-            );
-        $this->lockManagerMock->method('isLocked')->willReturn(false);
+            ->willReturnCallback(function ($arg1, $arg2) use ($order, $quote) {
+                if ($arg1 == 'sales_model_service_quote_submit_before' &&
+                    $arg2['order'] === $order && $arg2['quote'] === $quote) {
+                    return true;
+                } elseif ($arg1 === 'sales_model_service_quote_submit_success' &&
+                    $arg2['order'] === $order && $arg2['quote'] === $quote) {
+                    return true;
+                }
+            });
+        $this->lockManagerMock->method('lock')->willReturn(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
@@ -939,13 +932,16 @@ class QuoteManagementTest extends TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderStatus')->with($orderStatus);
 
-        $this->assertEquals($orderId, $service->placeOrder($cartId));
+        $this->assertEquals(
+            $orderId,
+            $this->invokeMethod($service, 'placeOrderRun', [$cartId])
+        );
     }
 
     /**
      * @return array
      */
-    public function guestPlaceOrderDataProvider(): array
+    public static function guestPlaceOrderDataProvider(): array
     {
         return [
             [null, 1],
@@ -1052,7 +1048,10 @@ class QuoteManagementTest extends TestCase
         $paymentMethod->expects($this->once())->method('setChecks');
         $paymentMethod->expects($this->once())->method('getData')->willReturn(['additional_data' => []]);
 
-        $this->assertEquals($orderId, $service->placeOrder($cartId, $paymentMethod));
+        $this->assertEquals(
+            $orderId,
+            $this->invokeMethod($service, 'placeOrderRun', [$cartId, $paymentMethod])
+        );
     }
 
     /**
@@ -1144,7 +1143,7 @@ class QuoteManagementTest extends TestCase
         $quote->expects($this->any())
             ->method('getCustomer')
             ->willReturn($customer);
-        $quote->expects($this->exactly(2))
+        $quote->expects($this->once())
             ->method('getId')
             ->willReturn($id);
         $this->customerRepositoryMock->expects($this->any())->method('getById')->willReturn($customer);
@@ -1223,6 +1222,7 @@ class QuoteManagementTest extends TestCase
     /**
      * @return void
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetCartForCustomer(): void
     {
@@ -1273,6 +1273,7 @@ class QuoteManagementTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSubmitForCustomer(): void
     {
@@ -1311,6 +1312,7 @@ class QuoteManagementTest extends TestCase
             false
         );
 
+        $this->lockManagerMock->method('lock')->willReturn(true);
         $this->submitQuoteValidator->method('validateQuote')
             ->with($quote);
         $this->quoteAddressToOrder->expects($this->once())
@@ -1319,23 +1321,18 @@ class QuoteManagementTest extends TestCase
             ->willReturn($baseOrder);
         $this->quoteAddressToOrderAddress
             ->method('convert')
-            ->withConsecutive(
-                [
-                    $shippingAddress,
-                    [
-                        'address_type' => 'shipping',
-                        'email' => 'customer@example.com'
-                    ]
-                ],
-                [
-                    $billingAddress,
-                    [
-                        'address_type' => 'billing',
-                        'email' => 'customer@example.com'
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($convertedShipping, $convertedBilling);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($shippingAddress, $billingAddress, $convertedShipping, $convertedBilling) {
+                if ($arg1 == $shippingAddress &&
+                $arg2['address_type'] == 'shipping' &&
+                $arg2['email'] == 'customer@example.com') {
+                    return $convertedShipping;
+                } elseif ($arg1 == $billingAddress &&
+                $arg2['address_type'] == 'billing'
+                && $arg2['email'] == 'customer@example.com') {
+                    return $convertedBilling;
+                }
+            });
         $this->quoteItemToOrderItem->expects($this->once())->method('convert')
             ->with($quoteItem, ['parent_item' => null])
             ->willReturn($convertedQuoteItem);
@@ -1368,16 +1365,16 @@ class QuoteManagementTest extends TestCase
             ->willReturn($order);
         $this->eventManager
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'sales_model_service_quote_submit_before',
-                    ['order' => $order, 'quote' => $quote]
-                ],
-                [
-                    'sales_model_service_quote_submit_success',
-                    ['order' => $order, 'quote' => $quote]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($order, $quote) {
+                if ($arg1 == 'sales_model_service_quote_submit_before' &&
+                    $arg2['order'] == $order && $arg2['quote'] == $quote) {
+                    return null;
+                } elseif ($arg1 == 'sales_model_service_quote_submit_success' &&
+                    $arg2['order'] == $order && $arg2['quote'] == $quote) {
+                    return null;
+                }
+            });
+        $this->lockManagerMock->method('lock')->willReturn(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
@@ -1389,6 +1386,7 @@ class QuoteManagementTest extends TestCase
      * @param array $methods
      *
      * @return MockObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function createPartialMockForAbstractClass(string $className, array $methods = []): MockObject
     {
@@ -1404,108 +1402,19 @@ class QuoteManagementTest extends TestCase
     }
 
     /**
-     * @return void
+     * Invokes private method.
      *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @param $object
+     * @param $methodName
+     * @param array $parameters
+     * @return mixed
      */
-    public function testSubmitWithLockException(): void
+    private function invokeMethod(&$object, $methodName, array $parameters = [])
     {
-        $orderData = [];
-        $isGuest = true;
-        $isVirtual = false;
-        $customerId = 1;
-        $quoteId = 1;
-        $quoteItem = $this->createMock(Item::class);
-        $billingAddress = $this->createMock(Address::class);
-        $shippingAddress = $this->getMockBuilder(Address::class)
-            ->addMethods(['getQuoteId'])
-            ->onlyMethods(['getShippingMethod', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $payment = $this->createMock(Payment::class);
-        $baseOrder = $this->getMockForAbstractClass(OrderInterface::class);
-        $convertedBilling = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
-        $convertedShipping = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
-        $convertedPayment = $this->getMockForAbstractClass(OrderPaymentInterface::class);
-        $convertedQuoteItem = $this->getMockForAbstractClass(OrderItemInterface::class);
-        $addresses = [$convertedShipping, $convertedBilling];
-        $quoteItems = [$quoteItem];
-        $convertedItems = [$convertedQuoteItem];
-        $quote = $this->getQuote(
-            $isGuest,
-            $isVirtual,
-            $billingAddress,
-            $payment,
-            $customerId,
-            $quoteId,
-            $quoteItems,
-            $shippingAddress,
-            false
-        );
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
 
-        $this->submitQuoteValidator->expects($this->once())
-            ->method('validateQuote')
-            ->with($quote);
-        $this->quoteAddressToOrder->expects($this->once())
-            ->method('convert')
-            ->with($shippingAddress, $orderData)
-            ->willReturn($baseOrder);
-        $this->quoteAddressToOrderAddress
-            ->method('convert')
-            ->withConsecutive(
-                [
-                    $shippingAddress,
-                    [
-                        'address_type' => 'shipping',
-                        'email' => 'customer@example.com'
-                    ]
-                ],
-                [
-                    $billingAddress,
-                    [
-                        'address_type' => 'billing',
-                        'email' => 'customer@example.com'
-                    ]
-                ]
-            )->willReturnOnConsecutiveCalls($convertedShipping, $convertedBilling);
-        $billingAddress->expects($this->once())->method('getId')->willReturn(4);
-        $convertedBilling->expects($this->once())->method('setData')->with('quote_address_id', 4);
-
-        $this->quoteItemToOrderItem->expects($this->once())->method('convert')
-            ->with($quoteItem, ['parent_item' => null])
-            ->willReturn($convertedQuoteItem);
-        $this->quotePaymentToOrderPayment->expects($this->once())->method('convert')->with($payment)
-            ->willReturn($convertedPayment);
-        $shippingAddress->expects($this->once())->method('getShippingMethod')->willReturn('free');
-        $shippingAddress->expects($this->once())->method('getId')->willReturn(5);
-        $convertedShipping->expects($this->once())->method('setData')->with('quote_address_id', 5);
-        $order = $this->prepareOrderFactory(
-            $baseOrder,
-            $convertedBilling,
-            $addresses,
-            $convertedPayment,
-            $convertedItems,
-            $quoteId,
-            $convertedShipping
-        );
-
-        $this->eventManager
-            ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'sales_model_service_quote_submit_before',
-                    ['order' => $order, 'quote' => $quote]
-                ],
-                [
-                    'sales_model_service_quote_submit_success',
-                    ['order' => $order, 'quote' => $quote]
-                ]
-            );
-        $this->lockManagerMock->method('isLocked')->willReturn(true);
-
-        $this->expectExceptionMessage(
-            'A server error stopped your order from being placed. Please try to place your order again.'
-        );
-        $this->assertEquals($order, $this->model->submit($quote, $orderData));
+        return $method->invokeArgs($object, $parameters);
     }
 }

@@ -10,7 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductImagesSection">
         <element name="productImagesToggle" type="button" selector="div[data-index=gallery] .admin__collapsible-title"/>
-        <element name="imageFileUpload" type="input" selector="#fileupload"/>
+        <element name="imageFileUpload" type="input" selector="div.image div.fileinput-button .uppy-Dashboard-input"/>
         <element name="imageUploadButton" type="button" selector="div.image div.fileinput-button"/>
         <element name="imageFile" type="text" selector="//*[@id='media_gallery_content']//img[contains(@src, '{{url}}')]" parameterized="true"/>
         <element name="imageFileRoleByImage" type="text" selector="//*[@id='media_gallery_content']//img[contains(@src, '{{url}}')]/ancestor::div[@data-role='image']//*[@data-role-code='{{roleCode}}']" parameterized="true"/>
@@ -26,6 +26,7 @@
 
         <element name="altText" type="textarea" selector="textarea[data-role='image-description']"/>
 
+        <element name="role" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[label[normalize-space(.) = '{{role}}']]" parameterized="true"/>
         <element name="roleBase" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Base']"/>
         <element name="roleSmall" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Small']"/>
         <element name="roleThumbnail" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Thumbnail']"/>

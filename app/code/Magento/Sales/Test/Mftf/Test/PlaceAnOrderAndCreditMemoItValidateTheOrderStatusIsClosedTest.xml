@@ -103,7 +103,8 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
 
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>

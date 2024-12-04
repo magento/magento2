@@ -22,7 +22,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $config = $this->getMockBuilder(
             \Magento\Framework\View\Layout\PageType\Config::class
-        )->setMethods(
+        )->onlyMethods(
             ['getPageTypes']
         )->disableOriginalConstructor()->getMock();
         $pageTypeValues = [

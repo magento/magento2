@@ -1,14 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Controller\Adminhtml\Bookmark;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\DecoderInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
@@ -55,11 +60,12 @@ class Save extends AbstractAction implements HttpPostActionInterface
     /**
      * @var DecoderInterface
      * @deprecated 101.1.0
+     * @see Replaced the usage of Magento\Framework\Json\DecoderInterface by Magento\Framework\Serialize\Serializer\Json
      */
     protected $jsonDecoder;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
@@ -71,7 +77,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
      * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param UserContextInterface $userContext
      * @param DecoderInterface $jsonDecoder
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json|null $serializer
      * @throws \RuntimeException
      */
     public function __construct(
@@ -82,7 +88,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
         BookmarkInterfaceFactory $bookmarkFactory,
         UserContextInterface $userContext,
         DecoderInterface $jsonDecoder,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null
     ) {
         parent::__construct($context, $factory);
         $this->bookmarkRepository = $bookmarkRepository;
@@ -90,8 +96,8 @@ class Save extends AbstractAction implements HttpPostActionInterface
         $this->bookmarkFactory = $bookmarkFactory;
         $this->userContext = $userContext;
         $this->jsonDecoder = $jsonDecoder;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
     }
 
     /**
@@ -99,7 +105,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
      *
      * @return void
      * @throws \InvalidArgumentException
-     * @throws \LogicException
+     * @throws \LogicException|LocalizedException
      */
     public function execute()
     {
@@ -126,6 +132,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
                     $bookmark->getTitle(),
                     $jsonData
                 );
+                $this->updateCurrentBookmarkConfig($data);
 
                 break;
 
@@ -134,7 +141,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
                     $this->updateBookmark(
                         $bookmark,
                         $identifier,
-                        isset($data['label']) ? $data['label'] : '',
+                        $data['label'] ?? '',
                         $jsonData
                     );
                     $this->updateCurrentBookmark($identifier);
@@ -176,32 +183,31 @@ class Save extends AbstractAction implements HttpPostActionInterface
      *
      * @param string $identifier
      * @return void
+     * @throws LocalizedException
      */
     protected function updateCurrentBookmark($identifier)
     {
         $bookmarks = $this->bookmarkManagement->loadByNamespace($this->_request->getParam('namespace'));
         $currentConfig = null;
         foreach ($bookmarks->getItems() as $bookmark) {
-            if ($bookmark->getIdentifier() === self::CURRENT_IDENTIFIER) {
-                $current = $bookmark->getConfig();
-                $currentConfig = $current[self::CURRENT_IDENTIFIER];
-                break;
-            }
-        }
-
-        foreach ($bookmarks->getItems() as $bookmark) {
-            if ($bookmark->getCurrent() && $currentConfig !== null) {
-                $bookmarkConfig = $bookmark->getConfig();
-                $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $currentConfig;
-                $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
-            }
-
             if ($bookmark->getIdentifier() == $identifier) {
+                $current = $bookmark->getConfig();
+                $currentConfig = $current['views'][$bookmark->getIdentifier()]['data'];
                 $bookmark->setCurrent(true);
             } else {
                 $bookmark->setCurrent(false);
             }
             $this->bookmarkRepository->save($bookmark);
+        }
+
+        foreach ($bookmarks->getItems() as $bookmark) {
+            if ($bookmark->getIdentifier() === self::CURRENT_IDENTIFIER && $currentConfig !== null) {
+                $bookmarkConfig = $bookmark->getConfig();
+                $bookmarkConfig[self::CURRENT_IDENTIFIER] = $currentConfig;
+                $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
+                $this->bookmarkRepository->save($bookmark);
+                break;
+            }
         }
     }
 
@@ -225,5 +231,49 @@ class Save extends AbstractAction implements HttpPostActionInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Update current bookmark config data
+     *
+     * @param array $data
+     * @return void
+     * @throws LocalizedException
+     */
+    private function updateCurrentBookmarkConfig(array $data): void
+    {
+        $bookmarks = $this->bookmarkManagement->loadByNamespace($this->_request->getParam('namespace'));
+        foreach ($bookmarks->getItems() as $bookmark) {
+            if ($bookmark->getCurrent()) {
+                $bookmarkConfig = $bookmark->getConfig();
+                $existingConfig = $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] ?? null;
+                $currentConfig = $data[self::CURRENT_IDENTIFIER] ?? null;
+                if ($existingConfig && $currentConfig && $this->isPositionChanged($existingConfig, $currentConfig)) {
+                    $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $data[self::CURRENT_IDENTIFIER];
+                    $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
+                    $this->bookmarkRepository->save($bookmark);
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * Check if the positions for identical filters has changed
+     *
+     * @param array $existingConfig The existing configuration
+     * @param array $currentConfig The current configuration
+     * @return bool True if positions have changed, false otherwise
+     */
+    private function isPositionChanged(array $existingConfig, array $currentConfig): bool
+    {
+        foreach (['filters', 'positions'] as $key) {
+            if (!array_key_exists($key, $existingConfig) || !array_key_exists($key, $currentConfig)) {
+                return false;
+            }
+        }
+
+        return $existingConfig['filters'] === $currentConfig['filters']
+            && $existingConfig['positions'] !== $currentConfig['positions'];
     }
 }

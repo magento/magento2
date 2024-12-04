@@ -121,16 +121,15 @@ class SaveTest extends TestCase
             ->willReturn($this->redirect);
         $this->request->expects($this->exactly(3))
             ->method('getParam')
-            ->withConsecutive(
-                ['scope'],
-                ['scope_id'],
-                ['back', false]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeId,
-                true
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($scope, $scopeId) {
+                if ($arg1 == 'scope') {
+                    return $scope;
+                } elseif ($arg1 == 'scope_id') {
+                    return $scopeId;
+                } elseif ($arg1 == 'back') {
+                    return true;
+                }
+            });
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);
@@ -161,10 +160,13 @@ class SaveTest extends TestCase
             ->with('theme_design_config');
         $this->redirect->expects($this->exactly(2))
             ->method('setPath')
-            ->withConsecutive(
-                ['theme/design_config/'],
-                ['theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($scope, $scopeId) {
+                if ($arg1 == 'theme/design_config/') {
+                    return null;
+                } elseif ($arg1 == 'theme/design_config/edit' && $arg2 == ['scope' => $scope, 'scope_id' => $scopeId]) {
+                    return null;
+                }
+            });
 
         $this->assertSame($this->redirect, $this->controller->execute());
     }
@@ -178,14 +180,11 @@ class SaveTest extends TestCase
             ->willReturn($this->redirect);
         $this->request->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(
-                ['scope'],
-                ['scope_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeId
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['scope'] => $scope,
+                ['scope_id'] => $scopeId
+            });
+
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);
@@ -232,14 +231,10 @@ class SaveTest extends TestCase
             ->willReturn($this->redirect);
         $this->request->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(
-                ['scope'],
-                ['scope_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $scope,
-                $scopeId
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['scope'] => $scope,
+                ['scope_id'] => $scopeId
+            });
         $this->request->expects($this->once())
             ->method('getParams')
             ->willReturn(['header_default_title' => 'Default title']);

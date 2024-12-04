@@ -2,7 +2,7 @@
     "name": "magento/module-review-analytics",
     "description": "N/A",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-review": "*",
         "magento/module-analytics": "*"

@@ -46,7 +46,7 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
         $this->objectManager->get(\Magento\TestFramework\App\Config::class)->clean();
 
         $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
-            ->setMethods(['getObjectManager'])
+            ->onlyMethods(['getObjectManager'])
             ->setConstructorArgs([$this->objectManager->get(IndexerReindexCommand::class)])
             ->getMock();
         $this->fixtureModelMock
@@ -61,7 +61,7 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
         );
 
         $objectFactoryMock = $this->getMockBuilder(ObjectManagerFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectFactoryMock

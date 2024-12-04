@@ -17,10 +17,11 @@
             <argument name="address" type="entity"/>
         </arguments>
 
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailFieldVisible" />
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customer.firstName}}" stepKey="fillFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customer.lastName}}" stepKey="fillLastName"/>
-        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{address.street}}" stepKey="fillStreet"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{address.street[0]}}" stepKey="fillStreet"/>
         <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{address.city}}" stepKey="fillCity"/>
         <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{address.state}}" stepKey="selectRegion"/>
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{address.postcode}}" stepKey="fillZipCode"/>

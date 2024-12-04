@@ -105,8 +105,13 @@ class UpdateItemQtyTest extends TestCase
     {
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item_id', null], ['item_qty', null])
-            ->willReturnOnConsecutiveCalls('1', '2');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'item_id' && $arg2 === null) {
+                    return '1';
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
+                    return '2';
+                }
+            });
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -162,8 +167,13 @@ class UpdateItemQtyTest extends TestCase
     {
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item_id', null], ['item_qty', null])
-            ->willReturnOnConsecutiveCalls('1', '2');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'item_id' && $arg2 === null) {
+                    return '1';
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
+                    return '2';
+                }
+            });
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -205,8 +215,13 @@ class UpdateItemQtyTest extends TestCase
     {
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item_id', null], ['item_qty', null])
-            ->willReturnOnConsecutiveCalls('1', '2');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'item_id' && $arg2 === null) {
+                    return '1';
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
+                    return '2';
+                }
+            });
 
         $exception = new \Exception('Error!');
 
@@ -217,8 +232,7 @@ class UpdateItemQtyTest extends TestCase
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception)
-            ->willReturn(null);
+            ->with($exception);
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')
@@ -260,8 +274,13 @@ class UpdateItemQtyTest extends TestCase
         $jsonResult = json_encode($error);
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item_id', null], ['item_qty', null])
-            ->willReturnOnConsecutiveCalls('1', '{{7+2}}');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'item_id' && $arg2 === null) {
+                    return '1';
+                } elseif ($arg1 == 'item_qty' && $arg2 === null) {
+                    return '{{7+2}}';
+                }
+            });
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')

@@ -32,7 +32,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * Default console line max length(use for limitation in case terminal width greater than 120 characters).
      */
-    const MAX_LINE_LENGTH = 120;
+    public const MAX_LINE_LENGTH = 120;
 
     /**
      * Console input provider.
@@ -114,7 +114,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function title($message)
     {
         $this->autoPrependBlock();
-        $bar = str_repeat('=', Helper::strlenWithoutDecoration($this->getFormatter(), $message));
+        $bar = str_repeat('=', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)));
         $this->writeln(
             [
                 sprintf(' <options=bold>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
@@ -130,7 +130,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function section($message)
     {
         $this->autoPrependBlock();
-        $bar = str_repeat('-', Helper::strlenWithoutDecoration($this->getFormatter(), $message));
+        $bar = str_repeat('-', Helper::width(Helper::removeDecoration($this->getFormatter(), $message)));
         $this->writeln(
             [
                 sprintf(' <fg=white>%s</>', OutputFormatter::escapeTrailingBackslash($message)),
@@ -242,7 +242,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * @inheritdoc
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
-    public function ask($question, $default = null, $validator = null, $maxAttempts = null)
+    public function ask($question, $default = null, $validator = null, $maxAttempts = null):mixed
     {
         $question = new Question($question, $default);
         $question->setValidator($validator);
@@ -255,7 +255,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      * @inheritdoc
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function askHidden($question, $validator = null)
+    public function askHidden($question, $validator = null):mixed
     {
         $question = new Question($question);
 
@@ -268,7 +268,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function confirm($question, $default = true)
+    public function confirm($question, $default = true):bool
     {
         return $this->askQuestion(new ConfirmationQuestion($question, $default));
     }
@@ -276,7 +276,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function choice($question, array $choices, $default = null)
+    public function choice($question, array $choices, $default = null):mixed
     {
         if (null !== $default) {
             $values = array_flip($choices);
@@ -319,7 +319,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * @inheritdoc
      */
-    public function createProgressBar($max = 0)
+    public function createProgressBar($max = 0): ProgressBar
     {
         $progressBar = parent::createProgressBar($max);
         $progressBar->setEmptyBarCharacter(' ');
@@ -564,7 +564,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
         bool $padding = false
     ) {
         $indentLength = 0;
-        $prefixLength = Helper::strlenWithoutDecoration($this->getFormatter(), $prefix);
+        $prefixLength = Helper::width(Helper::removeDecoration($this->getFormatter(), $prefix));
         $lineIndentation = '';
         if (null !== $type) {
             $type = sprintf('[%s] ', $type);
@@ -583,7 +583,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
                 $line = $firstLineIndex === $i ? $type . $line : $lineIndentation . $line;
             }
             $line = $prefix . $line;
-            $multiplier = $this->lineLength - Helper::strlenWithoutDecoration($this->getFormatter(), $line);
+            $multiplier = $this->lineLength - Helper::width(Helper::removeDecoration($this->getFormatter(), $line));
             $line .= str_repeat(' ', $multiplier);
             if ($style) {
                 $line = sprintf('<%s>%s</>', $style, $line);

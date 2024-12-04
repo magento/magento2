@@ -32,6 +32,7 @@
             <selectOption userInput="Central Standard Time (America/Chicago)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectDefaultoption"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>

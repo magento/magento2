@@ -6,8 +6,6 @@
 
 /**
  * Tax report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\ResourceModel\Report;
 
@@ -51,6 +49,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
     }
 
     /**
+     * Return an array of columns which are selected
+     *
      * @return array
      */
     protected function _getSelectedColumns()

@@ -97,7 +97,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Set Minimum Advertised Price to configurable products -->

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectCustomAttributeToExistingProductActionGroup">
+        <annotations>
+            <description>Add the created dropdown attribute to the existing product</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeCode" type="string" defaultValue="test_attribute"/>
+            <argument name="adminOption1" type="string" defaultValue="value 1 admin"/>
+        </arguments>
+        <!--Scroll to element to avoid test order flakiness-->
+        <waitForElement selector="{{AdminProductFormSection.attributeTab}}" stepKey="waitForSection"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminProductFormSection.attributeTab}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getBoundingClientRect().y" stepKey="sectionPosition"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight"/>
+        <executeJS function="window.scrollTo({top: {$sectionPosition}-{$floatingHeaderHeight}})" stepKey="scrollToAttributesTab"/>
+        <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductFormSection.attributeTabOpened}}" visible="false" stepKey="clickToOpen"/>
+        <comment userInput="BIC workaround" stepKey="scrollToAttributeTab"/>
+        <selectOption selector="{{AdminProductFormSection.customSelectField(attributeCode)}}" userInput="{{adminOption1}}" stepKey="selectAvalueFromDropdown"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct" />
+        <waitForPageLoad stepKey="waitForProductsToBeSaved"/>
+    </actionGroup>
+</actionGroups>

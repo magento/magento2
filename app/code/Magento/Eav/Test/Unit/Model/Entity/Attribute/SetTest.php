@@ -71,7 +71,7 @@ class SetTest extends TestCase
      *
      * @return array
      */
-    public function invalidAttributeSetDataProvider()
+    public static function invalidAttributeSetDataProvider()
     {
         return [
             ['', 'The attribute set name is empty. Enter the name and try again.'],

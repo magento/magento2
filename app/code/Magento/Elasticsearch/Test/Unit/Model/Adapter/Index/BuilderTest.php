@@ -46,7 +46,7 @@ class BuilderTest extends TestCase
     {
         $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'emulate',
                 'getLocale'
             ])
@@ -190,7 +190,7 @@ class BuilderTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider()
+    public static function buildDataProvider()
     {
         return [
             ['en_US'],

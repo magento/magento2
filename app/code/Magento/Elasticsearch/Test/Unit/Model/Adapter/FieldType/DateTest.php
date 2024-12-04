@@ -46,7 +46,7 @@ class DateTest extends TestCase
     {
         $this->dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEmptyDate'])
+            ->onlyMethods(['isEmptyDate'])
             ->getMock();
 
         $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)

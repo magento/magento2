@@ -51,7 +51,7 @@ class XsdTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         // @codingStandardsIgnoreStart
         return [
@@ -80,7 +80,13 @@ class XsdTest extends TestCase
                     </publisher>
                 </config>',
                 [
-                    "Element 'publisher': Duplicate key-sequence ['topic.message.queue.config.01'] in unique identity-constraint 'unique-publisher-topic'."
+                    "Element 'publisher': Duplicate key-sequence ['topic.message.queue.config.01'] in unique identity-constraint 'unique-publisher-topic'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <publisher topic=\"topic.message.queue.config.01\">\n" .
+                    "3:                        <connection name=\"amqp\" exchange=\"magento2\"/>\n" .
+                    "4:                    </publisher>\n5:                    <publisher topic=\"topic.message.queue.config.01\">\n" .
+                    "6:                        <connection name=\"amqp\" exchange=\"magento2\" disabled=\"true\"/>\n7:                    </publisher>\n" .
+                    "8:                </config>\n9:\n"
                 ],
             ],
             'non unique publisher connection name' => [
@@ -91,7 +97,12 @@ class XsdTest extends TestCase
                     </publisher>
                 </config>',
                 [
-                    "Element 'connection': Duplicate key-sequence ['amqp'] in unique identity-constraint 'unique-connection-name'."
+                    "Element 'connection': Duplicate key-sequence ['amqp'] in unique identity-constraint 'unique-connection-name'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <publisher topic=\"topic.message.queue.config.01\">\n" .
+                    "3:                        <connection name=\"amqp\" exchange=\"magento2\"/>\n" .
+                    "4:                        <connection name=\"amqp\" exchange=\"magento2\"/>\n" .
+                    "5:                    </publisher>\n6:                </config>\n7:\n"
                 ],
             ],
             'missed required publisher attribute' => [
@@ -101,7 +112,13 @@ class XsdTest extends TestCase
                     </publisher>
                 </config>',
                 [
-                    "Element 'publisher': The attribute 'topic' is required but missing."
+                    "Element 'publisher': The attribute 'topic' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <publisher disabled=\"false\">\n" .
+                    "3:                        <connection name=\"amqp\" exchange=\"magento2\"/>\n" .
+                    "4:                    </publisher>\n5:                </config>\n6:\n"
+
+
                 ],
             ],
             'missed required connection attribute' => [
@@ -118,7 +135,11 @@ class XsdTest extends TestCase
                     <publisher topic="topic.message.queue.config.03" disabled="true" />
                 </config>',
                 [
-                    "Element 'unexpected': This element is not expected. Expected is ( publisher )."
+                    "Element 'unexpected': This element is not expected. Expected is ( publisher ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <unexpected name=\"10\">20</unexpected>\n" .
+                    "3:                    <publisher topic=\"topic.message.queue.config.03\" disabled=\"true\"/>\n" .
+                    "4:                </config>\n5:\n"
                 ],
             ],
             'unexpected connection element' => [
@@ -129,7 +150,12 @@ class XsdTest extends TestCase
                     </publisher>
                 </config>',
                 [
-                    "Element 'unexpected': This element is not expected. Expected is ( connection )."
+                    "Element 'unexpected': This element is not expected. Expected is ( connection ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <publisher topic=\"topic.message.queue.config.03\" disabled=\"true\">\n" .
+                    "3:                        <connection name=\"amqp\" exchange=\"magento2\"/>\n" .
+                    "4:                        <unexpected name=\"10\">20</unexpected>\n" .
+                    "5:                    </publisher>\n6:                </config>\n7:\n"
                 ],
             ],
             'unexpected publisher attribute' => [
@@ -137,7 +163,10 @@ class XsdTest extends TestCase
                     <publisher topic="topic.message.queue.config.03" disabled="true" unexpected="10"/>
                 </config>',
                 [
-                    "Element 'publisher', attribute 'unexpected': The attribute 'unexpected' is not allowed.",
+                    "Element 'publisher', attribute 'unexpected': The attribute 'unexpected' is not allowed.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <publisher topic=\"topic.message.queue.config.03\" disabled=\"true\" unexpected=\"10\"/>\n" .
+                    "3:                </config>\n4:\n",
                 ],
             ],
             'unexpected connection attribute' => [
@@ -147,7 +176,11 @@ class XsdTest extends TestCase
                     </publisher>
                 </config>',
                 [
-                    "Element 'connection', attribute 'unexpected': The attribute 'unexpected' is not allowed.",
+                    "Element 'connection', attribute 'unexpected': The attribute 'unexpected' is not allowed.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <publisher topic=\"topic.message.queue.config.03\" disabled=\"true\">\n" .
+                    "3:                        <connection name=\"amqp\" exchange=\"magento2\" unexpected=\"10\"/>\n" .
+                    "4:                    </publisher>\n5:                </config>\n6:\n",
                 ],
             ],
             'invalid connection attribute value' => [
@@ -157,7 +190,11 @@ class XsdTest extends TestCase
                     </publisher>
                 </config>',
                 [
-                    "Element 'connection', attribute 'disabled': 'disabled' is not a valid value of the atomic type 'xs:boolean'.",
+                    "Element 'connection', attribute 'disabled': 'disabled' is not a valid value of the atomic type 'xs:boolean'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <publisher topic=\"topic.message.queue.config.03\" disabled=\"true\">\n" .
+                    "3:                        <connection name=\"amqp\" exchange=\"magento2\" disabled=\"disabled\"/>\n" .
+                    "4:                    </publisher>\n5:                </config>\n6:\n",
                 ],
             ],
             'invalid publisher attribute value' => [
@@ -167,7 +204,11 @@ class XsdTest extends TestCase
                     </publisher>
                 </config>',
                 [
-                    "Element 'publisher', attribute 'disabled': 'disabled' is not a valid value of the atomic type 'xs:boolean'.",
+                    "Element 'publisher', attribute 'disabled': 'disabled' is not a valid value of the atomic type 'xs:boolean'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/publisher.xsd\">\n" .
+                    "2:                    <publisher topic=\"topic.message.queue.config.03\" disabled=\"disabled\">\n" .
+                    "3:                        <connection name=\"amqp\" exchange=\"magento2\"/>\n" .
+                    "4:                    </publisher>\n5:                </config>\n6:\n",
                 ],
             ],
         ];

@@ -22,6 +22,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Customer;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\Utility;
+use Magento\SalesRule\Model\ValidateCoupon;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -92,6 +93,11 @@ class UtilityTest extends TestCase
     protected $priceCurrency;
 
     /**
+     * @var ValidateCoupon|MockObject
+     */
+    protected $validateCoupon;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -157,12 +163,14 @@ class UtilityTest extends TestCase
 
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMock();
+        $this->validateCoupon = $this->createMock(ValidateCoupon::class);
         $this->utility = new Utility(
             $this->usageFactory,
             $this->couponFactory,
             $this->customerFactory,
             $this->objectFactory,
-            $this->priceCurrency
+            $this->priceCurrency,
+            $this->validateCoupon
         );
     }
 
@@ -195,10 +203,7 @@ class UtilityTest extends TestCase
     public function testCanProcessRuleCouponUsageLimitFail(): void
     {
         $couponCode = 111;
-        $couponId = 4;
         $quoteId = 4;
-        $usageLimit = 1;
-        $timesUsed = 2;
         $this->rule->setCouponType(Rule::COUPON_TYPE_SPECIFIC);
         $this->quote->setCouponCode($couponCode);
         $this->quote->setId($quoteId);
@@ -206,21 +211,9 @@ class UtilityTest extends TestCase
             ->method('getQuote')
             ->willReturn($this->quote);
 
-        $this->coupon->expects($this->atLeastOnce())
-            ->method('getUsageLimit')
-            ->willReturn($usageLimit);
-        $this->coupon->expects($this->once())
-            ->method('getTimesUsed')
-            ->willReturn($timesUsed);
-        $this->coupon->expects($this->once())
-            ->method('load')
-            ->with($couponCode, 'code')->willReturnSelf();
-        $this->couponFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->coupon);
-        $this->coupon->expects($this->once())
-            ->method('getId')
-            ->willReturn($couponId);
+        $this->validateCoupon->method('execute')
+            ->willReturn(false);
+
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
     }
 
@@ -232,11 +225,8 @@ class UtilityTest extends TestCase
     public function testCanProcessRuleCouponUsagePerCustomerFail(): void
     {
         $couponCode = 111;
-        $couponId = 4;
         $quoteId = 4;
         $customerId = 1;
-        $usageLimit = 1;
-        $timesUsed = 2;
 
         $this->rule->setCouponType(Rule::COUPON_TYPE_SPECIFIC);
         $this->quote->setCouponCode($couponCode);
@@ -246,28 +236,9 @@ class UtilityTest extends TestCase
             ->method('getQuote')
             ->willReturn($this->quote);
 
-        $this->coupon->expects($this->atLeastOnce())
-            ->method('getUsagePerCustomer')
-            ->willReturn($usageLimit);
-        $this->coupon->expects($this->once())
-            ->method('load')
-            ->with($couponCode, 'code')->willReturnSelf();
-        $this->coupon->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($couponId);
-        $this->couponFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->coupon);
+        $this->validateCoupon->method('execute')
+            ->willReturn(false);
 
-        $couponUsage = new DataObject();
-        $this->objectFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($couponUsage);
-        $couponUsageModel = $this->createMock(Usage::class);
-        $couponUsage->setData(['coupon_id' => $couponId, 'times_used' => $timesUsed]);
-        $this->usageFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($couponUsageModel);
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
     }
 
@@ -294,6 +265,9 @@ class UtilityTest extends TestCase
             ->method('create')
             ->willReturn($this->customer);
 
+        $this->validateCoupon->method('execute')
+            ->willReturn(true);
+
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
     }
 
@@ -304,7 +278,9 @@ class UtilityTest extends TestCase
      */
     public function testCanProcessRuleInvalidConditions(): void
     {
-        $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
         $this->assertFalse($this->utility->canProcessRule($this->rule, $this->address));
     }
 
@@ -318,6 +294,11 @@ class UtilityTest extends TestCase
         $this->rule->setCouponType(Rule::COUPON_TYPE_NO_COUPON);
         $this->rule->expects($this->once())
             ->method('validate')
+            ->willReturn(true);
+        $this->address->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($this->quote);
+        $this->validateCoupon->method('execute')
             ->willReturn(true);
         $this->assertTrue($this->utility->canProcessRule($this->rule, $this->address));
     }
@@ -419,7 +400,7 @@ class UtilityTest extends TestCase
     /**
      * @return array
      */
-    public function mergeIdsDataProvider(): array
+    public static function mergeIdsDataProvider(): array
     {
         return [
             ['id1,id2', '', true, 'id1,id2'],
@@ -445,6 +426,7 @@ class UtilityTest extends TestCase
         $this->getItemBasePrice();
         $this->item->setDiscountAmount($amount);
         $this->item->setBaseDiscountAmount($baseAmount);
+        $this->item->setQty($qty);
         $discountData = $this->createMock(Data::class);
         $discountData->expects($this->atLeastOnce())
             ->method('getAmount')
@@ -540,16 +522,24 @@ class UtilityTest extends TestCase
         $discountData->method('getAmount')
             ->willReturnOnConsecutiveCalls($discountAmount, $discountAmount);
         $discountData->method('setBaseAmount')
-            ->withConsecutive([$roundedBaseDiscount], [$secondRoundedBaseDiscount]);
+            ->willReturnCallback(function ($arg1) use ($roundedBaseDiscount, $secondRoundedBaseDiscount) {
+                if ($arg1 == $roundedBaseDiscount || $arg1 == $secondRoundedBaseDiscount) {
+                    return null;
+                }
+            });
         $discountData->method('setAmount')
-            ->withConsecutive([$roundedDiscount], [$secondRoundedDiscount]);
+            ->willReturnCallback(function ($arg1) use ($roundedDiscount, $secondRoundedDiscount) {
+                if ($arg1 == $roundedDiscount || $arg1 == $secondRoundedDiscount) {
+                    return null;
+                }
+            });
         $discountData->method('getBaseAmount')
             ->willReturnOnConsecutiveCalls($baseDiscountAmount, $baseDiscountAmount);
 
         $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
     }
 
-    public function deltaRoundingFixDataProvider()
+    public static function deltaRoundingFixDataProvider()
     {
         return [
             ['discountAmount' => 10.003, 'baseDiscountAmount' => 12.465, 'percent' => 15, 'rowTotal' => 100],

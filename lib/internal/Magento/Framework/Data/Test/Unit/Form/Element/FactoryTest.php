@@ -85,7 +85,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createPositiveDataProvider()
+    public static function createPositiveDataProvider()
     {
         return [
             'button' => ['button'],
@@ -142,7 +142,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createExceptionReflectionExceptionDataProvider()
+    public static function createExceptionReflectionExceptionDataProvider()
     {
         return [
             'factory' => ['factory'],
@@ -175,7 +175,7 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createExceptionInvalidArgumentDataProvider()
+    public static function createExceptionInvalidArgumentDataProvider()
     {
         return [
             Factory::class => [

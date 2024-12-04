@@ -16,6 +16,8 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Source\Backorders;
 use Magento\CatalogInventory\Model\Source\Stock;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -82,6 +84,18 @@ class InventoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
         $this->contextMock = $this->createPartialMock(
             Context::class,
@@ -241,15 +255,10 @@ class InventoryTest extends TestCase
         $websiteId = 15;
         $fieldName = 'field';
 
-        $stockItemMock = $this->getMockForAbstractClass(
-            StockItemInterface::class,
-            [],
-            '',
-            false,
-            false,
-            false,
-            $methods
-        );
+        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
+                            ->disableOriginalConstructor()
+                            ->addMethods($methods)
+                            ->getMockForAbstractClass();
         $productMock = $this->createMock(Product::class);
         $storeMock = $this->createMock(Store::class);
         $productMock->expects($this->once())
@@ -304,15 +313,10 @@ class InventoryTest extends TestCase
         $websiteId = 15;
         $fieldName = 'field';
 
-        $stockItemMock = $this->getMockForAbstractClass(
-            StockItemInterface::class,
-            [],
-            '',
-            false,
-            false,
-            false,
-            $methods
-        );
+        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods($methods)
+            ->getMockForAbstractClass();
         $productMock = $this->createMock(Product::class);
         $storeMock = $this->createMock(Store::class);
         $productMock->expects($this->once())
@@ -498,14 +502,14 @@ class InventoryTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderModuleEnabled()
+    public static function dataProviderModuleEnabled()
     {
         return [
             [
-                'ModuleEnabled' => true,
+                'moduleEnabled' => true,
             ],
             [
-                'ModuleEnabled' => false
+                'moduleEnabled' => false
             ]
         ];
     }
@@ -515,7 +519,7 @@ class InventoryTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetFieldValue()
+    public static function dataProviderGetFieldValue()
     {
         return [
             [
@@ -541,7 +545,7 @@ class InventoryTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetConfigFieldValue()
+    public static function dataProviderGetConfigFieldValue()
     {
         return [
             [
@@ -567,7 +571,7 @@ class InventoryTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderGetId()
+    public static function dataProviderGetId()
     {
         return [
             [

@@ -638,13 +638,6 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
      */
     public function _resetState(): void
     {
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            session_write_close();
-            session_id('');
-        }
-        session_name('PHPSESSID');
-        session_unset();
         static::$urlHostCache = [];
-        $_SESSION = [];
     }
 }

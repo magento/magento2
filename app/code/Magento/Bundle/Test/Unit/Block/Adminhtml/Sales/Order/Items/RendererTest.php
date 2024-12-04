@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\Items;
 
 use Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order\Creditmemo;
@@ -40,6 +42,17 @@ class RendererTest extends TestCase
             ->getMock();
         $this->serializer = $this->createMock(Json::class);
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->model = $objectManager->getObject(
             Renderer::class,
             ['serializer' => $this->serializer]
@@ -71,7 +84,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getChildrenEmptyItemsDataProvider()
+    public static function getChildrenEmptyItemsDataProvider()
     {
         return [
             [
@@ -127,7 +140,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getChildrenDataProvider()
+    public static function getChildrenDataProvider()
     {
         return [
             [true],
@@ -149,7 +162,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isShipmentSeparatelyWithoutItemDataProvider()
+    public static function isShipmentSeparatelyWithoutItemDataProvider()
     {
         return [
             [['shipment_type' => 1], true],
@@ -181,7 +194,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isShipmentSeparatelyWithItemDataProvider()
+    public static function isShipmentSeparatelyWithItemDataProvider()
     {
         return [
             [['shipment_type' => 1], false, false],
@@ -205,7 +218,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isChildCalculatedWithoutItemDataProvider()
+    public static function isChildCalculatedWithoutItemDataProvider()
     {
         return [
             [['product_calculations' => 0], true],
@@ -237,7 +250,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isChildCalculatedWithItemDataProvider()
+    public static function isChildCalculatedWithItemDataProvider()
     {
         return [
             [['product_calculations' => 0], false, false],
@@ -302,7 +315,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function canShowPriceInfoDataProvider()
+    public static function canShowPriceInfoDataProvider()
     {
         return [
             [true, ['product_calculations' => 0], true],
@@ -318,7 +331,7 @@ class RendererTest extends TestCase
     {
         $model = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml', 'isShipmentSeparately', 'getSelectionAttributes', 'isChildCalculated'])
+            ->onlyMethods(['escapeHtml', 'isShipmentSeparately', 'getSelectionAttributes', 'isChildCalculated'])
             ->getMock();
         $model->expects($this->any())->method('escapeHtml')->willReturn('Test');
         $model->expects($this->any())->method('isShipmentSeparately')->willReturn(false);
@@ -330,7 +343,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getValueHtmlWithoutShipmentSeparatelyDataProvider()
+    public static function getValueHtmlWithoutShipmentSeparatelyDataProvider()
     {
         return [
             [1],

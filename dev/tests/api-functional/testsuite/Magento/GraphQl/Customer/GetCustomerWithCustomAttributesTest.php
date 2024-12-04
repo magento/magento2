@@ -16,9 +16,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Test\Fixture\AttributeOption as AttributeOptionFixture;
-use Magento\EavGraphQl\Model\Uid as EAVUid;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -115,16 +113,6 @@ class GetCustomerWithCustomAttributesTest extends GraphQlAbstract
     private $objectManager;
 
     /**
-     * @var EAVUid $eavUid
-     */
-    private $eavUid;
-
-    /**
-     * @var Uid $uid
-     */
-    private $uid;
-
-    /**
      * @var AttributeInterface|null
      */
     private $varcharCustomerAttribute;
@@ -158,8 +146,6 @@ class GetCustomerWithCustomAttributesTest extends GraphQlAbstract
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
-        $this->uid = $this->objectManager->get(Uid::class);
-        $this->eavUid = $this->objectManager->get(EAVUid::class);
 
         $this->varcharCustomerAttribute = DataFixtureStorageManager::getStorage()->get(
             'varchar_customer_attribute'
@@ -198,14 +184,12 @@ query {
         lastname
         email
         custom_attributes {
-            uid
             code
             ... on AttributeValue {
                 value
             }
             ... on AttributeSelectedOptions {
                 selected_options {
-                    uid
                     label
                     value
                 }
@@ -230,29 +214,19 @@ QUERY;
                     'email' => $this->customer->getEmail(),
                     'custom_attributes' => [
                         [
-                            'uid' => $this->eavUid->encode(
-                                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                                $this->multiselectCustomerAttribute->getAttributeCode()
-                            ),
                             'code' => $this->multiselectCustomerAttribute->getAttributeCode(),
                             'selected_options' => [
                                 [
-                                    'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption2->getValue()),
                                     'label' => $this->multiselectCustomerAttributeOption2->getLabel(),
                                     'value' => $this->multiselectCustomerAttributeOption2->getValue(),
                                 ],
                                 [
-                                    'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption1->getValue()),
                                     'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
                                     'value' => $this->multiselectCustomerAttributeOption1->getValue(),
                                 ]
                             ]
                         ],
                         [
-                            'uid' => $this->eavUid->encode(
-                                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                                $this->varcharCustomerAttribute->getAttributeCode()
-                            ),
                             'code' => $this->varcharCustomerAttribute->getAttributeCode(),
                             'value' => '42'
                         ]
@@ -271,15 +245,13 @@ query {
         firstname
         lastname
         email
-        custom_attributes(uids: ["%s"]) {
-            uid
+        custom_attributes(attributeCodes: ["%s"]) {
             code
             ... on AttributeValue {
                 value
             }
             ... on AttributeSelectedOptions {
                 selected_options {
-                    uid
                     label
                     value
                 }
@@ -290,10 +262,7 @@ query {
 QUERY;
 
         $response = $this->graphQlQuery(
-            sprintf($query, $this->eavUid->encode(
-                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                $this->multiselectCustomerAttribute->getAttributeCode()
-            )),
+            sprintf($query, $this->multiselectCustomerAttribute->getAttributeCode()),
             [],
             '',
             $this->getCustomerAuthHeaders($this->customer->getEmail(), $this->currentPassword)
@@ -307,19 +276,13 @@ QUERY;
                     'email' => $this->customer->getEmail(),
                     'custom_attributes' => [
                         [
-                            'uid' => $this->eavUid->encode(
-                                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                                $this->multiselectCustomerAttribute->getAttributeCode()
-                            ),
                             'code' => $this->multiselectCustomerAttribute->getAttributeCode(),
                             'selected_options' => [
                                 [
-                                    'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption2->getValue()),
                                     'label' => $this->multiselectCustomerAttributeOption2->getLabel(),
                                     'value' => $this->multiselectCustomerAttributeOption2->getValue(),
                                 ],
                                 [
-                                    'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption1->getValue()),
                                     'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
                                     'value' => $this->multiselectCustomerAttributeOption1->getValue(),
                                 ]

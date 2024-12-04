@@ -42,10 +42,10 @@ class ShippingTest extends TestCase
 
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['hasBaseShippingAmount'])
+            ->onlyMethods(
                 [
                     'getOrder',
-                    'hasBaseShippingAmount',
                     'getBaseShippingAmount',
                     'setShippingAmount',
                     'setBaseShippingAmount',
@@ -315,7 +315,7 @@ class ShippingTest extends TestCase
     /**
      * @return array
      */
-    public function collectWithSpecifiedShippingAmountDataProvider()
+    public static function collectWithSpecifiedShippingAmountDataProvider()
     {
         return [
             'half' => [0.5], //This will test the case where specified amount equals maximum allowed amount
@@ -608,7 +608,7 @@ class ShippingTest extends TestCase
     /**
      * @return array
      */
-    public function calculationSequenceDataProvider(): array
+    public static function calculationSequenceDataProvider(): array
     {
         return [
             'inclTax' => [TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],

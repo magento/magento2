@@ -22,6 +22,7 @@ use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -208,6 +209,19 @@ class BundleTest extends AbstractImportTestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getScope'])
             ->getMockForAbstractClass();
+
+        $objects = [
+            [
+                Bundle\RelationsDataSaver::class,
+                $this->createMock(Bundle\RelationsDataSaver::class)
+            ],
+            [
+                StoreManagerInterface::class,
+                $this->createMock(StoreManagerInterface::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
+
         $this->bundle = $this->objectManagerHelper->getObject(
             Bundle::class,
             [
@@ -248,9 +262,12 @@ class BundleTest extends AbstractImportTestCase
     {
         $this->entityModel->expects($this->any())->method('getBehavior')->willReturn(Import::BEHAVIOR_APPEND);
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn($skus['newSku']);
+        $callCount = 0;
         $this->entityModel
             ->method('getNextBunch')
-            ->willReturnOnConsecutiveCalls([$bunch]);
+            ->willReturnCallback(function () use (&$callCount, $bunch) {
+                return $callCount++ === 0 ? [$bunch] : null;
+            });
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
         $scope = $this->getMockBuilder(ScopeInterface::class)->getMockForAbstractClass();
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
@@ -321,7 +338,7 @@ class BundleTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function saveDataProvider(): array
+    public static function saveDataProvider(): array
     {
         return [
             [
@@ -395,13 +412,12 @@ class BundleTest extends AbstractImportTestCase
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn([
             'sku' => ['sku' => 'sku', 'entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'bundle']
         ]);
+        $callCount = 0;
         $this->entityModel
             ->method('getNextBunch')
-            ->willReturnOnConsecutiveCalls(
-                [
-                    ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
-                ]
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                return $callCount++ === 0 ? [['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']] : null;
+            });
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
         $select = $this->createMock(Select::class);
         $this->connection->expects($this->any())->method('select')->willReturn($select);

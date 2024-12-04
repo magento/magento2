@@ -28,6 +28,7 @@
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="firstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
             <deleteData createDataKey="secondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -76,6 +77,7 @@
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
         <!-- Click next button to open payment section -->
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectDefaultPaymentMethod"/>
         <!-- Click place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>

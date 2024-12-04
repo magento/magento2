@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog\CategoriesQuery;
 
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -64,5 +68,47 @@ QUERY;
         $this->assertEquals(1, $optionsAttribute1[0]['count']);
         $this->assertEquals(2, $optionsAttribute1[1]['count']);
         $this->assertEquals(3, $optionsAttribute1[2]['count']);
+    }
+
+    /**
+     * Test to return category aggregations filtered by category_uid
+     */
+    #[
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1', 'parent_id' => '2'], 'c1'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1-1', 'parent_id' => '$c1.id$'], 'c11'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1-1-1', 'parent_id' => '$c11.id$'], 'c111'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'product1',
+                'category_ids' => ['$c111.id$']
+            ],
+        ),
+    ]
+    public function testCategoryAggregationFilteredByCategoryUid(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $categoryId = $fixtures->get('c1')->getId();
+        $categoryUid = base64_encode((string) $categoryId);
+        $query = <<<QUERY
+{
+  products(filter: {category_uid: {eq: "{$categoryUid}"}}) {
+    aggregations{
+      label
+      attribute_code
+      count
+      options{
+        label
+        value
+        count
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('aggregations', $response['products']);
     }
 }

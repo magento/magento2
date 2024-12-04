@@ -1,0 +1,24 @@
+{
+    "name": "magento/module-order-cancellation-ui",
+    "description": "Magento module that implements order cancellation UI.",
+    "require": {
+        "php": "~8.2.0||~8.3.0",
+        "magento/framework": "*",
+        "magento/module-customer": "*",
+        "magento/module-order-cancellation": "*",
+        "magento/module-sales": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\OrderCancellationUi\\": ""
+        }
+    }
+}

@@ -180,6 +180,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      */
     public function _resetState(): void
     {
-        $this->orders = [];
+        $this->orders = null;
     }
 }

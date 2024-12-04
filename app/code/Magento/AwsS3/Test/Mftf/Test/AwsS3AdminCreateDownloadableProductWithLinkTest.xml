@@ -35,6 +35,7 @@
             <comment userInput="BIC workaround" stepKey="disableRemoteStorage"/>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Delete category -->
@@ -81,7 +82,9 @@
 
         <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-        <magentoCron stepKey="runIndexCronJobs" groups="index"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Login to frontend -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signIn">

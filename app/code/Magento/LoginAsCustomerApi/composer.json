@@ -2,7 +2,7 @@
     "name": "magento/module-login-as-customer-api",
     "description": "Allow for admin to enter a customer account",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*"
     },
     "type": "magento2-module",

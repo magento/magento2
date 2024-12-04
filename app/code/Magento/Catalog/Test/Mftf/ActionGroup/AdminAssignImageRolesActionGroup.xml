@@ -19,10 +19,10 @@
         <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
         <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
-        <checkOption selector="{{AdminProductImagesSection.roleBase}}" stepKey="checkRoleBase"/>
-        <checkOption selector="{{AdminProductImagesSection.roleSmall}}" stepKey="checkRoleSmall"/>
-        <checkOption selector="{{AdminProductImagesSection.roleThumbnail}}" stepKey="checkRoleThumbnail"/>
-        <checkOption selector="{{AdminProductImagesSection.roleSwatch}}" stepKey="checkRoleSwatch"/>
+        <conditionalClick selector="{{AdminProductImagesSection.role('Base')}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Base')}}" visible="false" stepKey="checkRoleBase"/>
+        <conditionalClick selector="{{AdminProductImagesSection.role('Small')}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Small')}}" visible="false" stepKey="checkRoleSmall"/>
+        <conditionalClick selector="{{AdminProductImagesSection.role('Thumbnail')}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Thumbnail')}}" visible="false" stepKey="checkRoleThumbnail"/>
+        <conditionalClick selector="{{AdminProductImagesSection.role('Swatch')}}" dependentSelector="{{AdminProductImagesSection.isRoleChecked('Swatch')}}" visible="false" stepKey="checkRoleSwatch"/>
         <click selector="{{AdminSlideOutDialogSection.closeButton}}" stepKey="clickCloseButton"/>
     </actionGroup>
 </actionGroups>

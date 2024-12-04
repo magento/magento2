@@ -47,7 +47,8 @@ class BaseUrlConfigPluginTest extends TestCase
         $this->subscriptionUpdateHandlerMock = $this->createMock(SubscriptionUpdateHandler::class);
         $this->configValueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isValueChanged', 'getPath', 'getScope', 'getOldValue'])
+            ->addMethods(['getPath', 'getScope'])
+            ->onlyMethods(['isValueChanged', 'getOldValue'])
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
@@ -88,25 +89,25 @@ class BaseUrlConfigPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterSavePluginIsNotApplicableDataProvider()
+    public static function afterSavePluginIsNotApplicableDataProvider()
     {
         return [
             'Value has not been changed' => [
-                'Config Value Data' => [
+                'configValueData' => [
                     'isValueChanged' => false,
                     'path' => Store::XML_PATH_SECURE_BASE_URL,
                     'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ],
             ],
             'Unsecure URL has been changed' => [
-                'Config Value Data' => [
+                'configValueData' => [
                     'isValueChanged' => true,
                     'path' => Store::XML_PATH_UNSECURE_BASE_URL,
                     'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ],
             ],
             'Secure URL has been changed not in the Default scope' => [
-                'Config Value Data' => [
+                'configValueData' => [
                     'isValueChanged' => true,
                     'path' => Store::XML_PATH_SECURE_BASE_URL,
                     'scope' => ScopeInterface::SCOPE_STORES

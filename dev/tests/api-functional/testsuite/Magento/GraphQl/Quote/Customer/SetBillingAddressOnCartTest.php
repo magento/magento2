@@ -7,14 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\Catalog\Test\Fixture\Product;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Quote\Test\Fixture\AddProductToCart;
+use Magento\Quote\Test\Fixture\GuestCart;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -61,6 +69,11 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
      */
     private $customerRepository;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -72,6 +85,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
         $this->customerAddressRepository = $objectManager->get(AddressRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
+        $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -715,17 +729,37 @@ QUERY;
      * Tests that a logged-in customer cannot use a saved customer address that is not their own.
      *
      * _security
-     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     *
      */
+    #[
+        DataFixture(Customer::class, ['addresses' => [['postcode' => '12345']]], as: 'customer', count: 2),
+        DataFixture(Product::class, as: 'product'),
+        DataFixture(GuestCart::class, ['customer_email' => '$customer2.email$'], as: 'cart'),
+        DataFixture(AddProductToCart::class, [
+            'cart_id' => '$cart.id$',
+            'product_id' => '$product.id$',
+            'qty' => 1
+        ])
+    ]
     public function testSetBillingAddressIfCustomerIsNotOwnerOfAddress()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Current customer does not have permission to address with ID "1"');
+        /** @var \Magento\Customer\Model\Customer $customer1 */
+        $customer1 = $this->fixtures->get('customer1');
+        $customer1AddressId = current($customer1->getAddresses())->getId();
+        $customer2 = $this->fixtures->get('customer2');
+        $customer2 = $this->customerRepository->getById($customer2->getId());
 
-        $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 2);
+        /** @var Quote $quote */
+        $quote = $this->fixtures->get('cart');
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+
+        $quote->setCustomer($customer2);
+        $quote->setCustomerIsGuest(false);
+        $quote->save();
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Current customer does not have permission to address with ID "'.$customer1AddressId.'"'
+        );
 
         $query = <<<QUERY
 mutation {
@@ -733,7 +767,7 @@ mutation {
     input: {
       cart_id: "$maskedQuoteId"
       billing_address: {
-          customer_address_id: 1
+          customer_address_id: "$customer1AddressId"
        }
     }
   ) {
@@ -745,7 +779,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap($customer2->getEmail()));
     }
 
     /**
@@ -822,7 +856,7 @@ QUERY;
     /**
      * @return array
      */
-    public function dataProviderSetWithoutRequiredParameters(): array
+    public static function dataProviderSetWithoutRequiredParameters(): array
     {
         return [
             'missed_region' => [

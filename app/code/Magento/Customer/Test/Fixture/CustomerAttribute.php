@@ -19,31 +19,6 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 class CustomerAttribute implements RevertibleDataFixtureInterface
 {
-    private const DEFAULT_DATA = [
-        'entity_type_id' => null,
-        'attribute_id' => null,
-        'attribute_code' => 'attribute%uniqid%',
-        'default_frontend_label' => 'Attribute%uniqid%',
-        'frontend_labels' => [],
-        'frontend_input' => 'text',
-        'backend_type' => 'varchar',
-        'is_required' => false,
-        'is_user_defined' => true,
-        'note' => null,
-        'backend_model' => null,
-        'source_model' => null,
-        'default_value' => null,
-        'is_unique' => '0',
-        'frontend_class' => null,
-        'used_in_forms' => [],
-        'sort_order' => 0,
-        'attribute_set_id' => null,
-        'attribute_group_id' => null,
-        'input_filter' => null,
-        'multiline_count' => 0,
-        'validate_rules' => null
-    ];
-
     /**
      * @var DataMerger
      */
@@ -70,24 +45,32 @@ class CustomerAttribute implements RevertibleDataFixtureInterface
     private AttributeRepositoryInterface $attributeRepository;
 
     /**
+     * @var CustomerAttributeDefaultData
+     */
+    private CustomerAttributeDefaultData $customerAttributeDefaultData;
+
+    /**
      * @param DataMerger $dataMerger
      * @param ProcessorInterface $processor
      * @param AttributeRepositoryInterface $attributeRepository
      * @param AttributeFactory $attributeFactory
      * @param ResourceModelAttribute $resourceModelAttribute
+     * @param CustomerAttributeDefaultData $customerAttributeDefaultData
      */
     public function __construct(
         DataMerger $dataMerger,
         ProcessorInterface $processor,
         AttributeRepositoryInterface $attributeRepository,
         AttributeFactory $attributeFactory,
-        ResourceModelAttribute $resourceModelAttribute
+        ResourceModelAttribute $resourceModelAttribute,
+        CustomerAttributeDefaultData $customerAttributeDefaultData
     ) {
         $this->dataMerger = $dataMerger;
         $this->processor = $processor;
         $this->attributeFactory = $attributeFactory;
         $this->resourceModelAttribute = $resourceModelAttribute;
         $this->attributeRepository = $attributeRepository;
+        $this->customerAttributeDefaultData = $customerAttributeDefaultData;
     }
 
     /**
@@ -95,6 +78,7 @@ class CustomerAttribute implements RevertibleDataFixtureInterface
      */
     public function apply(array $data = []): ?DataObject
     {
+        $defaultData = $this->customerAttributeDefaultData->getData();
         if (empty($data['entity_type_id'])) {
             throw new InvalidArgumentException(
                 __(
@@ -107,9 +91,12 @@ class CustomerAttribute implements RevertibleDataFixtureInterface
         }
 
         /** @var Attribute $attr */
-        $attr = $this->attributeFactory->createAttribute(Attribute::class, self::DEFAULT_DATA);
-        $mergedData = $this->processor->process($this, $this->dataMerger->merge(self::DEFAULT_DATA, $data));
+        $attr = $this->attributeFactory->createAttribute(Attribute::class, $defaultData);
+        $mergedData = $this->processor->process($this, $this->dataMerger->merge($defaultData, $data));
         $attr->setData($mergedData);
+        if (isset($data['website_id'])) {
+            $attr->setWebsite($data['website_id']);
+        }
         $this->resourceModelAttribute->save($attr);
         return $attr;
     }

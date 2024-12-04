@@ -92,6 +92,12 @@ class DataTest extends TestCase
      */
     public function testGetOptions(array $expected, array $data)
     {
+        if (!empty($data['allowed_products']) && is_callable($data['allowed_products'])) {
+            $data['allowed_products'] = $data['allowed_products']($this);
+        }
+        if (!empty($data['current_product_mock']) && is_callable($data['current_product_mock'])) {
+            $data['current_product_mock'] = $data['current_product_mock']($this);
+        }
         if (count($data['allowed_products'])) {
             $imageHelper1 = $this->getMockBuilder(Image::class)
                 ->disableOriginalConstructor()
@@ -124,11 +130,7 @@ class DataTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function getOptionsDataProvider(): array
+    protected function getMockForProductClass()
     {
         $currentProductMock = $this->createPartialMock(
             Product::class,
@@ -180,6 +182,12 @@ class DataTest extends TestCase
         $currentProductMock->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($typeInstanceMock);
+
+        return $currentProductMock;
+    }
+
+    protected function getMockForAllowProductClass()
+    {
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->createPartialMock(
@@ -203,6 +211,18 @@ class DataTest extends TestCase
             }
             $allowedProducts[] = $productMock;
         }
+
+        return $allowedProducts;
+    }
+
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public static function getOptionsDataProvider(): array
+    {
+        $currentProductMock = static fn (self $testCase) => $testCase->getMockForProductClass();
+        $allowedProducts = static fn (self $testCase) => $testCase->getMockForAllowProductClass();
         $provider[] = [
             [
                 'attribute_id_1' => [
@@ -249,7 +269,7 @@ class DataTest extends TestCase
     public function testGetGalleryImages()
     {
         $productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getMediaGalleryImages'])
+            ->addMethods(['getMediaGalleryImages'])
             ->getMockForAbstractClass();
         $productMock->expects($this->once())
             ->method('getMediaGalleryImages')
@@ -257,27 +277,16 @@ class DataTest extends TestCase
 
         $this->imageUrlBuilder->expects($this->exactly(3))
             ->method('getUrl')
-            ->withConsecutive(
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_small')
-                ],
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_medium')
-                ],
-                [
-                    self::identicalTo('test_file'),
-                    self::identicalTo('product_page_image_large')
-                ]
-            )
-            ->will(
-                self::onConsecutiveCalls(
-                    'testSmallImageUrl',
-                    'testMediumImageUrl',
-                    'testLargeImageUrl'
-                )
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'test_file' && $arg2 == 'product_page_image_small') {
+                    return 'testSmallImageUrl';
+                } elseif ($arg1 == 'test_file' && $arg2 == 'product_page_image_medium') {
+                    return 'testMediumImageUrl';
+                } elseif ($arg1 == 'test_file' && $arg2 == 'product_page_image_large') {
+                    return 'testLargeImageUrl';
+                }
+            });
+
         $this->_imageHelperMock->expects(self::never())
             ->method('setImageFile')
             ->with('test_file')

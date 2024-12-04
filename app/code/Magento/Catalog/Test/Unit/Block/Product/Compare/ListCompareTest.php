@@ -132,7 +132,7 @@ class ListCompareTest extends TestCase
     /**
      * @return array
      */
-    public function attributeDataProvider(): array
+    public static function attributeDataProvider(): array
     {
         return [
             [

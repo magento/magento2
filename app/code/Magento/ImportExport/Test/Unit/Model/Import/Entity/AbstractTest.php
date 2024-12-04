@@ -31,7 +31,7 @@ class AbstractTest extends AbstractImportTestCase
 
         $this->_model = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['_saveValidatedBunches', 'getErrorAggregator'])
+            ->onlyMethods(['_saveValidatedBunches', 'getErrorAggregator'])
             ->getMockForAbstractClass();
 
         $this->_model->method('getErrorAggregator')->willReturn(
@@ -177,7 +177,7 @@ class AbstractTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function isAttributeValidDataProvider()
+    public static function isAttributeValidDataProvider()
     {
         return [
             ['created_at', ['type' => 'datetime'], ['created_at' => '2012-02-29'], 1, true],

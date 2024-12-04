@@ -337,7 +337,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetWeeeAttributesForBundle(): array
+    public static function dataProviderGetWeeeAttributesForBundle(): array
     {
         return [
             [2, false, ["16.00", "15.00"]],

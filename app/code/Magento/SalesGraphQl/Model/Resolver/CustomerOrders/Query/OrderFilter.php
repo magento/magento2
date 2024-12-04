@@ -25,6 +25,8 @@ class OrderFilter
      */
     private $fieldTranslatorArray = [
         'number' => 'increment_id',
+        'order_date' => 'created_at',
+        'grand_total' => 'base_grand_total',
     ];
 
     /**
@@ -73,6 +75,7 @@ class OrderFilter
         array $storeIds
     ): array {
         $filterGroups = [];
+        $filter = [];
         $this->filterGroupBuilder->setFilters(
             [$this->filterBuilder->setField('customer_id')->setValue($userId)->setConditionType('eq')->create()]
         );
@@ -85,7 +88,6 @@ class OrderFilter
         $filterGroups[] = $this->filterGroupBuilder->create();
 
         if (isset($args['filter'])) {
-            $filters = [];
             foreach ($args['filter'] as $field => $cond) {
                 if (isset($this->fieldTranslatorArray[$field])) {
                     $field = $this->fieldTranslatorArray[$field];
@@ -96,21 +98,21 @@ class OrderFilter
                             throw new InputException(__('Invalid match filter'));
                         }
                         $searchValue = $value !== null ? str_replace('%', '', $value) : '';
-                        $filters[] = $this->filterBuilder->setField($field)
+                        $filter = $this->filterBuilder->setField($field)
                             ->setValue("%{$searchValue}%")
                             ->setConditionType('like')
                             ->create();
                     } else {
-                        $filters[] = $this->filterBuilder->setField($field)
+                        $filter = $this->filterBuilder->setField($field)
                             ->setValue($value)
                             ->setConditionType($condType)
                             ->create();
                     }
                 }
-            }
 
-            $this->filterGroupBuilder->setFilters($filters);
-            $filterGroups[] = $this->filterGroupBuilder->create();
+                $this->filterGroupBuilder->setFilters([$filter]);
+                $filterGroups[] = $this->filterGroupBuilder->create();
+            }
         }
         return $filterGroups;
     }

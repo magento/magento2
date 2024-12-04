@@ -69,7 +69,7 @@ class LinksTest extends TestCase
     /**
      * @return array
      */
-    public function linksDataProvider()
+    public static function linksDataProvider()
     {
         return [
             [
@@ -129,7 +129,7 @@ class LinksTest extends TestCase
     /**
      * @return array
      */
-    public function attributesDataProvider()
+    public static function attributesDataProvider()
     {
         return [
             [
