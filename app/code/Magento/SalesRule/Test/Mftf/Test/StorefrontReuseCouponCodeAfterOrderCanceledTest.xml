@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontReuseCouponCodeAfterOrderCanceledTest">
@@ -129,7 +128,10 @@
 
         <!-- Clicking on Reorder link from Order Details Tab -->
         <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
-
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
+            
         <!-- Reuse coupon code -->
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToDiscountTab"/>
         <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{CatPriceRule.coupon_code}}" stepKey="fillCouponCode"/>

@@ -194,15 +194,19 @@
         <data key="value">{{_CREDS.magento/payflow_pro_business_account}}</data>
     </entity>
     <entity name="PaypalPayflowProPartner" type="partner">
+        <data key="path">payment/payflowpro/partner</data>
         <data key="value">{{_CREDS.magento/payflow_pro_partner}}</data>
     </entity>
     <entity name="PaypalPayflowProUser" type="user">
+        <data key="path">payment/payflowpro/user</data>
         <data key="value">{{_CREDS.magento/payflow_pro_user}}</data>
     </entity>
     <entity name="PaypalPayflowProVendor" type="vendor">
+        <data key="path">payment/payflowpro/vendor</data>
         <data key="value">{{_CREDS.magento/payflow_pro_vendor}}</data>
     </entity>
     <entity name="PaypalPayflowProPassword" type="pwd">
+        <data key="path">payment/payflowpro/pwd</data>
         <data key="value">{{_CREDS.magento/payflow_pro_pwd}}</data>
     </entity>
     <!-- default configuration used to restore Magento config -->
