@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,9 +111,11 @@ class ItemsToRenderTest extends TestCase
     }
 
     /**
-     * Test get items
+     * Test the behavior of getItems when the invoicing status changes.
+     *
+     * @dataProvider itemInvoicingDataProvider
      */
-    public function testGetItems(): void
+    public function testGetItemsBasedOnInvoicing($qtyInvoiced, $qtyRefunded, $expectedCount, $shouldContainItem): void
     {
         $this->blockItems->method('getCreditmemo')
             ->willReturn($this->creditmemo);
@@ -126,22 +127,39 @@ class ItemsToRenderTest extends TestCase
             ->willReturn($this->creditmemo);
         $this->creditmemo->method('getStoreId')
             ->willReturn(1);
+
         $this->orderItem->method('getQtyInvoiced')
-            ->willReturn(1.0);
+            ->willReturn($qtyInvoiced);
         $this->orderItem->method('getQtyRefunded')
-            ->willReturn(1.0);
+            ->willReturn($qtyRefunded);
+
         $this->creditmemoItem->method('getOrderItem')
             ->willReturn($this->orderItem);
-        $this->orderItem->method('getParentItem')
-            ->willReturn($this->orderItemParent);
-        $this->orderItemParent->method('getItemId')
-            ->willReturn(1);
-        $this->converter->method('itemToCreditmemoItem')
-            ->willReturn($this->creditmemoItemParent);
 
-        $this->assertLessThanOrEqual(
-            [$this->creditmemoItemParent, $this->creditmemoItem],
-            $this->itemsToRender->getItems()
-        );
+        $items = $this->itemsToRender->getItems();
+
+        $this->assertCount($expectedCount, $items);
+
+        if ($shouldContainItem) {
+            $this->assertContains($this->creditmemoItem, $items);
+        } else {
+            $this->assertNotContains($this->creditmemoItem, $items);
+        }
+    }
+
+    /**
+     * Data provider for testing the invoicing status.
+     *
+     * @return array
+     */
+    public static function itemInvoicingDataProvider(): array
+    {
+        return [
+            // Test case: Item is invoiced, should be included
+            [1.0, 0.0, 1, true],
+
+            // Test case: Item is not invoiced, should not be included
+            [0.0, 0.0, 0, false],
+        ];
     }
 }
