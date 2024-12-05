@@ -38,7 +38,7 @@ class PaymentMethodListTest extends TestCase
         $this->paymentMethodList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
         $this->instanceFactory = $this->getMockBuilder(InstanceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->vaultPaymentList = new PaymentMethodList($this->paymentMethodList, $this->instanceFactory);

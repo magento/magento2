@@ -256,7 +256,7 @@ class AttributeTest extends TestCase
     /**
      * @return array
      */
-    public function attributeDataProvider(): array
+    public static function attributeDataProvider(): array
     {
         return [
             'Attribute with \'text\' backend type' => [
@@ -393,19 +393,15 @@ class AttributeTest extends TestCase
 
         $this->itemDataBuilder
             ->method('addItemData')
-            ->withConsecutive(
-                [
-                    $selectedOptions[0]['label'],
-                    $selectedOptions[0]['value'],
-                    $facetedData[$selectedOptions[0]['value']]['count']
-                ],
-                [
-                    $selectedOptions[1]['label'],
-                    $selectedOptions[1]['value'],
-                    $facetedData[$selectedOptions[1]['value']]['count']
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($this->itemDataBuilder, $this->itemDataBuilder);
+            ->willReturnCallback(function ($label, $value, $count) use ($selectedOptions, $facetedData) {
+                if ($label == $selectedOptions[0]['label'] && $value == $selectedOptions[0]['value'] &&
+                    $count == $facetedData[$selectedOptions[0]['value']]['count']) {
+                    return $this->itemDataBuilder;
+                } elseif ($label == $selectedOptions[1]['label'] && $value == $selectedOptions[1]['value'] &&
+                    $count == $facetedData[$selectedOptions[1]['value']]['count']) {
+                    return $this->itemDataBuilder;
+                }
+            });
 
         $this->itemDataBuilder->expects($this->once())
             ->method('build')

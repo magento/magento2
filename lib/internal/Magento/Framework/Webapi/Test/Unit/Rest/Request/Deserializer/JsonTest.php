@@ -36,7 +36,7 @@ class JsonTest extends TestCase
         /** Prepare mocks for SUT constructor. */
         $this->decoderMock = $this->getMockBuilder(Decoder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['decode'])
+            ->onlyMethods(['decode'])
             ->getMock();
         $this->_appStateMock = $this->createMock(
             State::class

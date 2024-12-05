@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
@@ -29,7 +29,8 @@
     "suggest": {
         "magento/module-cookie": "*",
         "magento/module-customer-sample-data": "*",
-        "magento/module-webapi": "*"
+        "magento/module-webapi": "*",
+        "magento/module-asynchronous-operations": "*"
     },
     "type": "magento2-module",
     "license": [

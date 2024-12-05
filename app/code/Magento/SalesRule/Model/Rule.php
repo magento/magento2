@@ -38,7 +38,6 @@ use Magento\Quote\Model\Quote\Address;
  * @method \Magento\SalesRule\Model\Rule setProductIds(string $value)
  * @method int getSortOrder()
  * @method \Magento\SalesRule\Model\Rule setSortOrder(int $value)
- * @method string getSimpleAction()
  * @method \Magento\SalesRule\Model\Rule setSimpleAction(string $value)
  * @method float getDiscountAmount()
  * @method \Magento\SalesRule\Model\Rule setDiscountAmount(float $value)
@@ -545,6 +544,17 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getFromDate()
     {
         return $this->getData('from_date');
+    }
+
+    /**
+     * Get from date.
+     *
+     * @return string
+     * @since 100.1.0
+     */
+    public function getSimpleAction()
+    {
+        return $this->_getData('simple_action');
     }
 
     /**

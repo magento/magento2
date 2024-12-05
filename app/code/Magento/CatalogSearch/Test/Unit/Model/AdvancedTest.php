@@ -86,36 +86,55 @@ class AdvancedTest extends TestCase
         $this->dataCollection = $this->createPartialMock(\Magento\Framework\Data\Collection::class, ['getIterator']);
 
         $this->currency = $this->getMockBuilder(Currency::class)
-            ->setMethods(['getRate'])
+            ->onlyMethods(['getRate'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getCurrentCurrencyCode', 'getBaseCurrencyCode', 'getBaseCurrency'])
+            ->onlyMethods(['getCurrentCurrencyCode', 'getBaseCurrencyCode', 'getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store->expects($this->any())
             ->method('getBaseCurrency')
             ->willReturn($this->currency);
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
     }
 
+    protected function getMockForAttribute(
+        $backend,
+        $source,
+        $attributeCode,
+        $storeLabel,
+        $frontendInput,
+        $backendType
+    ) {
+        $attr = $this->createAttribute(
+            $this->createBackend($backend),
+            $this->createSource($source),
+            $attributeCode,
+            $storeLabel,
+            $frontendInput,
+            $backendType
+        );
+        return $attr;
+    }
+
     /**
      * @return array
      */
-    public function addFiltersDataProvider()
+    public static function addFiltersDataProvider()
     {
         return array_merge(
             [
                 'sku' => [
                     'attributes' => [
-                        $this->createAttribute(
-                            $this->createBackend('catalog_product_entity'),
-                            $this->createSource(),
+                        static fn (self $testCase) => $testCase->getMockForAttribute(
+                            'catalog_product_entity',
+                            '',
                             'sku',
                             'SKU',
                             'text',
@@ -126,9 +145,9 @@ class AdvancedTest extends TestCase
                 ],
                 'color_multiselect' => [
                     'attributes' => [
-                        $this->createAttribute(
-                            $this->createBackend('color_multiselect'),
-                            $this->createSource(['label' => 'Color']),
+                        static fn (self $testCase) => $testCase->getMockForAttribute(
+                            'color_multiselect',
+                            ['label' => 'Color'],
                             'color',
                             'Color',
                             'multiselect',
@@ -141,9 +160,9 @@ class AdvancedTest extends TestCase
                 ],
                 'color_select' => [
                     'attributes' => [
-                        $this->createAttribute(
-                            $this->createBackend('color_select'),
-                            $this->createSource(['label' => 'Color']),
+                        static fn (self $testCase) => $testCase->getMockForAttribute(
+                            'color_select',
+                            ['label' => 'Color'],
                             'color',
                             'Color',
                             'select',
@@ -156,9 +175,9 @@ class AdvancedTest extends TestCase
                 ],
                 'boolean' => [
                     'attributes' => [
-                        $this->createAttribute(
-                            $this->createBackend('boolean'),
-                            $this->createSource(['label' => 'Color']),
+                        static fn (self $testCase) => $testCase->getMockForAttribute(
+                            'boolean',
+                            ['label' => 'Color'],
                             'is_active',
                             'Is active?',
                             'boolean',
@@ -170,7 +189,7 @@ class AdvancedTest extends TestCase
                     'baseCurrencyCode' => 'USD'
                 ],
             ],
-            $this->addFiltersPriceDataProvider()
+            self::addFiltersPriceDataProvider()
         );
     }
 
@@ -187,6 +206,7 @@ class AdvancedTest extends TestCase
         $currentCurrencyCode = 'GBP',
         $baseCurrencyCode = 'USD'
     ) {
+        $attributes[0] = $attributes[0]($this);
         $registry = new Registry();
 
         $this->collection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
@@ -203,14 +223,14 @@ class AdvancedTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $advancedFactory = $this->getMockBuilder(AdvancedFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $advancedFactory->expects($this->once())->method('create')->willReturn($this->resource);
 
         $productCollectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $productCollectionFactory->expects($this->any())->method('create')->willReturn($this->collection);
@@ -227,7 +247,7 @@ class AdvancedTest extends TestCase
             ->willReturn(1.5);
 
         $currency = $this->getMockBuilder(Currency::class)
-            ->setMethods(['load', 'format'])
+            ->onlyMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
         $currency->expects($this->any())
@@ -237,7 +257,7 @@ class AdvancedTest extends TestCase
             ->method('format')
             ->willReturnArgument(0);
         $currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $currencyFactory->expects($this->any())
@@ -284,7 +304,7 @@ class AdvancedTest extends TestCase
     private function createSource($optionText = 'optionText')
     {
         $source = $this->getMockBuilder(AbstractSource::class)
-            ->setMethods(['getOptionText'])
+            ->onlyMethods(['getOptionText'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $source->expects($this->any())
@@ -296,14 +316,14 @@ class AdvancedTest extends TestCase
     /**
      * @return array
      */
-    private function addFiltersPriceDataProvider()
+    private static function addFiltersPriceDataProvider()
     {
         return [
             'price_without_currency' => [
                 'attributes' => [
-                    $this->createAttribute(
-                        $this->createBackend('table_price_without_currency'),
-                        $this->createSource(),
+                    static fn (self $testCase) => $testCase->getMockForAttribute(
+                        'table_price_without_currency',
+                        '',
                         'price',
                         'Price',
                         'multiselect',
@@ -316,9 +336,9 @@ class AdvancedTest extends TestCase
             ],
             'price_without_to' => [
                 'attributes' => [
-                    $this->createAttribute(
-                        $this->createBackend('price_without_to'),
-                        $this->createSource(),
+                    static fn (self $testCase) => $testCase->getMockForAttribute(
+                        'price_without_to',
+                        '',
                         'price',
                         'Price',
                         'multiselect',
@@ -331,9 +351,9 @@ class AdvancedTest extends TestCase
             ],
             'price_without_from' => [
                 'attributes' => [
-                    $this->createAttribute(
-                        $this->createBackend('price_without_from'),
-                        $this->createSource(),
+                    static fn (self $testCase) => $testCase->getMockForAttribute(
+                        'price_without_from',
+                        '',
                         'price',
                         'Price',
                         'multiselect',
@@ -346,9 +366,9 @@ class AdvancedTest extends TestCase
             ],
             'price_empty' => [
                 'attributes' => [
-                    $this->createAttribute(
-                        $this->createBackend('price_empty'),
-                        $this->createSource(),
+                    static fn (self $testCase) => $testCase->getMockForAttribute(
+                        'price_empty',
+                        '',
                         'price',
                         'Price',
                         'multiselect',
@@ -361,9 +381,9 @@ class AdvancedTest extends TestCase
             ],
             'price_with_currency' => [
                 'attributes' => [
-                    $this->createAttribute(
-                        $this->createBackend('price_with_currency'),
-                        $this->createSource(),
+                    static fn (self $testCase) => $testCase->getMockForAttribute(
+                        'price_without_currency',
+                        '',
                         'price',
                         'Price',
                         'multiselect',

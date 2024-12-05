@@ -54,9 +54,13 @@ class LogoPathResolver implements LogoPathResolverInterface, ArgumentInterface
         if ($order instanceof Order) {
             $storeId = $order->getStoreId();
         }
+        $scopeType = ScopeInterface::SCOPE_STORE;
+        if ($this->scopeConfig->getValue('general/single_store_mode/enabled') === "1") {
+            $scopeType = ScopeInterface::SCOPE_WEBSITE;
+        }
         $salesLogoPath = $this->scopeConfig->getValue(
             'sales/identity/logo_html',
-            ScopeInterface::SCOPE_STORE,
+            $scopeType,
             $storeId
         );
 
@@ -66,7 +70,7 @@ class LogoPathResolver implements LogoPathResolverInterface, ArgumentInterface
 
         $headerLogoPath = $this->scopeConfig->getValue(
             'design/header/logo_src',
-            ScopeInterface::SCOPE_STORE,
+            $scopeType,
             $storeId
         );
 

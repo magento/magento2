@@ -46,7 +46,7 @@ class ReviewDataProviderTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionMock = $this->objectManager->getCollectionMock(Collection::class, []);

@@ -82,7 +82,10 @@ class ReadHandlerTest extends TestCase
         }
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(...$dataObjHelperWithArgs);
+            ->willReturnCallback(function (...$dataObjHelperWithArgs) {
+                return null;
+            });
+        
         $this->categoryLinkFactory
             ->method('create')
             ->willReturnOnConsecutiveCalls(...$categoryLinkFactoryWillReturnArgs);

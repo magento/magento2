@@ -74,7 +74,7 @@ class BuilderFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             'layout_type' => [

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -11,6 +11,7 @@
     <section name="AdminInvoiceMainActionsSection">
         <element name="submitInvoice" type="button" selector=".action-default.scalable.save.submit-button.primary" timeout="60"/>
         <element name="openNewCreditMemoFromInvoice" type="button" selector=".action-default.scalable.credit-memo"/>
-        <element name="submitNewRefundFromInvoice" type="button" selector=".action-default.scalable.save.submit-button refund primary"/>
+        <element name="submitNewRefundFromInvoice" type="button" selector=".action-default.scalable.save.submit-button.refund.primary"/>
+        <element name="selectModeOfAmount" type="select" selector=".admin__control-select"/>
     </section>
 </sections>

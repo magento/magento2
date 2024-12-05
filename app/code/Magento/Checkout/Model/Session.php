@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface;
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
-    const CHECKOUT_STATE_BEGIN = 'begin';
+    public const CHECKOUT_STATE_BEGIN = 'begin';
 
     /**
      * Quote instance
@@ -99,12 +99,12 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $customerRepository;
 
     /**
-     * @param QuoteIdMaskFactory
+     * @var QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
 
     /**
-     * @param bool
+     * @var bool
      */
     protected $isQuoteMasked;
 
@@ -184,6 +184,19 @@ class Session extends \Magento\Framework\Session\SessionManager
         );
         $this->logger = $logger ?: ObjectManager::getInstance()
             ->get(LoggerInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_quote = null;
+        $this->_customer = null;
+        $this->_loadInactive = false;
+        $this->isLoading = false;
+        $this->_order = null;
     }
 
     /**

@@ -14,6 +14,7 @@
             <title value="Create Search Term Entity With Redirect. Check How Redirect is Working on Storefront"/>
             <description value="Storefront search by created search term with redirect. Verifying if created redirect is working"/>
             <severity value="CRITICAL"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

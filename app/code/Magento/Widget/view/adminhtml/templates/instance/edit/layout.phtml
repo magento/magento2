@@ -27,7 +27,7 @@ require([
     'mage/template',
     'Magento_Ui/js/modal/alert',
     "prototype",
-    "extjs/ext-tree-checkbox"
+    "jquery/jstree/jquery.jstree"
 ], function (jQuery, mageTemplate, alert) {
 
 //<![CDATA[
@@ -486,25 +486,6 @@ var WidgetInstance = {
             entitiesElm.value = this.selectedItems[selectionId].keys().join(',');
         }
     },
-    checkCategory : function(event) {
-        node = event.memo.node;
-        container = event.target.up('div.chooser_container');
-        value = container.down('input[type="text"].entities').value.strip();
-        if (node.attributes.checked) {
-            if (value) ids = value.split(',');
-            else ids = [];
-            if (-1 == ids.indexOf(node.id)) {
-                ids.push(node.id);
-                container.down('input[type="text"].entities').value = ids.join(',');
-            }
-        } else {
-            ids = value.split(',');
-            while (-1 != ids.indexOf(node.id)) {
-                ids.splice(ids.indexOf(node.id), 1);
-                container.down('input[type="text"].entities').value = ids.join(',');
-            }
-        }
-    },
     togglePageGroupChooser : function(element) {
         element = $(element);
         if (element && (chooser = element.up('div.group_container').down('div.chooser_container'))) {
@@ -583,9 +564,6 @@ $scriptString .= <<<script
 
     Event.observe(document, 'product:changed', function(event){
         WidgetInstance.checkProduct(event);
-    });
-    Event.observe(document, 'node:changed', function(event){
-        WidgetInstance.checkCategory(event);
     });
     Event.observe(document, 'category:beforeLoad', function(event) {
         container = event.target.up('div.chooser_container');

@@ -57,7 +57,7 @@ class FileProcessorTest extends TestCase
     {
         $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->uploader = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
@@ -83,7 +83,7 @@ class FileProcessorTest extends TestCase
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
         $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseUrl'])
+            ->addMethods(['getBaseUrl'])
             ->getMockForAbstractClass();
 
         $this->fileProcessor = new FileProcessor(

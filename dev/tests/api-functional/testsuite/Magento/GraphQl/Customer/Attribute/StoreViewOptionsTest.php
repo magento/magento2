@@ -12,12 +12,10 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Test\Fixture\Attribute;
 use Magento\Eav\Test\Fixture\AttributeOption;
-use Magento\EavGraphQl\Model\Uid;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Test\Fixture\Store;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -99,9 +97,8 @@ class StoreViewOptionsTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
       code
       label
       entity_type
@@ -132,18 +129,11 @@ QRY;
         /** @var AttributeOptionInterface $option2 */
         $option2 = DataFixtureStorageManager::getStorage()->get('option2');
 
-        /** @var string $uid */
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
-        );
-
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getDefaultFrontendLabel(),
                             'entity_type' => 'CUSTOMER',
@@ -167,7 +157,8 @@ QRY;
             $this->graphQlQuery(
                 sprintf(
                     self::QUERY,
-                    $uid
+                    $attribute->getAttributeCode(),
+                    'customer'
                 )
             )
         );
@@ -184,18 +175,11 @@ QRY;
         /** @var StoreInterface $store2 */
         $store2 = DataFixtureStorageManager::getStorage()->get('store_2');
 
-        /** @var string $uid */
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
-        );
-
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getStoreLabel($store1->getId()),
                             'entity_type' => 'CUSTOMER',
@@ -219,7 +203,8 @@ QRY;
             $this->graphQlQuery(
                 sprintf(
                     self::QUERY,
-                    $uid
+                    $attribute->getAttributeCode(),
+                    'customer'
                 ),
                 [],
                 '',
@@ -229,10 +214,9 @@ QRY;
 
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getStoreLabel($store2->getId()),
                             'entity_type' => 'CUSTOMER',
@@ -256,7 +240,8 @@ QRY;
             $this->graphQlQuery(
                 sprintf(
                     self::QUERY,
-                    $uid
+                    $attribute->getAttributeCode(),
+                    'customer'
                 ),
                 [],
                 '',

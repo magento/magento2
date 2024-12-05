@@ -6,9 +6,11 @@
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
+use Magento\Config\Model\Config\PathValidatorFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -16,8 +18,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Config\Model\Config\PathValidatorFactory;
 
 /**
  * Command provides possibility to show saved system configuration.
@@ -94,12 +94,18 @@ class ConfigShowCommand extends Command
     private $emulatedAreaProcessor;
 
     /**
+     * @var LocaleEmulatorInterface|mixed
+     */
+    private mixed $localeEmulator;
+
+    /**
      * @param ValidatorInterface $scopeValidator
      * @param ConfigSourceInterface $configSource
      * @param ConfigPathResolver $pathResolver
      * @param ValueProcessor $valueProcessor
      * @param PathValidatorFactory|null $pathValidatorFactory
      * @param EmulatedAdminhtmlAreaProcessor|null $emulatedAreaProcessor
+     * @param LocaleEmulatorInterface|null $localeEmulator
      * @internal param ScopeConfigInterface $appConfig
      */
     public function __construct(
@@ -108,7 +114,8 @@ class ConfigShowCommand extends Command
         ConfigPathResolver $pathResolver,
         ValueProcessor $valueProcessor,
         ?PathValidatorFactory $pathValidatorFactory = null,
-        ?EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null
+        ?EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
+        ?LocaleEmulatorInterface $localeEmulator = null
     ) {
         parent::__construct();
         $this->scopeValidator = $scopeValidator;
@@ -119,6 +126,7 @@ class ConfigShowCommand extends Command
             ?: ObjectManager::getInstance()->get(PathValidatorFactory::class);
         $this->emulatedAreaProcessor = $emulatedAreaProcessor
             ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
+        $this->localeEmulator = $localeEmulator;
     }
 
     /**
@@ -171,15 +179,26 @@ class ConfigShowCommand extends Command
             $this->inputPath = $inputPath !== null ? trim($inputPath, '/') : '';
 
             $configValue = $this->emulatedAreaProcessor->process(function () {
-                $this->scopeValidator->isValid($this->scope, $this->scopeCode);
-                if ($this->inputPath) {
-                    $pathValidator = $this->pathValidatorFactory->create();
-                    $pathValidator->validate($this->inputPath);
-                }
+                return $this->localeEmulator->emulate(function () {
+                    $this->scopeValidator->isValid($this->scope, $this->scopeCode);
+                    if ($this->inputPath) {
+                        $pathValidator = $this->pathValidatorFactory->create();
+                        $pathValidator->validate($this->inputPath);
+                    }
 
-                $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
-
-                return $this->configSource->get($configPath);
+                    $configPath = $this->pathResolver
+                        ->resolve($this->inputPath, $this->scope, $this->scopeCode);
+                    $value = $this->configSource->get($configPath);
+                    if (!$value) {
+                        $configPath = $this->pathResolver
+                            ->resolve($this->inputPath, $this->scope, strtolower($this->scopeCode));
+                        $value = $this->configSource->get($configPath);
+                        if (!$value) {
+                            $value = $this->configSource->get(strtolower($configPath));
+                        }
+                    }
+                    return $value;
+                });
             });
 
             $this->outputResult($output, $configValue, $this->inputPath);
@@ -219,7 +238,7 @@ class ConfigShowCommand extends Command
     {
         if (!is_array($configValue)) {
             $value = $this->valueProcessor->process($this->scope, $this->scopeCode, $configValue, $configPath);
-            $output->writeln($this->inputPath === $configPath ? $value : sprintf("%s - %s", $configPath, $value));
+            $output->writeln($this->inputPath === $configPath ? [$value] : sprintf("%s - %s", $configPath, $value));
         } elseif (is_array($configValue)) {
             foreach ($configValue as $name => $value) {
                 $childPath = empty($configPath) ? $name : ($configPath . '/' . $name);

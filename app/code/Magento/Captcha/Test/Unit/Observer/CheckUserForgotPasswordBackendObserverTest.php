@@ -29,8 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckUserForgotPasswordBackendObserverTest extends TestCase
 {
-    const STUB_EMAIL = 'stub@test.mail';
-    const STUB_REQUEST_PARAMS = ['STUB_PARAM'];
+    private const STUB_EMAIL = 'stub@test.mail';
+    private const STUB_REQUEST_PARAMS = ['STUB_PARAM'];
 
     /**
      * @var MockObject|DataHelper
@@ -97,7 +97,7 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
         $this->helperMock = $this->createMock(DataHelper::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
         $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
-            ->setMethods(['setEmail'])
+            ->addMethods(['setEmail'])
             ->getMockForAbstractClass();
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
         $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
@@ -117,7 +117,8 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
         );
 
         $this->captchaMock = $this->getMockBuilder(CaptchaInterface::class)
-            ->setMethods(['isRequired', 'isCorrect'])
+            ->addMethods(['isRequired'])
+            ->onlyMethods(['isCorrect'])
             ->getMockForAbstractClass();
         $this->helperMock->expects($this->once())
             ->method('getCaptcha')
@@ -128,7 +129,8 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
 
         $this->controllerMock = $this->getMockBuilder(Action::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrl', 'getResponse'])
+            ->addMethods(['getUrl'])
+            ->onlyMethods(['getResponse'])
             ->getMockForAbstractClass();
         $this->controllerMock->expects($this->any())
             ->method('getResponse')

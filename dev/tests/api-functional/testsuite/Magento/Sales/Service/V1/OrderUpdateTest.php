@@ -209,6 +209,105 @@ class OrderUpdateTest extends WebapiAbstract
     }
 
     /**
+     * Check that changes to taxes extension attribute are saved
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_tax.php
+     */
+    public function testUpdateTaxesExtensionAttributes()
+    {
+        /** @var Order $order */
+        $order = $this->objectManager->get(Order::class)
+            ->loadByIncrementId(self::ORDER_INCREMENT_ID);
+
+        $getServiceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $order->getEntityId(),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'get',
+            ],
+        ];
+        $postServiceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/orders',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'save',
+            ],
+        ];
+        $data = $this->_webApiCall($getServiceInfo, ['id' => $order->getEntityId()]);
+        $data['extension_attributes']['taxes'][0]['code'] = 'US-NY-*-Rate';
+        $data['extension_attributes']['taxes'][0]['percent'] = 5;
+        $data['extension_attributes']['additional_itemized_taxes'][0]['tax_percent'] = 5;
+        $data['extension_attributes']['additional_itemized_taxes'][0]['amount'] = 0.25;
+        $data['extension_attributes']['additional_itemized_taxes'][0]['base_amount'] = 0.25;
+        $data['extension_attributes']['additional_itemized_taxes'][0]['real_amount'] = 0.25;
+        $data['items'][0]['extension_attributes']['itemized_taxes'] = [
+            [
+                'tax_percent' => 5,
+                'tax_code' => 'US-NY-*-Rate',
+                'amount' => 0.5,
+                'base_amount' => 0.5,
+                'real_amount' => 0.5,
+                'real_base_amount' => 0.5,
+                'taxable_item_type' => 'product',
+            ]
+        ];
+        $this->_webApiCall($postServiceInfo, ['entity' => $data]);
+        $result = $this->_webApiCall($getServiceInfo, ['id' => $order->getEntityId()]);
+        $taxes = $result['extension_attributes']['taxes'];
+        $this->assertCount(1, $taxes);
+        $this->assertEquals('US-NY-*-Rate', $taxes[0]['code']);
+        $this->assertEquals(5, $taxes[0]['percent']);
+        // check that amount is not automatically calculated
+        $this->assertEquals($data['extension_attributes']['taxes'][0]['amount'], $taxes[0]['amount']);
+
+        $this->assertCount(1, $result['extension_attributes']['additional_itemized_taxes']);
+        $shippingTaxItem = $result['extension_attributes']['additional_itemized_taxes'][0];
+        $this->assertEquals('shipping', $shippingTaxItem['taxable_item_type']);
+        $this->assertEquals(5, $shippingTaxItem['tax_percent']);
+        $this->assertEquals(0.25, $shippingTaxItem['amount']);
+        $this->assertEquals(0.25, $shippingTaxItem['base_amount']);
+        $this->assertEquals(0.25, $shippingTaxItem['real_amount']);
+        $this->assertCount(1, $result['items'][0]['extension_attributes']['itemized_taxes']);
+        $orderItemTaxItem = $result['items'][0]['extension_attributes']['itemized_taxes'][0];
+        $this->assertEquals('product', $orderItemTaxItem['taxable_item_type']);
+        $this->assertEquals(5, $orderItemTaxItem['tax_percent']);
+        $this->assertEquals(0.50, $orderItemTaxItem['amount']);
+        $this->assertEquals(0.50, $orderItemTaxItem['base_amount']);
+        $this->assertEquals(0.50, $orderItemTaxItem['real_amount']);
+        $this->assertEquals($result['items'][0]['item_id'], $orderItemTaxItem['item_id']);
+
+        // test when additional_itemized_taxes and taxes are not provided
+        $data = $result;
+        $additionalItemizedTaxes = $data['extension_attributes']['additional_itemized_taxes'];
+        $orderItemAssociatedItemizedTaxes = $data['items'][0]['extension_attributes']['itemized_taxes'];
+        unset($data['extension_attributes']['taxes']);
+        unset($data['extension_attributes']['additional_itemized_taxes']);
+        unset($data['items'][0]['extension_attributes']['additional_itemized_taxes']);
+        $this->_webApiCall($postServiceInfo, ['entity' => $data]);
+        $result = $this->_webApiCall($getServiceInfo, ['id' => $order->getEntityId()]);
+        $this->assertEquals(
+            $taxes,
+            $result['extension_attributes']['taxes']
+        );
+        $this->assertEquals(
+            $additionalItemizedTaxes,
+            $result['extension_attributes']['additional_itemized_taxes']
+        );
+        $this->assertEquals(
+            $orderItemAssociatedItemizedTaxes,
+            $result['items'][0]['extension_attributes']['itemized_taxes']
+        );
+    }
+
+    /**
      * Prepare order data for request
      *
      * @param Order $order

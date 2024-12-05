@@ -162,12 +162,13 @@ class ExportFileDataProvider extends DataProvider
         foreach ($files as $filePath) {
             $filePath = $this->directory->getAbsolutePath($filePath);
             if ($this->directory->isFile($filePath)) {
-                $fileModificationTime = $this->directory->stat($filePath)['mtime'];
-                $sortedFiles[$fileModificationTime] = $filePath;
+                $sortedFiles[] = $filePath;
             }
         }
-        //sort array elements using key value
-        krsort($sortedFiles);
+        usort(
+            $sortedFiles,
+            fn ($f1, $f2) => ($this->directory->stat($f1)['mtime'] <=> $this->directory->stat($f2)['mtime']) * -1
+        );
 
         return $sortedFiles;
     }

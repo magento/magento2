@@ -41,7 +41,7 @@ class CronTest extends TestCase
     /**
      * @return array
      */
-    public function numericValueProvider()
+    public static function numericValueProvider()
     {
         return [
             ['jan', 1],
@@ -85,7 +85,7 @@ class CronTest extends TestCase
     /**
      * @return array
      */
-    public function matchCronExpressionProvider()
+    public static function matchCronExpressionProvider()
     {
         return [
             ['mon-fri', 2, true],
@@ -117,7 +117,7 @@ class CronTest extends TestCase
     /**
      * @return array
      */
-    public function isValidForProvider()
+    public static function isValidForProvider()
     {
         return [
             [mktime(0, 0, 12, 7, 1, 2000), '* * * * *', true],

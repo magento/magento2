@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -27,22 +28,27 @@ class CouponCodeValidationTest extends TestCase
     private $couponCodeValidation;
 
     /**
-     * @var MockObject|CodeLimitManagerInterface
+     * @var MockObject&CodeLimitManagerInterface
      */
     private $codeLimitManagerMock;
 
     /**
-     * @var MockObject|CartRepositoryInterface
+     * @var MockObject&CartRepositoryInterface
      */
     private $cartRepositoryMock;
 
     /**
-     * @var MockObject|SearchCriteriaBuilder
+     * @var MockObject&SearchCriteriaBuilder
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var MockObject|Observer
+     * @var MockObject&SearchCriteriaBuilderFactory
+     */
+    private $searchCriteriaBuilderMockFactory;
+
+    /**
+     * @var MockObject&Observer
      */
     private $observerMock;
 
@@ -67,13 +73,19 @@ class CouponCodeValidationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->setMethods(['getItems'])
+            ->addMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->setMethods(['addFilter', 'create'])
+            ->onlyMethods(['addFilter', 'create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $this->searchCriteriaBuilderMockFactory = $this->getMockBuilder(SearchCriteriaBuilderFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->searchCriteriaBuilderMockFactory->expects($this->any())->method('create')
+            ->willReturn($this->searchCriteriaBuilderMock);
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods(['getCouponCode', 'setCouponCode'])
             ->onlyMethods(['getId'])
@@ -83,7 +95,8 @@ class CouponCodeValidationTest extends TestCase
         $this->couponCodeValidation = new CouponCodeValidation(
             $this->codeLimitManagerMock,
             $this->cartRepositoryMock,
-            $this->searchCriteriaBuilderMock
+            $this->searchCriteriaBuilderMock,
+            $this->searchCriteriaBuilderMockFactory
         );
     }
 

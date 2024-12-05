@@ -51,7 +51,7 @@ class DefaultOrderTest extends TestCase
 
         $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+            ->onlyMethods(['getBlock'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
@@ -66,7 +66,8 @@ class DefaultOrderTest extends TestCase
 
         $this->priceRenderBlock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setItem', 'toHtml'])
+            ->addMethods(['setItem'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
 
         $this->itemMock = $this->getMockBuilder(OrderItem::class)

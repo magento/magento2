@@ -127,11 +127,15 @@ class ReaderTest extends TestCase
             ->willReturnOnConsecutiveCalls(file_get_contents($this->_paths[0]), file_get_contents($this->_paths[1]));
         $this->_moduleDirResolver
             ->method('getModuleName')
-            ->withConsecutive(
-                [__DIR__ . '/_files/Fixture/ModuleOne/etc/email_templates_one.xml'],
-                [__DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml']
-            )
-            ->willReturnOnConsecutiveCalls('Fixture_ModuleOne', 'Fixture_ModuleTwo');
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === __DIR__ . '/_files/Fixture/ModuleOne/etc/email_templates_one.xml') {
+                        return 'Fixture_ModuleOne';
+                    } elseif ($arg === __DIR__ . '/_files/Fixture/ModuleTwo/etc/email_templates_two.xml') {
+                        return 'Fixture_ModuleTwo';
+                    }
+                }
+            );
         $constraint = function (\DOMDocument $actual) {
             try {
                 $expected = file_get_contents(__DIR__ . '/_files/email_templates_merged.xml');

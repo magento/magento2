@@ -44,7 +44,15 @@ type SelectedBundleOptionValue @doc(description: "Contains details about a value
     uid: ID! @doc(description: "The unique ID for a `SelectedBundleOptionValue` object")
     label: String! @doc(description: "The display name of the value for the selected bundle product option.")
     quantity: Float! @doc(description: "The quantity of the value for the selected bundle product option.")
-    price: Float! @doc(description: "The price of the value for the selected bundle product option.")
+    price: Float! @deprecated(reason: "Use priceV2 instead.") @doc(description: "The price of the value for the selected bundle product option.")
+    priceV2: Money! @doc(description: "The price of the value for the selected bundle product option.")
+    original_price: Money! @doc(description: "The original price of the value for the selected bundle product option.")
+}
+
+type PriceDetails @doc(description: "Can be used to retrieve the main price details in case of bundle product") {
+    main_price: Float @doc(description: "The regular price of the main product")
+    main_final_price: Float @doc(description: "The final price after applying the discount to the main product")
+    discount_percentage: Float @doc(description: "The percentage of discount applied to the main product price")
 }
 
 type BundleItem @doc(description: "Defines an individual item within a bundle product.") {
@@ -79,6 +87,7 @@ type BundleProduct implements ProductInterface, RoutableInterface, PhysicalProdu
     dynamic_sku: Boolean @doc(description: "Indicates whether the bundle product has a dynamic SKU.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicSku")
     ship_bundle_items: ShipBundleItemsEnum @doc(description: "Indicates whether to ship bundle items together or individually.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\ShipBundleItems")
     dynamic_weight: Boolean @doc(description: "Indicates whether the bundle product has a dynamically calculated weight.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Product\\Fields\\DynamicWeight")
+    price_details: PriceDetails @doc(description: "The price details of the main product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundlePriceDetails")
     items: [BundleItem] @doc(description: "An array containing information about individual bundle items.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleItems")
 }
 

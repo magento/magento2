@@ -119,6 +119,7 @@
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="paypal-billing-agreement" xsi:type="string">Magento\Paypal\CustomerData\BillingAgreement</item>
+                <item name="paypal-buyer-country" xsi:type="string">Magento\Paypal\CustomerData\BuyerCountry</item>
             </argument>
         </arguments>
     </type>

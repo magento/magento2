@@ -10,21 +10,23 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManager\NoninterceptableInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Create and use Logger implementation based on deployment configuration
  */
-class LoggerProxy implements LoggerInterface, NoninterceptableInterface
+class LoggerProxy implements LoggerInterface, NoninterceptableInterface, ResetAfterRequestInterface
 {
     /**
      * @var ObjectManagerInterface
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
-     * @var LoggerInterface
+     * @var LoggerInterface|null
      */
     private $logger;
 
@@ -37,6 +39,14 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
         ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->logger = null;
     }
 
     /**
@@ -97,7 +107,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function emergency($message, array $context = [])
+    public function emergency(\Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->emergency($message, $context);
@@ -106,7 +116,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function alert($message, array $context = [])
+    public function alert(\Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->alert($message, $context);
@@ -115,7 +125,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function critical($message, array $context = [])
+    public function critical(\Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->critical($message, $context);
@@ -124,7 +134,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function error($message, array $context = [])
+    public function error(\Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->error($message, $context);
@@ -133,7 +143,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function warning($message, array $context = [])
+    public function warning(\Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->warning($message, $context);
@@ -142,7 +152,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function notice($message, array $context = [])
+    public function notice(\Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->notice($message, $context);
@@ -151,7 +161,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function info($message, array $context = [])
+    public function info(\Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->info($message, $context);
@@ -160,7 +170,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function debug($message, array $context = [])
+    public function debug(\Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->debug($message, $context);
@@ -169,7 +179,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     /**
      * @inheritDoc
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, \Stringable|string $message, array $context = []): void
     {
         $context = $this->addExceptionToContext($message, $context);
         $this->getLogger()->log($level, $message, $context);

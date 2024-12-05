@@ -13,11 +13,7 @@
     </argument>
     <settings>
         <buttons>
-            <button name="add">
-                <url path="*/*/new"/>
-                <class>primary</class>
-                <label translate="true">Add New Customer Group</label>
-            </button>
+            <button name="add" class="Magento\Customer\Block\Adminhtml\Group\AddCustomerGroupButton"/>
         </buttons>
         <spinner>customer_group_columns</spinner>
         <deps>

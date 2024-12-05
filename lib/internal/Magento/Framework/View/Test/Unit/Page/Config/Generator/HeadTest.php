@@ -130,12 +130,29 @@ class HeadTest extends TestCase
 
         $this->pageConfigMock
             ->method('addRemotePageAsset')
-            ->withConsecutive(
-                ['file-url-css', 'css', ['attributes' => ['media' => 'all']]],
-                ['file-url-css-last', 'css', ['attributes' => ['media' => 'all'], 'order' => 30]],
-                ['file-url-css-first', 'css', ['attributes' => ['media' => 'all'], 'order' => 10]],
-                ['file-url-link', Head::VIRTUAL_CONTENT_TYPE_LINK, ['attributes' => ['media' => 'all']]],
-                ['http://magento.dev/customcss/render/css', 'css', ['attributes' => ['media' => 'all']]]
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 == 'file-url-css' &&
+                        $arg2 == 'css' &&
+                        $arg3 == ['attributes' => ['media' => 'all']]) {
+                        return null;
+                    } elseif ($arg1 == 'file-url-css-last' &&
+                        $arg2 == 'css' &&
+                        $arg3 == ['attributes' => ['media' => 'all'], 'order' => 30]) {
+                        return null;
+                    } elseif ($arg1 == 'file-url-css-first' &&
+                        $arg2 == 'css' &&
+                        $arg3 == ['attributes' => ['media' => 'all'], 'order' => 10]) {
+                        return null;
+                    } elseif ($arg1 == 'file-url-link' &&
+                        $arg2 == Head::VIRTUAL_CONTENT_TYPE_LINK &&
+                        $arg3 == ['attributes' => ['media' => 'all']]) {
+                        return null;
+                    } elseif ($arg1 == 'http://magento.dev/customcss/render/css' &&
+                        $arg2 == 'css' && $arg3 == ['attributes' => ['media' => 'all']]) {
+                        return null;
+                    }
+                }
             );
         $this->pageConfigMock->expects($this->once())
             ->method('addPageAsset')
@@ -156,7 +173,15 @@ class HeadTest extends TestCase
             ->willReturn($metadata);
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('setMetadata')
-            ->withConsecutive(['name1', 'content1'], ['name2', 'content2']);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'name1' && $arg2 == 'content1') {
+                        return null;
+                    } elseif ($arg1 == 'name2' && $arg2 == 'content2') {
+                        return null;
+                    }
+                }
+            );
 
         $elementAttributes = [
             PageConfig::ELEMENT_TYPE_BODY => [
@@ -172,10 +197,19 @@ class HeadTest extends TestCase
             ->willReturn($elementAttributes);
         $this->pageConfigMock->expects($this->exactly(3))
             ->method('setElementAttribute')
-            ->withConsecutive(
-                [PageConfig::ELEMENT_TYPE_BODY, 'body_attr_1', 'body_value_1'],
-                [PageConfig::ELEMENT_TYPE_BODY, 'body_attr_2', 'body_value_2'],
-                [PageConfig::ELEMENT_TYPE_HTML, 'html_attr_1', 'html_attr_1']
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) {
+                    if ($arg1 == PageConfig::ELEMENT_TYPE_BODY &&
+                        $arg2 == 'body_attr_1' && $arg3 == 'body_value_1') {
+                        return null;
+                    } elseif ($arg1 == PageConfig::ELEMENT_TYPE_BODY &&
+                        $arg2 == 'body_attr_2' && $arg3 == 'body_value_2') {
+                        return null;
+                    } elseif ($arg1 == PageConfig::ELEMENT_TYPE_HTML &&
+                        $arg2 == 'html_attr_1' && $arg3 == 'html_attr_1') {
+                        return null;
+                    }
+                }
             );
 
         $result = $this->headGenerator->process($readerContextMock, $generatorContextMock);

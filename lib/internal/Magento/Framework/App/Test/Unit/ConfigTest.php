@@ -71,7 +71,7 @@ class ConfigTest extends TestCase
         }
         $this->configType->expects($this->once())
             ->method('get')
-            ->with($scope =='store' ? 'stores/path' : 'websites/mywebsite/path')
+            ->with($scope =='store' ? 'stores/path' : 'websites/myWebsite/path')
             ->willReturn(true);
 
         $this->assertTrue($this->appConfig->getValue($path, $scope, $scopeCode ?: $this->scope));
@@ -80,11 +80,11 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             ['store', 1],
-            ['website']
+            ['website'],
         ];
     }
 }

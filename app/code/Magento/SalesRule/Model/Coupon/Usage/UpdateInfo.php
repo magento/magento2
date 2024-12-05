@@ -19,6 +19,7 @@ class UpdateInfo extends DataObject
     private const CUSTOMER_ID_KEY = 'customer_id';
     private const IS_INCREMENT_KEY = 'is_increment';
     private const IS_COUPON_ALREADY_APPLIED = 'is_coupon_already_applied';
+    private const COUPON_CODES = 'coupon_codes';
 
     /**
      * Get applied rule ids
@@ -60,6 +61,27 @@ class UpdateInfo extends DataObject
     public function setCouponCode(string $value): void
     {
         $this->setData(self::COUPON_CODE_KEY, $value);
+    }
+
+    /**
+     * Get coupon code
+     *
+     * @return string[]
+     */
+    public function getCouponCodes(): array
+    {
+        return $this->getData(self::COUPON_CODES) ?? [];
+    }
+
+    /**
+     * Set coupon code
+     *
+     * @param string[] $value
+     * @return void
+     */
+    public function setCouponCodes(array $value): void
+    {
+        $this->setData(self::COUPON_CODES, $value);
     }
 
     /**

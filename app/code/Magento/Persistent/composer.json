@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-checkout": "*",
         "magento/module-cron": "*",
@@ -13,6 +13,9 @@
         "magento/module-page-cache": "*",
         "magento/module-quote": "*",
         "magento/module-store": "*"
+    },
+    "suggest": {
+        "magento/module-login-as-customer-api": "*"
     },
     "type": "magento2-module",
     "license": [

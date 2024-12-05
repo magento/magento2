@@ -39,12 +39,12 @@ class AppArea implements ParserInterface
         try {
             $reflection = $scope === ParserInterface::SCOPE_CLASS
                 ? new \ReflectionClass($test)
-                : new \ReflectionMethod($test, $test->getName(false));
+                : new \ReflectionMethod($test, $test->name());
         } catch (\ReflectionException $e) {
             throw new LocalizedException(
                 __(
                     'Unable to parse attributes for %1',
-                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? '' : '::' . $test->getName(false))
+                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? '' : '::' . $test->name())
                 ),
                 $e
             );

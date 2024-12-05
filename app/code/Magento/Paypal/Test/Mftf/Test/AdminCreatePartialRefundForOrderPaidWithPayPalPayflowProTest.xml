@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialRefundForOrderPaidWithPayPalPayflowProTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal Payments Pro"/>
+            <title value="Create Partial Refund for Order Paid with PayPal Payflow Pro"/>
+            <description value="Admin Create Partial Refund for Order Paid with PayPal Payflow Pro from the storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5264"/>
+            <group value="paypalPayflowPro"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <!--Create Simple product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <!--Create Customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Reindex and Clean cache-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+            <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCache">
+                <argument name="tags" value="full_page config"/>
+            </actionGroup>
+            <!--Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Login to storefront-->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                <argument name="Customer" value="$createCustomer$" />
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+            <!-- Add product to cart with qty 2 and proceed to checkout-->
+            <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addVirtualProductToCart">
+                <argument name="productQty" value="2"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
+            <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+            <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+            <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+            <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" visible="true" stepKey="selectCreditCardPaymentMethod"/>
+            <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+            <!--Fill Card Data and place an order-->
+            <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardData">
+                <argument name="cardData" value="VisaDefaultCard"/>
+            </actionGroup>
+            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <waitForElement selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Go to invoice page and submit invoice-->
+        <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoiceIntoOrder"/>
+        <!--Open Invoice tab and create credit memo for partial refund from created invoice-->
+        <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoiceTab"/>
+        <waitForElementClickable selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedOne"/>
+        <click selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="seeForInvoicesTabOpenedOne"/>
+        <waitForPageLoad stepKey="waitForInvoicePageToBeLoaded"/>
+        <actionGroup ref="AdminStartToCreateCreditMemoFromInvoicePageActionGroup" stepKey="clickOnCreditMemoFromInvoiceTab"/>
+        <waitForElementVisible selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="waitToItemToRefundTextField"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="1" stepKey="partialRefund"/>
+        <waitForElementClickable selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="waitToClickUpdateQuantity"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund"/>
+        <waitForPageLoad stepKey="waitForQuantityApplied"/>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo">
+            <argument name="refundButton" value="{{AdminInvoiceMainActionsSection.submitNewRefundFromInvoice}}"/>
+        </actionGroup>
+        <!--Assert Order status-->
+        <waitForText selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderStatus"/>
+        <!-- Grab transaction ID for refund and assert refund message in comments history tab-->
+        <waitForElement selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionID"/>
+        <grabTextFrom selector="{{AdminOrderPaymentInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('refunded')}}" userInput="We refunded $133.00 online. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotesForRefund"/>
+        <!--Open credit memo tab and assert created credit memo grand total-->
+        <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="waitToClickCreditMemoTab"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
+        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="clickOnCreditMemosTab"/>
+        <actionGroup ref="AssertAdminCreditMemoGrandTotalActionGroup" stepKey="assertGrandTotal">
+            <argument name="expectedGrandTotal" value="$133.00"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitToClickBackButtonFromCreditMemo"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromCreditMemo"/>
+        <!--Open transaction Tab and assert the transaction types Authorization, Capture and Refund are present-->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertAuthorizationTransactionType">
+            <argument name="transactionType" value="authorization"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedFromAuthorization"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromAuthorization"/>
+        <!-- Assert Capture Transaction-->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertCaptureTransactionType">
+            <argument name="transactionType" value="capture"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForCapture"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedFromCapture"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromCapture"/>
+        <!-- Assert Refund Transaction-->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertRefundTransactionType">
+            <argument name="transactionType" value="refund"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData('Is Closed')}}" userInput="Yes" stepKey="seeIfClosedHeaderIsSetAsYesForRefund"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedFromRefund"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonFromRefund"/>
+    </test>
+</tests>

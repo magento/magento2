@@ -16,6 +16,11 @@
             <description value="Check duplicate Validate Message on Customer Login Form"/>
             <severity value="MAJOR"/>
             <group value="Customer"/>
+            <group value="cloud"/>
+            <group value="pr_exclude"/>
+            <skip>
+              <issueId value="AC-12714"/>
+            </skip>
         </annotations>
 
         <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>

@@ -15,6 +15,7 @@
             <features value="Sales"/>
             <severity value="BLOCKER"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Set default flat rate shipping method settings-->

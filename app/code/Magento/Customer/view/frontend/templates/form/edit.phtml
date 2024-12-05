@@ -7,17 +7,24 @@
 use Magento\Customer\Block\Widget\Name;
 
 /** @var \Magento\Customer\Block\Form\Edit $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
+/** @var $escaper \Magento\Framework\Escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <form class="form form-edit-account"
-      action="<?= $block->escapeUrl($block->getUrl('customer/account/editPost')) ?>"
+      action="<?= $escaper->escapeUrl($block->getUrl('customer/account/editPost')) ?>"
       method="post" id="form-validate"
       enctype="multipart/form-data"
-      data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+      data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>"
       autocomplete="off">
     <fieldset class="fieldset info">
         <?= $block->getBlockHtml('formkey') ?>
-        <legend class="legend"><span><?= $block->escapeHtml(__('Account Information')) ?></span></legend><br>
+        <legend class="legend"><span><?= $escaper->escapeHtml(__('Account Information')) ?></span></legend><br>
         <?= $block->getLayout()->createBlock(Name::class)->setObject($block->getCustomer())->toHtml() ?>
 
         <?php $_dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
@@ -34,17 +41,17 @@ use Magento\Customer\Block\Widget\Name;
         <?php endif ?>
         <div class="field choice">
             <input type="checkbox" name="change_email" id="change-email" data-role="change-email" value="1"
-                   title="<?= $block->escapeHtmlAttr(__('Change Email')) ?>" class="checkbox" />
+                   title="<?= $escaper->escapeHtmlAttr(__('Change Email')) ?>" class="checkbox" />
             <label class="label" for="change-email">
-                <span><?= $block->escapeHtml(__('Change Email')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Change Email')) ?></span>
             </label>
         </div>
         <div class="field choice">
             <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
-                   title="<?= $block->escapeHtmlAttr(__('Change Password')) ?>"
+                   title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
                 <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <label class="label" for="change-password">
-                <span><?= $block->escapeHtml(__('Change Password')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Change Password')) ?></span>
             </label>
         </div>
         <?= $block->getChildHtml('fieldset_edit_info_additional') ?>
@@ -52,21 +59,21 @@ use Magento\Customer\Block\Widget\Name;
 
     <fieldset class="fieldset password" data-container="change-email-password">
         <legend class="legend">
-            <span data-title="change-email-password"><?= $block->escapeHtml(__('Change Email and Password')) ?></span>
+            <span data-title="change-email-password"><?= $escaper->escapeHtml(__('Change Email and Password')) ?></span>
         </legend><br>
         <div class="field email required" data-container="change-email">
-            <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
+            <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
                 <input type="email" name="email" id="email" autocomplete="email" data-input="change-email"
-                       value="<?= $block->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                       value="<?= $escaper->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
                        class="input-text"
                        data-validate="{required:true, 'validate-email':true}" />
             </div>
         </div>
         <div class="field password current required">
             <label class="label" for="current-password">
-                <span><?= $block->escapeHtml(__('Current Password')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Current Password')) ?></span>
             </label>
             <div class="control">
                 <input type="password" class="input-text" name="current_password" id="current-password"
@@ -75,20 +82,20 @@ use Magento\Customer\Block\Widget\Name;
             </div>
         </div>
         <div class="field new password required" data-container="new-password">
-            <label class="label" for="password"><span><?= $block->escapeHtml(__('New Password')) ?></span></label>
+            <label class="label" for="password"><span><?= $escaper->escapeHtml(__('New Password')) ?></span></label>
             <div class="control">
                 <?php $minCharacterSets = $block->getRequiredCharacterClassesNumber() ?>
                 <input type="password" class="input-text" name="password" id="password"
-                    data-password-min-length="<?= $block->escapeHtml($block->getMinimumPasswordLength()) ?>"
-                    data-password-min-character-sets="<?= $block->escapeHtml($minCharacterSets) ?>"
+                    data-password-min-length="<?= $escaper->escapeHtml($block->getMinimumPasswordLength()) ?>"
+                    data-password-min-character-sets="<?= $escaper->escapeHtml($minCharacterSets) ?>"
                     data-input="new-password"
                     data-validate="{required:true, 'validate-customer-password':true}"
                     autocomplete="off" />
                 <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
                     <div id="password-strength-meter" class="password-strength-meter">
-                        <?= $block->escapeHtml(__('Password Strength')) ?>:
+                        <?= $escaper->escapeHtml(__('Password Strength')) ?>:
                         <span id="password-strength-meter-label" data-role="password-strength-meter-label">
-                            <?= $block->escapeHtml(__('No Password')) ?>
+                            <?= $escaper->escapeHtml(__('No Password')) ?>
                         </span>
                     </div>
                 </div>
@@ -96,7 +103,7 @@ use Magento\Customer\Block\Widget\Name;
         </div>
         <div class="field confirmation password required" data-container="confirm-password">
             <label class="label" for="password-confirmation">
-                <span><?= $block->escapeHtml(__('Confirm New Password')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Confirm New Password')) ?></span>
             </label>
             <div class="control">
                 <input type="password" class="input-text" name="password_confirmation" id="password-confirmation"
@@ -115,16 +122,16 @@ use Magento\Customer\Block\Widget\Name;
 
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>"
+            <button type="submit" class="action save primary" title="<?= $escaper->escapeHtmlAttr(__('Save')) ?>"
                 <?php if ($block->getButtonLockManager()->isDisabled('customer_edit_form_submit')): ?>
                     disabled="disabled"
                 <?php endif; ?>>
-            <span><?= $block->escapeHtml(__('Save')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Save')) ?></span>
             </button>
         </div>
         <div class="secondary">
-            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
-                <span><?= $block->escapeHtml(__('Go back')) ?></span>
+            <a class="action back" href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>">
+                <span><?= $escaper->escapeHtml(__('Go back')) ?></span>
             </a>
         </div>
     </div>
@@ -168,14 +175,14 @@ $scriptString .= <<<script
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
-<?php $changeEmailAndPasswordTitle = $block->escapeHtml(__('Change Email and Password')) ?>
+<?php $changeEmailAndPasswordTitle = $escaper->escapeHtml(__('Change Email and Password')) ?>
 <script type="text/x-magento-init">
     {
         "[data-role=change-email], [data-role=change-password]": {
             "changeEmailPassword": {
-                "titleChangeEmail": "<?= $block->escapeJs($block->escapeHtml(__('Change Email'))) ?>",
-                "titleChangePassword": "<?= $block->escapeJs($block->escapeHtml(__('Change Password'))) ?>",
-                "titleChangeEmailAndPassword": "<?= $block->escapeJs($changeEmailAndPasswordTitle) ?>"
+                "titleChangeEmail": "<?= $escaper->escapeJs($escaper->escapeHtml(__('Change Email'))) ?>",
+                "titleChangePassword": "<?= $escaper->escapeJs($escaper->escapeHtml(__('Change Password'))) ?>",
+                "titleChangeEmailAndPassword": "<?= $escaper->escapeJs($changeEmailAndPasswordTitle) ?>"
             }
         },
         "[data-container=new-password]": {

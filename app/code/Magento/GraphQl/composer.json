@@ -3,11 +3,10 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/module-eav": "*",
         "magento/framework": "*",
         "magento/module-webapi": "*",
-        "magento/module-new-relic-reporting": "*",
         "magento/module-authorization": "*",
         "webonyx/graphql-php": "^15.0"
     },

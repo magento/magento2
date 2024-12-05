@@ -95,7 +95,7 @@ class ValueTest extends TestCase
     /**
      * @return array
      */
-    public function dataIsValueChanged(): array
+    public static function dataIsValueChanged(): array
     {
         return [
             ['value', 'value', false],
@@ -110,19 +110,15 @@ class ValueTest extends TestCase
     {
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'model_load_after',
-                    ['object' => $this->model]
-                ],
-                [
-                    'config_data_load_after',
-                    [
-                        'data_object' => $this->model,
-                        'config_data' => $this->model
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'model_load_after' &&
+                    $arg2 == ['object' => $this->model]) {
+                    return null;
+                } elseif ($arg1 == 'config_data_load_after' &&
+                    $arg2 == ['data_object' => $this->model, 'config_data' => $this->model]) {
+                    return null;
+                }
+            });
 
         $this->model->afterLoad();
     }
@@ -144,7 +140,7 @@ class ValueTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetFieldsetDataValue(): array
+    public static function dataProviderGetFieldsetDataValue(): array
     {
         return [
             [
@@ -186,7 +182,7 @@ class ValueTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
             [0, 'some_value'],

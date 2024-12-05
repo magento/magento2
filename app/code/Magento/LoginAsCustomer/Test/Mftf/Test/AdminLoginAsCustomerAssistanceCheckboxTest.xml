@@ -17,6 +17,7 @@
                 value="Verify that 'Allow remote shopping assistance' checkbox is present on Edit Account Information page"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"

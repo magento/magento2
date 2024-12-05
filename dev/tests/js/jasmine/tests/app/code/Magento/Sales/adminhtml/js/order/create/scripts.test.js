@@ -160,6 +160,92 @@ define([
             jQueryAjax = undefined;
         });
 
+        describe('Testing syncAddressField method', function () {
+            it('Synchronize region and region_id fields display when called with field named "country"', function () {
+                let form, billingCountryId, billingRegionId, billingRegion, billingCountryIdOption1,
+                    billingCountryIdOption2, shippingCountryId, shippingRegionId, shippingRegion, billingRegionOption1,
+                    billingRegionOption2, shippingCountryIdOption1, shippingOption2, shippingRegionOption1,
+                    shippingRegionOption2;
+
+                form = document.createElement('form');
+
+                //create billing country id field
+                billingCountryId = document.createElement('select');
+                billingCountryId.name = 'order[billing_address][country_id]';
+                billingCountryIdOption1 = document.createElement('option');
+                billingCountryIdOption1.value = 'USA';
+                billingCountryIdOption1.innerText = 'United States of America';
+                billingCountryIdOption2 = document.createElement('option');
+                billingCountryIdOption2.value = 'RO';
+                billingCountryIdOption2.innerText = 'Romania';
+                billingCountryId.appendChild(billingCountryIdOption1);
+                billingCountryId.appendChild(billingCountryIdOption2);
+                form.appendChild(billingCountryId);
+
+                //create billing region id field
+                billingRegionId = document.createElement('select');
+                billingRegionId.name = 'order[billing_address][region_id]';
+                billingRegionId.id = 'order-billing_address_region_id';
+                billingRegionOption1 = document.createElement('option');
+                billingRegionOption1.value = 'NY';
+                billingRegionOption1.innerText = 'New York';
+                billingRegionOption2 = document.createElement('option');
+                billingRegionOption2.value = 'TX';
+                billingRegionOption2.innerText = 'Texas';
+                billingRegionId.appendChild(billingRegionOption1);
+                billingRegionId.appendChild(billingRegionOption2);
+                form.appendChild(billingRegionId);
+
+                //create hidden billing region field
+                billingRegion = document.createElement('input');
+                billingRegion.name = 'order[billing_address][region]';
+                billingRegion.id = 'order-billing_address_region';
+                billingRegion.style.display = 'none';
+                form.appendChild(billingRegion);
+
+                //create shipping country id field
+                shippingCountryId = document.createElement('select');
+                shippingCountryId.name = 'order[shipping_address][country_id]';
+                shippingCountryIdOption1 = document.createElement('option');
+                shippingCountryIdOption1.value = 'USA';
+                shippingCountryIdOption1.innerText = 'United States of America';
+                shippingOption2 = document.createElement('option');
+                shippingOption2.value = 'RO';
+                shippingOption2.innerText = 'Romania';
+                shippingCountryId.appendChild(shippingCountryIdOption1);
+                shippingCountryId.appendChild(shippingOption2);
+                shippingCountryId.value = 'RO';
+                form.appendChild(shippingCountryId);
+
+                //create shipping region id field
+                shippingRegionId = document.createElement('select');
+                shippingRegionId.name = 'order[shipping_address][region_id]';
+                shippingRegionId.id = 'order-shipping_address_region_id';
+                shippingRegionOption1 = document.createElement('option');
+                shippingRegionOption1.value = 'B';
+                shippingRegionOption1.innerText = 'Bucuresti';
+                shippingRegionOption2 = document.createElement('option');
+                shippingRegionOption2.value = 'CT';
+                shippingRegionOption2.innerText = 'Constanta';
+                shippingRegionId.appendChild(shippingRegionOption1);
+                shippingRegionId.appendChild(shippingRegionOption2);
+                form.appendChild(shippingRegionId);
+
+                //create shipping region field
+                shippingRegion = document.createElement('input');
+                shippingRegion.name = 'order[shipping_address][region]';
+                shippingRegion.id = 'order-shipping_address_region';
+                form.appendChild(shippingRegion);
+
+                document.body.appendChild(form);
+                order = new window.AdminOrder({});
+                order.syncAddressField(form, 'order[billing_address][country_id]', billingCountryId);
+
+                expect(shippingCountryId.value).toEqual('USA');
+                expect(shippingRegion.style.display).toEqual('none');
+            });
+        });
+
         it('test that setStoreId calls loadArea with a callback', function () {
             init();
             spyOn(order, 'loadArea').and.callFake(function () {

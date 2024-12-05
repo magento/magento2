@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EditOrderFromAdminWithSavedWithinPayPalPayflowProCreditCardForRegisteredCustomerTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Edit Order from Admin with saved within PayPal Payflow Pro credit card for Registered Customer"/>
+            <description value="Edit Order from Admin with saved within PayPal Payflow Pro credit card for Registered Customer"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5107"/>
+            <group value="paypal"/>
+            <group value="payflowpro"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <!--Create a customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create simple product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
+            <!-- Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Configure Paypal payflowpro-->
+            <actionGroup ref="AdminPayPalPayflowProWithValutActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Disable payflowpro-->
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!-- Delete product and customer-->
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefront"/>
+        <!-- Add product 1 to cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createSimpleProduct1.name$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatrate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+        <!--Fill Card Data  and place an order-->
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+            <argument name="cardData" value="VisaDefaultCard"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFillCardData"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <!-- Grab order number-->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--Navigate to admin order grid and filter the order-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!-- Click on edit-->
+        <actionGroup ref="AdminEditOrderActionGroup" stepKey="openOrderForEdit">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <!-- Select stored card and submit order-->
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.storedCard}}" dependentSelector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" visible="true" stepKey="checkCheckMoneyOption"/>
+        <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
+        <!-- Filter order-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderByIdAgain">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <!--verify order status is canceled-->
+        <click selector="{{AdminOrdersGridSection.secondRow}}" stepKey="clickSecondOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+        <see userInput="Canceled" selector="{{AdminOrderDetailsInformationSection.orderStatus}}" stepKey="seeOrderStatus"/>
+    </test>
+</tests>

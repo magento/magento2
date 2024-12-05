@@ -16,14 +16,19 @@
             <testCaseId value="MAGETWO-94951"/>
             <stories value="MAGETWO-94346: Implement handling of large number of addresses on admin edit customer page"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

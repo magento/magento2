@@ -15,6 +15,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-4982"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>

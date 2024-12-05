@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Oauth;
 
-use Laminas\OAuth\Http\Utility;
+use Magento\Framework\Oauth\Helper\Utility;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
 use Magento\Framework\Oauth\Exception as AuthException;
@@ -22,11 +22,6 @@ class Oauth implements OauthInterface
     protected $_oauthHelper;
 
     /**
-     * @var  Utility
-     */
-    protected $_httpUtility;
-
-    /**
      * @var \Magento\Framework\Oauth\NonceGeneratorInterface
      */
     protected $_nonceGenerator;
@@ -37,22 +32,26 @@ class Oauth implements OauthInterface
     protected $_tokenProvider;
 
     /**
+     * @var Utility
+     */
+    private Utility $httpUtility;
+
+    /**
      * @param Helper\Oauth $oauthHelper
      * @param NonceGeneratorInterface $nonceGenerator
      * @param TokenProviderInterface $tokenProvider
-     * @param \Zend_Oauth_Http_Utility $httpUtility
+     * @param Utility $utility
      */
     public function __construct(
         Helper\Oauth $oauthHelper,
         NonceGeneratorInterface $nonceGenerator,
         TokenProviderInterface $tokenProvider,
-        Utility $httpUtility = null
+        Utility $utility
     ) {
         $this->_oauthHelper = $oauthHelper;
         $this->_nonceGenerator = $nonceGenerator;
         $this->_tokenProvider = $tokenProvider;
-        // null default to prevent ObjectManagerFactory from injecting, see MAGETWO-30809
-        $this->_httpUtility = $httpUtility ?: new Utility();
+        $this->httpUtility = $utility;
     }
 
     /**
@@ -155,7 +154,7 @@ class Oauth implements OauthInterface
             'oauth_version' => '1.0',
         ];
         $headerParameters = array_merge($headerParameters, $params);
-        $headerParameters['oauth_signature'] = $this->_httpUtility->sign(
+        $headerParameters['oauth_signature'] = $this->httpUtility->sign(
             $params,
             $signatureMethod,
             $headerParameters['oauth_consumer_secret'],
@@ -163,10 +162,8 @@ class Oauth implements OauthInterface
             $httpMethod,
             $requestUrl
         );
-        $authorizationHeader = $this->_httpUtility->toAuthorizationHeader($headerParameters);
-        // toAuthorizationHeader adds an optional realm="" which is not required for now.
-        // http://tools.ietf.org/html/rfc2617#section-1.2
-        return str_replace('realm="",', '', $authorizationHeader);
+
+        return $this->httpUtility->toAuthorizationHeader($headerParameters);
     }
 
     /**
@@ -191,11 +188,8 @@ class Oauth implements OauthInterface
             );
         }
 
-        $allowedSignParams = $params;
-        unset($allowedSignParams['oauth_signature']);
-
-        $calculatedSign = $this->_httpUtility->sign(
-            $allowedSignParams,
+        $calculatedSign = $this->httpUtility->sign(
+            $params,
             $params['oauth_signature_method'],
             $consumerSecret,
             $tokenSecret,

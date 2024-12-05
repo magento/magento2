@@ -68,7 +68,7 @@ class PriceModifierTest extends TestCase
     /**
      * @return array
      */
-    public function modifyPriceDataProvider()
+    public static function modifyPriceDataProvider()
     {
         return ['resulted_price_exists' => [150, 150], 'resulted_price_not_exists' => [null, 100]];
     }

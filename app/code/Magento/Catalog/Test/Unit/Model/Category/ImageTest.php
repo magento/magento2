@@ -74,7 +74,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [

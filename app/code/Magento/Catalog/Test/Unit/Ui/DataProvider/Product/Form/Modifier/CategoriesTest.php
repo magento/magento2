@@ -7,22 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Authorization\Model\Role;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Authorization\Model\Role;
 use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoriesTest extends AbstractModifierTest
+class CategoriesTest extends AbstractModifierTestCase
 {
     /**
      * @var CategoryCollectionFactory|MockObject
@@ -63,7 +64,7 @@ class CategoriesTest extends AbstractModifierTest
     {
         parent::setUp();
         $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbHelperMock = $this->getMockBuilder(DbHelper::class)
@@ -81,7 +82,7 @@ class CategoriesTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryCollectionFactoryMock->expects($this->any())
@@ -89,6 +90,9 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturn($this->categoryCollectionMock);
         $this->categoryCollectionMock->expects($this->any())
             ->method('addAttributeToSelect')
+            ->willReturnSelf();
+        $this->categoryCollectionMock->expects($this->any())
+            ->method('addAttributeToSort')
             ->willReturnSelf();
         $this->categoryCollectionMock->expects($this->any())
             ->method('addAttributeToFilter')
@@ -101,7 +105,7 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturn(new \ArrayIterator([]));
 
         $roleAdmin = $this->getMockBuilder(Role::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $roleAdmin->expects($this->any())
@@ -109,7 +113,7 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturn(0);
 
         $userAdmin = $this->getMockBuilder(User::class)
-            ->setMethods(['getRole'])
+            ->onlyMethods(['getRole'])
             ->disableOriginalConstructor()
             ->getMock();
         $userAdmin->expects($this->any())
@@ -126,6 +130,13 @@ class CategoriesTest extends AbstractModifierTest
      */
     protected function createModel()
     {
+        $objects = [
+            [
+                CacheInterface::class,
+                $this->createMock(CacheInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         return $this->objectManager->getObject(
             Categories::class,
             [
@@ -220,7 +231,7 @@ class CategoriesTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function modifyMetaLockedDataProvider()
+    public static function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];
     }
@@ -251,7 +262,7 @@ class CategoriesTest extends AbstractModifierTest
             ->will($this->returnValue($roleAclUser));
 
         $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
 

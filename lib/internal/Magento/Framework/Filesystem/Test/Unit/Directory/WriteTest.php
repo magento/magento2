@@ -167,14 +167,15 @@ class WriteTest extends TestCase
      */
     public function testRenameFile($sourcePath, $targetPath, $targetDir)
     {
-        if ($targetDir !== null) {
+        if ($targetDir !== null && is_callable($targetDir)) {
+            $targetDir = $targetDir($this);
             /** @noinspection PhpUndefinedFieldInspection */
             $targetDirPath = 'TARGET_PATH/';
             $targetDir->expects($this->once())
                 ->method('getAbsolutePath')
                 ->with($targetPath)
                 ->willReturn($targetDirPath . $targetPath);
-            $targetDir->expects($this->once())
+            $targetDir->expects($this->any())
                 ->method('isExists')
                 ->with(dirname($targetPath))
                 ->willReturn(false);
@@ -205,7 +206,7 @@ class WriteTest extends TestCase
     /**
      * @return array
      */
-    public function getFilePathsDataProvider()
+    public static function getFilePathsDataProvider()
     {
         return [
             [
@@ -216,10 +217,16 @@ class WriteTest extends TestCase
             [
                 'path/to/source.file',
                 'path/to/target.file',
-                $this->getMockBuilder(WriteInterface::class)
-                    ->setMethods(['isExists', 'getAbsolutePath', 'create'])
-                    ->getMockForAbstractClass(),
+                static fn (self $testCase) => $testCase->getWriterMock(),
             ],
         ];
+    }
+
+    public function getWriterMock()
+    {
+        return $this->getMockBuilder(WriteInterface::class)
+            ->onlyMethods(['getAbsolutePath', 'create'])
+            ->addMethods(['isExists'])
+            ->getMockForAbstractClass();
     }
 }

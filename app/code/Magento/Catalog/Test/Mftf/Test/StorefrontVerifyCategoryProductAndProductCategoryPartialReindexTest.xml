@@ -20,10 +20,11 @@
             <group value="catalog"/>
             <group value="indexer"/>
             <group value="pr_exclude"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
         <before>
             <!-- Change "Category Products", "Product Categories" and "Catalog Search" indexers to "Update by Schedule" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="schedule catalog_category_product catalog_product_category catalogsearch_fulltext" stepKey="setIndexerMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
 
             <!-- Create categories K, L, M, N with different nesting in the tree and Anchor = Yes/No-->
             <!-- Category K is an anchor category -->
@@ -58,11 +59,13 @@
                 <requiredEntity createDataKey="categoryN"/>
                 <requiredEntity createDataKey="productC"/>
             </createData>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Change indexers to "Update on Save" mode -->
-            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode realtime' command for preserving Backward Compatibility" stepKey="setRealtimeMode"/>
 
             <!-- Delete data -->
             <deleteData createDataKey="productA" stepKey="deleteProductA"/>
@@ -72,7 +75,9 @@
             <deleteData createDataKey="categoryM" stepKey="deleteCategoryM"/>
             <deleteData createDataKey="categoryL" stepKey="deleteCategoryL"/>
             <deleteData createDataKey="categoryK" stepKey="deleteCategoryK"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Open categories K, L, M, N on Storefront -->
@@ -139,7 +144,9 @@
         <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductBInCategoryN"/>
 
         <!-- Run cron -->
-        <magentoCron groups="index" stepKey="runCronIndex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assignments are applied -->
         <!-- Category K contains only Products A, C -->
@@ -204,8 +211,10 @@
         <dontSee userInput="$productA.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductAOnTheCategoryN"/>
         <dontSee userInput="$productB.name$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductBOnTheCategoryN"/>
 
-        <!-- Run Cron once to reindex product changes -->
-        <magentoCron groups="index" stepKey="runCronIndex2"/>
+        <!-- Reindex product changes -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex2">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assignments are applied -->
 

@@ -22,6 +22,7 @@ use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Config\Processor\Fallback;
 use Magento\Store\Model\ScopeInterface as StoreScope;
+use Psr\Log\LoggerInterface;
 
 /**
  * System configuration type
@@ -105,6 +106,10 @@ class System implements ConfigTypeInterface
     private $cacheState;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
      * System constructor.
      * @param ConfigSourceInterface $source
      * @param PostProcessorInterface $postProcessor
@@ -119,6 +124,7 @@ class System implements ConfigTypeInterface
      * @param LockManagerInterface|null $locker
      * @param LockGuardedCacheLoader|null $lockQuery
      * @param StateInterface|null $cacheState
+     * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -135,7 +141,8 @@ class System implements ConfigTypeInterface
         Encryptor $encryptor = null,
         LockManagerInterface $locker = null,
         LockGuardedCacheLoader $lockQuery = null,
-        StateInterface $cacheState = null
+        StateInterface $cacheState = null,
+        LoggerInterface $logger = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;
@@ -148,6 +155,8 @@ class System implements ConfigTypeInterface
             ?: ObjectManager::getInstance()->get(LockGuardedCacheLoader::class);
         $this->cacheState = $cacheState
             ?: ObjectManager::getInstance()->get(StateInterface::class);
+        $this->logger = $logger
+            ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -265,7 +274,12 @@ class System implements ConfigTypeInterface
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
             $scopeData = false;
             if ($cachedData !== false) {
-                $scopeData = [$scopeType => $this->serializer->unserialize($this->encryptor->decrypt($cachedData))];
+                try {
+                    $scopeData = [$scopeType => $this->serializer->unserialize($this->encryptor->decrypt($cachedData))];
+                } catch (\InvalidArgumentException $e) {
+                    $this->logger->warning($e->getMessage());
+                    $scopeData = false;
+                }
             }
             return $scopeData;
         };
@@ -536,5 +550,16 @@ class System implements ConfigTypeInterface
             $this->cachePreparedData($preparedData);
         };
         $this->lockQuery->lockedLoadData(self::$lockName, $loadAction, $dataCollector, $dataSaver);
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

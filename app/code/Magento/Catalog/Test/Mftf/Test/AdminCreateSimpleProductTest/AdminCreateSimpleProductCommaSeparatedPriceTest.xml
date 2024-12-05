@@ -17,6 +17,7 @@
             <testCaseId value="AC-2928"/>
             <useCaseId value="ACP2E-420"/>
             <group value="product"/>
+            <group value="cloud"/>
         </annotations>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>

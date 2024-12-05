@@ -6,11 +6,12 @@
 namespace Magento\Framework\Code\Reader;
 
 use Magento\Framework\GetParameterClassTrait;
+use Laminas\Code\Reflection\ParameterReflection;
 
 /**
  * The class arguments reader
  */
-class ArgumentsReader
+class ArgumentsReader extends ParameterReflection
 {
     use GetParameterClassTrait;
 
@@ -25,6 +26,11 @@ class ArgumentsReader
      * @var ScalarTypesProvider
      */
     private $scalarTypesProvider;
+
+    /**
+     * @var ParameterReflection
+     */
+    protected $parameterReflection;
 
     /**
      * @param NamespaceResolver|null $namespaceResolver
@@ -102,13 +108,14 @@ class ArgumentsReader
      */
     private function processType(\ReflectionClass $class, \Laminas\Code\Reflection\ParameterReflection $parameter)
     {
+        $this->parameterReflection = $parameter;
         $parameterClass = $this->getParameterClass($parameter);
 
         if ($parameterClass) {
             return NamespaceResolver::NS_SEPARATOR . $parameterClass->getName();
         }
 
-        $type = $parameter->detectType();
+        $type = $this->detectType();
 
         /**
          * $type === null if it is unspecified
@@ -276,5 +283,63 @@ class ArgumentsReader
         }
 
         return $annotations;
+    }
+
+    /**
+     * ReflectionType does not have an isBuiltin() / getName() method
+     *
+     * @deprecated this method is unreliable, and should not be used: it will be removed in the next major release.
+     *             It may crash on parameters with union types, and will return relative types, instead of
+     *             FQN references
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @see reflectionnamedtype.isbuiltin.php
+     *
+     * @return mixed|string|void|null
+     */
+    public function detectType()
+    {
+        if (null !== ($type = $this->parameterReflection->getType())
+            && method_exists($type, 'isBuiltin') && $type->isBuiltin()
+        ) {
+            return $type->getName();
+        }
+
+        if (null !== $type && method_exists($type, 'getName') && $type->getName() === 'self') {
+            $declaringClass = $this->parameterReflection->getDeclaringClass();
+            // @codingStandardsIgnoreStart
+            assert($declaringClass !== null, 'A parameter called `self` can only exist on a class');
+            // @codingStandardsIgnoreEnd
+
+            return $declaringClass->getName();
+        }
+
+        if (($class = $this->parameterReflection->getClass()) instanceof \ReflectionClass) {
+            return $class->getName();
+        }
+
+        $docBlock = $this->parameterReflection->getDeclaringFunction()->getDocBlock();
+
+        if (! $docBlock instanceof \Laminas\Code\Reflection\DocBlockReflection) {
+            return null;
+        }
+
+        $params       = $docBlock->getTags('param');
+        $paramTag     = $params[$this->parameterReflection->getPosition()] ?? null;
+        $variableName = '$' . $this->parameterReflection->getName();
+
+        if ($paramTag && ('' === $paramTag->getVariableName() || $variableName === $paramTag->getVariableName())) {
+            return $paramTag->getTypes()[0] ?? '';
+        }
+
+        foreach ($params as $param) {
+            if ($param->getVariableName() === $variableName) {
+                return $param->getTypes()[0] ?? '';
+            }
+        }
+
+        return null;
     }
 }

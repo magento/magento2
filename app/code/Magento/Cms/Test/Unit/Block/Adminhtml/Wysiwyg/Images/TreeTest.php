@@ -62,6 +62,8 @@ class TreeTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
         $contextMock = $this->createMock(Context::class);
         $this->cmsWysiwygImagesMock = $this->createMock(Images::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);

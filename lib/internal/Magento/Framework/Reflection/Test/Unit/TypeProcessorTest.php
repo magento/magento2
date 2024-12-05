@@ -278,11 +278,11 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function arrayParamTypeDataProvider()
+    public static function arrayParamTypeDataProvider()
     {
         return [
-            ['method name' => 'addData', 'type' => 'array[]'],
-            ['method name' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
+            ['methodName' => 'addData', 'type' => 'array[]'],
+            ['methodName' => 'addObjectList', 'type' => '\\' . TSampleInterface::class . '[]']
         ];
     }
 
@@ -312,11 +312,11 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function methodParamsDataProvider()
+    public static function methodParamsDataProvider()
     {
         return [
-            ['method name' => 'setName', 'descriptions' => ['Name of the attribute']],
-            ['method name' => 'setData', 'descriptions' => ['Key is used as index', null]],
+            ['methodName' => 'setName', 'descriptions' => ['Name of the attribute']],
+            ['methodName' => 'setData', 'descriptions' => ['Key is used as index', null]],
         ];
     }
 
@@ -343,7 +343,7 @@ class TypeProcessorTest extends TestCase
         self::assertEquals($returnTypeData, $this->typeProcessor->getGetterReturnType($methodReflection));
     }
 
-    public function getReturnTypeWithInheritDocBlockDataProvider(): array
+    public static function getReturnTypeWithInheritDocBlockDataProvider(): array
     {
         return [
             [
@@ -412,7 +412,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function simpleAndComplexDataProvider(): array
+    public static function simpleAndComplexDataProvider(): array
     {
         return [
             ['string', true],
@@ -441,7 +441,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function basicClassNameProvider(): array
+    public static function basicClassNameProvider(): array
     {
         return [
             ['SomeClass[]', 'SomeClass'],
@@ -470,7 +470,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function isFullyQualifiedClassNamesDataProvider(): array
+    public static function isFullyQualifiedClassNamesDataProvider(): array
     {
         return [
             ['SomeClass', false],
@@ -510,7 +510,7 @@ class TypeProcessorTest extends TestCase
      *
      * @return array
      */
-    public function resolveFullyQualifiedClassNamesDataProvider(): array
+    public static function resolveFullyQualifiedClassNamesDataProvider(): array
     {
         return [
             [UseSample::class, 'string', 'string'],

@@ -16,6 +16,7 @@
             <severity value="AVERAGE"/>
             <group value="sales"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

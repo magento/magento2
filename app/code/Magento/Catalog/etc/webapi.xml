@@ -51,6 +51,12 @@
             <resource ref="Magento_Catalog::attributes_attributes" />
         </resources>
     </route>
+    <route url="/V1/products/attributes/:attributeCode/is-filterable" method="GET">
+        <service class="Magento\Catalog\Api\ProductAttributeIsFilterableManagementInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
     <route url="/V1/products/attributes" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeRepositoryInterface" method="getList" />
         <resources>
@@ -83,6 +89,12 @@
     </route>
     <route url="/V1/products/attributes/:attributeCode" method="PUT">
         <service class="Magento\Catalog\Api\ProductAttributeRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/:attributeCode/is-filterable/:isFilterable" method="PUT">
+        <service class="Magento\Catalog\Api\ProductAttributeIsFilterableManagementInterface" method="set"/>
         <resources>
             <resource ref="Magento_Catalog::attributes_attributes" />
         </resources>

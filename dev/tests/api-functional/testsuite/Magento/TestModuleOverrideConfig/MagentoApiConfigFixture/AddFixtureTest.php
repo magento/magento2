@@ -80,7 +80,7 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function testDataProvider(): array
+    public static function testDataProvider(): array
     {
         return [
             'first_data_set' => ['expected_config_value' => 'overridden value for method'],

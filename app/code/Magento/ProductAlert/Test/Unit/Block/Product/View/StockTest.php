@@ -61,7 +61,7 @@ class StockTest extends TestCase
         $this->_registry = $this->getMockBuilder(
             Registry::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
             ['registry']
         )->getMock();
         $this->_block = $objectManager->getObject(
@@ -141,7 +141,7 @@ class StockTest extends TestCase
     /**
      * @return array
      */
-    public function setTemplateStockUrlNotAllowedDataProvider()
+    public static function setTemplateStockUrlNotAllowedDataProvider()
     {
         return [
             'stock alert not allowed' => [false, false],

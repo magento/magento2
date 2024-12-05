@@ -16,6 +16,7 @@
             <description value="Admin Rename Category on Store View level"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4284"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- log in as admin -->

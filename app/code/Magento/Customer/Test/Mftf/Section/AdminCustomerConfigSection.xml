@@ -15,5 +15,12 @@
         <element name="showDateOfBirthInherit" type="select" selector="#customer_address_dob_show_inherit"/>
         <element name="showTelephone" type="select" selector="#customer_address_telephone_show"/>
         <element name="showTelephoneInherit" type="checkbox" selector="#customer_address_telephone_show_inherit"/>
+        <element name="showCompany" type="select" selector="#customer_address_company_show"/>
+        <element name="showCompanyInherit" type="select" selector="#customer_address_company_show_inherit"/>
+        <element name="passwordOptions" type="select" selector="#customer_password-head"/>
+        <element name="passwordResetProtectionType" type="select" selector="#customer_password_password_reset_protection_type"/>
+        <element name="passwordResetProtectionTypeOptions" type="select" selector="#customer_password_password_reset_protection_type option:nth-child({{option}})" parameterized="true"/>
+        <element name="maxReqsOfPasswordReset" type="select" selector="#customer_password_max_number_password_reset_requests"/>
+        <element name="minTimeBtwnPasswordResetRequest" type="select" selector="#customer_password_min_time_between_password_reset_requests"/>
     </section>
 </sections>

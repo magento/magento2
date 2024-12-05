@@ -174,8 +174,11 @@ class PageTest extends TestCase
 
         $this->layoutMerge
             ->method('addHandle')
-            ->withConsecutive([$handleDefault], [$fullActionName])
-            ->willReturnOnConsecutiveCalls($this->layoutMerge, $this->layoutMerge);
+            ->willReturnCallback(function ($arg) use ($handleDefault, $fullActionName) {
+                if ($arg == $handleDefault || $arg == $fullActionName) {
+                    return $this->layoutMerge;
+                }
+            });
         $this->layoutMerge
             ->method('isLayoutDefined')
             ->willReturn(false);
@@ -196,8 +199,11 @@ class PageTest extends TestCase
 
         $this->layoutMerge
             ->method('addHandle')
-            ->withConsecutive([$handleDefault], [$fullActionName])
-            ->willReturnOnConsecutiveCalls($this->layoutMerge, $this->layoutMerge);
+            ->willReturnCallback(function ($arg) use ($handleDefault, $fullActionName) {
+                if ($arg == $handleDefault || $arg == $fullActionName) {
+                    return $this->layoutMerge;
+                }
+            });
         $this->layoutMerge
             ->method('removeHandle')
             ->with($handleDefault)
@@ -259,7 +265,13 @@ class PageTest extends TestCase
 
         $this->entitySpecificHandlesListMock
             ->method('addHandle')
-            ->withConsecutive(['full_action_name_key_one_val_one'], ['full_action_name_key_two_val_two']);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'full_action_name_key_one_val_one' || $arg == 'full_action_name_key_two_val_two') {
+                        return null;
+                    }
+                }
+            );
 
         $this->page->addPageLayoutHandles($parameters, $defaultHandle);
     }

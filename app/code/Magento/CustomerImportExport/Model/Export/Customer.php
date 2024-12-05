@@ -21,21 +21,25 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL = 'email';
+    public const COLUMN_EMAIL = 'email';
 
-    const COLUMN_WEBSITE = '_website';
+    public const COLUMN_WEBSITE = '_website';
 
-    const COLUMN_STORE = '_store';
+    public const COLUMN_STORE = '_store';
+
+    private const COLUMN_CREATED_AT = 'created_at';
+
+    private const COLUMN_UPDATED_AT = 'updated_at';
 
     /**
-     * Attribute collection name
+     * A constant declaration for attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
+    public const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
     /**
      * XML path to page size parameter
      */
-    const XML_PATH_PAGE_SIZE = 'export/customer_page_size/customer';
+    public const XML_PATH_PAGE_SIZE = 'export/customer_page_size/customer';
 
     /**
      * @var array
@@ -139,7 +143,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getHeaderColumns()
     {
@@ -158,6 +162,18 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         $row = $this->_addAttributeValuesToRow($item);
         $row[self::COLUMN_WEBSITE] = $this->_websiteIdToCode[$item->getWebsiteId()];
         $row[self::COLUMN_STORE] = $this->_storeIdToCode[$item->getStoreId()];
+
+        if (isset($row[self::COLUMN_CREATED_AT])) {
+            $row[self::COLUMN_CREATED_AT] = $this->_localeDate
+                ->scopeDate(null, $item->getCreatedAt(), true)
+                ->format('Y-m-d H:i:s');
+        }
+
+        if (isset($row[self::COLUMN_UPDATED_AT])) {
+            $row[self::COLUMN_UPDATED_AT] = $this->_localeDate
+                ->scopeDate(null, $item->getUpdatedAt(), true)
+                ->format('Y-m-d H:i:s');
+        }
 
         $this->getWriter()->writeRow($row);
     }

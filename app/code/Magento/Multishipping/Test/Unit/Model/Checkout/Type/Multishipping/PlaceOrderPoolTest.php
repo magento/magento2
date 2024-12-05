@@ -21,13 +21,17 @@ class PlaceOrderPoolTest extends TestCase
     /**
      * @param string $paymentProviderCode
      * @param PlaceOrderInterface[] $placeOrderList
-     * @param PlaceOrderInterface|null $expectedResult
+     * @param \Closure $expectedResult
      * @return void
      *
      * @dataProvider getDataProvider
      */
     public function testGet(string $paymentProviderCode, array $placeOrderList, $expectedResult)
     {
+        $placeOrderList['payment_code'] = $placeOrderList['payment_code']($this);
+        if($expectedResult != null) {
+            $expectedResult = $expectedResult($this);
+        }
         /** @var TMapFactory|MockObject $tMapFactory */
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
@@ -43,9 +47,9 @@ class PlaceOrderPoolTest extends TestCase
     /**
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
-        $placeOrder = $this->getMockForAbstractClass(PlaceOrderInterface::class);
+        $placeOrder = static fn (self $testCase) => $testCase->getMockForAbstractClass(PlaceOrderInterface::class);
         $placeOrderList = ['payment_code' => $placeOrder];
 
         return [

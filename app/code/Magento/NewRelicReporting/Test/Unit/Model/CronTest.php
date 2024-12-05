@@ -45,7 +45,7 @@ class CronTest extends TestCase
     protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['isCronEnabled'])
+            ->onlyMethods(['isCronEnabled'])
             ->disableOriginalConstructor()
             ->getMock();
 

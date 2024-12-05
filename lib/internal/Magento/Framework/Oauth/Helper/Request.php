@@ -43,6 +43,11 @@ class Request
             $httpRequest->getContent(),
             $this->getRequestUrl($httpRequest)
         );
+        foreach ($oauthParams as $key => $value) {
+            if ($key !== 'oauth_signature') {
+                $oauthParams[$key] = rawurlencode($value);
+            }
+        }
         return $oauthParams;
     }
 

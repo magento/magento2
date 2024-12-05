@@ -99,7 +99,7 @@ class AppendUpsellProductsObserverTest extends TestCase
 
         $this->bundleCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'addAttributeToSelect',
                 'addFieldToFilter',
                 'addFinalPrice',
@@ -115,37 +115,37 @@ class AppendUpsellProductsObserverTest extends TestCase
 
         $this->bundleDataMock = $this->getMockBuilder(BundleHelper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllowedSelectionTypes'])
+            ->onlyMethods(['getAllowedSelectionTypes'])
             ->getMock();
 
         $this->bundleSelectionMock = $this->getMockBuilder(Selection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParentIdsByChild'])
+            ->onlyMethods(['getParentIdsByChild'])
             ->getMock();
 
         $this->configMock = $this->getMockBuilder(CatalogConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductAttributes'])
+            ->onlyMethods(['getProductAttributes'])
             ->getMock();
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct', 'getCollection', 'getLimit'])
+            ->addMethods(['getProduct', 'getCollection', 'getLimit'])
             ->getMock();
 
         $this->collectionMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setItems', 'getItems'])
+            ->addMethods(['setItems', 'getItems'])
             ->getMock();
 
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCollection', 'getId', 'getTypeId'])
+            ->onlyMethods(['getCollection', 'getId', 'getTypeId'])
             ->getMock();
 
         $this->productVisibilityMock = $this->getMockBuilder(Visibility::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getVisibleInCatalogIds'])
+            ->onlyMethods(['getVisibleInCatalogIds'])
             ->getMock();
 
         $this->observer = $this->objectManager->getObject(

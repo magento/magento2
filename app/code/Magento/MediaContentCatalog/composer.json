@@ -2,7 +2,7 @@
     "name": "magento/module-media-content-catalog",
     "description": "Magento module provides the implementation of MediaContent functionality for Magento_Catalog module",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/module-media-content-api": "*",
         "magento/module-catalog": "*",
         "magento/module-eav": "*",

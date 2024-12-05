@@ -23,7 +23,9 @@
         <before>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -52,7 +54,7 @@
         <!-- and then configure bundled items for this product -->
 
         <scrollTo selector="{{AdminProductFormBundleSection.addOption}}" stepKey="scrollToAddOptionButton"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption"/>
+        <actionGroup ref="AdminClickAddOptionForBundleItemsActionGroup" stepKey="clickAddOption"/>
         <waitForPageLoad stepKey="waitForOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="MFTF Test Bundle 1" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="checkbox" stepKey="selectInputType"/>
@@ -77,7 +79,7 @@
             <argument name="productIndex" value="1"/>
             <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
         </actionGroup>
-        
+
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- If PageCache is enabled, Cache clearing happens here, via merge -->

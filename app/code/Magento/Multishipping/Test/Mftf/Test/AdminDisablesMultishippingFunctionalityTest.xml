@@ -17,6 +17,7 @@
             <testCaseId value="MC-26572"/>
             <useCaseId value="MC-26572"/>
             <group value="multishipping"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -37,7 +38,9 @@
             <click selector="{{MultipleshippingConfigurationSection.AllowMultipleShippingCheckbox}}" stepKey="ClickOnCheckbox"/>
             <waitForPageLoad time="10" stepKey="waitForSectionDisplaysss"/>
             <click selector="{{CatalogSection.save}}" stepKey="clickSaveConfigBtn"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTestRun">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Login to admin -->
@@ -49,7 +52,9 @@
         <selectOption selector="{{MultipleshippingConfigurationSection.AllowMultipleShippingDropdown}}" userInput="No" stepKey="SelectAllowMultipleShippingAddress"/>
         <click selector="{{CatalogSection.save}}" stepKey="clickSaveConfigBtn"/>
         <!-- Flushing all the config data -->
-        <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTestRun">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Go to Storefront as Guest -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad time="5" stepKey="waitForPageLoad"/>

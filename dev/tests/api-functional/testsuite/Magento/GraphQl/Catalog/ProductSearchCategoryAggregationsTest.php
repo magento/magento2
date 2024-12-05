@@ -227,4 +227,90 @@ QUERY;
 }
 QUERY;
     }
+
+    /**
+     * Test the categories that appear in aggregation Layered Navigation > Display Category Filter => Yes (default).
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @throws \Exception
+     */
+    public function testFetchCategoriesWhenDisplayCategoryEnabled(): void
+    {
+        $result = $this->aggregationWithDisplayCategorySetting();
+        $aggregationAttributeCode = [];
+        foreach ($result['products']['aggregations'] as $aggregation) {
+            $this->assertArrayHasKey('attribute_code', $aggregation);
+            $aggregationAttributeCode[] = $aggregation['attribute_code'];
+        }
+        $this->assertTrue(in_array('category_uid', $aggregationAttributeCode));
+    }
+
+    /**
+     * Test the categories not in aggregation when Layered Navigation > Display Category Filter => No.
+     *
+     * @magentoConfigFixture catalog/layered_navigation/display_category 0
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @throws \Exception
+     */
+    public function testDontFetchCategoriesWhenDisplayCategoryDisabled(): void
+    {
+        $result = $this->aggregationWithDisplayCategorySetting();
+        $aggregationAttributeCode = [];
+        foreach ($result['products']['aggregations'] as $aggregation) {
+            $this->assertArrayHasKey('attribute_code', $aggregation);
+            $aggregationAttributeCode[] = $aggregation['attribute_code'];
+        }
+        $this->assertFalse(in_array('category_uid', $aggregationAttributeCode));
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    private function aggregationWithDisplayCategorySetting(): array
+    {
+        $query = $this->getGraphQlQueryProductSearch();
+        $result = $this->graphQlQuery($query);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertArrayHasKey('aggregations', $result['products']);
+        return $result;
+    }
+
+    /**
+     * Get graphQl query.
+     *
+     * @return string
+     */
+    private function getGraphQlQueryProductSearch(): string
+    {
+        return <<<QUERY
+{
+  products(
+    search: "simple"
+    pageSize: 20
+    currentPage: 1
+    sort: {  }
+  ) {
+    items {
+      sku
+      canonical_url
+      categories{
+        name
+        path
+      }
+}
+    aggregations (filter: {category: {includeDirectChildrenOnly: true}}) {
+      attribute_code
+      count
+      label
+      options {
+        label
+        value
+      }
+    }
+  }
+}
+QUERY;
+    }
 }

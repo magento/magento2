@@ -36,8 +36,13 @@
         <element name="couponCode" type="input" selector="#order-coupons input" timeout="30"/>
         <element name="applyCoupon" type="button" selector="#order-coupons button"/>
         <element name="removeCoupon" type="button" selector=".added-coupon-code .action-remove"/>
+        <element name="removeSpecificCoupon" type="button" selector=".added-coupon-code.coupon-code-{{couponCode}} .action-remove" parameterized="true"/>
+        <element name="couponCodeApplied" type="text" selector=".added-coupon-code.coupon-code-{{couponCode}} span" parameterized="true"/>
         <element name="totalRecords" type="text" selector="#sales_order_create_search_grid-total-count"/>
         <element name="numberOfPages" type="text" selector="div.admin__data-grid-pager-wrap div.admin__data-grid-pager > label"/>
         <element name="productName" type="button" selector="(.//*[@class='col-product'])[2]/span"/>
+        <element name="productCompositeDatePicker" type="button" selector="//*[@id='product_composite_configure_fields_options']//div[{{row}}]//button[contains(@class, 'ui-datepicker-trigger')]" parameterized="true"/>
+        <element name="datepickerGoToday" type="button" selector="#ui-datepicker-div button.ui-datepicker-current" timeout="30"/>
+        <element name="datepickerClose" type="button" selector="#ui-datepicker-div button.ui-datepicker-close" timeout="30"/>
     </section>
 </sections>

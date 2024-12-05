@@ -16,10 +16,12 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
 use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
+use Magento\Customer\Model\AccountManagement\Authenticate;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\CredentialsValidator;
 use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
+use Magento\Customer\Model\Logger as CustomerLogger;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
@@ -57,7 +59,6 @@ use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Customer\Model\Logger as CustomerLogger;
 
 /**
  * Handle various customer account actions
@@ -69,6 +70,11 @@ use Magento\Customer\Model\Logger as CustomerLogger;
  */
 class AccountManagement implements AccountManagementInterface
 {
+    /**
+     * System Configuration Path for Enable/Disable Login at Guest Checkout
+     */
+    public const GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG = 'checkout/options/enable_guest_checkout_login';
+
     /**
      * Configuration paths for create account email template
      *
@@ -396,6 +402,11 @@ class AccountManagement implements AccountManagementInterface
     private CustomerLogger $customerLogger;
 
     /**
+     * @var Authenticate
+     */
+    private Authenticate $authenticate;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -434,6 +445,7 @@ class AccountManagement implements AccountManagementInterface
      * @param AuthenticationInterface|null $authentication
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
+     * @param Authenticate|null $authenticate
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -478,7 +490,8 @@ class AccountManagement implements AccountManagementInterface
         AuthorizationInterface $authorization = null,
         AuthenticationInterface $authentication = null,
         Backend $eavValidator = null,
-        ?CustomerLogger $customerLogger = null
+        CustomerLogger $customerLogger = null,
+        Authenticate $authenticate = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -522,6 +535,7 @@ class AccountManagement implements AccountManagementInterface
         $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
         $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
         $this->customerLogger = $customerLogger ?? $objectManager->get(CustomerLogger::class);
+        $this->authenticate = $authenticate ?? $objectManager->get(Authenticate::class);
     }
 
     /**
@@ -615,51 +629,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function authenticate($username, $password)
     {
-        try {
-            $customer = $this->customerRepository->get($username);
-        } catch (NoSuchEntityException $e) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
-        $customerId = $customer->getId();
-        if ($this->authentication->isLocked($customerId)) {
-            throw new UserLockedException(__('The account is locked.'));
-        }
-        try {
-            $this->authentication->authenticate($customerId, $password);
-        } catch (InvalidEmailOrPasswordException $e) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
-        }
-
-        if ($customer->getConfirmation()
-            && ($this->isConfirmationRequired($customer) || $this->isEmailChangedConfirmationRequired($customer))) {
-            throw new EmailNotConfirmedException(__("This account isn't confirmed. Verify and try again."));
-        }
-
-        $customerModel = $this->customerFactory->create()->updateData($customer);
-        $this->eventManager->dispatch(
-            'customer_customer_authenticated',
-            ['model' => $customerModel, 'password' => $password]
-        );
-
-        $this->eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);
-
-        return $customer;
-    }
-
-    /**
-     * Checks if account confirmation is required if the email address has been changed
-     *
-     * @param CustomerInterface $customer
-     * @return bool
-     */
-    private function isEmailChangedConfirmationRequired(CustomerInterface $customer): bool
-    {
-        return $this->accountConfirmation->isEmailChangedConfirmationRequired(
-            (int)$customer->getWebsiteId(),
-            (int)$customer->getId(),
-            $customer->getEmail()
-        );
+        return $this->authenticate->execute((string) $username, (string) $password);
     }
 
     /**
@@ -719,7 +689,7 @@ class AccountManagement implements AccountManagementInterface
         throw new InputException(
             __(
                 'Invalid value of "%value" provided for the %fieldName field. '
-                    . 'Possible values: %template1 or %template2.',
+                . 'Possible values: %template1 or %template2.',
                 [
                     'value' => $template,
                     'fieldName' => 'template',
@@ -877,14 +847,14 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
-        $groupId = $customer->getGroupId();
-        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
-            $customer->setGroupId(null);
+        $customerEmail = $customer->getEmail();
+        if ($customerEmail === null) {
+            throw new LocalizedException(
+                __("The email address is required to create a customer account.")
+            );
         }
-
         if ($password !== null) {
             $this->checkPasswordStrength($password);
-            $customerEmail = $customer->getEmail();
             try {
                 $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
             } catch (InputException $e) {
@@ -923,7 +893,11 @@ class AccountManagement implements AccountManagementInterface
         // Make sure we have a storeId to associate this customer with.
         if (!$customer->getStoreId()) {
             if ($customer->getWebsiteId()) {
-                $storeId = $this->storeManager->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+                $storeId = null;
+                $website = $this->storeManager->getWebsite($customer->getWebsiteId());
+                if ($website->getDefaultStore()) {
+                    $storeId = $website->getDefaultStore()->getId();
+                }
             } else {
                 $this->storeManager->setCurrentStore(null);
                 $storeId = $this->storeManager->getStore()->getId();
@@ -1125,7 +1099,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->eavValidator->isValid($customerModel);
         if ($result === false && is_array($this->eavValidator->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
                     array_values($this->eavValidator->getMessages())
@@ -1137,9 +1111,24 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @inheritdoc
+     *
+     * @param string $customerEmail
+     * @param int|null $websiteId
+     * @return bool
+     * @throws LocalizedException
      */
     public function isEmailAvailable($customerEmail, $websiteId = null)
     {
+        $guestLoginConfig = $this->scopeConfig->getValue(
+            self::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+
+        if (!$guestLoginConfig) {
+            return true;
+        }
+
         try {
             if ($websiteId === null) {
                 $websiteId = $this->storeManager->getStore()->getWebsiteId();

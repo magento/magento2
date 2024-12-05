@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingCreditMemoTotalsTest">
+        <annotations>
+            <features value="CreditMemo"/>
+            <stories value="Create credit memo"/>
+            <title value="Checking Credit Memo Update Totals button"/>
+            <description value="Checking Credit Memo Update Totals button"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-18159"/>
+            <useCaseId value="MC-17003"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+
+            <createData entity="Invoice" stepKey="invoiceOrderOne">
+              <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="startCreateInvoice"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="submitInvoice"/>
+
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="$createCustomerCart.return$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onOrderPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="getOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrdersGridById"/>
+
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="startToCreateCreditMemo"/>
+        <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
+        <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateCreditMemoTotals"/>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+
+        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemosTab"/>
+        <waitForPageLoad stepKey="waitForCreditMemosGridToLoad"/>
+
+        <waitForText selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$123" stepKey="seeCreditMemoInGrid"/>
+    </test>
+</tests>

@@ -17,6 +17,7 @@
                 value="Verify that UI elements are present and links are working if 'Login as customer' functionality enabled"/>
             <severity value="BLOCKER"/>
             <group value="login_as_customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
@@ -35,6 +36,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>

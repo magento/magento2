@@ -2,14 +2,14 @@
     "name": "magento/module-open-search",
     "description": "N/A",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-advanced-search": "*",
         "magento/module-catalog-search": "*",
         "magento/module-elasticsearch": "*",
         "magento/module-search": "*",
         "magento/module-config": "*",
-        "opensearch-project/opensearch-php": "^1.0 || ^2.0"
+        "opensearch-project/opensearch-php": "^2.2"
     },
     "type": "magento2-module",
     "license": [

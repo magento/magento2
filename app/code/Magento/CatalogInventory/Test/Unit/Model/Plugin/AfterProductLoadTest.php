@@ -52,7 +52,7 @@ class AfterProductLoadTest extends TestCase
             ->willReturn($stockItemMock);
 
         $this->productExtensionMock = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['setStockItem'])
+            ->addMethods(['setStockItem'])
             ->getMockForAbstractClass();
         $this->productExtensionMock->expects($this->once())
             ->method('setStockItem')

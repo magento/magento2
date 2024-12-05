@@ -70,7 +70,7 @@ class RowCustomizerTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScope'])
+            ->onlyMethods(['getScope'])
             ->getMockForAbstractClass();
         $this->rowCustomizerMock = $this->objectManagerHelper->getObject(
             RowCustomizer::class,

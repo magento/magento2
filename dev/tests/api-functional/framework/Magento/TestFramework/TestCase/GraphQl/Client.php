@@ -22,6 +22,8 @@ class Client
     public const GRAPHQL_METHOD_POST = 'POST';
     /**#@-*/
 
+    private const SET_COOKIE_HEADER_NAME = 'Set-Cookie';
+
     /** @var CurlClient */
     private $curlClient;
 
@@ -111,20 +113,21 @@ class Client
      */
     private function processResponse(string $response, array $responseHeaders = [], array $responseCookies = [])
     {
-        $responseArray = $this->json->jsonDecode($response);
-
+        $responseArray = null;
+        try {
+            $responseArray = $this->json->jsonDecode($response);
+        } catch (\Exception $exception) {
+            // Note: We don't care about this exception because we have error checking bellow if it fails to decode.
+        }
         if (!is_array($responseArray)) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
-
         $this->processErrors($responseArray, $responseHeaders, $responseCookies);
-
         if (!isset($responseArray['data'])) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
-
         return $responseArray['data'];
     }
 
@@ -225,7 +228,7 @@ class Client
                 }
 
                 throw new ResponseContainsErrorsException(
-                    'GraphQL response contains errors: ' . $errorMessage,
+                    'GraphQL response contains errors: ' . $errorMessage . "\n" . var_export($responseBodyArray, true),
                     $responseBodyArray,
                     null,
                     0,
@@ -263,7 +266,15 @@ class Client
         foreach ($headerLines as $headerLine) {
             $headerParts = preg_split('/: /', $headerLine, 2);
             if (count($headerParts) == 2) {
-                $headersArray[trim($headerParts[0])] = trim($headerParts[1]);
+                $headerName = trim($headerParts[0]);
+                if ($headerName === self::SET_COOKIE_HEADER_NAME) {
+                    if (!isset($headersArray[self::SET_COOKIE_HEADER_NAME])) {
+                        $headersArray[self::SET_COOKIE_HEADER_NAME] = [];
+                    }
+                    $headersArray[self::SET_COOKIE_HEADER_NAME][] = trim($headerParts[1]);
+                } else {
+                    $headersArray[$headerName] = trim($headerParts[1]);
+                }
             } elseif (preg_match('/HTTP\/[\.0-9]+/', $headerLine)) {
                 $headersArray[trim('Status-Line')] = trim($headerLine);
             }

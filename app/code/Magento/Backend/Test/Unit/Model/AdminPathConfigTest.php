@@ -119,7 +119,7 @@ class AdminPathConfigTest extends TestCase
     /**
      * @return array
      */
-    public function shouldBeSecureDataProvider()
+    public static function shouldBeSecureDataProvider()
     {
         return [
             ['http://localhost/', false, 'default', false, '', false],

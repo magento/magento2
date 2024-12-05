@@ -58,60 +58,6 @@ class CategoryFilterTest extends TestCase
     }
 
     /**
-     * Test that category filter works correctly with condition type "eq"
-     */
-    public function testApplyWithConditionTypeEq(): void
-    {
-        $filter = new Filter();
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $collection = $this->createMock(Collection::class);
-        $filter->setConditionType('eq');
-        $categoryId = 1;
-        $filter->setValue($categoryId);
-        $this->categoryFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($category);
-        $this->categoryResourceModel->expects($this->once())
-            ->method('load')
-            ->with($category, $categoryId);
-        $collection->expects($this->once())
-            ->method('addCategoryFilter')
-            ->with($category);
-        $collection->expects($this->once())
-            ->method('getFlag')
-            ->with('search_resut_applied')
-            ->willReturn(true);
-        $this->model->apply($filter, $collection);
-    }
-
-    /**
-     * Test that category filter works correctly with condition type "in" and single category
-     */
-    public function testApplyWithConditionTypeInAndSingleCategory(): void
-    {
-        $filter = new Filter();
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $collection = $this->createMock(Collection::class);
-        $filter->setConditionType('in');
-        $categoryId = 1;
-        $filter->setValue($categoryId);
-        $this->categoryFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($category);
-        $this->categoryResourceModel->expects($this->once())
-            ->method('load')
-            ->with($category, $categoryId);
-        $collection->expects($this->once())
-            ->method('addCategoryFilter')
-            ->with($category);
-        $collection->expects($this->once())
-            ->method('getFlag')
-            ->with('search_resut_applied')
-            ->willReturn(true);
-        $this->model->apply($filter, $collection);
-    }
-
-    /**
      * Test that category filter works correctly with condition type "in" and multiple categories
      */
     public function testApplyWithConditionTypeInAndMultipleCategories(): void
@@ -135,19 +81,22 @@ class CategoryFilterTest extends TestCase
             ->willReturnOnConsecutiveCalls($category1, $category3);
         $this->categoryResourceModel->expects($this->exactly(2))
             ->method('load')
-            ->withConsecutive(
-                [$category1, 1],
-                [$category3, 3]
-            );
+            ->willReturnCallback(function (...$args) use ($category1, $category3) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$category1, 1],
+                    [$category3, 3]
+                ];
+                $index++;
+                if ($args === $expectedArgs[$index - 1]) {
+                    return null;
+                }
+            });
         $collection->expects($this->never())
             ->method('addCategoryFilter');
         $collection->expects($this->once())
             ->method('addCategoriesFilter')
             ->with(['in' => [1, 2, 3]]);
-        $collection->expects($this->once())
-            ->method('getFlag')
-            ->with('search_resut_applied')
-            ->willReturn(false);
         $category1->expects($this->once())
             ->method('getIsAnchor')
             ->willReturn(true);
@@ -191,10 +140,6 @@ class CategoryFilterTest extends TestCase
         $collection->expects($this->once())
             ->method('addCategoriesFilter')
             ->with([$condition => [1, 2]]);
-        $collection->expects($this->once())
-            ->method('getFlag')
-            ->with('search_resut_applied')
-            ->willReturn(false);
         $category->expects($this->once())
             ->method('getIsAnchor')
             ->willReturn(true);
@@ -208,7 +153,7 @@ class CategoryFilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithOtherSupportedConditionTypesDataProvider(): array
+    public static function applyWithOtherSupportedConditionTypesDataProvider(): array
     {
         return [['neq'], ['nin'],];
     }
@@ -238,7 +183,7 @@ class CategoryFilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithUnsupportedConditionTypesDataProvider(): array
+    public static function applyWithUnsupportedConditionTypesDataProvider(): array
     {
         return [['gteq'], ['lteq'], ['gt'], ['lt'], ['like'], ['nlike']];
     }

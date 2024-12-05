@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Url\Validator;
 
 class Media extends AbstractImportValidator implements RowValidatorInterface
@@ -15,11 +16,11 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * @deprecated As this regexp doesn't give guarantee of correct url validation
      * @see \Magento\Framework\Url\Validator::isValid()
      */
-    const URL_REGEXP = '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i';
+    private const URL_REGEXP = '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i';
 
-    const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
+    private const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
 
-    const ADDITIONAL_IMAGES = 'additional_images';
+    private const ADDITIONAL_IMAGES = 'additional_images';
 
     /**
      * The url validator. Checks if given url is valid.
@@ -29,18 +30,27 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     private $validator;
 
     /**
-     * @param Validator $validator The url validator
+     * @var File
      */
-    public function __construct(Validator $validator = null)
-    {
+    private File $file;
+
+    /**
+     * @param Validator|null $validator The url validator
+     * @param File|null $file
+     */
+    public function __construct(
+        Validator $validator = null,
+        File      $file = null
+    ) {
         $this->validator = $validator ?: ObjectManager::getInstance()->get(Validator::class);
+        $this->file = $file ?: ObjectManager::getInstance()->get(File::class);
     }
 
     /**
      * @deprecated
      * @see \Magento\CatalogImportExport\Model\Import\Product::getMultipleValueSeparator()
      */
-    const ADDITIONAL_IMAGES_DELIMITER = ',';
+    private const ADDITIONAL_IMAGES_DELIMITER = ',';
 
     /**
      * @var array
@@ -48,6 +58,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
     /**
+     * Checks if the provided $string parameter is a valid URL or not.
+     *
      * @param string $string
      * @return bool
      * @deprecated 100.2.0 As this method doesn't give guarantee of correct url validation.
@@ -59,6 +71,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
+     * Validates a provided string as a file or directory path.
+     *
      * @param string $string
      * @return bool
      */
@@ -68,12 +82,14 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
+     * Checks whether a file or directory exists at a given path
+     *
      * @param string $path
      * @return bool
      */
     protected function checkFileExists($path)
     {
-        return file_exists($path);
+        return $this->file->fileExists($path);
     }
 
     /**
@@ -102,8 +118,14 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
                 }
             }
         }
-        if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
-            foreach (explode($this->context->getMultipleValueSeparator(), $value[self::ADDITIONAL_IMAGES]) as $image) {
+        if (isset($value[self::ADDITIONAL_IMAGES])) {
+            $images = array_filter(
+                is_array($value[self::ADDITIONAL_IMAGES])
+                    ? $value[self::ADDITIONAL_IMAGES]
+                    : explode($this->context->getMultipleValueSeparator(), $value[self::ADDITIONAL_IMAGES])
+            );
+
+            foreach ($images as $image) {
                 if (!$this->checkPath($image) && !$this->validator->isValid($image)) {
                     $this->_addMessages(
                         [

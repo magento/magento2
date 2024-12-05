@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
             <features value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>

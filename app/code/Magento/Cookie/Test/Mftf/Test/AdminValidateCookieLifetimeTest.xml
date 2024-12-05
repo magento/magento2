@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <group value="Cookie"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>

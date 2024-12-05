@@ -41,5 +41,7 @@
         <element name="storeViewOptions" type="text" selector=".admin__data-grid-outer-wrap select[name='store_id'] > option[value='{{value}}']" parameterized="true"/>
         <element name="viewColumnOptionName" type="text" selector="//div[contains(@class, '_active')]//div[contains(@class, 'admin__data-grid-action-columns-menu')]//div[@class='admin__field-option']//label[text()='{{col}}']" parameterized="true"/>
         <element name="customAttribute" type="text" selector="input.admin__control-text[name='{{var}}']" parameterized="true"/>
+        <element name="crossSellFilters" type="button" selector="//*[contains(@class, 'crosssell_product')]//button[text()='Filters']"/>
+        <element name="upSellFilters" type="button" selector="//*[contains(@class, 'upsell_product')]//button[text()='Filters']"/>
     </section>
 </sections>

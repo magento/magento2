@@ -18,6 +18,9 @@
             <testCaseId value="MC-14738"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
@@ -28,6 +31,12 @@
 
             <!-- Create customer -->
             <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfig">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Admin log out -->
@@ -69,7 +78,6 @@
 
         <!-- Select payment solution -->
         <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
-
         <!-- Check order summary in checkout -->
         <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
         <comment userInput="BIC workaround" stepKey="waitForPlaceOrderButton"/>

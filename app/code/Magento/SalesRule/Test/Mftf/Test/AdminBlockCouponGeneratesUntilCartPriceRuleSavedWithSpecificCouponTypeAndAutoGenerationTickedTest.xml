@@ -19,6 +19,7 @@
             <testCaseId value="MC-42602"/>
             <useCaseId value="MC-42288"/>
             <group value="salesRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

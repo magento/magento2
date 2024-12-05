@@ -53,11 +53,13 @@ class DownloadableTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
-            ->setMethods([
-                'getPriceInfo',
+            ->addMethods([
                 'getLinksPurchasedSeparately',
                 'getCustomOption',
-                'getTypeInstance',
+                'getTypeInstance'
+            ])
+            ->onlyMethods([
+                'getPriceInfo'
             ])
             ->getMockForAbstractClass();
         $this->saleableItem->expects($this->once())

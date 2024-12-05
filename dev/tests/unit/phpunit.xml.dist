@@ -6,12 +6,12 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php">
-    <coverage>
+    <source>
         <include>
             <directory suffix=".php">../../../app/code/*</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
@@ -23,7 +23,7 @@
             <directory>../../../lib/internal/*/*/*/Test</directory>
             <directory>../../../setup/src/*/*/Test</directory>
         </exclude>
-    </coverage>
+    </source>
     <testsuites>
         <testsuite name="Magento_Unit_Tests_App_Code">
             <directory>../../../app/code/*/*/Test/Unit</directory>
@@ -49,16 +49,10 @@
         <ini name="date.timezone" value="America/Los_Angeles"/>
         <ini name="xdebug.max_nesting_level" value="200"/>
     </php>
-    <listeners>
-        <listener class="Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager"/>
-    </listeners>
     <extensions>
-        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
-            <!-- Optional arguments block; omit it if you want to use default values -->
-            <arguments>
-                <!-- Path to config file (default is config/allure.config.php) -->
-                <string>allure/allure.config.php</string>
-            </arguments>
-        </extension>
+        <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Path to config file (default is config/allure.config.php) -->
+            <parameter name="config" value="allure/allure.config.php" />
+        </bootstrap>
     </extensions>
 </phpunit>

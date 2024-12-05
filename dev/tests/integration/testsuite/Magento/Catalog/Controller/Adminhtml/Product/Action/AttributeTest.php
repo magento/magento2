@@ -28,6 +28,9 @@ class AttributeTest extends AbstractBackendController
 {
     /** @var PublisherConsumerController */
     private $publisherConsumerController;
+    /**
+     * @var string[]
+     */
     private $consumers = ['product_action_attribute.update'];
 
     protected function setUp(): void
@@ -126,6 +129,7 @@ class AttributeTest extends AbstractBackendController
         /** @var ListProduct $listProduct */
         $listProduct = $this->_objectManager->get(ListProduct::class);
 
+        sleep(30); // timeout to processing queue
         $this->publisherConsumerController->waitForAsynchronousResult(
             function () use ($repository) {
                 sleep(10); // Should be refactored in the scope of MC-22947
@@ -183,11 +187,11 @@ class AttributeTest extends AbstractBackendController
      *
      * @return array
      */
-    public function validateActionDataProvider()
+    public static function validateActionDataProvider()
     {
         return [
             [
-                'arguments' => [
+                'attributes' => [
                     'name'              => 'Name',
                     'description'       => 'Description',
                     'short_description' => 'Short Description',
@@ -206,11 +210,11 @@ class AttributeTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionVisibilityAttrDataProvider()
+    public static function saveActionVisibilityAttrDataProvider()
     {
         return [
-            ['arguments' => ['visibility' => Visibility::VISIBILITY_BOTH]],
-            ['arguments' => ['visibility' => Visibility::VISIBILITY_IN_CATALOG]]
+            ['attributes' => ['visibility' => Visibility::VISIBILITY_BOTH]],
+            ['attributes' => ['visibility' => Visibility::VISIBILITY_IN_CATALOG]]
         ];
     }
 

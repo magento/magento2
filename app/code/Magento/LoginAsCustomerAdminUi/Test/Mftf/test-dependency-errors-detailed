@@ -1,0 +1,10 @@
+
+File "/var/www/html/app/code/Magento/LoginAsCustomerAdminUi/Test/Mftf/Test/AdminLoginAsCustomerManualSelectionTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 LoginAsCustomerConfigDataEnabled from module(s): magento/module-login-as-customer
+	 LoginAsCustomerStoreViewLogin from module(s): magento/module-login-as-customer
+	 AdminLoginAsCustomerLoginFromCustomerPageManualChooseActionGroup from module(s): magento/module-login-as-customer
+	 StorefrontAssertLoginAsCustomerLoggedInActionGroup from module(s): magento/module-login-as-customer
+	 StorefrontAssertCustomerOnStoreViewActionGroup from module(s): magento/module-login-as-customer
+	 StorefrontSignOutAndCloseTabActionGroup from module(s): magento/module-login-as-customer

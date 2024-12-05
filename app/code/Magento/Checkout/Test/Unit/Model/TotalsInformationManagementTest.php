@@ -85,6 +85,7 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
                     'setCollectShippingRates',
                 ]
             )
+            ->onlyMethods(['save'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,6 +98,9 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
             ->method('setCollectShippingRates')->with(true)->willReturn($addressMock);
         $addressMock->expects($this->exactly($methodSetCount))
             ->method('setShippingMethod')->with($carrierCode . '_' . $carrierMethod);
+        $addressMock->expects($this->exactly($methodSetCount))
+            ->method('save')
+            ->willReturnSelf();
         $cartMock->expects($this->once())->method('collectTotals');
 
         $this->totalsInformationManagement->calculate($cartId, $addressInformationMock);
@@ -131,6 +135,7 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
                     'getShippingMethod',
                     'setShippingAmount',
                     'setBaseShippingAmount',
+                    'save'
                 ]
             )
             ->disableOriginalConstructor()
@@ -162,6 +167,9 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressMock->expects($this->once())
             ->method('setShippingMethod')
             ->with($carrierCode . '_' . $carrierMethod);
+        $addressMock->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
         $cartMock->expects($this->once())
             ->method('collectTotals');
 
@@ -173,7 +181,7 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dataProviderCalculate(): array
+    public static function dataProviderCalculate(): array
     {
         return [
             [

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UseLayeredNavigationToFilterProductsByOutOfStockOptionOfConfigurableProductTest">
+        <annotations>
+            <stories value="Search Term"/>
+            <title value="Use Layered Navigation to filter Products by Out of Stock option of configurable product"/>
+            <description value="Use Layered Navigation to filter Products by Out of Stock option of configurable product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5228"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory">
+                 <field key="name">Test Out Of Stock Filter</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">Product Simple 1</field>
+                <field key="price">200</field>
+                <field key="quantity">100</field>
+            </createData>
+            <createData entity="ConfigurableProductWithAttributeSet" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">Product Configurable 1</field>
+                <field key="price">300</field>
+                <field key="quantity">500</field>
+            </createData>
+            <!-- Create product attribute with 3 options -->
+            <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>
+            <!-- Set attribute properties -->
+            <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="Test Out Of Stock Attribute" stepKey="fillDefaultLabel"/>
+            <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Dropdown" stepKey="fillInputType"/>
+            <!-- Set advanced attribute properties -->
+            <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="showAdvancedAttributePropertiesSection"/>
+            <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" stepKey="waitForSlideOut"/>
+            <fillField selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="TestOutOfStockAttribute" stepKey="fillAttributeCode"/>
+            <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+            <!-- Add new attribute options -->
+            <click selector="{{AttributeOptionsSection.AddOption}}" stepKey="clickAddOption1"/>
+            <fillField selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('1')}}" userInput="one" stepKey="fillAdminValue1"/>
+            <click selector="{{AttributeOptionsSection.AddOption}}" stepKey="clickAddOption2"/>
+            <fillField selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('2')}}" userInput="two" stepKey="fillAdminValue2"/>
+            <click selector="{{AttributeOptionsSection.AddOption}}" stepKey="clickAddOption3"/>
+            <fillField selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('3')}}" userInput="three" stepKey="fillAdminValue3"/>
+            <!-- Set Use In Layered Navigation -->
+            <scrollToTopOfPage stepKey="scrollToTopOfThePage"/>
+            <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+            <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="1" stepKey="selectUseInLayeredNavigation"/>
+            <!-- Save the new product attribute -->
+            <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave"/>
+            <waitForPageLoad stepKey="waitForGridPageLoad"/>
+            <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+            <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
+            <waitForPageLoad stepKey="waitForProductAttributeSetPageToLoad"/>
+            <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickOnResetFilter"/>
+            <!-- Filter created Product Attribute Set -->
+            <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="Default" stepKey="fillAttributeSetName"/>
+            <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickOnSearchButton"/>
+            <waitForPageLoad stepKey="waitForPageToLoad"/>
+            <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="clickOnAttributeSet"/>
+            <waitForPageLoad stepKey="waitForAttributeSetEditPageToLoad"/>
+            <!--Assign Attribute to the Group and save the attribute set -->
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttribute">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="TestOutOfStockAttribute"/>
+            </actionGroup>
+            <click selector="{{AdminProductAttributeSetActionSection.save}}" stepKey="clickOnSaveButton"/>
+            <waitForPageLoad stepKey="waitForPageToSave"/>
+            <see userInput="You saved the attribute set" selector="{{AdminMessagesSection.success}}" stepKey="successMessage"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProductEditPage">
+                <argument name="productId" value="$createProduct.id$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductFormSection.customSelectField('TestOutOfStockAttribute')}}" userInput="two" stepKey="setFirstAttributeValue"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstProduct"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openConfigurableProductEditPage">
+                <argument name="productId" value="$createConfigurableProduct.id$"/>
+            </actionGroup>
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+            <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkSecondAttribute">
+                <argument name="attributeCode" value="TestOutOfStockAttribute"/>
+            </actionGroup>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+            <waitForPageLoad stepKey="waitForStepLoad"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickSecondNextStep"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantityToEachSkus}}" stepKey="clickOnApplyUniqueQuantitiesToEachSku"/>
+            <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectQuantity}}" userInput="Test Out Of Stock Attribute" stepKey="selectOption"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantity('one')}}" userInput="200" stepKey="enterAttributeQuantity1"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantity('two')}}" userInput="0" stepKey="enterAttributeQuantity2"/>
+            <fillField selector="{{AdminCreateProductConfigurationsPanel.applyUniqueQuantity('three')}}" userInput="600" stepKey="enterAttributeQuantity3"/>
+            <waitForElement selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitThirdNextButton"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickThirdStep"/>
+            <waitForElement selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitGenerateConfigurationsButton"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickToGenerateConfigurations"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete all created data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="TestOutOfStockAttribute"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteSecondProductAttributeByAttributeCode">
+                <argument name="productAttributeCode" value="TestOutOfStockAttribute"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributesFilter"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($createProduct.name$)}}" stepKey="seeSimpleProductInCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($createConfigurableProduct.name$)}}" stepKey="seeConfigurableProductInCategoryPage"/>
+        <!-- Verify the Layered Navigation first option tab -->
+        <click selector="{{StorefrontLayeredNavigationSection.shoppingOptionsByName('Test Out Of Stock Attribute')}}" stepKey="clickTheAttributeFromShoppingOptions"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpanded('one')}}"  stepKey="verifyFirstOptionName"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpandedCount('one','1')}}"  stepKey="verifyFirstOptionNameCount"/>
+        <!-- second option -->
+        <seeElement selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpanded('two')}}"  stepKey="verifySecondOptionName"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpandedCount('two','1')}}"  stepKey="verifySecondOptionNameCount"/>
+        <!-- third option -->
+        <seeElement selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpanded('three')}}"  stepKey="verifyThirdOptionName"/>
+        <seeElement selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpandedCount('three','1')}}"  stepKey="verifyThirdOptionNameCount"/>
+        <!-- Click on the attribute -->
+        <click selector="{{StorefrontLayeredNavigationSection.shoppingOptionsExpanded('two')}}"  stepKey="clickOnSecondAttributeValue"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.specifiedProductItemInfo($createProduct.name$)}}" stepKey="seeSimpleProductInPage"/>
+    </test>
+</tests>
+

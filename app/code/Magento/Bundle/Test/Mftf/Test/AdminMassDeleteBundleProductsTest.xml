@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-218"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -24,7 +25,9 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Clear Filters-->
@@ -44,6 +47,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!--Create bundle product-->
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddOption3"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions"/>
@@ -85,6 +89,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad2"/>
 
         <!--Create bundle product 2-->
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddOption32"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions2"/>

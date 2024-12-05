@@ -194,7 +194,7 @@ class SubselectTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderForFixedBundleProduct(): array
+    public static function dataProviderForFixedBundleProduct(): array
     {
         return [
             'validate true for bundle product data with conditions' =>
@@ -303,6 +303,99 @@ class SubselectTest extends TestCase
                         'hasChildren' => false,
                         'baseRowTotal' => 100,
                         'valueParsed' => 50
+                    ],
+                    false
+                ]
+        ];
+    }
+
+    /**
+     * Tests validate for base row total incl tax
+     *
+     * @param array|null $attributeDetails
+     * @param array $productDetails
+     * @param bool $expectedResult
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider dataProviderForBaseTotalInclTax
+     */
+    public function testValidateForBaseTotalInclTax(
+        ?array $attributeDetails,
+        array $productDetails,
+        bool $expectedResult
+    ):void {
+        $attributeResource = new DataObject();
+        if ($attributeDetails) {
+            $attributeResource->setAttribute($attributeDetails['id']);
+            $this->ruleConditionMock->expects($this->any())
+                ->method('setName')
+                ->willReturn($attributeDetails['name']);
+            $this->ruleConditionMock->expects($this->any())
+                ->method('setAttributeScope')
+                ->willReturn($attributeDetails['attributeScope']);
+            $this->ruleConditionMock->expects($this->any())
+                ->method('getAttribute')
+                ->willReturn($attributeDetails['id']);
+            $this->model->setData('conditions', [$this->ruleConditionMock]);
+            $this->model->setData('attribute', $attributeDetails['id']);
+            $this->model->setData('value', $productDetails['valueParsed']);
+            $this->model->setData('operator', $attributeDetails['attributeOperator']);
+            $this->productMock->expects($this->any())
+                ->method('hasData')
+                ->with($attributeDetails['id'])
+                ->willReturn(!empty($productDetails));
+            $this->productMock->expects($this->any())
+                ->method('getData')
+                ->with($attributeDetails['id'])
+                ->willReturn($productDetails['price']);
+            $this->ruleConditionMock->expects($this->any())
+                ->method('getValueParsed')
+                ->willReturn($productDetails['valueParsed']);
+            $this->ruleConditionMock->expects($this->any())->method('getOperatorForValidate')
+                ->willReturn($attributeDetails['attributeOperator']);
+        }
+
+        /* @var AbstractItem|MockObject $quoteItemMock */
+        $this->productMock->expects($this->any())
+            ->method('getResource')
+            ->willReturn($attributeResource);
+        $this->quoteItemMock->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
+        $this->quoteItemMock->expects($this->any())
+            ->method('getProductId')
+            ->willReturn($productDetails['id']);
+        $this->quoteItemMock->expects($this->any())
+            ->method('getData')
+            ->willReturn($productDetails['baseRowTotalInclTax']);
+        $this->assertEquals($expectedResult, $this->model->validate($this->abstractModel));
+    }
+
+    /**
+     * Get data provider array for validate base total incl tax
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public static function dataProviderForBaseTotalInclTax(): array
+    {
+        return [
+            'validate true for product data with conditions for attribute base_row_total_incl_tax' =>
+                [
+                    [
+                        'id' => 'attribute_set_id',
+                        'name' => 'base_row_total_incl_tax',
+                        'attributeScope' => 'frontend',
+                        'attributeOperator' => '=='
+                    ],
+                    [
+                        'id'=> 1,
+                        'type' => ProductType::TYPE_SIMPLE,
+                        'qty' => 2,
+                        'price' => 100,
+                        'hasChildren' => true,
+                        'baseRowTotalInclTax' => 200,
+                        'valueParsed' => 200
                     ],
                     false
                 ]

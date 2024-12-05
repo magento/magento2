@@ -59,17 +59,18 @@ class AccountTest extends TestCase
     {
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setNoReferer', 'unsNoReferer', 'authenticate'])
+            ->addMethods(['setNoReferer', 'unsNoReferer'])
+            ->onlyMethods(['authenticate'])
             ->getMock();
 
         $this->actionMock = $this->getMockBuilder(AccountInterface::class)
-            ->setMethods(['getActionFlag'])
+            ->addMethods(['getActionFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->requestMock = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getActionName'])
+            ->onlyMethods(['getActionName'])
             ->getMock();
 
         $this->resultMock = $this->getMockBuilder(ResultInterface::class)
@@ -94,7 +95,7 @@ class AccountTest extends TestCase
     ) {
         /** @var callable|MockObject $proceedMock */
         $proceedMock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['__invoke'])
+            ->addMethods(['__invoke'])
             ->getMock();
 
         $closureMock = Closure::fromCallable($proceedMock);
@@ -122,38 +123,33 @@ class AccountTest extends TestCase
     /**
      * @return array
      */
-    public function beforeExecuteDataProvider()
+    public static function beforeExecuteDataProvider()
     {
         return [
             [
                 'action' => 'TestAction',
-                'allowed_actions' => ['TestAction'],
-                'is_action_allowed' => true,
-                'is_authenticated' => false,
+                'allowedActions' => ['TestAction'],
+                'isAllowed' => true
             ],
             [
                 'action' => 'testaction',
-                'allowed_actions' => ['testaction'],
-                'is_action_allowed' => true,
-                'is_authenticated' => false,
+                'allowedActions' => ['testaction'],
+                'isAllowed' => true
             ],
             [
                 'action' => 'wrongaction',
-                'allowed_actions' => ['testaction'],
-                'is_action_allowed' => false,
-                'is_authenticated' => false,
+                'allowedActions' => ['testaction'],
+                'isAllowed' => false
             ],
             [
                 'action' => 'wrongaction',
-                'allowed_actions' => ['testaction'],
-                'is_action_allowed' => false,
-                'is_authenticated' => true,
+                'allowedActions' => ['testaction'],
+                'isAllowed' => false
             ],
             [
                 'action' => 'wrongaction',
-                'allowed_actions' => [],
-                'is_action_allowed' => false,
-                'is_authenticated' => true,
+                'allowedActions' => [],
+                'isAllowed' => false
             ],
         ];
     }

@@ -8,11 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontCheckoutClickNextOnShippingStepActionGroup" extends="StorefrontCheckoutForwardFromShippingStepActionGroup">
+    <actionGroup name="StorefrontCheckoutClickNextOnShippingStepActionGroup">
         <annotations>
             <description>Scrolls and clicks next on Checkout Shipping step</description>
         </annotations>
-        <scrollTo selector="{{CheckoutShippingSection.next}}" before="clickNext" stepKey="scrollToNextButton"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" stepKey="waitForNextButtonElement"/>
+        <scrollTo selector="{{CheckoutShippingSection.next}}" stepKey="scrollToNextButton"/>
+        <waitForElementClickable selector="{{CheckoutShippingSection.next}}" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 </actionGroups>

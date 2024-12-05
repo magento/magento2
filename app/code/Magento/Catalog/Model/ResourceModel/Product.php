@@ -16,6 +16,7 @@ use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Product entity resource model
@@ -23,9 +24,10 @@ use Magento\Framework\Model\AbstractModel;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  * @since 100.0.2
  */
-class Product extends AbstractResource
+class Product extends AbstractResource implements ResetAfterRequestInterface
 {
     /**
      * Product to website linkage table
@@ -843,5 +845,18 @@ class Product extends AbstractResource
     {
         $this->mediaImageDeleteProcessor->execute($object);
         return parent::_afterDelete($object);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->availableCategoryIdsCache = [];
+        $this->_type = null;
+        $this->_entityTable = null;
+        $this->_entityIdField = null;
+        $this->linkIdField = null;
     }
 }

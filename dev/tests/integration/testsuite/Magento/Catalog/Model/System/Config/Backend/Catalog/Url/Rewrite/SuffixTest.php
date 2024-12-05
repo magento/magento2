@@ -32,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuffixTest extends TestCase
 {
@@ -83,7 +84,7 @@ class SuffixTest extends TestCase
     public function testSaveWithError(): void
     {
         $this->expectException(LocalizedException::class);
-        $this->expectErrorMessage((string)__('Anchor symbol (#) is not supported in url rewrite suffix.'));
+        $this->expectExceptionMessage((string)__('Anchor symbol (#) is not supported in url rewrite suffix.'));
         $this->model->setValue('.html#');
         $this->model->beforeSave();
     }
@@ -114,7 +115,7 @@ class SuffixTest extends TestCase
     /**
      * @return array
      */
-    public function wrongValuesProvider(): array
+    public static function wrongValuesProvider(): array
     {
         return [
             'with_wrong_path' => [

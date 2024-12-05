@@ -12,22 +12,30 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Simple as SimpleProductType;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\Directory\Helper\Data as DirectoryData;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
+use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
+use Magento\Translation\Test\Fixture\Translation;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -144,6 +152,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify successful export of product with stock data with 'use config max sale quantity is enabled
      *
+     * @magentoConfigFixture default/cataloginventory/item_options/manage_stock 1
      * @magentoDataFixture /Magento/Catalog/_files/product_without_options_with_stock_data.php
      * @magentoDbIsolation enabled
      * @return void
@@ -162,6 +171,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $stockItem->setMaxSaleQty($maxSaleQty);
         $stockItem->setMinSaleQty($minSaleQty);
+        $stockItem->setManageStock(0);
+        $stockItem->setUseConfigManageStock(1);
         $stockRepository->save($stockItem);
 
         $this->model->setWriter(
@@ -170,10 +181,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
+        $rows = $this->csvToArray($exportData);
+
         $this->assertStringContainsString((string)$stockConfiguration->getMaxSaleQty(), $exportData);
         $this->assertStringNotContainsString($maxSaleQty, $exportData);
         $this->assertStringNotContainsString($minSaleQty, $exportData);
         $this->assertStringContainsString('Simple Product Without Custom Options', $exportData);
+        $this->assertEquals(1, $rows[0]['use_config_manage_stock']);
+        $this->assertEquals(1, $rows[0]['manage_stock']);
     }
 
     /**
@@ -220,7 +235,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function exportWithJsonAndMarkupTextAttributeDataProvider(): array
+    public static function exportWithJsonAndMarkupTextAttributeDataProvider(): array
     {
         return [
             'json' => [
@@ -759,7 +774,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function filterByQuantityAndStockStatusDataProvider(): array
+    public static function filterByQuantityAndStockStatusDataProvider(): array
     {
         return [
             [
@@ -878,5 +893,62 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
         $this->assertStringNotContainsString('NewCategoryName', $exportData);
+    }
+
+    #[
+        DataFixture(
+            Translation::class,
+            [
+                'string' => 'Catalog, Search',
+                'translate' => 'Katalog, Suche',
+                'locale' => 'de_DE',
+            ]
+        ),
+        DataFixture(ProductFixture::class, as: 'p1')
+    ]
+    public function testExportWithSpecificLocale(): void
+    {
+        $sku = $this->fixtures->get('p1')->getSku();
+        $exportFilter = [
+            'sku' => $sku
+        ];
+        $exportManager = $this->objectManager->get(ExportManagementInterface::class);
+        $exportInfo = $this->objectManager->create(LocalizedExportInfoInterface::class);
+        $exportInfo->setSkipAttr([]);
+        $exportInfo->setFileFormat('csv');
+        $exportInfo->setEntity('catalog_product');
+        $exportInfo->setLocale('de_DE');
+        $exportInfo->setExportFilter($this->objectManager->get(Json::class)->serialize($exportFilter));
+        $this->assertStringContainsString('Katalog, Suche', $exportManager->export($exportInfo));
+    }
+
+    #[
+        AppArea('adminhtml'),
+        Config(DirectoryData::XML_PATH_DEFAULT_TIMEZONE, 'America/Chicago', ScopeConfigInterface::SCOPE_TYPE_DEFAULT),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'date', 'backend_type' => 'datetime', 'attribute_code' => 'date_attr'],
+            'date_attr'
+        ),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'datetime', 'backend_type' => 'datetime', 'attribute_code' => 'datetime_attr'],
+            'datetime_attr'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            ['datetime_attr' => '2015-07-19 08:30:00', 'date_attr' => '2017-02-07'],
+            'product'
+        )
+    ]
+    public function testExportProductWithDateAndDatetimeAttributes(): void
+    {
+        $sku = $this->fixtures->get('product')->getSku();
+        $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
+        $this->assertEquals('2015-07-19 08:30:00', $product->getDatetimeAttr());
+        $this->assertEquals('2017-02-07 00:00:00', $product->getDateAttr());
+        $csv = $this->doExport(['sku' => $sku]);
+        $this->assertMatchesRegularExpression('#datetime_attr=7/19/15,\p{Zs}3:30\p{Zs}AM#u', $csv);
+        $this->assertMatchesRegularExpression('#date_attr=2/7/17("|(,\w+=))#', $csv);
     }
 }

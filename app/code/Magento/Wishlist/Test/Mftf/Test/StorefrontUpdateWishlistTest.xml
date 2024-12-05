@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94296"/>
             <group value="Wishlist"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -60,6 +61,7 @@
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
         </after>
     </test>

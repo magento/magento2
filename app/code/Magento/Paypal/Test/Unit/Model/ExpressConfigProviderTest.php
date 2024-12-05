@@ -44,7 +44,8 @@ class ExpressConfigProviderTest extends TestCase
         $configFactory->expects($this->once())->method('create')->willReturn($config);
 
         $payment = $this->getMockBuilder(Payflowpro::class)
-            ->setMethods(['isAvailable', 'getCheckoutRedirectUrl'])
+            ->addMethods(['getCheckoutRedirectUrl'])
+            ->onlyMethods(['isAvailable'])
             ->setMockClassName('paymentInstance')
             ->disableOriginalConstructor()
             ->getMock();

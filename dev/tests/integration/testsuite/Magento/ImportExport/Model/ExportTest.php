@@ -35,7 +35,8 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setData(['entity' => $entity]);
         $this->_model->getEntityAttributeCollection();
-        $this->assertClassHasAttribute('_entityAdapter', get_class($this->_model));
+        $this->assertIsObject($this->_model);
+        $this->assertTrue(property_exists($this->_model, '_entityAdapter'));
         $object = new ReflectionClass(get_class($this->_model));
         $attribute = $object->getProperty('_entityAdapter');
         $attribute->setAccessible(true);
@@ -47,20 +48,20 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getEntityDataProvider()
+    public static function getEntityDataProvider()
     {
         return [
             'product' => [
-                '$entity' => 'catalog_product',
-                '$expectedEntityType' => \Magento\CatalogImportExport\Model\Export\Product::class,
+                'entity' => 'catalog_product',
+                'expectedEntityType' => \Magento\CatalogImportExport\Model\Export\Product::class,
             ],
             'customer main data' => [
-                '$entity' => 'customer',
-                '$expectedEntityType' => \Magento\CustomerImportExport\Model\Export\Customer::class,
+                'entity' => 'customer',
+                'expectedEntityType' => \Magento\CustomerImportExport\Model\Export\Customer::class,
             ],
             'customer address' => [
-                '$entity' => 'customer_address',
-                '$expectedEntityType' => \Magento\CustomerImportExport\Model\Export\Address::class,
+                'entity' => 'customer_address',
+                'expectedEntityType' => \Magento\CustomerImportExport\Model\Export\Address::class,
             ]
         ];
     }

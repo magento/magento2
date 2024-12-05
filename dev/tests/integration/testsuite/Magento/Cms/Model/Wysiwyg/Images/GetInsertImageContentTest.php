@@ -94,7 +94,7 @@ class GetInsertImageContentTest extends TestCase
      *
      * @return array[]
      */
-    public function imageDataProvider(): array
+    public static function imageDataProvider(): array
     {
         return [
             [

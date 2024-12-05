@@ -23,7 +23,8 @@ use Magento\Store\Model\WebsiteFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  *
- * @deprecated 100.3.0 Replaced with Multi Source Inventory
+ * @deprecated 100.3.0
+ * @see Replaced with Multi Source Inventory
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  * @since 100.0.2
@@ -35,6 +36,7 @@ class Status extends AbstractDb
      *
      * @var StoreManagerInterface
      * @deprecated 100.1.0
+     * @see Not used anymore
      */
     protected $_storeManager;
 
@@ -227,7 +229,7 @@ class Status extends AbstractDb
      */
     public function addStockStatusToSelect(Select $select, Website $website)
     {
-        $websiteId = $this->getWebsiteId($website->getId());
+        $websiteId = $this->getWebsiteId();
         $select->joinLeft(
             ['stock_status' => $this->getMainTable()],
             'e.entity_id = stock_status.product_id AND stock_status.website_id=' . $websiteId,

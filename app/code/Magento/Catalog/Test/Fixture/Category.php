@@ -27,7 +27,7 @@ class Category implements RevertibleDataFixtureInterface
         'include_in_menu' => true,
         'available_sort_by' => [],
         'custom_attributes' => [
-            'default_sort_by' => ['name']
+            'default_sort_by' => 'position'
         ],
         'extension_attributes' => [],
         'created_at' => null,

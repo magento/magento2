@@ -63,7 +63,7 @@ class AddQuantityFilterToCollectionTest extends TestCase
      *
      * @return array
      */
-    public function quantityFilterProvider(): array
+    public static function quantityFilterProvider(): array
     {
         return [
             'from' => [
@@ -72,7 +72,7 @@ class AddQuantityFilterToCollectionTest extends TestCase
                         'from' => 100,
                     ],
                 ],
-                'expected_products' => [
+                'expectedProducts' => [
                     'simple1',
                     'simple3',
                 ],
@@ -83,7 +83,7 @@ class AddQuantityFilterToCollectionTest extends TestCase
                         'to' => 100,
                     ],
                 ],
-                'expected_products' => [
+                'expectedProducts' => [
                     'simple1',
                     'simple2',
                 ],
@@ -95,7 +95,7 @@ class AddQuantityFilterToCollectionTest extends TestCase
                         'to' => 130,
                     ],
                 ],
-                'expected_products' => [
+                'expectedProducts' => [
                     'simple1',
                 ],
             ],

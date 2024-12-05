@@ -16,5 +16,6 @@
         <element name="mainContent" type="text" selector="#maincontent"/>
         <element name="footerTop" type="text" selector="footer.page-footer"/>
         <element name="title" type="text" selector="//div[@class='breadcrumbs']//ul/li[@class='item cms_page']"/>
+        <element name="widgetContentApostrophe" type="text" selector="//div[@class='widget block block-cms-link']//span[contains(text(),'{{var}}')]" parameterized="true"/>
     </section>
 </sections>

@@ -53,7 +53,16 @@ class IteratorTest extends TestCase
     {
         $this->_flyweightMock
             ->method('setData')
-            ->withConsecutive([['id' => 1], 'scope'], [['id' => 2], 'scope'], [['id' => 3], 'scope']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1['id'] == 1 && $arg2 == 'scope') {
+                    return null;
+                } elseif ($arg1['id'] == 2 && $arg2 == 'scope') {
+                    return null;
+                } elseif ($arg1['id'] == 3 && $arg2 == 'scope') {
+                    return null;
+                }
+            });
+
         $this->_flyweightMock->expects($this->any())->method('isVisible')->willReturn(true);
         $counter = 0;
         foreach ($this->_model as $item) {
@@ -88,7 +97,7 @@ class IteratorTest extends TestCase
     /**
      * @return array
      */
-    public function isLastDataProvider(): array
+    public static function isLastDataProvider(): array
     {
         return [[1, false], [2, false], [3, true]];
     }

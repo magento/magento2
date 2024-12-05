@@ -13,6 +13,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -51,18 +52,26 @@ class SessionTest extends TestCase
     protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $this->helper->prepareObjectManager($objects);
     }
 
     /**
      * @param int|null $orderId
      * @param int|null $incrementId
-     * @param Order|MockObject $orderMock
+     * @param \Closure $orderMock
      *
      * @return void
      * @dataProvider getLastRealOrderDataProvider
      */
-    public function testGetLastRealOrder($orderId, $incrementId, $orderMock): void
+    public function testGetLastRealOrder($orderId, $incrementId, \Closure $orderMock): void
     {
+        $orderMock = $orderMock($this);
         $orderFactory = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
@@ -106,12 +115,12 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function getLastRealOrderDataProvider(): array
+    public static function getLastRealOrderDataProvider(): array
     {
         return [
-            [null, 1, $this->_getOrderMock(1, null)],
-            [1, 1, $this->_getOrderMock(1, 1)],
-            [1, null, $this->_getOrderMock(null, 1)]
+            [null, 1, static fn (self $testCase) => $testCase->_getOrderMock(1, null)],
+            [1, 1, static fn (self $testCase) => $testCase->_getOrderMock(1, 1)],
+            [1, null, static fn (self $testCase) => $testCase->_getOrderMock(null, 1)]
         ];
     }
 
@@ -153,7 +162,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function clearHelperDataDataProvider(): array
+    public static function clearHelperDataDataProvider(): array
     {
         return [
             ['redirect_url'],
@@ -270,7 +279,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function restoreQuoteDataProvider(): array
+    public static function restoreQuoteDataProvider(): array
     {
         return [[true, true], [true, false], [false, true], [false, false]];
     }

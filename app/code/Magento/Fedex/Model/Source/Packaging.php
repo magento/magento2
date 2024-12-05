@@ -6,8 +6,6 @@
 
 /**
  * Fedex packaging source implementation
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Fedex\Model\Source;
 

@@ -12,6 +12,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
 
 /**
  * Resolver field name for not EAV attribute.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class NotEavAttribute implements ResolverInterface
 {
@@ -21,6 +23,7 @@ class NotEavAttribute implements ResolverInterface
      * @param AttributeAdapter $attribute
      * @param array $context
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldName(AttributeAdapter $attribute, $context = []): ?string
     {

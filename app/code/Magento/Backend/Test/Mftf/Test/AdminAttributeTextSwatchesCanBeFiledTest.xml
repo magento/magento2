@@ -19,6 +19,7 @@
             <useCaseId value="MAGETWO-96409"/>
             <group value="backend"/>
             <group value="ui"/>
+            <group value="cloud"/>
         </annotations>
         <before>
 
@@ -57,7 +58,9 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView10">
                 <argument name="customStore" value="storeViewData7"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -93,7 +96,9 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView10">
             <argument name="customStore" value="storeViewData7"/>
         </actionGroup>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Navigate to Product attribute page-->
         <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>

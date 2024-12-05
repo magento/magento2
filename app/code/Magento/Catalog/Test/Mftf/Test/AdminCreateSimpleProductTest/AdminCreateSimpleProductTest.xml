@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-23414"/>
             <group value="product"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
@@ -34,7 +35,9 @@
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="simpleProduct" value="_defaultProduct"/>
         </actionGroup>
-        <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createPreReqCategory$$"/>
             <argument name="product" value="_defaultProduct"/>

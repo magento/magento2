@@ -13,6 +13,8 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\AddProductsToCart;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\Quote\Model\QuoteMutexInterface;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
  * Add configurable products to cart GraphQl resolver
@@ -31,15 +33,23 @@ class AddConfigurableProductsToCart implements ResolverInterface
     private $addProductsToCart;
 
     /**
+     * @var QuoteMutexInterface
+     */
+    private $quoteMutex;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param AddProductsToCart $addProductsToCart
+     * @param QuoteMutexInterface $quoteMutex
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        AddProductsToCart $addProductsToCart
+        AddProductsToCart $addProductsToCart,
+        QuoteMutexInterface $quoteMutex
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->addProductsToCart = $addProductsToCart;
+        $this->quoteMutex = $quoteMutex;
     }
 
     /**
@@ -50,15 +60,33 @@ class AddConfigurableProductsToCart implements ResolverInterface
         if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
-        $maskedCartId = $args['input']['cart_id'];
 
         if (!isset($args['input']['cart_items']) || empty($args['input']['cart_items'])
             || !is_array($args['input']['cart_items'])
         ) {
             throw new GraphQlInputException(__('Required parameter "cart_items" is missing'));
         }
-        $cartItems = $args['input']['cart_items'];
 
+        return $this->quoteMutex->execute(
+            [$args['input']['cart_id']],
+            \Closure::fromCallable([$this, 'run']),
+            [$context, $args]
+        );
+    }
+
+    /**
+     * Run the resolver.
+     *
+     * @param ContextInterface $context
+     * @param array|null $args
+     * @return array[]
+     * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    public function run($context, array $args): array
+    {
+        $cartItems = $args['input']['cart_items'];
+        $maskedCartId = $args['input']['cart_id'];
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->addProductsToCart->execute($cart, $cartItems);

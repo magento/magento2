@@ -48,6 +48,10 @@ class GraphQlSessionTest extends GraphQlAbstract
     /**
      * Test for checking if graphQL query sets session cookies
      *
+     * Note: The reason why the first response doesn't have cookies, but the subsequent responses do is
+     * because Magento/Framework/App/PageCache/Kernel.php removes Set-Cookie headers when the response has a
+     * public Cache-Control.  This test asserts that behaviour.
+     *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @magentoConfigFixture graphql/session/disable 0
      */
@@ -71,8 +75,7 @@ QUERY;
         $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
         $this->assertEmpty($result['cookies']);
         // perform secondary request after cookies have been flushed
-        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', []);
-
+        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
         // may have other cookies than session
         $this->assertNotEmpty($result['cookies']);
         $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
@@ -279,5 +282,47 @@ QUERY;
             }
         }
         $this->assertTrue($result, 'Failed assertion. At least one cookie in the array matches pattern: ' . $pattern);
+    }
+
+    /**
+     * Tests that Magento\Customer\Model\Session works properly when graphql/session/disable=0
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoConfigFixture graphql/session/disable 0
+     */
+    public function testCustomerCanQueryOwnEmailUsingSession() : void
+    {
+        $query = '{customer{email}}';
+        $result = $this->graphQlClient->postWithResponseHeaders($query, [], '', $this->getAuthHeaders(), true);
+        // cookies are never empty and session is restarted for the authorized customer regardless current session
+        $this->assertNotEmpty($result['cookies']);
+        $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
+        $this->assertEquals('customer@example.com', $result['body']['customer']['email'] ?? '');
+        $result = $this->graphQlClient->postWithResponseHeaders($query, [], '', $this->getAuthHeaders());
+        // cookies are never empty and session is restarted for the authorized customer
+        // regardless current session and missing flush
+        $this->assertNotEmpty($result['cookies']);
+        $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
+        $this->assertEquals('customer@example.com', $result['body']['customer']['email'] ?? '');
+        /* Note: This third request is the actual one that tests that the session cookie is properly used.
+         * This time we don't send the Authorization header and rely on Cookie header instead.
+         * Because of bug in postWithResponseHeaders's $flushCookies parameter not being properly used,
+         * We have to manually set cookie header ourselves. :-(
+         */
+        $cookiesToSend = '';
+        foreach ($result['cookies'] as $cookie) {
+            preg_match('/^([^;]*);/', $cookie, $matches);
+            if (!strlen($matches[1] ?? '')) {
+                continue;
+            }
+            if (!empty($cookiesToSend)) {
+                $cookiesToSend .= '; ';
+            }
+            $cookiesToSend .= $matches[1];
+        }
+        $result = $this->graphQlClient->postWithResponseHeaders($query, [], '', ['Cookie: ' . $cookiesToSend]);
+        $this->assertNotEmpty($result['cookies']);
+        $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
+        $this->assertEquals('customer@example.com', $result['body']['customer']['email'] ?? '');
     }
 }

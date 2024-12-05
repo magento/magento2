@@ -137,8 +137,10 @@ class ResponseFactoryTest extends TestCase
 
         $this->documentFactory
             ->method('create')
-            ->withConsecutive([$modifiedDocuments[0]], [$modifiedDocuments[1]])
-            ->willReturnOnConsecutiveCalls('document1', 'document2');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$modifiedDocuments[0]] => 'document1',
+                [$modifiedDocuments[1]] => 'document2',
+            });
 
         $this->aggregationFactory
             ->method('create')

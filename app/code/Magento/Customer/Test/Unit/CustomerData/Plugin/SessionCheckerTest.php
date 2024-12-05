@@ -76,11 +76,10 @@ class SessionCheckerTest extends TestCase
             ->willReturn($phpSessionCookieName);
         $this->cookieManager->expects($this->exactly(2))
             ->method('getCookie')
-            ->withConsecutive(
-                [$phpSessionCookieName],
-                [$frontendSessionCookieName]
-            )
-            ->willReturnOnConsecutiveCalls(false, $result);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$phpSessionCookieName] => false,
+                [$frontendSessionCookieName] => $result
+            });
 
         $this->metadataFactory->expects($this->{$callCount}())
             ->method('createCookieMetadata')
@@ -98,7 +97,7 @@ class SessionCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function beforeStartDataProvider()
+    public static function beforeStartDataProvider()
     {
         return [
             [true, 'once'],

@@ -61,7 +61,7 @@ class SignatureTest extends TestCase
     /**
      * @return array
      */
-    public function afterGetBaseUrlInactiveDataProvider()
+    public static function afterGetBaseUrlInactiveDataProvider()
     {
         return [
             'disabled in config, relevant URL type'  => [0, UrlInterface::URL_TYPE_STATIC],

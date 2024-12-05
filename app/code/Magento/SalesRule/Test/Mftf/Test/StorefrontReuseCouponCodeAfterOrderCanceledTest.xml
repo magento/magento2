@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontReuseCouponCodeAfterOrderCanceledTest">
@@ -34,6 +33,7 @@
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{CatPriceRule.name}}"/>
             </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -87,13 +87,13 @@
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
         <waitForElement selector="{{CheckoutShippingSection.shippingTab}}" stepKey="waitForCheckoutPage"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
-        <magentoCLI command="cron:run" stepKey="runCronAfterPlacingOrder"/>
+        <magentoCron groups="default" stepKey="runCronAfterPlacingOrder"/>
 
         <!-- Get Order id -->
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
@@ -113,7 +113,7 @@
         <!-- Cancel order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <magentoCLI command="cron:run" stepKey="runCronAfterCancelingOrder"/>
+        <magentoCron groups="default" stepKey="runCronAfterCancelingOrder"/>
 
         <!-- Open My Account Page from Customer dropdown -->
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
@@ -128,7 +128,10 @@
 
         <!-- Clicking on Reorder link from Order Details Tab -->
         <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
-
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
+            
         <!-- Reuse coupon code -->
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToDiscountTab"/>
         <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{CatPriceRule.coupon_code}}" stepKey="fillCouponCode"/>

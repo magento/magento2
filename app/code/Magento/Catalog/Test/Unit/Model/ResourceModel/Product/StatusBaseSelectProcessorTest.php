@@ -125,11 +125,13 @@ class StatusBaseSelectProcessorTest extends TestCase
 
         $this->select
             ->method('joinLeft')
-            ->withConsecutive(
+            ->willReturnCallback(function (...$args) use ($backendTable, $linkField, $attributeId, $currentStoreId) {
+                static $index = 0;
+                $expectedArgs = [
                 [
                     ['status_global_attr' => $backendTable],
-                    "status_global_attr.{$linkField} = "
-                    . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS . ".{$linkField}"
+                    "status_global_attr.{$linkField} = " . BaseSelectProcessorInterface::PRODUCT_TABLE_ALIAS .
+                    ".{$linkField}"
                     . " AND status_global_attr.attribute_id = {$attributeId}"
                     . ' AND status_global_attr.store_id = ' . Store::DEFAULT_STORE_ID,
                     []
@@ -141,8 +143,11 @@ class StatusBaseSelectProcessorTest extends TestCase
                     . " AND status_attr.store_id = {$currentStoreId}",
                     []
                 ]
-            )
-            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+                ];
+                $returnValue = $this->select;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
         $this->select
             ->method('where')
             ->with('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_ENABLED)

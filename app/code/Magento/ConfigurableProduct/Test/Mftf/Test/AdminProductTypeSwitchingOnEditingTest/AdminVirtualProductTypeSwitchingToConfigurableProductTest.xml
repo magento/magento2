@@ -17,6 +17,7 @@
             <useCaseId value="MAGETWO-44170"/>
             <severity value="MAJOR"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

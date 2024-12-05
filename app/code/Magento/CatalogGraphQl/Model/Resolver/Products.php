@@ -15,6 +15,8 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
+use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -31,17 +33,23 @@ class Products implements ResolverInterface
      */
     private $searchApiCriteriaBuilder;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param ProductQueryInterface $searchQuery
      * @param SearchCriteriaBuilder|null $searchApiCriteriaBuilder
+     * @param Uid|null $uidEncoder
      */
     public function __construct(
         ProductQueryInterface $searchQuery,
-        SearchCriteriaBuilder $searchApiCriteriaBuilder = null
+        SearchCriteriaBuilder $searchApiCriteriaBuilder = null,
+        Uid $uidEncoder = null
     ) {
         $this->searchQuery = $searchQuery;
         $this->searchApiCriteriaBuilder = $searchApiCriteriaBuilder ??
-            \Magento\Framework\App\ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
+            ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()->get(Uid::class);
     }
 
     /**
@@ -80,12 +88,36 @@ class Products implements ResolverInterface
             'layer_type' => isset($args['search']) ? Resolver::CATALOG_LAYER_SEARCH : Resolver::CATALOG_LAYER_CATEGORY,
         ];
 
+        if (isset($args['filter']['category_uid'])) {
+            $args['filter']['category_id'] = $this->getFilterCategoryIdFromCategoryUid($args['filter']['category_uid']);
+        }
+
         if (isset($args['filter']['category_id'])) {
             $data['categories'] = $args['filter']['category_id']['eq'] ?? $args['filter']['category_id']['in'];
             $data['categories'] = is_array($data['categories']) ? $data['categories'] : [$data['categories']];
         }
 
         return $data;
+    }
+
+    /**
+     * Get filter category_id by category_uid
+     *
+     * @param array $filterCategoryUid
+     * @return array|null
+     */
+    private function getFilterCategoryIdFromCategoryUid(array $filterCategoryUid): ?array
+    {
+        $filterCategoryId = null;
+        if (isset($filterCategoryUid['eq'])) {
+            $filterCategoryId['eq'] = $this->uidEncoder
+                ->decode((string)$filterCategoryUid['eq']);
+        } elseif (!empty($filterCategoryUid['in'])) {
+            foreach ($filterCategoryUid['in'] as $uid) {
+                $filterCategoryId['in'][] = $this->uidEncoder->decode((string) $uid);
+            }
+        }
+        return $filterCategoryId;
     }
 
     /**

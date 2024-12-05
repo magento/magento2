@@ -17,11 +17,14 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-224"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create a Website -->
             <createData entity="customWebsite" stepKey="createWebsite"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Create a simple product for a bundle option -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
@@ -37,7 +40,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="Second Website"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

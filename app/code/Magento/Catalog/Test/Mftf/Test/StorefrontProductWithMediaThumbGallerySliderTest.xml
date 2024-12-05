@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-2076"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>

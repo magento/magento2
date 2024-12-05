@@ -17,6 +17,7 @@
             <testCaseId value="MC-15290"/>
             <useCaseId value="MC-15289"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

@@ -50,15 +50,14 @@ class CurrencyConverterApiTest extends TestCase
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -100,11 +99,15 @@ class CurrencyConverterApiTest extends TestCase
         $this->prepareCurrencyFactoryMock();
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/currencyconverterapi/api_key', 'store'],
-                ['currency/currencyconverterapi/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('api_key', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'currency/currencyconverterapi/api_key' && $arg2 === 'store') {
+                        return 'api_key';
+                    } elseif ($arg1 === 'currency/currencyconverterapi/timeout' && $arg2 === 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         /** @var LaminasClient|MockObject $httpClient */
         $httpClient = $this->getMockBuilder(LaminasClient::class)
@@ -113,7 +116,7 @@ class CurrencyConverterApiTest extends TestCase
         /** @var DataObject|MockObject $currencyMock */
         $httpResponse = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBody'])
+            ->addMethods(['getBody'])
             ->getMock();
 
         $this->httpClientFactory->expects($this->once())->method('create')->willReturn($httpClient);
@@ -180,11 +183,15 @@ class CurrencyConverterApiTest extends TestCase
         $this->prepareCurrencyFactoryMock();
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/currencyconverterapi/api_key', 'store'],
-                ['currency/currencyconverterapi/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'currency/currencyconverterapi/api_key' && $arg2 === 'store') {
+                        return '';
+                    } elseif ($arg1 === 'currency/currencyconverterapi/timeout' && $arg2 === 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         $expectedCurrencyRateList = ['USD' => ['EUR' => null, 'UAH' => null]];
         self::assertEquals($expectedCurrencyRateList, $this->model->fetchRates());

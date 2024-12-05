@@ -39,7 +39,7 @@ class SearchResultProcessorTest extends TestCase
 
         $this->searchResultCollectionMock = $this->getMockBuilder(AbstractSearchResult::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSearchCriteria', 'getItems', 'getItemId'])
+            ->onlyMethods(['getSearchCriteria', 'getItems', 'getItemId'])
             ->getMockForAbstractClass();
         $this->searchResultCollectionMock->expects($this->any())
             ->method('getSearchCriteria')

@@ -5,10 +5,24 @@
  */
 namespace Magento\Framework\Model;
 
+use Exception;
 use Laminas\Validator\ValidatorChain;
 use Laminas\Validator\ValidatorInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Error;
+use Magento\Framework\Model\ActionValidator\RemoveAction;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Data\Collection\AbstractDb as AbstractDbCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract model class
@@ -70,12 +84,12 @@ abstract class AbstractModel extends DataObject
     /**
      * Resource model instance
      *
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @var AbstractDb
      */
     protected $_resource;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @var AbstractCollection
      */
     protected $_resourceCollection;
 
@@ -128,34 +142,34 @@ abstract class AbstractModel extends DataObject
     /**
      * Application Event Dispatcher
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $_eventManager;
 
     /**
      * Application Cache Manager
      *
-     * @var \Magento\Framework\App\CacheInterface
+     * @var CacheInterface
      */
     protected $_cacheManager;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_registry;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\Framework\Model\ActionValidator\RemoveAction
+     * @var RemoveAction
      */
     protected $_actionValidator;
 
@@ -167,18 +181,19 @@ abstract class AbstractModel extends DataObject
     protected $storedData = [];
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param AbstractResource|null $resource
+     * @param AbstractDbCollection|null $resourceCollection
      * @param array $data
+     * @throws LocalizedException
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        Context              $context,
+        Registry             $registry,
+        AbstractResource     $resource = null,
+        AbstractDbCollection $resourceCollection = null,
+        array                $data = []
     ) {
         $this->_registry = $registry;
         $this->_appState = $context->getAppState();
@@ -213,6 +228,7 @@ abstract class AbstractModel extends DataObject
      *
      * @param string $resourceModel
      * @return void
+     * @throws LocalizedException
      */
     protected function _init($resourceModel)
     {
@@ -251,11 +267,11 @@ abstract class AbstractModel extends DataObject
      */
     public function __wakeup()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_registry = $objectManager->get(\Magento\Framework\Registry::class);
+        $objectManager = ObjectManager::getInstance();
+        $this->_registry = $objectManager->get(Registry::class);
 
-        $context = $objectManager->get(\Magento\Framework\Model\Context::class);
-        if ($context instanceof \Magento\Framework\Model\Context) {
+        $context = $objectManager->get(Context::class);
+        if ($context instanceof Context) {
             $this->_appState = $context->getAppState();
             $this->_eventManager = $context->getEventDispatcher();
             $this->_cacheManager = $context->getCacheManager();
@@ -356,6 +372,7 @@ abstract class AbstractModel extends DataObject
             }
             $this->_data = $key;
         } else {
+            $this->checkAndConvertNumericValue($key, $value);
             if (!array_key_exists($key, $this->_data) || $this->_data[$key] !== $value) {
                 $this->_hasDataChanges = true;
             }
@@ -469,20 +486,19 @@ abstract class AbstractModel extends DataObject
     /**
      * Get resource instance
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @return AbstractDb
+     * @throws LocalizedException
      * @deprecated 101.0.0 because resource models should be used directly
      * @see we don't recommend this approach anymore
      */
     protected function _getResource()
     {
         if (empty($this->_resourceName) && empty($this->_resource)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('The resource isn\'t set.')
+            throw new LocalizedException(
+                new Phrase('The resource isn\'t set.')
             );
         }
-
-        return $this->_resource ?: \Magento\Framework\App\ObjectManager::getInstance()->get($this->_resourceName);
+        return $this->_resource ?: ObjectManager::getInstance()->get($this->_resourceName);
     }
 
     /**
@@ -499,20 +515,20 @@ abstract class AbstractModel extends DataObject
      * Get collection instance
      *
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @throws LocalizedException
+     * @return AbstractCollection
      * @deprecated 101.0.0 because collections should be used directly via factory
      * @see we don't recommend this approach anymore
      */
     public function getResourceCollection()
     {
         if (empty($this->_resourceCollection) && empty($this->_collectionName)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Model collection resource name is not defined.')
+            throw new LocalizedException(
+                new Phrase('Model collection resource name is not defined.')
             );
         }
-        return $this->_resourceCollection ? clone $this
-            ->_resourceCollection : \Magento\Framework\App\ObjectManager::getInstance()
+        return !$this->_collectionName ? clone $this
+            ->_resourceCollection : ObjectManager::getInstance()
             ->create(
                 $this->_collectionName
             );
@@ -522,9 +538,10 @@ abstract class AbstractModel extends DataObject
      * Retrieve collection instance
      *
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @deprecated 101.0.0 because collections should be used directly via factory
+     * @return AbstractCollection
+     * @throws LocalizedException
      * @see we don't recommend this approach anymore
+     * @deprecated 101.0.0 because collections should be used directly via factory
      */
     public function getCollection()
     {
@@ -537,10 +554,11 @@ abstract class AbstractModel extends DataObject
      * @param integer $modelId
      * @param null|string $field
      * @return $this
+     * @throws LocalizedException
+     * @see we don't recommend this approach anymore
      * @deprecated 100.1.0 because entities must not be responsible for their own loading.
      * Service contracts should persist entities. Use resource model "load" or collections to implement
      * service contract model loading operations.
-     * @see we don't recommend this approach anymore
      */
     public function load($modelId, $field = null)
     {
@@ -651,7 +669,7 @@ abstract class AbstractModel extends DataObject
      * Save object data
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      *
      * @deprecated 100.1.0 because entities must not be responsible for their own persistence.
      * Service contracts should persist entities. Use resource model "save" to implement
@@ -726,7 +744,7 @@ abstract class AbstractModel extends DataObject
                 new Phrase(implode(PHP_EOL, $errors))
             );
             foreach ($errors as $errorMessage) {
-                $exception->addMessage(new \Magento\Framework\Message\Error($errorMessage));
+                $exception->addMessage(new Error($errorMessage));
             }
             throw $exception;
         }
@@ -739,6 +757,7 @@ abstract class AbstractModel extends DataObject
      * Returns FALSE, if no validation rules exist.
      *
      * @return ValidatorInterface|false
+     * @throws LocalizedException
      */
     protected function _getValidatorBeforeSave()
     {
@@ -754,6 +773,7 @@ abstract class AbstractModel extends DataObject
      * Returns FALSE, if no validation rules exist.
      *
      * @return ValidatorInterface|bool
+     * @throws LocalizedException
      */
     protected function _createValidatorBeforeSave()
     {
@@ -763,17 +783,25 @@ abstract class AbstractModel extends DataObject
             return false;
         }
 
-        if ($modelRules && $resourceRules) {
-            $validator = new ValidatorChain();
-            $validator->addValidator($modelRules);
-            $validator->addValidator($resourceRules);
-        } elseif ($modelRules) {
-            $validator = $modelRules;
-        } else {
-            $validator = $resourceRules;
+        $validator = $this->getValidator();
+        if ($modelRules) {
+            $validator->attach($modelRules);
+        }
+        if ($resourceRules) {
+            $validator->attach($resourceRules);
         }
 
         return $validator;
+    }
+
+    /**
+     * Create validator instance
+     *
+     * @return ValidatorChain
+     */
+    private function getValidator(): ValidatorChain
+    {
+        return ObjectManager::getInstance()->create(ValidatorChain::class);
     }
 
     /**
@@ -818,7 +846,7 @@ abstract class AbstractModel extends DataObject
     public function cleanModelCache()
     {
         $tags = $this->getCacheTags();
-        if ($tags !== false) {
+        if (!empty($tags)) {
             $this->_cacheManager->clean($tags);
         }
         return $this;
@@ -843,7 +871,7 @@ abstract class AbstractModel extends DataObject
      * Delete object from database
      *
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      * @deprecated 100.1.0 because entities must not be responsible for their own deletion.
      * Service contracts should delete entities. Use resource model "delete" method to implement
      * service contract persistence operations.
@@ -859,13 +887,13 @@ abstract class AbstractModel extends DataObject
      * Processing object before delete data
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function beforeDelete()
     {
         if (!$this->_actionValidator->isAllowed($this)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Delete operation is forbidden for current area')
+            throw new LocalizedException(
+                new Phrase('Delete operation is forbidden for current area')
             );
         }
 
@@ -904,7 +932,7 @@ abstract class AbstractModel extends DataObject
     /**
      * Retrieve model resource
      *
-     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @return AbstractDb
      * @deprecated 101.0.0 because resource models should be used directly
      * @see we don't recommend this approach anymore
      */
@@ -1000,5 +1028,27 @@ abstract class AbstractModel extends DataObject
     public function getEventPrefix()
     {
         return $this->_eventPrefix;
+    }
+
+    /**
+     * Check and Convert Numeric Value for Proper Type Matching
+     *
+     * @param mixed $key
+     * @param mixed $value
+     * @return void
+     */
+    private function checkAndConvertNumericValue(mixed $key, mixed $value): void
+    {
+        if (array_key_exists($key, $this->_data) && is_numeric($this->_data[$key])
+            && $value !== null
+        ) {
+            if (is_float($value) ||
+                (is_string($value) && preg_match('/^-?\d*\.\d+$/', $value))
+            ) {
+                $this->_data[$key] = (float) $this->_data[$key];
+            } elseif (is_int($value)) {
+                $this->_data[$key] = (int) $this->_data[$key];
+            }
+        }
     }
 }

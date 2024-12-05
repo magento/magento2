@@ -67,6 +67,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="category"/>
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
 
             <!-- Disable extra Shipment and Payment Methods enabled -->

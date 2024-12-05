@@ -7,8 +7,6 @@ namespace Magento\Review\Block\Rating\Entity;
 
 /**
  * Entity rating block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Detailed extends \Magento\Framework\View\Element\Template
 {

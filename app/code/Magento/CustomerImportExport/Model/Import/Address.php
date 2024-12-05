@@ -272,7 +272,7 @@ class Address extends AbstractCustomer
      * @param array $data
      * @param CountryWithWebsitesSource|null $countryWithWebsites
      * @param AddressStorage|null $addressStorage
-     * @param Processor $indexerProcessor
+     * @param Processor|null $indexerProcessor
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -634,7 +634,8 @@ class Address extends AbstractCustomer
 
                 $value = $rowData[$attributeAlias];
 
-                if ($rowData[$attributeAlias] === null || !strlen($rowData[$attributeAlias])) {
+                if ($rowData[$attributeAlias] === null
+                    || (is_string($rowData[$attributeAlias]) && !strlen($rowData[$attributeAlias]))) {
                     if ($attributeParams['is_required']) {
                         continue;
                     }
@@ -689,12 +690,12 @@ class Address extends AbstractCustomer
     /**
      * Process row data, based on attirbute type
      *
-     * @param string $rowAttributeData
+     * @param string|array $rowAttributeData
      * @param array $attributeParams
      * @return \DateTime|int|string
      * @throws \Exception
      */
-    protected function getValueByAttributeType(string $rowAttributeData, array $attributeParams)
+    protected function getValueByAttributeType($rowAttributeData, array $attributeParams)
     {
         $multiSeparator = $this->getMultipleValueSeparator();
         $value = $rowAttributeData;
@@ -709,8 +710,14 @@ class Address extends AbstractCustomer
                 break;
             case 'multiselect':
                 $ids = [];
-                foreach (explode($multiSeparator, mb_strtolower($rowAttributeData)) as $subValue) {
-                    $ids[] = $this->getSelectAttrIdByValue($attributeParams, $subValue);
+                if (is_array($rowAttributeData)) {
+                    foreach ($rowAttributeData as $subValue) {
+                        $ids[] = $this->getSelectAttrIdByValue($attributeParams, mb_strtolower($subValue));
+                    }
+                } elseif (is_string($rowAttributeData)) {
+                    foreach (explode($multiSeparator, mb_strtolower($rowAttributeData)) as $subValue) {
+                        $ids[] = $this->getSelectAttrIdByValue($attributeParams, $subValue);
+                    }
                 }
                 $value = implode(',', $ids);
                 break;
@@ -880,7 +887,9 @@ class Address extends AbstractCustomer
 
                     if (in_array($attributeCode, $this->_ignoredAttributes)) {
                         continue;
-                    } elseif (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                    } elseif (isset($rowData[$attributeCode])
+                        && ((is_string($rowData[$attributeCode]) && strlen($rowData[$attributeCode]))
+                            || (is_array($rowData[$attributeCode]) && count($rowData[$attributeCode])))) {
                         $this->isAttributeValid(
                             $attributeCode,
                             $attributeParams,

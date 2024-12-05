@@ -299,7 +299,7 @@ class AssociatedProducts
                             ['id' => $product->getId()]
                         ) . '" target="_blank">' . $this->escaper->escapeHtml($product->getName()) . '</a>',
                         'sku' => $product->getSku(),
-                        'name' => $this->escaper->escapeHtml($product->getName()),
+                        'name' => $product->getName(),
                         'qty' => $this->getProductStockQty($product),
                         'price' => $price,
                         'price_string' => $currency->toCurrency(sprintf("%f", $price)),

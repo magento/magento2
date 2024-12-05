@@ -14,7 +14,6 @@ use Magento\Review\Model\Review;
  * Customer Review detailed view block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
@@ -162,6 +161,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get rating summary
      *
      * @deprecated 100.3.3
+     * @see f72f74d3
      * @return array
      */
     public function getRatingSummary()
@@ -183,11 +183,14 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     {
         if (!$this->getTotalReviewsCache()) {
             $this->setTotalReviewsCache(
-                $this->_reviewFactory->create()->getTotalReviews($this->getProductData()->getId()),
-                false,
-                $this->_storeManager->getStore()->getId()
+                $this->_reviewFactory->create()->getTotalReviews(
+                    $this->getProductData()->getId(),
+                    false,
+                    $this->_storeManager->getStore()->getId()
+                )
             );
         }
+
         return $this->getTotalReviewsCache();
     }
 

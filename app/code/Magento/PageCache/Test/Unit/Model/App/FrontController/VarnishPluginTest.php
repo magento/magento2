@@ -165,7 +165,7 @@ class VarnishPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterDispatchDataProvider()
+    public static function afterDispatchDataProvider()
     {
         return [
             'developer_mode' => [AppState::MODE_DEVELOPER, 1],

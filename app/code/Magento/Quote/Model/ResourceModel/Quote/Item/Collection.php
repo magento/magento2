@@ -128,6 +128,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_productIds = [];
+        $this->_quote = null;
+    }
+
+    /**
      * Retrieve store Id (From Quote)
      *
      * @return int

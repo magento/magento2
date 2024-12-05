@@ -17,7 +17,7 @@ interface MutableDataInterface
      * @param  array $data
      * @return void
      */
-    public function setData(array $data);
+    public function setData(int|string $dataName, array $data);
 
     /**
      * Retrieve data injected dynamically in test case.

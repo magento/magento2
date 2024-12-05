@@ -77,7 +77,8 @@ class LockConfigProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->valueMock = $this->getMockBuilder(Value::class)
-            ->setMethods(['validateBeforeSave', 'beforeSave', 'setValue', 'getValue', 'afterSave'])
+            ->addMethods(['setValue', 'getValue'])
+            ->onlyMethods(['validateBeforeSave', 'beforeSave', 'afterSave'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -156,7 +157,7 @@ class LockConfigProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             ['test/test/test', 'value', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],

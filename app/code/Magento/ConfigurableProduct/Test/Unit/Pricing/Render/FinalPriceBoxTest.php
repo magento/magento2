@@ -12,12 +12,13 @@ use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\Render\RendererPool;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,42 +31,42 @@ class FinalPriceBoxTest extends TestCase
     /**
      * @var Context|MockObject
      */
-    private $context;
+    private Context $context;
 
     /**
      * @var Product|MockObject
      */
-    private $saleableItem;
+    private Product $saleableItem;
 
     /**
      * @var PriceInterface|MockObject
      */
-    private $price;
+    private PriceInterface $price;
 
     /**
      * @var RendererPool|MockObject
      */
-    private $rendererPool;
+    private RendererPool $rendererPool;
 
     /**
      * @var SalableResolverInterface|MockObject
      */
-    private $salableResolver;
+    private SalableResolverInterface $salableResolver;
 
     /**
      * @var MinimalPriceCalculatorInterface|MockObject
      */
-    private $minimalPriceCalculator;
+    private MinimalPriceCalculatorInterface $minimalPriceCalculator;
 
     /**
      * @var ConfigurableOptionsProviderInterface|MockObject
      */
-    private $configurableOptionsProvider;
+    private ConfigurableOptionsProviderInterface $configurableOptionsProvider;
 
     /**
      * @var FinalPriceBox
      */
-    private $model;
+    private FinalPriceBox $model;
 
     /**
      * @inheritDoc
@@ -82,17 +83,15 @@ class FinalPriceBoxTest extends TestCase
             ConfigurableOptionsProviderInterface::class
         );
 
-        $this->model = (new ObjectManager($this))->getObject(
-            FinalPriceBox::class,
-            [
-                'context' => $this->context,
-                'saleableItem' => $this->saleableItem,
-                'price' => $this->price,
-                'rendererPool' => $this->rendererPool,
-                'salableResolver' => $this->salableResolver,
-                'minimalPriceCalculator' => $this->minimalPriceCalculator,
-                'configurableOptionsProvider' => $this->configurableOptionsProvider,
-            ]
+        $this->model = new FinalPriceBox(
+            $this->context,
+            $this->saleableItem,
+            $this->price,
+            $this->rendererPool,
+            $this->salableResolver,
+            $this->minimalPriceCalculator,
+            $this->configurableOptionsProvider,
+            []
         );
     }
 
@@ -101,12 +100,13 @@ class FinalPriceBoxTest extends TestCase
      * @param float $finalPrice
      * @param bool $expected
      * @dataProvider hasSpecialPriceDataProvider
+     * @throws \Exception
      */
-    public function testHasSpecialPrice(
+    public function testHasSpecialPriceProductDetailsPage(
         float $regularPrice,
         float $finalPrice,
-        bool $expected
-    ) {
+        bool  $expected
+    ): void {
         $priceMockOne = $this->getMockForAbstractClass(PriceInterface::class);
         $priceMockOne->expects($this->once())
             ->method('getValue')
@@ -134,13 +134,28 @@ class FinalPriceBoxTest extends TestCase
             ->with($this->saleableItem)
             ->willReturn([$productMock]);
 
+        $this->model->setData('is_product_list', false);
         $this->assertEquals($expected, $this->model->hasSpecialPrice());
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function testHasSpecialPriceProductListingPage(): void
+    {
+        $productId = 1;
+        $this->model->setData('is_product_list', true);
+        $this->model->setData('special_price_map', [1 => true]);
+        $this->saleableItem->expects($this->once())->method('getId')->willReturn($productId);
+
+        $this->assertTrue($this->model->hasSpecialPrice());
     }
 
     /**
      * @return array
      */
-    public function hasSpecialPriceDataProvider(): array
+    public static function hasSpecialPriceDataProvider(): array
     {
         return [
             [10., 20., false],

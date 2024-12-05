@@ -12,6 +12,7 @@ use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\NewRelicReporting\Model\Apm\Deployments;
 use Magento\NewRelicReporting\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -45,31 +46,24 @@ class DeploymentsTest extends TestCase
      */
     protected $loggerMock;
 
+    /**
+     * @var SerializerInterface|MockObject
+     */
+    private $serializerMock;
+
     protected function setUp(): void
     {
-        $this->httpClientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->httpClientMock = $this->getMockBuilder(LaminasClient::class)
-            ->setMethods(['send', 'setUri', 'setMethod', 'setHeaders', 'setParameterPost'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getNewRelicApiUrl', 'getNewRelicApiKey', 'getNewRelicAppId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpClientFactoryMock = $this->createMock(LaminasClientFactory::class);
+        $this->httpClientMock = $this->createMock(LaminasClient::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->model = new Deployments(
             $this->configMock,
             $this->loggerMock,
-            $this->httpClientFactoryMock
+            $this->httpClientFactoryMock,
+            $this->serializerMock
         );
     }
 
@@ -97,9 +91,13 @@ class DeploymentsTest extends TestCase
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->httpClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())
@@ -163,9 +161,13 @@ class DeploymentsTest extends TestCase
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->httpClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())
@@ -225,9 +227,13 @@ class DeploymentsTest extends TestCase
             ->with($data['headers'])
             ->willReturnSelf();
 
-        $this->httpClientMock->expects($this->once())
-            ->method('setParameterPost')
+        $this->serializerMock->expects($this->once())
+            ->method('serialize')
             ->with($data['params'])
+            ->willReturn(json_encode($data['params']));
+        $this->httpClientMock->expects($this->once())
+            ->method('setRawBody')
+            ->with(json_encode($data['params']))
             ->willReturnSelf();
 
         $this->configMock->expects($this->once())

@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-10899"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -52,7 +53,7 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
+        <click selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}" stepKey="openFirstProduct"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
         <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
@@ -94,6 +95,11 @@
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
         <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+
+        <actionGroup ref="AdminInputCustomAttributeToExistingProductActionGroup" stepKey="adminProductFillCustomAttribute">
+            <argument name="attributeCode" value="{{newProductAttribute.attribute_code}}"/>
+            <argument name="adminOption1" value="{{ProductAttributeOption8.label}}"/>
+        </actionGroup>
 
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>

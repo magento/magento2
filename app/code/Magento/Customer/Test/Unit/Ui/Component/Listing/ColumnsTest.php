@@ -195,31 +195,37 @@ class ColumnsTest extends TestCase
             ->willReturn([]);
         $this->column
             ->method('setData')
-            ->withConsecutive(
-                [
-                    'config',
-                    [
-                        'options' => [
-                            [
-                                'label' => 'Label',
-                                'value' => 'Value'
+            ->willReturnCallback(function (...$args) use ($attributeCode, $frontendInput) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount === 1 && $args === [
+                        'config',
+                        [
+                            'options' => [
+                                [
+                                    'label' => 'Label',
+                                    'value' => 'Value'
+                                ]
                             ]
                         ]
-                    ]
-                ],
-                [
-                    'config',
-                    [
-                        'name' => $attributeCode,
-                        'dataType' => $frontendInput,
-                        'filter' => [
-                            'filterType' => 'text',
-                            'conditionType' => 'like',
-                        ],
-                        'visible' => true
-                    ]
-                ]
-            );
+                    ]) {
+                    return null;
+                }
+                if ($callCount === 2 && $args === [
+                        'config',
+                        [
+                            'name' => $attributeCode,
+                            'dataType' => $frontendInput,
+                            'filter' => [
+                                'filterType' => 'text',
+                                'conditionType' => 'like',
+                            ],
+                            'visible' => true
+                        ]
+                    ]) {
+                    return null;
+                }
+            });
 
         $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();
@@ -269,10 +275,10 @@ class ColumnsTest extends TestCase
             ->willReturn(['editor' => 'text']);
         $this->column
             ->method('setData')
-            ->withConsecutive(
-                [
-                    'config',
-                    [
+            ->willReturnCallback(function ($arg1, $arg2) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount == 1 && $arg1 == 'config' && $arg2 == [
                         'editor' => 'text',
                         'options' => [
                             [
@@ -280,16 +286,17 @@ class ColumnsTest extends TestCase
                                 'value' => 'Value'
                             ]
                         ]
-                    ]
-                ],
-                [
-                    'config',
-                    [
+                    ]) {
+                    return null;
+                }
+
+                if ($callCount === 2 && $arg1 === 'config' && $arg2 === [
                         'editor' => 'text',
                         'visible' => true
-                    ]
-                ]
-            );
+                    ]) {
+                     return null;
+                }
+            });
 
         $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();

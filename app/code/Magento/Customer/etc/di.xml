@@ -578,11 +578,19 @@
                     <item name="store_id" xsi:type="string">store_id</item>
                     <item name="group_id" xsi:type="string">group_id</item>
                     <item name="dob" xsi:type="string">dob</item>
+                    <item name="rp_token" xsi:type="string">rp_token</item>
+                    <item name="rp_token_created_at" xsi:type="string">rp_token_created_at</item>
+                    <item name="password_hash" xsi:type="string">password_hash</item>
                 </item>
                 <item name="customer_address" xsi:type="array">
                     <item name="country_id" xsi:type="string">country_id</item>
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\AsynchronousOperations\Model\MassSchedule">
+        <plugin name="anonymousAsyncCustomerRequest"
+                type="Magento\Customer\Plugin\AsyncRequestCustomerGroupAuthorization"
+        />
     </type>
 </config>

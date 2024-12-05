@@ -76,13 +76,13 @@ class FormTest extends TestCase
             ->getMockForAbstractClass();
         $this->productBuilder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['build'])
+            ->onlyMethods(['build'])
             ->getMock();
         $this->initializationHelper = $this->getMockBuilder(
             Helper::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['initialize'])
+            ->onlyMethods(['initialize'])
             ->getMock();
         $this->view = $this->getMockForAbstractClass(ViewInterface::class);
 
@@ -110,12 +110,14 @@ class FormTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['_wakeup', 'getId'])
+            ->addMethods(['_wakeup'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $block = $this->getMockBuilder(Bundle::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIndex', 'toHtml'])
+            ->addMethods(['setIndex'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
 
         $this->productBuilder->expects($this->once())->method('build')->with($this->request)->willReturn($product);

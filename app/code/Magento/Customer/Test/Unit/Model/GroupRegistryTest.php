@@ -33,7 +33,7 @@ class GroupRegistryTest extends TestCase
     {
         $this->groupFactory = $this->getMockBuilder(GroupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->unit = new GroupRegistry($this->groupFactory);
     }
@@ -47,7 +47,7 @@ class GroupRegistryTest extends TestCase
     {
         $groupId = 1;
         $group = $this->getMockBuilder(Group::class)
-            ->setMethods(['load', 'getId', '__wakeup'])
+            ->onlyMethods(['load', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $group->expects($this->once())
@@ -77,7 +77,7 @@ class GroupRegistryTest extends TestCase
 
         $groupId = 1;
         $group = $this->getMockBuilder(Group::class)
-            ->setMethods(['load', 'getId', '__wakeup'])
+            ->onlyMethods(['load', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $group->expects($this->once())
@@ -103,7 +103,7 @@ class GroupRegistryTest extends TestCase
         $groupId = 1;
         $group = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', '__wakeup'])
+            ->onlyMethods(['load', 'getId', '__wakeup'])
             ->getMock();
         $group->expects($this->exactly(2))
             ->method('load')

@@ -15,6 +15,7 @@
             <description value="Admin Can Create Category Anchor setting and it should work perfectly"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4587"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategoryA"/>
@@ -45,6 +46,12 @@
             <requiredEntity createDataKey="createCategoryA"/>
             <field key="name">A</field>
         </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices1">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageFirstTime">
             <argument name="categoryName" value="$$createCategoryA.name$$"/>
         </actionGroup>
@@ -65,6 +72,12 @@
             <requiredEntity createDataKey="createCategoryB"/>
             <field key="name">B</field>
         </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices2">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openCategoryBPage">
             <argument name="categoryName" value="$$createCategoryA.name$$"/>
             <argument name="subCategoryName" value="$$createCategoryB.name$$"/>
@@ -95,6 +108,12 @@
             <requiredEntity createDataKey="createCategoryC"/>
             <field key="name">C</field>
         </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices3">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory1"/>
 
         <!-- admin side category tree hierarchy validation for category A, category B and category C-->
         <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForThree($createCategoryA.name$,$createCategoryB.name$,$createCategoryC.name$)}}"  stepKey="verifyThreeLayerCategoryTree"/>
@@ -142,6 +161,12 @@
             <field key="name">D</field>
         </createData>
 
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices4">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory2"/>
+
         <!-- admin side category tree hierarchy validation with product qty for category A, category B, category C and category D-->
         <reloadPage stepKey="refreshEditCategoryDPage" />
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandAll"/>
@@ -177,6 +202,12 @@
             <requiredEntity createDataKey="createCategoryE"/>
             <field key="name">E</field>
         </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices5">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory3"/>
 
         <!-- admin side category tree hierarchy validation with product qty for category A, category B, category C, category D and category E-->
         <reloadPage stepKey="refreshCategoryEPage" />

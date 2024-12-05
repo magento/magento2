@@ -19,6 +19,7 @@
             <group value="catalog"/>
             <group value="configurableProduct"/>
             <group value="swatch"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

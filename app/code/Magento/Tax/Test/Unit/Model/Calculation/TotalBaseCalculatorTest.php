@@ -13,6 +13,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 {
+    /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
     /** @var MockObject */
     protected $totalBaseCalculator;
 
@@ -27,7 +32,11 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             $this->taxDetailsItem,
             $this->calculate($this->totalBaseCalculator)
         );
-        $this->assertEquals(self::UNIT_PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+        $this->assertEqualsWithDelta(
+            self::UNIT_PRICE_INCL_TAX_ROUNDED,
+            $this->taxDetailsItem->getPriceInclTax(),
+            self::EPSILON
+        );
     }
 
     public function testCalculateWithTaxInPriceNoRounding()
@@ -41,7 +50,11 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             $this->taxDetailsItem,
             $this->calculate($this->totalBaseCalculator, false)
         );
-        $this->assertEquals(self::UNIT_PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
+        $this->assertEqualsWithDelta(
+            self::UNIT_PRICE_INCL_TAX,
+            $this->taxDetailsItem->getPriceInclTax(),
+            self::EPSILON
+        );
     }
 
     public function testCalculateWithTaxNotInPrice()
@@ -61,7 +74,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $taxClassService = $this->getMockForAbstractClass(TaxClassManagementInterface::class);
         $this->totalBaseCalculator = $this->getMockBuilder(TotalBaseCalculator::class)
-            ->setMethods(['deltaRound'])
+            ->onlyMethods(['deltaRound'])
             ->setConstructorArgs(
                 [
                     'taxClassService' => $taxClassService,

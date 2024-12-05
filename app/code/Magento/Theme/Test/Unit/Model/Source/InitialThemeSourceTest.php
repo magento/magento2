@@ -69,7 +69,7 @@ class InitialThemeSourceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeFactoryMock = $this->getMockBuilder(ThemeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeMock = $this->getMockBuilder(Theme::class)
@@ -77,12 +77,13 @@ class InitialThemeSourceTest extends TestCase
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['sort', 'from'])
+            ->addMethods(['sort'])
+            ->onlyMethods(['from'])
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();
         $this->dataObjectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectMock = $this->getMockBuilder(DataObject::class)

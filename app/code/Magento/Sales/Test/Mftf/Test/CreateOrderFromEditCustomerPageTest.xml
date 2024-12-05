@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-16161"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -82,7 +83,9 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomerGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
@@ -127,17 +130,17 @@
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckBoxToVisible"/> 
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckBoxToVisible"/>
         <actionGroup ref="AdminSelectAddToOrderCheckboxForSimpleProductInWishListSectionOnCreateOrderPageActionGroup" stepKey="selectProductToAddToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
-        </actionGroup>    
+        </actionGroup>
         <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesButton"/>
 
         <actionGroup ref="AdminClickConfigureAndAddToOrderForConfigurableProductInWishListSectionOnCreateOrderPageActionGroup" stepKey="AddConfigurableProductToOrder">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="productAttribute" value="$$createConfigProductAttribute$$"/>
             <argument name="option" value="$$getConfigAttributeOption1$$"/>
-        </actionGroup>    
+        </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfigurablePopover"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectConfigurableOption"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOkButton"/>
@@ -161,7 +164,7 @@
         </actionGroup>
         <actionGroup ref="AdminClickUpdateItemsAndQuantitesOnCreateOrderPageActionGroup" stepKey="clickOnUpdateItems"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminCreateOrderShoppingCartSectionPageLoad"/>
- 
+
         <actionGroup ref="AdminAssertProductInShoppingCartSectionActionGroup" stepKey="seeProductInShoppingCart">
             <argument name="product" value="$$simpleProduct.name$$"/>
         </actionGroup>
@@ -172,10 +175,10 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAddToOrderCheckBox"/>
         <actionGroup ref="AdminSelectAddToOrderCheckboxInShoppingCartOnCreateOrderPageActionGroup" stepKey="selectFirstProduct">
             <argument name="product" value="$$simpleProduct$$"/>
-        </actionGroup>    
+        </actionGroup>
         <actionGroup ref="AdminSelectAddToOrderCheckboxInShoppingCartOnCreateOrderPageActionGroup" stepKey="selectSecondProduct">
             <argument name="product" value="$$simpleProduct1$$"/>
-        </actionGroup>    
+        </actionGroup>
         <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickOnUpdateButton1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminCreateOrderShoppingCartSectionPageLoad1"/>
 
@@ -214,6 +217,9 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad1"/>
 
         <actionGroup ref="AdminClickOrdersItemOnCustomerEditPageActionGroup" stepKey="clickOnOrdersButton"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToOpen"/>
         <actionGroup ref="AdminOpenOrderByIdFromOrdersGridOnCustomerEditPageActionGroup" stepKey="selectOnOrderID">
             <argument name="orderId" value="$orderId"/>

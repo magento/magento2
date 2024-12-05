@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Image abstract adapter
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -27,25 +28,25 @@ abstract class AbstractAdapter implements AdapterInterface
      * Position constants.
      * Used mainly for watermarks
      */
-    const POSITION_TOP_LEFT = 'top-left';
+    public const POSITION_TOP_LEFT = 'top-left';
 
-    const POSITION_TOP_RIGHT = 'top-right';
+    public const POSITION_TOP_RIGHT = 'top-right';
 
-    const POSITION_BOTTOM_LEFT = 'bottom-left';
+    public const POSITION_BOTTOM_LEFT = 'bottom-left';
 
-    const POSITION_BOTTOM_RIGHT = 'bottom-right';
+    public const POSITION_BOTTOM_RIGHT = 'bottom-right';
 
-    const POSITION_STRETCH = 'stretch';
+    public const POSITION_STRETCH = 'stretch';
 
-    const POSITION_TILE = 'tile';
+    public const POSITION_TILE = 'tile';
 
-    const POSITION_CENTER = 'center';
+    public const POSITION_CENTER = 'center';
     /**#@-*/
 
     /**
      * The size of the font to use as default
      */
-    const DEFAULT_FONT_SIZE = 15;
+    public const DEFAULT_FONT_SIZE = 15;
 
     /**
      * @var  int
@@ -604,7 +605,10 @@ abstract class AbstractAdapter implements AdapterInterface
             }
             // keep aspect ratio
             if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
-                $dstHeight = round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight);
+                $dstHeight = max(
+                    1,
+                    round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight)
+                );
             } else {
                 $dstWidth = round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
             }
@@ -624,7 +628,7 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         if ($frameWidth !== null && $frameWidth <= 0 ||
             $frameHeight !== null && $frameHeight <= 0 ||
-            empty($frameWidth) && empty($frameHeight)
+            ($frameWidth === null && $frameHeight === null)
         ) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \InvalidArgumentException('Invalid image dimensions.');

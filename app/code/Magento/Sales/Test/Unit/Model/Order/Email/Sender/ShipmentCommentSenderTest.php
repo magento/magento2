@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Sales\Model\Order\Shipment;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ShipmentCommentSenderTest extends AbstractSenderTest
+class ShipmentCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var ShipmentCommentSender

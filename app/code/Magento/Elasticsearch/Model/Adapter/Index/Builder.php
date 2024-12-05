@@ -105,6 +105,12 @@ class Builder implements BuilderInterface
                 'tokenizer' => $tokenizer,
                 'filter' => array_merge($filter, $synonymFilter),
                 'char_filter' => $charFilter,
+                'normalizer' => [
+                    'folding' => [
+                        'type' => 'custom',
+                        'filter' => ['asciifolding', 'lowercase'],
+                    ],
+                ],
             ],
         ];
 

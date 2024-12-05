@@ -133,7 +133,7 @@ class NewsletterTest extends TestCase
 
         $this->_response = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect', 'getHeader', '__wakeup'])
+            ->onlyMethods(['setRedirect', 'getHeader', '__wakeup'])
             ->getMock();
 
         $this->_response->expects(
@@ -149,7 +149,7 @@ class NewsletterTest extends TestCase
         $this->_objectManager = $this->getMockBuilder(
             ObjectManager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['get', 'create']
             )->getMock();
         $frontControllerMock = $this->getMockBuilder(
@@ -164,7 +164,7 @@ class NewsletterTest extends TestCase
         $this->_session = $this->getMockBuilder(
             Session::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 ['setIsUrlNotice', '__wakeup']
             )->getMock();
         $this->_session->expects($this->any())->method('setIsUrlNotice');
@@ -172,39 +172,41 @@ class NewsletterTest extends TestCase
         $this->_helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getUrl']
             )->getMock();
 
         $this->messageManager = $this->getMockBuilder(
             Manager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['addSuccess', 'addMessage', 'addException']
             )->getMock();
+
+        $addContextArgs = [
+            'getTranslator',
+            'getFrontController',
+            'getLayoutFactory',
+            'getTitle'
+        ];
 
         $contextArgs = [
             'getHelper',
             'getSession',
             'getAuthorization',
-            'getTranslator',
             'getObjectManager',
-            'getFrontController',
             'getActionFlag',
             'getMessageManager',
-            'getLayoutFactory',
             'getEventManager',
             'getRequest',
             'getResponse',
-            'getTitle',
             'getView'
         ];
-        $contextMock = $this->getMockBuilder(
-            Context::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                $contextArgs
-            )->getMock();
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->addMethods($addContextArgs)
+            ->onlyMethods($contextArgs)
+            ->getMock();
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_response);
         $contextMock->expects(

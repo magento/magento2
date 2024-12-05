@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
@@ -15,7 +15,8 @@
         "magento/module-sales": "*",
         "magento/module-sales-rule": "*",
         "magento/module-shipping": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-async-config": "*"
     },
     "suggest": {
         "magento/module-checkout": "*",

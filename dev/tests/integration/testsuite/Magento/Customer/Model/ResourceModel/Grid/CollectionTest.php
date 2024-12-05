@@ -8,6 +8,8 @@ namespace Magento\Customer\Model\ResourceModel\Grid;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Indexer\TestCase;
@@ -17,6 +19,7 @@ use Magento\TestFramework\Indexer\TestCase;
  */
 class CollectionTest extends TestCase
 {
+
     public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()
@@ -28,6 +31,9 @@ class CollectionTest extends TestCase
         }
         $db->restoreFromDbDump();
 
+        $indexerRegistry = Bootstrap::getObjectManager()->create(IndexerRegistry::class);
+        $indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
         parent::setUpBeforeClass();
     }
 
@@ -87,13 +93,5 @@ class CollectionTest extends TestCase
         $expectedSelect = "WHERE (((`main_table`.`created_at` = '{$convertedDate}')))";
 
         $this->assertStringContainsString($expectedSelect, $collection->getSelectSql(true));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
     }
 }

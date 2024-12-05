@@ -17,8 +17,10 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13097"/>
             <group value="OnePageCheckout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
@@ -39,9 +41,9 @@
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
-
             <!-- Logout admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
         <!-- Go to Storefront as Guest and create new account -->
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>

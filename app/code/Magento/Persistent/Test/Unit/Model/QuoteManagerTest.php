@@ -343,30 +343,38 @@ class QuoteManagerTest extends TestCase
      */
     public function testConvertCustomerCartToGuest(): void
     {
-        $quoteId = 1;
         $addressArgs = ['customerAddressId' => null];
         $customerIdArgs = ['customerId' => null];
-        $emailArgs = ['email' => null];
+        $email = 'test@example.com';
+        $firstname = 'Firstname';
+        $lastname = 'Lastname';
 
-        $this->checkoutSessionMock->expects($this->once())
-            ->method('getQuoteId')->willReturn($quoteId);
-        $this->quoteMock->expects($this->once())->method('getId')->willReturn($quoteId);
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->with($quoteId)->willReturn($this->quoteMock);
+        $billingAddressMock = $this->createMock(Address::class);
+        $billingAddressMock->method('getEmail')->willReturn($email);
+        $billingAddressMock->method('getFirstname')->willReturn($firstname);
+        $billingAddressMock->method('getLastname')->willReturn($lastname);
+        $this->quoteMock->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->quoteMock->expects($this->once())
-            ->method('setIsActive')->with(true)->willReturn($this->quoteMock);
+            ->method('setCustomerId')
+            ->with(null)
+            ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
-            ->method('setCustomerId')->with(null)->willReturn($this->quoteMock);
+            ->method('setCustomerEmail')->with($email)
+            ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
-            ->method('setCustomerEmail')->with(null)->willReturn($this->quoteMock);
+            ->method('setCustomerFirstname')
+            ->with($firstname)
+            ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
-            ->method('setCustomerFirstname')->with(null)->willReturn($this->quoteMock);
+            ->method('setCustomerLastname')->with($lastname)
+            ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
-            ->method('setCustomerLastname')->with(null)->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->never())->method('setCustomerGroupId')
+            ->method('setCustomerGroupId')
+            ->with(0)
             ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
             ->method('setIsPersistent')->with(false)->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->exactly(3))
+        $this->quoteMock->expects($this->exactly(2))
             ->method('getAddressesCollection')->willReturn($this->abstractCollectionMock);
         $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock->expects($this->once())
@@ -375,49 +383,18 @@ class QuoteManagerTest extends TestCase
             ->willReturnSelf();
         $this->quoteMock->expects($this->once())
             ->method('getCustomer')->willReturn($customerMock);
-        $this->abstractCollectionMock->expects($this->exactly(3))->method('walk')->with(
+        $this->abstractCollectionMock->expects($this->exactly(2))->method('walk')->with(
             $this->logicalOr(
                 $this->equalTo('setCustomerAddressId'),
                 $this->equalTo($addressArgs),
                 $this->equalTo('setCustomerId'),
-                $this->equalTo($customerIdArgs),
-                $this->equalTo('setEmail'),
-                $this->equalTo($emailArgs)
+                $this->equalTo($customerIdArgs)
             )
         );
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
-        $this->persistentSessionMock->expects($this->once())
-            ->method('getSession')->willReturn($this->sessionMock);
-        $this->sessionMock->expects($this->once())
-            ->method('removePersistentCookie')->willReturn($this->sessionMock);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
 
-        $this->model->convertCustomerCartToGuest();
-    }
-
-    /**
-     * @return void
-     */
-    public function testConvertCustomerCartToGuestWithEmptyQuote(): void
-    {
-        $this->checkoutSessionMock->expects($this->once())
-            ->method('getQuoteId')->willReturn(null);
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->with(null)->willReturn(null);
-        $this->model->convertCustomerCartToGuest();
-    }
-
-    /**
-     * @return void
-     */
-    public function testConvertCustomerCartToGuestWithEmptyQuoteId(): void
-    {
-        $this->checkoutSessionMock->expects($this->once())
-            ->method('getQuoteId')->willReturn(1);
-        $quoteWithNoId = $this->quoteMock = $this->createMock(Quote::class);
-        $quoteWithNoId->expects($this->once())->method('getId')->willReturn(null);
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->with(1)->willReturn($quoteWithNoId);
-        $this->quoteMock->expects($this->once())->method('getId')->willReturn(1);
-        $this->model->convertCustomerCartToGuest();
+        $this->model->convertCustomerCartToGuest($this->quoteMock);
     }
 
     /**

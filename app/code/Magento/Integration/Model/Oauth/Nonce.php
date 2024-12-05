@@ -7,7 +7,6 @@ namespace Magento\Integration\Model\Oauth;
 
 /**
  * Nonce model
- * @author Magento Core Team <core@magentocommerce.com>
  * @method string getNonce()
  * @method \Magento\Integration\Model\Oauth\Nonce setNonce() setNonce(string $nonce)
  * @method int getConsumerId()
@@ -18,7 +17,7 @@ namespace Magento\Integration\Model\Oauth;
 class Nonce extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Oauth data
+     * Oauth data function
      *
      * @var \Magento\Integration\Helper\Oauth\Data
      */

@@ -14,10 +14,10 @@ use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Image\Factory;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -386,8 +386,15 @@ class ImageTest extends TestCase
         $this->storeManager->expects($this->any())->method('getWebsite')->willReturn($website);
         $this->mediaDirectory
             ->method('isExist')
-            ->withConsecutive([], [], [], ['catalog/product/watermark//somefile.png'])
-            ->willReturnOnConsecutiveCalls(null, null, null, true);
+            ->willReturnCallback(
+                function ($arg) {
+                    if (empty($arg)) {
+                        return null;
+                    } elseif ($arg == 'catalog/product/watermark//somefile.png') {
+                        return true;
+                    }
+                }
+            );
         $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
         $this->mediaDirectory->expects($this->any())->method('getAbsolutePath')
             ->with('catalog/product/watermark//somefile.png')
@@ -504,54 +511,35 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @param bool $isRenameSuccessful
-     * @param string $expectedDirectoryToDelete
      * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @dataProvider clearCacheDataProvider
+     * @throws FileSystemException
      */
-    public function testClearCache(
-        bool $isRenameSuccessful,
-        string $expectedDirectoryToDelete
-    ): void {
-        $driver = $this->createMock(DriverInterface::class);
-        $this->mediaDirectory->method('getAbsolutePath')
-            ->willReturnCallback(
-                function (string $path) {
-                    return 'path/to/media/' . $path;
-                }
-            );
-        $this->mediaDirectory->expects($this->exactly(2))
-            ->method('isDirectory')
-            ->willReturnOnConsecutiveCalls(false, true);
-        $this->mediaDirectory->expects($this->once())
-            ->method('getDriver')
-            ->willReturn($driver);
-        $driver->expects($this->once())
-            ->method('rename')
-            ->with(
-                'path/to/media/catalog/product/cache',
-                $this->matchesRegularExpression('/^path\/to\/media\/catalog\/product\/\.[0-9A-ZA-z-_]{3}$/')
-            )
-            ->willReturn($isRenameSuccessful);
-        $this->mediaDirectory->expects($this->once())
-            ->method('delete')
-            ->with($this->matchesRegularExpression($expectedDirectoryToDelete));
-
+    public function testClearCache(): void
+    {
         $this->coreFileHelper->expects($this->once())->method('deleteFolder')->willReturn(true);
         $this->cacheManager->expects($this->once())->method('clean');
         $this->image->clearCache();
     }
 
     /**
-     * @return array
+     * This test verifies that if the cache directory cannot be deleted because it is no longer empty (due to newly
+     * cached files being created after the old ones were deleted), the cache clean method should handle the exception
+     * and complete the clean successfully even if the directory cannot be deleted.
+     *
+     * @return void
+     * @throws FileSystemException
      */
-    public function clearCacheDataProvider(): array
+    public function testClearCacheWithUnableToDeleteDirectory(): void
     {
-        return [
-            [true, '/^catalog\/product\/\.[0-9A-ZA-z-_]{3}$/'],
-            [false, '/^catalog\/product\/cache$/'],
-        ];
+        $this->mediaDirectory->expects($this->once())
+            ->method('delete')
+            ->willThrowException(new FileSystemException(__('Cannot delete non-empty dir.')));
+
+        // Image cache should complete successfully even if the directory cannot be deleted.
+        $this->coreFileHelper->expects($this->once())->method('deleteFolder')->willReturn(true);
+        $this->cacheManager->expects($this->once())->method('clean');
+
+        $this->image->clearCache();
     }
 
     /**

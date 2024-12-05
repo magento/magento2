@@ -7,18 +7,23 @@
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\ConfigurableMaxPriceCalculator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Class RegularPrice
  */
-class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegularPriceInterface
+class ConfigurableRegularPrice extends AbstractPrice implements
+    ConfigurableRegularPriceInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Price type
      */
-    const PRICE_CODE = 'regular_price';
+    public const PRICE_CODE = 'regular_price';
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
@@ -51,11 +56,17 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     private $lowestPriceOptionsProvider;
 
     /**
+     * @var ConfigurableMaxPriceCalculator
+     */
+    private $configurableMaxPriceCalculator;
+
+    /**
      * @param \Magento\Framework\Pricing\SaleableInterface $saleableItem
      * @param float $quantity
      * @param \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param PriceResolverInterface $priceResolver
+     * @param ConfigurableMaxPriceCalculator $configurableMaxPriceCalculator
      * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
      */
     public function __construct(
@@ -64,16 +75,18 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
         \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         PriceResolverInterface $priceResolver,
+        ConfigurableMaxPriceCalculator $configurableMaxPriceCalculator,
         LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->priceResolver = $priceResolver;
         $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
             ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
+        $this->configurableMaxPriceCalculator = $configurableMaxPriceCalculator;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue()
     {
@@ -85,7 +98,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAmount()
     {
@@ -93,7 +106,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMaxRegularAmount()
     {
@@ -121,7 +134,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMinRegularAmount()
     {
@@ -159,8 +172,11 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
+     * Retrieve Configurable Option Provider
+     *
      * @return \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface
      * @deprecated 100.1.1
+     * @see we don't recommend this approach anymore
      */
     private function getConfigurableOptionsProvider()
     {
@@ -169,5 +185,37 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
                 ->get(ConfigurableOptionsProviderInterface::class);
         }
         return $this->configurableOptionsProvider;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->values = [];
+    }
+
+    /**
+     * Check whether Configurable Product have more than one children products
+     *
+     * @param SaleableInterface $product
+     * @return bool
+     */
+    public function isChildProductsOfEqualPrices(SaleableInterface $product): bool
+    {
+        $minPrice = $this->getMinRegularAmount()->getValue();
+        $final_price = $product->getFinalPrice();
+        $productId = $product->getId();
+        if ($final_price < $minPrice) {
+            return false;
+        }
+        $attributes = $product->getTypeInstance()->getConfigurableAttributes($product);
+        $items = $attributes->getItems();
+        $options = reset($items);
+        $maxPrice = $this->configurableMaxPriceCalculator->getMaxPriceForConfigurableProduct($productId);
+        if ($maxPrice == 0) {
+            $maxPrice = $this->getMaxRegularAmount()->getValue();
+        }
+        return (count($options->getOptions()) > 1) && $minPrice == $maxPrice;
     }
 }

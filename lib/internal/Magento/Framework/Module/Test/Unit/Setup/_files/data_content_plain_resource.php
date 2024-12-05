@@ -8,7 +8,7 @@ use Magento\Framework\Module\Setup\Migration;
  * See COPYING.txt for license details.
  */
 return [
-    '$replaceRules' => [
+    'replaceRules' => [
         [
             'table',
             'collection',
@@ -18,8 +18,8 @@ return [
             'flag = 1',
         ],
     ],
-    '$tableData' => [['collection' => 'customer/attribute_collection']],
-    '$expected' => [
+    'tableData' => [['collection' => 'customer/attribute_collection']],
+    'expected' => [
         'updates' => [
             [
                 'table' => 'table',

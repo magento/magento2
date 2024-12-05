@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SamplePaypalConfig" type="paypal_config_state">
         <requiredEntity type="business_account">SampleBusinessAccount</requiredEntity>
         <requiredEntity type="api_username">SampleApiUsername</requiredEntity>
@@ -127,7 +127,51 @@
     <entity name="Payer">
         <data key="firstName">Alex</data>
     </entity>
-
+    <entity name="PaypalPayflowAdvancedConfig" type="paypal_payflow_Advanced_config_state">
+        <requiredEntity type="business_account">PaypalPayflowAdvancedBusinessAccount</requiredEntity>
+        <requiredEntity type="partner">EnterPaypalPayAdvancedPartner</requiredEntity>
+        <requiredEntity type="user">EnterPaypalPayAdvancedUser</requiredEntity>
+        <requiredEntity type="vendor">EnterPaypalPayAdvancedVendor</requiredEntity>
+        <requiredEntity type="pwd">EnterPaymentAdvancedPassword</requiredEntity>
+        <requiredEntity type="sandbox_flag">EnablePaymentAdvancedSandbox</requiredEntity>
+        <requiredEntity type="use_proxy">UseProxyAdvanced</requiredEntity>
+    </entity>
+    <entity name="EnterPaypalPayAdvancedPartner" type="text">
+        <data key="path">payment/payflow_advanced/partner</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_partner}}</data>
+    </entity>
+    <entity name="EnterPaypalPayAdvancedVendor" type="text">
+        <data key="path">payment/payflow_advanced/vendor</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_vendor}}</data>
+    </entity>
+    <entity name="EnterPaypalPayAdvancedUser" type="password">
+        <data key="path">payment/payflow_advanced/user</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_user}}</data>
+    </entity>
+    <entity name="EnterPaymentAdvancedPassword" type="password">
+        <data key="path">payment/payflow_advanced/pwd</data>
+        <data key="value">{{_CREDS.magento/paypal_paymentsflowlink_password}}</data>
+    </entity>
+    <entity name="EnablePaymentAdvancedSandbox">
+        <data key="path">payment/payflow_advanced/sandbox_flag</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnablePaymentAdvancedSolution">
+        <data key="path">payment/payflow_advanced/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaymentAdvancedSolution">
+        <data key="path">payment/payflow_advanced/active</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnablePaymentAdvancedPaypalCredit">
+        <data key="path">payment/payflow_express_bml/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaymentAdvancedPaypalCredit">
+        <data key="path">payment/payflow_express_bml/active</data>
+        <data key="value">0</data>
+    </entity>
     <!-- configuration used for paypal payflow pro -->
     <entity name="EnablePaypalPayflowProWithVault" type="custom_paypal_payflow_pro_config_state">
         <requiredEntity type="enable_paypal_payflow">EnablePaypalPayflowProMethod</requiredEntity>
@@ -150,15 +194,19 @@
         <data key="value">{{_CREDS.magento/payflow_pro_business_account}}</data>
     </entity>
     <entity name="PaypalPayflowProPartner" type="partner">
+        <data key="path">payment/payflowpro/partner</data>
         <data key="value">{{_CREDS.magento/payflow_pro_partner}}</data>
     </entity>
     <entity name="PaypalPayflowProUser" type="user">
+        <data key="path">payment/payflowpro/user</data>
         <data key="value">{{_CREDS.magento/payflow_pro_user}}</data>
     </entity>
     <entity name="PaypalPayflowProVendor" type="vendor">
+        <data key="path">payment/payflowpro/vendor</data>
         <data key="value">{{_CREDS.magento/payflow_pro_vendor}}</data>
     </entity>
     <entity name="PaypalPayflowProPassword" type="pwd">
+        <data key="path">payment/payflowpro/pwd</data>
         <data key="value">{{_CREDS.magento/payflow_pro_pwd}}</data>
     </entity>
     <!-- default configuration used to restore Magento config -->
@@ -191,9 +239,19 @@
         <data key="value">0</data>
     </entity>
     <entity name="EnablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
+        <data key="path">payment/payflowpro_cc_vault/active</data>
         <data key="value">1</data>
     </entity>
     <entity name="DisablePaypalPayflowProVault" type="payflowpro_cc_vault_active">
+        <data key="path">payment/payflowpro_cc_vault/active</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnablePaypalPayStandard">
+        <data key="path">payment/wps_express/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaypalPayStandard">
+        <data key="path">payment/wps_express/active</data>
         <data key="value">0</data>
     </entity>
     <entity name="Visa3DSecureCard" type="data">
@@ -214,7 +272,7 @@
     </entity>
     <entity name="VisaDefaultCardInfo">
         <data key="cardNumberEnding">1111</data>
-        <data key="cardExpire">01/2030</data>
+        <data key="cardExpire">1/2030</data>
     </entity>
     <entity name="SamplePaypalExpressConfig2" type="paypal_express_config">
         <data key="paypal_express_email">rlus_1349181941_biz@ebay.com</data>
@@ -222,5 +280,39 @@
         <data key="paypal_express_api_password">MDNAZYSJBDYNA6BN</data>
         <data key="paypal_express_api_signature">AFcWxV21C7fd0v3bYYYRCpSSRl31AqoP3QLd.JUUpDPuPpQIgT0-m401</data>
         <data key="paypal_express_merchantID">54Z2EE6T7PRB4</data>
+    </entity>
+    <entity name="SamplePaypalPaymentsProConfig" type="paypal_paymentspro_config">
+        <data key="paypal_paymentspro_parner">PayPal</data>
+        <data key="paypal_paymentspro_user">MksGLTest</data>
+        <data key="paypal_paymentspro_vendor">MksGLTest</data>
+        <data key="paypal_paymentspro_password">Abcd@123</data>
+    </entity>
+    <entity name="SamplePaypalPaymentsFlowLinkConfig" type="paypal_payment_flow_Link_config">
+        <data key="paypal_paymentsflowlink_businessacct">us_m2_biz@ebay.com</data>
+        <data key="paypal_paymentsflowlink_partner">PayPal</data>
+        <data key="paypal_paymentsflowlink_user">mpilink</data>
+        <data key="paypal_paymentsflowlink_vendor">mpilink</data>
+        <data key="paypal_paymentsflowlink_password">1234_1234L!</data>
+    </entity>
+    <entity name="validCreditCard" type="data">
+        <data key="cardNumber">4111111111111111</data>
+        <data key="month">12</data>
+        <data key="year">25</data>
+        <data key="cvv">123</data>
+    </entity>
+    <!-- configuration used for paypal PaymentsAdvanced-->
+    <entity name="SamplePaypalPaymentsAdvancedConfig" type="payflow_advanced_config">
+        <data key="payflow_advanced_partner">PayPal</data>
+        <data key="payflow_advanced_user">mpilink</data>
+        <data key="payflow_advanced_vendor">mpilink</data>
+        <data key="payflow_advanced_password">1234_1234L!</data>
+    </entity>
+    <entity name="EnablePaypalPayStandardNew">
+        <data key="path">payment/wps_express/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaypalPayStandardNew">
+        <data key="path">payment/wps_express/active</data>
+        <data key="value">0</data>
     </entity>
 </entities>

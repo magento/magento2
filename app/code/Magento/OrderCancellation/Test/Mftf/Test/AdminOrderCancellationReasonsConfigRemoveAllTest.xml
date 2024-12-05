@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCancellationReasonsConfigRemoveAllTest">
+        <annotations>
+            <features value="Order Cancellation"/>
+            <stories value="Remove order cancellation reasons through the admin."/>
+            <title value="Remove delete order cancellation reasons through the admin."/>
+            <description value="Test that removing all order cancellation reasons through the admin yields an error when saving."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="LYNX-189"/>
+            <group value="configuration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminOrderCancellationConfigPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminSalesConfigPageLoad"/>
+        <conditionalClick selector="{{AdminOrderCancellationConfigSection.salesCancellationHead}}" dependentSelector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellationReasons}}" visible="false"  stepKey="clickElementToExpand"/>
+        <uncheckOption selector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellationReasons}}" stepKey="uncheckUseSystemValue"/>
+        <click selector="{{AdminOrderCancellationConfigSection.deleteFirstReason}}" stepKey="deleteDefaultReason1"/>
+        <click selector="{{AdminOrderCancellationConfigSection.deleteFirstReason}}" stepKey="deleteDefaultReason2"/>
+        <click selector="{{AdminOrderCancellationConfigSection.deleteFirstReason}}" stepKey="deleteDefaultReason3"/>
+        <click selector="{{AdminOrderCancellationConfigSection.deleteFirstReason}}" stepKey="deleteDefaultReason4"/>
+        <click selector="{{AdminOrderCancellationConfigSection.deleteFirstReason}}" stepKey="deleteDefaultReason5"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.error}}" stepKey="waitForElementVisible"/>
+        <see selector="{{AdminMessagesSection.error}}" userInput="At least one reason value is required" stepKey="seeConfigErrorMessage"/>
+    </test>
+</tests>

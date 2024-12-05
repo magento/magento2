@@ -27,6 +27,8 @@
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
             <waitForPageLoad stepKey="waitForPageToLoad1"/>
 
@@ -41,11 +43,11 @@
             <see selector="{{AdminNewCatalogPriceRule.successMessage}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
         </before>
         <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
-
             <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer1"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategoryFirst1"/>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
         </after>
 
         <!-- Delete the simple product and catalog price rule -->

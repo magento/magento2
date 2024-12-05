@@ -72,7 +72,7 @@ class BuilderTest extends TestCase
             DataProviderFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);

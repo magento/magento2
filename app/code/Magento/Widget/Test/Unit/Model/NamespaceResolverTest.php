@@ -62,7 +62,7 @@ class NamespaceResolverTest extends TestCase
     /**
      * @return array
      */
-    public function determineOmittedNamespaceDataProvider()
+    public static function determineOmittedNamespaceDataProvider()
     {
         return[
             [

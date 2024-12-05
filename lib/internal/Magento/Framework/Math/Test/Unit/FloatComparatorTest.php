@@ -43,7 +43,7 @@ class FloatComparatorTest extends TestCase
      *
      * @return array
      */
-    public function eqDataProvider(): array
+    public static function eqDataProvider(): array
     {
         return [
             [10, 10.00001, true],
@@ -72,7 +72,7 @@ class FloatComparatorTest extends TestCase
      *
      * @return array
      */
-    public function gtDataProvider(): array
+    public static function gtDataProvider(): array
     {
         return [
             [10, 10.00001, false],
@@ -101,7 +101,7 @@ class FloatComparatorTest extends TestCase
      *
      * @return array
      */
-    public function gteDataProvider(): array
+    public static function gteDataProvider(): array
     {
         return [
             [10, 10.00001, true],

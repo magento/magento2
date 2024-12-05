@@ -9,9 +9,8 @@ namespace Magento\CustomerGraphQl\Model\Customer\Address;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Directory\Helper\Data as DirectoryData;
-use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Exception\AbstractAggregateException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
@@ -21,73 +20,19 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 class UpdateCustomerAddress
 {
     /**
-     * @var GetAllowedAddressAttributes
-     */
-    private $getAllowedAddressAttributes;
-
-    /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private $dataObjectHelper;
-
-    /**
-     * @var array
-     */
-    private $restrictedKeys;
-
-    /**
-     * @var DirectoryData
-     */
-    private $directoryData;
-
-    /**
-     * @var RegionCollectionFactory
-     */
-    private $regionCollectionFactory;
-
-    /**
-     * @var ValidateAddress
-     */
-    private $addressValidator;
-
-    /**
-     * @var PopulateCustomerAddressFromInput
-     */
-    private $populateCustomerAddressFromInput;
-
-    /**
-     * @param GetAllowedAddressAttributes $getAllowedAddressAttributes
      * @param AddressRepositoryInterface $addressRepository
      * @param DataObjectHelper $dataObjectHelper
-     * @param DirectoryData $directoryData
-     * @param RegionCollectionFactory $regionCollectionFactory
      * @param ValidateAddress $addressValidator
      * @param PopulateCustomerAddressFromInput $populateCustomerAddressFromInput
      * @param array $restrictedKeys
      */
     public function __construct(
-        GetAllowedAddressAttributes $getAllowedAddressAttributes,
-        AddressRepositoryInterface $addressRepository,
-        DataObjectHelper $dataObjectHelper,
-        DirectoryData $directoryData,
-        RegionCollectionFactory $regionCollectionFactory,
-        ValidateAddress $addressValidator,
-        PopulateCustomerAddressFromInput $populateCustomerAddressFromInput,
-        array $restrictedKeys = []
+        private readonly AddressRepositoryInterface $addressRepository,
+        private readonly DataObjectHelper $dataObjectHelper,
+        private readonly ValidateAddress $addressValidator,
+        private readonly PopulateCustomerAddressFromInput $populateCustomerAddressFromInput,
+        private readonly array $restrictedKeys = []
     ) {
-        $this->getAllowedAddressAttributes = $getAllowedAddressAttributes;
-        $this->addressRepository = $addressRepository;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->directoryData = $directoryData;
-        $this->regionCollectionFactory = $regionCollectionFactory;
-        $this->addressValidator = $addressValidator;
-        $this->populateCustomerAddressFromInput = $populateCustomerAddressFromInput;
-        $this->restrictedKeys = $restrictedKeys;
     }
 
     /**
@@ -103,7 +48,6 @@ class UpdateCustomerAddress
         if (isset($data['country_code'])) {
             $data['country_id'] = $data['country_code'];
         }
-        $this->validateData($data);
 
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
         $this->dataObjectHelper->populateWithArray($address, $filteredData, AddressInterface::class);
@@ -119,35 +63,20 @@ class UpdateCustomerAddress
 
         try {
             $this->addressRepository->save($address);
+        } catch (AbstractAggregateException $e) {
+            $errors = $e->getErrors();
+            if (is_array($errors) && !empty($errors)) {
+                $errorMessages = [];
+                foreach ($errors as $error) {
+                    $errorMessages[] = $error->getMessage();
+                }
+                $errorMessage = implode("\n", $errorMessages);
+            } else {
+                $errorMessage = $e->getMessage();
+            }
+            throw new GraphQlInputException(__($errorMessage), $e);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
-        }
-    }
-
-    /**
-     * Validate customer address update data
-     *
-     * @param array $addressData
-     * @return void
-     * @throws GraphQlInputException
-     */
-    public function validateData(array $addressData): void
-    {
-        $attributes = $this->getAllowedAddressAttributes->execute();
-        $errorInput = [];
-
-        foreach ($attributes as $attributeName => $attributeInfo) {
-            if ($attributeInfo->getIsRequired()
-                && (isset($addressData[$attributeName]) && empty($addressData[$attributeName]))
-            ) {
-                $errorInput[] = $attributeName;
-            }
-        }
-
-        if ($errorInput) {
-            throw new GraphQlInputException(
-                __('Required parameters are missing: %1', [implode(', ', $errorInput)])
-            );
         }
     }
 }

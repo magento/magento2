@@ -54,6 +54,11 @@ class ShippingAddresses implements ResolverInterface
         $cart = $value['model'];
 
         $addressesData = [];
+
+        if ($cart->getIsVirtual()) {
+            return $addressesData;
+        }
+
         $shippingAddresses = $cart->getAllShippingAddresses();
 
         if (count($shippingAddresses)) {

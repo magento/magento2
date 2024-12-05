@@ -90,7 +90,7 @@ class ClassTest extends \PHPUnit\Framework\TestCase
         $model->delete();
     }
 
-    public function classesDataProvider()
+    public static function classesDataProvider()
     {
         return [
             [\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER],

@@ -18,6 +18,7 @@
             <testCaseId value="MC-6317"/>
             <useCaseId value="MAGETWO-91544"/>
             <group value="importExport"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create Product-->

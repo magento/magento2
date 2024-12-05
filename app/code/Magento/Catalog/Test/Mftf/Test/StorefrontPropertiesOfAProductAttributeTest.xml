@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPropertiesOfAProductAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Storefront Properties of a Product Attribute"/>
+            <title value="Sorting of the products in the Strorefront category page based on Storefront Properties of a Product Attribute"/>
+            <description value="This test case verifies the sorting of the products in the Storefront category page based on the configured Storefront Properties for a Product Attribute"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4555"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Step1: Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createTextProductAttribute" stepKey="deleteTextAttribute"/>
+            <deleteData createDataKey="createDateProductAttribute" stepKey="deleteDateAttribute"/>
+            <deleteData createDataKey="createYesNoProductAttribute" stepKey="deleteYesNoAttribute"/>
+            <deleteData createDataKey="createMultiSelectProductAttributeWith2Options" stepKey="deleteMultiSelectAttribute"/>
+            <deleteData createDataKey="createDropdownProductAttributeWith2Options" stepKey="deleteDropdownAttribute"/>
+            <deleteData createDataKey="createPriceProductAttribute" stepKey="deletePriceAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+        <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+        <!-- Step4: Create Text Attribute with used for Sorting in Product Listing as No -->
+        <createData entity="textAttributeWithNoProductSortListing" stepKey="createTextProductAttribute"/>
+        <!-- Step5: Create Date Attribute with used for Sorting in Product Listing as No -->
+        <createData entity="dateAttributeWithNoProductSortListing" stepKey="createDateProductAttribute"/>
+        <!-- Step6: Create Yes / No Attribute with used for Sorting in Product Listing as No -->
+        <createData entity="yesNoAttributeWithNoProductSortListing" stepKey="createYesNoProductAttribute"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openYesNoAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createYesNoProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setDropdownProductUsedForSortingInProductListingAttributeAsNoForYesNoAttribute">
+            <argument name="usedForSortingInProductListing" value="No"/>
+        </actionGroup>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="No" stepKey="setDropdownUseInLayeredNavigationAsNoForYesNoAttribute"/>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveForYesNoAttribute"/>
+        <!-- Step7: Create Multi Select Attribute with used for Sorting in Product Listing as No -->
+        <createData entity="multiSelectAttributeWithNoProductSortListing" stepKey="createMultiSelectProductAttributeWith2Options"/>
+        <createData entity="productAttributeOption1" stepKey="createProductAttributeOption1">
+            <requiredEntity createDataKey="createMultiSelectProductAttributeWith2Options"/>
+        </createData>
+        <createData entity="productAttributeOption2" stepKey="createProductAttributeOption2">
+            <requiredEntity createDataKey="createMultiSelectProductAttributeWith2Options"/>
+        </createData>
+        <!-- Step8: Create Dropdown Attribute with used for Sorting in Product Listing as No and 2 options -->
+        <createData entity="productAttributeWithTwoOptions" stepKey="createDropdownProductAttributeWith2Options"/>
+        <createData entity="productAttributeOption3" stepKey="createProductAttributeOption3">
+            <requiredEntity createDataKey="createDropdownProductAttributeWith2Options"/>
+        </createData>
+        <createData entity="productAttributeOption4" stepKey="createProductAttributeOption4">
+            <requiredEntity createDataKey="createDropdownProductAttributeWith2Options"/>
+        </createData>
+        <!-- Step8.1: Set No for Product used for Sorting in Product Listing for DropdownAttribute -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createDropdownProductAttributeWith2Options.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setDropdownProductUsedForSortingInProductListingAttributeAsNo">
+            <argument name="usedForSortingInProductListing" value="No"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveDropdownProductAttributeWith2Options"/>
+        <!-- Step9: Create Price Attribute with used for Sorting in Product Listing as No -->
+        <createData entity="priceAttributeWithNoProductSortListing" stepKey="createPriceProductAttribute"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openPriceAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createPriceProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setDropdownProductUsedForSortingInProductListingAttributeAsNoForPriceAttribute">
+            <argument name="usedForSortingInProductListing" value="No"/>
+        </actionGroup>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="Filterable (with results)" stepKey="setDropdownUseInLayeredNavigationAsNoForPriceAttribute"/>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveForPriceAttribute"/>
+        <!-- Step9.1: Grab all the product attribute names -->
+        <actionGroup ref="SearchAttributeByCodeOnProductAttributeGridActionGroup" stepKey="navigateToProductAttributeGridToGrabTextAttributeName">
+            <argument name="productAttributeCode" value="attr"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminProductAttributeGridSection.attributeNameInGrid('$$createTextProductAttribute.attribute_code$$')}}" stepKey="grabTextAttributeName"/>
+        <grabTextFrom selector="{{AdminProductAttributeGridSection.attributeNameInGrid('$$createDateProductAttribute.attribute_code$$')}}" stepKey="grabDateAttributeName"/>
+        <grabTextFrom selector="{{AdminProductAttributeGridSection.attributeNameInGrid('$$createYesNoProductAttribute.attribute_code$$')}}" stepKey="grabYesNoAttributeName"/>
+        <grabTextFrom selector="{{AdminProductAttributeGridSection.attributeNameInGrid('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}" stepKey="grabMultiSelectAttributeName"/>
+        <grabTextFrom selector="{{AdminProductAttributeGridSection.attributeNameInGrid('$$createDropdownProductAttributeWith2Options.attribute_code$$')}}" stepKey="grabDropdownAttributeName"/>
+        <grabTextFrom selector="{{AdminProductAttributeGridSection.attributeNameInGrid('$$createPriceProductAttribute.attribute_code$$')}}" stepKey="grabPriceAttributeName"/>
+        <!-- Step10-13: Add all the created 6 attributes to the created attribute set -->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="OpenAttributeSet">
+            <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignTextAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$createTextProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignDateAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$createDateProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignYesNoAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$createYesNoProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignMultiSelectAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$createMultiSelectProductAttributeWith2Options.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignDropdownAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$createDropdownProductAttributeWith2Options.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignPriceAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$$createPriceProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+        <!-- Step 14-20: Create 2 simple products with above created attribute set-->
+        <createData entity="_defaultCategory" stepKey="createCategory"/>
+        <createData entity="_defaultProduct" stepKey="createSimpleProduct1">
+            <requiredEntity createDataKey="createCategory"/>
+            <field key="attribute_set_id">$$createAttributeSet.attribute_set_id$$</field>
+        </createData>
+        <createData entity="_defaultProduct" stepKey="createSimpleProduct2">
+            <requiredEntity createDataKey="createCategory"/>
+            <field key="attribute_set_id">$$createAttributeSet.attribute_set_id$$</field>
+        </createData>
+        <generateDate date="now" format="m/d/Y" stepKey="generateCurrentDate"/>
+        <generateDate date="-1 day" format="m/d/Y" stepKey="generateYesterdayDate"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageToEditProduct1"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct1">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.customSelectAttribute('$$createDropdownProductAttributeWith2Options.attribute_code$$')}}" userInput="option4" stepKey="setOption4ForCustomDropdownAttributeForSimpleProduct1"/>
+        <selectOption selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}" userInput="option1" stepKey="setOption1ForCustomMultiselectAttributeForSimpleProduct1"/>
+        <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createTextProductAttribute.attribute_code$$')}}" userInput="First Product" stepKey="setValueForCustomTextAttributeForSimpleProduct1"/>
+        <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createDateProductAttribute.attribute_code$$')}}" userInput="{$generateCurrentDate}" stepKey="setValueForCustomDateAttributeForSimpleProduct1"/>
+        <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createPriceProductAttribute.attribute_code$$')}}" userInput="123" stepKey="setValueForCustomPriceAttributeForSimpleProduct1"/>
+        <conditionalClick selector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" dependentSelector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" visible="true" stepKey="selectNoForCustomYesNoAttributeForSimpleProduct1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct1"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageToEditProduct2"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.customSelectAttribute('$$createDropdownProductAttributeWith2Options.attribute_code$$')}}" userInput="option3" stepKey="setOption4ForCustomDropdownAttributeForSimpleProduct2"/>
+        <selectOption selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}" userInput="option2" stepKey="setOption2ForCustomMultiselectAttributeForSimpleProduct2"/>
+        <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createTextProductAttribute.attribute_code$$')}}" userInput="Second Product" stepKey="setValueForCustomTextAttributeForSimpleProduct2"/>
+        <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createDateProductAttribute.attribute_code$$')}}" userInput="{$generateYesterdayDate}" stepKey="setValueForCustomDateAttributeForSimpleProduct2"/>
+        <fillField selector="{{AdminProductFormSection.customTextAttribute('$$createPriceProductAttribute.attribute_code$$')}}" userInput="456" stepKey="setValueForCustomPriceAttributeForSimpleProduct2"/>
+        <conditionalClick selector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" dependentSelector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" visible="true" stepKey="selectNoForCustomYesNoAttributeForSimpleProduct2"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct2"/>
+        <!-- Clear index and flush cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex1">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCacheAsCleanUp">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- Step 21-23: Navigate to the category on storefront and assert the created Products-->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="NavigateToCategoryPageOnStoreFront">
+            <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertSimpleProduct1InCategoryPage">
+            <argument name="productName" value="$$createSimpleProduct1.name$$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertSimpleProduct2InCategoryPage">
+            <argument name="productName" value="$$createSimpleProduct2.name$$"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <!-- Step 24: Verify the Sort by dropdown options -->
+        <click selector="{{StorefrontCategoryMainSection.sortedBy}}" stepKey="clickOnSortByDropdown"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('Position')}}" stepKey="assertPositionOptionInDropdown"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('Product Name')}}" stepKey="assertProductNameOptionInDropdown"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('Price')}}" stepKey="assertPriceOptionInDropdown"/>
+        <!-- Step 25: Check the list of attributes in the Layered Navigation Section -->
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabDropdownAttributeName}')}}" stepKey="assertDropdownAttributeInLayeredNavigation"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabMultiSelectAttributeName}')}}" stepKey="assertMultiSelectAttributeInLayeredNavigation"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabPriceAttributeName}')}}" stepKey="assertPriceAttributeInLayeredNavigation"/>
+        <waitForElementNotVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabTextAttributeName}')}}" stepKey="assertTextAttributeNotPresentInLayeredNavigation"/>
+        <waitForElementNotVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabDateAttributeName}')}}" stepKey="assertDateAttributeNotPresentInLayeredNavigation"/>
+        <waitForElementNotVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabYesNoAttributeName}')}}" stepKey="assertYesNoAttributeNotPresentInLayeredNavigation"/>
+        <!-- Step 26-27: Check the list of options in the Attributes dropdown in the Layered Navigation Section -->
+        <conditionalClick selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabMultiSelectAttributeName}')}}" dependentSelector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabMultiSelectAttributeName}')}}" visible="true" stepKey="expandMultiAttr"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.layeredNavigationAttributeOptions('{$grabMultiSelectAttributeName}','option1')}}" stepKey="seeMultiAttrOption1"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.layeredNavigationAttributeOptions('{$grabMultiSelectAttributeName}','option2')}}" stepKey="seeMultiAttrOption2"/>
+        <conditionalClick selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabDropdownAttributeName}')}}" dependentSelector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabDropdownAttributeName}')}}" visible="true" stepKey="expandDropdownAttr"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.layeredNavigationAttributeOptions('{$grabDropdownAttributeName}','option3')}}" stepKey="seeDropdownAttrOption1"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.layeredNavigationAttributeOptions('{$grabDropdownAttributeName}','option4')}}" stepKey="seeDropdownAttrOption2"/>
+        <!-- Step 28-29: Update the dropdown product attributes -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openDropdownProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createDropdownProductAttributeWith2Options.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setDropdownProductUsedForSortingInProductListingAttributeAsYes">
+            <argument name="usedForSortingInProductListing" value="Yes"/>
+        </actionGroup>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="No" stepKey="setDropdownUseInLayeredNavigationAsNo"/>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveDropdownProductAttributeWith2OptionsPostUpdate"/>
+        <!-- Step 30: Update the multiSelect product attributes -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openMultiSelectProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createMultiSelectProductAttributeWith2Options.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setMultiSelectProductUsedForSortingInProductListingAttributeAsNo">
+            <argument name="usedForSortingInProductListing" value="No"/>
+        </actionGroup>
+        <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="No" stepKey="setDropdownUseInLayeredNavigationAsNoForMultiSelectAttribute"/>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveMultiSelectProductAttributeWith2OptionsPostUpdate"/>
+        <!-- Step 31: Update the text, date, price and YesNo product attributes -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openTextProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createTextProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setTextProductUsedForSortingInProductListingAttributeAsYes">
+            <argument name="usedForSortingInProductListing" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveTextProductAttributePostUpdate"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openDateProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createDateProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setDateProductUsedForSortingInProductListingAttributeAsYes">
+            <argument name="usedForSortingInProductListing" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveDateProductAttributePostUpdate"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openPriceProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createPriceProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setPriceProductUsedForSortingInProductListingAttributeAsYes">
+            <argument name="usedForSortingInProductListing" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="savePriceProductAttributePostUpdate"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openYesNoProductAttributeFromSearchResultInGrid">
+            <argument name="productAttributeCode" value="$$createYesNoProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUpdateAttributeUsedForSortingInProductListingActionGroup" stepKey="setYesNoProductUsedForSortingInProductListingAttributeAsYes">
+            <argument name="usedForSortingInProductListing" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveYesNoProductAttributePostUpdate"/>
+        <!-- Step 32 Clear index and flush cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostUpdatingTheAttribute">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCachePostUpdatingTheAttributes">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- Step 33-35: Verify the Sort by dropdown options is updated -->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="NavigateToCategoryPageOnStoreFrontPostUpdatingProductAttributes">
+            <argument name="categoryUrl" value="$$createCategory.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabDropdownAttributeName}')}}" stepKey="assertDropdownAttributeNotPresentInLayeredNavigationPostAttributeUpdate"/>
+        <waitForElementNotVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabMultiSelectAttributeName}')}}" stepKey="assertMultiSelectAttributeNotPresentInLayeredNavigationPostAttributeUpdate"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabPriceAttributeName}')}}" stepKey="assertPriceAttributeInLayeredNavigationPostAttributeUpdate"/>
+        <waitForElementNotVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabTextAttributeName}')}}" stepKey="assertTextAttributeNotPresentInLayeredNavigationPostAttributeUpdate"/>
+        <waitForElementNotVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabDateAttributeName}')}}" stepKey="assertDateAttributeNotPresentInLayeredNavigationPostAttributeUpdate"/>
+        <waitForElementNotVisible selector="{{StorefrontCategorySidebarSection.expandLayeredNavigationAttribute('{$grabYesNoAttributeName}')}}" stepKey="assertYesNoAttributeNotPresentInLayeredNavigationPostAttributeUpdate"/>
+        <click selector="{{StorefrontCategoryMainSection.sortedBy}}" stepKey="clickOnSortByDropdownForUpdatedProductAttributesList"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('Position')}}" stepKey="assertPositionOptionInDropdownPostUpdatingProductAttributesList"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('Product Name')}}" stepKey="assertProductNameOptionInDropdownPostUpdatingProductAttributesList"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('Price')}}" stepKey="assertPriceOptionInDropdownPostUpdatingProductAttributesList"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('{$grabTextAttributeName}')}}" stepKey="assertTextAttributeOptionInDropdownPostUpdatingProductAttributesList"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('{$grabDateAttributeName}')}}" stepKey="assertDateAttributeOptionInDropdownPostUpdatingProductAttributesList"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('{$grabPriceAttributeName}')}}" stepKey="assertPriceAttributeOptionInDropdownPostUpdatingProductAttributesList"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('{$grabYesNoAttributeName}')}}" stepKey="assertYesNoAttributeOptionInDropdownPostUpdatingProductAttributesList"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.sortByDropdownContent('{$grabDropdownAttributeName}')}}" stepKey="assertDropdownAttributeOptionInDropdownPostUpdatingProductAttributesList"/>
+        <!-- Step 36-40: Verify the Product indexing by Sorting -->
+        <actionGroup ref="AssertProductSortingBasedOnAttributesInStorefrontCategoryPageActionGroup" stepKey="SortsTheProductsBasedOnTextAttributeFiltersOnStorefront">
+            <argument name="product1" value="$createSimpleProduct1$"/>
+            <argument name="product2" value="$createSimpleProduct2$"/>
+            <argument name="sortBy" value="{$grabTextAttributeName}"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductSortingBasedOnAttributesInStorefrontCategoryPageActionGroup" stepKey="SortsTheProductsBasedOnDateAttributeFiltersOnStorefront">
+            <argument name="product1" value="$createSimpleProduct2$"/>
+            <argument name="product2" value="$createSimpleProduct1$"/>
+            <argument name="sortBy" value="{$grabDateAttributeName}"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductSortingBasedOnAttributesInStorefrontCategoryPageActionGroup" stepKey="SortsTheProductsBasedOnYesNoAttributeFiltersOnStorefront">
+            <argument name="product1" value="$createSimpleProduct1$"/>
+            <argument name="product2" value="$createSimpleProduct2$"/>
+            <argument name="sortBy" value="{$grabYesNoAttributeName}"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductSortingBasedOnAttributesInStorefrontCategoryPageActionGroup" stepKey="SortsTheProductsBasedOnDropdownAttributeFiltersOnStorefront">
+            <argument name="product1" value="$createSimpleProduct2$"/>
+            <argument name="product2" value="$createSimpleProduct1$"/>
+            <argument name="sortBy" value="{$grabDropdownAttributeName}"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductSortingBasedOnAttributesInStorefrontCategoryPageActionGroup" stepKey="SortsTheProductsBasedOnPriceAttributeFiltersOnStorefront">
+            <argument name="product1" value="$createSimpleProduct1$"/>
+            <argument name="product2" value="$createSimpleProduct2$"/>
+            <argument name="sortBy" value="{$grabPriceAttributeName}"/>
+        </actionGroup>
+    </test>
+</tests>

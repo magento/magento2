@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14764"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -25,8 +26,12 @@
             <!--Create Simple Product -->
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
 
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <!-- Disable search suggestions -->
+            <magentoCLI command="config:set {{DisableSearchSuggestions.path}} {{DisableSearchSuggestions.value}}" stepKey="DisableSearchSuggestions"/>
         </before>
         <after>
 
@@ -44,6 +49,8 @@
             <!-- Delete created below search terms -->
             <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Re-enable search suggestions -->
+            <magentoCLI command="config:set {{EnableSearchSuggestions.path}} {{EnableSearchSuggestions.value}}" stepKey="EnableSearchSuggestions"/>
         </after>
 
         <!-- Go to storefront home page -->

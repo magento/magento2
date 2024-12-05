@@ -23,7 +23,7 @@ class DateTimeTest extends TestCase
     /**
      * @var string
      */
-    private $testDate = '2015-04-02 21:03:00';
+    private static $testDate = '2015-04-02 21:03:00';
 
     /**
      * @param int|string|DateTimeInterface $input
@@ -36,9 +36,9 @@ class DateTimeTest extends TestCase
         /** @var TimezoneInterface|MockObject $timezone */
         $timezone = $this->getMockBuilder(TimezoneInterface::class)
             ->getMock();
-        $timezone->method('date')->willReturn(new \DateTime($this->testDate));
+        $timezone->method('date')->willReturn(new \DateTime(self::$testDate));
 
-        $expected = gmdate('U', strtotime($this->testDate));
+        $expected = gmdate('U', strtotime(self::$testDate));
         $this->assertEquals($expected, (new DateTime($timezone))->gmtTimestamp($input));
     }
 
@@ -53,9 +53,9 @@ class DateTimeTest extends TestCase
         /** @var TimezoneInterface|MockObject $timezone */
         $timezone = $this->getMockBuilder(TimezoneInterface::class)
             ->getMock();
-        $timezone->method('date')->willReturn(new \DateTime($this->testDate));
+        $timezone->method('date')->willReturn(new \DateTime(self::$testDate));
 
-        $expected = gmdate('U', strtotime($this->testDate));
+        $expected = gmdate('U', strtotime(self::$testDate));
         $this->assertEquals($expected, (new DateTime($timezone))->timestamp($input));
     }
 
@@ -69,7 +69,7 @@ class DateTimeTest extends TestCase
         /** @var DateTime|MockObject $dateTime */
         $dateTime = $this->getMockBuilder(DateTime::class)
             ->setConstructorArgs([$timezone])
-            ->setMethods(null)
+            ->addMethods([])
             ->getMock();
 
         $this->assertEquals(
@@ -100,12 +100,12 @@ class DateTimeTest extends TestCase
      * @return array
      * @throws Exception
      */
-    public function dateTimeInputDataProvider()
+    public static function dateTimeInputDataProvider()
     {
         return [
-            'string' => [$this->testDate],
-            'int' => [strtotime($this->testDate)],
-            DateTimeInterface::class => [new DateTimeImmutable($this->testDate)],
+            'string' => [self::$testDate],
+            'int' => [strtotime(self::$testDate)],
+            DateTimeInterface::class => [new DateTimeImmutable(self::$testDate)],
         ];
     }
 }

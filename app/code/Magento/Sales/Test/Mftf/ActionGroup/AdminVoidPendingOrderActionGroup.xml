@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVoidPendingOrderActionGroup">
+        <annotations>
+            <description>Click on Void  on order view page</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminOrderDetailsMainActionsSection.void}}" stepKey="waitForVoidButtonVisible"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.void}}" stepKey="clickOnVoid"/>
+        <waitForText selector="{{AdminConfirmationModalSection.message}}" userInput="Are you sure you want to void the payment?" stepKey="seeConfirmationMessage"/>
+        <waitForElementClickable selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForOkButtonToBeClicked"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmVoid"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="The payment has been voided." stepKey="seeVoidedSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

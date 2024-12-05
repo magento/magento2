@@ -39,7 +39,7 @@ class TextTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getEscaper'])
+            ->onlyMethods(['getEscaper'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaper = $this->createPartialMock(
@@ -67,7 +67,7 @@ class TextTest extends TestCase
             'class="input-text admin__control-text no-changes" data-ui-id="filter-escapedhtml"  />';
 
         $column = $this->getMockBuilder(Column::class)
-            ->setMethods(['getId', 'getHtmlId'])
+            ->onlyMethods(['getId', 'getHtmlId'])
             ->disableOriginalConstructor()
             ->getMock();
 

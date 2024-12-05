@@ -17,6 +17,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
@@ -24,6 +25,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Responsible for testing product view action on a strorefront.
@@ -83,6 +85,16 @@ class ViewTest extends TestCase
     protected $urlBuilder;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    protected $loggerMock;
+
+    /**
+     * @var Data|MockObject
+     */
+    protected $jsonHelperMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -92,7 +104,8 @@ class ViewTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAjax', 'isPost', 'getParam'])
+            ->onlyMethods(['getParam'])
+            ->addMethods(['isAjax', 'isPost'])
             ->getMockForAbstractClass();
         $contextMock->expects($this->any())
             ->method('getRequest')
@@ -116,7 +129,7 @@ class ViewTest extends TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($resultRedirectFactoryMock);
         $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $contextMock->expects($this->any())
@@ -147,13 +160,16 @@ class ViewTest extends TestCase
         $storeMock = $this->createMock(Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
 
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->jsonHelperMock = $this->createMock(Data::class);
+
         $this->view = new View(
             $contextMock,
             $viewHelperMock,
             $resultForwardFactoryMock,
             $this->resultPageFactoryMock,
-            null,
-            null,
+            $this->loggerMock,
+            $this->jsonHelperMock,
             $this->catalogDesignMock,
             $this->productRepositoryMock,
             $this->storeManagerMock

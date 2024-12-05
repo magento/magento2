@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Load EAV attributes by UIDs
+ * Load EAV attributes by attribute_code and entity_type
  */
 class AttributesMetadata implements ResolverInterface
 {
@@ -42,12 +42,27 @@ class AttributesMetadata implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (empty($args['input']['uids']) || !is_array($args['input']['uids'])) {
-            throw new GraphQlInputException(__('Required parameter "%1" of type array.', 'uids'));
+        $attributeInputs = $args['attributes'];
+
+        if (empty($attributeInputs)) {
+            throw new GraphQlInputException(
+                __(
+                    'Required parameters "attribute_code" and "entity_type" of type String.'
+                )
+            );
+        }
+
+        foreach ($attributeInputs as $attributeInput) {
+            if (!isset($attributeInput['attribute_code'])) {
+                throw new GraphQlInputException(__('The attribute_code is required to retrieve the metadata'));
+            }
+            if (!isset($attributeInput['entity_type'])) {
+                throw new GraphQlInputException(__('The entity_type is required to retrieve the metadata'));
+            }
         }
 
         return $this->getAttributesMetadata->execute(
-            $args['input']['uids'],
+            $attributeInputs,
             (int) $context->getExtensionAttributes()->getStore()->getId()
         );
     }

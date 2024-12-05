@@ -19,6 +19,7 @@
             <useCaseId value="MC-10932"/>
             <group value="theme"/>
             <group value="email"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Login to Admin Area-->

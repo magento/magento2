@@ -272,20 +272,29 @@ class PluginTest extends TestCase
         $product1 = $this->createProduct();
         $product1
             ->method('addData')
-            ->withConsecutive([$requiredAttributes], [$matrix[0]])
-            ->willReturnOnConsecutiveCalls($product1, $product1);
+            ->willReturnCallback(function ($arg1) use ($requiredAttributes, $matrix, $product1) {
+                if ($arg1 == $requiredAttributes || $arg1 == $matrix[0]) {
+                    return $product1;
+                }
+            });
 
         $product2 = $this->createProduct();
         $product2
             ->method('addData')
-            ->withConsecutive([$requiredAttributes], [$matrix[1]])
-            ->willReturnOnConsecutiveCalls($product2, $product2);
+            ->willReturnCallback(function ($arg1) use ($requiredAttributes, $matrix, $product2) {
+                if ($arg1 == $requiredAttributes || $arg1 == $matrix[2]) {
+                    return $product2;
+                }
+            });
 
         $product3 = $this->createProduct();
         $product3
             ->method('addData')
-            ->withConsecutive([$requiredAttributes], [$matrix[2]])
-            ->willReturnOnConsecutiveCalls($product3, $product3);
+            ->willReturnCallback(function ($arg1) use ($requiredAttributes, $matrix, $product3) {
+                if ($arg1 == $requiredAttributes || $arg1 == $matrix[2]) {
+                    return $product3;
+                }
+            });
 
         $this->productMock->expects($this->exactly(3))
             ->method('getAttributes')

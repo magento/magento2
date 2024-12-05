@@ -299,7 +299,7 @@ define([
          * @returns {String}
          */
         getLabel: function (record) {
-            return record[this.index];
+            return record !== undefined ? record[this.index] : null;
         },
 
         /**

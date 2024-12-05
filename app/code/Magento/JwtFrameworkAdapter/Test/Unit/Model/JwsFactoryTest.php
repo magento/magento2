@@ -32,7 +32,7 @@ class JwsFactoryTest extends TestCase
         $this->model = new JwsFactory();
     }
 
-    public function getCreateCases(): array
+    public static function getCreateCases(): array
     {
         return [
             'compact-arbitrary' => [

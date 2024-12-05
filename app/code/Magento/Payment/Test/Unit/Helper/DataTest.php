@@ -287,7 +287,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getSortMethodsDataProvider(): array
+    public static function getSortMethodsDataProvider(): array
     {
         return [
             [

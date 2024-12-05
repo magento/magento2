@@ -33,7 +33,9 @@
             <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -41,12 +43,15 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="product" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStoreGroup">
                 <argument name="storeGroupName" value="$$storeGroup.group[name]$$"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilter"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!--Clear products filter-->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
@@ -100,7 +105,7 @@
         </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct1InWishlistOnSecondStore"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.wishListProductName('1')}}" stepKey="seeProduct1InWishlistOnSecondStore"/>
         <!-- Switch to second store and add second product (visible on second store) to wishlist -->
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
         <click selector="{{StorefrontFooterSection.storeLink($$storeGroup.group[name]$$)}}" stepKey="selectSecondStoreToSwitchOn"/>
@@ -113,10 +118,10 @@
         </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addSecondProductToWishlist"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <see userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct2InWishlistOnSecondStore"/>
+        <waitForText userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct2InWishlistOnSecondStore"/>
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnSecondStore"/>
         <click selector="{{StorefrontFooterSection.storeLink('Main Website Store')}}" stepKey="selectDefaultStoreToSwitchOn"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct1InWishlistOnDefaultStore"/>
+        <see userInput="$$product.name$$" selector="{{StorefrontCustomerWishlistSection.wishListProductName('1')}}" stepKey="seeProduct1InWishlistOnDefaultStore"/>
     </test>
 </tests>

@@ -88,8 +88,15 @@ class TaxTest extends TestCase
 
         $this->selectMock
             ->method('where')
-            ->withConsecutive(['website_id IN(?)', [1, 0]], ['country = ?', 'US'], ['state = ?', 0])
-            ->willReturnOnConsecutiveCalls($this->selectMock, $this->selectMock, $this->selectMock);
+            ->willReturnCallback(function ($column, $value) {
+                if ($column == 'website_id IN(?)' && $value == [1, 0]) {
+                    return $this->selectMock;
+                } elseif ($column == 'country = ?' && $value == 'US') {
+                    return $this->selectMock;
+                } elseif ($column == 'state = ?' && $value == 0) {
+                    return $this->selectMock;
+                }
+            });
 
         $this->selectMock->expects($this->any())
             ->method('from')

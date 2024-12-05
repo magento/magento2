@@ -10,13 +10,35 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\TestCase;
 
 class GridTest extends TestCase
 {
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+    }
+
     public function testGetRowUrl()
     {
         $attribute = $this->createMock(Attribute::class);

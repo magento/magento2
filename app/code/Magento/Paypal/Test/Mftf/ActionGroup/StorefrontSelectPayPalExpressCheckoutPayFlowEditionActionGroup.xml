@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSelectPayPalExpressCheckoutPayFlowEditionActionGroup">
+        <annotations>
+            <description>Select PayPal Express Checkout PayFlow Edition On Payments page.</description>
+        </annotations>
+
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalExpressCheckoutPayFlowEdition}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalExpressCheckoutPayFlowEdition}}" stepKey="selectPayPalExpressCheckoutPayFlowEdition"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.continueButton}}" stepKey="waitForContinueButtonToBeVisible"/>
+        <click selector="{{CheckoutPaymentSection.continueButton}}" stepKey="clickContinueButton"/>
+        <waitForPageLoad stepKey="waitForPayPalPageToOpen"/>
+    </actionGroup>
+</actionGroups>

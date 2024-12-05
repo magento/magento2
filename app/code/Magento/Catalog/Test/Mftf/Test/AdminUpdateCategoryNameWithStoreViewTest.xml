@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
@@ -28,7 +29,9 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
                 <argument name="storeGroupName" value="customStore.name"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -45,7 +48,9 @@
             <argument name="StoreGroup" value="customStore"/>
             <argument name="customStore" value="customStore"/>
         </actionGroup>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Verify created SubCategory is present on Store Front -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>

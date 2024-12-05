@@ -56,6 +56,10 @@ define([
             clientConfig.rendererComponent.beforeOnAuthorize(deferred.resolve, deferred.reject, actions)
                 .then(function () {
                     $.post(clientConfig.onAuthorizeUrl, params).done(function (res) {
+                        if (res.success === false) {
+                            clientConfig.rendererComponent.catchOnAuthorize(res, deferred.resolve, deferred.reject);
+                            return;
+                        }
                         clientConfig.rendererComponent
                             .afterOnAuthorize(res, deferred.resolve, deferred.reject, actions);
                         customerData.set('paypal-funding-source', '');

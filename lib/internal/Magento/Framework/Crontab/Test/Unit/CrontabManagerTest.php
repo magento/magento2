@@ -97,7 +97,7 @@ class CrontabManagerTest extends TestCase
      *
      * @return array
      */
-    public function getTasksDataProvider(): array
+    public static function getTasksDataProvider(): array
     {
         return [
             [
@@ -141,8 +141,15 @@ class CrontabManagerTest extends TestCase
 
         $this->shellMock
             ->method('execute')
-            ->withConsecutive(['crontab -l 2>/dev/null', []], ['echo "" | crontab -', []])
-            ->willReturnOnConsecutiveCalls('', $this->throwException($localizedException));
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($localizedException) {
+                    if ($arg1 == 'crontab -l 2>/dev/null' && empty($arg2)) {
+                        return '';
+                    } elseif ($arg1 == 'echo "" | crontab -' && empty($arg2)) {
+                        throw $localizedException;
+                    }
+                }
+            );
 
         $this->crontabManager->removeTasks();
     }
@@ -160,8 +167,15 @@ class CrontabManagerTest extends TestCase
     {
         $this->shellMock
             ->method('execute')
-            ->withConsecutive(['crontab -l 2>/dev/null', []], ['echo "' . $contentAfter . '" | crontab -', []])
-            ->willReturn($contentBefore);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($contentAfter, $contentBefore) {
+                    if ($arg1 == 'crontab -l 2>/dev/null' && $arg2 == []) {
+                        return $contentBefore;
+                    } elseif ($arg1 == 'echo "' . $contentAfter . '" | crontab -' && $arg2 == []) {
+                        return $contentBefore;
+                    }
+                }
+            );
 
         $this->crontabManager->removeTasks();
     }
@@ -171,7 +185,7 @@ class CrontabManagerTest extends TestCase
      *
      * @return array
      */
-    public function removeTasksDataProvider(): array
+    public static function removeTasksDataProvider(): array
     {
         return [
             [
@@ -292,8 +306,15 @@ class CrontabManagerTest extends TestCase
 
         $this->shellMock
             ->method('execute')
-            ->withConsecutive(['crontab -l 2>/dev/null', []], ['echo "' . $contentToSave . '" | crontab -', []])
-            ->willReturn($content);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($contentToSave, $content) {
+                    if ($arg1 == 'crontab -l 2>/dev/null' && empty($arg2)) {
+                        return $content;
+                    } elseif ($arg1 == 'echo "' . $contentToSave . '" | crontab -' && empty($arg2)) {
+                        return $content;
+                    }
+                }
+            );
 
         $this->crontabManager->saveTasks($tasks);
     }
@@ -303,7 +324,7 @@ class CrontabManagerTest extends TestCase
      *
      * @return array
      */
-    public function saveTasksDataProvider(): array
+    public static function saveTasksDataProvider(): array
     {
         $content = '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
             . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . hash("sha256", BP) . PHP_EOL

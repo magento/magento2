@@ -17,11 +17,13 @@ use Magento\ImportExport\Model\Export\Adapter\Csv;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Attribute\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Tests for customer export model.
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
@@ -51,6 +53,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     private $attributeCollection;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -58,6 +65,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->_model = $this->objectManager->create(Customer::class);
         $this->attributeCollection = $this->objectManager->create(Collection::class);
+        $this->localeDate = $this->objectManager->create(TimezoneInterface::class);
     }
 
     /**
@@ -153,6 +161,15 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customers = $this->objectManager->create(CustomerCollection::class);
         foreach ($customers as $customer) {
             $data = $this->processCustomerData($customer, $expectedAttributes);
+
+            $data['created_at'] = $this->localeDate
+                ->scopeDate(null, $data['created_at'], true)
+                ->format('Y-m-d H:i:s');
+
+            $data['updated_at'] = $this->localeDate
+                ->scopeDate(null, $data['updated_at'], true)
+                ->format('Y-m-d H:i:s');
+
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
 
@@ -359,7 +376,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function filterDataProvider(): array
+    public static function filterDataProvider(): array
     {
         return [
             ['en_US', 1, ['created_at' => ['01/02/1999', '01/03/1999']]],

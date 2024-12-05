@@ -93,7 +93,7 @@ class AuthorizationTest extends TestCase
     /**
      * @return array
      */
-    public function persistentLoggedInCombinations(): array
+    public static function persistentLoggedInCombinations(): array
     {
         return [
             'Emulated persistent Customer ID#1 should not be authorized' => [

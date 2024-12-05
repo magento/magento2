@@ -15,6 +15,7 @@
             <description value="Configurable Product with an Out of Stock Item in Shopping Cart"/>
             <testCaseId value="AC-4310"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

@@ -4,29 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Wishlist block customer item cart column
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Wishlist\Block\Customer\Wishlist;
 
 /**
+ * Wishlist block customer item cart column
+ *
  * @api
  * @since 100.0.2
  */
 class Button extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Wishlist config
-     *
      * @var \Magento\Wishlist\Model\Config
      */
     protected $_wishlistConfig;
 
     /**
-     * Wishlist data
-     *
      * @var \Magento\Wishlist\Helper\Data
      */
     protected $_wishlistData = null;

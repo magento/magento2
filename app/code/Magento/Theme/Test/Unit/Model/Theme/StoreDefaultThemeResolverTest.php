@@ -91,7 +91,7 @@ class StoreDefaultThemeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getThemesDataProvider(): array
+    public static function getThemesDataProvider(): array
     {
         return [
             [

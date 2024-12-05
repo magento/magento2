@@ -19,10 +19,11 @@
             <useCaseId value="ACP2E-789"/>
             <group value="catalog"/>
             <group value="indexer"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
         <before>
             <!-- Change indexers to "Update by Schedule" mode -->
-            <magentoCLI command="indexer:set-mode schedule" stepKey="setScheduleIndexer"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setScheduleIndexer"/>
 
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -50,11 +51,13 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCacheBefore"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheBefore">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Change indexers to "Update on Save" mode -->
-            <magentoCLI command="indexer:set-mode realtime" stepKey="setRealtimeMode"/>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode realtime' command for preserving Backward Compatibility" stepKey="setRealtimeMode"/>
 
             <!-- Delete data -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -67,8 +70,10 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCacheAfter"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheCleanAfter">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
 
         <!-- Open storefront on second store  -->
@@ -81,8 +86,11 @@
             <argument name="productName" value="{{_defaultProduct.name}}"/>
         </actionGroup>
 
-        <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <!-- We need the 'indexer_update_all_views' job to run. This is the best
+            way we can make that happen, but there is no guarantee that there is
+            such a job already scheduled in the queue. -->
+        <magentoCron groups="index" stepKey="runCron" />
+        <comment userInput="We need the indexer_update_all_views job to run" stepKey="runCronTwice"/>
 
         <!-- Check product is present in category after cron run -->
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">

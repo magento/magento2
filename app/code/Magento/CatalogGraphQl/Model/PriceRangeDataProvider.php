@@ -15,6 +15,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PricePro
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -27,25 +28,15 @@ class PriceRangeDataProvider
     private const STORE_FILTER_CACHE_KEY = '_cache_instance_store_filter';
 
     /**
-     * @var Discount
-     */
-    private Discount $discount;
-
-    /**
-     * @var PriceProviderPool
-     */
-    private PriceProviderPool $priceProviderPool;
-
-    /**
      * @param PriceProviderPool $priceProviderPool
      * @param Discount $discount
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
-        PriceProviderPool $priceProviderPool,
-        Discount $discount
+        private readonly PriceProviderPool $priceProviderPool,
+        private readonly Discount $discount,
+        private readonly PriceCurrencyInterface $priceCurrency
     ) {
-        $this->priceProviderPool = $priceProviderPool;
-        $this->discount = $discount;
     }
 
     /**
@@ -141,11 +132,11 @@ class PriceRangeDataProvider
     {
         return [
             'regular_price' => [
-                'value' => $regularPrice,
+                'value' => $this->priceCurrency->roundPrice($regularPrice),
                 'currency' => $store->getCurrentCurrencyCode(),
             ],
             'final_price' => [
-                'value' => $finalPrice,
+                'value' => $this->priceCurrency->roundPrice($finalPrice),
                 'currency' => $store->getCurrentCurrencyCode(),
             ],
             'discount' => $this->discount->getDiscountByDifference($regularPrice, $finalPrice),

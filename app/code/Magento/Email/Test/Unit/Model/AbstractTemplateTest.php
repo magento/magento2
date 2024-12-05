@@ -97,7 +97,7 @@ class AbstractTemplateTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
+            ->onlyMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store->expects($this->any())
@@ -126,7 +126,7 @@ class AbstractTemplateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterFactory = $this->getMockBuilder(FilterFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateFactory = $this->getMockBuilder(TemplateFactory::class)
@@ -180,7 +180,7 @@ class AbstractTemplateTest extends TestCase
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
     {
         $filterTemplate = $this->getMockBuilder(Filter::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setUseSessionInUrl',
                     'setPlainTemplateMode',
@@ -259,7 +259,7 @@ class AbstractTemplateTest extends TestCase
     {
         $this->expectException('LogicException');
         $filterTemplate = $this->getMockBuilder(Filter::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setPlainTemplateMode',
                     'setIsChildTemplate',
@@ -316,7 +316,7 @@ class AbstractTemplateTest extends TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateProvider()
+    public static function getProcessedTemplateProvider()
     {
         return [
             'default' => [
@@ -397,7 +397,7 @@ class AbstractTemplateTest extends TestCase
     /**
      * @return array
      */
-    public function invalidInputParametersDataProvider()
+    public static function invalidInputParametersDataProvider()
     {
         return [[[]], [['area' => 'some_area']], [['store' => 'any_store']]];
     }

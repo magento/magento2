@@ -103,8 +103,15 @@ class RouterListTest extends TestCase
 
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive(['DefaultClass'], ['FrontClass'])
-            ->willReturnOnConsecutiveCalls($defaultClass, $frontClass);
+            ->willReturnCallback(
+                function ($arg) use ($defaultClass, $frontClass) {
+                    if ($arg == 'DefaultClass') {
+                        return $defaultClass;
+                    } elseif ($arg == 'FrontClass') {
+                        return $frontClass;
+                    }
+                }
+            );
 
         $this->assertEquals($defaultClass, $this->model->current());
         $this->model->next();

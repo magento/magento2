@@ -86,38 +86,39 @@ class GroupTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->abstractModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isObjectNew', 'dataHasChangedFor', 'getStoreIds'])
+            ->addMethods(['getStoreIds'])
+            ->onlyMethods(['isObjectNew', 'dataHasChangedFor'])
             ->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['reinitStores'])
+            ->onlyMethods(['reinitStores'])
             ->getMockForAbstractClass();
         $this->categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCategories'])
+            ->onlyMethods(['getCategories'])
             ->getMock();
         $this->categoryFactoryMock = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productFactoryMock = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCategoryIds', 'addAttributeToSelect', 'addWebsiteFilter', 'getIterator'])
+            ->onlyMethods(['addCategoryIds', 'addAttributeToSelect', 'addWebsiteFilter', 'getIterator'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCollection'])
+            ->onlyMethods(['getCollection'])
             ->getMock();
         $this->productUrlRewriteGeneratorMock = $this->getMockBuilder(ProductUrlRewriteGenerator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate'])
+            ->onlyMethods(['generate'])
             ->getMock();
         $this->plugin = $this->objectManager->getObject(
             GroupPlugin::class,

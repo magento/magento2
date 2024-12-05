@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="PayFlowCreditCardSection">
+        <element name="creditCardNumber" type="input" selector="//*[@id='co-transparent-form']//*[@id='payment_form_payflowpro']//*[@id='payflowpro_cc_number']"/>
+        <element name="expirationMonth" type="select" selector="//*[@id='co-transparent-form']//*[@id='payment_form_payflowpro']//*[@id='payflowpro_cc_type_exp_div']//*[@id='payflowpro_expiration']/option[contains(., {{creditCardDetails.month}})]" parameterized="true"/>
+        <element name="expirationYear" type="select" selector="//*[@id='co-transparent-form']//*[@id='payment_form_payflowpro']//*[@id='payflowpro_cc_type_exp_div']//*[@id='payflowpro_expiration_yr']/option[contains(.,{{creditCardDetails.year}})]" parameterized="true"/>
+        <element name="cvv" type="input" selector="//*[@id='co-transparent-form']//*[@id='payment_form_payflowpro']//*[@id='payflowpro_cc_type_cvv_div']//*[@id='payflowpro_cc_cid']"/>
+    </section>
+</sections>

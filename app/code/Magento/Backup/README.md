@@ -4,7 +4,7 @@ The Magento_Backup module allows administrators to perform backups and rollbacks
 
 The Magento_Backup module does not affect the storefront.
 
-For more information about this module, see [Magento Backups](https://docs.magento.com/user-guide/system/backups.html)
+For more information about this module, see [Backups](https://experienceleague.adobe.com/docs/commerce-admin/systems/tools/backups.html)
 
 ## Extensibility
 

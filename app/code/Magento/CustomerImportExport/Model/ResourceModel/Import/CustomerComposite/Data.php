@@ -81,7 +81,7 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
     {
         $entityCustomer = CustomerComposite::COMPONENT_ENTITY_CUSTOMER;
         if ($this->_entityType == $entityCustomer) {
-            if ($rowData['_scope'] == CustomerComposite::SCOPE_DEFAULT) {
+            if ((isset($rowData['_scope'])) && $rowData['_scope'] == CustomerComposite::SCOPE_DEFAULT) {
                 return $rowData;
             } else {
                 return null;

@@ -5,14 +5,14 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
-use Magento\Framework\Stdlib\StringUtils;
 use Laminas\Http\Header\HeaderInterface;
 use Laminas\Stdlib\Parameters;
 use Laminas\Stdlib\ParametersInterface;
 use Laminas\Uri\UriFactory;
 use Laminas\Uri\UriInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * HTTP Request for current PHP environment.
@@ -451,6 +451,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      *
      * @return \Magento\Framework\App\Config
      * @deprecated 100.1.0
+     * @see Nothing
      */
     private function getAppConfig()
     {
@@ -819,5 +820,21 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     {
         $this->forwarded = $forwarded;
         return $this;
+    }
+
+    /**
+     * Retrieve debug info
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [
+            'pathInfo' => $this->pathInfo,
+            'requestString' => $this->requestString,
+            'module' => $this->module,
+            'controller' => $this->controller,
+            'action' => $this->action,
+        ];
     }
 }

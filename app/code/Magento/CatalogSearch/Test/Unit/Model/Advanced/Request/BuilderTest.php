@@ -205,8 +205,9 @@ class BuilderTest extends TestCase
         $this->requestBuilder->bindDimension('scope', 'default');
         $this->binder->expects($this->once())
             ->method('bind')
-            ->withConsecutive([$data, $bindData])
-            ->willReturn($data);
+            ->willReturnCallback(function ($data, $bindData) {
+                  return $data;
+            });
         $this->cleaner->expects($this->once())
             ->method('clean')
             ->willReturn($data);

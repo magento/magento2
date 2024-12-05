@@ -4,3 +4,19 @@
 enum PriceAdjustmentCodesEnum {
     TAX @deprecated(reason: "`PriceAdjustmentCodesEnum` is deprecated. Tax is included or excluded in the price. Tax is not shown separately in Catalog.")
 }
+
+type StoreConfig {
+    shopping_cart_display_price: Int @doc(description: "Extended Config Data - tax/cart_display/price")
+    shopping_cart_display_shipping: Int @doc(description: "Extended Config Data - tax/cart_display/shipping")
+    shopping_cart_display_subtotal: Int @doc(description: "Extended Config Data - tax/cart_display/subtotal")
+    shopping_cart_display_grand_total: Boolean @doc(description: "Extended Config Data - tax/cart_display/grandtotal")
+    shopping_cart_display_full_summary: Boolean @doc(description: "Extended Config Data - tax/cart_display/full_summary")
+    shopping_cart_display_zero_tax: Boolean @doc(description: "Extended Config Data - tax/cart_display/zero_tax")
+    shopping_cart_display_tax_gift_wrapping: TaxWrappingEnum @doc(description: "Extended Config Data - tax/cart_display/gift_wrapping") @resolver(class: "Magento\\TaxGraphQl\\Model\\Resolver\\DisplayWrapping")
+}
+
+enum TaxWrappingEnum {
+    DISPLAY_EXCLUDING_TAX
+    DISPLAY_INCLUDING_TAX
+    DISPLAY_TYPE_BOTH
+}

@@ -107,7 +107,7 @@ class EsiTest extends TestCase
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $regexObject = new Regex(self::VALIDATION_RULE_PATTERN);
@@ -189,7 +189,7 @@ class EsiTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [StubBlock::class, true],

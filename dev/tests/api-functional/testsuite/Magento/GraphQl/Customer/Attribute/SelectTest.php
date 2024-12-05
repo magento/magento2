@@ -12,12 +12,8 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Test\Fixture\Attribute;
 use Magento\Eav\Test\Fixture\AttributeOption;
-use Magento\EavGraphQl\Model\Uid;
-use Magento\Framework\DataObject;
-use Magento\Framework\GraphQl\Query\Uid as FrameworkUid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -27,11 +23,10 @@ class SelectTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
+      code
       options {
-        uid
         label
         value
       }
@@ -81,22 +76,17 @@ QRY;
         /** @var AttributeOptionInterface $option2 */
         $option2 = DataFixtureStorageManager::getStorage()->get('option2');
 
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
-        );
-
-        $result = $this->graphQlQuery(sprintf(self::QUERY, $uid));
+        $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
+                            'code' => $attribute->getAttributeCode(),
                             'options' => [
-                                $this->getOptionData($option1),
-                                $this->getOptionData($option2)
+                                $option1->getData(),
+                                $option2->getData()
                             ]
                         ]
                     ],
@@ -105,17 +95,5 @@ QRY;
             ],
             $result
         );
-    }
-
-    /**
-     * @param AttributeOptionInterface $option
-     * @return array
-     */
-    private function getOptionData(AttributeOptionInterface $option): array
-    {
-        return [
-            'uid' => Bootstrap::getObjectManager()->get(FrameworkUid::class)->encode($option->getValue()),
-            ...$option->getData()
-        ];
     }
 }

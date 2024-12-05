@@ -17,6 +17,7 @@
             <useCaseId value="ACP2E-101"/>
             <severity value="MAJOR"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

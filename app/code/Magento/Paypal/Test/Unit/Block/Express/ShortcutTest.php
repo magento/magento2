@@ -26,7 +26,7 @@ class ShortcutTest extends TestCase
     public function testGetAlias()
     {
         $paypalConfigFactoryMock = $this->getMockBuilder(ConfigFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $configMock = $this->getMockBuilder(Config::class)

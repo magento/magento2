@@ -103,6 +103,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_productLimitationFilters;
 
     /**
+     * @var ProductLimitationFactory
+     */
+    private $productLimitationFactory;
+
+    /**
      * Category product count select
      *
      * @var \Magento\Framework\DB\Select
@@ -354,10 +359,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
-        $productLimitationFactory = $productLimitationFactory ?: ObjectManager::getInstance()->get(
+        $this->productLimitationFactory = $productLimitationFactory ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory::class
         );
-        $this->_productLimitationFilters = $productLimitationFactory->create();
+        $this->_productLimitationFilters = $this->productLimitationFactory->create();
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         parent::__construct(
             $entityFactory,
@@ -385,6 +390,35 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             ->get(GalleryReadHandler::class);
         $this->mediaGalleryResource = $mediaGalleryResource ?: ObjectManager::getInstance()
             ->get(Gallery::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_flatEnabled = [];
+        $this->_addUrlRewrite = false;
+        $this->_urlRewriteCategory = '';
+        $this->_addFinalPrice = false;
+        $this->_allIdsCache = null;
+        $this->_addTaxPercents = false;
+        $this->_productLimitationFilters = $this->productLimitationFactory->create();
+        $this->_productCountSelect = null;
+        $this->_isWebsiteFilter = false;
+        $this->_priceDataFieldFilters = [];
+        $this->_priceExpression = null;
+        $this->_additionalPriceExpression = null;
+        $this->_maxPrice = null;
+        $this->_minPrice = null;
+        $this->_priceStandardDeviation = null;
+        $this->_pricesCount = null;
+        $this->_catalogPreparePriceSelect = null;
+        $this->needToAddWebsiteNamesToResult = null;
+        $this->linkField = null;
+        $this->backend = null;
+        $this->emptyItem = null;
+        parent::_resetState();
     }
 
     /**

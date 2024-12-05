@@ -20,14 +20,16 @@
             <group value="Sales"/>
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontOrderCommentWithHTMLTagsDisplayTest instead</issueId>
-            </skip> 
+            </skip>
         </annotations>
         <before>
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!-- Create product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Customer log out -->
@@ -35,6 +37,7 @@
             <!-- Admin log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -50,7 +53,7 @@
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>

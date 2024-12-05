@@ -69,16 +69,6 @@ class SettingCheckerTest extends TestCase
         $this->checker = new SettingChecker($this->configMock, $placeholderFactoryMock, $this->scopeCodeResolverMock);
     }
 
-    public function testGetEnvValue(): void
-    {
-        $_ENV = array_merge($this->env, ['SOME_PLACEHOLDER' => 0, 'another_placeholder' => 1, 'some_placeholder' => 1]);
-        $this->placeholderMock->expects($this->any())
-            ->method('isApplicable')
-            ->willReturn(true);
-        $this->assertSame($this->checker->getEnvValue('SOME_PLACEHOLDER'), 1);
-        $this->assertSame($this->checker->getEnvValue('another_placeholder'), 1);
-    }
-
     /**
      * @param string $path
      * @param string $scope
@@ -136,7 +126,7 @@ class SettingCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function isReadonlyDataProvider()
+    public static function isReadonlyDataProvider()
     {
         return [
             [

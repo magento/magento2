@@ -21,18 +21,18 @@ class TextEditor extends AbstractBaseAttributeData
     public function __construct()
     {
         parent::__construct();
-        $this->defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
     }
 
     /**
      * @inheritdoc
      */
-    public function getAttributeData(): array
+    public static function getAttributeData(): array
     {
         return array_replace_recursive(
             parent::getAttributeData(),
             [
-                "{$this->getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     [
                         'default_value_text' => '',
                         'default_value_textarea' => 'Default attribute value',
@@ -45,72 +45,72 @@ class TextEditor extends AbstractBaseAttributeData
     /**
      * @inheritDoc
      */
-    public function getAttributeDataWithCheckArray(): array
+    public static function getAttributeDataWithCheckArray(): array
     {
         return array_replace_recursive(
             parent::getAttributeDataWithCheckArray(),
             [
-                "{$this->getFrontendInput()}_with_required_fields" => [
+                "{static::getFrontendInput()}_with_required_fields" => [
                     1 => [
                         'frontend_input' => 'textarea',
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_store_view_scope" => [
+                "{static::getFrontendInput()}_with_store_view_scope" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_global_scope" => [
+                "{static::getFrontendInput()}_with_global_scope" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_website_scope" => [
+                "{static::getFrontendInput()}_with_website_scope" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_attribute_code" => [
+                "{static::getFrontendInput()}_with_attribute_code" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_default_value" => [
+                "{static::getFrontendInput()}_with_default_value" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_default_value" => [
+                "{static::getFrontendInput()}_without_default_value" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_unique_value" => [
+                "{static::getFrontendInput()}_with_unique_value" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_unique_value" => [
+                "{static::getFrontendInput()}_without_unique_value" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_enabled_add_to_column_options" => [
+                "{static::getFrontendInput()}_with_enabled_add_to_column_options" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_enabled_add_to_column_options" => [
+                "{static::getFrontendInput()}_without_enabled_add_to_column_options" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_with_enabled_use_in_filter_options" => [
+                "{static::getFrontendInput()}_with_enabled_use_in_filter_options" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
                 ],
-                "{$this->getFrontendInput()}_without_enabled_use_in_filter_options" => [
+                "{static::getFrontendInput()}_without_enabled_use_in_filter_options" => [
                     1 => [
                         'frontend_input' => 'textarea'
                     ],
@@ -122,25 +122,25 @@ class TextEditor extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'text_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'text_editor_attribute',
                     ],
                 ],
                 "{$frontendInput}_change_frontend_input" => [
-                    'post_data' => [
+                    'postData' => [
                         'frontend_input' => 'textarea',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'frontend_input' => 'textarea',
                         'is_wysiwyg_enabled' => '0'
                     ],
@@ -152,7 +152,7 @@ class TextEditor extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getFrontendInput(): string
+    protected static function getFrontendInput(): string
     {
         return 'texteditor';
     }
@@ -160,7 +160,7 @@ class TextEditor extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdatePostData(): array
+    protected static function getUpdatePostData(): array
     {
         return [
             'frontend_label' => [
@@ -189,9 +189,9 @@ class TextEditor extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdateExpectedData(): array
+    protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = $this->getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         unset($updatePostData['default_value_textarea']);
         return array_merge(
             $updatePostData,

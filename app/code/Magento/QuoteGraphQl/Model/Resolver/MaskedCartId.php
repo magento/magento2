@@ -95,11 +95,7 @@ class MaskedCartId implements ResolverInterface
      */
     private function ensureQuoteMaskExist(int $quoteId): string
     {
-        try {
-            $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
-        } catch (NoSuchEntityException $e) {
-            $maskedId = '';
-        }
+        $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);
         if ($maskedId === '') {
             $quoteIdMask = $this->quoteIdMaskFactory->create();
             $quoteIdMask->setQuoteId($quoteId);

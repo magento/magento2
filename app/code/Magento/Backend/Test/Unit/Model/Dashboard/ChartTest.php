@@ -89,12 +89,13 @@ class ChartTest extends TestCase
     {
         $this->orderHelperMock
             ->method('setParam')
-            ->withConsecutive(
-                ['store', null],
-                ['website', null],
-                ['group', null],
-                ['period', $period]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($period) {
+                if ($arg1 == 'period' && $arg2 == $period) {
+                    return $this;
+                } elseif ($arg1 == 'store' || $arg1=='website' || $arg1 == 'group') {
+                    return $this;
+                }
+            });
 
         $this->dateRetrieverMock->expects($this->once())
             ->method('getByPeriod')
@@ -133,7 +134,7 @@ class ChartTest extends TestCase
     /**
      * @return array
      */
-    public function getByPeriodDataProvider(): array
+    public static function getByPeriodDataProvider(): array
     {
         return [
             [

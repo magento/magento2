@@ -87,6 +87,26 @@ class ArrayBackendTest extends TestCase
                 ['sku' => 'test1', 'attr' => '0,1,2,3,4'],
                 true,
                 '0,1,2,3,4'
+            ],
+            'keeps non numeric values from string' => [
+                ['sku' => 'test1', 'attr' => 'foo,bar'],
+                true,
+                'foo,bar'
+            ],
+            'keeps non numeric values from array' => [
+                ['sku' => 'test1', 'attr' => ['foo','bar']],
+                true,
+                'foo,bar'
+            ],
+            'filters empty values from string' => [
+                ['sku' => 'test1', 'attr' => 'foo,bar,,123'],
+                true,
+                'foo,bar,123'
+            ],
+            'filters empty values from array' => [
+                ['sku' => 'test1', 'attr' => ['foo','bar','',null,123]],
+                true,
+                'foo,bar,123'
             ]
         ];
     }
@@ -117,7 +137,7 @@ class ArrayBackendTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             [

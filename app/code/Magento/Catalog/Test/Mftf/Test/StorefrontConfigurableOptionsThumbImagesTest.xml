@@ -17,6 +17,7 @@
                 (visible and active) for each selected option for the configurable product"/>
             <group value="catalog"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -130,7 +131,7 @@
             <actionGroup ref="AddProductImageActionGroup" stepKey="addChildProduct1Magento2">
                 <argument name="image" value="Magento2"/>
             </actionGroup>
-            <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignMagento2Role">
+            <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignMagento2Role">
                 <argument name="image" value="Magento2"/>
             </actionGroup>
 
@@ -166,7 +167,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Open ConfigProduct in Store Front Page -->

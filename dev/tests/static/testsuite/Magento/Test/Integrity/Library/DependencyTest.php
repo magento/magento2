@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Library;
 
 use Laminas\Code\Reflection\ClassReflection;
 use Laminas\Code\Reflection\Exception\InvalidArgumentException;
+use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
@@ -39,7 +40,7 @@ class DependencyTest extends TestCase
             'Framework',
             'SomeModule',
             'ModuleName',
-            'Setup\Console\CommandList',
+            'Setup\Console\CommandLoader',
             'Setup\Console\CompilerPreparation',
             'Setup\Model\ObjectManagerProvider',
             'Setup\Mvc\Bootstrap\InitParamListener',
@@ -60,7 +61,7 @@ class DependencyTest extends TestCase
 
     public function testCheckDependencies(): void
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file

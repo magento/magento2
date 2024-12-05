@@ -9,4 +9,10 @@
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="update_cms_url_rewrites_after_store_save" type="Magento\CmsUrlRewrite\Plugin\Cms\Model\Store\View"/>
     </type>
+    <preference for="Magento\Cms\Model\Page\TargetUrlBuilderInterface" type="Magento\CmsUrlRewrite\Model\Page\TargetUrlBuilder"/>
+    <type name="Magento\CmsUrlRewrite\Model\Page\TargetUrlBuilder">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
 </config>

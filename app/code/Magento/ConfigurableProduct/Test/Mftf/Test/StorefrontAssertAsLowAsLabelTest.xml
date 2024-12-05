@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertAsLowAsLabelTest">
+        <annotations>
+            <stories value="Configurable Product"/>
+            <title value="As low as label Storefront behavior"/>
+            <description value="Create configurable products and assert thr as low as label in the storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-6158"/>
+        </annotations>
+        <before>
+            <!-- Create category and configurable products -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProductP1">
+                <field key="name">Configurable product p1</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProductP2">
+                <field key="name">Configurable product p2</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProductP3">
+                <field key="name">Configurable product p3</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProductP4">
+                <field key="name">Configurable product p4</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProductP5">
+                <field key="name">Configurable product p5</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProductP6">
+                <field key="name">Configurable product p6</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProductP7">
+                <field key="name">Configurable product p7</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create text swatch attribute with 3 options: Black, White and Blue -->
+            <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">
+                <argument name="attributeName" value="{{ProductColorAttribute.frontend_label}}"/>
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+                <argument name="option1" value="Red"/>
+                <argument name="option2" value="Green"/>
+                <argument name="option3" value="Blue"/>
+            </actionGroup>
+            <!-- Open configurable product edit page -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductP1">
+                <argument name="productId" value="$createConfigurableProductP1.id$"/>
+            </actionGroup>
+            <!-- Generate configurations for configurable product p1 -->
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurations">
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForRedP1">
+                <argument name="productAttributes" value="Color: Red"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForGreenP1">
+                <argument name="productAttributes" value="Color: Green"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlueP1">
+                <argument name="productAttributes" value="Color: Blue"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
+            <!-- Generate configurations for configurable product p2-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductP2">
+                <argument name="productId" value="$createConfigurableProductP2.id$"/>
+            </actionGroup>
+            <!-- Generate configurations for configurable product p2-->
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurationsP2">
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForRedP2">
+                <argument name="productAttributes" value="Color: Red"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForGreenP2">
+                <argument name="productAttributes" value="Color: Green"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlueP2">
+                <argument name="productAttributes" value="Color: Blue"/>
+                <argument name="productPrice" value="30"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductP2"/>
+            <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="waitForBlueChildProductToBecomeClickable"/>
+            <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="clickOnFirstProductLink"/>
+            <switchToNextTab stepKey="switchToConfigChildProductOfP2Page"/>
+            <waitForPageLoad stepKey="waitForAdvancedPricePageToLoadForP2Blue"/>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setAdvancedPricingOfBlueP2">
+                <argument name="price" value="10"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductP2BlueWithSpecialPrice"/>
+            <closeTab stepKey="closeBlueChildProductOfP2"/>
+            <switchToPreviousTab stepKey="SwitchToConfigurableProductP2Page"/>
+            <!-- Generate configurations for configurable product p3-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductP3">
+                <argument name="productId" value="$createConfigurableProductP3.id$"/>
+            </actionGroup>
+            <!-- Generate configurations for configurable product p3-->
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurationsP3">
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForRedP3">
+                <argument name="productAttributes" value="Color: Red"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForGreenP3">
+                <argument name="productAttributes" value="Color: Green"/>
+                <argument name="productPrice" value="20"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlueP3">
+                <argument name="productAttributes" value="Color: Blue"/>
+                <argument name="productPrice" value="30"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductP3"/>
+            <!-- Generate configurations for configurable product p4-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductP4">
+                <argument name="productId" value="$createConfigurableProductP4.id$"/>
+            </actionGroup>
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurationsP4">
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForRedP4">
+                <argument name="productAttributes" value="Color: Red"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForGreenP4">
+                <argument name="productAttributes" value="Color: Green"/>
+                <argument name="productPrice" value="20"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlueP4">
+                <argument name="productAttributes" value="Color: Blue"/>
+                <argument name="productPrice" value="30"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductP4"/>
+            <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="waitForBlueProductLinkOfP4ToBecomeClickable"/>
+            <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="clickOnBlueProductLinkOfP4"/>
+            <switchToNextTab stepKey="switchToConfigChildOfProductP4Page"/>
+            <waitForPageLoad stepKey="waitForAdvancedPricePageToLoadForP4Blue"/>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setAdvancedPricingForBlueP4">
+                <argument name="price" value="5"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductP4BlueWithSpecialPrice"/>
+            <closeTab stepKey="closeBlueChildProductOfP4"/>
+            <switchToPreviousTab stepKey="SwitchToConfigurableProductP4Page"/>
+            <!-- Generate configurations for configurable product p5-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductP5">
+                <argument name="productId" value="$createConfigurableProductP5.id$"/>
+            </actionGroup>
+            <!-- Generate configurations for configurable product p5-->
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurationsP5">
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForRedP5">
+                <argument name="productAttributes" value="Color: Red"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForGreenP5">
+                <argument name="productAttributes" value="Color: Green"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlueP5">
+                <argument name="productAttributes" value="Color: Blue"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductP5"/>
+            <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="waitForBlueProductLinkOfP5ToBecomeClickable"/>
+            <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="clickOnBlueProductLinkOfP5"/>
+            <switchToNextTab stepKey="switchToConfigChildOfProductP5Page"/>
+            <waitForPageLoad stepKey="waitForAdvancedPricePageToLoadForP5Blue"/>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setAdvancedPricingForBlueP5">
+                <argument name="price" value="5"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductP5BlueWithSpecialPrice"/>
+            <closeTab stepKey="closeBlueChildProductOfP5"/>
+            <switchToPreviousTab stepKey="SwitchToConfigurableProductP5Page"/>
+            <!-- Generate configurations for configurable product p6-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductP6">
+                <argument name="productId" value="$createConfigurableProductP6.id$"/>
+            </actionGroup>
+            <!-- Generate configurations for configurable product p6-->
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurationsP6">
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForRedP6">
+                <argument name="productAttributes" value="Color: Red"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForGreenP6">
+                <argument name="productAttributes" value="Color: Green"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlueP6">
+                <argument name="productAttributes" value="Color: Blue"/>
+                <argument name="productPrice" value="30"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductP6"/>
+            <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="waitForBlueProductLinkOfP6ToBecomeClickable"/>
+            <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="clickOnBlueProductLinkOfP6"/>
+            <switchToNextTab stepKey="switchToConfigChildOfProductP6Page"/>
+            <waitForPageLoad stepKey="waitForAdvancedPricePageToLoadForP6Blue"/>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setAdvancedPricingForBlueP6">
+                <argument name="price" value="5"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectOutOfStock">
+                <argument name="stockStatus" value="Out of Stock"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductP6BlueWithSpecialPrice"/>
+            <closeTab stepKey="closeBlueChildProductOfP6"/>
+            <switchToPreviousTab stepKey="SwitchToConfigurableProductP6Page"/>
+            <!-- Generate configurations for configurable product p7-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductP7">
+                <argument name="productId" value="$createConfigurableProductP7.id$"/>
+            </actionGroup>
+            <!-- Generate configurations for configurable product p6-->
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurationsP7">
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForRedP7">
+                <argument name="productAttributes" value="Color: Red"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForGreenP7">
+                <argument name="productAttributes" value="Color: Green"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlueP67">
+                <argument name="productAttributes" value="Color: Blue"/>
+                <argument name="productPrice" value="30"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductP7"/>
+            <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="waitForBlueProductLinkOfP7ToBecomeClickable"/>
+            <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName('Blue')}}" stepKey="clickOnBlueProductLinkOfP7"/>
+            <switchToNextTab stepKey="switchToConfigChildOfProductP7Page"/>
+            <waitForPageLoad stepKey="waitForAdvancedPricePageToLoadForP7Blue"/>
+            <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="setAdvancedPricingForBlueP7">
+                <argument name="price" value="5"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableChildProductOfP7"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductP7BlueWithSpecialPrice"/>
+            <closeTab stepKey="closeBlueChildProductOfP7"/>
+            <switchToPreviousTab stepKey="SwitchToConfigurableProductP7Page"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <deleteData createDataKey="createConfigurableProductP1" stepKey="deleteConfigurableProductP1"/>
+            <deleteData createDataKey="createConfigurableProductP2" stepKey="deleteConfigurableProductP2"/>
+            <deleteData createDataKey="createConfigurableProductP3" stepKey="deleteConfigurableProductP3"/>
+            <deleteData createDataKey="createConfigurableProductP4" stepKey="deleteConfigurableProductP4"/>
+            <deleteData createDataKey="createConfigurableProductP5" stepKey="deleteConfigurableProductP5"/>
+            <deleteData createDataKey="createConfigurableProductP6" stepKey="deleteConfigurableProductP6"/>
+            <deleteData createDataKey="createConfigurableProductP7" stepKey="deleteConfigurableProductP7"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete color attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
+                <argument name="ProductAttribute" value="ProductColorAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="catalog_category_product catalog_product_category"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCacheAfter">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Open created category on Storefront -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIsNotPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductP1">
+            <argument name="productName" value="$$createConfigurableProductP1.name$$"/>
+            <argument name="price" value="10"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIsNotPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductP2">
+            <argument name="productName" value="$$createConfigurableProductP2.name$$"/>
+            <argument name="price" value="10"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIfPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductP3">
+            <argument name="productName" value="$$createConfigurableProductP3.name$$"/>
+            <argument name="price" value="10"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIfPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductP4">
+            <argument name="productName" value="$$createConfigurableProductP4.name$$"/>
+            <argument name="price" value="5"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIfPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductP5">
+            <argument name="productName" value="$$createConfigurableProductP5.name$$"/>
+            <argument name="price" value="5"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIsNotPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductP6">
+            <argument name="productName" value="$$createConfigurableProductP6.name$$"/>
+            <argument name="price" value="10"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIsNotPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductP7">
+            <argument name="productName" value="$$createConfigurableProductP7.name$$"/>
+            <argument name="price" value="10"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+
+        <!-- Open configurable product p1 and assert price and price label -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigurableProductP1OnStorefront">
+            <argument name="product" value="$createConfigurableProductP1$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelOnP1"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForP1">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Red-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectRedOptionOnP1">
+            <argument name="optionName" value="Red"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForRedP1">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Green-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectGreenOptionOnP1">
+            <argument name="optionName" value="Green"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForGreenP1">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Blue-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectBlueOptionP1">
+            <argument name="optionName" value="Blue"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForBlueP1">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+
+        <!-- Open configurable product p2 and assert price and price label -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigurableProductP2OnStorefront">
+            <argument name="product" value="$createConfigurableProductP2$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelForP2"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForP2">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Red-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectRedOptionOnP2">
+            <argument name="optionName" value="Red"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForRedP2">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Green-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectGreenOptionOnP2">
+            <argument name="optionName" value="Green"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForGreenP2">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Blue-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectBlueOptionP2">
+            <argument name="optionName" value="Blue"/>
+        </actionGroup>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelForBlueP2"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForBlueP2">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+
+        <!-- Open configurable product p3 and assert price and price label -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigurableProductP3OnStorefront">
+            <argument name="product" value="$createConfigurableProductP3$"/>
+        </actionGroup>
+        <waitForText userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="seeAsLowAsLabelForP3"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForP3">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Red-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectRedOptionOnP3">
+            <argument name="optionName" value="Red"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForRedP3">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Green-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectGreenOptionOnP3">
+            <argument name="optionName" value="Green"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForGreenP3">
+            <argument name="finalProductPrice" value="20.00"/>
+        </actionGroup>
+        <!-- Select Option Blue-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectBlueOptionP3">
+            <argument name="optionName" value="Blue"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForBlueP3">
+            <argument name="finalProductPrice" value="30.00"/>
+        </actionGroup>
+
+        <!-- Open configurable product p4 and assert price and price label -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigurableProductP4OnStorefront">
+            <argument name="product" value="$createConfigurableProductP4$"/>
+        </actionGroup>
+        <waitForText userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="seeAsLowAsLabelForP4"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForP4">
+            <argument name="finalProductPrice" value="5.00"/>
+        </actionGroup>
+        <!-- Select Option Red-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectRedOptionOnP4">
+            <argument name="optionName" value="Red"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForRedP4">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Green-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectGreenOptionOnP4">
+            <argument name="optionName" value="Green"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForGreenP4">
+            <argument name="finalProductPrice" value="20.00"/>
+        </actionGroup>
+        <!-- Select Option Blue-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectBlueOptionP4">
+            <argument name="optionName" value="Blue"/>
+        </actionGroup>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelForBlueP4"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForBlueP4">
+            <argument name="finalProductPrice" value="5.00"/>
+        </actionGroup>
+
+        <!-- Open configurable product p5 and assert price and price label -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigurableProductP5OnStorefront">
+            <argument name="product" value="$createConfigurableProductP5$"/>
+        </actionGroup>
+        <waitForText userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="seeAsLowAsLabelForP5"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForP5">
+            <argument name="finalProductPrice" value="5.00"/>
+        </actionGroup>
+        <!-- Select Option Red-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectRedOptionOnP5">
+            <argument name="optionName" value="Red"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForRedP5">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Green-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectGreenOptionOnP5">
+            <argument name="optionName" value="Green"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForGreenP5">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Blue-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectBlueOptionP5">
+            <argument name="optionName" value="Blue"/>
+        </actionGroup>
+        <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelForBlueP5"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForBlueP5">
+            <argument name="finalProductPrice" value="5.00"/>
+        </actionGroup>
+
+        <!-- Open configurable product p6 and assert price and price label -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigurableProductP6OnStorefront">
+            <argument name="product" value="$createConfigurableProductP6$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelOnP6"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForP6">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Red-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectRedOptionOnP6">
+            <argument name="optionName" value="Red"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelForRedOnP6"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForRedP6">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Green-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectGreenOptionOnP6">
+            <argument name="optionName" value="Green"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForGreenP6">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Option Blue is not present-->
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Blue')}}" stepKey="dontSeeOptionBlueOnP6"/>
+
+        <!-- Open configurable product p7 and assert price and price label -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigurableProductP7OnStorefront">
+            <argument name="product" value="$createConfigurableProductP7$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelOnP7"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForP7">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Red-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectRedOptionOnP7">
+            <argument name="optionName" value="Red"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelForRedOnP7"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForRedP7">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Select Option Green-->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectGreenOptionOnP7">
+            <argument name="optionName" value="Green"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForGreenP7">
+            <argument name="finalProductPrice" value="10.00"/>
+        </actionGroup>
+        <!-- Option Blue is not present-->
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Blue')}}" stepKey="dontSeeOptionBlueOnP7"/>
+    </test>
+</tests>

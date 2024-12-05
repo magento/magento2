@@ -10,7 +10,9 @@ namespace Magento\Customer\Test\Unit\Block\Account;
 use Magento\Customer\Block\Account\AuthorizationLink;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Http\Context;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,7 +26,7 @@ class AuthorizationLinkTest extends TestCase
     protected $_objectManager;
 
     /**
-     * \Magento\Framework\App\Http\Context
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
@@ -41,13 +43,25 @@ class AuthorizationLinkTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->_objectManager->prepareObjectManager($objects);
+
         $this->httpContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $this->_customerUrl = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLogoutUrl', 'getLoginUrl'])
+            ->onlyMethods(['getLogoutUrl', 'getLoginUrl'])
             ->getMock();
 
         $context = $this->_objectManager->getObject(\Magento\Framework\View\Element\Template\Context::class);

@@ -37,7 +37,7 @@ class AttributeConfigFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function fileFormatDataProvider()
+    public static function fileFormatDataProvider()
     {
         return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('catalog_attributes.xml');
     }

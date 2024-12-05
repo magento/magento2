@@ -1,0 +1,26 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnablePaypalStandardPaylaterActionGroup">
+        <annotations>
+            <description>Enable Paypal Paylater Solution For Paypal Standard</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <click selector="{{AdminPaypalStandardConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
+        <selectOption selector="{{AdminPaypalStandardConfigSection.enablePaylaterExperience(countryCode)}}" userInput="Yes" stepKey="EnablePaylaterExperience"/>
+        <waitForPageLoad stepKey="waitForAdvisepaylaterdropdown"/>
+        <waitForElementClickable selector="{{AdminPaypalStandardConfigSection.advisePaylater(countryCode)}}" stepKey="waitForAdvisepaylaterClickable"/>
+        <click selector="{{AdminPaypalStandardConfigSection.advisePaylater(countryCode)}}" stepKey="clickAdvisePaylater"/>
+        <selectOption selector="{{AdminPaypalStandardConfigSection.enablePaypalPaylater(countryCode)}}" userInput="Yes" stepKey="EnablePaypallater"/>
+        <waitForElementClickable selector="{{AdminPaypalStandardConfigSection.expandCategoryPage(countryCode)}}" stepKey="waitForcategorypageClickable"/>
+        <click selector="{{AdminPaypalStandardConfigSection.expandCategoryPage(countryCode)}}" stepKey="clickCategoryPage"/>
+        <selectOption selector ="{{AdminPaypalStandardConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCategory"/>
+    </actionGroup>
+</actionGroups>

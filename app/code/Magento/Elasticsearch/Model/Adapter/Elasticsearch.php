@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\Model\Adapter;
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Exception;
+use LogicException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField;
@@ -25,6 +26,8 @@ use Magento\AdvancedSearch\Helper\Data;
  * Elasticsearch adapter
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Elasticsearch
 {
@@ -125,6 +128,16 @@ class Elasticsearch
     ];
 
     /**
+     * @var bool
+     */
+    private bool $isStackQueries = false;
+
+    /**
+     * @var array
+     */
+    private array $stackedQueries = [];
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param Config $clientConfig
@@ -183,6 +196,67 @@ class Elasticsearch
     }
 
     /**
+     * Disable query stacking
+     *
+     * @return void
+     */
+    public function disableStackQueriesMode(): void
+    {
+        $this->stackedQueries = [];
+        $this->isStackQueries = false;
+    }
+
+    /**
+     * Enable query stacking
+     *
+     * @return void
+     */
+    public function enableStackQueriesMode(): void
+    {
+        $this->isStackQueries = true;
+    }
+
+    /**
+     * Run the stacked queries
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function triggerStackedQueries(): self
+    {
+        try {
+            if (!empty($this->stackedQueries)) {
+                $this->client->bulkQuery($this->stackedQueries);
+            }
+        } catch (Exception $e) {
+            $this->logger->critical($e);
+            throw $e;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Combine query body request
+     *
+     * @param array $queries
+     * @return void
+     * @throws LogicException
+     */
+    private function stackQueries(array $queries): void
+    {
+        if ($this->isStackQueries) {
+            if (empty($this->stackedQueries)) {
+                $this->stackedQueries = $queries;
+            } else {
+                $this->stackedQueries['body'] = array_merge($this->stackedQueries['body'], $queries['body']);
+            }
+        } else {
+            throw new LogicException('Stacked indexer queries not enabled');
+        }
+    }
+
+    /**
      * Retrieve Elasticsearch server status
      *
      * @return bool
@@ -234,7 +308,11 @@ class Elasticsearch
             try {
                 $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName);
-                $this->client->bulkQuery($bulkIndexDocuments);
+                if ($this->isStackQueries === false) {
+                    $this->client->bulkQuery($bulkIndexDocuments);
+                } else {
+                    $this->stackQueries($bulkIndexDocuments);
+                }
             } catch (Exception $e) {
                 $this->logger->critical($e);
                 throw $e;
@@ -309,7 +387,11 @@ class Elasticsearch
                 $indexName,
                 self::BULK_ACTION_DELETE
             );
-            $this->client->bulkQuery($bulkDeleteDocuments);
+            if ($this->isStackQueries === false) {
+                $this->client->bulkQuery($bulkDeleteDocuments);
+            } else {
+                $this->stackQueries($bulkDeleteDocuments);
+            }
         } catch (Exception $e) {
             $this->logger->critical($e);
             throw $e;

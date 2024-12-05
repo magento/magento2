@@ -10,6 +10,7 @@ namespace Magento\Sales\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\EntityInterface;
 
@@ -21,7 +22,7 @@ use Magento\Sales\Model\EntityInterface;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
-abstract class EntityAbstract extends AbstractDb
+abstract class EntityAbstract extends AbstractDb implements ResetAfterRequestInterface
 {
     /**
      * @var string
@@ -204,5 +205,14 @@ abstract class EntityAbstract extends AbstractDb
     {
         parent::_afterDelete($object);
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_uniqueFields = null;
+        $this->serializer = null;
     }
 }

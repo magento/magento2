@@ -152,7 +152,7 @@ class ContentTest extends TestCase
      * Data provider for requestParams
      * @return array
      */
-    public function requestParamsProvider()
+    public static function requestParamsProvider()
     {
         return [
             [

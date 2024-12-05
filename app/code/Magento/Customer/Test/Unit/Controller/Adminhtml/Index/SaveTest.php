@@ -26,6 +26,7 @@ use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Customer\Model\SetCustomerStore;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
@@ -44,8 +45,6 @@ use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Newsletter\Model\SubscriptionManagerInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -204,7 +203,7 @@ class SaveTest extends TestCase
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             ForwardFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
@@ -214,7 +213,8 @@ class SaveTest extends TestCase
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
+            ->onlyMethods(['getConfig'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -224,19 +224,19 @@ class SaveTest extends TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['unsCustomerFormData', 'setCustomerFormData'])
+            ->addMethods(['unsCustomerFormData', 'setCustomerFormData'])
             ->getMock();
         $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectFactoryMock = $this->getMockBuilder(DataObjectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->customerDataFactoryMock = $this->getMockBuilder(
             CustomerInterfaceFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -262,7 +262,7 @@ class SaveTest extends TestCase
             ->getMockForAbstractClass();
         $this->subscriberFactoryMock = $this->getMockBuilder(SubscriberFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->subscriptionManager = $this->getMockForAbstractClass(SubscriptionManagerInterface::class);
         $this->registryMock = $this->getMockBuilder(Registry::class)
@@ -273,26 +273,22 @@ class SaveTest extends TestCase
             ->getMockForAbstractClass();
         $this->redirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->managementMock = $this->getMockBuilder(AccountManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createAccount', 'validateCustomerStoreIdByWebsiteId'])
+            ->onlyMethods(['createAccount', 'validateCustomerStoreIdByWebsiteId'])
             ->getMock();
         $this->addressDataFactoryMock = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->emailNotificationMock = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getStoreIds']);
-        $website->method('getStoreIds')
-            ->willReturn([1]);
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $storeManager->method('getWebsite')
-            ->willReturn($website);
+
+        $customerStoreMock = $this->createMock(SetCustomerStore::class);
+        $customerStoreMock->expects($this->once())->method('setStore');
 
         $objectManager = new ObjectManager($this);
 
@@ -319,7 +315,7 @@ class SaveTest extends TestCase
                 'addressRepository' => $this->customerAddressRepositoryMock,
                 'addressMapper' => $this->customerAddressMapperMock,
                 'subscriptionManager' => $this->subscriptionManager,
-                'storeManager' => $storeManager,
+                'customerStore' => $customerStoreMock
             ]
         );
 

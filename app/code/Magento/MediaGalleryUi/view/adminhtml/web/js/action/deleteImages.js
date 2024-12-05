@@ -8,15 +8,16 @@ define([
     'mage/url',
     'Magento_MediaGalleryUi/js/grid/messages',
     'Magento_Ui/js/modal/confirm',
-    'mage/translate'
+    'mage/translate',
+    'jquery/jquery-storageapi'
 ], function ($, _, urlBuilder, messages, confirmation, $t) {
     'use strict';
 
     return function (ids, deleteUrl, confirmationContent) {
         var deferred = $.Deferred(),
-               title = $t('Delete assets'),
-               cancelText = $t('Cancel'),
-               deleteImageText = $t('Delete');
+            title = $t('Delete assets'),
+            cancelText = $t('Cancel'),
+            deleteImageText = $t('Delete');
 
         /**
          * Send deletion request with redords ids
@@ -25,6 +26,17 @@ define([
          * @param {String} serviceUrl
          */
         function sendRequest(recordIds, serviceUrl) {
+            let imageLinks = [];
+
+            Object.values(recordIds).forEach(function (recordId) {
+                if (typeof recordId === 'string') {
+                    let imageUrl = new URL(
+                        $('div[data-id=' + recordId + ']').find('img').attr('src').replace('.thumbs', '')
+                    );
+
+                    imageLinks.push(imageUrl.pathname);
+                }
+            });
 
             $.ajax({
                 type: 'POST',
@@ -63,6 +75,11 @@ define([
                         code: 'success'
                     });
                     deferred.resolve(message);
+
+                    if ($.localStorage.get('deleted_images')) {
+                        imageLinks = imageLinks.concat($.localStorage.get('deleted_images'));
+                    }
+                    $.localStorage.set('deleted_images', [...new Set(imageLinks)]);
                 },
 
                 /**

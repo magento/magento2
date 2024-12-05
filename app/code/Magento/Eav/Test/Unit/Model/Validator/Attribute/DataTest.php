@@ -13,6 +13,7 @@ use Magento\Eav\Model\Attribute\Data\AbstractData;
 use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Validator\Attribute\Data;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManagerInterface;
@@ -36,6 +37,11 @@ class DataTest extends TestCase
     private $model;
 
     /**
+     * @var \Magento\Eav\Model\Config|MockObject
+     */
+    private $eavConfigMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -49,7 +55,12 @@ class DataTest extends TestCase
                 ]
             )
             ->getMock();
-
+        $this->createMock(ObjectManagerInterface::class);
+        ObjectManager::setInstance($this->createMock(ObjectManagerInterface::class));
+        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->onlyMethods(['getEntityType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = new Data($this->attrDataFactory);
     }
 
@@ -73,6 +84,10 @@ class DataTest extends TestCase
         $messages,
         $data = ['attribute' => 'new_test']
     ): void {
+        if(!empty($attributeData['data_model']))
+        {
+            $attributeData['data_model'] = $attributeData['data_model']($this);
+        }
         $entity = $this->_getEntityMock();
         $attribute = $this->_getAttributeMock($attributeData);
         $attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
@@ -103,29 +118,29 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function isValidDataProvider(): array
+    public static function isValidDataProvider(): array
     {
         return [
             'is_valid' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
-                    'data_model' => $this->_getDataModelMock(null),
+                    'data_model' => static fn (self $testCase) => $testCase->_getDataModelMock(null),
                     'frontend_input' => 'text',
                     'is_visible' => true
                 ],
-                'attributeReturns' => true,
-                'isValid' => true,
+                'result' => true,
+                'expected' => true,
                 'messages' => []
             ],
             'is_invalid' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
-                    'data_model' => $this->_getDataModelMock(null),
+                    'data_model' => static fn (self $testCase) => $testCase->_getDataModelMock(null),
                     'frontend_input' => 'text',
                     'is_visible' => true
                 ],
-                'attributeReturns' => ['Error'],
-                'isValid' => false,
+                'result' => ['Error'],
+                'expected' => false,
                 'messages' => ['attribute' => ['Error']]
             ],
             'no_data_models' => [
@@ -134,8 +149,8 @@ class DataTest extends TestCase
                     'frontend_input' => 'text',
                     'is_visible' => true
                 ],
-                'attributeReturns' => ['Error'],
-                'isValid' => false,
+                'result' => ['Error'],
+                'expected' => false,
                 'messages' => ['attribute' => ['Error']]
             ],
             'no_data_models_no_frontend_input' => [
@@ -143,43 +158,43 @@ class DataTest extends TestCase
                     'attribute_code' => 'attribute',
                     'is_visible' => true
                 ],
-                'attributeReturns' => ['Error'],
-                'isValid' => true,
+                'result' => ['Error'],
+                'expected' => true,
                 'messages' => []
             ],
             'no_data_for attribute' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
-                    'data_model' => $this->_getDataModelMock(null),
+                    'data_model' => static fn (self $testCase) => $testCase->_getDataModelMock(null),
                     'frontend_input' => 'text',
                     'is_visible' => true
                 ],
-                'attributeReturns' => true,
-                'isValid' => true,
+                'result' => true,
+                'expected' => true,
                 'messages' => [],
-                'setData' => ['attribute2' => 'new_test']
+                'data' => ['attribute2' => 'new_test']
             ],
             'is_valid_data_from_entity' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
-                    'data_model' => $this->_getDataModelMock(null),
+                    'data_model' => static fn (self $testCase) => $testCase->_getDataModelMock(null),
                     'frontend_input' => 'text',
                     'is_visible' => true
                 ],
-                'attributeReturns' => true,
-                'isValid' => true,
+                'result' => true,
+                'expected' => true,
                 'messages' => [],
-                'setData' => []
+                'data' => []
             ],
             'is_invisible' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
-                    'data_model' => $this->_getDataModelMock(null),
+                    'data_model' => static fn (self $testCase) => $testCase->_getDataModelMock(null),
                     'frontend_input' => 'text',
                     'is_visible' => false,
                 ],
-                'attributeReturns' => ['Error'],
-                'isValid' => true,
+                'result' => ['Error'],
+                'expected' => true,
                 'messages' => [],
                 'data' => [],
             ],
@@ -205,13 +220,17 @@ class DataTest extends TestCase
                 'is_visible' => true,
             ]
         );
+        $entityTypeCode = 'entity_type_code';
         $collection = $this->getMockBuilder(DataObject::class)
             ->addMethods(['getItems'])->getMock();
         $collection->expects($this->once())->method('getItems')->willReturn([$attribute]);
         $entityType = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getAttributeCollection'])
+            ->addMethods(['getAttributeCollection','getEntityTypeCode'])
             ->getMock();
+        $entityType->expects($this->atMost(2))->method('getEntityTypeCode')->willReturn($entityTypeCode);
         $entityType->expects($this->once())->method('getAttributeCollection')->willReturn($collection);
+        $this->eavConfigMock->expects($this->once())->method('getEntityType')
+            ->with($entityTypeCode)->willReturn($entityType);
         $entity = $this->_getEntityMock();
         $entity->expects($this->once())->method('getResource')->willReturn($resource);
         $entity->expects($this->once())->method('getEntityType')->willReturn($entityType);
@@ -235,7 +254,7 @@ class DataTest extends TestCase
         )->willReturn(
             $dataModel
         );
-        $validator = new Data($attrDataFactory);
+        $validator = new Data($attrDataFactory, $this->eavConfigMock);
 
         $validator->setData(['attribute' => 'new_test_data']);
         $this->assertTrue($validator->isValid($entity));
@@ -297,7 +316,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function allowDenyListProvider(): array
+    public static function allowDenyListProvider(): array
     {
         $allowedCallbackList = function ($validator) {
             $validator->setAllowedAttributesList(['attribute']);
@@ -395,17 +414,23 @@ class DataTest extends TestCase
 
         $factory
             ->method('create')
-            ->withConsecutive(
-                [$firstAttribute, $entity],
-                [$secondAttribute, $entity],
-                [$firstAttribute, $entity],
-                [$secondAttribute, $entity]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $firstDataModel,
-                $secondDataModel,
-                $firstDataModel,
-                $secondDataModel
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2
+                ) use (
+                    $firstAttribute,
+                    $entity,
+                    $firstDataModel,
+                    $secondDataModel,
+                    $secondAttribute
+                ) {
+                    if ($arg1 === $firstAttribute && $arg2 === $entity) {
+                        return $firstDataModel;
+                    } elseif ($arg1 === $secondAttribute && $arg2 === $entity) {
+                        return $secondDataModel;
+                    }
+                }
             );
 
         $this->assertFalse($validator->isValid($entity));

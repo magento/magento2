@@ -1,8 +1,10 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2024 Adobe
+# All Rights Reserved.
 
 type Query {
     customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @deprecated(reason: "Use the `customer` query instead.") @cache(cacheable: false)
+    guestOrder(input: OrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and postcode.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
+    guestOrderByToken(input: OrderTokenInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on token.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
 }
 
 type Mutation {
@@ -31,7 +33,10 @@ type Customer {
 }
 
 input CustomerOrdersFilterInput @doc(description: "Identifies the filter to use for filtering orders.") {
+    order_date: FilterRangeTypeInput @doc(description: "Filters by order created_at time.")
+    status: FilterEqualTypeInput @doc(description: "Filters by order status.")
     number: FilterStringTypeInput @doc(description: "Filters by order number.")
+    grand_total: FilterRangeTypeInput @doc(description: "Filters by order base grand total value.")
 }
 
 input CustomerOrderSortInput @doc(description: "CustomerOrderSortInput specifies the field to use for sorting search results and indicates whether the results are sorted in ascending or descending order.") {
@@ -48,6 +53,7 @@ type CustomerOrders @doc(description: "The collection of orders that match the c
     items: [CustomerOrder]! @doc(description: "An array of customer orders.")
     page_info: SearchResultPageInfo @doc(description: "Contains pagination metadata.")
     total_count: Int @doc(description: "The total count of customer orders.")
+    date_of_first_order: String @doc(description: "Date of the first order placed in the store") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\DateOfFirstOrderResolver")
 }
 
 type CustomerOrder @doc(description: "Contains details about each of the customer's orders.") {
@@ -70,6 +76,21 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     order_number: String! @deprecated(reason: "Use the `number` field instead.")
     created_at: String @deprecated(reason: "Use the `order_date` field instead.")
     grand_total: Float  @deprecated(reason: "Use the `totals.grand_total` field instead.")
+    token: String! @doc(description: "The token that can be used to retrieve the order using order query.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Token")
+    applied_coupons: [AppliedCoupon!]! @doc(description: "Coupons applied to the order.")
+    email: String @doc(description: "Order customer email.")
+    is_virtual: Boolean! @doc(description: "`TRUE` if the order is virtual") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderIsVirtual")
+    available_actions: [OrderActionType!]! @doc(description: "List of available order actions.") @resolver(class: "\\Magento\\SalesGraphQl\\Model\\Resolver\\OrderAvailableActions")
+    customer_info: OrderCustomerInfo! @doc(description: "Returns customer information from order.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderCustomerInfo")
+    order_status_change_date: String! @doc(description: "The date the order status was last updated.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderStatusChangeDate")
+}
+
+type OrderCustomerInfo {
+    firstname: String! @doc(description: "First name of the customer")
+    lastname: String @doc(description: "Last name of the customer")
+    middlename: String @doc(description: "Middle name of the customer")
+    prefix: String @doc(description: "Prefix of the customer")
+    suffix: String @doc(description: "Suffix of the customer")
 }
 
 type OrderAddress @doc(description: "Contains detailed information about an order's billing and shipping addresses."){
@@ -107,9 +128,24 @@ interface OrderItemInterface @doc(description: "Order item details.") @typeResol
     quantity_invoiced: Float @doc(description: "The number of invoiced items.")
     quantity_canceled: Float @doc(description: "The number of canceled items.")
     quantity_returned: Float @doc(description: "The number of returned items.")
+    product: ProductInterface @doc(description: "The ProductInterface object, which contains details about the base product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\ProductResolver")
+    prices: OrderItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") @resolver(class: "\\Magento\\SalesGraphQl\\Model\\Resolver\\OrderItemPrices")
 }
 
 type OrderItem implements OrderItemInterface {
+}
+
+type OrderItemPrices {
+    price: Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    price_including_tax:  Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
+    row_total: Money! @doc(description: "The value of the price multiplied by the quantity of the item.")
+    row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
+    discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
+    total_item_discount: Money! @doc(description: "The total of all discounts applied to the item.")
+    original_price: Money @doc(description: "The original price of the item.")
+    original_price_including_tax: Money @doc(description: "The original price of the item including tax.")
+    original_row_total: Money! @doc(description: "The value of the original price multiplied by the quantity of the item.")
+    original_row_total_including_tax: Money! @doc(description: "The value of the original price multiplied by the quantity of the item including tax.")
 }
 
 type OrderItemOption @doc(description: "Represents order item options like selected or entered.") {
@@ -265,4 +301,36 @@ enum ScopeTypeEnum @doc(description: "This enumeration defines the scope type fo
     GLOBAL
     WEBSITE
     STORE
+}
+
+input OrderTokenInput @doc(description: "Input to retrieve an order based on token.") {
+    token: String! @doc(description: "Order token.")
+}
+
+input OrderInformationInput @doc(description: "Input to retrieve an order based on details.") {
+    number: String! @doc(description: "Order number.")
+    email: String! @doc(description: "Order billing address email.")
+    postcode: String! @doc(description: "Order billing address postcode.")
+}
+
+enum OrderActionType @doc(description: "The list of available order actions.") {
+    REORDER
+}
+
+type StoreConfig {
+    display_product_prices_in_catalog: Boolean! @doc(description: "Configuration data from tax/display/type")
+    display_shipping_prices: Boolean! @doc(description: "Configuration data from tax/display/shipping")
+    orders_invoices_credit_memos_display_price: Boolean! @doc(description: "Configuration data from tax/sales_display/price")
+    orders_invoices_credit_memos_display_subtotal: Boolean! @doc(description: "Configuration data from tax/sales_display/subtotal")
+    orders_invoices_credit_memos_display_shipping_amount: Boolean! @doc(description: "Configuration data from tax/sales_display/shipping")
+    orders_invoices_credit_memos_display_grandtotal: Boolean! @doc(description: "Configuration data from tax/sales_display/grandtotal")
+    orders_invoices_credit_memos_display_full_summary: Boolean! @doc(description: "Configuration data from tax/sales_display/full_summary")
+    orders_invoices_credit_memos_display_zero_tax: Boolean! @doc(description: "Configuration data from tax/sales_display/zero_tax")
+    fixed_product_taxes_enable: Boolean! @doc(description: "Configuration data from tax/weee/enable")
+    fixed_product_taxes_display_prices_in_product_lists: Int @doc(description: "Configuration data from tax/weee/display_list")
+    fixed_product_taxes_display_prices_on_product_view_page: Int @doc(description: "Configuration data from tax/weee/display")
+    fixed_product_taxes_display_prices_in_sales_modules: Int @doc(description: "Configuration data from tax/weee/display_sales")
+    fixed_product_taxes_display_prices_in_emails: Int @doc(description: "Configuration data from tax/weee/display_email")
+    fixed_product_taxes_apply_tax_to_fpt: Boolean! @doc(description: "Configuration data from tax/weee/apply_vat")
+    fixed_product_taxes_include_fpt_in_subtotal: Boolean! @doc(description: "Configuration data from tax/weee/include_in_subtotal")
 }

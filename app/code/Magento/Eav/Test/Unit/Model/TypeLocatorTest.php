@@ -83,34 +83,35 @@ class TypeLocatorTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getTypeDataProvider()
+    public static function getTypeDataProvider()
     {
         $serviceInterface = ProductInterface::class;
         $eavEntityType = 'catalog_product';
-        $mediaBackEndModelClass = ProductAttributeMediaGalleryEntryInterface::class;
+//        $mediaBackEndModelClass = ProductAttributeMediaGalleryEntryInterface::class;
         $mediaAttributeDataInterface = ProductAttributeMediaGalleryEntryInterface::class;
 
-        $attribute = $this->createPartialMock(
-            Attribute::class,
-            ['getBackendModel']
-        );
-
-        $attribute->expects($this->any())
-            ->method('getBackendModel')
-            ->willReturn($mediaBackEndModelClass);
-
-        $attributeNoBackendModel = $this->createPartialMock(
-            Attribute::class,
-            ['getBackendModel', 'getFrontendInput']
-        );
-
-        $attributeNoBackendModel->expects($this->any())
-            ->method('getBackendModel')
-            ->willReturn(null);
-
-        $attributeNoBackendModel->expects($this->any())
-            ->method('getFrontendInput')
-            ->willReturn('image');
+        // There is no use of below mock, uncomment to paas in result
+//        $attribute = $this->createPartialMock(
+//            Attribute::class,
+//            ['getBackendModel']
+//        );
+//
+//        $attribute->expects($this->any())
+//            ->method('getBackendModel')
+//            ->willReturn($mediaBackEndModelClass);
+//
+//        $attributeNoBackendModel = $this->createPartialMock(
+//            Attribute::class,
+//            ['getBackendModel', 'getFrontendInput']
+//        );
+//
+//        $attributeNoBackendModel->expects($this->any())
+//            ->method('getBackendModel')
+//            ->willReturn(null);
+//
+//        $attributeNoBackendModel->expects($this->any())
+//            ->method('getFrontendInput')
+//            ->willReturn('image');
 
         return [
             [

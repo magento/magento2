@@ -78,7 +78,7 @@ class GroupedTest extends TestCase
         $this->catalogProductLink = $this->createMock(Link::class);
         $this->productStatusMock = $this->createMock(Status::class);
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->getMockForAbstractClass();
 
         $this->_model = $this->objectHelper->getObject(
@@ -185,7 +185,7 @@ class GroupedTest extends TestCase
      *
      * @return array
      */
-    public function addStatusFilterDataProvider(): array
+    public static function addStatusFilterDataProvider(): array
     {
         return [[1, [], [1]], [1, false, [1]]];
     }
@@ -273,7 +273,7 @@ class GroupedTest extends TestCase
 
         /** @var Grouped $model */
         $model = $this->getMockBuilder(Grouped::class)
-            ->setMethods(['getAssociatedProducts'])
+            ->onlyMethods(['getAssociatedProducts'])
             ->setConstructorArgs($args)
             ->getMock();
 
@@ -360,7 +360,7 @@ class GroupedTest extends TestCase
      *
      * @return array
      */
-    public function processBuyRequestDataProvider(): array
+    public static function processBuyRequestDataProvider(): array
     {
         return [
             'positive' => [[1, 2, 3], ['super_group' => [1, 2, 3]]],
@@ -736,7 +736,7 @@ class GroupedTest extends TestCase
     /**
      * @return array
      */
-    public function prepareForCartAdvancedWithProductsStrictTrueDataProvider(): array
+    public static function prepareForCartAdvancedWithProductsStrictTrueDataProvider(): array
     {
         return [
             [

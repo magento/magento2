@@ -9,12 +9,14 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\CatalogGraphQl\Model\Resolver\Product\ProductFieldsSelector;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ProductFactory as ProductDataProviderFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
@@ -22,31 +24,35 @@ use Magento\Framework\Exception\LocalizedException;
 class Product implements ResolverInterface
 {
     /**
-     * @var ProductDataProvider
+     * @var ProductDataProviderFactory
      */
-    private $productDataProvider;
+    private ProductDataProviderFactory $productDataProviderFactory;
 
     /**
      * @var ValueFactory
      */
-    private $valueFactory;
+    private ValueFactory $valueFactory;
 
     /**
      * @var ProductFieldsSelector
      */
-    private $productFieldsSelector;
+    private ProductFieldsSelector $productFieldsSelector;
 
     /**
-     * @param ProductDataProvider $productDataProvider
+     * @param ProductDataProvider $productDataProvider Deprecated. Use $productDataProviderFactory
      * @param ValueFactory $valueFactory
      * @param ProductFieldsSelector $productFieldsSelector
+     * @param ProductDataProviderFactory|null $productDataProviderFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ProductDataProvider $productDataProvider,
         ValueFactory $valueFactory,
-        ProductFieldsSelector $productFieldsSelector
+        ProductFieldsSelector $productFieldsSelector,
+        ProductDataProviderFactory $productDataProviderFactory = null
     ) {
-        $this->productDataProvider = $productDataProvider;
+        $this->productDataProviderFactory = $productDataProviderFactory
+            ?: ObjectManager::getInstance()->get(ProductDataProviderFactory::class);
         $this->valueFactory = $valueFactory;
         $this->productFieldsSelector = $productFieldsSelector;
     }
@@ -59,12 +65,12 @@ class Product implements ResolverInterface
         if (!isset($value['sku'])) {
             throw new GraphQlInputException(__('No child sku found for product link.'));
         }
-        $this->productDataProvider->addProductSku($value['sku']);
+        $productDataProvider = $this->productDataProviderFactory->create();
+        $productDataProvider->addProductSku($value['sku']);
         $fields = $this->productFieldsSelector->getProductFieldsFromInfo($info);
-        $this->productDataProvider->addEavAttributes($fields);
-
-        $result = function () use ($value, $context) {
-            $data = $value['product'] ?? $this->productDataProvider->getProductBySku($value['sku'], $context);
+        $productDataProvider->addEavAttributes($fields);
+        $result = function () use ($value, $context, $productDataProvider) {
+            $data = $value['product'] ?? $productDataProvider->getProductBySku($value['sku'], $context);
             if (empty($data)) {
                 return null;
             }
@@ -75,7 +81,6 @@ class Product implements ResolverInterface
             /** @var \Magento\Catalog\Model\Product $productModel */
             $data = $productModel->getData();
             $data['model'] = $productModel;
-
             if (!empty($productModel->getCustomAttributes())) {
                 foreach ($productModel->getCustomAttributes() as $customAttribute) {
                     if (!isset($data[$customAttribute->getAttributeCode()])) {

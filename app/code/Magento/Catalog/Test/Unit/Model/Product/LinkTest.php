@@ -45,14 +45,14 @@ class LinkTest extends TestCase
         $linkCollection = $this->getMockBuilder(
             Collection::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setLinkModel']
             )->getMock();
         $linkCollection->expects($this->any())->method('setLinkModel')->willReturnSelf();
         $linkCollectionFactory = $this->getMockBuilder(
             CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
         $linkCollectionFactory->expects($this->any())
@@ -61,14 +61,14 @@ class LinkTest extends TestCase
         $this->productCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setLinkModel']
             )->getMock();
         $this->productCollection->expects($this->any())->method('setLinkModel')->willReturnSelf();
         $productCollectionFactory = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['create']
             )->getMock();
         $productCollectionFactory->expects($this->any())

@@ -147,8 +147,10 @@ class LockValidatorTest extends TestCase
             ->willReturn($this->connectionMock);
         $this->resource
             ->method('getTableName')
-            ->withConsecutive(['catalog_product_super_attribute'], ['catalog_product_entity'])
-            ->willReturnOnConsecutiveCalls($attrTable, $productTable);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['catalog_product_super_attribute'] => $attrTable,
+                ['catalog_product_entity'] => $productTable
+            });
 
         $this->connectionMock->expects($this->once())->method('select')
             ->willReturn($this->select);

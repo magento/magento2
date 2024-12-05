@@ -26,14 +26,21 @@
             <magentoCLI command="config:set general/locale/timezone UTC" stepKey="setTimezone"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set general/locale/timezone America/Los_Angeles" stepKey="setTimezone"/>
             <!--Restore default configuration settings.-->
             <magentoCLI command="config:set {{DefaultWebCookieLifetimeConfigData.path}} {{DefaultWebCookieLifetimeConfigData.value}}" stepKey="setDefaultCookieLifetime"/>
             <!--Clear cache and perform reindex-->
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
         <!--Login to storefront from customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">

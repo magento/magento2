@@ -81,19 +81,33 @@ class ConvertToCsv
         $searchCriteria = $dataProvider->getSearchCriteria()
             ->setCurrentPage($i)
             ->setPageSize($this->pageSize);
-        $totalCount = (int) $dataProvider->getSearchResult()->getTotalCount();
-        $totalPagesCount = (int) ceil($totalCount / $this->pageSize);
-        while ($i <= $totalPagesCount) {
-            // setTotalCount to prevent total count from being calculated in loop
+
+        $totalCount = null;
+        $totalPagesCount = null;
+
+        do {
             $searchResult = $dataProvider->getSearchResult();
-            $searchResult->setTotalCount($totalCount);
             $items = $searchResult->getItems();
+
+            if ($totalCount === null) { // get total count only once
+                $totalCount = $searchResult->getTotalCount();
+                $totalPagesCount = (int) ceil($totalCount / $this->pageSize);
+            }
+
+            // call setTotalCount to prevent total count from being calculate in subsequent iterations of this loop
+            $searchResult->setTotalCount($totalCount);
+            // Ensure $items is always an array
+            if ($items === null) {
+                $items = [];
+            }
             foreach ($items as $item) {
                 $this->metadataProvider->convertDate($item, $component->getName());
                 $stream->writeCsv($this->metadataProvider->getRowData($item, $fields, $options));
             }
+
             $searchCriteria->setCurrentPage(++$i);
-        }
+        } while ($i <= $totalPagesCount);
+
         $stream->unlock();
         $stream->close();
 

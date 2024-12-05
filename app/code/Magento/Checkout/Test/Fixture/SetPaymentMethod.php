@@ -38,17 +38,21 @@ class SetPaymentMethod implements DataFixtureInterface
 
     /**
      * {@inheritdoc}
-     * @param array $data Parameters
+     * @param array $data Parameters. Same format as SetPaymentMethod::DEFAULT_DATA.
      * <pre>
      *    $data = [
      *      'cart_id' => (int) Cart ID. Required
      *      'method' => (array) Payment method. Optional
      *    ]
      * </pre>
+     * Fields structure:
+     * - $data['method']: can be supplied in following formats:
+     *      - array ["method" => "checkmo", "po_number" => null, "additional_data" => null]
+     *      - string "checkmo"
      */
     public function apply(array $data = []): ?DataObject
     {
-        $data = array_merge(self::DEFAULT_DATA, $data);
+        $data = $this->prepareData($data);
         $service = $this->serviceFactory->create(PaymentMethodManagementInterface::class, 'set');
         $service->execute(
             [
@@ -58,5 +62,20 @@ class SetPaymentMethod implements DataFixtureInterface
         );
 
         return null;
+    }
+
+    /**
+     * Prepare payment data
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareData(array $data): array
+    {
+        if (isset($data['method']) && is_string($data['method'])) {
+            $data['method'] = ['method' => $data['method']];
+        }
+
+        return array_merge(self::DEFAULT_DATA, $data);
     }
 }

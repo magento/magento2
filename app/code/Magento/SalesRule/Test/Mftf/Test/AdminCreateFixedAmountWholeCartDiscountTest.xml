@@ -17,6 +17,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-91"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

@@ -18,13 +18,14 @@ use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Category layer builder
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Category implements LayerBuilderInterface
+class Category implements LayerBuilderInterface, ResetAfterRequestInterface
 {
     /**
      * @var string
@@ -200,5 +201,18 @@ class Category implements LayerBuilderInterface
             )
         );
         return $collection->getAllIds();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$bucketMap = [
+            self::CATEGORY_BUCKET => [
+                'request_name' => 'category_uid',
+                'label' => 'Category'
+            ],
+        ];
     }
 }

@@ -243,7 +243,7 @@ class PatchApplierTest extends TestCase
     /**
      * @return array
      */
-    public function applyDataPatchDataNewModuleProvider()
+    public static function applyDataPatchDataNewModuleProvider()
     {
         return [
             'newly installed module' => [
@@ -323,7 +323,7 @@ class PatchApplierTest extends TestCase
     /**
      * @return array
      */
-    public function applyDataPatchDataInstalledModuleProvider()
+    public static function applyDataPatchDataInstalledModuleProvider()
     {
         return [
             'upgrade module iwth only OtherDataPatch' => [
@@ -608,7 +608,7 @@ class PatchApplierTest extends TestCase
     /**
      * @return array
      */
-    public function schemaPatchDataProvider()
+    public static function schemaPatchDataProvider()
     {
         return [
             'upgrade module iwth only OtherSchemaPatch' => [
@@ -644,7 +644,7 @@ class PatchApplierTest extends TestCase
 
         $mockIteratorAggregate = $this->getMockBuilder($className)
             ->disableOriginalConstructor()
-            ->setMethods(array_merge($methods, ['getIterator']))
+            ->onlyMethods(array_merge($methods, ['getIterator']))
             ->getMock();
 
         $mockIteratorAggregate->expects($this->any())->method('getIterator')->willReturn($someIterator);

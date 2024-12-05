@@ -16,6 +16,7 @@
             <useCaseId value="ACP2E-1053"/>
             <testCaseId value="AC-6642"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SalesRuleSpecificCoupon" stepKey="createSalesRule"/>

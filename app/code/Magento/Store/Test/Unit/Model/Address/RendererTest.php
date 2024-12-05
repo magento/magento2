@@ -29,14 +29,14 @@ class RendererTest extends TestCase
     {
         $eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $eventManager->expects($this->once())->method('dispatch')->with('store_address_format');
 
         $filterManager = $this->getMockBuilder(FilterManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['template'])
+            ->addMethods(['template'])
             ->getMock();
 
         $filterManager->expects($this->once())
@@ -66,7 +66,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function formatDataProvider()
+    public static function formatDataProvider()
     {
         $storeInfo = new DataObject([
             'region' => 'Gondolin',

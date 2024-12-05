@@ -10,6 +10,10 @@ use Magento\Framework\Escaper;
 
 /**
  * Builds the HTML for the release notification modals
+ *
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
 class NotificationRenderer
 {

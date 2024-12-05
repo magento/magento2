@@ -101,12 +101,16 @@ class SerializedDataConverterTest extends TestCase
         ];
         $this->serializeMock
             ->method('unserialize')
-            ->withConsecutive([$serializedData], [$serializedBundleAttributes])
-            ->willReturnOnConsecutiveCalls($data, $bundleAttributes);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$serializedData] => $data,
+                [$serializedBundleAttributes] => $bundleAttributes
+            });
         $this->jsonMock
             ->method('serialize')
-            ->withConsecutive([$bundleAttributes], [$dataWithJsonEncodedBundleAttributes])
-            ->willReturnOnConsecutiveCalls($jsonEncodedBundleAttributes, $jsonEncodedData);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$bundleAttributes] => $jsonEncodedBundleAttributes,
+                [$dataWithJsonEncodedBundleAttributes] =>$jsonEncodedData
+            });
         $this->assertEquals(
             $jsonEncodedData,
             $this->serializedDataConverter->convert($serializedData)
@@ -157,12 +161,16 @@ class SerializedDataConverterTest extends TestCase
         ];
         $this->serializeMock
             ->method('unserialize')
-            ->withConsecutive([$serializedData], [$serializedOptionValue])
-            ->willReturnOnConsecutiveCalls($data, $optionValue);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$serializedData] => $data,
+                [$serializedOptionValue] =>$optionValue
+            });
         $this->jsonMock
             ->method('serialize')
-            ->withConsecutive([$optionValue], [$dataWithJsonEncodedOptionValue])
-            ->willReturnOnConsecutiveCalls($jsonEncodedOptionValue, $jsonEncodedData);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$optionValue] => $jsonEncodedOptionValue,
+                [$dataWithJsonEncodedOptionValue] =>$jsonEncodedData
+            });
         $this->assertEquals(
             $jsonEncodedData,
             $this->serializedDataConverter->convert($serializedData)

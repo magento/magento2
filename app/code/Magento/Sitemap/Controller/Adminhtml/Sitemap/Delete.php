@@ -51,7 +51,7 @@ class Delete extends Sitemap implements HttpPostActionInterface
      */
     public function execute()
     {
-        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('sitemap_id');
         if ($id) {

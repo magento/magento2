@@ -183,7 +183,7 @@ class ConfigTest extends TestCase
             ->method('unserialize')
             ->with('serializedConfig')
             ->willReturn([['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]);
-        $test = $this->config->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
+        $test = $this->config->getVclFile(Config::VARNISH_6_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
 
@@ -205,8 +205,19 @@ class ConfigTest extends TestCase
     {
         $this->cacheState
             ->method('isEnabled')
-            ->withConsecutive([Type::TYPE_IDENTIFIER], [Type::TYPE_IDENTIFIER])
-            ->willReturnOnConsecutiveCalls(true, false);
+            ->willReturnCallback(
+                function ($arg) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg == Type::TYPE_IDENTIFIER) {
+                        $callCount++;
+                        return true;
+                    } elseif ($callCount == 1 && $arg == Type::TYPE_IDENTIFIER) {
+                        $callCount++;
+                        return false;
+                    }
+                }
+            );
+
         $this->assertTrue($this->config->isEnabled());
         $this->assertFalse($this->config->isEnabled());
     }

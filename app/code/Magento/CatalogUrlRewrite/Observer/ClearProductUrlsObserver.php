@@ -6,7 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
-use Magento\Framework\App\ResourceConnection;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
@@ -15,17 +15,25 @@ use Magento\Framework\Event\ObserverInterface;
 class ClearProductUrlsObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\UrlRewrite\Model\UrlPersistInterface
+     * @var UrlPersistInterface
      */
     protected $urlPersist;
 
     /**
+     * @var SkuStorage
+     */
+    private SkuStorage $skuStorage;
+
+    /**
      * @param UrlPersistInterface $urlPersist
+     * @param SkuStorage $skuStorage
      */
     public function __construct(
-        UrlPersistInterface $urlPersist
+        UrlPersistInterface $urlPersist,
+        SkuStorage $skuStorage
     ) {
         $this->urlPersist = $urlPersist;
+        $this->skuStorage = $skuStorage;
     }
 
     /**
@@ -37,14 +45,15 @@ class ClearProductUrlsObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         if ($products = $observer->getEvent()->getBunch()) {
-            $oldSku = $observer->getEvent()->getAdapter()->getOldSku();
             $idToDelete = [];
             foreach ($products as $product) {
-                $sku = strtolower($product[ImportProduct::COL_SKU] ?? '');
-                if (!isset($oldSku[$sku])) {
+                $sku = $product[ImportProduct::COL_SKU] ?? '';
+                $sku = (string)$sku;
+                if (!$this->skuStorage->has($sku)) {
                     continue;
                 }
-                $productData = $oldSku[$sku];
+
+                $productData = $this->skuStorage->get($sku);
                 $idToDelete[] = $productData['entity_id'];
             }
             if (!empty($idToDelete)) {

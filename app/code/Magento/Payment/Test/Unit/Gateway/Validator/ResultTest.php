@@ -30,14 +30,19 @@ class ResultTest extends TestCase
         $this->assertEquals($expectedFailsDescription, $this->model->getFailsDescription());
     }
 
-    /**
-     * @return array
-     */
-    public function resultDataProvider()
-    {
+    protected function getMockForPhrase() {
         $phraseMock = $this->getMockBuilder(Phrase::class)
             ->disableOriginalConstructor()
             ->getMock();
+        return $phraseMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function resultDataProvider()
+    {
+        $phraseMock = static fn (self $testCase) => $testCase->getMockForPhrase();
         return [
             [true, [$phraseMock, $phraseMock], true, [$phraseMock, $phraseMock]],
             ['', [], false, []],

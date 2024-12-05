@@ -36,7 +36,7 @@
         </referenceBlock>
 
         <referenceContainer name="content">
-            <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" before="-">
+            <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" before="product.info.details">
                 <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price">
                     <container name="product.info.stock.sku" label="Product auxiliary info" htmlTag="div" htmlClass="product-info-stock-sku">
                         <container name="product.info.type" before="-"/>
@@ -111,14 +111,14 @@
                     </arguments>
                 </block>
             </container>
-            <container name="product.info.media" htmlTag="div" htmlClass="product media" after="product.info.main">
+            <container name="product.info.media" htmlTag="div" htmlClass="product media" before="product.info.main">
                 <block class="Magento\Framework\View\Element\Template" name="skip_gallery_after.target" before="skip_gallery_before.wrapper" template="Magento_Theme::html/skiptarget.phtml">
                     <arguments>
                         <argument name="target_id" xsi:type="string">gallery-prev-area</argument>
                     </arguments>
                 </block>
                 <container name="skip_gallery_before.wrapper" htmlTag="div" htmlClass="action-skip-wrapper">
-                    <block class="Magento\Framework\View\Element\Template" before="product.info.media.image" name="skip_gallery_before" template="Magento_Theme::html/skip.phtml">
+                    <block class="Magento\Framework\View\Element\Template" name="skip_gallery_before" template="Magento_Theme::html/skip.phtml">
                         <arguments>
                             <argument name="target" xsi:type="string">gallery-next-area</argument>
                             <argument name="label" translate="true" xsi:type="string">Skip to the end of the images gallery</argument>
@@ -132,7 +132,7 @@
                     </arguments>
                 </block>
                 <container name="skip_gallery_after.wrapper" htmlTag="div" htmlClass="action-skip-wrapper">
-                    <block class="Magento\Framework\View\Element\Template" after="product.info.media.image" name="skip_gallery_after" template="Magento_Theme::html/skip.phtml">
+                    <block class="Magento\Framework\View\Element\Template" name="skip_gallery_after" template="Magento_Theme::html/skip.phtml">
                         <arguments>
                             <argument name="target" xsi:type="string">gallery-prev-area</argument>
                             <argument name="label" translate="true" xsi:type="string">Skip to the beginning of the images gallery</argument>

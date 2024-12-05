@@ -291,4 +291,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Observer\ImageResizeAfterProductSave">
+        <arguments>
+            <argument name="imageResizeSchedulerFlag" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
 </config>

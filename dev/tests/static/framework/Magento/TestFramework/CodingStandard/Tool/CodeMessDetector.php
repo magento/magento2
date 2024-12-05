@@ -10,6 +10,7 @@
 namespace Magento\TestFramework\CodingStandard\Tool;
 
 use \Magento\TestFramework\CodingStandard\ToolInterface;
+use Magento\TestFramework\CodingStandard\Tool\CodeMessOutput;
 
 class CodeMessDetector implements ToolInterface
 {
@@ -21,16 +22,12 @@ class CodeMessDetector implements ToolInterface
     private $rulesetFile;
 
     /**
-     * Report file
-     *
      * @var string
      */
     private $reportFile;
 
     /**
-     * Constructor
-     *
-     * @param string $rulesetDir \Directory that locates the inspection rules
+     * @param string $rulesetFile \Directory that locates the inspection rules
      * @param string $reportFile Destination file to write inspection report to
      */
     public function __construct($rulesetFile, $reportFile)
@@ -50,7 +47,7 @@ class CodeMessDetector implements ToolInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function run(array $whiteList)
     {
@@ -69,7 +66,7 @@ class CodeMessDetector implements ToolInterface
 
         $options = new \PHPMD\TextUI\CommandLineOptions($commandLineArguments);
 
-        $command = new \PHPMD\TextUI\Command();
+        $command = new \PHPMD\TextUI\Command(new CodeMessOutput());
 
         return $command->run($options, new \PHPMD\RuleSetFactory());
     }

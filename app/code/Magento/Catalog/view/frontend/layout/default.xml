@@ -65,6 +65,7 @@
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Catalog::js/components.phtml"/>
         </referenceContainer>
+        <block class="Magento\Framework\View\Element\Template" name="head.critical" as="head.critical" template="Magento_Theme::html/container.phtml"/>
         <block class="Magento\Framework\View\Element\Template" name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml"/>
     </body>
 </page>

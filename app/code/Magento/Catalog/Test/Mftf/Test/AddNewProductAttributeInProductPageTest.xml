@@ -21,7 +21,10 @@
         <before>
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPageBefore"/>
+            <!-- remove the Filter From the page-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFilterFromProductIndex"/>
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
@@ -33,7 +36,8 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
-
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductListing"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -97,7 +101,11 @@
 
         <!--Click on Go Back button -->
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackToGridSimple"/>
-
+        <!--Clear filter if available -->
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminGridFilterControls.clearAll}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProductOnProductGridPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
         <!-- Select created attribute as an column -->
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdown"/>
         <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkCreatedAttributeColumn">
@@ -106,6 +114,9 @@
         <wait stepKey="waitPostClickingCheck" time="5"/>
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdown"/>
 
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
         <!-- Asserting the value of the created column -->
         <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCreatedAttributeColumn">
             <argument name="row" value="1"/>

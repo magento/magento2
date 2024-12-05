@@ -16,12 +16,15 @@
             <severity value="MINOR"/>
             <testCaseId value="MC-42765"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="SimpleProduct2" stepKey="createProduct1"/>
             <createData entity="SimpleProduct2" stepKey="createProduct2"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete the bundled product -->
@@ -70,8 +73,10 @@
         <!-- Save product and go to storefront -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <wait stepKey="waitBeforeIndexerAfterBundle" time="60"/>
-        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexerAfterBundle"/>
+        <comment userInput="BIC workaround" stepKey="waitBeforeIndexerAfterBundle"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexerAfterBundle">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>

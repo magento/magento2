@@ -9,12 +9,13 @@ namespace Magento\CatalogUrlRewrite\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Product\GetUrlRewriteData;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 
 /**
  * Product data needed for url rewrite generation locator class
  */
-class GetProductUrlRewriteDataByStore
+class GetProductUrlRewriteDataByStore implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -51,8 +52,10 @@ class GetProductUrlRewriteDataByStore
             $storesData = $this->getUrlRewriteData->execute($product);
             foreach ($storesData as $storeData) {
                 $this->urlRewriteData[$productId][$storeData['store_id']] = [
-                    'visibility' => (int)($storeData['visibility'] ?? $storesData[Store::DEFAULT_STORE_ID]['visibility']),
-                    'url_key' => $storeData['url_key'] ?? $storesData[Store::DEFAULT_STORE_ID]['url_key'],
+                    'visibility' =>
+                        (int)($storeData['visibility'] ?? $storesData[Store::DEFAULT_STORE_ID]['visibility']),
+                    'url_key' =>
+                        $storeData['url_key'] ?? $storesData[Store::DEFAULT_STORE_ID]['url_key'],
                 ];
             }
         }
@@ -72,5 +75,13 @@ class GetProductUrlRewriteDataByStore
     public function clearProductUrlRewriteDataCache(ProductInterface $product)
     {
         unset($this->urlRewriteData[$product->getId()]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->urlRewriteData = [];
     }
 }

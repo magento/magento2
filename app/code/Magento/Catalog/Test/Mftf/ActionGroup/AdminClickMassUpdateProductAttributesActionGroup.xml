@@ -12,7 +12,9 @@
         <annotations>
             <description>Clicks on 'Update attributes' from dropdown actions list on product grid page. Products should be selected via mass action before</description>
         </annotations>
+        <waitForElementClickable selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="waitForDropdownClickable" />
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="waitForOptionClickable" />
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
         <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeInUrl"/>

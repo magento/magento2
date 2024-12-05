@@ -79,4 +79,14 @@
         <data key="filename">png</data>
         <data key="file_extension">png</data>
     </entity>
+    <entity name="placeholderDummyBaseImage" type="imageFile">
+        <data key="file">Dummy(3).jpg</data>
+        <data key="name">Dummy(3)</data>
+        <data key="extension">jpg</data>
+    </entity>
+    <entity name="PageBuilderBackgroundImage_LargerThan2MB" type="imageFile">
+        <data key="file">LargerThan2MB.jpg</data>
+        <data key="name">LargerThan2MB</data>
+        <data key="extension">jpg</data>
+    </entity>
 </entities>

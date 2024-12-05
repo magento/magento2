@@ -46,7 +46,7 @@ class PostDataProcessorTest extends TestCase
             ->getMockForAbstractClass();
         $this->validatorFactoryMock = $this->getMockBuilder(ValidatorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->postDataProcessor = (new ObjectManager($this))->getObject(

@@ -14,6 +14,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Data provider for order items
@@ -46,6 +48,11 @@ class DataProvider
     private $optionsProcessor;
 
     /**
+     * @var TaxHelper
+     */
+    private $taxHelper;
+
+    /**
      * @var int[]
      */
     private $orderItemIds = [];
@@ -61,19 +68,22 @@ class DataProvider
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OptionsProcessor $optionsProcessor
+     * @param TaxHelper|null $taxHelper
      */
     public function __construct(
         OrderItemRepositoryInterface $orderItemRepository,
         ProductRepositoryInterface $productRepository,
         OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        OptionsProcessor $optionsProcessor
+        OptionsProcessor $optionsProcessor,
+        ?TaxHelper $taxHelper = null
     ) {
         $this->orderItemRepository = $orderItemRepository;
         $this->productRepository = $productRepository;
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->optionsProcessor = $optionsProcessor;
+        $this->taxHelper = $taxHelper ?? ObjectManager::getInstance()->get(TaxHelper::class);
     }
 
     /**
@@ -140,7 +150,9 @@ class DataProvider
                 'status' => $orderItem->getStatus(),
                 'discounts' => $this->getDiscountDetails($associatedOrder, $orderItem),
                 'product_sale_price' => [
-                    'value' => $orderItem->getPrice(),
+                    'value' => $this->taxHelper->displaySalesPriceInclTax($associatedOrder->getStoreId())
+                        ? $orderItem->getPriceInclTax()
+                        : $orderItem->getPrice(),
                     'currency' => $associatedOrder->getOrderCurrencyCode()
                 ],
                 'selected_options' => $itemOptions['selected_options'],

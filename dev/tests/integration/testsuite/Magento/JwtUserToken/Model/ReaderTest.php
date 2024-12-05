@@ -60,7 +60,7 @@ class ReaderTest extends TestCase
      */
     private $config;
 
-    public function getJwtCases(): array
+    public static function getJwtCases(): array
     {
         return [
             'jws-hs256' => [Jwk::ALGORITHM_HS256, JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM],

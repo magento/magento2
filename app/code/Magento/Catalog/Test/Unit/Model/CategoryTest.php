@@ -361,7 +361,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function reindexFlatEnabledTestDataProvider(): array
+    public static function reindexFlatEnabledTestDataProvider(): array
     {
         return [
             'set 1' => [false, false, 1, 1],
@@ -410,16 +410,17 @@ class CategoryTest extends TestCase
 
         $this->indexerRegistry
             ->method('get')
-            ->withConsecutive([State::INDEXER_ID], [Product::INDEXER_ID])
-            ->willReturnOnConsecutiveCalls($this->flatIndexer, $this->productIndexer);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [State::INDEXER_ID] => $this->flatIndexer,
+                [Product::INDEXER_ID] => $this->productIndexer
+            });
         $this->category->reindex();
     }
 
     /**
      * @return array
      */
-    public function reindexFlatDisabledTestDataProvider(): array
+    public static function reindexFlatDisabledTestDataProvider(): array
     {
         return [
             [false, null, null, null, null, null, 0],
@@ -538,7 +539,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function getImageWithAttributeCodeDataProvider(): array
+    public static function getImageWithAttributeCodeDataProvider(): array
     {
         return [
             ['testimage', 'http://www.example.com/catalog/category/testimage'],

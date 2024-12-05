@@ -7,9 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Model;
 
+use Magento\Framework\Amqp\ConfigPool as AmqpConfigPool;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Registry;
 use Magento\Indexer\Model\ProcessManager;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class covers process manager execution test logic
@@ -28,11 +31,21 @@ class ProcessManagerTest extends TestCase
     public function testFailureInChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
+        $registryMock = $this->createMock(Registry::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
         $processManager = new ProcessManager(
             $connectionMock,
-            null,
-            $threadsCount
+            $registryMock,
+            $threadsCount,
+            $loggerMock,
+            $amqpConfigPoolMock
         );
+
+        $connectionMock->expects($this->once())
+            ->method('closeConnection');
+        $amqpConfigPoolMock->expects($this->once())
+            ->method('closeConnections');
 
         try {
             $processManager->execute($userFunctions);
@@ -48,11 +61,11 @@ class ProcessManagerTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function functionsWithErrorProvider(): array
+    public static function functionsWithErrorProvider(): array
     {
         return [
             'more_threads_than_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(1);
@@ -65,10 +78,10 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 4,
+                'threadsCount' => 4,
             ],
             'less_threads_than_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(1);
@@ -81,10 +94,10 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 2,
+                'threadsCount' => 2,
             ],
             'equal_threads_and_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(1);
@@ -97,7 +110,7 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 3,
+                'threadsCount' => 3,
             ],
         ];
     }
@@ -111,11 +124,21 @@ class ProcessManagerTest extends TestCase
     public function testSuccessChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
+        $registryMock = $this->createMock(Registry::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
         $processManager = new ProcessManager(
             $connectionMock,
-            null,
-            $threadsCount
+            $registryMock,
+            $threadsCount,
+            $loggerMock,
+            $amqpConfigPoolMock
         );
+
+        $connectionMock->expects($this->once())
+            ->method('closeConnection');
+        $amqpConfigPoolMock->expects($this->once())
+            ->method('closeConnections');
 
         try {
             $processManager->execute($userFunctions);
@@ -130,11 +153,11 @@ class ProcessManagerTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function successFunctionsProvider(): array
+    public static function successFunctionsProvider(): array
     {
         return [
             'more_threads_than_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(0);
@@ -147,10 +170,10 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 4,
+                'threadsCount' => 4,
             ],
             'less_threads_than_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(0);
@@ -163,10 +186,10 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 2,
+                'threadsCount' => 2,
             ],
             'equal_threads_and_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(0);
@@ -179,7 +202,7 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 3,
+                'threadsCount' => 3,
             ],
         ];
     }

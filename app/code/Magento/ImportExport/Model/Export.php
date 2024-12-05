@@ -6,6 +6,12 @@
 
 namespace Magento\ImportExport\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\ImportExport\Model\Export\ConfigInterface;
+use Magento\ImportExport\Model\Export\Entity\Factory;
+use Psr\Log\LoggerInterface;
+
 /**
  * Export model
  *
@@ -78,12 +84,18 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     ];
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-     * @param \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory
+     * @var LocaleEmulatorInterface
+     */
+    private $localeEmulator;
+
+    /**
+     * @param LoggerInterface $logger
+     * @param Filesystem $filesystem
+     * @param ConfigInterface $exportConfig
+     * @param Factory $entityFactory
      * @param \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac
      * @param array $data
+     * @param LocaleEmulatorInterface|null $localeEmulator
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -91,12 +103,14 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac,
-        array $data = []
+        array $data = [],
+        ?LocaleEmulatorInterface $localeEmulator = null
     ) {
         $this->_exportConfig = $exportConfig;
         $this->_entityFactory = $entityFactory;
         $this->_exportAdapterFac = $exportAdapterFac;
         parent::__construct($logger, $filesystem, $data);
+        $this->localeEmulator = $localeEmulator ?? ObjectManager::getInstance()->get(LocaleEmulatorInterface::class);
     }
 
     /**
@@ -188,6 +202,20 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function export()
+    {
+        return $this->localeEmulator->emulate(
+            $this->exportCallback(...),
+            $this->getData('locale') ?: null
+        );
+    }
+
+    /**
+     * Export data.
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function exportCallback()
     {
         if (isset($this->_data[self::FILTER_ELEMENT_GROUP])) {
             $this->addLogComment(__('Begin export of %1', $this->getEntity()));

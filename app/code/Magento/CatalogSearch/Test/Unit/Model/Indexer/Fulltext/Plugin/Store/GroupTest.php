@@ -55,7 +55,7 @@ class GroupTest extends TestCase
             ->getMock();
         $this->storeGroupMock = $this->getMockBuilder(StoreGroup::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dataHasChangedFor', 'isObjectNew'])
+            ->onlyMethods(['dataHasChangedFor', 'isObjectNew'])
             ->getMock();
 
         $this->plugin = new StoreGroupIndexerPlugin($this->indexerRegistryMock);
@@ -90,7 +90,7 @@ class GroupTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
             [false, false, 0],

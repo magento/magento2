@@ -151,8 +151,15 @@ class DataObjectHelperTest extends TestCase
 
         $this->methodsMapProcessor
             ->method('getMethodReturnType')
-            ->withConsecutive([AddressInterface::class, 'getStreet'], [AddressInterface::class, 'getRegion'])
-            ->willReturnOnConsecutiveCalls('string[]', RegionInterface::class);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == AddressInterface::class && $arg2 == 'getStreet') {
+                        return 'string[]';
+                    } elseif ($arg1 == AddressInterface::class && $arg2 == 'getRegion') {
+                        return RegionInterface::class;
+                    }
+                }
+            );
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(RegionInterface::class, [])
@@ -421,8 +428,16 @@ class DataObjectHelperTest extends TestCase
             ->willReturn($data2);
         $this->methodsMapProcessor
             ->method('getMethodReturnType')
-            ->withConsecutive([Address::class, 'getStreet'], [Address::class, 'getRegion'])
-            ->willReturnOnConsecutiveCalls('string[]', RegionInterface::class);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == Address::class && $arg2 == 'getStreet') {
+                        return 'string[]';
+                    } elseif ($arg1 == Address::class && $arg2 == 'getRegion') {
+                        return RegionInterface::class;
+                    }
+                }
+            );
+
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(RegionInterface::class, [])
@@ -444,7 +459,7 @@ class DataObjectHelperTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestMergeDataObjects(): array
+    public static function dataProviderForTestMergeDataObjects(): array
     {
         return [
             [

@@ -103,7 +103,7 @@ class CatalogProductViewObserverTest extends TestCase
         $this->productIndexFactoryMock = $this->getMockBuilder(
             ViewedFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productIndexMock = $this->getMockBuilder(Viewed::class)
@@ -115,7 +115,7 @@ class CatalogProductViewObserverTest extends TestCase
             ->willReturn($this->productIndexMock);
 
         $reportEventFactory = $this->getMockBuilder(EventFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()
+            ->onlyMethods(['create'])->disableOriginalConstructor()
             ->getMock();
         $this->reportEventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
@@ -143,7 +143,7 @@ class CatalogProductViewObserverTest extends TestCase
             ComparedFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productCompFactoryMock->expects($this->any())
             ->method('create')
@@ -152,17 +152,17 @@ class CatalogProductViewObserverTest extends TestCase
         $this->productCompFactoryMock = $this->getMockBuilder(
             ComparedFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->eventSaverMock = $this->getMockBuilder(EventSaver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMock();
 
         $this->reportStatusMock = $this->getMockBuilder(ReportStatus::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isReportEnabled'])
+            ->onlyMethods(['isReportEnabled'])
             ->getMock();
 
         $this->observer = $objectManager->getObject(
@@ -293,7 +293,7 @@ class CatalogProductViewObserverTest extends TestCase
             ->getMock();
         $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])->getMock();
+            ->addMethods(['getProduct'])->getMock();
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();

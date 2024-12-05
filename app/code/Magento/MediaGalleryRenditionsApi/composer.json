@@ -2,7 +2,7 @@
     "name": "magento/module-media-gallery-renditions-api",
     "description": "Magento module that is responsible for the API implementation of Media Gallery Renditions.",
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*"
     },
     "type": "magento2-module",

@@ -1,5 +1,6 @@
 <?php
 /**
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -125,12 +126,22 @@ class Config implements ScopeConfigInterface
      */
     public function get($configType, $path = '', $default = null)
     {
-        $path = strtolower($path);
         $result = null;
         if (isset($this->types[$configType])) {
             $result = $this->types[$configType]->get($path);
         }
 
         return $result !== null ? $result : $default;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

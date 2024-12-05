@@ -30,7 +30,7 @@ class IndexTest extends TestCase
     {
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

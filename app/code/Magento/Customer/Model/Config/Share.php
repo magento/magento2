@@ -7,8 +7,6 @@ namespace Magento\Customer\Model\Config;
 
 /**
  * Customer sharing config model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Share extends \Magento\Framework\App\Config\Value implements \Magento\Framework\Option\ArrayInterface
 {
@@ -16,15 +14,14 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * Xml config path to customers sharing scope value
      *
      */
-    const XML_PATH_CUSTOMER_ACCOUNT_SHARE = 'customer/account_share/scope';
+    public const XML_PATH_CUSTOMER_ACCOUNT_SHARE = 'customer/account_share/scope';
 
     /**
      * Possible customer sharing scopes
      *
      */
-    const SHARE_GLOBAL = 0;
-
-    const SHARE_WEBSITE = 1;
+    public const SHARE_GLOBAL = 0;
+    public const SHARE_WEBSITE = 1;
 
     /**
      * @var \Magento\Customer\Model\ResourceModel\Customer
@@ -37,8 +34,6 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
     protected $_storeManager;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config

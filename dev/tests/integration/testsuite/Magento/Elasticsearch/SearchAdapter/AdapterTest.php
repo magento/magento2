@@ -411,7 +411,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function elasticSearchAdvancedSearchDataProvider()
+    public static function elasticSearchAdvancedSearchDataProvider()
     {
         return [
             ['white', 'shorts', ['from' => '16', 'to' => '18'], 0],
@@ -670,7 +670,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dateDataProvider()
+    public static function dateDataProvider()
     {
         return [
             [['from' => '1999-12-31T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1],
@@ -678,7 +678,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function filterByAttributeValuesDataProvider()
+    public static function filterByAttributeValuesDataProvider()
     {
         return [
             'quick_search_container' => [

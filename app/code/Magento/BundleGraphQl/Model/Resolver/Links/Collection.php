@@ -15,12 +15,13 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Zend_Db_Select_Exception;
 
 /**
  * Collection to fetch link data at resolution time.
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * @var CollectionFactory
@@ -155,5 +156,15 @@ class Collection
         }
 
         return $this->links;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->links = [];
+        $this->optionIds = [];
+        $this->parentIds = [];
     }
 }

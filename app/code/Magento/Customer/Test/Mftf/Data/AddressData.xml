@@ -34,6 +34,32 @@
         <data key="default_billing">true</data>
         <data key="region_qty">66</data>
     </entity>
+    <entity name="CustomerInvalidAddress" type="address">
+        <data key="id">0</data>
+        <data key="customer_id">12</data>
+        <requiredEntity type="region">CustomerRegionOne</requiredEntity>
+        <data key="region_id">0</data>
+        <data key="country_id">US</data>
+        <array key="street">
+            <item>7700 W Parmer Ln</item>
+            <item>Bld D</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">Invalid Telephone</data>
+        <data key="fax">1234568910</data>
+        <data key="postcode">Invalid PostCode</data>
+        <data key="city">InvalidCity</data>
+        <data key="state">Texas</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="middlename">string</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">vatData</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+        <data key="region_qty">66</data>
+    </entity>
     <entity name="US_Address_TX" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -248,6 +274,24 @@
         <data key="default_shipping">true</data>
         <data key="default_billing">true</data>
     </entity>
+    <entity name="addressNoCompany" type="address">
+        <data key="company"/>
+        <data key="firstname">Fn</data>
+        <data key="lastname">Ln</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="vat_id">47458714</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+    </entity>
     <entity name="updateCustomerUKAddress" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
@@ -355,15 +399,16 @@
         <data key="state">Berlin</data>
         <data key="vatNumber">111607872</data>
     </entity>
-    <entity name="US_Address_California">
+    <entity name="US_Address_California" type="address">
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
         <data key="company">Magento</data>
         <array key="street">
             <item>6161 West Centinela Avenue</item>
+            <item>16</item>
         </array>
         <data key="city">Culver City</data>
-        <data key="country_id">United States</data>
+        <data key="country_id">US</data>
         <data key="country">United States</data>
         <data key="state">California</data>
         <data key="postcode">90230</data>
@@ -492,5 +537,99 @@
         <data key="state">Aargau</data>
         <data key="postcode">5555</data>
         <data key="telephone">555-55-555-55</data>
+    </entity>
+    <entity name="US_Address_CA_CC" type="address">
+        <data key="firstname">CCREJECT-BANK_ERROR</data>
+        <data key="lastname">Doe</data>
+        <array key="street">
+            <item>119 Belmont St</item>
+        </array>
+        <data key="city">Ontario</data>
+        <data key="state">California</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">91761</data>
+        <data key="telephone">7865438767</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionCA</requiredEntity>
+    </entity>
+    <entity name="US_Address_California_Madison">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>4145 Madison Ave</item>
+        </array>
+        <data key="city">Culver City</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="state">California</data>
+        <data key="postcode">90232</data>
+        <data key="telephone">555-55-555-55</data>
+    </entity>
+    <entity name="US_Address_Florida">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>352 Lake View Lane</item>
+        </array>
+        <data key="city">Palm Bay</data>
+        <data key="country_id">United States</data>
+        <data key="country">United States</data>
+        <data key="state">Florida</data>
+        <data key="postcode">32909</data>
+        <data key="telephone">12345678</data>
+    </entity>
+    <entity name="DE_Berlin_State" type="address" extends="DE_Address_Berlin_Not_Default_Address">
+        <requiredEntity type="region">RegionBER</requiredEntity>
+    </entity>
+    <entity name="UK_State_Address" type="address" extends="UK_Not_Default_Address">
+        <array key="street">
+            <item>172, Westminster</item>
+        </array>
+        <data key="state">California</data>
+        <requiredEntity type="region">RegionUKGL</requiredEntity>
+    </entity>
+    <entity name="US_California_State" type="address" extends="US_Address_California">
+        <requiredEntity type="region">RegionCA</requiredEntity>
+    </entity>
+    <entity name="US_Address_TX_With_RegionID" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="region_id">Texas</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="vat_id">47458714</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionTX</requiredEntity>
+     </entity>
+    <entity name="US_Address_Bris" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">National Auto Parts</data>
+        <array key="street">
+            <item>3976 Thunder Road</item>
+        </array>
+        <data key="city">Brisbane</data>
+        <data key="state">California</data>
+        <data key="country_id">US</data>
+        <data key="country">United States</data>
+        <data key="postcode">94005</data>
+        <data key="telephone">650-544-6365</data>
+        <data key="vat_id">47458714</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">RegionCA</requiredEntity>
     </entity>
 </entities>

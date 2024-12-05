@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/framework-bulk": "*",
         "magento/module-backend": "*",
@@ -27,7 +27,9 @@
         "magento/module-captcha": "*",
         "magento/module-checkout": "*",
         "magento/module-authorization": "*",
-        "magento/module-asynchronous-operations": "*"
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-multishipping": "*",
+        "magento/module-tax": "*"
     },
     "suggest": {
         "magento/module-sales-rule-sample-data": "*"
