@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -13,6 +13,7 @@ use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 
 class InfoAdminUriCommand extends Command
 {
+    public const NAME = 'info:adminuri';
     /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
@@ -38,13 +39,13 @@ class InfoAdminUriCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('info:adminuri')
+        $this->setName(self::NAME)
             ->setDescription('Displays the Magento Admin URI');
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

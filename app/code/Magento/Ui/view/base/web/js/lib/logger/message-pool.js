@@ -18,7 +18,7 @@ define(function () {
             'Component "${$.component}" start initialization with instance name "${$.componentName}".',
         componentStartLoading: ' Started loading the "${$.component}" component.',
         componentFinishLoading: 'The "${$.component}" component was loaded.',
-        componentLoadingFail: 'Failed to load the "${$.component}" component.',
+        componentLoadingFail: 'Failed to load the "${$.component}" component. Due to "${$.errorMsg}"',
         depsLoadingFail: 'Could not get the declared "${$.deps}" dependency for the "${$.component}" instance.',
         depsStartRequesting: 'Requesting the "${$.deps}" dependency for the "${$.component}" instance.',
         depsFinishRequesting: 'The "${$.deps}" dependency for the "${$.component}" instance was received.',
