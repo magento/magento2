@@ -9,6 +9,7 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\PriceModifierInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -20,25 +21,25 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class CalculateCustomOptionCatalogRule
 {
     /**
-     * @var PriceCurrencyInterface
-     */
-    private $priceCurrency;
-
-    /**
      * @var PriceModifierInterface
      */
     private $priceModifier;
 
     /**
-     * @param PriceCurrencyInterface $priceCurrency
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param PriceModifierInterface $priceModifier
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        PriceCurrencyInterface $priceCurrency,
-        PriceModifierInterface $priceModifier
+        PriceModifierInterface $priceModifier,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->priceModifier = $priceModifier;
-        $this->priceCurrency = $priceCurrency;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -62,7 +63,10 @@ class CalculateCustomOptionCatalogRule
             $product
         );
         // Apply catalog price rules to product options only if catalog price rules are applied to product.
-        if ($catalogRulePrice < $regularPrice) {
+        if (($catalogRulePrice < $regularPrice) 
+            && $this->scopeConfig->isSetFlag('catalog/catalog_price_rules/apply_to_custom_options',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+            
             $optionPrice = $this->getOptionPriceWithoutPriceRule($optionPriceValue, $isPercent, $regularPrice);
             $totalCatalogRulePrice = $this->priceModifier->modifyPrice(
                 $regularPrice + $optionPrice,

@@ -7,7 +7,10 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Product\Option;
 
 /**
  * Catalog product option select type
@@ -39,6 +42,11 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     private $singleSelectionTypes;
 
     /**
+     * @var CalculateCustomOptionCatalogRule
+     */
+    private $calculateCustomOptionCatalogRule;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -52,7 +60,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Escaper $escaper,
         array $data = [],
-        array $singleSelectionTypes = []
+        array $singleSelectionTypes = [],
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
     ) {
         $this->string = $string;
         $this->_escaper = $escaper;
@@ -62,6 +71,10 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             'drop_down' => \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
             'radio' => \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO,
         ];
+
+        $this->calculateCustomOptionCatalogRule = 
+            $calculateCustomOptionCatalogRule ?? ObjectManager::getInstance()
+                ->get(CalculateCustomOptionCatalogRule::class);
     }
 
     /**
@@ -253,11 +266,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', (string)$optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $result += $this->_getChargeableOptionPrice(
-                        $_result->getPrice(),
-                        $_result->getPriceType() === Value::TYPE_PERCENT,
-                        $basePrice
-                    );
+                    $result += $this->getCalculatedOptionValue($option, $_result, $basePrice);
                 } else {
                     if ($this->getListener()) {
                         $this->getListener()->setHasError(true)->setMessage($this->_getWrongConfigurationMessage());
@@ -268,11 +277,20 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif ($this->_isSingleSelection()) {
             $_result = $option->getValueById($optionValue);
             if ($_result) {
-                $result = $this->_getChargeableOptionPrice(
-                    $_result->getPrice(),
-                    $_result->getPriceType() === Value::TYPE_PERCENT,
-                    $basePrice
+                $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
+                    $option->getProduct(),
+                    (float)$_result->getPrice(),
+                    $_result->getPriceType() === Value::TYPE_PERCENT
                 );
+                if ($catalogPriceValue !== null) {
+                    $result = $catalogPriceValue;
+                } else {
+                    $result = $this->_getChargeableOptionPrice(
+                        $_result->getPrice(),
+                        $_result->getPriceType() == 'percent',
+                        $basePrice
+                    );
+                }
             } else {
                 if ($this->getListener()) {
                     $this->getListener()->setHasError(true)->setMessage($this->_getWrongConfigurationMessage());
@@ -333,5 +351,32 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected function _isSingleSelection()
     {
         return in_array($this->getOption()->getType(), $this->singleSelectionTypes, true);
+    }
+
+    /**
+     * Returns calculated price of option
+     *
+     * @param Option $option
+     * @param Option\Value $result
+     * @param float $basePrice
+     * @return float
+     */
+    protected function getCalculatedOptionValue(Option $option, Value $result, float $basePrice) : float
+    {
+        $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
+            $option->getProduct(),
+            (float)$result->getPrice(),
+            $result->getPriceType() === Value::TYPE_PERCENT
+        );
+        if ($catalogPriceValue !== null) {
+            $optionCalculatedValue = $catalogPriceValue;
+        } else {
+            $optionCalculatedValue = $this->_getChargeableOptionPrice(
+                $result->getPrice(),
+                $result->getPriceType() === Value::TYPE_PERCENT,
+                $basePrice
+            );
+        }
+        return $optionCalculatedValue;
     }
 }
