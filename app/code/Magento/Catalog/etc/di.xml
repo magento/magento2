@@ -554,6 +554,11 @@
     <type name="Magento\Catalog\Model\ResourceModel\Config">
         <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\ResourceModel\Config" />
     </type>
+    <type name="Magento\Catalog\Plugin\Model\ResourceModel\Config">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_eav_cache</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Catalog\Api\ProductLinkTypeListInterface" type="Magento\Catalog\Model\Product\LinkTypeProvider" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkAttributeInterface" type="Magento\Catalog\Model\ProductLink\Attribute" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkTypeInterface" type="Magento\Catalog\Model\ProductLink\Type" />

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model;
@@ -745,8 +745,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         $itemsSorted = [];
         /** @var $rule Rule */
         foreach ($this->getRules($address) as $rule) {
+            $actions = $rule->getActions();
             foreach ($items as $itemKey => $itemValue) {
-                if ($rule->getActions()->validate($itemValue)) {
+                if ($actions->validate($itemValue)) {
                     unset($items[$itemKey]);
                     $itemsSorted[] = $itemValue;
                 }

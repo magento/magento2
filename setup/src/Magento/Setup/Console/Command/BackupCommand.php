@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Console\Command;
 
@@ -26,13 +26,12 @@ class BackupCommand extends AbstractSetupCommand
     /**
      * Name of input options
      */
-    const INPUT_KEY_CODE = 'code';
-    const INPUT_KEY_MEDIA = 'media';
-    const INPUT_KEY_DB = 'db';
+    public const INPUT_KEY_CODE = 'code';
+    public const INPUT_KEY_MEDIA = 'media';
+    public const INPUT_KEY_DB = 'db';
+    public const NAME = 'setup:backup';
 
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -81,7 +80,7 @@ class BackupCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -105,14 +104,14 @@ class BackupCommand extends AbstractSetupCommand
                 'Take complete database backup'
             ),
         ];
-        $this->setName('setup:backup')
+        $this->setName(self::NAME)
             ->setDescription('Takes backup of Magento Application code base, media and database')
             ->setDefinition($options);
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
