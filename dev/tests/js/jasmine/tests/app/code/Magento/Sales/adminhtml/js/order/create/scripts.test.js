@@ -33,6 +33,7 @@ define([
                     '</fieldset>' +
                     '<input id="p_method_free" type="radio" name="payment[method]" value="free"/>' +
                 '</div>' +
+            '<button id="submit_order_top_button" type="button">Submit Order</button>' +
             '</form>';
 
     $.widget('magetest.testPaymentMethodA', {
@@ -369,5 +370,112 @@ define([
                 );
             });
         });
+
+        describe('Check that payment custom handler is executed and button states', function () {
+            let $submitButton;
+
+            function testSubmit(currentPaymentMethod, paymentMethod, ajaxParams) {
+                $.ajax = jasmine.createSpy('$.ajax');
+                init({
+                    method: currentPaymentMethod
+                });
+                $(formEl).find(':radio[value="' + paymentMethod + '"]').prop('checked', true);
+                order.switchPaymentMethod(paymentMethod);
+
+                spyOn($.prototype, 'trigger').and.callThrough();
+                order.submit();
+
+                $submitButton = $('#submit_order_top_button');
+                expect($.ajax).toHaveBeenCalledTimes(1);
+                expect($.ajax).toHaveBeenCalledWith(jasmine.objectContaining(ajaxParams));
+
+                expect($.prototype.trigger).toHaveBeenCalledWith(
+                    jasmine.objectContaining({ type: 'beforeSubmitOrder' }));
+
+                if (paymentMethod !== 'payment1') {
+                    $.prototype.trigger.and.callFake(function (event) {
+                        if (event.type === 'beforeSubmitOrder') {
+                            event.result = false;
+                        }
+                    });
+                    expect($submitButton.prop('disabled')).toBe(true);
+                } else {
+                    expect($submitButton.prop('disabled')).toBe(false);
+
+                }
+            }
+
+            it('Check that payment custom handler is executed and button states #1', function () {
+                testSubmit(
+                    null,
+                    'payment1',
+                    {
+                        url: '/admin/sales/order/create/payment_method/payment1',
+                        data: {
+                            code: 'payment1'
+                        }
+                    }
+                );
+            });
+
+            it('Check that payment custom handler is executed and button states #2', function () {
+                testSubmit(
+                    'payment1',
+                    'payment1',
+                    {
+                        url: '/admin/sales/order/create/payment_method/payment1',
+                        data: {
+                            code: 'payment1'
+                        }
+                    }
+                );
+            });
+
+            it('Validate re-enabling the button for canceled events', function () {
+                order = new window.AdminOrder({});
+                spyOn(order, 'submit').and.callFake(function () {
+                    const $editForm = $('#edit_form');
+
+                    if ($editForm.valid()) {
+                        $submitButton.prop('disabled', true);
+                        const beforeSubmitOrderEvent = $.Event('beforeSubmitOrder');
+
+                        $editForm.trigger(beforeSubmitOrderEvent);
+
+                        if (beforeSubmitOrderEvent.result !== false) {
+                            $editForm.trigger('submitOrder');
+                        } else {
+                            $submitButton.prop('disabled', false);
+                        }
+                    }
+                });
+                spyOn($.prototype, 'trigger').and.callFake(function (event) {
+                    if (event.type === 'beforeSubmitOrder') {
+                        event.result = false;
+                    }
+                });
+                $.prototype.trigger.and.callFake(function (event) {
+                    if (event.type === 'beforeSubmitOrder') {
+                        event.result = false;
+                    }
+                });
+                order.submit();
+                expect($submitButton.prop('disabled')).toBe(false);
+            });
+
+            it('Check button state for non-payment1 methods', function () {
+                testSubmit(
+                    'payment2',
+                    'payment2',
+                    {
+                        url: '/admin/sales/order/create/payment_method/payment2',
+                        data: {
+                            code: 'payment2'
+                        }
+                    }
+                );
+            });
+        });
+
     });
 });

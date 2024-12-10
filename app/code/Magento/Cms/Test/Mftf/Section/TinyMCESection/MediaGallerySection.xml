@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2020 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,7 +23,7 @@
         <element name="UploadImageNew" type="file" selector="#upload_image"/>
         <element name="UploadImageSelector" type="file" selector="#fileUploader"/>
         <element name="UploadImageWithUploaderId" type="file" selector="#fileUploader + .uppy-Root .uppy-Dashboard-input"/>
-        <element name="OkBtn" type="button" selector=".tox-dialog__footer button[aria-label='Save']"/>
+        <element name="OkBtn" type="button" selector=".tox-dialog__footer button[title='Save']"/>
         <element name="insertBtn" type="button" selector="#insert"/>
         <element name="InsertFile" type="text" selector="#insert_files" timeout="30"/>
         <element name="CreateFolder" type="button" selector="#new_folder" timeout="30"/>
