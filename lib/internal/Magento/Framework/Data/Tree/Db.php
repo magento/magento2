@@ -10,8 +10,6 @@ namespace Magento\Framework\Data\Tree;
  *
  * Data model:
  * id  |  pid  |  level | order
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Db extends \Magento\Framework\Data\Tree
 {
