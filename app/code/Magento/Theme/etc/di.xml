@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -334,5 +334,17 @@
     <type name="Magento\Config\Console\Command\LocaleEmulator">
         <plugin name="themeForLocaleEmulator" type="Magento\Theme\Plugin\LocaleEmulator"/>
     </type>
-
+    <type name="Magento\Theme\Model\Design\Config\Validator">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="header" xsi:type="string">email_header_template</item>
+                <item name="footer" xsi:type="string">email_footer_template</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Console\Command\ConfigSet\ProcessorFacade">
+        <arguments>
+            <argument name="pathValidator" xsi:type="object">Magento\Theme\Model\Config\PathValidator</argument>
+        </arguments>
+    </type>
 </config>

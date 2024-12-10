@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
- * Copyright 2023 Adobe
- * All Rights Reserved.
- */
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -14,7 +14,8 @@
             <title value="Customer cancels an order from recent orders page."/>
             <description value="Customer cancels an order from recent orders page."/>
             <severity value="AVERAGE"/>
-            <testCaseId value="LYNX-180"/>
+            <!-- Will be fixed in the scope of ACQE-7314 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Enable configuration -->
@@ -78,7 +79,6 @@
             <expectedResult type="string">Canceled</expectedResult>
             <actualResult type="variable">$getLatestOrderStatus</actualResult>
         </assertEquals>
-
         <!--Grab Order Id for later usage-->
         <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderId}}" stepKey="getOrderId"/>
 
