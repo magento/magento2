@@ -12,8 +12,6 @@ use Magento\Framework\DB\Select;
  *
  * Data model:
  * id  |  path  |  order
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Dbp extends \Magento\Framework\Data\Tree
 {
