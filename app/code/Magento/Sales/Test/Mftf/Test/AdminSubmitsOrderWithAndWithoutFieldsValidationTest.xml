@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2014 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -40,7 +40,7 @@
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
         <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewOrderPageTitle">
-            <argument name="value" value="Create New Order"/>\
+            <argument name="value" value="Create New Order"/>
         </actionGroup>
 
         <!--Check if order can be submitted without the required fields including email address-->
