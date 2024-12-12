@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -42,5 +42,6 @@
         <element name="fptAmount" type="text" selector="//*[@id='cart-totals']//tr[@class='totals']//td[@class='amount']/span"/>
         <element name="canadaTaxAmount" type="text" selector="//span[@data-th='Canada-GST-5%']"/>
         <element name="canadaPstTaxAmount" type="text" selector="//span[@data-th='Canada-GST-PST-5%']"/>
+        <element name="shippingMethods" type="text" selector="//label[text()='{{deliveryMethod}}']" parameterized="true"/>
     </section>
 </sections>
