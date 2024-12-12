@@ -16,6 +16,17 @@ namespace Magento\Framework\HTTP\Client;
 class Curl implements \Magento\Framework\HTTP\ClientInterface
 {
     /**
+     * @url https://www.rfc-editor.org/rfc/rfc9110.html
+     */
+    private const HTTP_METHODS_WITH_PAYLOAD = [
+        'POST',
+        'PUT',
+        'PATCH',
+        'DELETE',
+        'OPTIONS'
+    ];
+
+    /**
      * Max supported protocol by curl CURL_SSLVERSION_TLSv1_2
      * @var int
      */
@@ -455,13 +466,24 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         $this->_ch = curl_init();
         $this->curlOption(CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS | CURLPROTO_FTP | CURLPROTO_FTPS);
         $this->curlOption(CURLOPT_URL, $uri);
-        if ($method == 'POST') {
-            $this->curlOption(CURLOPT_POST, 1);
+
+        if (in_array($method, self::HTTP_METHODS_WITH_PAYLOAD)) {
             $this->curlOption(CURLOPT_POSTFIELDS, is_array($params) ? http_build_query($params) : $params);
-        } elseif ($method == "GET") {
-            $this->curlOption(CURLOPT_HTTPGET, 1);
-        } else {
-            $this->curlOption(CURLOPT_CUSTOMREQUEST, $method);
+        }
+
+        switch ($method) {
+            case 'POST':
+                $this->curlOption(CURLOPT_POST, 1);
+                break;
+            case 'PUT':
+                $this->curlOption(CURLOPT_PUT, 1);
+                break;
+            case "GET":
+                $this->curlOption(CURLOPT_HTTPGET, 1);
+                break;
+            default:
+                $this->curlOption(CURLOPT_CUSTOMREQUEST, $method);
+                break;
         }
 
         if (count($this->_headers)) {
