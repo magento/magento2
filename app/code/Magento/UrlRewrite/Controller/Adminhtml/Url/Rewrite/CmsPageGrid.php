@@ -8,6 +8,7 @@ namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\UrlRewrite\Block\Cms\Page\Grid;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite as RewriteAction;
 
 class CmsPageGrid extends RewriteAction implements HttpPostActionInterface, HttpGetActionInterface
@@ -20,7 +21,7 @@ class CmsPageGrid extends RewriteAction implements HttpPostActionInterface, Http
     public function execute()
     {
         $this->getResponse()->setBody(
-            $this->_view->getLayout()->createBlock(\Magento\UrlRewrite\Block\Cms\Page\Grid::class)->toHtml()
+            $this->_view->getLayout()->createBlock(Grid::class)->toHtml()
         );
     }
 }

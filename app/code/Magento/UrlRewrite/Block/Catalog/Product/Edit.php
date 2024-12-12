@@ -5,35 +5,48 @@
  */
 namespace Magento\UrlRewrite\Block\Catalog\Product;
 
+use Magento\Backend\Block\Widget\Button;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\UrlRewrite\Block\Catalog\Category\Tree;
+use Magento\UrlRewrite\Block\Catalog\Edit\Form;
+use Magento\UrlRewrite\Block\Edit as UrlRewriteEdit;
+use Magento\UrlRewrite\Block\Link;
+use Magento\UrlRewrite\Model\UrlRewriteFactory;
+
 /**
  * Block for Catalog Category URL rewrites editing
  */
-class Edit extends \Magento\UrlRewrite\Block\Edit
+class Edit extends UrlRewriteEdit
 {
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * @var \Magento\Catalog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     protected $_categoryFactory;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param Context $context
+     * @param UrlRewriteFactory $rewriteFactory
+     * @param BackendHelper $adminhtmlData
+     * @param ProductFactory $productFactory
+     * @param CategoryFactory $categoryFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        Context $context,
+        UrlRewriteFactory $rewriteFactory,
+        BackendHelper $adminhtmlData,
+        ProductFactory $productFactory,
+        CategoryFactory $categoryFactory,
         array $data = []
     ) {
         $this->_categoryFactory = $categoryFactory;
@@ -88,7 +101,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     /**
      * Get or create new instance of product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     private function _getProduct()
     {
@@ -101,7 +114,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     /**
      * Get or create new instance of category
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return Category
      */
     private function _getCategory()
     {
@@ -120,7 +133,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     {
         $this->addChild(
             'product_link',
-            \Magento\UrlRewrite\Block\Link::class,
+            Link::class,
             [
                 'item_url' => $this->_adminhtmlData->getUrl('adminhtml/*/*') . 'product',
                 'item_name' => $this->_getProduct()->getName(),
@@ -138,7 +151,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     {
         $this->addChild(
             'category_link',
-            \Magento\UrlRewrite\Block\Link::class,
+            Link::class,
             [
                 'item_url' => $this->_adminhtmlData->getUrl(
                     'adminhtml/*/*',
@@ -157,7 +170,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      */
     private function _addProductsGridBlock()
     {
-        $this->addChild('products_grid', \Magento\UrlRewrite\Block\Catalog\Product\Grid::class);
+        $this->addChild('products_grid', Grid::class);
     }
 
     /**
@@ -167,7 +180,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
      */
     private function _addCategoriesTreeBlock()
     {
-        $this->addChild('categories_tree', \Magento\UrlRewrite\Block\Catalog\Category\Tree::class);
+        $this->addChild('categories_tree', Tree::class);
     }
 
     /**
@@ -179,7 +192,7 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     {
         $this->addChild(
             'skip_categories',
-            \Magento\Backend\Block\Widget\Button::class,
+            Button::class,
             [
                 'label' => __('Skip Category Selection'),
                 'onclick' => 'window.location = \'' . $this->_adminhtmlData->getUrl(
@@ -195,12 +208,12 @@ class Edit extends \Magento\UrlRewrite\Block\Edit
     /**
      * Creates edit form block
      *
-     * @return \Magento\UrlRewrite\Block\Catalog\Edit\Form
+     * @return Form
      */
     protected function _createEditFormBlock()
     {
         return $this->getLayout()->createBlock(
-            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
+            Form::class,
             '',
             [
                 'data' => [

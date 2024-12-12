@@ -7,60 +7,45 @@
 
 namespace Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
+use Exception;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+use Magento\UrlRewrite\Helper\UrlRewrite as UrlRewriteHelper;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Model\UrlRewrite as ModelUrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implements HttpPostActionInterface
+class Save extends Rewrite implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
-     */
-    protected $productUrlPathGenerator;
-
-    /**
-     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
-     */
-    protected $categoryUrlPathGenerator;
-
-    /**
-     * @var \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator
-     */
-    protected $cmsPageUrlPathGenerator;
-
-    /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     */
-    protected $urlFinder;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
-     * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
-     * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
+     * @param Context $context
+     * @param ProductUrlPathGenerator $productUrlPathGenerator
+     * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
+     * @param CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
      * @param UrlFinderInterface $urlFinder
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator,
-        \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator,
-        UrlFinderInterface $urlFinder
+        Context $context,
+        protected readonly ProductUrlPathGenerator $productUrlPathGenerator,
+        protected readonly CategoryUrlPathGenerator $categoryUrlPathGenerator,
+        protected readonly CmsPageUrlPathGenerator $cmsPageUrlPathGenerator,
+        protected readonly UrlFinderInterface $urlFinder
     ) {
         parent::__construct($context);
-        $this->productUrlPathGenerator = $productUrlPathGenerator;
-        $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
-        $this->cmsPageUrlPathGenerator = $cmsPageUrlPathGenerator;
-        $this->urlFinder = $urlFinder;
     }
 
     /**
      * Override urlrewrite data, basing on current category and product
      *
-     * @param \Magento\UrlRewrite\Model\UrlRewrite $model
+     * @param ModelUrlRewrite $model
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _handleCatalogUrlRewrite($model)
     {
@@ -81,9 +66,9 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     /**
      * Get Target Path
      *
-     * @param \Magento\UrlRewrite\Model\UrlRewrite $model
+     * @param ModelUrlRewrite $model
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function getTargetPath($model)
     {
@@ -156,7 +141,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     /**
      * Override URL rewrite data, basing on current CMS page
      *
-     * @param \Magento\UrlRewrite\Model\UrlRewrite $model
+     * @param ModelUrlRewrite $model
      * @return void
      */
     private function _handleCmsPageUrlRewrite($model)
@@ -184,14 +169,14 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
-            /** @var $session \Magento\Backend\Model\Session */
-            $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
+            /** @var Session $session */
+            $session = $this->_objectManager->get(Session::class);
             try {
                 $model = $this->_getUrlRewrite();
 
                 $requestPath = $this->getRequest()->getParam('request_path');
                 $this->_objectManager->get(
-                    \Magento\UrlRewrite\Helper\UrlRewrite::class
+                    UrlRewriteHelper::class
                 )->validateRequestPath($requestPath);
 
                 $model->setEntityType($this->getRequest()->getParam('entity_type') ?: self::ENTITY_TYPE_CUSTOM)
@@ -211,7 +196,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $session->setUrlRewriteData($data);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addException(
                     $e,
                     __('An error occurred while saving the URL rewrite. Please try to save again.')

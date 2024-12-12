@@ -5,12 +5,16 @@
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
 
+use Magento\Cms\Block\Adminhtml\Page\Grid as PageGrid;
+use Magento\Cms\Model\Page;
+use Magento\Framework\DataObject;
+
 /**
  * CMS pages grid for URL rewrites
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
+class Grid extends PageGrid
 {
     /**
      * Constructor
@@ -85,7 +89,7 @@ class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
     /**
      * Return row url for js event handlers
      *
-     * @param \Magento\Cms\Model\Page|\Magento\Framework\DataObject $row
+     * @param Page|DataObject $row
      * @return string
      */
     public function getRowUrl($row)

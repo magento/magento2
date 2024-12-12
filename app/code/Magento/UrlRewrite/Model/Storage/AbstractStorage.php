@@ -5,7 +5,10 @@
  */
 namespace Magento\UrlRewrite\Model\Storage;
 
+use Exception;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\StorageInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\Framework\Api\DataObjectHelper;
 
@@ -15,25 +18,13 @@ use Magento\Framework\Api\DataObjectHelper;
 abstract class AbstractStorage implements StorageInterface
 {
     /**
-     * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory
-     */
-    protected $urlRewriteFactory;
-
-    /**
-     * @var \Magento\Framework\Api\DataObjectHelper
-     */
-    protected $dataObjectHelper;
-
-    /**
      * @param UrlRewriteFactory $urlRewriteFactory
      * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        UrlRewriteFactory $urlRewriteFactory,
-        DataObjectHelper $dataObjectHelper
+        protected readonly UrlRewriteFactory $urlRewriteFactory,
+        protected readonly DataObjectHelper $dataObjectHelper
     ) {
-        $this->urlRewriteFactory = $urlRewriteFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -90,9 +81,9 @@ abstract class AbstractStorage implements StorageInterface
     /**
      * Save new url rewrites and remove old if exist. Template method
      *
-     * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @throws \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException|\Exception
+     * @param UrlRewrite[] $urls
+     * @return UrlRewrite[]
+     * @throws UrlAlreadyExistsException|Exception
      */
     abstract protected function doReplace(array $urls);
 
@@ -100,7 +91,7 @@ abstract class AbstractStorage implements StorageInterface
      * Create url rewrite object
      *
      * @param array $data
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite
+     * @return UrlRewrite
      */
     protected function createUrlRewrite($data)
     {
@@ -108,7 +99,7 @@ abstract class AbstractStorage implements StorageInterface
         $this->dataObjectHelper->populateWithArray(
             $dataObject,
             $data,
-            \Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class
+            UrlRewrite::class
         );
         return $dataObject;
     }
