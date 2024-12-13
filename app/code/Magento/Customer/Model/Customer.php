@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model;
@@ -1415,5 +1415,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
     public function _resetState(): void
     {
         $this->_errors = [];
+        $this->_origData = null;
+        $this->storedData = [];
+        $this->_data = [];
     }
 }

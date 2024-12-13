@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="_defaultCategory" type="category">
         <data key="name" unique="suffix">simpleCategory</data>
         <data key="name_lwr" unique="suffix">simplecategory</data>
@@ -315,5 +315,10 @@
     <entity name="AssignProductToCategory" type="category_product_link">
         <var key="category_id" entityKey="id" entityType="category"/>
         <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
+    <entity name="ApiCategoryNonAnchor"  type="category">
+        <data key="name" unique="suffix">ApiCategoryNonAnchor</data>
+        <data key="is_active">true</data>
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryNonAnchor</requiredEntity>
     </entity>
 </entities>
