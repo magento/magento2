@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Weee\Model\Total\Quote;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -129,12 +128,13 @@ class Weee extends AbstractTotal
                 continue;
             }
             $this->resetItemData($item);
-            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+            if ($item->getHasChildren()) {
+                $child = null;
                 foreach ($item->getChildren() as $child) {
                     $this->resetItemData($child);
                     $this->process($address, $total, $child);
                 }
-                $this->recalculateParent($item);
+                $this->recalculateParent($item, $child);
             } else {
                 $this->process($address, $total, $item);
             }
@@ -315,10 +315,10 @@ class Weee extends AbstractTotal
      * Recalculate parent item amounts based on children results
      *
      * @param AbstractItem $item
+     * @param AbstractItem|null $childItem
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function recalculateParent(AbstractItem $item)
+    protected function recalculateParent(AbstractItem $item, AbstractItem $childItem = null)
     {
         $associatedTaxables = [];
         foreach ($item->getChildren() as $child) {
@@ -326,6 +326,11 @@ class Weee extends AbstractTotal
         }
         $associatedTaxables = array_merge([], ...$associatedTaxables);
         $item->setAssociatedTaxables($associatedTaxables);
+
+        if (isset($childItem)) {
+            $item->setWeeeTaxApplied($childItem->getWeeeTaxApplied());
+            $item->setWeeeTaxAppliedAmount($childItem->getWeeeTaxAppliedAmount());
+        }
     }
 
     /**
