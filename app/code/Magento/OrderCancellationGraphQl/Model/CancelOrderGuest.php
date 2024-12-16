@@ -17,17 +17,12 @@ declare(strict_types=1);
 namespace Magento\OrderCancellationGraphQl\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\OrderCancellation\Model\Email\ConfirmationKeySender;
 use Magento\OrderCancellation\Model\GetConfirmationKey;
-use Magento\OrderCancellationGraphQl\Model\Validator\GuestOrder\ValidateRequest;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 
-/**
- * Class for Guest order cancellation
- */
 class CancelOrderGuest
 {
     /**
@@ -35,14 +30,12 @@ class CancelOrderGuest
      *
      * @param OrderFormatter $orderFormatter
      * @param OrderRepositoryInterface $orderRepository
-     * @param ValidateRequest $validateRequest
      * @param ConfirmationKeySender $confirmationKeySender
      * @param GetConfirmationKey $confirmationKey
      */
     public function __construct(
         private readonly OrderFormatter           $orderFormatter,
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly ValidateRequest          $validateRequest,
         private readonly ConfirmationKeySender    $confirmationKeySender,
         private readonly GetConfirmationKey       $confirmationKey,
     ) {
@@ -54,13 +47,9 @@ class CancelOrderGuest
      * @param Order $order
      * @param array $input
      * @return array
-     * @throws GraphQlInputException
-     * @throws LocalizedException
      */
     public function execute(Order $order, array $input): array
     {
-        $this->validateRequest->validateCancelGuestOrderInput($input);
-
         try {
             // send confirmation key and order id
             $this->sendConfirmationKeyEmail($order, $input['reason']);

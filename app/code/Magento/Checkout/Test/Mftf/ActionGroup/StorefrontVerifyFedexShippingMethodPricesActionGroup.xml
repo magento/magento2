@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright 2024 Adobe
+      * All Rights Reserved.
+      */
+    -->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyFedexShippingMethodPricesActionGroup">
+        <annotations>
+            <description>Validates that the Fedex Shipping method prices in the checkout page.</description>
+        </annotations>
+        <arguments>
+            <argument name="smartPostPrice" type="string" defaultValue="$17.25"/>
+            <argument name="groundPrice" type="string" defaultValue="$13.72"/>
+            <argument name="expressSaverPrice" type="string" defaultValue="$37.97"/>
+            <argument name="twoDayPrice" type="string" defaultValue="$44.11"/>
+            <argument name="twoDayAMPrice" type="string" defaultValue="$50.91"/>
+            <argument name="standardOvernightPrice" type="string" defaultValue="$90.31"/>
+            <argument name="priorityOvernightPrice" type="string" defaultValue="$100.37"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <waitForText selector="{{CheckoutShippingMethodsSection.smartPostFedexPrice}}" userInput="{{smartPostPrice}}" stepKey="waitForSmartPostPriceVisible"/>
+        <waitForText selector="{{CheckoutShippingMethodsSection.groundFedexPrice}}" userInput="{{groundPrice}}" stepKey="waitForGroundPriceVisible"/>
+        <waitForText selector="{{CheckoutShippingMethodsSection.expressSaverFedexPrice}}" userInput="{{expressSaverPrice}}" stepKey="waitForExpressPriceVisible"/>
+        <waitForText selector="{{CheckoutShippingMethodsSection.twoDayFedexPrice}}" userInput="{{twoDayPrice}}" stepKey="waitForTwodayPriceVisible"/>
+        <waitForText selector="{{CheckoutShippingMethodsSection.twoDayAMFedexPrice}}" userInput="{{twoDayAMPrice}}" stepKey="waitForTwodayAMPriceVisible"/>
+        <waitForText selector="{{CheckoutShippingMethodsSection.standardOvernightFedexPrice}}" userInput="{{standardOvernightPrice}}" stepKey="waitForStandardPriceVisible"/>
+        <waitForText selector="{{CheckoutShippingMethodsSection.priorityOvernightFedexPrice}}" userInput="{{priorityOvernightPrice}}" stepKey="waitForOvernightPriceVisible"/>
+    </actionGroup>
+</actionGroups>

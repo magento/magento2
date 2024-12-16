@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Weee\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Website;
-use Magento\Tax\Model\Calculation;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Catalog\Model\Product\Type;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @api
  * @since 100.0.2
  */
@@ -22,22 +23,22 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     /**
      * Including FPT only
      */
-    const DISPLAY_INCL = 0;
+    public const DISPLAY_INCL = 0;
 
     /**
      * Including FPT and FPT description
      */
-    const DISPLAY_INCL_DESCR = 1;
+    public const DISPLAY_INCL_DESCR = 1;
 
     /**
      * Excluding FPT. Including FPT description and final price
      */
-    const DISPLAY_EXCL_DESCR_INCL = 2;
+    public const DISPLAY_EXCL_DESCR_INCL = 2;
 
     /**
      * Excluding FPT
      */
-    const DISPLAY_EXCL = 3;
+    public const DISPLAY_EXCL = 3;
 
     /**
      * @var array|null
@@ -45,8 +46,6 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     protected $_allAttributes = null;
 
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxData = null;
@@ -71,9 +70,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      */
     protected $_customerSession;
 
-    /**
-     * Weee config
-     *
+    /**s
      * @var \Magento\Weee\Model\Config
      */
     protected $weeeConfig;
@@ -141,6 +138,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve Weee Attribute amount
+     *
      * @param Product $product
      * @param null|false|\Magento\Framework\DataObject $shipping
      * @param null|false|\Magento\Framework\DataObject $billing
@@ -170,6 +169,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve Weee attribute amount excluding tax
+     *
      * @param Product $product
      * @param null|false|\Magento\Framework\DataObject $shipping
      * @param null|false|\Magento\Framework\DataObject $billing
@@ -182,24 +183,32 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         $billing = null,
         $website = null
     ) {
+        $attributes = [];
         $amountExclTax = 0;
-        $attributes = $this->getProductWeeeAttributes(
-            $product,
-            $shipping,
-            $billing,
-            $website,
-            true,
-            false
-        );
+
+        if ($product->getTypeId() !== Configurable::TYPE_CODE) {
+            $attributes = $this->getProductWeeeAttributes(
+                $product,
+                $shipping,
+                $billing,
+                $website,
+                true,
+                false
+            );
+        }
+
         if (Type::TYPE_BUNDLE !== $product->getTypeId() || $product->getPriceType()) {
             foreach ($attributes as $attribute) {
                 $amountExclTax += $attribute->getAmountExclTax();
             }
         }
+
         return $amountExclTax;
     }
 
     /**
+     * Retrieve Weee Attribute Codes
+     *
      * @param bool $forceEnabled
      * @return array
      */
@@ -209,7 +218,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Retrieve Wee tax attribute codes
+     * Retrieve Weee tax attribute codes
      *
      * @param  null|string|bool|int|Store $store
      * @param  bool $forceEnabled
@@ -228,6 +237,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve product Weee attribute
+     *
      * @param Product $product
      * @param null|false|\Magento\Quote\Model\Quote\Address $shipping
      * @param null|false|\Magento\Quote\Model\Quote\Address $billing
@@ -238,6 +249,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function getProductWeeeAttributes(
         $product,
@@ -374,6 +386,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Check if Weee is in location
+     *
      * @param int $countryId
      * @param int $regionId
      * @param int $websiteId

@@ -88,3 +88,8 @@ Debug,Debug
 "Package Return Program","Package Return Program"
 "Regular Stop","Regular Stop"
 "Tag","Tag"
+"Api Key","Api Key"
+"Secret Key","Secret Key"
+"Enable Tracking API credentials","Enable Tracking API credentials"
+"Tracking API Key","Tracking API Key"
+"Tracking API Secret Key","Tracking API Secret Key"
