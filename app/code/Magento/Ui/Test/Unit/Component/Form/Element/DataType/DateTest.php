@@ -182,7 +182,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function convertDatetimeDataProvider(): array
+    public static function convertDatetimeDataProvider(): array
     {
         return [
             ['2019-09-30T12:32:00.000Z', false, '2019-09-30 12:32:00'],
@@ -228,7 +228,7 @@ class DateTest extends TestCase
      *
      * @return array
      */
-    public function convertDateFormatDataProvider(): array
+    public static function convertDateFormatDataProvider(): array
     {
         return [
             [

@@ -94,7 +94,7 @@ class OutputAbstractTest extends TestCase
     /**
      * @return array
      */
-    public function renderColumnValueDataProvider()
+    public static function renderColumnValueDataProvider()
     {
         return [
             ['someTimerId', Stat::ID, 'someTimerId'],

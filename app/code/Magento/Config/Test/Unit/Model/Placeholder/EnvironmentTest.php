@@ -54,7 +54,7 @@ class EnvironmentTest extends TestCase
     /**
      * @return array
      */
-    public function getGenerateDataProvider()
+    public static function getGenerateDataProvider()
     {
         return [
             [
@@ -94,7 +94,7 @@ class EnvironmentTest extends TestCase
     /**
      * @return array
      */
-    public function getIsPlaceholderDataProvider()
+    public static function getIsPlaceholderDataProvider()
     {
         return [
             [Environment::PREFIX . 'TEST', true],
@@ -122,7 +122,7 @@ class EnvironmentTest extends TestCase
     /**
      * @return array
      */
-    public function restoreDataProvider()
+    public static function restoreDataProvider()
     {
         return [
             [Environment::PREFIX . 'TEST__CONFIG', 'test/config'],

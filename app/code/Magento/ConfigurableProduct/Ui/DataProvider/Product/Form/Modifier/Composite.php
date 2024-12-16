@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
-use Magento\Catalog\Model\Product\Type;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\AssociatedProducts;
@@ -53,7 +52,7 @@ class Composite extends AbstractModifier
      * @param LocatorInterface $locator
      * @param ObjectManagerInterface $objectManager
      * @param AssociatedProducts $associatedProducts
-     * @param AllowedProductTypes $allowedProductTypes,
+     * @param AllowedProductTypes $allowedProductTypes
      * @param array $modifiers
      */
     public function __construct(
@@ -84,7 +83,7 @@ class Composite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -112,7 +111,7 @@ class Composite extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {

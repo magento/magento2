@@ -347,7 +347,7 @@ class CollectTest extends TestCase
     /**
      * @return array
      */
-    public function itemDataProvider()
+    public static function itemDataProvider()
     {
         return [
             [

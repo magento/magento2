@@ -64,7 +64,7 @@ class ConfigurableProductMultipleStoreViewTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function childrenAssignedToDifferentWebsitesDataProvider(): array
+    public static function childrenAssignedToDifferentWebsitesDataProvider(): array
     {
         return [
             ['default', 'simple_option_2', 'Option 2'],

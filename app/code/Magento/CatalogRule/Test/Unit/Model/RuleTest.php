@@ -247,7 +247,7 @@ class RuleTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderCallbackValidateProduct(): array
+    public static function dataProviderCallbackValidateProduct(): array
     {
         return [
             [false],
@@ -275,7 +275,7 @@ class RuleTest extends TestCase
      *
      * @return array
      */
-    public function validateDataDataProvider(): array
+    public static function validateDataDataProvider(): array
     {
         return [
             [
@@ -381,7 +381,7 @@ class RuleTest extends TestCase
     /**
      * @return array
      */
-    public function afterUpdateDataProvider(): array
+    public static function afterUpdateDataProvider(): array
     {
         return [
             ['active' => 0],
@@ -428,7 +428,7 @@ class RuleTest extends TestCase
      *
      * @return array
      */
-    public function isRuleBehaviorChangedDataProvider(): array
+    public static function isRuleBehaviorChangedDataProvider(): array
     {
         return [
             [['new name', 'new description'], ['name', 'description'], false, false],

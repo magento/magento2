@@ -1625,7 +1625,7 @@ QUERY;
     /**
      * @return array
      */
-    public function sortByPositionWithMultipleCategoriesDataProvider(): array
+    public static function sortByPositionWithMultipleCategoriesDataProvider(): array
     {
         return [
             [
@@ -2995,16 +2995,16 @@ QUERY;
      *
      * @return array[][]
      */
-    public function filterProductsBySingleCategoryIdDataProvider(): array
+    public static function filterProductsBySingleCategoryIdDataProvider(): array
     {
         return [
             [
                 'fieldName' => 'category_id',
-                'categoryId' => '333',
+                'queryCategoryId' => '333',
             ],
             [
                 'fieldName' => 'category_uid',
-                'categoryId' => base64_encode('333'),
+                'queryCategoryId' => base64_encode('333'),
             ],
         ];
     }

@@ -225,7 +225,7 @@ QUERY;
         );
     }
 
-    public function stockThresholdQtyProvider(): array
+    public static function stockThresholdQtyProvider(): array
     {
         return [
             ['0', null],

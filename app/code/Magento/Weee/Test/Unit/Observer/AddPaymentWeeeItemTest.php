@@ -109,7 +109,7 @@ class AddPaymentWeeeItemTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [true, false],

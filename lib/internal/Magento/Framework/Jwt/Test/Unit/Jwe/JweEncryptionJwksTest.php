@@ -18,27 +18,27 @@ use PHPUnit\Framework\TestCase;
 
 class JweEncryptionJwksTest extends TestCase
 {
-    public function getConstructorCases(): array
+    public static function getConstructorCases(): array
     {
         return [
-            'valid-jwk' => [$this->createJwk(Jwk::PUBLIC_KEY_USE_ENCRYPTION), true],
+            'valid-jwk' => [['use' => Jwk::PUBLIC_KEY_USE_ENCRYPTION], true],
             'valid-jwks' => [
-                $this->createJwkSet(
+                [
                     [
-                        $this->createJwk(Jwk::PUBLIC_KEY_USE_ENCRYPTION),
-                        $this->createJwk(Jwk::PUBLIC_KEY_USE_ENCRYPTION)
+                        ['use' => Jwk::PUBLIC_KEY_USE_ENCRYPTION],
+                        ['use' => Jwk::PUBLIC_KEY_USE_ENCRYPTION]
                     ]
-                ),
+                ],
                 true
             ],
-            'invalid-jwk' => [$this->createJwk(Jwk::PUBLIC_KEY_USE_SIGNATURE), false],
+            'invalid-jwk' => [['use' => Jwk::PUBLIC_KEY_USE_SIGNATURE], false],
             'invalid-jwks' => [
-                $this->createJwkSet(
+                [
                     [
-                        $this->createJwk(Jwk::PUBLIC_KEY_USE_SIGNATURE),
-                        $this->createJwk(Jwk::PUBLIC_KEY_USE_ENCRYPTION)
+                        ['use' => Jwk::PUBLIC_KEY_USE_SIGNATURE],
+                        ['use' => Jwk::PUBLIC_KEY_USE_ENCRYPTION]
                     ]
-                ),
+                ],
                 false
             ]
         ];
@@ -52,29 +52,39 @@ class JweEncryptionJwksTest extends TestCase
      * @return void
      * @dataProvider getConstructorCases
      */
-    public function testConstruct($jwks, $valid): void
+    public function testConstruct(array $jwkData, bool $valid): void
     {
+        if (isset($jwkData[0]) && is_array($jwkData[0])) {
+            $jwks = array_map(function ($data) {
+                return $this->createJwk($data['use']);
+            }, $jwkData[0]);
+            $jwkSet = $this->createJwkSet($jwks);
+            $jwksObject = $jwkSet;
+        } else {
+            $jwksObject = $this->createJwk($jwkData['use']);
+        }
+
         if (!$valid) {
             $this->expectException(EncryptionException::class);
         }
 
-        new JweEncryptionJwks($jwks, JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM);
+        new JweEncryptionJwks($jwksObject, JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM);
     }
 
-    public function getAlgorithmCases(): array
+    public static function getAlgorithmCases(): array
     {
         return [
             'one-algo' => [
-                $this->createJwk(Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_RSA_OAEP),
+                ['use' => Jwk::PUBLIC_KEY_USE_ENCRYPTION, 'alg' => Jwk::ALGORITHM_RSA_OAEP],
                 Jwk::ALGORITHM_RSA_OAEP
             ],
             'json' => [
-                $this->createJwkSet(
+                [
                     [
-                        $this->createJwk(Jwk::PUBLIC_KEY_USE_ENCRYPTION),
-                        $this->createJwk(Jwk::PUBLIC_KEY_USE_ENCRYPTION)
+                        ['use' => Jwk::PUBLIC_KEY_USE_ENCRYPTION, 'alg' => Jwk::ALGORITHM_RSA_OAEP],
+                        ['use' => Jwk::PUBLIC_KEY_USE_ENCRYPTION, 'alg' => Jwk::ALGORITHM_RSA_OAEP]
                     ]
-                ),
+                ],
                 'jwe-json-serialization'
             ],
         ];
@@ -83,14 +93,23 @@ class JweEncryptionJwksTest extends TestCase
     /**
      * Test algorithm logic.
      *
-     * @param Jwk|JwkSet $jwk
+     * @param array $jwkData
      * @param string $expectedName
      * @return void
      * @dataProvider getAlgorithmCases
      */
-    public function testGetAlgorithmName($jwk, string $expectedName): void
+    public function testGetAlgorithmName(array $jwkData, string $expectedName): void
     {
-        $model = new JweEncryptionJwks($jwk, JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM);
+        if (isset($jwkData['use'])) {
+            $jwk = $this->createJwk($jwkData['use'], $jwkData['alg']);
+            $model = new JweEncryptionJwks($jwk, JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM);
+        } else {
+            $jwks = array_map(function ($data) {
+                return $this->createJwk($data['use'], $data['alg']);
+            }, $jwkData[0]);
+            $jwkSet = $this->createJwkSet($jwks);
+            $model = new JweEncryptionJwks($jwkSet, JweEncryptionSettingsInterface::CONTENT_ENCRYPTION_ALGO_A128GCM);
+        }
 
         $this->assertEquals($expectedName, $model->getAlgorithmName());
     }

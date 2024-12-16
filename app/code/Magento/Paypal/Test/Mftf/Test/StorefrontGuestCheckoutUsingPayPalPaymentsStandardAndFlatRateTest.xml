@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutUsingPayPalPaymentsStandardAndFlatRateTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal Payments Standard Checkout Configuration"/>
+            <title value="Paypal Payments Standard Checkout configuration with valid credentials"/>
+            <description value="As a customer I want to be able to place and Order using PayPal Payments Standard with Flat Rate"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5185"/>
+            <group value="paypalStandard"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create category and simple product-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <field key="qty">120</field>
+                <field key="price">10</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Create configurable product-->
+            <actionGroup ref="AdminCreateApiConfigurableProductForPayPalActionGroup" stepKey="createConfigurableProduct"/>
+            <!--Create bundle product-->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+                <field key="qty">11</field>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfig">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!--Add new tax rates. Go to tax rule page -->
+            <actionGroup ref="AddNewTaxRuleActionGroup" stepKey="addFirstTaxRuleActionGroup"/>
+            <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="{{TaxRule.name}}"/>
+            <!-- Adding product rate tax for CA -->
+            <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addProductTaxRateForCA">
+                <argument name="taxCode" value="SimpleTaxCA"/>
+            </actionGroup>
+            <!-- Save Tax Rule -->
+            <actionGroup ref="ClickSaveButtonActionGroup" stepKey="saveAnotherTaxRule">
+            <argument name="message" value="You saved the tax rule."/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createConfigProductCreateConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Go to the tax rule page and delete the row created-->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPageA"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="{{TaxRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Deleting Tax zones and rate for Product Tax -->
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToStoresTaxZonesAndRatesPage">
+                <argument name="menuUiId" value="{{AdminMenuStores.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuStoresTaxZonesAndRates.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteProductTaxRule1">
+                <argument name="name" value="{{SimpleTaxCA.identifier}}-{{SimpleTaxCA.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+        </after>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Add configurable product to the cart  -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="$$createConfigProductAttributeCreateConfigurableProduct.default_value$$"/>
+            <argument name="productOption" value="$$getConfigAttributeOption2CreateConfigurableProduct.label$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront2"/>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront3"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefront">
+            <argument name="productUrl" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="customizeBundleProduct"/>
+        <actionGroup ref="StorefrontAddToTheCartButtonActionGroup" stepKey="addToCartBundleProduct"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="fillState"/>
+        <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+
+        <!-- Click on PayPal payment radio button and click on continue btn -->
+        <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageGuestCheckoutActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinuebtn"/>
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
+        <actionGroup ref="StorefrontLoginToPayPalStandardPaymentGuestCheckoutActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!--Go to Admin and check order information-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!-- Check status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $145.98." stepKey="seeOrderHistoryNotes"/>
+   </test>
+</tests>

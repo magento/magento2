@@ -188,7 +188,7 @@ class ImporterTest extends TestCase
     /**
      * @return array
      */
-    public function getWarningMessagesDataProvider()
+    public static function getWarningMessagesDataProvider()
     {
         return [
             [[], [], [], []],

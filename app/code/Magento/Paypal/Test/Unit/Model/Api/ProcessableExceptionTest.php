@@ -34,7 +34,7 @@ class ProcessableExceptionTest extends TestCase
     /**
      * @return array
      */
-    public function getUserMessageDataProvider()
+    public static function getUserMessageDataProvider()
     {
         return [
             [

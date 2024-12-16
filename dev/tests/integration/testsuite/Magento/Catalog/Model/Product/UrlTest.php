@@ -81,7 +81,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getUrlsWithSecondStoreProvider()
+    public static function getUrlsWithSecondStoreProvider()
     {
         return [
            'case1' => ['fixturestore', 'http://sample-second.com/index.php/simple-product-one.html'],

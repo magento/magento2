@@ -152,7 +152,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleReturnsTrueForProperScopesDataProvider()
+    public static function isVisibleReturnsTrueForProperScopesDataProvider()
     {
         return [
             [
@@ -184,7 +184,7 @@ class AbstractElementTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleReturnsFalseForNonProperScopesDataProvider()
+    public static function isVisibleReturnsFalseForNonProperScopesDataProvider()
     {
         return [
             [

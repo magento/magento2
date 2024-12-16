@@ -90,7 +90,7 @@ class AbstractTest extends TestCase
     /**
      * @return array
      */
-    public function adaptResizeValuesDataProvider()
+    public static function adaptResizeValuesDataProvider()
     {
         $expected = [
             'src' => ['x' => 0, 'y' => 0],
@@ -125,7 +125,7 @@ class AbstractTest extends TestCase
     /**
      * @return array
      */
-    public function prepareDestinationDataProvider()
+    public static function prepareDestinationDataProvider()
     {
         return [
             [__DIR__, 'name.txt', __DIR__ . '/name.txt'],

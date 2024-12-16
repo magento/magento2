@@ -426,6 +426,7 @@ class UtilityTest extends TestCase
         $this->getItemBasePrice();
         $this->item->setDiscountAmount($amount);
         $this->item->setBaseDiscountAmount($baseAmount);
+        $this->item->setQty($qty);
         $discountData = $this->createMock(Data::class);
         $discountData->expects($this->atLeastOnce())
             ->method('getAmount')

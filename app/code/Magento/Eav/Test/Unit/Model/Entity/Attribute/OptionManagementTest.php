@@ -130,7 +130,7 @@ class OptionManagementTest extends TestCase
     /**
      * @return array
      */
-    public function optionLabelDataProvider(): array
+    public static function optionLabelDataProvider(): array
     {
         return [
             ['optionLabel'],

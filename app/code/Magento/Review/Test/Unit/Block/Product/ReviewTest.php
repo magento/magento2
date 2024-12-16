@@ -214,7 +214,7 @@ class ReviewTest extends TestCase
     /**
      * @return array
      */
-    public function getProductReviewUrlDataProvider()
+    public static function getProductReviewUrlDataProvider()
     {
         return [
             [false, 'http://localhost/review/product/listAjax', 3],

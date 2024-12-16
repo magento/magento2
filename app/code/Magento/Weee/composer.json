@@ -5,11 +5,12 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-checkout": "*",
+        "magento/module-configurable-product": "*",
         "magento/module-customer": "*",
         "magento/module-directory": "*",
         "magento/module-eav": "*",

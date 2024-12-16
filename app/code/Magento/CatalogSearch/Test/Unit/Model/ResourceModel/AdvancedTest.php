@@ -55,7 +55,7 @@ class AdvancedTest extends TestCase
      *
      * @return array
      */
-    public function prepareConditionDataProvider()
+    public static function prepareConditionDataProvider()
     {
         return [
             ['string', 'string', 'string'],

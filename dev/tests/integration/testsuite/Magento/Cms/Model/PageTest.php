@@ -125,7 +125,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
     public static function testGetByIdentifierDataProvider() : array
     {
         return [
-            ['data' => [
+            ['pageData' => [
                 'title' => 'Test title',
                 'identifier' => 'test-identifier',
                 'page_layout' => '1column',

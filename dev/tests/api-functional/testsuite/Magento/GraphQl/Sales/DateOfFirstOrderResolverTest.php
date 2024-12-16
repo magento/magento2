@@ -121,12 +121,18 @@ class DateOfFirstOrderResolverTest extends GraphQlAbstract
         self::assertEquals(1, count($response['customer']['orders']['items']));
         self::assertArrayHasKey('date_of_first_order', $response['customer']['orders']);
 
-        $customerAuthHeaders = $this->getCustomerHeaders($token, null);
+        $customerAuthHeaders = $this->getCustomerHeaders($token, $store2->getCode());
         $query = $this->getCustomerOrdersQueryWithFilters('GLOBAL');
         $response = $this->graphQlQuery($query, [], '', $customerAuthHeaders);
         self::assertNotEmpty($response['customer']['orders']['items']);
         self::assertEquals(2, count($response['customer']['orders']['items']));
         self::assertArrayHasKey('date_of_first_order', $response['customer']['orders']);
+
+        $customerAuthHeaders = $this->getCustomerHeaders($token, null);
+        $query = $this->getCustomerOrdersQueryWithFilters('GLOBAL');
+        $this->expectException(\Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+        $this->graphQlQuery($query, [], '', $customerAuthHeaders);
     }
 
     /**
@@ -175,13 +181,6 @@ class DateOfFirstOrderResolverTest extends GraphQlAbstract
         );
         $token = $tokenResponse['body']['generateCustomerToken']['token'];
 
-        $customerAuthHeaders = $this->getCustomerHeaders($token, null);
-        $query = $this->getCustomerOrdersQueryWithFilters('STORE', '+1 years');
-        $response = $this->graphQlQuery($query, [], '', $customerAuthHeaders);
-        self::assertEmpty($response['customer']['orders']['items']);
-        self::assertEquals(0, count($response['customer']['orders']['items']));
-        self::assertNull($response['customer']['orders']['date_of_first_order']);
-
         $customerAuthHeaders = $this->getCustomerHeaders($token, $store2->getCode());
         $query = $this->getCustomerOrdersQueryWithFilters('STORE', null);
         $response = $this->graphQlQuery($query, [], '', $customerAuthHeaders);
@@ -192,6 +191,12 @@ class DateOfFirstOrderResolverTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query, [], '', $customerAuthHeaders);
         self::assertEquals(2, count($response['customer']['orders']['items']));
         self::assertArrayHasKey('date_of_first_order', $response['customer']['orders']);
+
+        $customerAuthHeaders = $this->getCustomerHeaders($token, null);
+        $query = $this->getCustomerOrdersQueryWithFilters('STORE', '+1 years');
+        $this->expectException(\Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+        $this->graphQlQuery($query, [], '', $customerAuthHeaders);
     }
 
     /**

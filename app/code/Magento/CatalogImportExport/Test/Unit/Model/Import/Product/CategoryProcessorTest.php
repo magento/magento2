@@ -173,14 +173,14 @@ class CategoryProcessorTest extends TestCase
     {
         return [
             [
-                '$categoriesCache' => [
+                'categoriesCache' => [
                     'category_id' => 'category_id value',
                 ],
-                '$expectedResult' => 'category_id value',
+                'expectedResult' => 'category_id value',
             ],
             [
-                '$categoriesCache' => [],
-                '$expectedResult' => null,
+                'categoriesCache' => [],
+                'expectedResult' => null,
             ],
         ];
     }

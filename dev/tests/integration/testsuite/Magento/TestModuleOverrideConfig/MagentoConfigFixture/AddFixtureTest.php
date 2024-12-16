@@ -73,8 +73,8 @@ class AddFixtureTest extends AbstractOverridesTest
     public static function testDataProvider(): array
     {
         return [
-            'first_data_set' => ['expected_config_value' => 'overridden value for method'],
-            'second_data_set' => ['expected_config_value' => 'overridden value for data set']
+            'first_data_set' => ['expectedConfigValue' => 'overridden value for method'],
+            'second_data_set' => ['expectedConfigValue' => 'overridden value for data set']
         ];
     }
 

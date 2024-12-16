@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,7 +12,7 @@ use Magento\Customer\Model\AddressFactory;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Customer\Model\ResourceModel\Address\Attribute as AddressAttribute;
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\CustomerImportExport\Model\Import\CountryWithWebsites;
 use Magento\CustomerImportExport\Model\Import\Address;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory;
@@ -145,7 +145,7 @@ class AddressTest extends TestCase
     protected $errorAggregator;
 
     /**
-     * @var AddressAttribute\Source\CountryWithWebsites|MockObject
+     * @var CountryWithWebsites|MockObject
      */
     private $countryWithWebsites;
 
@@ -168,8 +168,7 @@ class AddressTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->countryWithWebsites
-
-            ->method('getAllOptions')
+            ->method('getCountiesPerWebsite')
             ->willReturn([]);
         $this->_model = $this->_getModelMock();
         $this->errorAggregator = $this->createPartialMock(
@@ -407,14 +406,14 @@ class AddressTest extends TestCase
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
             'empty address id' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_empty_address_id.php',
+                'errors' => [],
+                'isValid' => true,
             ],
         ];
     }
@@ -428,9 +427,9 @@ class AddressTest extends TestCase
     {
         return [
             'valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
-                '$errors' => [],
-                '$isValid' => true,
+                'rowData' => include __DIR__ . '/_files/row_data_address_update_valid.php',
+                'errors' => [],
+                'isValid' => true,
             ],
         ];
     }

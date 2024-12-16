@@ -96,7 +96,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
     {
         return [
             '#1 Testing price for dynamic bundle product with one simple' => [
-                'strategy' => self::getBundleConfiguration1(),
+                'strategyModifiers' => self::getBundleConfiguration1(),
                 'expectedResults' => [
                     // just price from simple1
                     'minimalPrice' => 10,
@@ -106,7 +106,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#2 Testing price for dynamic bundle product with three simples and different qty' => [
-                'strategy' => self::getBundleConfiguration2(),
+                'strategyModifiers' => self::getBundleConfiguration2(),
                 'expectedResults' => [
                     // min price from simples 3*10 or 30
                     'minimalPrice' => 30,
@@ -116,7 +116,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#3 Testing price for dynamic bundle product with four simples and different price' => [
-                'strategy' => self::getBundleConfiguration3(),
+                'strategyModifiers' => self::getBundleConfiguration3(),
                 'expectedResults' => [
                     //  10
                     'minimalPrice' => 10,
@@ -126,7 +126,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#4 Testing price for dynamic bundle with two non required options' => [
-                'strategy' => self::getBundleConfiguration4(),
+                'strategyModifiers' => self::getBundleConfiguration4(),
                 'expectedResults' => [
                     // 1 * 10
                     'minimalPrice' => 10,
@@ -136,7 +136,7 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
             ],
 
             '#5 Testing price for dynamic bundle with two required options' => [
-                'strategy' => self::getBundleConfiguration5(),
+                'strategyModifiers' => self::getBundleConfiguration5(),
                 'expectedResults' => [
                     // 1 * 10 + 1 * 10
                     'minimalPrice' => 20,

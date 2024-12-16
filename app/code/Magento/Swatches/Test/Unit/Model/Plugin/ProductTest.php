@@ -46,7 +46,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function dataRoles()
+    public static function dataRoles()
     {
         return [
             [

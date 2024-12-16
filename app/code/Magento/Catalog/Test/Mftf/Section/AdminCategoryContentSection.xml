@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCategoryContentSection">
@@ -26,5 +25,7 @@
         <element name="productTableRow" type="button" selector="#catalog_category_products_table tbody tr"/>
         <element name="productSearch" type="button" selector="//button[@data-action='grid-filter-apply']" timeout="30"/>
         <element name="productTableColumnSku" type="input" selector="#catalog_category_products_filter_sku"/>
+        <element name="categoryImageUseDefault" type="checkbox" selector="input[name='use_default[image]']"/>
+        <element name="categoryDescriptionUseDefault" type="checkbox" selector="input[name='use_default[description]']"/>
     </section>
 </sections>

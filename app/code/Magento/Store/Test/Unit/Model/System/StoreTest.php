@@ -45,7 +45,7 @@ class StoreTest extends TestCase
     /**
      * @var int
      */
-    protected $groupId = 2;
+    protected static $groupId = 2;
 
     protected function setUp(): void
     {
@@ -71,7 +71,7 @@ class StoreTest extends TestCase
             []
         );
         $this->groupMock->expects($this->any())->method('getStores')->willReturn([$this->storeMock]);
-        $this->groupMock->expects($this->atLeastOnce())->method('getId')->willReturn($this->groupId);
+        $this->groupMock->expects($this->atLeastOnce())->method('getId')->willReturn(self::$groupId);
         $this->websiteMock->expects($this->atLeastOnce())->method('getGroups')->willReturn([$this->groupMock]);
         $this->storeManagerMock->expects($this->atLeastOnce())->method('getWebsites')->willReturn([$this->websiteMock]);
         $this->storeManagerMock->expects($this->atLeastOnce())->method('getStores')->willReturn([$this->storeMock]);
@@ -113,13 +113,13 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getStoresStructureDataProvider()
+    public static function getStoresStructureDataProvider()
     {
         $websiteName = 'website';
         $groupName = 'group';
         $storeName = 'store';
         $storeId = 1;
-        $groupId = $this->groupId;
+        $groupId = self::$groupId;
         $websiteId = 3;
 
         return [
@@ -219,13 +219,13 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getStoreValuesForFormDataProvider()
+    public static function getStoreValuesForFormDataProvider()
     {
         $websiteName = 'website';
         $groupName = 'group';
         $storeName = 'store';
         $storeId = 1;
-        $groupId = $this->groupId;
+        $groupId = self::$groupId;
         $websiteId = 3;
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
 

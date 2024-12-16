@@ -6,8 +6,18 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-class Capture extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View;
+
+class Capture extends View implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
     /**
      * Capture invoice action
      *

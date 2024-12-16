@@ -58,7 +58,7 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function escapeHtmlDataProvider()
+    public static function escapeHtmlDataProvider()
     {
         return [
             [

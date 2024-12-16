@@ -57,7 +57,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_beforeImport = [
+    protected static $_beforeImport = [
         'betsyparker@example.com' => [
             'addresses' => ['19107', '72701'],
             'data' => [self::ATTRIBUTE_CODE_FIRST_NAME => 'Betsy', self::ATTRIBUTE_CODE_LAST_NAME => 'Parker'],
@@ -69,7 +69,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_afterImport = [
+    protected static $_afterImport = [
         'betsyparker@example.com' => [
             'addresses' => ['19107', '72701', '19108'],
             'data' => [
@@ -239,7 +239,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
                 'createdItemsCount' => 3,
                 'deletedItemsCount' => 0,
                 'errors' => [],
-            ],
+            ]
         ];
 
         return $sourceData;

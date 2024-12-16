@@ -42,7 +42,7 @@ class AjaxBlockTest extends AbstractBackendController
      *
      * @return array
      */
-    public function ajaxBlockDataProvider(): array
+    public static function ajaxBlockDataProvider(): array
     {
         return [
             [

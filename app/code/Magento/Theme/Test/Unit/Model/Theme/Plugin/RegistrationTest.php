@@ -170,7 +170,7 @@ class RegistrationTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBeforeExecute()
+    public static function dataProviderBeforeExecute()
     {
         return [
             [true],

@@ -147,7 +147,7 @@ class SaveAssetKeywordsTest extends TestCase
      *
      * @return array
      */
-    public function assetKeywordsDataProvider(): array
+    public static function assetKeywordsDataProvider(): array
     {
         return [
             [

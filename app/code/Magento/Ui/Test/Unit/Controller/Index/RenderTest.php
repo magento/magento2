@@ -400,7 +400,7 @@ class RenderTest extends TestCase
     /**
      * @return array
      */
-    public function executeAjaxRequestWithoutPermissionsDataProvider(): array
+    public static function executeAjaxRequestWithoutPermissionsDataProvider(): array
     {
         $aclResource = 'Magento_Test::index_index';
         return [

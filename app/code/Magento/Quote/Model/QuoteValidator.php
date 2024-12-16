@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model;
@@ -14,7 +14,6 @@ use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage as OrderAmountValidationMessage;
 use Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface;
-use Magento\Framework\Webapi\Rest\Response as RestResponse;
 
 /**
  * Class to validate the quote
@@ -45,23 +44,16 @@ class QuoteValidator
     private $quoteValidationRule;
 
     /**
-     * @var RestResponse
-     */
-    private $_response;
-
-    /**
      * QuoteValidator constructor.
      *
      * @param AllowedCountries|null $allowedCountryReader
      * @param OrderAmountValidationMessage|null $minimumAmountMessage
      * @param QuoteValidationRuleInterface|null $quoteValidationRule
-     * @param RestResponse|null $response
      */
     public function __construct(
         AllowedCountries $allowedCountryReader = null,
         OrderAmountValidationMessage $minimumAmountMessage = null,
-        QuoteValidationRuleInterface $quoteValidationRule = null,
-        RestResponse $response = null
+        QuoteValidationRuleInterface $quoteValidationRule = null
     ) {
         $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
             ->get(AllowedCountries::class);
@@ -69,7 +61,6 @@ class QuoteValidator
             ->get(OrderAmountValidationMessage::class);
         $this->quoteValidationRule = $quoteValidationRule ?: ObjectManager::getInstance()
             ->get(QuoteValidationRuleInterface::class);
-        $this->_response = $response ?: ObjectManager::getInstance()->get(RestResponse::class);
     }
 
     /**
@@ -115,7 +106,6 @@ class QuoteValidator
                 $defaultMessage .= ' %1';
             }
             if ($defaultMessage) {
-                $this->_response->setHeader('errorRedirectAction', '#shipping');
                 throw new ValidatorException(__($defaultMessage, implode(' ', $messages)));
             }
         }

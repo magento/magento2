@@ -138,7 +138,7 @@ class RetryTest extends TestCase
     /**
      * @return array
      */
-    public function executeExceptionsDataProvider()
+    public static function executeExceptionsDataProvider()
     {
         return [
             [new LocalizedException(__('TestMessage')), __('TestMessage')],

@@ -342,10 +342,10 @@ namespace Magento\Framework\Session {
         public static function dataConstructor(): array
         {
             return [
-                [Config::PARAM_SESSION_SAVE_METHOD =>'db'],
-                [Config::PARAM_SESSION_SAVE_METHOD =>'redis'],
-                [Config::PARAM_SESSION_SAVE_METHOD =>'memcached'],
-                [Config::PARAM_SESSION_SAVE_METHOD =>'user'],
+                ['saveMethod' =>'db'],
+                ['saveMethod' =>'redis'],
+                ['saveMethod' =>'memcached'],
+                ['saveMethod' =>'user'],
             ];
         }
 

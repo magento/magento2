@@ -78,7 +78,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isSetFlagDataProvider()
+    public static function isSetFlagDataProvider()
     {
         return [
             ['a', 0, false],

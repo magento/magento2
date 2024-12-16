@@ -62,7 +62,7 @@ class TextTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             'empty' => ['', true],
@@ -105,7 +105,7 @@ class TextTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueRequiredDataProvider()
+    public static function validateValueRequiredDataProvider()
     {
         return [
             'empty' => ['', '"" is a required value.'],
@@ -191,7 +191,7 @@ class TextTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueLengthDataProvider()
+    public static function validateValueLengthDataProvider()
     {
         return [
             'false' => [false, true],

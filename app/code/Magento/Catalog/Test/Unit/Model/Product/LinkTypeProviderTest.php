@@ -133,7 +133,7 @@ class LinkTypeProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getItemAttributesDataProvider()
+    public static function getItemAttributesDataProvider()
     {
         return [
             ['test_product_link_2', ['data' => ['link_type_id' => 'test_code_2']]],

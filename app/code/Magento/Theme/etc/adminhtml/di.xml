@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -33,12 +33,8 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Theme\Model\Design\Config\Validator">
-        <arguments>
-            <argument name="fields" xsi:type="array">
-                <item name="header" xsi:type="string">email_header_template</item>
-                <item name="footer" xsi:type="string">email_footer_template</item>
-            </argument>
-        </arguments>
+    <type name="Magento\Config\Console\Command\ConfigSet\ProcessorFacade">
+        <plugin name="validate_design_config"
+                type="Magento\Theme\Plugin\DesignProcessorFacade"/>
     </type>
 </config>

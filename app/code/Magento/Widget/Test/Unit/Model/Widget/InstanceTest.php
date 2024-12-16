@@ -476,7 +476,7 @@ class InstanceTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function beforeSavePageGroupDataProvider()
+    public static function beforeSavePageGroupDataProvider()
     {
         return [
             'test case for anchor categories layout handles' => [

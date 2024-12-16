@@ -283,7 +283,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function redisOptionProvider()
+    public static function redisOptionProvider()
     {
         return [
             ['session-save-redis-host', 'host', 'google'],
@@ -310,7 +310,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function invalidOptionsProvider()
+    public static function invalidOptionsProvider()
     {
         return [
             ['session-save', 'clay-tablet', 'Invalid session handler \'clay-tablet\''],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Console\Command;
 
@@ -27,13 +27,12 @@ class RollbackCommand extends AbstractSetupCommand
     /**
      * Name of input arguments or options
      */
-    const INPUT_KEY_CODE_BACKUP_FILE = 'code-file';
-    const INPUT_KEY_MEDIA_BACKUP_FILE = 'media-file';
-    const INPUT_KEY_DB_BACKUP_FILE = 'db-file';
+    public const INPUT_KEY_CODE_BACKUP_FILE = 'code-file';
+    public const INPUT_KEY_MEDIA_BACKUP_FILE = 'media-file';
+    public const INPUT_KEY_DB_BACKUP_FILE = 'db-file';
+    public const NAME = 'setup:rollback';
 
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -104,7 +103,7 @@ class RollbackCommand extends AbstractSetupCommand
                 'Basename of the db backup file in var/backups'
             ),
         ];
-        $this->setName('setup:rollback')
+        $this->setName(self::NAME)
             ->setDescription('Rolls back Magento Application codebase, media and database')
             ->setDefinition($options);
         parent::configure();

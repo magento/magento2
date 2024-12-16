@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
--->
-
+    /**
+     * Copyright 2024 Adobe
+     * All Rights Reserved.
+     */
+   -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ProductOptionField" type="product_option">
@@ -24,6 +23,234 @@
         <var key="product_sku" entityType="product" entityKey="sku" />
         <data key="title">OptionField2</data>
         <data key="sku">OptionField2</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField3" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField3</data>
+        <data key="sku">OptionField3</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField4" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField4</data>
+        <data key="sku">OptionField4</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField5" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField5</data>
+        <data key="sku">OptionField5</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField6" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField6</data>
+        <data key="sku">OptionField6</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="priceWithDecimals">10.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField7" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField7</data>
+        <data key="sku">OptionField7</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField8" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField8</data>
+        <data key="sku">OptionField8</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField9" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField9</data>
+        <data key="sku">OptionField9</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField10" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField10</data>
+        <data key="sku">OptionField10</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField11" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField11</data>
+        <data key="sku">OptionField11</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="priceWithDecimals">10.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField12" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField12</data>
+        <data key="sku">OptionField12</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField13" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField13</data>
+        <data key="sku">OptionField13</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField14" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField14</data>
+        <data key="sku">OptionField14</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField15" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField15</data>
+        <data key="sku">OptionField15</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField16" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField16</data>
+        <data key="sku">OptionField16</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">10</data>
+        <data key="priceWithDecimals">10.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField17" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField17</data>
+        <data key="sku">OptionField17</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField18" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField18</data>
+        <data key="sku">OptionField18</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField19" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField19</data>
+        <data key="sku">OptionField19</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField20" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField20</data>
+        <data key="sku">OptionField20</data>
+        <data key="type">field</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">1</data>
+        <data key="price">20</data>
+        <data key="priceWithDecimals">20.000000</data>
+        <data key="price_type">fixed</data>
+        <data key="max_characters">0</data>
+    </entity>
+    <entity name="ProductOptionField21" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionField21</data>
+        <data key="sku">OptionField21</data>
         <data key="type">field</data>
         <data key="is_require">true</data>
         <data key="sort_order">1</data>

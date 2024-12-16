@@ -195,11 +195,11 @@ class ToOrderConverterTest extends TestCase
      *
      * @return array
      */
-    public function afterConvertDataProvider()
+    public static function afterConvertDataProvider()
     {
         return [
             'afterConvert' => [
-                'applied_taxes' => [
+                'appliedTaxes' => [
                     'IL' => [
                         'amount' => 0.36,
                         'percent' => 6,
@@ -212,7 +212,7 @@ class ToOrderConverterTest extends TestCase
                         ],
                     ],
                 ],
-                'expected_applied_taxes' => [
+                'expectedAppliedTaxes' => [
                     'IL' => [
                         'amount' => 0.36,
                         'percent' => 6,
@@ -227,7 +227,7 @@ class ToOrderConverterTest extends TestCase
                         ],
                     ],
                 ],
-                'item_applied_taxes' => [
+                'itemsAppliedTaxes' => [
                     'sequence-1' => [
                         [
                             'amount' => 0.06,
@@ -259,7 +259,7 @@ class ToOrderConverterTest extends TestCase
                         ]
                     ],
                 ],
-                'item_applied_taxes_expected' => [
+                'itemAppliedTaxesExpected' => [
                     'sequence-1' => [
                         'item_id' => 146,
                         'type' => 'product',

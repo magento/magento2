@@ -153,7 +153,7 @@ class NewActionTest extends ProductTestCase
      *
      * @return array
      */
-    public function validationCases(): array
+    public static function validationCases(): array
     {
         return [
             'execute-with-exception' => ['simple\' and true()]|*[self%3a%3ahandle%20or%20self%3a%3alayout',true],

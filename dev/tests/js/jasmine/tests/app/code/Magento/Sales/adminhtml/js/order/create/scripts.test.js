@@ -33,6 +33,7 @@ define([
                     '</fieldset>' +
                     '<input id="p_method_free" type="radio" name="payment[method]" value="free"/>' +
                 '</div>' +
+            '<button id="submit_order_top_button" type="button">Submit Order</button>' +
             '</form>';
 
     $.widget('magetest.testPaymentMethodA', {
@@ -160,6 +161,92 @@ define([
             jQueryAjax = undefined;
         });
 
+        describe('Testing syncAddressField method', function () {
+            it('Synchronize region and region_id fields display when called with field named "country"', function () {
+                let form, billingCountryId, billingRegionId, billingRegion, billingCountryIdOption1,
+                    billingCountryIdOption2, shippingCountryId, shippingRegionId, shippingRegion, billingRegionOption1,
+                    billingRegionOption2, shippingCountryIdOption1, shippingOption2, shippingRegionOption1,
+                    shippingRegionOption2;
+
+                form = document.createElement('form');
+
+                //create billing country id field
+                billingCountryId = document.createElement('select');
+                billingCountryId.name = 'order[billing_address][country_id]';
+                billingCountryIdOption1 = document.createElement('option');
+                billingCountryIdOption1.value = 'USA';
+                billingCountryIdOption1.innerText = 'United States of America';
+                billingCountryIdOption2 = document.createElement('option');
+                billingCountryIdOption2.value = 'RO';
+                billingCountryIdOption2.innerText = 'Romania';
+                billingCountryId.appendChild(billingCountryIdOption1);
+                billingCountryId.appendChild(billingCountryIdOption2);
+                form.appendChild(billingCountryId);
+
+                //create billing region id field
+                billingRegionId = document.createElement('select');
+                billingRegionId.name = 'order[billing_address][region_id]';
+                billingRegionId.id = 'order-billing_address_region_id';
+                billingRegionOption1 = document.createElement('option');
+                billingRegionOption1.value = 'NY';
+                billingRegionOption1.innerText = 'New York';
+                billingRegionOption2 = document.createElement('option');
+                billingRegionOption2.value = 'TX';
+                billingRegionOption2.innerText = 'Texas';
+                billingRegionId.appendChild(billingRegionOption1);
+                billingRegionId.appendChild(billingRegionOption2);
+                form.appendChild(billingRegionId);
+
+                //create hidden billing region field
+                billingRegion = document.createElement('input');
+                billingRegion.name = 'order[billing_address][region]';
+                billingRegion.id = 'order-billing_address_region';
+                billingRegion.style.display = 'none';
+                form.appendChild(billingRegion);
+
+                //create shipping country id field
+                shippingCountryId = document.createElement('select');
+                shippingCountryId.name = 'order[shipping_address][country_id]';
+                shippingCountryIdOption1 = document.createElement('option');
+                shippingCountryIdOption1.value = 'USA';
+                shippingCountryIdOption1.innerText = 'United States of America';
+                shippingOption2 = document.createElement('option');
+                shippingOption2.value = 'RO';
+                shippingOption2.innerText = 'Romania';
+                shippingCountryId.appendChild(shippingCountryIdOption1);
+                shippingCountryId.appendChild(shippingOption2);
+                shippingCountryId.value = 'RO';
+                form.appendChild(shippingCountryId);
+
+                //create shipping region id field
+                shippingRegionId = document.createElement('select');
+                shippingRegionId.name = 'order[shipping_address][region_id]';
+                shippingRegionId.id = 'order-shipping_address_region_id';
+                shippingRegionOption1 = document.createElement('option');
+                shippingRegionOption1.value = 'B';
+                shippingRegionOption1.innerText = 'Bucuresti';
+                shippingRegionOption2 = document.createElement('option');
+                shippingRegionOption2.value = 'CT';
+                shippingRegionOption2.innerText = 'Constanta';
+                shippingRegionId.appendChild(shippingRegionOption1);
+                shippingRegionId.appendChild(shippingRegionOption2);
+                form.appendChild(shippingRegionId);
+
+                //create shipping region field
+                shippingRegion = document.createElement('input');
+                shippingRegion.name = 'order[shipping_address][region]';
+                shippingRegion.id = 'order-shipping_address_region';
+                form.appendChild(shippingRegion);
+
+                document.body.appendChild(form);
+                order = new window.AdminOrder({});
+                order.syncAddressField(form, 'order[billing_address][country_id]', billingCountryId);
+
+                expect(shippingCountryId.value).toEqual('USA');
+                expect(shippingRegion.style.display).toEqual('none');
+            });
+        });
+
         it('test that setStoreId calls loadArea with a callback', function () {
             init();
             spyOn(order, 'loadArea').and.callFake(function () {
@@ -283,5 +370,112 @@ define([
                 );
             });
         });
+
+        describe('Check that payment custom handler is executed and button states', function () {
+            let $submitButton;
+
+            function testSubmit(currentPaymentMethod, paymentMethod, ajaxParams) {
+                $.ajax = jasmine.createSpy('$.ajax');
+                init({
+                    method: currentPaymentMethod
+                });
+                $(formEl).find(':radio[value="' + paymentMethod + '"]').prop('checked', true);
+                order.switchPaymentMethod(paymentMethod);
+
+                spyOn($.prototype, 'trigger').and.callThrough();
+                order.submit();
+
+                $submitButton = $('#submit_order_top_button');
+                expect($.ajax).toHaveBeenCalledTimes(1);
+                expect($.ajax).toHaveBeenCalledWith(jasmine.objectContaining(ajaxParams));
+
+                expect($.prototype.trigger).toHaveBeenCalledWith(
+                    jasmine.objectContaining({ type: 'beforeSubmitOrder' }));
+
+                if (paymentMethod !== 'payment1') {
+                    $.prototype.trigger.and.callFake(function (event) {
+                        if (event.type === 'beforeSubmitOrder') {
+                            event.result = false;
+                        }
+                    });
+                    expect($submitButton.prop('disabled')).toBe(true);
+                } else {
+                    expect($submitButton.prop('disabled')).toBe(false);
+
+                }
+            }
+
+            it('Check that payment custom handler is executed and button states #1', function () {
+                testSubmit(
+                    null,
+                    'payment1',
+                    {
+                        url: '/admin/sales/order/create/payment_method/payment1',
+                        data: {
+                            code: 'payment1'
+                        }
+                    }
+                );
+            });
+
+            it('Check that payment custom handler is executed and button states #2', function () {
+                testSubmit(
+                    'payment1',
+                    'payment1',
+                    {
+                        url: '/admin/sales/order/create/payment_method/payment1',
+                        data: {
+                            code: 'payment1'
+                        }
+                    }
+                );
+            });
+
+            it('Validate re-enabling the button for canceled events', function () {
+                order = new window.AdminOrder({});
+                spyOn(order, 'submit').and.callFake(function () {
+                    const $editForm = $('#edit_form');
+
+                    if ($editForm.valid()) {
+                        $submitButton.prop('disabled', true);
+                        const beforeSubmitOrderEvent = $.Event('beforeSubmitOrder');
+
+                        $editForm.trigger(beforeSubmitOrderEvent);
+
+                        if (beforeSubmitOrderEvent.result !== false) {
+                            $editForm.trigger('submitOrder');
+                        } else {
+                            $submitButton.prop('disabled', false);
+                        }
+                    }
+                });
+                spyOn($.prototype, 'trigger').and.callFake(function (event) {
+                    if (event.type === 'beforeSubmitOrder') {
+                        event.result = false;
+                    }
+                });
+                $.prototype.trigger.and.callFake(function (event) {
+                    if (event.type === 'beforeSubmitOrder') {
+                        event.result = false;
+                    }
+                });
+                order.submit();
+                expect($submitButton.prop('disabled')).toBe(false);
+            });
+
+            it('Check button state for non-payment1 methods', function () {
+                testSubmit(
+                    'payment2',
+                    'payment2',
+                    {
+                        url: '/admin/sales/order/create/payment_method/payment2',
+                        data: {
+                            code: 'payment2'
+                        }
+                    }
+                );
+            });
+        });
+
     });
 });

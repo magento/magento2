@@ -86,7 +86,7 @@ class WorkflowTypeTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [State::MODE_PRODUCTION, 1],

@@ -25,7 +25,7 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function loadByPhraseDataProvider(): array
+    public static function loadByPhraseDataProvider(): array
     {
         return [
             [
