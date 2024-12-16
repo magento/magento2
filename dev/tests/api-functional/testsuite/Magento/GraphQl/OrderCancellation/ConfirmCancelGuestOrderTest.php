@@ -126,9 +126,16 @@ MUTATION;
             }
           }
 MUTATION;
-        $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("The entity that was requested doesn't exist. Verify the entity and try again.");
-        $this->graphQlMutation($query);
+
+        $this->assertEquals(
+            [
+                'confirmCancelOrder' => [
+                    'error' => 'The entity that was requested doesn\'t exist. Verify the entity and try again.',
+                    'order' => null
+                ]
+            ],
+            $this->graphQlMutation($query)
+        );
     }
 
     /**
@@ -349,9 +356,18 @@ MUTATION;
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
         $query = $this->getConfirmCancelOrderMutation($order);
-        $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("The order cancellation could not be confirmed.");
-        $this->graphQlMutation($query);
+        $this->assertEquals(
+            [
+                'confirmCancelOrder' =>
+                    [
+                        'errorV2' => [
+                            'message' => 'The order cancellation could not be confirmed.'
+                        ],
+                        'order' => null
+                    ]
+            ],
+            $this->graphQlMutation($query)
+        );
     }
 
     #[
@@ -410,9 +426,18 @@ MUTATION;
         $this->confirmationKey->execute($order, 'Simple reason');
 
         $query = $this->getConfirmCancelOrderMutation($order);
-        $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("The order cancellation could not be confirmed.");
-        $this->graphQlMutation($query);
+        $this->assertEquals(
+            [
+                'confirmCancelOrder' =>
+                    [
+                        'errorV2' => [
+                            'message' => 'The order cancellation could not be confirmed.'
+                        ],
+                        'order' => null
+                    ]
+            ],
+            $this->graphQlMutation($query)
+        );
     }
 
     #[

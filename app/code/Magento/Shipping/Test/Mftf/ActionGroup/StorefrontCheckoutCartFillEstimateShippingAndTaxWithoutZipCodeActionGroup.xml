@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckoutCartFillEstimateShippingAndTaxWithoutZipCodeActionGroup">
+        <annotations>
+            <description>Fill address data in Estimate Shipping And Tax section of shopping cart on storefront without zip code</description>
+        </annotations>
+        <arguments>
+            <argument name="country" type="string" defaultValue="{{US_Address_TX.country}}"/>
+            <argument name="state" type="string" defaultValue="{{US_Address_TX.state}}"/>
+        </arguments>
+        <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.estimateShippingAndTaxSummary}}" visible="false" stepKey="openEestimateShippingAndTaxSection"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{country}}" stepKey="selectCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{state}}" stepKey="selectState"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDiappear"/>
+    </actionGroup>
+</actionGroups>

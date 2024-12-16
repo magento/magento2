@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
@@ -141,6 +141,9 @@ class CartFixed extends AbstractDiscount
             $baseDiscountAmount = min($baseItemPrice * $qty, $baseDiscountAmount);
             if ($ruleItemsCount <= 1) {
                 $this->deltaPriceRound->reset($discountType);
+                if ($baseDiscountAmount > $availableDiscountAmount) {
+                    $baseDiscountAmount = $availableDiscountAmount;
+                }
             } else {
                 $this->validator->decrementRuleItemTotalsCount($rule->getId());
             }
@@ -191,6 +194,7 @@ class CartFixed extends AbstractDiscount
      * Set information about usage cart fixed rule by quote address
      *
      * @deprecated 101.2.0 should be removed as it is not longer used
+     * @see Nothing
      * @param int $ruleId
      * @param int $itemId
      * @return void
@@ -204,6 +208,7 @@ class CartFixed extends AbstractDiscount
      * Retrieve information about usage cart fixed rule by quote address
      *
      * @deprecated 101.2.0 should be removed as it is not longer used
+     * @see Nothing
      * @param int $ruleId
      * @return int|null
      */

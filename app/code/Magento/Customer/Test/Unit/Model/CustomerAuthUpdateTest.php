@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Customer as CustomerModel;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecure;
@@ -36,9 +37,9 @@ class CustomerAuthUpdateTest extends TestCase
     protected $customerResourceModel;
 
     /**
-     * @var CustomerModel|MockObject
+     * @var CustomerFactory|MockObject
      */
-    protected $customerModel;
+    protected $customerFactory;
 
     /**
      * @var ObjectManager
@@ -56,15 +57,15 @@ class CustomerAuthUpdateTest extends TestCase
             $this->createMock(CustomerRegistry::class);
         $this->customerResourceModel =
             $this->createMock(CustomerResourceModel::class);
-        $this->customerModel =
-            $this->createMock(CustomerModel::class);
+        $this->customerFactory =
+            $this->createMock(CustomerFactory::class);
 
         $this->model = $this->objectManager->getObject(
             CustomerAuthUpdate::class,
             [
                 'customerRegistry' => $this->customerRegistry,
                 'customerResourceModel' => $this->customerResourceModel,
-                'customerModel' => $this->customerModel
+                'customerFactory' => $this->customerFactory
             ]
         );
     }
@@ -115,8 +116,13 @@ class CustomerAuthUpdateTest extends TestCase
                 $customerId
             );
 
-        $this->customerModel->expects($this->once())
+        $customerModel = $this->createMock(CustomerModel::class);
+        $customerModel->expects($this->once())
             ->method('reindex');
+
+        $this->customerFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($customerModel);
 
         $this->model->saveAuth($customerId);
     }

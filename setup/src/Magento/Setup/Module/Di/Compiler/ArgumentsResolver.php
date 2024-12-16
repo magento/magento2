@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Module\Di\Compiler;
@@ -193,7 +192,11 @@ class ArgumentsResolver
         $configuredArguments = $this->diContainerConfig->getArguments($instanceType);
         return array_map(
             function ($type) {
-                if (isset($type['instance'])) {
+                if (is_object($type)) {
+                    return;
+                }
+
+                if (is_array($type) && isset($type['instance'])) {
                     $type['instance'] = ltrim($type['instance'], '\\');
                 }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,9 +11,11 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AddressFactory;
 use Magento\Framework\Validator;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Validator\Factory;
 use Magento\Quote\Model\CustomerManagement;
 use Magento\Quote\Model\Quote;
@@ -76,6 +78,11 @@ class CustomerManagementTest extends TestCase
      */
     private $addressFactoryMock;
 
+    /**
+     * @var MockObject
+     */
+    private $customerAddressFactoryMock;
+
     protected function setUp(): void
     {
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
@@ -107,7 +114,8 @@ class CustomerManagementTest extends TestCase
         );
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods(['getPasswordHash'])
-            ->onlyMethods(['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer'])
+            ->onlyMethods(['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer',
+                'getCustomerIsGuest'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->quoteAddressMock = $this->createMock(Address::class);
@@ -136,10 +144,20 @@ class CustomerManagementTest extends TestCase
         $this->validatorFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->customerAddressFactoryMock = $this->getMockForAbstractClass(
+            AddressInterfaceFactory::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['create']
+        );
         $this->customerManagement = new CustomerManagement(
             $this->customerRepositoryMock,
             $this->customerAddressRepositoryMock,
             $this->accountManagementMock,
+            $this->customerAddressFactoryMock,
             $this->validatorFactoryMock,
             $this->addressFactoryMock
         );
@@ -249,8 +267,18 @@ class CustomerManagementTest extends TestCase
 
     public function testValidateAddressesNotSavedInAddressBook()
     {
+        $this->expectException(ValidatorException::class);
+        $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
+        $this->quoteAddressMock->method('getStreet')->willReturn(['test']);
+        $this->quoteAddressMock->method('getCustomAttributes')->willReturn(['test']);
+        $this->customerAddressFactoryMock->method('create')
+            ->willReturn($this->customerAddressMock);
+        $addressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->addressFactoryMock->expects($this->exactly(1))->method('create')->willReturn($addressMock);
         $this->quoteMock
-            ->expects($this->once())
+            ->expects($this->atMost(2))
             ->method('getBillingAddress')
             ->willReturn($this->quoteAddressMock);
         $this->quoteMock
@@ -258,10 +286,16 @@ class CustomerManagementTest extends TestCase
             ->method('getShippingAddress')
             ->willReturn($this->quoteAddressMock);
         $this->quoteAddressMock->expects($this->any())->method('getCustomerAddressId')->willReturn(null);
+        $validatorMock = $this->getMockBuilder(Validator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->validatorFactoryMock
-            ->expects($this->never())
+            ->expects($this->exactly(1))
             ->method('createValidator')
-            ->with('customer_address', 'save', null);
+            ->with('customer_address', 'save', null)
+            ->willReturn($validatorMock);
+        $validatorMock->expects($this->exactly(1))->method('isValid')->with($addressMock)->willReturn(false);
+        $validatorMock->expects($this->exactly(1))->method('getMessages')->willReturn([]);
         $this->customerManagement->validateAddresses($this->quoteMock);
     }
 }

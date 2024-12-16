@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertSeveralTermsAndConditionsOnPayPalPayFlowProCheckoutReviewPageTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Checkout agreements and Paypal payflow pro checkout"/>
+            <title value="Assert Several Terms And Conditions On PayPal Pay Flow Pro Checkout Review Page"/>
+            <description value="Several Terms and Conditions with different types are shown on PayPal payflow pro checkout review page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4428"/>
+            <group value="paypalPayflowProWithOutValut"/>
+            <group value="3rd_party_integration"/>
+<!--            <group value="pr_exclude" />-->
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <actionGroup ref="AdminEnableTermsAndConditionsConfigurationActionGroup" stepKey="EnableTermsAndConditions"/>
+            <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
+             <!-- create manual term -->
+            <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTermForManualTerm"/>
+            <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="createManualTerm">
+               <argument name="term" value="newHtmlTerm"/>
+            </actionGroup>
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveManualTerm"/>
+            <!-- create automatic term -->
+            <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTermForAutomaticTerm"/>
+            <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="createAutomaticTerm">
+               <argument name="term" value="newHtmlAutomaticallyTerm"/>
+            </actionGroup>
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveAutomaticTerm"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+               <argument name="indices" value=""/>
+            </actionGroup>
+           <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+               <argument name="tags" value="config full_page"/>
+           </actionGroup>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <actionGroup ref="AdminDisableTermsAndConditionsConfigurationActionGroup" stepKey="disableTermsAndConditions"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storeFrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <!--Navigate to checkout-->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <!-- Click next button to open payment section -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!-- Click on PayPal payment radio button -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalExpressCheckoutPayFlowEdition}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalExpressCheckoutPayFlowEdition}}" stepKey="selectPayPalExpressCheckoutPayFlowEdition"/>
+        <!-- Verify both manual and automatic are present -->
+        <waitForText selector="{{StorefrontCheckoutAgreementsSection.manualCheckoutAgreementLink('agreement_payflow_express')}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeManualTermTextInCheckoutIsPresent"/>
+        <waitForText selector="{{StorefrontCheckoutAgreementsSection.automaticCheckoutAgreementLink('agreement_payflow_express')}}" userInput="{{newHtmlAutomaticallyTerm.checkboxText}}" stepKey="seeAutomaticTermTextInCheckoutIsPresent"/>
+        <!-- open manual terms and conditions and verify content messages-->
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.manualCheckoutAgreementLink('agreement_payflow_express')}}" stepKey="waitForManualTermTextInCheckoutIsClickable"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.manualCheckoutAgreementLink('agreement_payflow_express')}}" stepKey="clickManualTermTextInCheckout"/>
+        <waitForElement selector="{{StorefrontCheckoutAgreementsSection.contentArea(newHtmlTerm.content)}}" stepKey="verifyManualTermContentTextMessage"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="waitForCloseToBeClickable"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.agreementClose}}" stepKey="ClickOnClose"/>
+        <!-- open automatic terms and conditions and verify content messages-->
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.automaticCheckoutAgreementLink('agreement_payflow_express')}}" stepKey="waitForAutomaticTermTextInCheckoutIsClickable"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.automaticCheckoutAgreementLink('agreement_payflow_express')}}" stepKey="clickAutomaticTermTextInCheckoutIsClickable"/>
+        <waitForElement selector="{{StorefrontCheckoutAgreementsSection.contentArea(newHtmlAutomaticallyTerm.content)}}" stepKey="verifyAutomaticTermContentTextMessage"/>
+    </test>
+</tests>
