@@ -1,8 +1,8 @@
 <?php
 /**
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
@@ -268,6 +268,11 @@ class Save extends Attribute implements HttpPostActionInterface
             }
 
             unset($data['entity_type_id']);
+
+            if (array_key_exists('reset_is-default_option', $data) && $data['reset_is-default_option']) {
+                unset($data['reset_is-default_option']);
+                $data['default_value'] = null;
+            }
 
             $model->addData($data);
 

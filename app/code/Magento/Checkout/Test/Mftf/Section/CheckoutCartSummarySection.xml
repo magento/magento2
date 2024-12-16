@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
@@ -42,5 +41,8 @@
         <element name="fptAmount" type="text" selector="//*[@id='cart-totals']//tr[@class='totals']//td[@class='amount']/span"/>
         <element name="canadaTaxAmount" type="text" selector="//span[@data-th='Canada-GST-5%']"/>
         <element name="canadaPstTaxAmount" type="text" selector="//span[@data-th='Canada-GST-PST-5%']"/>
+        <element name="verifyErrorMessageOfShippingMethod" type="text" selector="//div[@data-bind='text: error_message']"/>
+        <element name="upsShippingMethod" type="input" selector="#s_method_ups_08"/>
+        <element name="shippingMethods" type="text" selector="//label[text()='{{deliveryMethod}}']" parameterized="true"/>
     </section>
 </sections>

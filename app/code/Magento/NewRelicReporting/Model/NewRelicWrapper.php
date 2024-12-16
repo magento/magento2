@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\NewRelicReporting\Model;
 
+use Magento\Framework\App\State;
+use Magento\Framework\App\ObjectManager;
 use Throwable;
 
 /**
@@ -16,6 +18,26 @@ class NewRelicWrapper
 {
     private const NEWRELIC_APPNAME = 'newrelic.appname';
     private const NEWRELIC_AUTO_INSTRUMENT = 'newrelic.browser_monitoring.auto_instrument';
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var State
+     */
+    private $state;
+
+    /**
+     * @param ?Config $config
+     * @param ?State $state
+     */
+    public function __construct(?Config $config = null, ?State $state = null)
+    {
+        $this->config = $config ?? ObjectManager::getInstance()->get(Config::class);
+        $this->state = $state ?? ObjectManager::getInstance()->get(State::class);
+    }
 
     /**
      * Wrapper for 'newrelic_add_custom_parameter' function
@@ -80,7 +102,8 @@ class NewRelicWrapper
     public function startBackgroundTransaction()
     {
         if ($this->isExtensionInstalled()) {
-            newrelic_start_transaction(ini_get(self::NEWRELIC_APPNAME));
+            $name = $this->getCurrentAppName();
+            newrelic_start_transaction($name);
             newrelic_background_job();
         }
     }
@@ -160,5 +183,22 @@ class NewRelicWrapper
         }
 
         return newrelic_get_browser_timing_footer($includeTags);
+    }
+
+    /**
+     * Get current App name for NR transactions
+     *
+     * @return string
+     */
+    public function getCurrentAppName()
+    {
+        if ($this->config->isSeparateApps() &&
+            $this->config->getNewRelicAppName() &&
+            $this->config->isNewRelicEnabled()) {
+            $code = $this->state->getAreaCode();
+            $current = $this->config->getNewRelicAppName();
+            return $current . ';' . $current . '_' . $code;
+        }
+        return ini_get(self::NEWRELIC_APPNAME);
     }
 }

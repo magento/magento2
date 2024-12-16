@@ -66,6 +66,7 @@
         <element name="setSecondRuleParameter" type="input" selector="#conditions__1--2__value"/>
         <element name="selectPage" type="button" selector="//span[contains(text(),'Select Page')]"/>
         <element name="enableCookies" type="button" selector="//tbody//tr//td[contains(text(),'Enable Cookies')]"/>
+        <element name="conditions" type="button" selector="//label[@class='label admin__field-label']//span[text()='Conditions']"/>
     </section>
 </sections>
 

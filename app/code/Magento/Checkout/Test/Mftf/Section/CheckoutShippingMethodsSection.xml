@@ -37,5 +37,14 @@
         <element name="shippingMethodFreeShippingLabel" type="text" selector="#label_carrier_freeshipping_freeshipping"/>
         <element name="shippingDHLErrorMessage" type="text" selector="#checkout-shipping-method-load .table-checkout-shipping-method tr.row-error .error div"/>
         <element name="smartPostShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_SMART_POST']"/>
+        <element name="shippingMethodDhlExpressEasyLabel" type="text" selector="#label_method_8_dhl"/>
+        <element name="shippingMethodFedexLabel" type="text" selector="#label_carrier_null_fedex"/>
+        <element name="smartPostFedexPrice" type="text" selector="//tr[td[@id='label_carrier_SMART_POST_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="groundFedexPrice" type="text" selector="//tr[td[@id='label_method_FEDEX_GROUND_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="expressSaverFedexPrice" type="text" selector="//tr[td[@id='label_method_FEDEX_EXPRESS_SAVER_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="twoDayFedexPrice" type="text" selector="//tr[td[@id='label_method_FEDEX_2_DAY_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="twoDayAMFedexPrice" type="text" selector="//tr[td[@id='label_method_FEDEX_2_DAY_AM_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="standardOvernightFedexPrice" type="text" selector="//tr[td[@id='label_method_STANDARD_OVERNIGHT_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="priorityOvernightFedexPrice" type="text" selector="//tr[td[@id='label_method_PRIORITY_OVERNIGHT_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
     </section>
 </sections>

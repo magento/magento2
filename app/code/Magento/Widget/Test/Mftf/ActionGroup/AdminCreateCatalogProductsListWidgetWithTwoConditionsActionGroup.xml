@@ -37,6 +37,8 @@
         <waitForElementClickable selector="{{AdminNewWidgetSection.conditionOperator}}" stepKey="clickConditionsOperator234"/>
         <click selector="{{AdminNewWidgetSection.conditionOperator}}" stepKey="clickConditionsOperator"/>
         <selectOption selector="{{AdminNewWidgetSection.selectOperator}}" userInput="{{conditionsOperator}}" stepKey="selectConditionsOperator"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.conditions}}" stepKey="waitForClickOnConditionsElement"/>
+        <click selector="{{AdminNewWidgetSection.conditions}}" stepKey="clickOnConditionsELement"/>
         <waitForElementClickable selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitForConiditionParameterToBeClickable"/>
         <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickConditionParameter"/>
         <waitForElementVisible selector="{{AdminNewWidgetSection.setRuleParameter}}" stepKey="waitForConditionParameterFieldToBeVisible"/>
@@ -50,6 +52,8 @@
         <waitForElementClickable selector="{{AdminNewWidgetSection.secondConditionOperator}}" stepKey="waitForSecondConditionsOperatorToBeClickable"/>
         <click selector="{{AdminNewWidgetSection.secondConditionOperator}}" stepKey="clickSecondConditionsOperator"/>
         <selectOption selector="{{AdminNewWidgetSection.secondSelectOperator}}" userInput="{{secondConditionOperator}}" stepKey="selectSecondConditionsOperator"/>
+        <waitForElementClickable selector="{{AdminNewWidgetSection.conditions}}" stepKey="againWaitForClickOnConditionsElement"/>
+        <click selector="{{AdminNewWidgetSection.conditions}}" stepKey="againClickOnConditionsELement"/>
         <waitForElementClickable selector="{{AdminNewWidgetSection.secondRuleParameter}}" stepKey="waitForSecondRuleParameterToBeClickable"/>
         <click selector="{{AdminNewWidgetSection.secondRuleParameter}}" stepKey="clickSecondRuleParameter"/>
         <waitForElementVisible selector="{{AdminNewWidgetSection.setSecondRuleParameter}}" stepKey="waitForSecondConditionParameterToBeVisible"/>

@@ -1580,4 +1580,28 @@
         <requiredEntity type="product_option">ProductOptionDropDownFor2</requiredEntity>
         <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
     </entity>
+    <entity name="ProductWithTwentyOneTextFieldOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField3</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField4</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField5</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField6</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField7</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField8</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField9</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField10</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField11</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField12</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField13</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField14</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField15</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField16</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField17</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField18</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField19</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField20</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField21</requiredEntity>
+    </entity>
 </entities>
