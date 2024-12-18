@@ -17,7 +17,7 @@ define([
         sources = {};
 
     function isInViewport(el) {
-        if ((!_.isFunction(el.checkVisibility)) || !el.checkVisibility()) {
+        if (!el || (!_.isFunction(el.checkVisibility)) || !el.checkVisibility()) {
             return false;
         }
 
@@ -77,7 +77,7 @@ define([
          */
         ko.bindingHandlers.template.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
             /*eslint-enable no-unused-vars*/
-            if (isInViewport(element.parentElement)) {
+            if (isInViewport(element.previousElementSibling) || isInViewport(element.parentElement)) {
                 return ko.bindingHandlers.template._updateTemplate.apply(this, arguments);
             } else {
                 (events => {
