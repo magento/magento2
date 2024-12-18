@@ -1,8 +1,19 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ***********************************************************************
  */
+
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Image;
@@ -10,7 +21,6 @@ namespace Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -21,6 +31,11 @@ use Magento\Framework\View\ConfigInterface;
  */
 class RemoveDeletedImagesFromCache
 {
+    /**
+     * Current hashing algorithm
+     */
+    private const HASH_ALGORITHM = 'md5';
+
     /**
      * @var ConfigInterface
      */
@@ -103,10 +118,10 @@ class RemoveDeletedImagesFromCache
                 unset($imageMiscParams['image_type']);
             }
 
-            $cacheId = $this->encryptor->hash(
+            $cacheId = hash(
+                self::HASH_ALGORITHM,
                 implode('_', $this->convertImageMiscParamsToReadableFormat
-                    ->convertImageMiscParamsToReadableFormat($imageMiscParams)),
-                Encryptor::HASH_VERSION_MD5
+                ->convertImageMiscParamsToReadableFormat($imageMiscParams))
             );
 
             foreach ($files as $filePath) {

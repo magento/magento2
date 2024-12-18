@@ -1,7 +1,17 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ***********************************************************************
  */
 
 namespace Magento\Catalog\Model\View\Asset;
@@ -11,7 +21,6 @@ use Magento\Catalog\Model\Config\CatalogMediaConfig;
 use Magento\Catalog\Model\Product\Image\ConvertImageMiscParamsToReadableFormat;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\ContextInterface;
@@ -25,6 +34,11 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Image implements LocalInterface
 {
+    /**
+     * Current hashing algorithm
+     */
+    private const HASH_ALGORITHM = 'md5';
+
     /**
      * Image type of image (thumbnail,small_image,image,swatch_image,swatch_thumb)
      *
@@ -96,6 +110,8 @@ class Image implements LocalInterface
      * @param CatalogMediaConfig $catalogMediaConfig
      * @param StoreManagerInterface $storeManager
      * @param ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ConfigInterface $mediaConfig,
@@ -260,29 +276,27 @@ class Image implements LocalInterface
     }
 
     /**
-     * Retrieve part of path based on misc params
-     *
-     * @return string
-     */
-    private function getMiscPath()
-    {
-        return $this->encryptor->hash(
-            implode('_', $this->convertToReadableFormat($this->miscParams)),
-            Encryptor::HASH_VERSION_MD5
-        );
-    }
-
-    /**
-     * Generate path from image info
+     * Generate path from image info.
      *
      * @return string
      */
     private function getImageInfo()
     {
-        $path = $this->getModule()
-            . DIRECTORY_SEPARATOR . $this->getMiscPath()
-            . DIRECTORY_SEPARATOR . $this->getFilePath();
-        return preg_replace('|\Q'. DIRECTORY_SEPARATOR . '\E+|', DIRECTORY_SEPARATOR, $path);
+        $data = implode('_', $this->convertToReadableFormat($this->miscParams));
+
+        $pathTemplate = $this->getModule()
+            . DIRECTORY_SEPARATOR . "%s" . DIRECTORY_SEPARATOR
+            . $this->getFilePath();
+
+        /**
+         * New paths are generated without dependency on
+         * an encryption key.
+         */
+        return preg_replace(
+            '|\Q' . DIRECTORY_SEPARATOR . '\E+|',
+            DIRECTORY_SEPARATOR,
+            sprintf($pathTemplate, hash(self::HASH_ALGORITHM, $data))
+        );
     }
 
     /**
