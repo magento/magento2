@@ -16,6 +16,24 @@ define([
         NativeTemplateEngine = ko.nativeTemplateEngine,
         sources = {};
 
+    function isInViewport(el) {
+        if ((!_.isFunction(el.checkVisibility)) || !el.checkVisibility()) {
+            return false;
+        }
+
+        const rect = el.getBoundingClientRect(),
+            vWidth = window.innerWidth || doc.documentElement.clientWidth,
+            vHeight = window.innerHeight || doc.documentElement.clientHeight;
+
+        // Check if the element is out of bounds
+        if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight) {
+            return false;
+        }
+
+        // Return true if any of the above disjunctions are false
+        return true;
+    }
+
     /**
      * Remote template engine class. Is used to be able to load remote templates via knockout template binding.
      */
@@ -58,6 +76,32 @@ define([
          * @returns {*}
          */
         ko.bindingHandlers.template.update = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+            /*eslint-enable no-unused-vars*/
+            if (isInViewport(element.parentElement)) {
+                return ko.bindingHandlers.template._updateTemplate.apply(this, arguments);
+            } else {
+                (events => {
+                    const lazyLoadJs = () => {
+                        events.forEach(type => window.removeEventListener(type, lazyLoadJs))
+                        return ko.bindingHandlers.template._updateTemplate.apply(this, arguments);
+                    };
+
+                    events.forEach(type => window.addEventListener(type, lazyLoadJs, {once: true}))
+                })(['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown']);
+            }
+        };
+
+        /**
+         * Decorate update method
+         *
+         * @param {HTMLElement} element
+         * @param {Function} valueAccessor
+         * @param {Object} allBindings
+         * @param {Object} viewModel
+         * @param {ko.bindingContext} bindingContext
+         * @returns {*}
+         */
+        ko.bindingHandlers.template._updateTemplate = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
             /*eslint-enable no-unused-vars*/
             var options = ko.utils.peekObservable(valueAccessor()),
                 templateName,
