@@ -15,7 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
-
+use Magento\Store\Model\StoreManagerInterface;
 /**
  * Abstract class for controllers Reorder(Customer) and Reorder(Guest)
  */
@@ -52,19 +52,22 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
      * @param CheckoutSession|null $checkoutSession
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+
     public function __construct(
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
         Registry $registry,
         ReorderHelper $reorderHelper = null,
         \Magento\Sales\Model\Reorder\Reorder $reorder = null,
-        CheckoutSession $checkoutSession = null
+        CheckoutSession $checkoutSession = null,
+        private ?StoreManagerInterface $storeManager = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
         parent::__construct($context);
         $this->reorder = $reorder ?: ObjectManager::getInstance()->get(\Magento\Sales\Model\Reorder\Reorder::class);
         $this->checkoutSession = $checkoutSession ?: ObjectManager::getInstance()->get(CheckoutSession::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
 
     /**
@@ -78,13 +81,16 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
             return $result;
         }
+
+        $currentStoreId = $this->storeManager->getStore()->getId();
+
         $order = $this->_coreRegistry->registry('current_order');
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
         try {
-            $reorderOutput = $this->reorder->execute($order->getIncrementId(), $order->getStoreId());
+            $reorderOutput = $this->reorder->execute($order->getIncrementId(), $currentStoreId);
         } catch (LocalizedException $localizedException) {
             $this->messageManager->addErrorMessage($localizedException->getMessage());
             return $resultRedirect->setPath('checkout/cart');
