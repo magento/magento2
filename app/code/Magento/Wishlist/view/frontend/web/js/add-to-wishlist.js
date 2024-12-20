@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -16,7 +16,7 @@ define([
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
             customOptionsInfo: '.product-custom-option',
-            qtyInfo: '#qty',
+            qtyInfo: 'input.qty',
             actionElement: '[data-action="add-to-wishlist"]',
             productListWrapper: '.product-item-info',
             productPageWrapper: '.product-info-main'
@@ -293,9 +293,14 @@ define([
          * @private
          */
         _validateWishlistQty: function (event) {
-            var element = $(this.options.qtyInfo);
+            var element = $(this.options.qtyInfo), isValid = true;
+            $(element).each(function () {
+                if (!($(this).validation() && $(this).validation('isValid'))) {
+                    isValid = false;
+                }
+            })
 
-            if (!(element.validation() && element.validation('isValid'))) {
+            if (!isValid) {
                 event.preventDefault();
                 event.stopPropagation();
 
