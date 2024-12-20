@@ -436,6 +436,7 @@ class Escaper
      */
     public function escapeQuote($data, $addSlashes = false)
     {
+        if (empty($data)) return "";
         if ($addSlashes === true) {
             $data = addslashes($data);
         }
