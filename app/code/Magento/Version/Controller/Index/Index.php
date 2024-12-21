@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,9 @@ namespace Magento\Version\Controller\Index;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\Result\RawFactory as RawResponseFactory;
 
 /**
@@ -31,18 +33,26 @@ class Index extends Action implements HttpGetActionInterface
     private $rawFactory;
 
     /**
+     * @var AppState
+     */
+    private $appState;
+
+    /**
      * @param Context $context
      * @param RawResponseFactory $rawFactory
      * @param ProductMetadataInterface $productMetadata
+     * @param AppState $appState
      */
     public function __construct(
         Context $context,
         RawResponseFactory $rawFactory,
-        ProductMetadataInterface $productMetadata
+        ProductMetadataInterface $productMetadata,
+        AppState $appState = null
     ) {
         parent::__construct($context);
         $this->rawFactory = $rawFactory;
         $this->productMetadata = $productMetadata;
+        $this->appState = $appState ?: ObjectManager::getInstance()->get(AppState::class);
     }
 
     /**
@@ -55,11 +65,12 @@ class Index extends Action implements HttpGetActionInterface
         $version = $this->productMetadata->getVersion() ?? '';
         $versionParts = explode('.', $version);
         if (!$this->isGitBasedInstallation($version) && $this->isCorrectVersion($versionParts)) {
-            $rawResponse->setContents(
-                $this->productMetadata->getName() . '/' .
-                $this->getMajorMinorVersion($versionParts) .
-                ' (' . $this->productMetadata->getEdition() . ')'
-            );
+            $content = $this->productMetadata->getName();
+            if ($this->appState->getMode() != AppState::MODE_PRODUCTION) {
+                $content .= '/' . $this->getMajorMinorVersion($versionParts) .
+                ' (' . $this->productMetadata->getEdition() . ')';
+            }
+            $rawResponse->setContents($content);
         }
 
         return $rawResponse;
