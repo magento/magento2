@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Version\Test\Unit\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Version\Controller\Index\Index as VersionIndex;
@@ -22,6 +23,9 @@ class IndexTest extends TestCase
 
     /** @var MockObject|ProductMetadataInterface */
     private $productMetadataMock;
+
+    /** @var MockObject|AppState */
+    private $appStateMock;
 
     /** @var MockObject|RawFactory */
     private $rawResponseFactoryMock;
@@ -44,6 +48,8 @@ class IndexTest extends TestCase
             ->onlyMethods(['getName', 'getEdition', 'getVersion'])
             ->getMockForAbstractClass();
 
+        $this->appStateMock = $this->createMock(AppState::class);
+
         $this->rawResponseFactoryMock = $this->createPartialMock(RawFactory::class, ['create']);
         $this->rawResponseMock = $this->createPartialMock(Raw::class, ['setContents']);
         $this->rawResponseFactoryMock->method('create')->willReturn($this->rawResponseMock);
@@ -51,7 +57,8 @@ class IndexTest extends TestCase
         $this->versionController = new VersionIndex(
             $this->contextMock,
             $this->rawResponseFactoryMock,
-            $this->productMetadataMock
+            $this->productMetadataMock,
+            $this->appStateMock
         );
     }
 
@@ -81,6 +88,21 @@ class IndexTest extends TestCase
 
         $this->rawResponseMock->expects($this->once())->method('setContents')
             ->with('Magento/2.3 (Community)')
+            ->willReturnSelf();
+
+        $this->versionController->execute();
+    }
+
+    public function testCommunityVersionDisplaysMajorMinorVersionAndEditionNameProductionMode(): void
+    {
+        $this->productMetadataMock->expects($this->any())->method('getVersion')->willReturn('2.3.3');
+        $this->productMetadataMock->expects($this->any())->method('getEdition')->willReturn('Community');
+        $this->productMetadataMock->expects($this->any())->method('getName')->willReturn('Magento');
+
+        $this->appStateMock->expects($this->any())->method('getMode')->willReturn(AppState::MODE_PRODUCTION);
+
+        $this->rawResponseMock->expects($this->once())->method('setContents')
+            ->with('Magento')
             ->willReturnSelf();
 
         $this->versionController->execute();
