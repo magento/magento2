@@ -6,29 +6,35 @@
  */
 namespace Magento\Variable\Controller\Adminhtml\System\Variable;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Variable\Controller\Adminhtml\System\Variable;
+use Magento\Variable\Model\Source\Variables;
+use Magento\Variable\Model\Variable as ModelVariable;
+
 /**
  * Retrieve variables list for WYSIWYG
  *
  * @api
  * @since 100.0.2
  */
-class WysiwygPlugin extends \Magento\Variable\Controller\Adminhtml\System\Variable
+class WysiwygPlugin extends Variable implements HttpGetActionInterface
 {
     /**
      * WYSIWYG Plugin Action
      *
-     * @return \Magento\Framework\Controller\Result\Json
+     * @return Json
      */
     public function execute()
     {
-        $customVariables = $this->_objectManager->create(\Magento\Variable\Model\Variable::class)
+        $customVariables = $this->_objectManager->create(ModelVariable::class)
             ->getVariablesOptionArray(true);
         $storeContactVariables = $this->_objectManager->create(
-            \Magento\Variable\Model\Source\Variables::class
+            Variables::class
         )->toOptionArray(
             true
         );
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         return $resultJson->setData([$storeContactVariables, $customVariables]);
     }

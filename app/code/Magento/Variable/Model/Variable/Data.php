@@ -6,31 +6,23 @@
 
 namespace Magento\Variable\Model\Variable;
 
+use Magento\Variable\Model\ResourceModel\Variable\Collection;
+use Magento\Variable\Model\ResourceModel\Variable\CollectionFactory;
+use Magento\Variable\Model\Source\Variables;
+
 /**
  * The class purpose is returns
  */
 class Data
 {
     /**
-     * @var \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var \Magento\Variable\Model\Source\Variables
-     */
-    private $storesVariables;
-
-    /**
-     * @param \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory
-     * @param \Magento\Variable\Model\Source\Variables $storesVariables
+     * @param CollectionFactory $collectionFactory
+     * @param Variables $storesVariables
      */
     public function __construct(
-        \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory,
-        \Magento\Variable\Model\Source\Variables $storesVariables
+        private readonly CollectionFactory $collectionFactory,
+        private readonly Variables $storesVariables
     ) {
-        $this->collectionFactory = $collectionFactory;
-        $this->storesVariables = $storesVariables;
     }
 
     /**
@@ -45,7 +37,7 @@ class Data
             $variables[] = [
                 'code' => $variable['value'],
                 'variable_name' => $variable['group_label'] . ' / ' . $variable['label'],
-                'variable_type' => \Magento\Variable\Model\Source\Variables::DEFAULT_VARIABLE_TYPE
+                'variable_type' => Variables::DEFAULT_VARIABLE_TYPE
             ];
         }
 
@@ -59,7 +51,7 @@ class Data
      */
     public function getCustomVariables()
     {
-        /** @var \Magento\Variable\Model\ResourceModel\Variable\Collection $customVariables */
+        /** @var Collection $customVariables */
         $customVariables = $this->collectionFactory->create();
 
         $variables = [];
@@ -67,7 +59,7 @@ class Data
             $variables[] = [
                 'code' => $variable['code'],
                 'variable_name' => __('Custom Variable') . ' / ' . $variable['name'],
-                'variable_type' => \Magento\Variable\Model\Source\Variables::CUSTOM_VARIABLE_TYPE
+                'variable_type' => Variables::CUSTOM_VARIABLE_TYPE
             ];
         }
 

@@ -6,18 +6,19 @@
 namespace Magento\Variable\Model\Source;
 
 use Magento\Config\Model\Config\Structure\SearchInterface;
+use Magento\Framework\Option\ArrayInterface;
 use Magento\Variable\Model\Config\Structure\AvailableVariables;
 
 /**
  * Store Contact Information source model.
  */
-class Variables implements \Magento\Framework\Option\ArrayInterface
+class Variables implements ArrayInterface
 {
     /**
      * Variable types
      */
-    const DEFAULT_VARIABLE_TYPE = "default";
-    const CUSTOM_VARIABLE_TYPE = "custom";
+    public const DEFAULT_VARIABLE_TYPE = "default";
+    public const CUSTOM_VARIABLE_TYPE = "custom";
 
     /**
      * Assoc array of configuration variables.
@@ -27,27 +28,15 @@ class Variables implements \Magento\Framework\Option\ArrayInterface
     private $configVariables = [];
 
     /**
-     * @var AvailableVariables
-     */
-    private $configPaths = [];
-
-    /**
-     * @var SearchInterface
-     */
-    private $configStructure;
-
-    /**
      * Constructor.
      *
      * @param SearchInterface $configStructure
      * @param array $configPaths
      */
     public function __construct(
-        SearchInterface $configStructure,
-        AvailableVariables $configPaths
+        private readonly SearchInterface $configStructure,
+        private readonly AvailableVariables $configPaths
     ) {
-        $this->configStructure = $configStructure;
-        $this->configPaths = $configPaths;
     }
 
     /**

@@ -10,17 +10,14 @@ use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
+use Magento\Variable\Model\Variable\Data;
 
 /**
  * Data provider for variables_modal listing
  */
-class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
+class VariablesDataProvider extends DataProvider
 {
-    /**
-     * @var \Magento\Variable\Model\Variable\Data
-     */
-    private $variableDataProvider;
-
     /**
      * @param string $name
      * @param string $primaryFieldName
@@ -29,7 +26,7 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
-     * @param \Magento\Variable\Model\Variable\Data $variableDataProvider
+     * @param Data $variableDataProvider
      * @param array $meta
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -42,7 +39,7 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
         SearchCriteriaBuilder $searchCriteriaBuilder,
         RequestInterface $request,
         FilterBuilder $filterBuilder,
-        \Magento\Variable\Model\Variable\Data $variableDataProvider,
+        private readonly Data $variableDataProvider,
         array $meta = [],
         array $data = []
     ) {
@@ -57,7 +54,6 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
             $meta,
             $data
         );
-        $this->variableDataProvider = $variableDataProvider;
     }
 
     /**
@@ -113,7 +109,7 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
             $this->variableDataProvider->getCustomVariables()
         );
 
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        /** @var SortOrder $sortOrder */
         foreach ($sortOrders as $sortOrder) {
             if ($sortOrder->getField() && $sortOrder->getDirection()) {
                 $items = $this->sortBy($items, $sortOrder->getField(), $sortOrder->getDirection());

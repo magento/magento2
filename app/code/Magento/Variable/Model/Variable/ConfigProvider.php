@@ -7,31 +7,28 @@ declare(strict_types=1);
 
 namespace Magento\Variable\Model\Variable;
 
+use Magento\Framework\Data\Wysiwyg\ConfigProviderInterface;
+use Magento\Framework\DataObject;
+
 /**
  * Class ConfigProvider
  * This class has been added to prevent BIC changes in the \Magento\Variable\Model\Variable\Config
  */
-class ConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
+class ConfigProvider implements ConfigProviderInterface
 {
-    /**
-     * @var \Magento\Variable\Model\Variable\Config
-     */
-    private $variableConfig;
-
     /**
      * ConfigProvider constructor.
      * @param Config $variableConfig
      */
-    public function __construct(Config $variableConfig)
-    {
-        $this->variableConfig = $variableConfig;
+    public function __construct(
+        private readonly Config $variableConfig
+    ) {
     }
 
    /**
-    * {@inheritdoc}
-    *
+    * @inheritdoc
     */
-    public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
+    public function getConfig(DataObject $config): DataObject
     {
         $settings = $this->variableConfig->getWysiwygPluginSettings($config);
         return $config->addData($settings);
