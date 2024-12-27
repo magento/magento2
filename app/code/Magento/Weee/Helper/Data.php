@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Weee\Helper;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteAbstractItem;
 use Magento\Store\Model\Store;
@@ -19,42 +20,38 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
  * @api
  * @since 100.0.2
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper implements ResetAfterRequestInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const KEY_WEEE_AMOUNT_INVOICED = 'weee_amount_invoiced';
+    public const KEY_WEEE_AMOUNT_INVOICED = 'weee_amount_invoiced';
 
-    const KEY_BASE_WEEE_AMOUNT_INVOICED = 'base_weee_amount_invoiced';
+    public const KEY_BASE_WEEE_AMOUNT_INVOICED = 'base_weee_amount_invoiced';
 
-    const KEY_WEEE_TAX_AMOUNT_INVOICED = 'weee_tax_amount_invoiced';
+    public const KEY_WEEE_TAX_AMOUNT_INVOICED = 'weee_tax_amount_invoiced';
 
-    const KEY_BASE_WEEE_TAX_AMOUNT_INVOICED = 'base_weee_tax_amount_invoiced';
+    public const KEY_BASE_WEEE_TAX_AMOUNT_INVOICED = 'base_weee_tax_amount_invoiced';
 
-    const KEY_WEEE_AMOUNT_REFUNDED = 'weee_amount_refunded';
+    public const KEY_WEEE_AMOUNT_REFUNDED = 'weee_amount_refunded';
 
-    const KEY_BASE_WEEE_AMOUNT_REFUNDED = 'base_weee_amount_refunded';
+    public const KEY_BASE_WEEE_AMOUNT_REFUNDED = 'base_weee_amount_refunded';
 
-    const KEY_WEEE_TAX_AMOUNT_REFUNDED = 'weee_tax_amount_refunded';
+    public const KEY_WEEE_TAX_AMOUNT_REFUNDED = 'weee_tax_amount_refunded';
 
-    const KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED = 'base_weee_tax_amount_refunded';
+    public const KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED = 'base_weee_tax_amount_refunded';
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var array
+     */
     protected $_storeDisplayConfig = [];
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxData;
@@ -355,7 +352,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected function getRecursiveNumericAmount($item, $functionName)
     {
         if ($item instanceof QuoteAbstractItem || $item instanceof OrderItem) {
-            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+            if ($item->getHasChildren()) {
                 $result = 0;
                 $children = $item instanceof OrderItem ? $item->getChildrenItems() : $item->getChildren();
                 foreach ($children as $child) {
@@ -385,11 +382,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getApplied($item)
     {
         if ($item instanceof QuoteAbstractItem) {
-            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+            if ($item->getHasChildren()) {
                 $result = [];
                 foreach ($item->getChildren() as $child) {
                     $childData = $this->getApplied($child);
                     if (is_array($childData)) {
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $result = array_merge($result, $childData);
                     }
                 }
@@ -577,6 +575,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get invoiced wee amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -594,6 +594,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get invoiced base wee amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -611,6 +613,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get invoiced wee tax amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -628,6 +632,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get invoiced base wee tax amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -645,6 +651,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get refunded wee amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -662,6 +670,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get refunded base wee amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -679,6 +689,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get refunded wee tax amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -696,6 +708,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get refunded base wee tax amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -734,10 +748,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Returns the base total amount of FPT across all items.  Used for displaying the FPT totals line item.
+     * Returns the base total amount of FPT across all items.
      *
-     * @param  QuoteAbstractItem[] $items
-     * @param  null|string|bool|int|Store $store
+     * Used for displaying the FPT totals line item.
+     *
+     * @param QuoteAbstractItem[] $items
+     * @param mixed $store
      * @return float
      * @since 100.1.0
      */
@@ -871,5 +887,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return $insertedWeeeCodesArray;
         }
         return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_storeDisplayConfig = [];
     }
 }

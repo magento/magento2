@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddBlockWidgetToCMSPageTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Add block to page and check block id"/>
+            <title value="Add block to CMS page and check block id"/>
+            <description value="Add block to CMS page and check block_id in content"/>
+            <severity value="AVERAGE"/>
+            <group value="backend"/>
+            <group value="Cms"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock">
+                <field key="identifier">block-id-777</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Navigate to Page in Admin -->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+
+        <!-- Insert block page -->
+        <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="insertWidgetToCmsPageContent">
+            <argument name="widgetType" value="CMS Static Block"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSelectBlockActionGroup" stepKey="clickSelectBlockButton"/>
+        <actionGroup ref="searchBlockOnGridPage" stepKey="searchBlockOnGridPage">
+            <argument name="Block" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectBlockOnGridActionGroup" stepKey="selectBlockOnGrid">
+            <argument name="block" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+
+        <!-- Assert block_id value in page content -->
+        <actionGroup ref="AdminAssertCMSPageContentParamValueActionGroup" stepKey="assertBlockId">
+            <argument name="param" value="block_id"/>
+            <argument name="value" value="$$createPreReqBlock.identifier$$"/>
+        </actionGroup>
+    </test>
+</tests>

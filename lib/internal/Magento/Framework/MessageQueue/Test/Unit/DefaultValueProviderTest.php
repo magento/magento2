@@ -39,6 +39,11 @@ class DefaultValueProviderTest extends TestCase
      */
     public function testGetConnection(): void
     {
+        $this->config->method('get')->willReturnMap(
+            [
+                ['queue', null, ['key' => 'test_connection']],
+            ]
+        );
         $this->assertEquals('db', $this->model->getConnection());
     }
 
@@ -66,7 +71,8 @@ class DefaultValueProviderTest extends TestCase
         $this->config->method('get')->willReturnMap(
             [
                 ['queue/default_connection', null, null],
-                ['queue/amqp', null, ['host' => '127.0.0.1', 'port' => '5672']]
+                ['queue/amqp', null, ['host' => '127.0.0.1', 'port' => '5672']],
+                ['queue', null, ['amqp' => ['host' => '127.0.0.1', 'port' => '5672']]]
             ]
         );
 

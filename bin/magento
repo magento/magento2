@@ -23,6 +23,13 @@ try {
     $application->run();
 } catch (\Throwable $e) {
     while ($e) {
+        if ($e->getFile()) {
+            echo sprintf("\nThere is an error in %s", $e->getFile());
+            if ($e->getLine()) {
+                echo sprintf(" at line: %d", $e->getLine());
+            }
+            echo "\n";
+        }
         echo $e->getMessage();
         echo $e->getTraceAsString();
         echo "\n\n";

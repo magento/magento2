@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Patch;
 
 /**
  * This interface describe script, that is presented by atomic operations for data and schema
+ *
+ * @api
  */
 interface PatchInterface extends DependentPatchInterface
 {

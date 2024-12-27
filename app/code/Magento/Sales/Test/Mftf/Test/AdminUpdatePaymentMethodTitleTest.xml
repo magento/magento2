@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdatePaymentMethodTitleTest" extends="CustomerOrderSimpleProductTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Changing Payment method"/>
+            <title value="Admin Update Payment method title from Admin Configuration"/>
+            <description value="Admin Update Payment method title from Admin Configuration"/>
+            <stories value="Changing Payment method"/>
+            <testCaseId value="MC-26507"/>
+            <severity value="MAJOR"/>
+            <group value="sales"/>
+        </annotations>
+
+        <before>
+            <!-- Enabling Check/Money Order Payment Method -->
+            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <!-- Updating the title for Check/Money Order Method -->
+            <magentoCLI command="config:set {{ChangeDefaultCheckMoneyOrderTitle.path}} {{ChangeDefaultCheckMoneyOrderTitle.value}}" stepKey="changeDefaultCheckMoneyOrderTitle"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{DefaultCheckMoneyOrderTitle.path}} {{DefaultCheckMoneyOrderTitle.value}}" stepKey="setDefaultCheckMoneyOrderTitle"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="openOrdersGridAndClearFilters" />
+            <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="DisablePaymentMethodOption" />
+        </after>
+
+        <!-- Log in as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!--Filter order grid by order id field-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="addFilterToGridByOrderNumber">
+            <argument name="orderId" value="{$getOrderNumber}"/>
+        </actionGroup>
+
+        <!-- Resetting column checkbox -->
+        <actionGroup ref="AdminResetColumnDropDownActionGroup" stepKey="ResetColumnDropdown"/>
+        <!--Enabling Payment Method option from Column dropdown-->
+        <actionGroup ref="AdminSelectFieldToColumnActionGroup" stepKey="EnablePaymentMethodOption">
+            <argument name="column" value="Payment Method"/>
+        </actionGroup>
+
+        <!--Verifying the updated Payment Method title -->
+        <actionGroup ref="AdminVerifyPaymentInformationTitleActionGroup" stepKey="seePaymentMethod">
+            <argument name="paymentText" value="Test"/>
+        </actionGroup>
+    </test>
+</tests>
+

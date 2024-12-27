@@ -147,8 +147,13 @@ class AttributeMetadataResolverTest extends TestCase
             ->willReturn($defaultGroupId);
         $this->attribute
             ->method('getDataUsingMethod')
-            ->withConsecutive([], [], [], [], [], [], ['default_value'])
-            ->willReturnOnConsecutiveCalls(null, null, null, null, null, null, $defaultGroupId);
+            ->willReturnCallback(function ($arg1) use ($defaultGroupId) {
+                if (empty($arg1)) {
+                    return null;
+                } elseif ($arg1 == 'default_value') {
+                    return $defaultGroupId;
+                }
+            });
         $this->attribute->expects($this->once())
             ->method('setDataUsingMethod')
             ->willReturnSelf();

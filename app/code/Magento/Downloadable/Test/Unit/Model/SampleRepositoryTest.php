@@ -113,7 +113,7 @@ class SampleRepositoryTest extends TestCase
             ->getMock();
         $this->sampleDataObjectFactory = $this->getMockBuilder(
             SampleInterfaceFactory::class
-        )->setMethods(['create'])
+        )->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

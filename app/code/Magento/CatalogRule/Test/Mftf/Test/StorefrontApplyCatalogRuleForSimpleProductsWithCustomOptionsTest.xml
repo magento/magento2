@@ -18,6 +18,7 @@
             <group value="catalogRule"/>
             <group value="mtf_migrated"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -44,7 +45,9 @@
 
             <!-- Clear all catalog price rules before test -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
-            <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesBeforeTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -55,7 +58,9 @@
 
             <!-- Delete the catalog price rule -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
-            <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfterTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesAfterTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>

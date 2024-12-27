@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2020 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="TinyMCESection">
         <element name="checkIfContentTabOpen" type="button" selector="//span[text()='Content']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
         <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
         <element name="TinyMCE" type="text" selector=".tox-tinymce"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
-        <element name="InsertWidgetIcon" type="button" selector="button[aria-label='Insert Widget']" timeout="30"/>
+        <element name="InsertWidgetIcon" type="button" selector="button[title='Insert Widget']" timeout="30"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
-        <element name="InsertVariableIcon" type="button" selector="button[aria-label='Insert Variable']"/>
+        <element name="InsertVariableIcon" type="button" selector="button[title='Insert Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
         <element name="InsertImageIcon" type="button" selector="button[title='Insert/edit image']" timeout="30"/>
-        <element name="Style" type="button" selector="button[title='Blocks']"/>
+        <element name="Style" type="button" selector="button[title='Block Paragraph']"/>
         <element name="Bold" type="button" selector="button[title='Bold']"/>
         <element name="Italic" type="button" selector="button[title='Italic']"/>
         <element name="Underline" type="button" selector="button[title='Underline']"/>

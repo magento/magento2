@@ -168,7 +168,7 @@ class TemporaryTableServiceTest extends TestCase
     /**
      * @return array
      */
-    public function createFromSelectDataProvider()
+    public static function createFromSelectDataProvider()
     {
         return [
             [
@@ -203,7 +203,7 @@ class TemporaryTableServiceTest extends TestCase
     /**
      * @return array
      */
-    public function dropTableWhenCreatedTablesArrayNotEmptyDataProvider()
+    public static function dropTableWhenCreatedTablesArrayNotEmptyDataProvider()
     {
         return [
             ['tmp_select_table_1', false],

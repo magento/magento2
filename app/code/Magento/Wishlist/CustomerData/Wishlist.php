@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Wishlist\CustomerData;
 
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Wishlist section
@@ -17,7 +18,7 @@ class Wishlist implements SectionSourceInterface
     /**
      * @var string
      */
-    const SIDEBAR_ITEMS_NUMBER = 3;
+    public const SIDEBAR_ITEMS_NUMBER = 3;
 
     /**
      * @var \Magento\Wishlist\Helper\Data
@@ -45,18 +46,25 @@ class Wishlist implements SectionSourceInterface
     private $itemResolver;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
      * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface|null $itemResolver
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
+        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;
@@ -65,6 +73,7 @@ class Wishlist implements SectionSourceInterface
         $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(
             \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface::class
         );
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -76,6 +85,8 @@ class Wishlist implements SectionSourceInterface
         return [
             'counter' => $counter,
             'items' => $counter ? $this->getItems() : [],
+            'websiteId' => $this->storeManager->getWebsite()->getId(),
+            'storeId' => $this->storeManager->getStore()->getId()
         ];
     }
 

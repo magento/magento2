@@ -18,6 +18,13 @@
         <data key="title">Pages</data>
         <data key="dataUiId">magento-cms-cms-page</data>
     </entity>
+
+    <entity name="AdminMenuContentElementsWidgets">
+        <data key="pageTitle">Widgets</data>
+        <data key="title">Widgets</data>
+        <data key="dataUiId">magento-widget-cms-widget-instance</data>
+    </entity>
+
     <entity name="AdminMenuContentElementsBlocks">
         <data key="pageTitle">Blocks</data>
         <data key="title">Blocks</data>

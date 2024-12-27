@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe.
+ * All Rights Reserved.
   */
 -->
 
@@ -18,7 +18,6 @@
         <element name="listedProduct" type="block" selector="ol li:nth-child({{productPositionInList}}) img" parameterized="true"/>
         <element name="ProductImageByNumber" type="button" selector="//main//li[{{var1}}]//img" parameterized="true"/>
         <element name="categoryListView" type="button" selector="a[title='List']" timeout="30"/>
-
         <element name="ProductTitleByName" type="button" selector="//main//li//a[contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="ProductPriceByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//span[@class='price']" parameterized="true"/>
         <element name="ProductCatalogRuleSpecialPriceTitleByName" type="text" selector="//div[contains(@class, 'product-item-info')][.//a[contains(text(), '{{productName}}')]]//span[@class='special-price']/span" parameterized="true"/>
@@ -35,5 +34,13 @@
         <element name="ProductAddToCompareByName" type="text" selector="//*[contains(@class,'product-item-info')][descendant::a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocompare')]" parameterized="true"/>
         <element name="ProductImageByNameAndSrc" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[contains(@src, '{{src}}')]" parameterized="true"/>
         <element name="ProductStockUnavailable" type="text" selector="//*[text()='Out of stock']"/>
+        <element name="listedProductOnProductPage" type="block" selector="//div[contains(@aria-labelledBy,'{{attribute_code}}')]//div[@aria-label='{{attribute_name}}']" parameterized="true"/>
+        <element name="clickProduct" type="button" selector="//li/a/span[text()='{{product}}']" parameterized="true"/>
+        <element name="productCurrencyByProductName" type="text" selector="//strong[@class='product name product-item-name']//a[contains(text(),'{{productName}}')]/parent::strong/following-sibling::div[@class='price-box price-final_price']//span[@class='price' and contains(text(),'{{currencySymbol}}')]" parameterized="true"/>
+        <element name="productPriceByProductName" type="text" selector="//strong[@class='product name product-item-name']//a[contains(text(),'{{productName}}')]/parent::strong/following-sibling::div[@class='price-box price-final_price']//span[@class='price' and contains(text(),'{{productPrice}}')]" parameterized="true"/>
+        <element name="filterOptionCurrencySymbol" type="text" selector="//div[@class='filter-options-content']//a//span[@class='price' and contains(text(),'{{currencySymbol}}')]" parameterized="true"/>
+        <element name="priceDropdown" type="button" selector="//div[@class='filter-options-title']"/>
+        <element name="priceBlockShoppingOptions" type="block" selector="//div[@class='filter-options-content']"/>
+        <element name="widgetProduct" type="text" selector="//main//ol[@class='product-items widget-product-grid']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
     </section>
 </sections>

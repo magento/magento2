@@ -5,16 +5,18 @@
  */
 namespace Magento\MysqlMq\Model\Driver;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\MessageQueue\CountableQueueInterface;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
-use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\MysqlMq\Model\QueueManagement;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
+use Magento\MysqlMq\Model\ResourceModel\Queue as QueueResourceModel;
 use Psr\Log\LoggerInterface;
 
 /**
  * Queue based on MessageQueue protocol
  */
-class Queue implements QueueInterface
+class Queue implements CountableQueueInterface
 {
     /**
      * @var QueueManagement
@@ -47,6 +49,11 @@ class Queue implements QueueInterface
     private $logger;
 
     /**
+     * @var QueueResourceModel
+     */
+    private $queueResourceModel;
+
+    /**
      * Queue constructor.
      *
      * @param QueueManagement $queueManagement
@@ -55,6 +62,7 @@ class Queue implements QueueInterface
      * @param string $queueName
      * @param int $interval
      * @param int $maxNumberOfTrials
+     * @param QueueResourceModel|null $queueResourceModel
      */
     public function __construct(
         QueueManagement $queueManagement,
@@ -62,7 +70,8 @@ class Queue implements QueueInterface
         LoggerInterface $logger,
         $queueName,
         $interval = 5,
-        $maxNumberOfTrials = 3
+        $maxNumberOfTrials = 3,
+        ?QueueResourceModel $queueResourceModel = null
     ) {
         $this->queueManagement = $queueManagement;
         $this->envelopeFactory = $envelopeFactory;
@@ -70,6 +79,8 @@ class Queue implements QueueInterface
         $this->interval = $interval;
         $this->maxNumberOfTrials = $maxNumberOfTrials;
         $this->logger = $logger;
+        $this->queueResourceModel = $queueResourceModel
+            ?? ObjectManager::getInstance()->get(QueueResourceModel::class);
     }
 
     /**
@@ -150,5 +161,13 @@ class Queue implements QueueInterface
             $envelope->getBody(),
             [$this->queueName]
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function count(): int
+    {
+        return $this->queueResourceModel->getMessagesCount($this->queueName);
     }
 }

@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * System configuration loader
- */
 namespace Magento\Config\Model\Config;
 
+use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+
 /**
- * Class which can read config by paths
+ * System configuration loader - Class which can read config by paths
  *
- * @package Magento\Config\Model\Config
  * @api
  * @since 100.0.2
  */
@@ -22,15 +21,26 @@ class Loader
      * Config data factory
      *
      * @var \Magento\Framework\App\Config\ValueFactory
+     * @deprecated
+     * @see $collectionFactory
      */
     protected $_configValueFactory;
 
     /**
-     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
+     * @var CollectionFactory
      */
-    public function __construct(\Magento\Framework\App\Config\ValueFactory $configValueFactory)
-    {
+    private $collectionFactory;
+
+    /**
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
+     * @param ?CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        \Magento\Framework\App\Config\ValueFactory $configValueFactory,
+        CollectionFactory $collectionFactory = null
+    ) {
         $this->_configValueFactory = $configValueFactory;
+        $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()->get(CollectionFactory::class);
     }
 
     /**
@@ -44,9 +54,8 @@ class Loader
      */
     public function getConfigByPath($path, $scope, $scopeId, $full = true)
     {
-        $configDataCollection = $this->_configValueFactory->create();
-        $configDataCollection = $configDataCollection->getCollection()->addScopeFilter($scope, $scopeId, $path);
-
+        $configDataCollection = $this->collectionFactory->create();
+        $configDataCollection->addScopeFilter($scope, $scopeId, $path);
         $config = [];
         $configDataCollection->load();
         foreach ($configDataCollection->getItems() as $data) {

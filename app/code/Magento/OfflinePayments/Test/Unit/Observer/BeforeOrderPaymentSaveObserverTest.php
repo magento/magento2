@@ -63,7 +63,7 @@ class BeforeOrderPaymentSaveObserverTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPayment'])
+            ->addMethods(['getPayment'])
             ->getMock();
 
         $this->eventMock->expects(self::once())
@@ -123,7 +123,7 @@ class BeforeOrderPaymentSaveObserverTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderBeforeOrderPaymentSaveWithInstructions()
+    public static function dataProviderBeforeOrderPaymentSaveWithInstructions()
     {
         return [
             [Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE],

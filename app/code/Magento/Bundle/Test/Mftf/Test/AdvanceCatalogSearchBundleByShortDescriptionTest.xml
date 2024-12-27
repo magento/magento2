@@ -17,7 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-25434"/>
             <group value="bundle"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
@@ -37,7 +37,9 @@
                 <requiredEntity createDataKey="simple2"/>
             </createData>
 
-            <magentoCron stepKey="runCronReindex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>

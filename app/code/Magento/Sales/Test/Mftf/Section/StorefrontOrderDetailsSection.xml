@@ -20,6 +20,7 @@
         <element name="paymentMethod" type="text" selector=".box-order-billing-method dt.title"/>
         <element name="shippingMethod" type="text" selector=".box-order-shipping-method div.box-content"/>
         <element name="productNameCell" type="text" selector="//*[contains(@class, 'product-item-name')]"/>
+        <element name="bundleOptionPrice" type="text" selector=".item-options-container td.col.value span.price"/>
         <element name="shippingAddressBlock" type="block" selector=".block-order-details-view .box-order-shipping-address .box-content"/>
     </section>
 </sections>

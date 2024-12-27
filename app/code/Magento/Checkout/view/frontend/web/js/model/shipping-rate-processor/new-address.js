@@ -52,8 +52,10 @@ define([
                 shippingService.setShippingRates(cache);
                 shippingService.isLoading(false);
             } else {
+                let async = quote.isPersistent() ? false : true;
+
                 storage.post(
-                    serviceUrl, payload, false
+                    serviceUrl, payload, false, 'application/json', {}, async
                 ).done(function (result) {
                     rateRegistry.set(address.getCacheKey(), result);
                     shippingService.setShippingRates(result);

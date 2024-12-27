@@ -9,7 +9,7 @@ namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
 use Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container;
 
-class ContainerTest extends AbstractContainerTest
+class ContainerTest extends AbstractContainerTestCase
 {
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container

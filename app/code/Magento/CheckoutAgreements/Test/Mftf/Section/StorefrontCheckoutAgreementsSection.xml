@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCheckoutAgreementsSection">
+        <element name="checkoutAgreementCheckboxInput" type="checkbox" selector="input#agreement_checkmo_3.required-entry"/>
+        <element name="checkoutAgreementBlock" type="checkbox" selector=".checkout-agreements-block"/>
         <element name="checkoutAgreementCheckbox" type="checkbox" selector="div.checkout-agreement.field.choice.required > input"/>
         <element name="checkoutAgreementButton" type="button" selector="div.checkout-agreements-block > div > div > div > label > button > span"/>
         <element name="checkoutAgreementErrorMessage" type="button" selector="div.checkout-agreement.field.choice.required > div.mage-error"/>
+        <element name="checkoutAgreementCheckboxcheck" type="checkbox" selector="//span[text()='{{agreementname}}']/../../../input[@type='checkbox']" parameterized="true"/>
+        <element name="close" type="button" selector="//div[@class='modals-wrapper']//aside[@class='modal-popup agreements-modal modal-slide _inner-scroll _show']//footer//span"/>
+        <element name="checkoutAgreementLink" type="button" selector="//div[@id='checkout-payment-method-load']//label//span[contains(., '{{paymentName}}')]//ancestor::div[contains(@class, 'payment-method _active')]//div[contains(@class, 'checkout-agreements-block')]//span" parameterized="true"/>
+        <element name="agreementClose" type="button" selector=".agreements-modal._show .action-close"/>
+        <element name="contentArea" type="text" selector="//div[@class='modals-wrapper']//aside[@class='modal-popup agreements-modal modal-slide _inner-scroll _show']//div[@class='checkout-agreements-item-content' and contains(text(), '{{contentText}}')]" parameterized="true"/>
+        <element name="manualCheckoutAgreementLink" type="button" selector="//input[starts-with(@id,'{{paymentName}}')]/..//label//span" parameterized="true"/>
+        <element name="automaticCheckoutAgreementLink" type="button" selector="//input[starts-with(@id,'{{paymentName}}')]/..//following-sibling::div//button//span" parameterized="true"/>
+        <element name="checkoutAgreement" type="button" selector="(//*[@class='checkout-agreements fieldset']//button/span[text()='{{agreement}}'])[4]" parameterized="true"/>
+        <element name="checkoutAgreementContent" type="button" selector=".//*[@class='modal-popup agreements-modal modal-slide _inner-scroll _show']//div[@class='checkout-agreements-item-content']"/>
     </section>
 </sections>

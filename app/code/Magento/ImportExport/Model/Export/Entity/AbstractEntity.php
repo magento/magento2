@@ -11,6 +11,7 @@ use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 /**
  * Export entity abstract model
  *
+ * phpcs:ignore Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -48,8 +49,6 @@ abstract class AbstractEntity
     protected $_disabledAttrs = [];
 
     /**
-     * Entity type id.
-     *
      * @var int
      */
     protected $_entityTypeId;
@@ -97,8 +96,6 @@ abstract class AbstractEntity
     protected $_messageTemplates = [];
 
     /**
-     * Parameters.
-     *
      * @var array
      */
     protected $_parameters = [];
@@ -147,6 +144,18 @@ abstract class AbstractEntity
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
+
+    /**
+     * Array of pairs store ID to its code.
+     *
+     * @var array
+     */
+    protected $_storeIdToCode = [];
+
+    /**
+     * @var array
+     */
+    private $_invalidRows = [];
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -251,6 +260,8 @@ abstract class AbstractEntity
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
     {
@@ -268,6 +279,11 @@ abstract class AbstractEntity
 
         foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
             $attrCode = $attribute->getAttributeCode();
+
+            $filterFlagName = $attrCode . '_filter_applied';
+            if ($collection->hasFlag($filterFlagName)) {
+                continue;
+            }
 
             // filter applying
             if (isset($exportFilter[$attrCode])) {
@@ -320,13 +336,17 @@ abstract class AbstractEntity
                         }
                     }
                 }
+
+                $collection->setFlag($filterFlagName);
             }
+
             if (in_array($attrCode, $exportAttrCodes)) {
                 $collection->addAttributeToSelect($attrCode);
             }
         }
         return $collection;
     }
+    //phpcs:enable Generic.Metrics.NestingLevel
 
     /**
      * Add error with corresponding current data source row number.
@@ -426,12 +446,13 @@ abstract class AbstractEntity
             try {
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     foreach (is_array($option['value']) ? $option['value'] : [$option] as $innerOption) {
-                        if (strlen($innerOption['value'])) {
+                        if (isset($innerOption['value']) && strlen($innerOption['value'])) {
                             // skip ' -- Please Select -- ' option
                             $options[$innerOption['value']] = (string)$innerOption[$index];
                         }
                     }
                 }
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Exception $e) {
                 // ignore exceptions connected with source models
             }
@@ -561,6 +582,7 @@ abstract class AbstractEntity
 
     /**
      * Clean cached values
+     *
      * @since 100.1.2
      */
     public function __destruct()

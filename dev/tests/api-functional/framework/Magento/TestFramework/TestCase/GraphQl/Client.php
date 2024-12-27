@@ -19,8 +19,10 @@ class Client
     /**#@+
      * GraphQL HTTP method
      */
-    const GRAPHQL_METHOD_POST = 'POST';
+    public const GRAPHQL_METHOD_POST = 'POST';
     /**#@-*/
+
+    private const SET_COOKIE_HEADER_NAME = 'Set-Cookie';
 
     /** @var CurlClient */
     private $curlClient;
@@ -87,7 +89,7 @@ class Client
         $requestArray = [
             'query' => $query,
             'variables' => $variables ? $this->json->jsonEncode($variables) : null,
-            'operationName' => $operationName ?? null
+            'operationName' => $operationName ? $operationName : null
         ];
         array_filter($requestArray);
 
@@ -101,28 +103,31 @@ class Client
     }
 
     /**
-     * Process response from GraphQl server
+     * Process response from GraphQL server.
      *
      * @param string $response
+     * @param array $responseHeaders
+     * @param array $responseCookies
      * @return mixed
      * @throws \Exception
      */
-    private function processResponse(string $response)
+    private function processResponse(string $response, array $responseHeaders = [], array $responseCookies = [])
     {
-        $responseArray = $this->json->jsonDecode($response);
-
+        $responseArray = null;
+        try {
+            $responseArray = $this->json->jsonDecode($response);
+        } catch (\Exception $exception) {
+            // Note: We don't care about this exception because we have error checking bellow if it fails to decode.
+        }
         if (!is_array($responseArray)) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
-
-        $this->processErrors($responseArray);
-
+        $this->processErrors($responseArray, $responseHeaders, $responseCookies);
         if (!isset($responseArray['data'])) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unknown GraphQL response body: ' . $response);
         }
-
         return $responseArray['data'];
     }
 
@@ -133,13 +138,16 @@ class Client
      * @param array $variables
      * @param string $operationName
      * @param array $headers
+     * @param bool $flushCookies
+     *
      * @return array
      */
     public function getWithResponseHeaders(
         string $query,
         array $variables = [],
         string $operationName = '',
-        array $headers = []
+        array $headers = [],
+        bool $flushCookies = false
     ): array {
         $url = $this->getEndpointUrl();
         $requestArray = [
@@ -149,11 +157,12 @@ class Client
         ];
         array_filter($requestArray);
 
-        $response = $this->curlClient->getWithFullResponse($url, $requestArray, $headers);
-        $responseBody = $this->processResponse($response['body']);
+        $response = $this->curlClient->getWithFullResponse($url, $requestArray, $headers, $flushCookies);
         $responseHeaders = !empty($response['header']) ? $this->processResponseHeaders($response['header']) : [];
+        $responseCookies = !empty($response['header']) ? $this->processResponseCookies($response['header']) : [];
+        $responseBody = $this->processResponse($response['body'], $responseHeaders, $responseCookies);
 
-        return ['headers' => $responseHeaders, 'body' => $responseBody];
+        return ['headers' => $responseHeaders, 'body' => $responseBody, 'cookies' => $responseCookies];
     }
 
     /**
@@ -163,13 +172,16 @@ class Client
      * @param array $variables
      * @param string $operationName
      * @param array $headers
+     * @param bool $flushCookies
+     *
      * @return array
      */
     public function postWithResponseHeaders(
         string $query,
         array $variables = [],
         string $operationName = '',
-        array $headers = []
+        array $headers = [],
+        bool $flushCookies = false
     ): array {
         $url = $this->getEndpointUrl();
         $headers = array_merge($headers, ['Accept: application/json', 'Content-Type: application/json']);
@@ -180,20 +192,24 @@ class Client
         ];
         $postData = $this->json->jsonEncode($requestArray);
 
-        $response = $this->curlClient->postWithFullResponse($url, $postData, $headers);
-        $responseBody = $this->processResponse($response['body']);
+        $response = $this->curlClient->postWithFullResponse($url, $postData, $headers, $flushCookies);
         $responseHeaders = !empty($response['header']) ? $this->processResponseHeaders($response['header']) : [];
+        $responseCookies = !empty($response['header']) ? $this->processResponseCookies($response['header']) : [];
+        $responseBody = $this->processResponse($response['body'], $responseHeaders, $responseCookies);
 
-        return ['headers' => $responseHeaders, 'body' => $responseBody];
+        return ['headers' => $responseHeaders, 'body' => $responseBody, 'cookies' => $responseCookies];
     }
 
     /**
-     * Process errors
+     * Process errors.
      *
      * @param array $responseBodyArray
-     * @throws \Exception
+     * @param array $responseHeaders
+     * @param array $responseCookies
+     * @return void
+     * @throws ResponseContainsErrorsException
      */
-    private function processErrors($responseBodyArray)
+    private function processErrors($responseBodyArray, array $responseHeaders = [], array $responseCookies = [])
     {
         if (isset($responseBodyArray['errors'])) {
             $errorMessage = '';
@@ -212,8 +228,12 @@ class Client
                 }
 
                 throw new ResponseContainsErrorsException(
-                    'GraphQL response contains errors: ' . $errorMessage,
-                    $responseBodyArray
+                    'GraphQL response contains errors: ' . $errorMessage . "\n" . var_export($responseBodyArray, true),
+                    $responseBodyArray,
+                    null,
+                    0,
+                    $responseHeaders,
+                    $responseCookies
                 );
             }
             //phpcs:ignore Magento2.Exceptions.DirectThrow
@@ -246,12 +266,41 @@ class Client
         foreach ($headerLines as $headerLine) {
             $headerParts = preg_split('/: /', $headerLine, 2);
             if (count($headerParts) == 2) {
-                $headersArray[trim($headerParts[0])] = trim($headerParts[1]);
+                $headerName = trim($headerParts[0]);
+                if ($headerName === self::SET_COOKIE_HEADER_NAME) {
+                    if (!isset($headersArray[self::SET_COOKIE_HEADER_NAME])) {
+                        $headersArray[self::SET_COOKIE_HEADER_NAME] = [];
+                    }
+                    $headersArray[self::SET_COOKIE_HEADER_NAME][] = trim($headerParts[1]);
+                } else {
+                    $headersArray[$headerName] = trim($headerParts[1]);
+                }
             } elseif (preg_match('/HTTP\/[\.0-9]+/', $headerLine)) {
                 $headersArray[trim('Status-Line')] = trim($headerLine);
             }
         }
 
         return $headersArray;
+    }
+
+    /**
+     * Prepare separate array of cookies.
+     *
+     * @param string $headers
+     * @return array
+     */
+    private function processResponseCookies(string $headers): array
+    {
+        $cookiesArray = [];
+        $headers = preg_split('/((\r?\n)|(\r\n?))/', $headers);
+        foreach ($headers as $header) {
+            if (strpos($header, 'Set-Cookie:') === 0) {
+                $cookie = preg_split('/: /', $header, 2);
+                if (isset($cookie[1]) && !empty($cookie[1])) {
+                    $cookiesArray[] = $cookie[1];
+                }
+            }
+        }
+        return $cookiesArray;
     }
 }

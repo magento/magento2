@@ -52,7 +52,7 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function addedFixturesProvider(): array
+    public static function addedFixturesProvider(): array
     {
         return [
             'first_data_set' => [

@@ -28,6 +28,7 @@ class Product extends \Magento\Catalog\Test\Fixture\Product
 
     private const DEFAULT_PRODUCT_LINK_DATA = [
         'sku' => null,
+        'type' => 'associated',
         'position' => 1,
         'qty' => 1,
     ];
@@ -49,7 +50,7 @@ class Product extends \Magento\Catalog\Test\Fixture\Product
         DataMerger $dataMerger,
         ProductRepositoryInterface $productRepository
     ) {
-        parent::__construct($serviceFactory, $dataProcessor, $dataMerger);
+        parent::__construct($serviceFactory, $dataProcessor, $dataMerger, $productRepository);
         $this->productRepository = $productRepository;
     }
 
@@ -102,18 +103,12 @@ class Product extends \Magento\Catalog\Test\Fixture\Product
                 $linkData = $link instanceof DataObject ? $link->toArray() : $link;
                 $product = $this->productRepository->get($linkData['sku']);
             }
-
+            if (isset($link['type']) && $link['type'] !== $defaultLinkData['type']) {
+                unset($defaultLinkData['qty']);
+            }
+            $linkData['sku'] = $product->getSku();
             $linkData += $defaultLinkData;
-            $links[] = [
-                'sku' => $data['sku'],
-                'link_type' => 'associated',
-                'linked_product_sku' => $product->getSku(),
-                'linked_product_type' =>  $product->getTypeId(),
-                'position' => $linkData['position'],
-                'extension_attributes' => [
-                    'qty' => $linkData['qty']
-                ],
-            ];
+            $links[] = $linkData;
             $position++;
         }
 

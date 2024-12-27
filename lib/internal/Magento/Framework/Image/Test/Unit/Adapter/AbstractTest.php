@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,7 +90,7 @@ class AbstractTest extends TestCase
     /**
      * @return array
      */
-    public function adaptResizeValuesDataProvider()
+    public static function adaptResizeValuesDataProvider()
     {
         $expected = [
             'src' => ['x' => 0, 'y' => 0],
@@ -98,7 +98,7 @@ class AbstractTest extends TestCase
             'frame' => ['width' => 135, 'height' => 135],
         ];
 
-        return [[135, null, $expected], [null, 135, $expected]];
+        return [[134.5, null, $expected], [null, 134.5, $expected]];
     }
 
     /**
@@ -125,7 +125,7 @@ class AbstractTest extends TestCase
     /**
      * @return array
      */
-    public function prepareDestinationDataProvider()
+    public static function prepareDestinationDataProvider()
     {
         return [
             [__DIR__, 'name.txt', __DIR__ . '/name.txt'],

@@ -127,4 +127,17 @@
         <data key="bundleOption2Required">false</data>
         <data key="bundleOption2NumberOfProducts">1</data>
     </entity>
+    <entity name="ImportProduct_Bundle2" type="product">
+        <data key="fileName">catalog_import_duplicate_bundle_products.csv</data>
+        <data key="name">import-product-bundle-with-duplicates</data>
+        <data key="sku">import-product-bundle2</data>
+        <data key="type_id">bundle</data>
+        <data key="attribute_set_id">4</data>
+        <data key="attributeSetText">Default</data>
+        <data key="urlKey">import-product-bundle2</data>
+        <data key="bundleOption1Title">Bundle Option A</data>
+        <data key="bundleOption1InputType">radio</data>
+        <data key="bundleOption1Required">true</data>
+        <data key="bundleOption1NumberOfProducts">2</data>
+    </entity>
 </entities>

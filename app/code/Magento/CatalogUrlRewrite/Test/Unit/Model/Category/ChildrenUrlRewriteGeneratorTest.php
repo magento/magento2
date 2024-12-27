@@ -65,7 +65,7 @@ class ChildrenUrlRewriteGeneratorTest extends TestCase
         $this->categoryUrlRewriteGeneratorFactory = $this->getMockBuilder(
             CategoryUrlRewriteGeneratorFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->categoryUrlRewriteGenerator = $this->getMockBuilder(
             CategoryUrlRewriteGenerator::class
         )->disableOriginalConstructor()

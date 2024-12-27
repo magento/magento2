@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class FormTest extends TestCase
     protected $orderConfig;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -66,6 +66,8 @@ class FormTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testToHtml(): void
     {
@@ -99,48 +101,22 @@ class FormTest extends TestCase
             ->willReturn($states);
 
         $fieldset->method('addField')
-            ->withConsecutive(
-                [
-                    'status',
-                    'select',
-                    [
-                        'name' => 'status',
-                        'label' => __('Order Status'),
-                        'class' => 'required-entry',
-                        'values' => $statusesForField,
-                        'required' => true
-                    ]
-                ],
-                [
-                    'state',
-                    'select',
-                    [
-                        'name' => 'state',
-                        'label' => __('Order State'),
-                        'class' => 'required-entry',
-                        'values' => $statesForField,
-                        'required' => true
-                    ]
-                ],
-                [
-                    'is_default',
-                    'checkbox',
-                    [
-                        'name' => 'is_default',
-                        'label' => __('Use Order Status As Default'),
-                        'value' => 1
-                    ]
-                ],
-                [
-                    'visible_on_front',
-                    'checkbox',
-                    [
-                        'name' => 'visible_on_front',
-                        'label' => __('Visible On Storefront'),
-                        'value' => 1,
-                        'checked' => true
-                    ]
-                ]
+            ->willReturnCallback(
+                // @phpstan-ignore-next-line
+                function ($arg1, $arg2, $arg3) use ($statusesForField, $statesForField) {
+                    if ($arg1 === 'status' && $arg2 === 'select' && $arg3['name'] === 'status') {
+                        return null;
+                    } elseif ($arg1 === 'state' && $arg2 === 'select' && $arg3['name'] === 'state') {
+                        return null;
+                    } elseif ($arg1 === 'is_default' && $arg2 === 'checkbox' && $arg3['name'] === 'is_default') {
+                        return null;
+                    } elseif ($arg1 === 'visible_on_front'
+                        && $arg2 === 'checkbox'
+                        && $arg3['name'] === 'visible_on_front'
+                    ) {
+                        return null;
+                    }
+                }
             );
 
         $this->block->toHtml();

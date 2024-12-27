@@ -16,6 +16,7 @@
             <description value="Admin should see TinyMCE is the native WYSIWYG on Newsletter"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84683"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>

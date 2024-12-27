@@ -38,7 +38,7 @@ class CleanMediaTest extends TestCase
         $helper = new ObjectManager($this);
 
         $session = $this->getMockBuilder(Session::class)
-            ->setMethods(['setIsUrlNotice'])
+            ->addMethods(['setIsUrlNotice'])
             ->setConstructorArgs($helper->getConstructArguments(Session::class))
             ->getMock();
 
@@ -46,7 +46,7 @@ class CleanMediaTest extends TestCase
             ExceptionMessageLookupFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 ['getMessageGenerator']
             )
             ->getMock();
@@ -54,7 +54,7 @@ class CleanMediaTest extends TestCase
         $messageManagerParams = $helper->getConstructArguments(Manager::class);
         $messageManagerParams['exceptionMessageFactory'] = $exceptionMessageFactory;
         $messageManager = $this->getMockBuilder(Manager::class)
-            ->setMethods(['addSuccessMessage'])
+            ->onlyMethods(['addSuccessMessage'])
             ->setConstructorArgs($messageManagerParams)
             ->getMock();
 
@@ -70,12 +70,12 @@ class CleanMediaTest extends TestCase
             ]
         );
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession', 'getResultFactory'])
             ->setConstructorArgs($args)
             ->getMock();
         $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()

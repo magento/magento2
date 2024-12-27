@@ -5,11 +5,15 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
+use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\EntityAbstract;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sales emails sending
@@ -20,16 +24,21 @@ use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 class EmailSenderHandler
 {
     /**
+     * Configuration path for defining asynchronous email sending attempts
+     */
+    public const XML_PATH_ASYNC_SENDING_ATTEMPTS = 'sales_email/general/async_sending_attempts';
+
+    /**
      * Email sender model.
      *
-     * @var \Magento\Sales\Model\Order\Email\Sender
+     * @var Sender
      */
     protected $emailSender;
 
     /**
      * Entity resource model.
      *
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract
+     * @var EntityAbstract
      */
     protected $entityResource;
 
@@ -43,7 +52,7 @@ class EmailSenderHandler
     /**
      * Global configuration storage.
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $globalConfig;
 
@@ -53,7 +62,7 @@ class EmailSenderHandler
     private $identityContainer;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
@@ -70,24 +79,24 @@ class EmailSenderHandler
     private $modifyStartFromDate;
 
     /**
-     * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
-     * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
+     * @param Sender $emailSender
+     * @param EntityAbstract $entityResource
      * @param AbstractCollection $entityCollection
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param ScopeConfigInterface $globalConfig
      * @param IdentityInterface|null $identityContainer
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param StoreManagerInterface|null $storeManager
      * @param ValueFactory|null $configValueFactory
      * @param string|null $modifyStartFromDate
      */
     public function __construct(
-        \Magento\Sales\Model\Order\Email\Sender $emailSender,
-        \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource,
+        Sender $emailSender,
+        EntityAbstract $entityResource,
         AbstractCollection $entityCollection,
-        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
+        ScopeConfigInterface $globalConfig,
         IdentityInterface $identityContainer = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        StoreManagerInterface $storeManager = null,
         ?ValueFactory $configValueFactory = null,
-        ?string $modifyStartFromDate = null
+        ?string $modifyStartFromDate = null,
     ) {
         $this->emailSender = $emailSender;
         $this->entityResource = $entityResource;
@@ -97,7 +106,7 @@ class EmailSenderHandler
         $this->identityContainer = $identityContainer ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Model\Order\Email\Container\NullIdentity::class);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()
-            ->get(\Magento\Store\Model\StoreManagerInterface::class);
+            ->get(StoreManagerInterface::class);
 
         $this->configValueFactory = $configValueFactory ?: ObjectManager::getInstance()->get(ValueFactory::class);
         $this->modifyStartFromDate = $modifyStartFromDate ?: $this->modifyStartFromDate;
@@ -105,13 +114,20 @@ class EmailSenderHandler
 
     /**
      * Handles asynchronous email sending
+     *
      * @return void
      */
     public function sendEmails()
     {
         if ($this->globalConfig->getValue('sales_email/general/async_sending')) {
             $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
-            $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
+            $this->entityCollection->addFieldToFilter(
+                'email_sent',
+                [
+                    ['null' => true],
+                    ['lteq' => -1]
+                ]
+            );
             $this->filterCollectionByStartFromDate($this->entityCollection);
             $this->entityCollection->setPageSize(
                 $this->globalConfig->getValue('sales_email/general/sending_limit')
@@ -119,6 +135,8 @@ class EmailSenderHandler
 
             /** @var \Magento\Store\Api\Data\StoreInterface[] $stores */
             $stores = $this->getStores(clone $this->entityCollection);
+
+            $maxSendAttempts = $this->globalConfig->getValue(self::XML_PATH_ASYNC_SENDING_ATTEMPTS);
 
             /** @var \Magento\Store\Model\Store $store */
             foreach ($stores as $store) {
@@ -131,12 +149,19 @@ class EmailSenderHandler
 
                 /** @var \Magento\Sales\Model\AbstractModel $item */
                 foreach ($entityCollection->getItems() as $item) {
-                    if ($this->emailSender->send($item, true)) {
-                        $this->entityResource->saveAttribute(
-                            $item->setEmailSent(true),
-                            'email_sent'
-                        );
+                    $sendAttempts = $item->getEmailSent() ?? -$maxSendAttempts;
+                    $isEmailSent = $this->emailSender->send($item, true);
+
+                    if ($isEmailSent) {
+                        $sendAttempts = 1;
+                    } else {
+                        $sendAttempts++;
                     }
+
+                    $this->entityResource->saveAttribute(
+                        $item->setEmailSent($sendAttempts),
+                        'email_sent'
+                    );
                 }
             }
         }
@@ -157,7 +182,7 @@ class EmailSenderHandler
         $entityCollection->addAttributeToSelect('store_id')->getSelect()->group('store_id');
         /** @var \Magento\Sales\Model\EntityInterface $item */
         foreach ($entityCollection->getItems() as $item) {
-            /** @var \Magento\Store\Model\StoreManagerInterface $store */
+            /** @var StoreManagerInterface $store */
             $store = $this->storeManager->getStore($item->getStoreId());
             $stores[$item->getStoreId()] = $store;
         }

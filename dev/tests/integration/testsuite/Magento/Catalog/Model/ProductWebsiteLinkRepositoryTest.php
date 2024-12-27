@@ -65,7 +65,7 @@ class ProductWebsiteLinkRepositoryTest extends TestCase
         $productWebsiteLink = $this->productWebsiteLinkFactory->create();
         $productWebsiteLink->setSku('unique-simple-azaza');
         $this->expectException(InputException::class);
-        $this->expectErrorMessage((string)__('There are not websites for assign to product'));
+        $this->expectExceptionMessage((string)__('There are not websites for assign to product'));
         $this->productWebsiteLinkRepository->save($productWebsiteLink);
     }
 

@@ -54,7 +54,7 @@ class SwatchAttributeTypeTest extends TestCase
      *
      * @return array
      */
-    public function provideIsSwatchAttributeTestData() : array
+    public static function provideIsSwatchAttributeTestData() : array
     {
         return [
             [Swatch::SWATCH_INPUT_TYPE_TEXT, true],
@@ -84,7 +84,7 @@ class SwatchAttributeTypeTest extends TestCase
      *
      * @return array
      */
-    public function provideIsTextSwatchAttributeTestData() : array
+    public static function provideIsTextSwatchAttributeTestData() : array
     {
         return [
             [Swatch::SWATCH_INPUT_TYPE_TEXT, true],
@@ -114,7 +114,7 @@ class SwatchAttributeTypeTest extends TestCase
      *
      * @return array
      */
-    public function provideIsVisualSwatchAttributeTestData() : array
+    public static function provideIsVisualSwatchAttributeTestData() : array
     {
         return [
             [Swatch::SWATCH_INPUT_TYPE_VISUAL, true],
@@ -135,7 +135,7 @@ class SwatchAttributeTypeTest extends TestCase
         /** @var AttributeInterface|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasData', 'getData', 'setData'])
+            ->addMethods(['hasData', 'getData', 'setData'])
             ->getMockForAbstractClass();
 
         $attributeMock->expects($this->any())->method('hasData')->willReturn(false);
@@ -162,7 +162,7 @@ class SwatchAttributeTypeTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(AttributeInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasData', 'getData', 'setData'])
+            ->addMethods(['hasData', 'getData', 'setData'])
             ->getMockForAbstractClass();
 
         $attributeMock->expects($this->any())->method('hasData')->willReturn($hasDataReturns);

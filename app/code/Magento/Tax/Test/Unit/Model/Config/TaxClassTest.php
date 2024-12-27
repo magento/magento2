@@ -26,7 +26,7 @@ class TaxClassTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadByCode', 'getId', 'setData', 'save', '__wakeup'])
+            ->onlyMethods(['loadByCode', 'getId', 'setData', 'save', '__wakeup'])
             ->getMock();
         $attributeMock
             ->expects($this->any())
@@ -35,7 +35,8 @@ class TaxClassTest extends TestCase
 
         $attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['create'])
             ->getMock();
         $attributeFactoryMock
             ->expects($this->any())
@@ -44,7 +45,7 @@ class TaxClassTest extends TestCase
 
         $resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['beginTransaction', '_construct', 'getIdFieldName', 'addCommitCallback', 'commit',
+            ->onlyMethods(['beginTransaction', '_construct', 'getIdFieldName', 'addCommitCallback', 'commit',
                 'save', '__wakeup', ])
             ->getMock();
         $resourceMock

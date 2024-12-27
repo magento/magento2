@@ -7,18 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\DB\Helper as DbHelper;
-use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Framework\AuthorizationInterface;
-use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\UrlInterface;
 
 /**
  * Data provider for categories field of product page
@@ -33,7 +35,7 @@ class Categories extends AbstractModifier
     /**#@+
      * Category tree cache id
      */
-    const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
+    public const CATEGORY_TREE_ID = 'CATALOG_PRODUCT_CATEGORY_TREE';
     /**#@-*/
 
     /**
@@ -51,6 +53,7 @@ class Categories extends AbstractModifier
     /**
      * @var array
      * @deprecated 101.0.0
+     * @see Nothing
      * @since 101.0.0
      */
     protected $categoriesTrees = [];
@@ -128,6 +131,7 @@ class Categories extends AbstractModifier
      *
      * @return CacheInterface
      * @deprecated 101.0.3
+     * @see getCategoriesTree
      */
     private function getCacheManager(): CacheInterface
     {
@@ -312,13 +316,11 @@ class Categories extends AbstractModifier
                                     'actionName' => 'toggleModal',
                                 ],
                                 [
-                                    'targetName' =>
-                                        'product_form.product_form.create_category_modal.create_category',
+                                    'targetName' => 'product_form.product_form.create_category_modal.create_category',
                                     'actionName' => 'render'
                                 ],
                                 [
-                                    'targetName' =>
-                                        'product_form.product_form.create_category_modal.create_category',
+                                    'targetName' => 'product_form.product_form.create_category_modal.create_category',
                                     'actionName' => 'resetForm'
                                 ]
                             ],
@@ -421,7 +423,7 @@ class Categories extends AbstractModifier
 
         /** @var \Magento\Catalog\Model\Category $category */
         foreach ($matchingNamesCollection as $category) {
-            foreach (explode('/', $category->getPath()) as $parentId) {
+            foreach (explode('/', $category->getPath() ?? '') as $parentId) {
                 $shownCategoriesIds[$parentId] = 1;
             }
         }
@@ -444,6 +446,8 @@ class Categories extends AbstractModifier
 
         $collection->addAttributeToFilter('entity_id', ['in' => array_keys($shownCategoriesIds)])
             ->addAttributeToSelect(['name', 'is_active', 'parent_id'])
+            ->addAttributeToSort(CategoryInterface::KEY_LEVEL, Collection::SORT_ORDER_ASC)
+            ->addAttributeToSort(CategoryInterface::KEY_POSITION, Collection::SORT_ORDER_ASC)
             ->setStoreId($storeId);
 
         $categoryById = [

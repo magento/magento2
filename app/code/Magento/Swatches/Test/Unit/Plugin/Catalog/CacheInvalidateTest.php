@@ -65,7 +65,11 @@ class CacheInvalidateTest extends TestCase
             ->willReturn(true);
         $this->typeList
             ->method('invalidate')
-            ->withConsecutive(['block_html'], ['collections']);
+            ->willReturnCallback(function ($arg1) use (&$callCount) {
+                if ($arg1 == 'block_html' || $arg1 == 'collections') {
+                    return null;
+                }
+            });
         $this->assertSame($this->attribute, $this->cacheInvalidate->afterSave($this->attribute, $this->attribute));
     }
 

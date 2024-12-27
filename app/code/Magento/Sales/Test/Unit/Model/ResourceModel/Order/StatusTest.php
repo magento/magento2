@@ -62,8 +62,15 @@ class StatusTest extends TestCase
         $tableName = 'sales_order_status_state';
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive([], [$tableName])
-            ->willReturn(null, $tableName);
+            ->willReturnCallback(
+                function ($arg) use ($tableName) {
+                    if (empty($arg)) {
+                        return null;
+                    } elseif ($arg === $tableName) {
+                        return $tableName;
+                    }
+                }
+            );
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn(

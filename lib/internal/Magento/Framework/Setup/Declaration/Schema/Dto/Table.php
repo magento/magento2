@@ -13,6 +13,8 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
  * Table structural element
  * Aggregate inside itself: columns, constraints and indexes
  * Resource is also specified on this strucural element
+ *
+ * @api
  */
 class Table extends GenericElement implements
     ElementInterface,

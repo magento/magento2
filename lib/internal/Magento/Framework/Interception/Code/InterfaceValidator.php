@@ -30,6 +30,16 @@ class InterfaceValidator
     protected $_argumentsReader;
 
     /**
+     * List of optional packages
+     *
+     * @var array
+     */
+    public static array $optionalPackages = [
+        'Swoole',
+        'OpenSwoole'
+    ];
+
+    /**
      * @param ArgumentsReader $argumentsReader
      */
     public function __construct(ArgumentsReader $argumentsReader = null)
@@ -50,8 +60,14 @@ class InterfaceValidator
      */
     public function validate($pluginClass, $interceptedType)
     {
-        $interceptedType = '\\' . trim($interceptedType, '\\');
-        $pluginClass = '\\' . trim($pluginClass, '\\');
+        // check if $interceptedType is a part of optional package
+        $interceptedPackage = strstr(trim((string)$interceptedType), "\\", true);
+        if (in_array($interceptedPackage, self::$optionalPackages)) {
+            return;
+        }
+
+        $interceptedType = '\\' . trim((string)$interceptedType, '\\');
+        $pluginClass = '\\' . trim((string)$pluginClass, '\\');
         $plugin = new \ReflectionClass($pluginClass);
         $type = new \ReflectionClass($interceptedType);
 

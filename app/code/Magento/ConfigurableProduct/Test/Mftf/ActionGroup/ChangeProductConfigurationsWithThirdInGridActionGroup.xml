@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ChangeProductConfigurationsWithThirdInGridActionGroup" extends="ChangeProductConfigurationsInGridActionGroup">
+        <annotations>
+            <description>Edit the Product Configuration with 3rd attribute via the Admin Product grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="thirdOption" type="entity"/>
+        </arguments>
+
+        <fillField userInput="{{thirdOption.name}}" selector="{{AdminProductFormConfigurationsSection.confProductNameCell(thirdOption.name)}}" after="fillFieldNameForSecondAttributeOption" stepKey="fillFieldNameForThirdAttributeOption"/>
+        <fillField userInput="{{thirdOption.sku}}" selector="{{AdminProductFormConfigurationsSection.confProductSkuCell(thirdOption.name)}}" after="fillFieldNameForThirdAttributeOption" stepKey="fillFieldSkuForThirdAttributeOption"/>
+        <fillField userInput="{{thirdOption.price}}" selector="{{AdminProductFormConfigurationsSection.confProductPriceCell(thirdOption.name)}}" after="fillFieldSkuForThirdAttributeOption" stepKey="fillFieldPriceForThirdAttributeOption"/>
+        <fillField userInput="{{thirdOption.quantity}}" selector="{{AdminProductFormConfigurationsSection.confProductQuantityCell(thirdOption.name)}}" after="fillFieldPriceForThirdAttributeOption" stepKey="fillFieldQuantityForThirdAttributeOption"/>
+        <fillField userInput="{{thirdOption.weight}}" selector="{{AdminProductFormConfigurationsSection.confProductWeightCell(thirdOption.name)}}" after="fillFieldQuantityForThirdAttributeOption" stepKey="fillFieldWeightForThirdAttributeOption"/>
+    </actionGroup>
+</actionGroups>

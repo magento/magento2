@@ -60,12 +60,12 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
         $observerMock = $this->createMock(Observer::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
 
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $productMock->expects(self::exactly(3))
@@ -97,7 +97,7 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
         $observerMock = $this->createMock(Observer::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
 
         $eventMock->expects($this->once())

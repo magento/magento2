@@ -37,20 +37,20 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
                 <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete product attribute -->
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
+            <comment userInput="BIC workaround" stepKey="reindex"/>
 
-            <!-- Reindex after deleting product attribute -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-
-            <!-- Delete attribute set -->
+            <!-- Delete attribute set & reindex -->
             <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
                 <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+                <argument name="indices" value=""/>
             </actionGroup>
 
             <!-- Delete category -->

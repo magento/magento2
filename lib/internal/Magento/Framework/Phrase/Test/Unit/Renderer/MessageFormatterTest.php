@@ -36,7 +36,7 @@ class MessageFormatterTest extends TestCase
      * @return array [Raw Phrase, Locale, Arguments, Expected Result]
      * @throws \Exception
      */
-    public function renderMessageFormatterDataProvider(): array
+    public static function renderMessageFormatterDataProvider(): array
     {
         $twentynineteenJuneTwentyseven = new \DateTime('2019-06-27');
 
@@ -105,7 +105,7 @@ class MessageFormatterTest extends TestCase
     {
         $translateMock = $this->getMockBuilder(Translate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLocale'])
+            ->onlyMethods(['getLocale'])
             ->getMock();
         $translateMock->method('getLocale')
             ->willReturn($locale);

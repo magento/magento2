@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ScrollToUpSellSectionAtStorefrontActionGroup">
+        <annotations>
+            <description>Admin scroll to upsell section on storefront preview page.</description>
+        </annotations>
+        <scrollTo selector="{{StorefrontProductUpSellProductsSection.upSellSection}}" stepKey="scrollToUpSellSection" />
+        <waitForText selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!" stepKey="seeTheUpSellHeading"/>
+    </actionGroup>
+</actionGroups>

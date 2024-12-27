@@ -11,14 +11,19 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ResolveRequest;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use RuntimeException;
+use Throwable;
 
 /**
  * Wrapper containing batching logic for BatchResolverInterface.
  */
-class BatchResolverWrapper implements ResolverInterface
+class BatchResolverWrapper implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var BatchResolverInterface
@@ -31,7 +36,7 @@ class BatchResolverWrapper implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var \Magento\Framework\GraphQl\Query\Resolver\ContextInterface|null
+     * @var ContextInterface|null
      */
     private $context;
 
@@ -78,14 +83,14 @@ class BatchResolverWrapper implements ResolverInterface
      * Find resolved data for given request.
      *
      * @param BatchRequestItemInterface $item
-     * @throws \Throwable
+     * @throws Throwable
      * @return mixed
      */
     private function findResolvedFor(BatchRequestItemInterface $item)
     {
         try {
             return $this->resolveFor($item);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $this->clearAggregated();
             throw $exception;
         }
@@ -95,13 +100,13 @@ class BatchResolverWrapper implements ResolverInterface
      * Resolve branch/leaf for given item.
      *
      * @param BatchRequestItemInterface $item
-     * @return mixed|\Magento\Framework\GraphQl\Query\Resolver\Value
-     * @throws \Throwable
+     * @return mixed|Value
+     * @throws Throwable
      */
     private function resolveFor(BatchRequestItemInterface $item)
     {
         if (!$this->request) {
-            throw new \RuntimeException('Unknown batch request item');
+            throw new RuntimeException('Unknown batch request item');
         }
 
         if (!$this->response) {
@@ -130,5 +135,13 @@ class BatchResolverWrapper implements ResolverInterface
                 return $this->findResolvedFor($item);
             }
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clearAggregated();
     }
 }

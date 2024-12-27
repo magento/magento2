@@ -34,11 +34,11 @@ class UiComponentGeneratorTest extends TestCase
     {
         $this->contextFactoryMock = $this
             ->getMockBuilder(ContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

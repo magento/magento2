@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminTaxDetailsVerificationForPartialInvoiceAndCreditMemoWithShoppingCartRuleAndFPTTest">
+        <annotations>
+            <stories value="Create tax rule"/>
+            <title value="Tax details verification for partial invoice and credit memo with shopping cart rule and FPT"/>
+            <description value="Admin verifies tax details on Order totals section for partial invoice and credit memo with shopping cart rule and FPT"/>
+            <testCaseId value="AC-4273"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationCountry.path}} {{US_Address_NY.country_id}}" stepKey="selectDefaultCountry"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationRegion.path}} *" stepKey="selectDefaultState"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationPostcode.path}} *" stepKey="fillDefaultPostCode"/>
+            <createData entity="US_CA_Rate_20" stepKey="createTaxRateCA"/>
+            <createData entity="productAttributeFPT" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
+            <createData entity="SalesRuleSpecificCouponAndBy50Percent" stepKey="createSalesRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createSalesRule"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule">
+                <argument name="taxRate" value="$$createTaxRateCA$$"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+                <argument name="productId" value="$createSimpleProduct.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+                <argument name="countryForFPT" value="US"/>
+                <argument name="stateForFPT" value="*"/>
+                <argument name="valueForFPT" value="10"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <actionGroup ref="ChangeShippingTaxClassActionGroup" stepKey="changeTaxClassForShipping"/>
+            <actionGroup ref="AdminChangeDefaultTaxClassForProductActionGroup" stepKey="changeTaxClassForProduct"/>
+            <actionGroup ref="AdminChangeCalculationSettingsActionGroup" stepKey="changeCalculationsSettings"/>
+            <actionGroup ref="AdminChangePriceDisplaySettingsActionGroup" stepKey="changeTheDisplayPricesSettings"/>
+            <actionGroup ref="AdminChangeShoppingCartDisplaySettingsActionGroup" stepKey="changeTheShoppingCartDisplayPricesSettings"/>
+            <actionGroup ref="AdminChangeSalesTaxSettingsActionGroup" stepKey="ChangeSalesTaxSettings"/>
+            <actionGroup ref="AdminChangeFixedProductTaxesActionGroup" stepKey="ChangeFPTSettings"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCache">
+                <argument name="tags" value="full_page config"/>
+            </actionGroup>
+            <!-- Login Customer Storefront -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                <argument name="Customer" value="$createCustomer$" />
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+                <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+            </actionGroup>
+            <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="3" stepKey="setQuantityForTheSecondProduct"/>
+            <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+                <argument name="productCount" value="3"/>
+            </actionGroup>
+            <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToCheckoutCartPage"/>
+            <!-- Chose flat rate -->
+            <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate">
+                <argument name="shippingMethodName" value="Flat Rate"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+            <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
+                <argument name="discountCode" value="$createCouponForCartPriceRule.code$"/>
+            </actionGroup>
+            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteFPTAttribute"/>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+            </actionGroup>
+            <deleteData createDataKey="createTaxRateCA" stepKey="deleteTaxRate"/>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationCountry.path}} {{DefaultTaxDestinationCountry.value}}" stepKey="resetDefaultCountry"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationRegion.path}} {{DefaultTaxDestinationRegion.value}}" stepKey="resetDefaultState"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationPostcode.path}} {{DefaultTaxDestinationPostcode.value}}" stepKey="resetDefaultPostCode"/>
+            <actionGroup ref="SetDefaultShippingTaxClassActionGroup" stepKey="changeToDefaultValueTaxClassForShipping"/>
+            <actionGroup ref="AdminResetDefaultTaxClassForProductActionGroup" stepKey="changeToDefaultValueTaxClassForProduct"/>
+            <actionGroup ref="AdminResetCalculationSettingsToDefaultActionGroup" stepKey="changeToDefaultCalculationsSettings"/>
+            <actionGroup ref="AdminResetPriceDisplaySettingsActionGroup" stepKey="resetPriceDisplaySettings"/>
+            <actionGroup ref="AdminResetShoppingCartDisplaySettingsActionGroup" stepKey="resetShoppingCartDisplaySettings"/>
+            <actionGroup ref="AdminResetSalesTaxSettingsActionGroup" stepKey="resetSalesTaxSettings"/>
+            <actionGroup ref="AdminResetFixedProductTaxesActionGroup" stepKey="resetFPTSettings"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <waitForElement selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForOrderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAssertTotalsWithTaxOnOrderViewPageActionGroup" stepKey="applyCoupon">
+            <argument name="subtotalExclTax" value="$250.00"/>
+            <argument name="subtotalInclTax" value="$330.00"/>
+            <argument name="discount" value="-$125.00"/>
+            <argument name="shippingAndHandlingExclTax" value="$15.00"/>
+            <argument name="shippingAndHandlingInclTax" value="$18.00"/>
+            <argument name="fpt" value="$30.00"/>
+            <argument name="grandTotalExclTax" value="$185.83"/>
+            <argument name="grandTotalInclTax" value="$223.00"/>
+            <argument name="totalTaxWithTaxRate" value="$37.17"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickOnInvoiceButton"/>
+        <actionGroup ref="AdminAssertTotalsWithTaxOnOrderViewPageActionGroup" stepKey="assertOrderTotals">
+            <argument name="subtotalExclTax" value="$250.00"/>
+            <argument name="subtotalInclTax" value="$330.00"/>
+            <argument name="discount" value="-$125.00"/>
+            <argument name="shippingAndHandlingExclTax" value="$15.00"/>
+            <argument name="shippingAndHandlingInclTax" value="$18.00"/>
+            <argument name="fpt" value="$30.00"/>
+            <argument name="grandTotalExclTax" value="$185.83"/>
+            <argument name="grandTotalInclTax" value="$223.00"/>
+            <argument name="totalTaxWithTaxRate" value="$37.17"/>
+        </actionGroup>
+        <!--Update qty as 1 and assert the price-->
+        <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillInvoiceQuantity">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickUpdateQtyAfterUpdatingInvoiceBtn"/>
+        <actionGroup ref="AdminAssertTotalsWithTaxOnOrderViewPageActionGroup" stepKey="assertInvoiceTotalsWithQtyAs1">
+            <argument name="subtotalExclTax" value="$83.33"/>
+            <argument name="subtotalInclTax" value="$110.00"/>
+            <argument name="discount" value="-$41.66"/>
+            <argument name="shippingAndHandlingExclTax" value="$15.00"/>
+            <argument name="shippingAndHandlingInclTax" value="$18.00"/>
+            <argument name="fpt" value="$10.00"/>
+            <argument name="grandTotalExclTax" value="$71.95"/>
+            <argument name="grandTotalInclTax" value="$86.33"/>
+            <argument name="totalTaxWithTaxRate" value="$14.38"/>
+        </actionGroup>
+        <!--Update qty as 2 and assert the price-->
+        <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillInvoiceQuantityAs2">
+            <argument name="qty" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickUpdateQtyAfterUpdating2InvoiceBtn"/>
+        <actionGroup ref="AdminAssertTotalsWithTaxOnOrderViewPageActionGroup" stepKey="assertInvoiceTotalsWithQtyAs2">
+            <argument name="subtotalExclTax" value="$166.67"/>
+            <argument name="subtotalInclTax" value="$220.00"/>
+            <argument name="discount" value="-$83.34"/>
+            <argument name="shippingAndHandlingExclTax" value="$15.00"/>
+            <argument name="shippingAndHandlingInclTax" value="$18.00"/>
+            <argument name="fpt" value="$20.00"/>
+            <argument name="grandTotalExclTax" value="$128.88"/>
+            <argument name="grandTotalInclTax" value="$154.67"/>
+            <argument name="totalTaxWithTaxRate" value="$25.79"/>
+        </actionGroup>
+        <!--Submit Invoice-->
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+        <!--Create credit memo with qty 2-->
+        <!--Update qty as 2-->
+        <actionGroup ref="AdminCreateCreditMemoWithUpdateQtyActionGroup" stepKey="createCreditMemoWithQty2">
+            <argument name="productQty" value="{{twoPiecesAddToCart.value}}"/>
+        </actionGroup>
+        <!--Assert Refund totals-->
+        <actionGroup ref="AdminAssertTotalsWithTaxOnCreditMemoViewPageActionGroup" stepKey="assertRefundTotalsWithQtyAs2">
+            <argument name="subtotalExclTax" value="$166.67"/>
+            <argument name="subtotalInclTax" value="$220.00"/>
+            <argument name="discount" value="-$83.34"/>
+            <argument name="fpt" value="$20.00"/>
+            <argument name="grandTotalExclTax" value="$128.88"/>
+            <argument name="grandTotalInclTax" value="$154.67"/>
+            <argument name="totalTaxWithTaxRate" value="$25.79"/>
+        </actionGroup>
+        <click selector="{{AdminInvoiceTotalSection.backButton}}" stepKey="clickBackButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!--Update qty as 1-->
+        <actionGroup ref="AdminCreateCreditMemoWithUpdateQtyActionGroup" stepKey="createCreditMemoWithQty1">
+            <argument name="productQty" value="{{minimalProductQty.value}}"/>
+        </actionGroup>
+        <!--Assert Refund totals with qty 1-->
+        <actionGroup ref="AdminAssertTotalsWithTaxOnCreditMemoViewPageActionGroup" stepKey="assertRefundTotalsWithQtyAs1">
+            <argument name="subtotalExclTax" value="$83.34"/>
+            <argument name="subtotalInclTax" value="$110.00"/>
+            <argument name="discount" value="-$41.67"/>
+            <argument name="fpt" value="$10.00"/>
+            <argument name="grandTotalExclTax" value="$71.95"/>
+            <argument name="grandTotalInclTax" value="$86.34"/>
+            <argument name="totalTaxWithTaxRate" value="$14.39"/>
+        </actionGroup>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemoWithQty1"/>
+        <!--Submit credit memo again with 1 qty-->
+        <actionGroup ref="AdminCreateCreditMemoWithUpdateQtyActionGroup" stepKey="createCreditMemo2ndTimeWithQty1">
+            <argument name="productQty" value="{{minimalProductQty.value}}"/>
+        </actionGroup>
+        <!--Assert Refund totals with qty 1-->
+        <actionGroup ref="AdminAssertTotalsWithTaxOnCreditMemoViewPageActionGroup" stepKey="assertRefundTotals2ndTimeWithQtyAs1">
+            <argument name="subtotalExclTax" value="$83.33"/>
+            <argument name="subtotalInclTax" value="$110.00"/>
+            <argument name="discount" value="-$41.67"/>
+            <argument name="fpt" value="$10.00"/>
+            <argument name="grandTotalExclTax" value="$56.93"/>
+            <argument name="grandTotalInclTax" value="$68.33"/>
+            <argument name="totalTaxWithTaxRate" value="$11.40"/>
+        </actionGroup>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemoWithQty1Again"/>
+
+        <!--Create invoice with qty 1-->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickOnInvoiceButtonAgain"/>
+        <scrollTo selector="{{AdminOrderInvoiceViewSection.invoiceQty}}" x="0" y="-80" stepKey="scrollToQty"/>
+        <seeInField selector="{{AdminOrderInvoiceViewSection.invoiceQty}}" userInput="1" stepKey="seeProductQuantity"/>
+        <actionGroup ref="AdminAssertTotalsWithTaxOnInvoiceTotalsExcludingShippingAndHandlingPricesPageActionGroup" stepKey="assertInvoiceTotalsWithQtyAs1Again">
+            <argument name="subtotalExclTax" value="$83.33"/>
+            <argument name="subtotalInclTax" value="$110.00"/>
+            <argument name="discount" value="-$41.66"/>
+            <argument name="shippingAndHandlingExclTax" value="$15.00"/>
+            <argument name="shippingAndHandlingInclTax" value="$18.00"/>
+            <argument name="fpt" value="$10.00"/>
+            <argument name="grandTotalExclTax" value="$56.95"/>
+            <argument name="grandTotalInclTax" value="$68.33"/>
+            <argument name="totalTaxWithTaxRate" value="$11.38"/>
+        </actionGroup>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoiceWithQty1"/>
+        <!--Create Credit memo with qty as 1 again-->
+        <actionGroup ref="AdminCreateCreditMemoWithUpdateQtyActionGroup" stepKey="createCreditMemo2ndTimeWithQty1again">
+            <argument name="productQty" value="{{minimalProductQty.value}}"/>
+        </actionGroup>
+        <!--Assert Refund totals with qty 1-->
+        <actionGroup ref="AdminAssertTotalsWithTaxOnCreditMemoViewPageActionGroup" stepKey="assertRefundTotals2ndTimeWithQtyAs1Again">
+            <argument name="subtotalExclTax" value="$83.33"/>
+            <argument name="subtotalInclTax" value="$110.00"/>
+            <argument name="discount" value="-$41.66"/>
+            <argument name="fpt" value="$10.00"/>
+            <argument name="grandTotalExclTax" value="$56.95"/>
+            <argument name="grandTotalInclTax" value="$68.33"/>
+            <argument name="totalTaxWithTaxRate" value="$11.38"/>
+        </actionGroup>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemoAsALastTime"/>
+    </test>
+</tests>

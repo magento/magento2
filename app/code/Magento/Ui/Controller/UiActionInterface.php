@@ -7,6 +7,8 @@ namespace Magento\Ui\Controller;
 
 /**
  * Interface UiActionInterface
+ *
+ * @api
  */
 interface UiActionInterface
 {

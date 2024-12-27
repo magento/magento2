@@ -50,22 +50,18 @@ class CacheManagerTest extends TestCase
     {
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->translateResourceMock = $this->getMockBuilder(ResourceInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->fileManagerMock = $this->getMockBuilder(FileManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $objectManagerHelper = new ObjectManager($this);

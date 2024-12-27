@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductVideoAutoplayOnGalleryFullscreenModeTest">
+        <annotations>
+            <features value="ProductVideo"/>
+            <stories value="Storefront product video autoplay on gallery full screen mode"/>
+            <title value="Storefront product video gets auto played on gallery full screen mode"/>
+            <description value="Storefront product video autoplay on selecting the video by clicking video thumbnail in
+            gallery full screen mode"/>
+            <severity value="MAJOR"/>
+            <group value="productVideo"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- Login to Admin page -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Logout from Admin page -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Open product edit page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <!-- Add image to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <!-- Add product video -->
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!-- Open storefront product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefrontProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageOpenImageFullscreenActionGroup" stepKey="openGalleryFullScreen">
+            <argument name="imageNumber" value="1"/>
+        </actionGroup>
+        <conditionalClick selector="{{StorefrontProductMediaSection.fotoramaImageThumbnail('2')}}"
+                          dependentSelector="{{StorefrontProductMediaSection.fotoramaImageThumbnailActive('2')}}"
+                          visible="false" stepKey="clickOnVideoThumbnail"/>
+        <wait stepKey="waitTenSecondsToPlayVideo" time="10"/>
+        <!-- On clicking video thumbnail, assert the video iframe is loaded with autoplay attribute -->
+        <seeElementInDOM selector="iframe" stepKey="AssertVideoIsPlayed"/>
+        <grabAttributeFrom selector="iframe" userInput="allow" stepKey="grabAllowAttribute"/>
+        <assertStringContainsString stepKey="assertAllowAttribute">
+            <actualResult type="string">$grabAllowAttribute</actualResult>
+            <expectedResult type="string">autoplay</expectedResult>
+        </assertStringContainsString>
+        <actionGroup ref="StorefrontProductPageCloseFullscreenGalleryActionGroup" stepKey="closeGalleryFullScreen"/>
+    </test>
+</tests>

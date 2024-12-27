@@ -27,7 +27,7 @@ class SenderTest extends TestCase
     {
         $this->block = $this->getMockBuilder(Sender::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->onlyMethods(['escapeHtml'])
             ->getMock();
     }
 

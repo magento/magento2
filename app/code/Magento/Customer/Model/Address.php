@@ -9,6 +9,9 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\CompositeValidator;
 use Magento\Framework\Indexer\StateInterface;
 
 /**
@@ -74,6 +77,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param CompositeValidator|null $compositeValidator
+     * @param CountryModelsCache|null $countryModelsCache
+     * @param RegionModelsCache|null $regionModelsCache
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -96,7 +102,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?CompositeValidator $compositeValidator = null,
+        ?CountryModelsCache $countryModelsCache = null,
+        ?RegionModelsCache $regionModelsCache = null,
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->_customerFactory = $customerFactory;
@@ -117,7 +126,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             $dataObjectHelper,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $compositeValidator,
+            $countryModelsCache,
+            $regionModelsCache,
         );
     }
 
@@ -380,6 +392,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
      * @deprecated 100.0.6
+     * @see not recommended way
      */
     private function getAttributeList()
     {

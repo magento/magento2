@@ -7,6 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Layer\Category as CategoryLayer;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\CatalogSearch\Model\Layer\Filter\Price as PriceFilter;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -19,9 +27,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 class PriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Layer\Filter\Price
+     * @var PriceFilter
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -31,37 +39,28 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $category = $this->objectManager->create(
-            \Magento\Catalog\Model\Category::class
-        );
-        $category->load(4);
-        $layer = $this->objectManager->get(\Magento\Catalog\Model\Layer\Category::class);
-        $layer->setCurrentCategory($category);
-        $this->_model = $this->objectManager->create(
-            \Magento\CatalogSearch\Model\Layer\Filter\Price::class,
-            ['layer' => $layer]
-        );
+        $this->initializePriceFilter();
     }
 
     public function testApplyNothing()
     {
-        $this->assertEmpty($this->_model->getData('price_range'));
+        $this->assertEmpty($this->model->getData('price_range'));
         /** @var $request \Magento\TestFramework\Request */
         $request = $this->objectManager->get(\Magento\TestFramework\Request::class);
-        $this->_model->apply($request);
+        $this->model->apply($request);
 
-        $this->assertEmpty($this->_model->getData('price_range'));
+        $this->assertEmpty($this->model->getData('price_range'));
     }
 
     public function testApplyInvalid()
     {
-        $this->assertEmpty($this->_model->getData('price_range'));
+        $this->assertEmpty($this->model->getData('price_range'));
         /** @var $request \Magento\TestFramework\Request */
         $request = $this->objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', 'non-numeric');
-        $this->_model->apply($request);
+        $this->model->apply($request);
 
-        $this->assertEmpty($this->_model->getData('price_range'));
+        $this->assertEmpty($this->model->getData('price_range'));
     }
 
     /**
@@ -72,7 +71,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         /** @var $request \Magento\TestFramework\Request */
         $request = $this->objectManager->get(\Magento\TestFramework\Request::class);
         $request->setParam('price', '10-20');
-        $this->_model->apply($request);
+        $this->model->apply($request);
     }
 
     /**
@@ -84,11 +83,11 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $request = $this->objectManager->get(\Magento\TestFramework\Request::class);
 
         $request->setParam('price', '10-20');
-        $this->_model->setCurrencyRate(10);
+        $this->model->setCurrencyRate(10);
 
-        $this->_model->apply($request);
+        $this->model->apply($request);
 
-        $filters = $this->_model->getLayer()->getState()->getFilters();
+        $filters = $this->model->getLayer()->getState()->getFilters();
         $this->assertArrayHasKey(0, $filters);
         $this->assertEquals(
             '<span class="price">$100.00</span> - <span class="price">$199.99</span>',
@@ -100,22 +99,71 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             \Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID,
-            $this->_model->getCustomerGroupId()
+            $this->model->getCustomerGroupId()
         );
 
         $customerGroupId = 123;
-        $this->_model->setCustomerGroupId($customerGroupId);
+        $this->model->setCustomerGroupId($customerGroupId);
 
-        $this->assertEquals($customerGroupId, $this->_model->getCustomerGroupId());
+        $this->assertEquals($customerGroupId, $this->model->getCustomerGroupId());
     }
 
     public function testGetSetCurrencyRate()
     {
-        $this->assertEquals(1, $this->_model->getCurrencyRate());
+        $this->assertEquals(1, $this->model->getCurrencyRate());
 
         $currencyRate = 42;
-        $this->_model->setCurrencyRate($currencyRate);
+        $this->model->setCurrencyRate($currencyRate);
 
-        $this->assertEquals($currencyRate, $this->_model->getCurrencyRate());
+        $this->assertEquals($currencyRate, $this->model->getCurrencyRate());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories_no_products.php
+     */
+    #[
+        DbIsolation(false),
+        Config('catalog/layered_navigation/price_range_calculation', 'manual', 'store'),
+        Config('catalog/layered_navigation/price_range_step', '10', 'store'),
+        Config('catalog/layered_navigation/price_range_max_intervals', '2', 'store'),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 11]),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 13]),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 22]),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 22]),
+        DataFixture(ProductFixture::class, ['category_ids' => [4], 'price' => 110]),
+    ]
+    public function testGetItemsWithManualAlgorithm(): void
+    {
+        $attributeRepository = $this->objectManager->get(ProductAttributeRepositoryInterface::class);
+        $priceAttribute = $attributeRepository->get('price');
+        $this->model->setAttributeModel($priceAttribute);
+
+        /** @var \Magento\Catalog\Model\Layer\Filter\Item[] $ranges */
+        $ranges = $this->model->getItems();
+        self::assertCount(2, $ranges);
+
+        $request = $this->objectManager->get(\Magento\TestFramework\Request::class);
+        foreach ($ranges as $range) {
+            $request->setParam('price', $range->getValueString());
+            $this->initializePriceFilter();
+            $this->model->apply($request);
+            $products = $this->model->getLayer()->getProductCollection()->getItems();
+            self::assertCount($range->getCount(), $products);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    private function initializePriceFilter(): void
+    {
+        $categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
+        $category = $categoryRepository->get(4);
+        $layer = $this->objectManager->create(CategoryLayer::class);
+        $layer->setCurrentCategory($category);
+        $this->model = $this->objectManager->create(
+            PriceFilter::class,
+            ['layer' => $layer]
+        );
     }
 }

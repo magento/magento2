@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -244,7 +244,7 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritDoc
      */
     public function getConfigInterface()
     {
@@ -387,20 +387,6 @@ class Transparent extends Payflowpro implements TransparentInterface
     public function denyPayment(InfoInterface $payment)
     {
         return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function fetchTransactionInfo(InfoInterface $payment, $transactionId)
-    {
-        $result = parent::fetchTransactionInfo($payment, $transactionId);
-        $this->_canFetchTransactionInfo = false;
-        if ($payment->getIsTransactionApproved()) {
-            $this->acceptPayment($payment);
-        }
-
-        return $result;
     }
 
     /**

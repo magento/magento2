@@ -62,12 +62,12 @@ class InitializerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->quote = $this->getMockBuilder(Quote::class)
-            ->setMethods(['addProduct'])
+            ->onlyMethods(['addProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId'])
+            ->onlyMethods(['getTypeId'])
             ->getMock();
         $this->quoteItem = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()

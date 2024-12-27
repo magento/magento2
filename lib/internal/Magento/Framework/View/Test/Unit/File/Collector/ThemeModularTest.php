@@ -141,8 +141,14 @@ class ThemeModularTest extends TestCase
         }
         $this->fileFactory
             ->method('create')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                if (!empty($withArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
     }
@@ -150,7 +156,7 @@ class ThemeModularTest extends TestCase
     /**
      * @return array
      */
-    public function getFilesDataProvider(): array
+    public static function getFilesDataProvider(): array
     {
         return [
             [

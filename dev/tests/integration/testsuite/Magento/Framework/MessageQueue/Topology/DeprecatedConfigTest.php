@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Topology;
 
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\Iterator as BindingIterator;
 
 /**
@@ -19,9 +20,15 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
     }
 
     public function testGetTopology()
@@ -62,10 +69,10 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
-        $topology = $config->getExchange('overlappingDeprecatedExchange', 'db');
+        $topology = $config->getExchange('overlappingDeprecatedExchange', $this->defaultValueProvider->getConnection());
         $this->assertEquals('overlappingDeprecatedExchange', $topology->getName());
         $this->assertEquals('topic', $topology->getType());
-        $this->assertEquals('db', $topology->getConnection());
+        $this->assertEquals($this->defaultValueProvider->getConnection(), $topology->getConnection());
         $this->assertTrue($topology->isDurable());
         $this->assertFalse($topology->isAutoDelete());
         $this->assertFalse($topology->isInternal());

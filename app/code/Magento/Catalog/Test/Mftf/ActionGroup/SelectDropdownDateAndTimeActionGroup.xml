@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SelectDropdownDateAndTimeActionGroup">
+        <annotations>
+            <description>Select options for Use JavaScript Calendar and Date Fields Order dropdown</description>
+        </annotations>
+
+        <arguments>
+            <argument name="useJsCalender" type="string"/>
+            <argument name="firstFieldOfDateOrder" type="string"/>
+            <argument name="secondFieldOfDateOrder" type="string"/>
+            <argument name="thirdFieldOfDateOrder" type="string" defaultValue="Year"/>
+        </arguments>
+
+        <selectOption selector="{{AdminCustomizeDateAndTimeSection.dateAndTimeJsCalenderStatus}}"
+                      userInput="{{useJsCalender}}" stepKey="selectJsCalender" />
+        <selectOption selector="{{AdminCustomizeDateAndTimeSection.dateAndTimeFirstFieldOrder}}"
+                      userInput="{{firstFieldOfDateOrder}}" stepKey="selectFirstFieldOrder" />
+        <selectOption selector="{{AdminCustomizeDateAndTimeSection.dateAndTimeSecondFieldOrder}}"
+                      userInput="{{secondFieldOfDateOrder}}" stepKey="selectSecondFieldOrder" />
+        <selectOption selector="{{AdminCustomizeDateAndTimeSection.dateAndTimeThirdFieldOrder}}"
+                      userInput="{{thirdFieldOfDateOrder}}" stepKey="selectThirdFieldOrder" />
+    </actionGroup>
+</actionGroups>

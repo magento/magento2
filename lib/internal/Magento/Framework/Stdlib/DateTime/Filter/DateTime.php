@@ -5,6 +5,13 @@
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
+use Exception;
+use IntlDateFormatter;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filter\LocalizedToNormalized;
+use Magento\Framework\Filter\NormalizedToLocalized;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+
 /**
  * Date/Time filter. Converts datetime from localized to internal format.
  *
@@ -14,20 +21,19 @@ namespace Magento\Framework\Stdlib\DateTime\Filter;
 class DateTime extends Date
 {
     /**
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     *
+     * @param TimezoneInterface $localeDate
      */
-    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
+    public function __construct(TimezoneInterface $localeDate)
     {
         parent::__construct($localeDate);
-        $this->_localToNormalFilter = new \Zend_Filter_LocalizedToNormalized(
+        $this->_localToNormalFilter = new LocalizedToNormalized(
             [
                 'date_format' => $this->_localeDate->getDateTimeFormat(
-                    \IntlDateFormatter::SHORT
+                    IntlDateFormatter::SHORT
                 ),
             ]
         );
-        $this->_normalToLocalFilter = new \Zend_Filter_NormalizedToLocalized(
+        $this->_normalToLocalFilter = new NormalizedToLocalized(
             ['date_format' => \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT]
         );
     }
@@ -37,7 +43,7 @@ class DateTime extends Date
      *
      * @param string $value
      * @return string
-     * @throws \Exception
+     * @throws LocalizedException
      * @since 100.1.0
      */
     public function filter($value)
@@ -45,8 +51,10 @@ class DateTime extends Date
         try {
             $dateTime = $this->_localeDate->date($value, null, false);
             return $dateTime->format('Y-m-d H:i:s');
-        } catch (\Exception $e) {
-            throw new \Exception("Invalid input datetime format of value '$value'", $e->getCode(), $e);
+        } catch (Exception $e) {
+            throw new LocalizedException(
+                __('Invalid input datetime format of value "%1"', $value)
+            );
         }
     }
 }

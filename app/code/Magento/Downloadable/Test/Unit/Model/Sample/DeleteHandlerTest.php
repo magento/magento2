@@ -50,7 +50,7 @@ class DeleteHandlerTest extends TestCase
         $this->entityMock = $this->createMock(Product::class);
         $this->sampleRepositoryMock = $this->getMockBuilder(SampleRepository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList', 'delete'])
+            ->onlyMethods(['getList', 'delete'])
             ->getMockForAbstractClass();
 
         $this->deleteHandler = (new ObjectManagerHelper($this))->getObject(

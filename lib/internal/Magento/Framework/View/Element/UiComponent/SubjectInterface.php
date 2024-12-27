@@ -7,6 +7,8 @@ namespace Magento\Framework\View\Element\UiComponent;
 
 /**
  * Interface SubjectInterface
+ *
+ * @api
  */
 interface SubjectInterface
 {

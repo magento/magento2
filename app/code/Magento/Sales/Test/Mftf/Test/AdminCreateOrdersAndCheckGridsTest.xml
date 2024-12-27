@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrdersAndCheckGridsTest">
+        <annotations>
+            <stories value="Create orders and check grids"/>
+            <title value="Create orders, invoices, shipments and credit memos and check grids"/>
+            <description value="Create orders, invoices, shipments and credit memos and check async grids"/>
+            <severity value="AVERAGE"/>
+            <useCaseId value="ACP2E-1367" />
+            <testCaseId value="AC-7106" />
+            <group value="sales"/>
+            <group value="async_operations" />
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.enable_option}}" stepKey="enableAsyncIndexing"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheCleanBefore">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.disable_option}}" stepKey="disableAsyncIndexing"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheCleanAfter">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <createData entity="GuestCart" stepKey="createGuestCartOne"/>
+        <createData entity="SimpleCartItem" stepKey="addCartItemOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+            <requiredEntity createDataKey="createSimpleProduct"/>
+        </createData>
+        <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </createData>
+        <updateData createDataKey="createGuestCartOne" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </updateData>
+
+        <magentoCron groups="default" stepKey="runCronOne"/>
+
+        <createData entity="Invoice" stepKey="invoiceOrderOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </createData>
+
+        <magentoCron groups="default" stepKey="runCronTwo"/>
+
+        <createData entity="GuestCart" stepKey="createGuestCartTwo"/>
+        <createData entity="SimpleCartItem" stepKey="addCartItemTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+            <requiredEntity createDataKey="createSimpleProduct"/>
+        </createData>
+        <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </createData>
+        <updateData createDataKey="createGuestCartTwo" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </updateData>
+
+        <magentoCron groups="default" stepKey="runCronThree"/>
+
+        <createData entity="Shipment" stepKey="shipOrderOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </createData>
+
+        <magentoCron groups="default" stepKey="runCronFour"/>
+
+        <createData entity="GuestCart" stepKey="createGuestCartThree"/>
+        <createData entity="SimpleCartItem" stepKey="addCartItemThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+            <requiredEntity createDataKey="createSimpleProduct"/>
+        </createData>
+        <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </createData>
+        <updateData createDataKey="createGuestCartThree" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </updateData>
+
+        <magentoCron groups="default" stepKey="runCronFive"/>
+
+        <createData entity="CreditMemo" stepKey="refundOrderOne">
+            <requiredEntity createDataKey="createGuestCartOne"/>
+        </createData>
+
+        <magentoCron groups="default" stepKey="runCronSix"/>
+
+        <createData entity="Invoice" stepKey="invoiceOrderThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </createData>
+
+        <magentoCron groups="default" stepKey="runCronSeven"/>
+
+        <createData entity="Shipment" stepKey="shipOrderTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </createData>
+
+        <magentoCron groups="default" stepKey="runCronEight"/>
+
+        <createData entity="Invoice" stepKey="invoiceOrderTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </createData>
+
+        <createData entity="Shipment" stepKey="shipOrderThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </createData>
+
+        <createData entity="CreditMemo" stepKey="refundOrderTwo">
+            <requiredEntity createDataKey="createGuestCartTwo"/>
+        </createData>
+
+        <createData entity="CreditMemo" stepKey="refundOrderThree">
+            <requiredEntity createDataKey="createGuestCartThree"/>
+        </createData>
+
+        <magentoCron groups="default" stepKey="runCronNine"/>
+
+        <magentoCron groups="default" stepKey="runCronTen"/>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderOne">
+            <argument name="entityId" value="$createGuestCartOne.return$"/>
+        </actionGroup>
+
+        <waitForPageLoad time="30" stepKey="waitForPageLoadOne"/>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdOne"/>
+
+        <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageOne"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask1" after="openInvoicesTabOrdersPageOne"/>
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedOne"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="seeForInvoicesTabOpenedOne"/>
+        <actionGroup ref="AdminGoToShipmentTabActionGroup" stepKey="goToShipmentTabOne"/>
+        <seeElement selector="{{AdminOrderShipmentsTabSection.viewShipment}}" stepKey="seeForShipmentTabOpenedOne"/>
+        <actionGroup ref="AdminGoToCreditMemoTabActionGroup" stepKey="goToCreditMemoTabOne"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRowCell('1', 'Status')}}" userInput="Refunded" stepKey="seeCreditMemoStatusInGridOne"/>
+
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderTwo">
+            <argument name="entityId" value="$createGuestCartTwo.return$"/>
+        </actionGroup>
+
+        <waitForPageLoad time="30" stepKey="waitForPageLoadTwo"/>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdTwo"/>
+
+        <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageTwo"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask2" after="openInvoicesTabOrdersPageTwo"/>
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedTwo"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="seeForInvoicesTabOpenedTwo"/>
+        <actionGroup ref="AdminGoToShipmentTabActionGroup" stepKey="goToShipmentTabTwo"/>
+        <seeElement selector="{{AdminOrderShipmentsTabSection.viewShipment}}" stepKey="seeForShipmentTabOpenedTwo"/>
+        <actionGroup ref="AdminGoToCreditMemoTabActionGroup" stepKey="goToCreditMemoTabTwo"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRowCell('1', 'Status')}}" userInput="Refunded" stepKey="seeCreditMemoStatusInGridTwo"/>
+
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderThree">
+            <argument name="entityId" value="$createGuestCartThree.return$"/>
+        </actionGroup>
+
+        <waitForPageLoad time="30" stepKey="waitForPageLoadThree"/>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderIdThree"/>
+
+        <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageThree"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask3" after="openInvoicesTabOrdersPageThree"/>
+        <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedThree"/>
+        <seeElement selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="seeForInvoicesTabOpenedThree"/>
+        <actionGroup ref="AdminGoToShipmentTabActionGroup" stepKey="goToShipmentTabThree"/>
+        <seeElement selector="{{AdminOrderShipmentsTabSection.viewShipment}}" stepKey="seeForShipmentTabOpenedThree"/>
+        <actionGroup ref="AdminGoToCreditMemoTabActionGroup" stepKey="goToCreditMemoTabThree"/>
+        <see selector="{{AdminOrderCreditMemosTabSection.gridRowCell('1', 'Status')}}" userInput="Refunded" stepKey="seeCreditMemoStatusInGridThree"/>
+
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdOne">
+            <argument name="orderId" value="{$grabOrderIdOne}"/>
+        </actionGroup>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridOne"/>
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdTwo">
+            <argument name="orderId" value="{$grabOrderIdTwo}"/>
+        </actionGroup>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridTwo"/>
+
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdThree">
+            <argument name="orderId" value="{$grabOrderIdThree}"/>
+        </actionGroup>
+
+        <see selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" userInput="Closed" stepKey="seeOrderClosedInGridThree"/>
+    </test>
+</tests>

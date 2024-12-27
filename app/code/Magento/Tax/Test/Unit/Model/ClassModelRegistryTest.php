@@ -41,7 +41,7 @@ class ClassModelRegistryTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->classModelFactoryMock = $this->getMockBuilder(ClassModelFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->taxRuleRegistry = $objectManager->getObject(

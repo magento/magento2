@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OrderDataGridDisplaysPurchaseDateTest">
+        <annotations>
+            <stories value="verify purchase date format"/>
+            <title value="Order Data Grid displays Purchase Date in correct format"/>
+            <description value="Order Data Grid displays Purchase Date in correct format"/>
+            <testCaseId value="AC-4455"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <!-- Set Store Code To Urls -->
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToYes"/>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
+                <argument name="websiteCode" value="{{secondCustomWebsite.code}}"/>
+            </actionGroup>
+            <!-- Create second store -->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+                <argument name="website" value="{{secondCustomWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+                <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+            </actionGroup>
+            <!-- Create second store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAllIndexes">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Change time zone for second website-->
+            <actionGroup ref="AdminChangeTimeZoneForDifferentWebsiteActionGroup" stepKey="openConfigPage">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+                <argument name="timeZoneName" value="Hawaii-Aleutian Standard Time (America/Adak)"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <!-- Change time zone for Main website-->
+            <actionGroup ref="AdminChangeTimeZoneForDifferentWebsiteActionGroup" stepKey="openConfigPageSecondTime">
+                <argument name="websiteName" value="Main Website"/>
+                <argument name="timeZoneName" value="Taipei Standard Time (Asia/Taipei)"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurationSecondTime"/>
+            <!-- Create category and simple product -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10</field>
+            </createData>
+            <!-- Open product page and assign grouped project to second website -->
+            <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openAdminProductPage">
+                <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
+                <argument name="website" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Go to Storefront as Customer-->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                <argument name="Customer" value="$$createCustomer$$" />
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Disabled Store URLs -->
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToNo"/>
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete simple product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Delete first customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteFirstCustomer"/>
+            <!-- Delete second customer -->
+            <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
+            <amOnPage url="{{AdminDashboardPage.url}}" stepKey="gotoOnDashboardPage"/>
+            <waitForPageLoad stepKey="waitForDashboardPageToLoad"/>
+            <!-- Reset time zone for Main website-->
+            <actionGroup ref="AdminChangeTimeZoneForDifferentWebsiteActionGroup" stepKey="openConfigPageSecondTime">
+                <argument name="websiteName" value="Main Website"/>
+                <argument name="timeZoneName" value="Central Standard Time (America/Chicago)"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurationSecondTime"/>
+            <!--set main website as default-->
+            <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setMainWebsiteAsDefault">
+                <argument name="websiteName" value="Main Website"/>
+            </actionGroup>
+            <!-- Delete second website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!--reset prouct grid filter-->
+            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridFilter"/>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Go to product page -->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+        <!-- Add Product to Shopping Cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask2 action for preserving Backward Compatibility" stepKey="waitForLoadingMask2"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!-- Click Place Order button -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <!-- capture date at time of Placing Order -->
+        <generateDate date="+2 hour" format="M j, Y" stepKey="generateDateAtFirstOrderTime"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabFirstOrderNumber"/>
+        <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
+        <waitForPageLoad stepKey="waitForDashboardPageLoad"/>
+        <!--set second website as default-->
+        <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setSecondWebsiteAsDefault">
+            <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <!-- Clean config and full page cache-->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- create second Customer-->
+        <createData entity="Simple_US_Customer_CA" stepKey="createSecondCustomer"/>
+        <!--Go to Storefront as Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="secondCustomerLogin">
+            <argument name="Customer" value="$$createSecondCustomer$$" />
+        </actionGroup>
+        <!-- Go to product page -->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPageSecondTime"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoadSecondTime"/>
+        <!-- Add Product to Shopping Cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPageSecondTime">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <!-- Go to Checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCartSecondTime"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFlatRateShippingMethodSecondTime"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextSecondTime"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPaymentSecondTime"/>
+        <!-- Click Place Order button -->
+        <wait time="75" stepKey="waitBeforePlaceOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrderSecondTime"/>
+        <!-- capture date at time of Placing Order -->
+        <generateDate date="+2 hour" format="M j, Y" stepKey="generateDateAtSecondOrderTime"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabSecondOrderNumber"/>
+        <!-- Go to admin and check order status -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForFirstOrder">
+            <argument name="keyword" value="{$grabFirstOrderNumber}"/>
+        </actionGroup>
+        <!--Get date from "Purchase Date" column -->
+        <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateForFirstOrderInDefaultLocale"/>
+        <!--Get date and time in default locale (US)-->
+        <executeJS function="return (new Date('{$grabPurchaseDateForFirstOrderInDefaultLocale}').toLocaleDateString('en-US',{month: 'short', day: 'numeric', year: 'numeric'} ))" stepKey="getDateMonthYearNameForFirstOrderInUS"/>
+        <!--Checking oder placing Date with default "Interface Locale"-->
+        <assertStringContainsString stepKey="checkingFirstOrderDateWithPurchaseDate">
+            <expectedResult type="variable">getDateMonthYearNameForFirstOrderInUS</expectedResult>
+            <actualResult type="variable">grabPurchaseDateForFirstOrderInDefaultLocale</actualResult>
+        </assertStringContainsString>
+        <!--compare date of order with date of purchase-->
+        <assertStringContainsString stepKey="checkingFirstOrderDateWithDefaultInterfaceLocale1">
+            <expectedResult type="variable">generateDateAtFirstOrderTime</expectedResult>
+            <actualResult type="variable">grabPurchaseDateForFirstOrderInDefaultLocale</actualResult>
+        </assertStringContainsString>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForSecondOrder">
+            <argument name="keyword" value="{$grabSecondOrderNumber}"/>
+        </actionGroup>
+        <!--Get date from "Purchase Date" column-->
+        <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateForSecondOrderInDefaultLocale"/>
+        <!--Get date and time in default locale (US)-->
+        <executeJS function="return (new Date('{$grabPurchaseDateForSecondOrderInDefaultLocale}').toLocaleDateString('en-US',{month: 'short', day: 'numeric', year: 'numeric'} ))" stepKey="getDateMonthYearNameForSecondOrderInUS"/>
+        <!--Checking Purchase Date with default "Interface Locale"-->
+        <assertStringContainsString stepKey="checkingSecondOrderDateWithDefaultInterfaceLocale">
+            <expectedResult type="variable">getDateMonthYearNameForSecondOrderInUS</expectedResult>
+            <actualResult type="variable">grabPurchaseDateForSecondOrderInDefaultLocale</actualResult>
+        </assertStringContainsString>
+        <!--compare date of order with date of purchase-->
+        <assertStringContainsString stepKey="checkingSecondOrderDateWithPurchaseDate">
+            <expectedResult type="variable">generateDateAtSecondOrderTime</expectedResult>
+            <actualResult type="variable">grabPurchaseDateForFirstOrderInDefaultLocale</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

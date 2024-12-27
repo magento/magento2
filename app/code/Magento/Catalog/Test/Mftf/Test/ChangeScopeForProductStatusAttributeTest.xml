@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ChangeScopeForProductStatusAttributeTest">
+        <annotations>
+            <stories value="Admin Change Scope For Products Status For Attribute"/>
+            <features value="Catalog"/>
+            <title value="Admin Change Scope For Products Status For Attribute"/>
+            <description value="Admin Change Scope For Products Status For Attribute"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27249"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- create category, simple product -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <!--Create First website,store and 2 store views-->
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="goToAdminSystemStorePage"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateNewWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="adminCreateNewStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="storeViewData1"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="storeViewData2"/>
+            </actionGroup>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!--Create Second website,store and 2 store views-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite" >
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStore" >
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createFirstStoreView1">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="storeViewData3"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView2">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="storeViewData4"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!-- Delete First Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite1">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <!-- Delete Second Website -->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite2">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!-- Delete category, simple product -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+
+        <!-- Go to product page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+
+        <!--Assign product to custom website and save-->
+        <actionGroup ref="AdminAssignProductInWebsiteActionGroup" stepKey="selectProductInWebsites">
+            <argument name="website" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
+
+        <!--Switch to Store view 1-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView1">
+            <argument name="storeViewName" value="{{storeViewData1.name}}"/>
+        </actionGroup>
+
+        <!-- uncheck the product status use default -->
+        <waitForElementVisible selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="waitForDefaultValueCheckBox"/>
+        <click selector="{{AdminProductFormSection.productStatusUseDefault}}" stepKey="unCheckUseDefaultValueCheckBox"/>
+
+        <!-- Change status of product to "Disable" and save it -->
+        <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
+
+        <!--Switch to Store view 2 -->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView2AndAssertTheProductStatus">
+            <argument name="storeViewName" value="{{storeViewData2.name}}"/>
+        </actionGroup>
+
+        <!-- Verify that product is disable -->
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('2')}}" stepKey="assertThatProductSetToDisabled"/>
+
+        <!-- Enable the product for the second storeview -->
+        <waitForElementVisible selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="waitForProductEnableSlider"/>
+        <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="enableProduct"/>
+        <seeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="seeThatProductIsEnabled"/>
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('1')}}" stepKey="assertThatProductSetToEnabled"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProductAgain"/>
+
+        <!--Switch to Store view 1 Again -->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchToStoreView1Again">
+            <argument name="storeViewName" value="{{storeViewData1.name}}"/>
+        </actionGroup>
+
+        <!-- Verify that product is enable -->
+        <seeElement selector="{{AdminProductFormSection.productStatusValue('1')}}" stepKey="assertThatProductSetToEnabledAgain"/>
+    </test>
+</tests>

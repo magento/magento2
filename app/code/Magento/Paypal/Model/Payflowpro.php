@@ -6,6 +6,7 @@
 
 namespace Magento\Paypal\Model;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
@@ -612,7 +613,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
     {
         try {
             return $this->gateway->postRequest($request, $config);
-        } catch (\Zend_Http_Client_Exception $e) {
+        } catch (RuntimeException $e) {
             throw new ClientException(
                 __('Payment Gateway is unreachable at the moment. Please use another payment option.'),
                 $e
@@ -632,7 +633,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request = $this->buildBasicRequest();
         $request->setAmt($this->formatPrice($amount));
         $request->setAcct($payment->getCcNumber());
-        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . substr($payment->getCcExpYear(), -2, 2));
+        $expYear = $payment->getCcExpYear() !== null ? substr($payment->getCcExpYear(), -2, 2) : '';
+        $request->setExpdate(sprintf('%02d', $payment->getCcExpMonth()) . $expYear);
         $request->setCvv2($payment->getCcCid());
 
         $order = $payment->getOrder();

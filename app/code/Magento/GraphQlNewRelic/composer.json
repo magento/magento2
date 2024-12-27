@@ -1,0 +1,23 @@
+{
+    "name": "magento/module-graph-ql-new-relic",
+    "description": "N/A",
+    "type": "magento2-module",
+    "require": {
+        "php": "~8.2.0||~8.3.0",
+        "magento/framework": "*",
+        "magento/module-new-relic-reporting": "*",
+        "magento/module-graph-ql": "*"
+    },
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\GraphQlNewRelic\\": ""
+        }
+    }
+}

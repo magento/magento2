@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EditOrderWithBundleProductBackendProductEvenAfterOneOfMoreSelectedOptionsAreRemovedFromAdminTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Verify that the user is able to checkout bundled product even after one of more selected options are removed from admin"/>
+            <title value="Verify that the user is able to checkout bundled product even after one of more selected options are removed from admin"/>
+            <description value="Verify that the user is able to checkout bundled product even after one of more selected options are removed from admin"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4608"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- simple product1-->
+            <createData entity="SimpleProduct" stepKey="SimpleProduct1">
+                <field key="price">10.00</field>
+            </createData>
+
+            <!-- simple product2 -->
+            <createData entity="SimpleProduct" stepKey="SimpleProduct2">
+                <field key="price">15.00</field>
+            </createData>
+
+            <createData entity="ApiBundleProduct" stepKey="createBundleProduct"/>
+
+            <createData entity="RadioButtonsOption" stepKey="radioButtonsOption1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+
+            <createData entity="RadioButtonsOption" stepKey="radioButtonsOption2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToFirstProduct1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="radioButtonsOption1"/>
+                <requiredEntity createDataKey="SimpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToSecondProduct12">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="radioButtonsOption2"/>
+                <requiredEntity createDataKey="SimpleProduct2"/>
+            </createData>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="SimpleProduct1" stepKey="DeleteSimpleProduct1"/>
+
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="SimpleProduct2" stepKey="DeleteSimpleProduct2"/>
+
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Login customer on storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <!--Open Product Page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="product" value="$createBundleProduct$"/>
+        </actionGroup>
+        <!--Add bundle to cart-->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickAddToCart"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
+
+        <waitForText selector="{{StorefrontBundledSection.nthItemOptionsValue('1')}}" userInput="1 x $$SimpleProduct1.name$$ $10.00" stepKey="seeOptionValue1"/>
+        <waitForText selector="{{StorefrontBundledSection.nthItemOptionsValue('2')}}" userInput="1 x $$SimpleProduct2.name$$ $15.00" stepKey="seeOptionValue2"/>
+
+        <openNewTab stepKey="openNewTab"/>
+
+        <!--Open bundle product in admin-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createBundleProduct.id$"/>
+        </actionGroup>
+
+        <!-- Remove second option -->
+        <actionGroup ref="DeleteBundleOptionByIndexActionGroup" stepKey="deleteSecondOption">
+            <argument name="deleteIndex" value="1"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
+
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+
+        <reloadPage stepKey="reloadPage"/>
+
+        <dontSee selector="{{StorefrontBundledSection.nthItemOptionsValue('2')}}" userInput="1 x $$SimpleProduct1.name$$ $15.00" stepKey="assertNotBannerDescription"/>
+
+        <actionGroup ref="AssertStorefrontErrorMessageSignInPopupFormActionGroup" stepKey="seeErrorMessage">
+            <argument name="message" value="Some of the products below do not have all the required options."/>
+        </actionGroup>
+
+        <click stepKey="clickEdit" selector="{{CheckoutCartProductSection.nthEditButton('1')}}"/>
+        <waitForElementClickable selector="{{StorefrontProductInfoMainSection.updateCart}}" stepKey="waitForUpdateCartButtonClickable" />
+        <click selector="{{StorefrontProductInfoMainSection.updateCart}}" stepKey="clickUpdateCartButton"/>
+        <waitForElementClickable selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitForProceedToCheckoutClickable" />
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+
+        <waitForText selector="{{CheckoutHeaderSection.shippingMethodStep}}" userInput="Shipping" stepKey="checkShippingHeader"/>
+
+    </test>
+</tests>

@@ -25,7 +25,7 @@ define([
         }));
     }
 
-    $('#order-view-cancel-button').on('click', function () {
+    $(document).on('click', '#order-view-cancel-button', function () {
         var msg = $.mage.__('Are you sure you want to cancel this order?'),
             url = $('#order-view-cancel-button').data('url');
 
@@ -45,13 +45,13 @@ define([
         return false;
     });
 
-    $('#order-view-hold-button').on('click', function () {
+    $(document).on('click', '#order-view-hold-button', function () {
         var url = $('#order-view-hold-button').data('url');
 
         getForm(url).appendTo('body').trigger('submit');
     });
 
-    $('#order-view-unhold-button').on('click', function () {
+    $(document).on('click', '#order-view-unhold-button', function () {
         var url = $('#order-view-unhold-button').data('url');
 
         getForm(url).appendTo('body').trigger('submit');

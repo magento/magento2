@@ -18,6 +18,7 @@
             <testCaseId value="MC-228"/>
             <group value="bundle"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category -->
@@ -114,7 +115,9 @@
             <deleteData createDataKey="createThirdBundleProduct" stepKey="deleteThirdBundleProduct"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Open created category on Storefront -->

@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <group value="product"/>
             <testCaseId value="MAGETWO-92384"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -82,5 +83,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

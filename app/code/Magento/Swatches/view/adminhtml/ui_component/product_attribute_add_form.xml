@@ -170,6 +170,10 @@
                     <settings>
                         <dataType>text</dataType>
                         <label translate="true">Admin</label>
+                        <required>true</required>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
                     </settings>
                 </field>
                 <field name="position" component="Magento_Catalog/js/form/element/input" formElement="input">
@@ -292,6 +296,10 @@
                     <settings>
                         <dataType>text</dataType>
                         <label translate="true">Admin</label>
+                        <required>true</required>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
                     </settings>
                 </field>
                 <field name="position" component="Magento_Catalog/js/form/element/input" formElement="input">

@@ -17,7 +17,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\Validate;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -28,7 +28,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ValidateTest extends ProductTest
+class ValidateTest extends ProductTestCase
 {
     /** @var Validate */
     protected $action;
@@ -75,7 +75,7 @@ class ValidateTest extends ProductTest
         );
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'addData', 'getSku', 'getTypeId', 'getStoreId', '__sleep', 'getAttributes',
                 'setAttributeSetId',
             ])
@@ -91,7 +91,7 @@ class ValidateTest extends ProductTest
 
         $resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultPageFactory->expects($this->any())->method('create')->willReturn($this->resultPage);
 
@@ -100,7 +100,7 @@ class ValidateTest extends ProductTest
             ->getMock();
         $resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultForwardFactory->expects($this->any())
             ->method('create')
@@ -119,14 +119,14 @@ class ValidateTest extends ProductTest
 
         $this->productFactory = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
 
         $this->resultJson = $this->createMock(Json::class);
         $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultJsonFactory->expects($this->any())->method('create')->willReturn($this->resultJson);
 

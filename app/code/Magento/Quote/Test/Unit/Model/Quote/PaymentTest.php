@@ -56,7 +56,7 @@ class PaymentTest extends TestCase
             ->getMock();
         $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
+            ->onlyMethods(['unserialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $serializer->expects($this->any())
@@ -96,7 +96,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function yearValueDataProvider()
+    public static function yearValueDataProvider()
     {
         return [
             [null, null],
@@ -195,7 +195,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function getAdditionalDataDataProvider()
+    public static function getAdditionalDataDataProvider()
     {
         return [
             [
@@ -226,7 +226,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function importDataPositiveCheckDataProvider()
+    public static function importDataPositiveCheckDataProvider()
     {
         return [
             [

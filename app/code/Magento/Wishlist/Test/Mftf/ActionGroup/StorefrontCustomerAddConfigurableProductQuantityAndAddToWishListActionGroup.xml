@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" extends="StorefrontCustomerAddProductToWishlistActionGroup">
+        <annotations>
+            <description>Fills in the provided Configurable Product Quantity on a Storefront product page. Clicks on Add to Wish List.</description>
+        </annotations>
+        <arguments>
+            <argument name="quantity" defaultValue="1" type="string"/>
+            <argument name="option" type="string" defaultValue=""/>
+        </arguments>
+
+        <clearField selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="clearTheQuantityField" before="WaitForWishList"/>
+        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="{{quantity}}" stepKey="fillTheProductQuantity" after="clearTheQuantityField"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{option}}" stepKey="selectOption" after="fillTheProductQuantity"/>
+    </actionGroup>
+</actionGroups>

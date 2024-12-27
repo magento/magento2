@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckZeroSubtotalOrderWithCustomStatusTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Zero Subtotal Checkout Order"/>
+            <title value="Zero Subtotal Checkout Order must have the new order status set in configuration." />
+            <description value="Order placed with Zero Subtotal Checkout payment must have the new order status set in configuration."/>
+            <testCaseId value="AC-6723"/>
+            <useCaseId value="ACP2E-1120"/>
+            <severity value="AVERAGE"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleproduct">
+                <requiredEntity createDataKey="simplecategory"/>
+            </createData>
+            <createData entity="ApiSalesRule" stepKey="createCartPriceRule">
+                <field key="discount_amount">100</field>
+            </createData>
+            <createData entity="ApiSalesRuleCoupon" stepKey="createCartPriceRuleCoupon">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="freeShippingMethodsSettingConfig"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--      To be removed when BI Changes are allowed      -->
+            <comment userInput="Preserve BIC. PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
+            <comment userInput="Preserve BIC. CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches" />
+        </before>
+
+        <after>
+            <!-- Assign default pending status to state new -->
+            <actionGroup ref="AdminOrderStatusToStateAssignActionGroup" stepKey="resetDefaultStatusToState">
+                <argument name="orderStatus" value="{{OrderStatus.pending}}" />
+                <argument name="orderState" value="{{defaultOrderStatus.label}}" />
+            </actionGroup>
+
+            <magentoCLI command="config:set {{EnableFreeOrderStatusPending.path}} {{EnableFreeOrderStatusPending.value}}" stepKey="disablePaymentMethodsSettingConfig"/>
+            <magentoCLI command="config:set {{EnableFreeOrderPaymentAutomaticInvoiceAction.path}} {{EnableFreeOrderPaymentAutomaticInvoiceAction.value}}" stepKey="enableFreeOrderPaymentAutomaticInvoiceAction"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShippingConfig"/>
+            <!-- Unassign order status -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
+                <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+                <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
+            <waitForPageLoad stepKey="waitForGridLoad"/>
+
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!--      To be removed when BI Changes are allowed      -->
+            <comment userInput="Preserving BIC. DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+        </after>
+
+        <!-- Go to new order status page -->
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
+
+        <!-- Fill the form and validate message -->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+
+        <!-- Verify the order status grid page shows the order status we just created -->
+        <actionGroup ref="AssertOrderStatusExistsInGrid" stepKey="searchCreatedOrderStatus">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+
+        <!-- Assign status to state -->
+        <comment userInput="BIC workaround" stepKey="clickAssignStatusBtn"/>
+        <comment userInput="BIC workaround" stepKey="selectOrderStatus"/>
+        <comment userInput="BIC workaround" stepKey="selectOrderState"/>
+        <comment userInput="BIC workaround" stepKey="orderStatusAsDefault"/>
+        <comment userInput="BIC workaround" stepKey="visibleOnStorefront"/>
+        <comment userInput="BIC workaround" stepKey="clickSaveStatus"/>
+        <comment userInput="BIC workaround" stepKey="seeSuccess"/>
+
+        <actionGroup ref="AdminOrderStatusToStateAssignActionGroup" stepKey="resetDefaultStatusToState">
+            <argument name="orderStatus" value="{{defaultOrderStatus.label}}" />
+            <argument name="orderState" value="{{OrderState.new}}" />
+        </actionGroup>
+
+        <!-- Prepare data for constraints -->
+        <magentoCLI command="config:set {{EnableFreeOrderStatusCustom.path}} {{defaultOrderStatus.status}}" stepKey="enableNewOrderStatus"/>
+        <magentoCLI command="config:set {{DisableFreeOrderPaymentAutomaticInvoiceAction.path}} {{DisableFreeOrderPaymentAutomaticInvoiceAction.value}}" stepKey="enableNewOrderPaymentAction"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+
+        <!-- Add product to cart and place order -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
+            <argument name="product" value="$$simpleproduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="clickToProceedToCheckout"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodSelectorNextButton}}" stepKey="waitForNextButtonVisible" />
+
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormData">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="shipmentFormFreeShippingActionGroup">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButtonOnShippingPage" />
+        <waitForPageLoad stepKey="waitForPaymentLoading"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl" />
+
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
+            <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>
+        </actionGroup>
+
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <!-- Go to admin and check order status -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForOrder">
+            <argument name="keyword" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+            <argument name="status" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+
+        <!-- Open order -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <!-- Assert Order Status on Order view page -->
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.invoiceBtn}}" stepKey="seeInvoiceBtn"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="verifyOrderStatusOnOrderViewPage">
+            <argument name="status" value="{{defaultOrderStatus.label}}" />
+        </actionGroup>
+    </test>
+</tests>

@@ -99,7 +99,12 @@ class SaveHandlerTest extends TestCase
             ->onlyMethods(['getExtensionAttributes', 'getCategoryIds'])
             ->addMethods(['setAffectedCategoryIds', 'setIsChangedCategories'])
             ->getMock();
-        $product->method('setIsChangedCategories')->withConsecutive([false]);
+        $product->method('setIsChangedCategories')
+            ->willReturnCallback(function ($arg) {
+                if ($arg === false) {
+                    return null;
+                }
+            });
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -131,7 +136,7 @@ class SaveHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function getCategoryDataProvider(): array
+    public static function getCategoryDataProvider(): array
     {
         return [
             [

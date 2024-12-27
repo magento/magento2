@@ -30,11 +30,6 @@ abstract class AbstractEntityUrl implements ResolverInterface
     private $customUrlLocator;
 
     /**
-     * @var int
-     */
-    private $redirectType;
-
-    /**
      * @var Uid
      */
     private $idEncoder;
@@ -64,98 +59,87 @@ abstract class AbstractEntityUrl implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['url']) || empty(trim($args['url']))) {
-            throw new GraphQlInputException(__('"url" argument should be specified and not empty'));
-        }
-
+        $this->validateArgs($args);
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $result = null;
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $urlParts = parse_url($args['url']);
-        $url = $urlParts['path'] ?? $args['url'];
-        if (substr($url, 0, 1) === '/' && $url !== '/') {
-            $url = ltrim($url, '/');
-        }
-        $this->redirectType = 0;
+
+        $urlParts = $this->parseUrl($args['url']);
+        $url = $urlParts['path'];
         $customUrl = $this->customUrlLocator->locateUrl($url);
         $url = $customUrl ?: $url;
-        $finalUrlRewrite = $this->findFinalUrl($url, $storeId);
-        if ($finalUrlRewrite) {
-            $relativeUrl = $finalUrlRewrite->getRequestPath();
-            $resultArray = $this->rewriteCustomUrls($finalUrlRewrite, $storeId) ?? [
-                    'id' => $finalUrlRewrite->getEntityId(),
-                    'entity_uid' => $this->idEncoder->encode((string)$finalUrlRewrite->getEntityId()),
-                    'canonical_url' => $relativeUrl,
-                    'relative_url' => $relativeUrl,
-                    'redirectCode' => $this->redirectType,
-                    'redirect_code' => $this->redirectType,
-                    'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
-                ];
-            if (!empty($urlParts['query'])) {
-                $resultArray['relative_url'] .= '?' . $urlParts['query'];
+        $redirectType = 0;
+        $urlRewrite = $this->findUrlFromRequestPath($url, $storeId);
+        if ($urlRewrite) {
+            $redirectType = $urlRewrite->getRedirectType();
+        } else {
+            $urlRewrite = $this->findUrlFromTargetPath($url, $storeId);
+        }
+        if ($urlRewrite) {
+            $finalUrlRewrite = $this->findFinalUrl($urlRewrite);
+            $entityId = (int) $finalUrlRewrite->getEntityId();
+            $entityType = $finalUrlRewrite->getEntityType();
+            if (!$entityId) {
+                $entityUrlRewrite = $this->findUrlFromTargetPath($finalUrlRewrite->getTargetPath(), $storeId);
+                $entityId = (int) $entityUrlRewrite->getEntityId();
+                $entityType = $entityUrlRewrite->getEntityType();
             }
-
-            if (empty($resultArray['id'])) {
+            if ($redirectType === 0 && !$entityId) {
                 throw new GraphQlNoSuchEntityException(
                     __('No such entity found with matching URL key: %url', ['url' => $url])
                 );
             }
+            $relativeUrl = $redirectType > 0
+                ? $this->getRedirectPath($finalUrlRewrite)
+                : $urlRewrite->getRequestPath();
 
-            $result = $resultArray;
+            if (!empty($urlParts['query'])) {
+                $relativeUrl .= '?' . $urlParts['query'];
+            }
+            $result = $this->getData($relativeUrl, $redirectType, $entityType, $entityId);
         }
+
         return $result;
     }
 
     /**
-     * Handle custom urls with and without redirects
+     * Format and returns url data
      *
-     * @param UrlRewrite $finalUrlRewrite
-     * @param int $storeId
-     * @return array|null
+     * @param string $url
+     * @param int $redirectType
+     * @param string|null $entityType
+     * @param int|null $entityId
+     * @return array
      */
-    private function rewriteCustomUrls(UrlRewrite $finalUrlRewrite, int $storeId): ?array
+    private function getData(string $url, int $redirectType, ?string $entityType, ?int $entityId)
     {
-        if ($finalUrlRewrite->getEntityType() === 'custom' || !($finalUrlRewrite->getEntityId() > 0)) {
-            $finalCustomUrlRewrite = clone $finalUrlRewrite;
-            $finalUrlRewrite = $this->findFinalUrl($finalCustomUrlRewrite->getTargetPath(), $storeId, true);
-            $relativeUrl =
-                $finalCustomUrlRewrite->getRedirectType() == 0
-                    ? $finalCustomUrlRewrite->getRequestPath() : $finalUrlRewrite->getRequestPath();
-            return [
-                'id' => $finalUrlRewrite->getEntityId(),
-                'entity_uid' => $this->idEncoder->encode((string)$finalUrlRewrite->getEntityId()),
-                'canonical_url' => $relativeUrl,
-                'relative_url' => $relativeUrl,
-                'redirectCode' => $finalCustomUrlRewrite->getRedirectType(),
-                'redirect_code' => $finalCustomUrlRewrite->getRedirectType(),
-                'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
-            ];
-        }
-        return null;
+        return [
+            'id' => $entityId,
+            'entity_uid' => $this->idEncoder->encode((string)$entityId),
+            'canonical_url' => $url,
+            'relative_url' => $url,
+            'redirectCode' => $redirectType,
+            'redirect_code' => $redirectType,
+            'type' => $entityId ? $this->sanitizeType($entityType) : null
+        ];
     }
 
     /**
      * Find the final url passing through all redirects if any
      *
-     * @param string $requestPath
-     * @param int $storeId
-     * @param bool $findCustom
-     * @return UrlRewrite|null
+     * @param UrlRewrite $urlRewrite
+     * @return UrlRewrite
      */
-    private function findFinalUrl(string $requestPath, int $storeId, bool $findCustom = false): ?UrlRewrite
+    private function findFinalUrl(UrlRewrite $urlRewrite): UrlRewrite
     {
-        $urlRewrite = $this->findUrlFromRequestPath($requestPath, $storeId);
-        if ($urlRewrite) {
-            $this->redirectType = $urlRewrite->getRedirectType();
-            while ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
-                $urlRewrite = $this->findUrlFromRequestPath($urlRewrite->getTargetPath(), $storeId);
+        do {
+            $nextUrlRewrite = $this->findUrlFromRequestPath(
+                $urlRewrite->getTargetPath(),
+                (int) $urlRewrite->getStoreId()
+            );
+            if ($nextUrlRewrite) {
+                $urlRewrite = $nextUrlRewrite;
             }
-        } else {
-            $urlRewrite = $this->findUrlFromTargetPath($requestPath, $storeId);
-        }
-        if ($urlRewrite && ($findCustom && !$urlRewrite->getEntityId() && !$urlRewrite->getIsAutogenerated())) {
-            $urlRewrite = $this->findUrlFromTargetPath($urlRewrite->getTargetPath(), $storeId);
-        }
+        } while ($nextUrlRewrite);
 
         return $urlRewrite;
     }
@@ -200,8 +184,56 @@ abstract class AbstractEntityUrl implements ResolverInterface
      * @param string $type
      * @return string
      */
-    private function sanitizeType(string $type) : string
+    private function sanitizeType(string $type): string
     {
         return strtoupper(str_replace('-', '_', $type));
+    }
+
+    /**
+     * Returns url components
+     *
+     * @param string $url
+     * @return array
+     */
+    private function parseUrl(string $url): array
+    {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $urlParts = parse_url($url);
+        if (!is_array($urlParts)) {
+            $urlParts = [];
+            $urlParts['path'] = $url;
+        }
+        if (substr($urlParts['path'], 0, 1) === '/' && $urlParts['path'] !== '/') {
+            $urlParts['path'] = ltrim($urlParts['path'], '/');
+        }
+
+        return $urlParts;
+    }
+
+    /**
+     * Get path to redirect to
+     *
+     * @param UrlRewrite $urlRewrite
+     * @return string
+     */
+    private function getRedirectPath(UrlRewrite $urlRewrite): string
+    {
+        return $urlRewrite->getRedirectType() > 0
+            ? $urlRewrite->getTargetPath()
+            : $urlRewrite->getRequestPath();
+    }
+
+    /**
+     * Validates input
+     *
+     * @param array $args
+     * @return void
+     * @throws GraphQlInputException
+     */
+    private function validateArgs(array $args): void
+    {
+        if (!isset($args['url']) || empty(trim($args['url']))) {
+            throw new GraphQlInputException(__('"url" argument should be specified and not empty'));
+        }
     }
 }

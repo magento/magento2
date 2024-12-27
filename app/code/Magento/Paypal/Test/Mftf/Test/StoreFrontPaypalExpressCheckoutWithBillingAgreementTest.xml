@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontPaypalExpressCheckoutWithBillingAgreementTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal express checkout with billing agreement"/>
+            <title value="Sign Up to Billing Agreement during checkout from mini Shopping Cart"/>
+            <description value="Place an order with billing agreement using paypal express checkout as payment method"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5547"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Configure PayPal Express Checkout -->
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableBillingAgreementActionGroup" stepKey="enableBillingAgreement">
+                <argument name="countryCode" value="us"/>
+            </actionGroup>
+            <magentoCLI command="config:set payment/paypal_express/allow_ba_signup auto" stepKey="enableAutoBilling"/>
+        </before>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+            <!-- Login to StoreFront -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <!-- Add product to cart -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+            <!-- Go to Checkout Page -->
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+            <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping" />
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+            <!-- Click on PayPal payment radio button -->
+            <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+            <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+            <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+            <!-- Login to Paypal in-context-->
+            <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+            <!-- Click PayPal button and go back to Magento site -->
+            <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+            <!-- I see order successful Page -->
+            <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+            <waitForElementVisible selector="{{CheckoutSuccessMainSection.billingAgreement}}" stepKey="waitForBillingAgreement"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.billingAgreement}}" stepKey="billingAgreement"/>
+            <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+                <actualResult type="const">$orderNumber</actualResult>
+            </assertNotEmpty>
+            <assertNotEmpty stepKey="assertBillingAgreementIsNotEmpty">
+                <actualResult type="const">$billingAgreement</actualResult>
+            </assertNotEmpty>
+        <after>
+            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableBillingAgreementActionGroup" stepKey="disableBillingAgreement">
+                <argument name="countryCode" value="us"/>
+            </actionGroup>
+            <magentoCLI command="config:set payment/paypal_express/allow_ba_signup never" stepKey="disableAutoBilling"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

@@ -99,17 +99,17 @@ class Shipment extends AbstractItems
             }
 
             if (!isset($drawItems[$optionId])) {
-                $drawItems[$optionId] = ['lines' => [], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [], 'height' => 20];
             }
 
             if ($childItem->getParentItem() && $prevOptionId != $attributes['option_id']) {
                 $line[0] = [
                     'font' => 'italic',
                     'text' => $this->string->split($attributes['option_label'], 60, true, true),
-                    'feed' => 60,
+                    'feed' => 100,
                 ];
 
-                $drawItems[$optionId] = ['lines' => [$line], 'height' => 15];
+                $drawItems[$optionId] = ['lines' => [$line], 'height' => 20];
 
                 $line = [];
 
@@ -134,10 +134,10 @@ class Shipment extends AbstractItems
 
             // draw Name
             if ($childItem->getParentItem()) {
-                $feed = 65;
+                $feed = 110;
                 $name = $this->getValueHtml($childItem);
             } else {
-                $feed = 60;
+                $feed = 100;
                 $name = $childItem->getName();
             }
             $text = [];
@@ -151,7 +151,7 @@ class Shipment extends AbstractItems
             foreach ($this->string->split($childItem->getSku(), 25) as $part) {
                 $text[] = $part;
             }
-            $line[] = ['text' => $text, 'feed' => 440];
+            $line[] = ['text' => $text, 'feed' => 565, 'align' => 'right'];
 
             $drawItems[$optionId]['lines'][] = $line;
         }
@@ -169,12 +169,13 @@ class Shipment extends AbstractItems
                         true
                     ),
                     'font' => 'italic',
-                    'feed' => 60,
+                    'feed' => 110,
                 ];
 
                 if ($option['value']) {
                     $text = [];
                     $printValue = $option['print_value'] ?? $this->filterManager->stripTags($option['value']);
+                    $printValue = str_replace(PHP_EOL, ', ', $printValue);
                     $values = explode(', ', $printValue);
                     foreach ($values as $value) {
                         foreach ($this->string->split($value, 50, true, true) as $subValue) {
@@ -182,10 +183,10 @@ class Shipment extends AbstractItems
                         }
                     }
 
-                    $lines[][] = ['text' => $text, 'feed' => 65];
+                    $lines[][] = ['text' => $text, 'feed' => 115];
                 }
 
-                $drawItems[] = ['lines' => $lines, 'height' => 15];
+                $drawItems[] = ['lines' => $lines, 'height' => 20, 'shift' => 5];
             }
         }
 

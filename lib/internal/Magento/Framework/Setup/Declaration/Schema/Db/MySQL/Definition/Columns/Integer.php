@@ -107,7 +107,7 @@ class Integer implements DbDefinitionProcessorInterface
         $matches = [];
         if (preg_match(
             '/^(?<type>(?:big|small|tiny|medium)?int)(?:\((?<padding>\d+)\))?/',
-            $data['definition'],
+            $data['definition'] ?? '',
             $matches
         )) {
             // we have an agreement that tinyint(1) is Boolean

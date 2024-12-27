@@ -293,7 +293,7 @@ class AreaTest extends TestCase
     /**
      * @return array
      */
-    public function detectDesignByRequestDataProvider()
+    public static function detectDesignByRequestDataProvider()
     {
         return [
             [false, 0, 1],

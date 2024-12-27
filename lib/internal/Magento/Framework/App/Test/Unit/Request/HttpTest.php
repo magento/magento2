@@ -78,9 +78,8 @@ class HttpTest extends TestCase
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods(['cleanString'])
+            ->onlyMethods(['cleanString'])
             ->getMock();
-        $this->converterMock->expects($this->any())->method('cleanString')->willReturnArgument(0);
 
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
@@ -258,14 +257,16 @@ class HttpTest extends TestCase
 
     /**
      * @param array $serverVariables
+     * @param string $cleanHeaderHttpHost
      * @param string $expectedResult
      * @dataProvider serverVariablesProvider
      */
-    public function testGetDistroBaseUrl($serverVariables, $expectedResult)
+    public function testGetDistroBaseUrl($serverVariables, $cleanHeaderHttpHost, $expectedResult)
     {
         $originalServerValue = $_SERVER;
         $_SERVER = $serverVariables;
         $this->model = $this->getModel();
+        $this->converterMock->expects($this->once())->method('cleanString')->willReturn($cleanHeaderHttpHost);
         $this->assertEquals($expectedResult, $this->model->getDistroBaseUrl());
 
         $_SERVER = $originalServerValue;
@@ -284,7 +285,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function getDistroBaseUrlPathDataProvider()
+    public static function getDistroBaseUrlPathDataProvider()
     {
         return [
             [null, '/'],
@@ -301,7 +302,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function serverVariablesProvider()
+    public static function serverVariablesProvider()
     {
         $returnValue = [];
         $defaultServerData = [
@@ -314,37 +315,53 @@ class HttpTest extends TestCase
         $secureUnusualPort = $noHttpsData = $httpsOffData = $noHostData = $noScriptNameData = $defaultServerData;
 
         unset($noScriptNameData['SCRIPT_NAME']);
-        $returnValue['no SCRIPT_NAME'] = [$noScriptNameData, 'http://localhost/'];
+        $returnValue['no SCRIPT_NAME'] = [$noScriptNameData, $noScriptNameData['HTTP_HOST'], 'http://localhost/'];
 
         unset($noHostData['HTTP_HOST']);
-        $returnValue['no HTTP_HOST'] = [$noHostData, 'http://localhost/'];
+        $returnValue['no HTTP_HOST'] = [$noHostData, '', 'http://localhost/'];
 
         $httpsOffData['HTTPS'] = 'off';
-        $returnValue['HTTPS off'] = [$httpsOffData, 'http://sample.host.com/'];
+        $returnValue['HTTPS off'] = [$httpsOffData, $httpsOffData['HTTP_HOST'], 'http://sample.host.com/'];
 
         unset($noHttpsData['HTTPS']);
-        $returnValue['no HTTPS'] = [$noHttpsData, 'http://sample.host.com/'];
+        $returnValue['no HTTPS'] = [$noHttpsData, $noHttpsData['HTTP_HOST'], 'http://sample.host.com/'];
 
         $noHttpsNoServerPort = $noHttpsData;
         unset($noHttpsNoServerPort['SERVER_PORT']);
-        $returnValue['no SERVER_PORT'] = [$noHttpsNoServerPort, 'http://sample.host.com/'];
+        $returnValue['no SERVER_PORT'] = [
+            $noHttpsNoServerPort,
+            $noHttpsNoServerPort['HTTP_HOST'],
+            'http://sample.host.com/'
+        ];
 
         $noHttpsButSecurePort = $noHttpsData;
         $noHttpsButSecurePort['SERVER_PORT'] = 443;
-        $returnValue['no HTTP but secure port'] = [$noHttpsButSecurePort, 'https://sample.host.com/'];
+        $returnValue['no HTTP but secure port'] = [
+            $noHttpsButSecurePort,
+            $noHttpsButSecurePort['HTTP_HOST'],
+            'https://sample.host.com/'
+        ];
 
         $notSecurePort = $noHttpsData;
         $notSecurePort['SERVER_PORT'] = 81;
         $notSecurePort['HTTP_HOST'] = 'sample.host.com:81';
-        $returnValue['not secure not standard port'] = [$notSecurePort, 'http://sample.host.com:81/'];
+        $returnValue['not secure not standard port'] = [
+            $notSecurePort,
+            $notSecurePort['HTTP_HOST'],
+            'http://sample.host.com:81/'
+        ];
 
         $secureUnusualPort['SERVER_PORT'] = 441;
         $secureUnusualPort['HTTP_HOST'] = 'sample.host.com:441';
-        $returnValue['not standard secure port'] = [$secureUnusualPort, 'https://sample.host.com:441/'];
+        $returnValue['not standard secure port'] = [
+            $secureUnusualPort,
+            $secureUnusualPort['HTTP_HOST'],
+            'https://sample.host.com:441/'
+        ];
 
         $customUrlPathData = $noHttpsData;
         $customUrlPathData['SCRIPT_FILENAME'] = '/some/dir/custom.php';
-        $returnValue['custom path'] = [$customUrlPathData, 'http://sample.host.com/'];
+        $returnValue['custom path'] = [$customUrlPathData, $customUrlPathData['HTTP_HOST'], 'http://sample.host.com/'];
 
         return $returnValue;
     }
@@ -364,7 +381,7 @@ class HttpTest extends TestCase
         $configOffloadHeader = 'Header-From-Proxy';
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
@@ -409,7 +426,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function httpSafeMethodProvider()
+    public static function httpSafeMethodProvider()
     {
         return [
             'Test 1' => ['GET'],
@@ -422,7 +439,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function httpNotSafeMethodProvider()
+    public static function httpNotSafeMethodProvider()
     {
         return [
             'Test 1' => ['POST'],
@@ -437,7 +454,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function isSecureDataProvider()
+    public static function isSecureDataProvider()
     {
         /**
          * Data structure:
@@ -495,7 +512,7 @@ class HttpTest extends TestCase
     /**
      * @return array
      */
-    public function setPathInfoDataProvider()
+    public static function setPathInfoDataProvider()
     {
         return [
             ['http://svr.com/', '', ''],

@@ -73,7 +73,7 @@ class AbstractFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function canCreateFilterDataProvider()
+    public static function canCreateFilterDataProvider()
     {
         return [['arrayFilter', true], ['notExist', false]];
     }
@@ -91,7 +91,7 @@ class AbstractFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function isSharedDataProvider()
+    public static function isSharedDataProvider()
     {
         return [
             'shared' => [Template::class, true],
@@ -111,8 +111,8 @@ class AbstractFactoryTest extends TestCase
         $property = new \ReflectionProperty(AbstractFactory::class, 'sharedInstances');
         $property->setAccessible(true);
 
-        $filterMock = $this->getMockBuilder('FactoryInterface')
-            ->setMethods(['filter'])->getMock();
+        $filterMock = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['filter'])->getMock();
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -137,7 +137,7 @@ class AbstractFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createFilterDataProvider()
+    public static function createFilterDataProvider()
     {
         return [
             'not shared with args' => ['arrayFilter', ['123', '231'], false],

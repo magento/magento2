@@ -9,6 +9,8 @@ use Magento\Framework\Config\ReaderInterface;
 
 /**
  * Interface UiReaderInterface
+ *
+ * @api
  */
 interface UiReaderInterface extends ReaderInterface
 {

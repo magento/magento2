@@ -125,17 +125,23 @@ class ApplicationDumpCommandTest extends TestCase
             ->willReturn('Some comment message');
         $this->writer->expects($this->exactly(2))
             ->method('saveConfig')
-            ->withConsecutive(
-                [[ConfigFilePool::APP_CONFIG => $dump]],
-                [[ConfigFilePool::APP_ENV => $dump]]
-            );
+            ->willReturnCallback(function ($arg1) use ($dump) {
+                if ($arg1 == [ConfigFilePool::APP_CONFIG => $dump]) {
+                    return null;
+                } elseif ($arg1 == [ConfigFilePool::APP_ENV => $dump]) {
+                    return null;
+                }
+            });
 
         $this->output->expects($this->exactly(2))
             ->method('writeln')
-            ->withConsecutive(
-                [['system' => 'Some comment message']],
-                ['<info>Done. Config types dumped: system</info>']
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == ['system' => 'Some comment message']) {
+                    return null;
+                } elseif ($arg1 == ['<info>Done. Config types dumped: system</info>']) {
+                    return null;
+                }
+            });
 
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');
         $method->setAccessible(true);

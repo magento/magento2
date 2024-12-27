@@ -21,8 +21,6 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_eventManager = null;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -66,7 +64,7 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function prepareCondition($attribute, $value)
     {
-        $condition = false;
+        $condition = $value;
 
         if (is_array($value)) {
             if ($attribute->getBackendType() == 'varchar') { // multiselect
@@ -80,7 +78,7 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $condition = $value;
             }
         } else {
-            if (strlen($value) > 0) {
+            if ($value && strlen($value) > 0) {
                 if (in_array($attribute->getBackendType(), ['varchar', 'text', 'static'])) {
                     $condition = ['like' => $value]; // text search
                 } else {

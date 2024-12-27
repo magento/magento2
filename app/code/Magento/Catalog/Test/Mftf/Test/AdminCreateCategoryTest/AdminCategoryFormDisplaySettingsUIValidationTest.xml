@@ -17,6 +17,7 @@
         <testCaseId value="MAGETWO-95797"/>
         <group value="category"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
     <before>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -25,8 +26,10 @@
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
     </after>
     <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
+    <waitForElementClickable  selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="waitForElementClickOnAddSubCategory"></waitForElementClickable>
     <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
     <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+    <waitForElementClickable selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="waitForElementClickclickOnDisplaySettingsTab"/>
     <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="clickOnDisplaySettingsTab"/>
      <waitForElementVisible selector="{{CategoryDisplaySettingsSection.filterPriceRangeUseConfig}}" stepKey="wait"/>
     <scrollTo selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceInput}}" stepKey="scrollToLayeredNavigationField"/>

@@ -26,14 +26,18 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!--Reindex and flush cache-->
-            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <magentoCLI command="config:set {{DisableSynchronizeWidgetProductsWithBackendStorage.path}} {{DisableSynchronizeWidgetProductsWithBackendStorage.value}}" stepKey="setDisableSynchronizeWidgetProductsWithBackendStorage"/>
-            <!--Reindex and flush cache-->
-            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+            <!--Reindex-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <waitForPageLoad time="60" stepKey="waitForPageLoad"/>
@@ -46,7 +50,7 @@
         <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
         <!-- Check that error remains -->
         <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertFailure">
-            <argument name="message" value="The requested qty is not available"/>
+            <argument name="message" value="Not enough items for sale"/>
         </actionGroup>
     </test>
 </tests>

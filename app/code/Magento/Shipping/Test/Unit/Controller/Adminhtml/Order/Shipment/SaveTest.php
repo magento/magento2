@@ -348,8 +348,10 @@ class SaveTest extends TestCase
                 ->getMock();
             $saveTransaction
                 ->method('addObject')
-                ->withConsecutive([$shipment], [$order])
-                ->willReturnOnConsecutiveCalls($saveTransaction, $saveTransaction);
+                ->willReturnCallback(fn($param) => match ([$param]) {
+                    [$shipment] => $saveTransaction,
+                    [$order] => $saveTransaction
+                });
 
             $this->session->expects($this->once())
                 ->method('getCommentText')
@@ -386,7 +388,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         /**
         * bool $formKeyIsValid

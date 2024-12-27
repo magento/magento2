@@ -139,16 +139,15 @@ class SampleTest extends TestCase
             ->willReturnSelf();
         $this->objectManager
             ->method('get')
-            ->withConsecutive(
-                [File::class],
-                [\Magento\Downloadable\Model\Sample::class],
-                [Download::class]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->fileHelper,
-                $this->sampleModel,
-                $this->downloadHelper
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == File::class) {
+                    return $this->fileHelper;
+                } elseif ($arg1 == \Magento\Downloadable\Model\Sample::class) {
+                    return $this->sampleModel;
+                } elseif ($arg1 == Download::class) {
+                    return $this->downloadHelper;
+                }
+            });
         $this->fileHelper->expects($this->once())->method('getFilePath')
             ->willReturn('filepath/sample.jpg');
         $this->downloadHelper->expects($this->once())->method('setResource')

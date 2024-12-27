@@ -141,7 +141,7 @@ class IndexTest extends TestCase
         $this->layoutMock = $this->basicMock(Layout::class);
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isSecure', 'getHeader'])
+            ->onlyMethods(['isSecure', 'getHeader'])
             ->getMock();
         $this->responseMock = $this->basicMock(ResponseInterface::class);
         $this->redirectMock = $this->basicMock(RedirectInterface::class);
@@ -153,7 +153,7 @@ class IndexTest extends TestCase
 
         $resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultPageFactoryMock->expects($this->any())
             ->method('create')
@@ -161,7 +161,7 @@ class IndexTest extends TestCase
 
         $resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultRedirectFactoryMock->expects($this->any())
             ->method('create')
@@ -251,7 +251,7 @@ class IndexTest extends TestCase
      *
      * @return array
      */
-    public function sessionRegenerationDataProvider(): array
+    public static function sessionRegenerationDataProvider(): array
     {
         return [
             [

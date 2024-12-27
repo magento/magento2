@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertTrackingInformationActionGroup">
+        <annotations>
+            <description>In the Storefront 'My Profile' section check the tracking information.</description>
+        </annotations>
+        <!-- Grab value for tracking information and check assertion is not empty -->
+        <waitForElementVisible selector="{{AdminShipmentTrackingInformationShippingSection.trackingInformation('1')}}" stepKey="waitForTrackingNumber"/>
+        <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.trackingInformation('1')}}" stepKey="grabTrackingNumber"/>
+        <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.trackingInformation('2')}}" stepKey="grabCarrier"/>
+        <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.trackingInformation('3')}}" stepKey="grabStatus"/>
+        <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.trackingInformation('4')}}" stepKey="grabServiceType"/>
+        <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.trackingInformation('5')}}" stepKey="grabWeight"/>
+        <assertNotEmpty stepKey="checkTrackingNumber">
+            <actualResult type="const">$grabTrackingNumber</actualResult>
+        </assertNotEmpty>
+        <assertNotEmpty stepKey="checkCarrier">
+            <actualResult type="const">$grabCarrier</actualResult>
+        </assertNotEmpty>
+        <assertNotEmpty stepKey="checkStatus">
+            <actualResult type="const">$grabStatus</actualResult>
+        </assertNotEmpty>
+        <assertNotEmpty stepKey="checkServiceType">
+            <actualResult type="const">$grabServiceType</actualResult>
+        </assertNotEmpty>
+        <assertNotEmpty stepKey="checkWeight">
+            <actualResult type="const">$grabWeight</actualResult>
+        </assertNotEmpty>
+    </actionGroup>
+</actionGroups>

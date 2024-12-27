@@ -114,16 +114,16 @@ class VaultConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function customerIdProvider()
+    public static function customerIdProvider()
     {
         return [
             [
-                'id' => 1,
-                'vault_enabled' => true
+                'customerId' => 1,
+                'vaultEnabled' => true
             ],
             [
-                'id' => null,
-                'vault_enabled' => false
+                'customerId' => null,
+                'vaultEnabled' => false
             ]
         ];
     }

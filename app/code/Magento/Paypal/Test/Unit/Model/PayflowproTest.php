@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Laminas\Http\Exception\RuntimeException;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
@@ -92,10 +94,10 @@ class PayflowproTest extends TestCase
         $configFactoryMock->method('create')
             ->willReturn($this->configMock);
 
-        $client = $this->getMockBuilder(ZendClient::class)
+        $client = $this->getMockBuilder(LaminasClient::class)
             ->getMock();
 
-        $clientFactory = $this->getMockBuilder(ZendClientFactory::class)
+        $clientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $clientFactory->method('create')->willReturn($client);
@@ -104,6 +106,13 @@ class PayflowproTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->helper = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->helper->prepareObjectManager($objects);
         $this->payflowpro = $this->helper->getObject(
             Payflowpro::class,
             [
@@ -141,7 +150,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function canVoidDataProvider(): array
+    public static function canVoidDataProvider(): array
     {
         return [
             ["Can void transaction if order's paid amount not set", null, true],
@@ -207,7 +216,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function setTransStatusDataProvider(): array
+    public static function setTransStatusDataProvider(): array
     {
         return [
             [
@@ -265,8 +274,14 @@ class PayflowproTest extends TestCase
         }
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArs) {
+                if (!empty($withArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->assertEquals($result, $this->payflowpro->isActive($storeId));
     }
@@ -303,7 +318,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderCaptureAmountRounding(): array
+    public static function dataProviderCaptureAmountRounding(): array
     {
         return [
             [
@@ -416,7 +431,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive(): array
+    public static function dataProviderForTestIsActive(): array
     {
         return [
             [
@@ -634,7 +649,7 @@ class PayflowproTest extends TestCase
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
             ->with($request, $config)
-            ->willThrowException(new \Zend_Http_Client_Exception());
+            ->willThrowException(new RuntimeException());
 
         $this->payflowpro->postRequest($request, $config);
     }
@@ -717,7 +732,7 @@ class PayflowproTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderMapGatewayResponse(): array
+    public static function dataProviderMapGatewayResponse(): array
     {
         return [
             [

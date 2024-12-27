@@ -22,6 +22,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -34,7 +35,10 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider
+abstract class AbstractEntity extends AbstractResource implements
+    EntityInterface,
+    DefaultAttributesProvider,
+    ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Eav\Model\Entity\AttributeLoaderInterface
@@ -52,7 +56,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Entity type configuration
      *
-     * @var Type
+     * @var Type|null
      */
     protected $_type;
 
@@ -85,9 +89,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $_staticAttributes = [];
 
     /**
-     * Entity table
-     *
-     * @var string
+     * @var string|null
      */
     protected $_entityTable;
 
@@ -101,7 +103,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Entity table identification field name
      *
-     * @var string
+     * @var string|null
      */
     protected $_entityIdField;
 
@@ -551,7 +553,16 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function loadAllAttributes($object = null)
     {
-        return $this->attributeLoader->loadAllAttributes($this, $object);
+        $result = $this->attributeLoader->loadAllAttributes($this, $object);
+        if ($object instanceof DataObject && $object->getAttributeSetId()) {
+            $suffix = $this->getAttributesCacheSuffix($object);
+            $this->_attrSetEntity->addSetInfo(
+                $this->getEntityType(),
+                $this->getAttributesByScope($suffix),
+                $object->getAttributeSetId()
+            );
+        }
+        return $result;
     }
 
     /**
@@ -929,7 +940,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $attributeBackend = $attribute->getBackend();
         if ($attributeBackend->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
-            $bind = ['value' => trim($value)];
+            $bind = ['value' => $value !== null ? trim($value) : ''];
 
             $select->from(
                 $this->getEntityTable(),
@@ -944,7 +955,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             }
             $bind = [
                 'attribute_id' => $attribute->getId(),
-                'value' => trim($value),
+                'value' => $value !== null ? trim($value) : '',
             ];
 
             $entityIdField = $object->getResource()->getLinkField();
@@ -1021,6 +1032,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Loads attributes metadata.
      *
      * @deprecated 101.0.0 Use self::loadAttributesForObject instead
+     * @see \Magento\Eav\Model\Entity\AbstractEntity::loadAttributesForObject
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
@@ -1546,7 +1558,15 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        return $this->_saveAttribute($object, $attribute, $value);
+        $table = $attribute->getBackend()->getTable();
+        $connection = $this->getConnection();
+        $connection->update(
+            $table,
+            ['value' => $this->_prepareValueForSave($value, $attribute)],
+            sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
+        );
+
+        return $this;
     }
 
     /**
@@ -1928,6 +1948,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return AttributeLoaderInterface
      *
      * @deprecated 100.1.0
+     * @see $attributeLoader
      * @since 100.1.0
      */
     protected function getAttributeLoader()
@@ -2012,5 +2033,19 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $this->getAttribute($attrCode);
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_attributesByCode = [];
+        $this->attributesByScope = [];
+        $this->_attributesByTable = [];
+        $this->_staticAttributes = [];
+        $this->_attributeValuesToDelete = [];
+        $this->_attributeValuesToSave = [];
+        self::$_attributeBackendTables = [];
     }
 }

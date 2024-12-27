@@ -92,17 +92,17 @@ class CommonTaxCollectorTest extends TestCase
 
         $this->taxConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingTaxClass', 'shippingPriceIncludesTax', 'discountTax'])
+            ->onlyMethods(['getShippingTaxClass', 'shippingPriceIncludesTax', 'discountTax'])
             ->getMock();
 
         $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
 
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getStore'])
+            ->onlyMethods(['__wakeup', 'getStore'])
             ->getMock();
 
         $this->quote
@@ -230,7 +230,8 @@ class CommonTaxCollectorTest extends TestCase
         /** @var MockObject|QuoteItem $quoteItem */
         $quoteItem = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', 'setPrice', 'getCustomPrice', 'setCustomPrice'])
+            ->addMethods(['getCustomPrice'])
+            ->onlyMethods(['getPrice', 'setPrice', 'setCustomPrice'])
             ->getMock();
         $this->taxHelper->method('applyTaxOnCustomPrice')->willReturn(true);
         $quoteItem->method('getCustomPrice')->willReturn(true);
@@ -258,34 +259,34 @@ class CommonTaxCollectorTest extends TestCase
      *
      * @return array
      */
-    public function getShippingDataObjectDataProvider(): array
+    public static function getShippingDataObjectDataProvider(): array
     {
         $data = [
             'free_shipping' => [
-                'address' => [
+                'addressData' => [
                     'shipping_amount' => 0,
                     'base_shipping_amount' => 0,
                 ],
-                'use_base_currency' => false,
-                'shipping_tax_class' => 'shippingTaxClass',
+                'useBaseCurrency' => false,
+                'shippingTaxClass' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
             ],
             'none_zero_none_base' => [
-                'address' => [
+                'addressData' => [
                     'shipping_amount' => 10,
                     'base_shipping_amount' => 5,
                 ],
-                'use_base_currency' => false,
-                'shipping_tax_class' => 'shippingTaxClass',
+                'useBaseCurrency' => false,
+                'shippingTaxClass' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
             ],
             'none_zero_base' => [
-                'address' => [
+                'addressData' => [
                     'shipping_amount' => 10,
                     'base_shipping_amount' => 5,
                 ],
-                'use_base_currency' => true,
-                'shipping_tax_class' => 'shippingTaxClass',
+                'useBaseCurrency' => true,
+                'shippingTaxClass' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
             ],
         ];

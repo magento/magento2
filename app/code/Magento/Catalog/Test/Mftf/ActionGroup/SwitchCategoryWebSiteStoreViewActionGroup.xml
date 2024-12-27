@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SwitchCategoryWebSiteStoreViewActionGroup">
+        <annotations>
+            <description>Navigates to category page, selects a category and changes store view to specified store when we have multiple website.</description>
+        </annotations>
+        <arguments>
+            <argument name="Store" type="string"/>
+            <argument name="CatName"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCategoryPage.page}}" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatName)}}" stepKey="navigateToCreatedCategory"/>
+        <waitForPageLoad stepKey="waitForCreatedCategoryPageLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskSpinner"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfToggle"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="openStoreViewDropDown"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(Store)}}" stepKey="selectStoreView"/>
+        <waitForPageLoad stepKey="waitForSelectStoreViewLoad"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskSpinnerAgain"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewModalAccept}}" stepKey="selectStoreViewAccept"/>
+        <waitForPageLoad stepKey="waitForStoreViewChangeLoad"/>
+    </actionGroup>
+</actionGroups>

@@ -28,7 +28,7 @@ class CartTest extends TestCase
     /**
      * @var DataObject
      */
-    protected $_validItem;
+    protected static $_validItem;
 
     /**
      * @var SalesModelInterface|MockObject
@@ -40,10 +40,10 @@ class CartTest extends TestCase
      * @param array $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct($name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $this->_validItem = new DataObject(
+        self::$_validItem = new DataObject(
             [
                 'parent_item' => null,
                 'price' => 2.0,
@@ -78,7 +78,7 @@ class CartTest extends TestCase
      * @param array $items
      * @dataProvider invalidGetAllItemsDataProvider
      */
-    public function testInvalidGetAllItems($items)
+    public function testInvalidGetAllItems(array $items)
     {
         $taxContainer = new DataObject(
             ['base_discount_tax_compensation_amount' => 0.2, 'base_shipping_discount_tax_compensation_amnt' => 0.1]
@@ -99,8 +99,17 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function invalidGetAllItemsDataProvider()
+    public static function invalidGetAllItemsDataProvider()
     {
+        self::$_validItem = new DataObject(
+            [
+                'parent_item' => null,
+                'price' => 2.0,
+                'qty' => 3,
+                'name' => 'valid item',
+                'original_item' => new DataObject(['base_row_total' => 6.0]),
+            ]
+        );
         return [
             [[]],
             [
@@ -117,7 +126,7 @@ class CartTest extends TestCase
             ],
             [
                 [
-                    $this->_validItem,
+                    self::$_validItem,
                     new DataObject(
                         [
                             'price' => 2.0,
@@ -130,7 +139,7 @@ class CartTest extends TestCase
             ],
             [
                 [
-                    $this->_validItem,
+                    self::$_validItem,
                     new DataObject(
                         [
                             'price' => sqrt(2),
@@ -152,12 +161,14 @@ class CartTest extends TestCase
     public function testInvalidTotalsGetAllItems($values, $transferDiscount)
     {
         $expectedSubtotal = $this->_prepareInvalidModelData($values, $transferDiscount);
+        $baseShippingDiscountTaxCompensationAmount = $values['base_shipping_discount_tax_compensation_amount'] ??
+            $values['base_shipping_discount_tax_compensation_amnt'];
         $this->assertEmpty($this->_model->getAllItems());
         $this->assertEquals($expectedSubtotal, $this->_model->getSubtotal());
         $this->assertEquals(
             $values['base_tax_amount'] +
             $values['base_discount_tax_compensation_amount'] +
-            $values['base_shipping_discount_tax_compensation_amnt'],
+            $baseShippingDiscountTaxCompensationAmount,
             $this->_model->getTax()
         );
         $this->assertEquals($values['base_shipping_amount'], $this->_model->getShipping());
@@ -170,13 +181,14 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function invalidTotalsGetAllItemsDataProvider()
+    public static function invalidTotalsGetAllItemsDataProvider()
     {
         return [
             [
                 [
                     'base_discount_tax_compensation_amount' => 0,
                     'base_shipping_discount_tax_compensation_amnt' => 0,
+                    'base_shipping_discount_tax_compensation_amount' => null,
                     'base_subtotal' => 0,
                     'base_tax_amount' => 0,
                     'base_shipping_amount' => 0,
@@ -188,7 +200,8 @@ class CartTest extends TestCase
             [
                 [
                     'base_discount_tax_compensation_amount' => 1,
-                    'base_shipping_discount_tax_compensation_amnt' => 2,
+                    'base_shipping_discount_tax_compensation_amount' => 2,
+                    'base_shipping_discount_tax_compensation_amnt' => null,
                     'base_subtotal' => 3,
                     'base_tax_amount' => 4,
                     'base_shipping_amount' => 5,
@@ -207,9 +220,9 @@ class CartTest extends TestCase
             [
                 new DataObject(
                     [
-                        'name' => $this->_validItem->getName(),
-                        'qty' => $this->_validItem->getQty(),
-                        'amount' => $this->_validItem->getPrice(),
+                        'name' => self::$_validItem->getName(),
+                        'qty' => self::$_validItem->getQty(),
+                        'amount' => self::$_validItem->getPrice(),
                     ]
                 ),
             ],
@@ -245,10 +258,10 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function invalidGetAmountsDataProvider()
+    public static function invalidGetAmountsDataProvider()
     {
         $data = [];
-        $invalidTotalsData = $this->invalidTotalsGetAllItemsDataProvider();
+        $invalidTotalsData = self::invalidTotalsGetAllItemsDataProvider();
         foreach ($invalidTotalsData as $dataItem) {
             $data[] = [$dataItem[0], $dataItem[1], true];
             $data[] = [$dataItem[0], $dataItem[1], false];
@@ -267,8 +280,12 @@ class CartTest extends TestCase
     {
         $taxContainer = new DataObject(
             [
-                'base_discount_tax_compensation_amount' => $data['base_discount_tax_compensation_amount'],
-                'base_shipping_discount_tax_compensation_amnt' => $data['base_shipping_discount_tax_compensation_amnt'],
+                'base_discount_tax_compensation_amount' =>
+                    $data['base_discount_tax_compensation_amount'],
+                'base_shipping_discount_tax_compensation_amnt' =>
+                    $data['base_shipping_discount_tax_compensation_amnt'],
+                'base_shipping_discount_tax_compensation_amount' =>
+                    $data['base_shipping_discount_tax_compensation_amount']
             ]
         );
         $expectedSubtotal = $data['base_subtotal'];
@@ -282,7 +299,7 @@ class CartTest extends TestCase
         )->method(
             'getAllItems'
         )->willReturn(
-            [$this->_validItem]
+            [self::$_validItem]
         );
         $this->_salesModel->expects(
             $this->once()
@@ -347,7 +364,7 @@ class CartTest extends TestCase
         )->method(
             'getAllItems'
         )->willReturn(
-            [$this->_validItem]
+            [self::$_validItem]
         );
         $this->_salesModel->expects(
             $this->once()

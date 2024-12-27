@@ -62,7 +62,7 @@ class UnlockButtonTest extends TestCase
         $this->registryMock = $this->createPartialMock(Registry::class, ['registry']);
 
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
@@ -97,7 +97,7 @@ class UnlockButtonTest extends TestCase
     /**
      * @return array
      */
-    public function getButtonDataProvider()
+    public static function getButtonDataProvider()
     {
         return [
             [

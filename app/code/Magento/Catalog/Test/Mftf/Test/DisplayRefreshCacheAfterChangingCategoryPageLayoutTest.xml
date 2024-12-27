@@ -19,6 +19,7 @@
             <useCaseId value="MAGETWO-45666"/>
             <group value="catalog"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category, flush cache and log in -->

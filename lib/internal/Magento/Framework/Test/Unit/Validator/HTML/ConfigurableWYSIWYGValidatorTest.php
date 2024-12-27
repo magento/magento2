@@ -23,11 +23,11 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getConfigurations(): array
+    public static function getConfigurations(): array
     {
         return [
-            'no-html' => [['div'], [], [], 'just text', true, [], []],
-            'allowed-tag' => [['div'], [], [], 'just text and <div>a div</div>', true, [], []],
+            'no-html' => [['div'], [], [], 'just text', false, [], []],
+            'allowed-tag' => [['div'], [], [], 'just text and <div>a div</div>', false, [], []],
             'restricted-tag' => [
                 ['div', 'p'],
                 [],
@@ -165,6 +165,24 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 true,
                 [],
                 ['div' => ['src' => false]]
+            ],
+            'invalid-allowed-tag-attributes' => [
+                ['a'],
+                ['href'],
+                ['a' => ['href']],
+                '<a href="javascript:alert(1)">a</a>',
+                false,
+                [],
+                []
+            ],
+            'allowed-empty-tag' => [
+                [],
+                [],
+                [],
+                '',
+                false,
+                [],
+                []
             ]
         ];
     }
@@ -224,20 +242,23 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 );
             $tagValidatorsMocks[$tag] = [$mock];
         }
-        $validator = new ConfigurableWYSIWYGValidator(
-            $allowedTags,
-            $allowedAttr,
-            $allowedTagAttrs,
-            $attrValidators,
-            $tagValidatorsMocks
-        );
-        $valid = true;
         try {
-            $validator->validate($html);
-        } catch (ValidationException $exception) {
+            $validator = new ConfigurableWYSIWYGValidator(
+                $allowedTags,
+                $allowedAttr,
+                $allowedTagAttrs,
+                $attrValidators,
+                $tagValidatorsMocks
+            );
+            $valid = true;
+            try {
+                $validator->validate($html);
+            } catch (ValidationException $exception) {
+                $valid = false;
+            }
+        } catch (\InvalidArgumentException $exception) {
             $valid = false;
         }
-
         self::assertEquals($isValid, $valid);
     }
 }

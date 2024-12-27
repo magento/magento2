@@ -35,11 +35,11 @@ class ItemTest extends TestCase
         $objectHelper = new ObjectManager($this);
 
         $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->setMethods(['getAllCustomersGroup'])
+            ->onlyMethods(['getAllCustomersGroup'])
             ->getMockForAbstractClass();
 
         $allGroup = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $allGroup->expects($this->any())

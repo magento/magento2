@@ -95,7 +95,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function uploadActionDataProvider(): array
+    public static function uploadActionDataProvider(): array
     {
         return [
             'upload_image_with_type_jpg' => [
@@ -176,7 +176,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function uploadActionWithErrorsDataProvider(): array
+    public static function uploadActionWithErrorsDataProvider(): array
     {
         return [
             'upload_image_with_invalid_type' => [

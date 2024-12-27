@@ -124,11 +124,14 @@ class PredispatchReviewObserverTest extends TestCase
 
         $this->configMock
             ->method('getValue')
-            ->withConsecutive(
-                [PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE, ScopeInterface::SCOPE_STORE],
-                ['web/default/no_route', ScopeInterface::SCOPE_STORE]
-            )->willReturnOnConsecutiveCalls(false, $expectedRedirectUrl);
-
+            ->willReturnCallback(function ($arg1, $arg2) use ($expectedRedirectUrl) {
+                if ($arg1 == PredispatchReviewObserver::XML_PATH_REVIEW_ACTIVE &&
+                    $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return false;
+                } elseif ($arg1 == 'web/default/no_route' && $arg2 == ScopeInterface::SCOPE_STORE) {
+                    return $expectedRedirectUrl;
+                }
+            });
         $this->urlMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($expectedRedirectUrl);

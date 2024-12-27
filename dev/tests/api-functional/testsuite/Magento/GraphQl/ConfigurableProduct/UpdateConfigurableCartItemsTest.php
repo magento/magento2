@@ -72,7 +72,7 @@ class UpdateConfigurableCartItemsTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function updateConfigurableCartItemQuantityDataProvider(): array
+    public static function updateConfigurableCartItemQuantityDataProvider(): array
     {
         return [
             ['cart_item_id', 'test_cart_with_configurable'],

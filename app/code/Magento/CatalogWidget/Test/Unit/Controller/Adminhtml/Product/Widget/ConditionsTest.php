@@ -82,8 +82,11 @@ class ConditionsTest extends TestCase
         $type = 'Magento\CatalogWidget\Model\Rule\Condition\Product|attribute_set_id';
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id'], ['type'], ['form'])
-            ->willReturnOnConsecutiveCalls('1--1', $type, 'request_form_param_value');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['id'] => '1--1',
+                ['type'] => $type,
+                ['form'] => 'request_form_param_value'
+            });
 
         $condition = $this->getMockBuilder(Product::class)
             ->onlyMethods(['asHtmlRecursive'])

@@ -4,45 +4,40 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Form Input/Output Strip HTML tags Filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Form\Filter;
 
+use Exception;
+use Magento\Framework\Filter\LocalizedToNormalized;
+use Magento\Framework\Filter\NormalizedToLocalized;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime;
 
-class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
+/**
+ * Form Input/Output Strip HTML tags Filter
+ */
+class Date implements FilterInterface
 {
     /**
-     * Date format
-     *
      * @var string
      */
     protected $_dateFormat;
 
     /**
-     * Local
-     *
-     * @var \Magento\Framework\Locale\ResolverInterface
+     * @var ResolverInterface
      */
     protected $localeResolver;
 
     /**
      * Initialize filter
      *
-     * @param string $format \DateTime input/output format
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param string|null $format \DateTime input/output format
+     * @param ResolverInterface|null $localeResolver
      */
     public function __construct(
-        $format = null,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
+        string $format = null,
+        ResolverInterface $localeResolver = null
     ) {
-        if ($format === null) {
-            $format = DateTime::DATE_INTERNAL_FORMAT;
-        }
-        $this->_dateFormat = $format;
+        $this->_dateFormat = $format ?? DateTime::DATE_INTERNAL_FORMAT;
         $this->localeResolver = $localeResolver;
     }
 
@@ -51,6 +46,7 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      *
      * @param string $value
      * @return string
+     * @throws Exception
      */
     public function inputFilter($value)
     {
@@ -58,16 +54,15 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
             return $value;
         }
 
-        $filterInput = new \Zend_Filter_LocalizedToNormalized(
+        $filterInput = new LocalizedToNormalized(
             ['date_format' => $this->_dateFormat, 'locale' => $this->localeResolver->getLocale()]
         );
-        $filterInternal = new \Zend_Filter_NormalizedToLocalized(
+        $filterInternal = new NormalizedToLocalized(
             ['date_format' => DateTime::DATE_INTERNAL_FORMAT, 'locale' => $this->localeResolver->getLocale()]
         );
 
         $value = $filterInput->filter($value);
-        $value = $filterInternal->filter($value);
-        return $value;
+        return $filterInternal->filter($value);
     }
 
     /**
@@ -75,6 +70,7 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
      *
      * @param string $value
      * @return string
+     * @throws Exception
      */
     public function outputFilter($value)
     {
@@ -82,15 +78,14 @@ class Date implements \Magento\Framework\Data\Form\Filter\FilterInterface
             return $value;
         }
 
-        $filterInput = new \Zend_Filter_LocalizedToNormalized(
+        $filterInput = new LocalizedToNormalized(
             ['date_format' => DateTime::DATE_INTERNAL_FORMAT, 'locale' => $this->localeResolver->getLocale()]
         );
-        $filterInternal = new \Zend_Filter_NormalizedToLocalized(
+        $filterInternal = new NormalizedToLocalized(
             ['date_format' => $this->_dateFormat, 'locale' => $this->localeResolver->getLocale()]
         );
 
         $value = $filterInput->filter($value);
-        $value = $filterInternal->filter($value);
-        return $value;
+        return $filterInternal->filter($value);
     }
 }

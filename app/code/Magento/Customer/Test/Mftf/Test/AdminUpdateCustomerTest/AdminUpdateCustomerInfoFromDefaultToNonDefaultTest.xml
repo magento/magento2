@@ -17,6 +17,7 @@
             <testCaseId value="MC-13619"/>
             <group value="Customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData stepKey="customer" entity="Simple_Customer_Without_Address"/>
@@ -26,6 +27,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
             <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
             <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGrid"/>

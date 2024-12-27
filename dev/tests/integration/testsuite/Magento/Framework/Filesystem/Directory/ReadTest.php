@@ -117,7 +117,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function readProvider()
+    public static function readProvider()
     {
         return [
             ['foo', null, ['bar', 'file_three.txt']],
@@ -170,7 +170,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function searchProvider()
+    public static function searchProvider()
     {
         return [
             ['foo', 'bar/*', ['bar/file_two.txt', 'bar/baz']],
@@ -220,7 +220,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function existsProvider()
+    public static function existsProvider()
     {
         return [
             ['foo', 'bar', true],
@@ -289,7 +289,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function statProvider()
+    public static function statProvider()
     {
         return [['foo', 'bar'], ['foo', 'file_three.txt']];
     }
@@ -425,7 +425,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isReadableProvider()
+    public static function isReadableProvider()
     {
         return [['foo', 'bar', true], ['foo', 'file_three.txt', true]];
     }
@@ -435,7 +435,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isFileProvider()
+    public static function isFileProvider()
     {
         return [['bar', false], ['file_three.txt', true]];
     }
@@ -445,7 +445,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isDirectoryProvider()
+    public static function isDirectoryProvider()
     {
         return [['bar', true], ['file_three.txt', false]];
     }
@@ -500,7 +500,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function readFileProvider()
+    public static function readFileProvider()
     {
         return [
             ['popup.csv', 'var myData = 5;'],

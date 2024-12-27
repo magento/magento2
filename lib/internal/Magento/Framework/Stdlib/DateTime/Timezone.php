@@ -162,7 +162,7 @@ class Timezone implements TimezoneInterface
             (int)$type
         );
 
-        return $formatter->getPattern();
+        return str_replace(' ', ' ', $formatter->getPattern());
     }
 
     /**
@@ -325,8 +325,7 @@ class Timezone implements TimezoneInterface
         if ($pattern) {
             $formatter->setPattern($pattern);
         }
-
-        return $formatter->format($date);
+        return str_replace(' ', ' ', $formatter->format($date));
     }
 
     /**
@@ -376,7 +375,7 @@ class Timezone implements TimezoneInterface
                 $timezone
             );
             $timestamp = $formatter->parse($date);
-            if (!$timestamp) {
+            if ($timestamp === false) {
                 throw new LocalizedException(
                     new Phrase(
                         'Could not append time to DateTime'

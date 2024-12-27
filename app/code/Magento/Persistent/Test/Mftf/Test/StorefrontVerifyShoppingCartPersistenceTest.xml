@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyShoppingCartPersistenceTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="Shopping Cart Persistence"/>
+            <title value="Verify Shopping Cart Persistence"/>
+            <description value="Verify Shopping Cart Persistence"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-2619"/>
+            <group value="persistent"/>
+            <group value="customer"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Enable Persistence-->
+            <createData entity="PersistentConfigSettings" stepKey="persistentConfigSetting"/>
+            <!--Create Simple Product 1  and Product 2 -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimple1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+           <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="navigateToDefaultCookieSettingsPage"/>
+            <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValue">
+                <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+            </actionGroup>
+            <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetime">
+                <argument name="cookieLifetime" value="15" />
+            </actionGroup>
+            <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButtonWithString">
+                <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Set Defaults Persistence configuration-->
+            <createData entity="PersistentConfigUseSystemValue" stepKey="persistentDefaultsConfiguration"/>
+            <!--Delete Simple Product 1,customer and Category-->
+            <deleteData createDataKey="createSimple1" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
+                <argument name="customerEmail" value="John_Smith_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="navigateToDefaultCookieSettingsPage2"/>
+            <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeFieldWithNumber">
+                <argument name="cookieLifetime" value="3600"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValue">
+                <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButton">
+                <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- 1. Go to storefront and click the Create an Account link-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
+        <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickCreateAnAccountLink" />
+        <actionGroup ref="StorefrontAssertPersistentRegistrationPageFields" stepKey="assertPersistentRegistrationPageFields"/>
+
+        <!-- 2. Fill fields for registration, set password and select the Remember Me checkbox-->
+        <actionGroup ref="StorefrontRegisterCustomerRememberMeActionGroup" stepKey="registrationJohnSmithCustomer">
+            <argument name="Customer" value="John_Smith_Customer"/>
+        </actionGroup>
+        <!--Check customer name and last name in welcome message-->
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="customerCreatedSuccessMessageForJohnSmith"/>
+        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnSmithCustomer">
+            <argument name="customerFullName" value="{{John_Smith_Customer.fullname}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimple1ProductToCartForJohnSmithCustomer">
+            <argument name="product" value="$$createSimple1$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForJohnSmithCustomer">
+            <argument name="productName" value="$$createSimple1.name$$"/>
+        </actionGroup>
+
+        <wait time="15" stepKey="waitSometime3" />
+        <reloadPage stepKey="refreshSessionCookieByPageRefresh3" />
+        <waitForPageLoad stepKey="waitForPageLoadToSeeSuccessMessage"/>
+
+        <actionGroup ref="StorefrontAssertPersistentCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeForJohnDoeCustomer">
+            <argument name="customerFullName" value="{{John_Smith_Customer.fullname}}"/>
+        </actionGroup>
+
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitForCartCounterVisible"/>
+        <see selector="{{StorefrontMinicartSection.productCount}}" userInput="1" stepKey="miniCartContainsOneProductForGuest"/>
+
+        <!-- 8. Go to Shopping Cart and verify Simple Product 1 is present there  -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCart" />
+        <see selector="{{CheckoutCartProductSection.productName}}" userInput="$$createSimple1.name$$" stepKey="checkSimple1InShoppingCart"/>
+
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="checkSimple1InMiniCartForGuestCustomerSecondTime">
+            <argument name="productName" value="$$createSimple1.name$$"/>
+        </actionGroup>
+
+    </test>
+</tests>

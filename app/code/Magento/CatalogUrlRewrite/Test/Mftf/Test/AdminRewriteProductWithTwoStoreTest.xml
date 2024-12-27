@@ -13,6 +13,7 @@
             <description value="Rewriting URL of product. Verify the full URL address"/>
             <severity value="MAJOR"/>
             <group value="CatalogUrlRewrite"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -20,6 +21,9 @@
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <createData entity="_defaultCategoryDifferentUrlStore" stepKey="defaultCategory"/>
             <createData entity="SimpleSubCategoryDifferentUrlStore" stepKey="subCategory">
                 <requiredEntity createDataKey="defaultCategory"/>
@@ -35,6 +39,9 @@
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteNewRootCategory"/>
             <magentoCLI command="config:set {{DisableCategoriesPathProductUrls.path}} {{DisableCategoriesPathProductUrls.value}}" stepKey="disableUseCategoriesPath"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
 

@@ -21,6 +21,8 @@ class CanApplyMsrp
     }
 
     /**
+     * Checks whether MSRP can be applied to the address
+     *
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return bool
      */
@@ -29,8 +31,8 @@ class CanApplyMsrp
         $canApplyMsrp = false;
         foreach ($address->getAllItems() as $item) {
             if (!$item->getParentItemId()
-                    && $this->msrpHelper->isShowBeforeOrderConfirm($item->getProductId())
-                    && $this->msrpHelper->isMinimalPriceLessMsrp($item->getProductId())
+                    && $this->msrpHelper->isShowBeforeOrderConfirm($item->getProduct())
+                    && $this->msrpHelper->isMinimalPriceLessMsrp($item->getProduct())
             ) {
                 $canApplyMsrp = true;
                 break;

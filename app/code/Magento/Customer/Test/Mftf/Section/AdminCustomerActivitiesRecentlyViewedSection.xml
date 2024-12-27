@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerActivitiesRecentlyViewedSection">
         <element name="addToOrderConfigure" type="button" selector="//div[@id='sidebar_data_pviewed']//tr[td[contains(.,'{{productName}}')]]//a[contains(@class, 'icon-configure')]" parameterized="true" timeout="30"/>
+        <element name="selectStoreView" type="button" selector="//label[@class='admin__field-label' and contains(text(),'Default Store View')]" timeout="30"/>
     </section>
 </sections>

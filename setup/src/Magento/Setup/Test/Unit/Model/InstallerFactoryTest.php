@@ -20,8 +20,8 @@ use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManager;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Setup\ConsoleLoggerInterface;
 use Magento\Framework\Setup\FilePermissions;
-use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\SampleData\State;
 use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Setup\Model\AdminAccountFactory;
@@ -80,8 +80,8 @@ class InstallerFactoryTest extends TestCase
         $serviceLocatorMock->expects($this->any())->method('get')
             ->willReturnMap($this->getReturnValueMap());
 
-        /** @var LoggerInterface|MockObject $log */
-        $log = $this->getMockForAbstractClass(LoggerInterface::class);
+        /** @var ConsoleLoggerInterface|MockObject $log */
+        $log = $this->getMockForAbstractClass(ConsoleLoggerInterface::class);
         /** @var ResourceFactory|MockObject $resourceFactoryMock */
         $resourceFactoryMock = $this->createMock(ResourceFactory::class);
         $resourceFactoryMock

@@ -5,10 +5,10 @@
  */
 namespace Magento\Bundle\Model\ResourceModel;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
@@ -141,7 +141,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ''
         )->join(
             ['e' => $this->metadataPool->getMetadata(ProductInterface::class)->getEntityTable()],
-            'e.' . $metadata->getLinkField() . ' = ' .  $this->getMainTable() . '.parent_product_id',
+            'e.' . $metadata->getLinkField() . ' = ' . $this->getMainTable() . '.parent_product_id',
             ['e.entity_id as parent_product_id']
         )->where(
             $this->getMainTable() . '.product_id IN(?)',
@@ -174,10 +174,11 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $values = [
                 'selection_id' => $item->getSelectionId(),
                 'website_id' => $item->getWebsiteId(),
-                'selection_price_type' => $item->getSelectionPriceType(),
-                'selection_price_value' => $item->getSelectionPriceValue(),
+                'selection_price_type' => $item->getSelectionPriceType() ?? 0,
+                'selection_price_value' => $item->getSelectionPriceValue() ?? 0,
                 'parent_product_id' => $item->getParentProductId(),
             ];
+
             $connection->insertOnDuplicate(
                 $this->getTable('catalog_product_bundle_selection_price'),
                 $values,
@@ -187,7 +188,8 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.2.0
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)

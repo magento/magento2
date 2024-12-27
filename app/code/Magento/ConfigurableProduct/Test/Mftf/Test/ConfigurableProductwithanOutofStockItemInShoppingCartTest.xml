@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ConfigurableProductwithanOutofStockItemInShoppingCartTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product and change the stock status"/>
+            <title value="Configurable Product with an Out of Stock Item in Shopping Cart"/>
+            <description value="Configurable Product with an Out of Stock Item in Shopping Cart"/>
+            <testCaseId value="AC-4310"/>
+            <severity value="MAJOR"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Fill configurable product values -->
+            <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Create product configurations -->
+            <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations" after="fillConfigurableProductValues"/>
+            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
+
+            <!--Create new attribute with two options -->
+            <actionGroup ref="AddNewProductConfigurationAttributeActionGroup" stepKey="createProductConfigurationAttribute">
+                <argument name="attribute" value="colorProductAttribute"/>
+                <argument name="firstOption" value="colorConfigurableProductAttribute3"/>
+                <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+            </actionGroup>
+
+            <!-- Change product configurations in grid -->
+            <actionGroup ref="ChangeProductConfigurationsInGridActionGroup" stepKey="changeProductConfigurationsInGrid">
+                <argument name="firstOption" value="colorConfigurableProductAttribute3"/>
+                <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+            </actionGroup>
+
+            <!-- Save configurable product; add product to new attribute set -->
+            <actionGroup ref="SaveConfigurableProductWithNewAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete children products -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute3.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
+                <argument name="sku" value="{{colorConfigurableProductAttribute2.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+
+            <!-- Delete product attribute -->
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="reindex"/>
+
+            <!-- Delete attribute set & reindex -->
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefront">
+            <argument name="productUrl" value="{{ApiConfigurableProduct.urlKey}}"/>
+        </actionGroup>
+
+        <!-- Add configurable product to the cart with selected first option -->
+        <selectOption userInput="{{colorConfigurableProductAttribute2.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOptionForAddingToCart"/>
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
+
+        <!-- Assert configurable product in cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPage"/>
+        <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="storefrontCheckCartConfigurableProductActionGroup">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="optionProduct" value="colorConfigurableProductAttribute2"/>
+            <argument name="productQuantity" value="CONST.one"/>
+        </actionGroup>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{colorConfigurableProductAttribute2.sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+
+        <!-- Open product to edit-->
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="colorConfigurableProductAttribute2"/>
+        </actionGroup>
+
+        <!-- Set stock status as out of status-->
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatus">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+        <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Some of the products are out of stock." stepKey="verifyErrorMessage"/>
+
+    </test>
+</tests>

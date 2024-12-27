@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\RemoteStorage\Driver\Adapter\Cache;
 
 use Magento\Framework\App\CacheInterface as MagentoCacheInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\RemoteStorage\Driver\Adapter\PathUtil;
 
 /**
  * Generic cache implementation for filesystem storage.
  */
-class Generic implements CacheInterface
+class Generic implements CacheInterface, ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -64,6 +65,15 @@ class Generic implements CacheInterface
         $this->serializer = $serializer;
         $this->cacheAdapter = $cacheAdapter;
         $this->pathUtil = $pathUtil;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cacheData = [];
+        $this->cachePathPurgeQueue = [];
     }
 
     /**

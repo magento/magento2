@@ -84,7 +84,7 @@ class MultilineTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderValues()
+    public static function dataProviderValues()
     {
         return [
             ["", 0, ""],

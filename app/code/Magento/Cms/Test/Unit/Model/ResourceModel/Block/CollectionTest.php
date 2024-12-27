@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block;
 
 use Magento\Cms\Model\ResourceModel\Block\Collection;
-use Magento\Cms\Test\Unit\Model\ResourceModel\AbstractCollectionTest;
+use Magento\Cms\Test\Unit\Model\ResourceModel\AbstractCollectionTestCase;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
@@ -18,7 +18,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class CollectionTest extends AbstractCollectionTest
+class CollectionTest extends AbstractCollectionTestCase
 {
     /**
      * @var Collection
@@ -132,7 +132,7 @@ class CollectionTest extends AbstractCollectionTest
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             [

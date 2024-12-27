@@ -10,6 +10,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 use Magento\Framework\ObjectManager\Config\Config;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
+use Magento\Framework\ObjectManager\Helper\SortItems;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -60,7 +61,16 @@ class ConfigTest extends TestCase
         $serializerMock->expects($this->atLeast(2))
             ->method('serialize')
             ->willReturn('[[],[],[],[]]');
-        $config = new Config(null, $definitions, $serializerMock);
+
+        $sortItemsMock = $this->getMockForAbstractClass(SortItems::class);
+        $config =$this->objectManagerHelper->getObject(
+            Config::class,
+            [
+                'relations' => null,
+                'definitions' => $definitions,
+                'sortItemsHelper' => $sortItemsMock,
+            ]
+        );
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $config,
             'serializer',

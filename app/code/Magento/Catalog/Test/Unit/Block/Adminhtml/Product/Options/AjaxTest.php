@@ -51,7 +51,7 @@ class AjaxTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getEventManager', 'getScopeConfig', 'getLayout', 'getRequest'])
+            ->onlyMethods(['getEventManager', 'getScopeConfig', 'getLayout', 'getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->encoderInterface = $this->getMockForAbstractClass(EncoderInterface::class);
@@ -68,12 +68,12 @@ class AjaxTest extends TestCase
     {
         $eventManager = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMock();
         $eventManager->expects($this->exactly(2))->method('dispatch')->willReturn(true);
 
         $scopeConfig = $this->getMockBuilder(Config::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
@@ -81,14 +81,15 @@ class AjaxTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'load', 'getId', '__sleep'])
+            ->onlyMethods(['setStoreId', 'load', 'getId', '__sleep'])
             ->getMock();
         $product->expects($this->once())->method('setStoreId')->willReturnSelf();
         $product->expects($this->once())->method('load')->willReturnSelf();
         $product->expects($this->once())->method('getId')->willReturn(1);
 
         $optionsBlock = $this->getMockBuilder(Option::class)
-            ->setMethods(['setIgnoreCaching', 'setProduct', 'getOptionValues'])
+            ->addMethods(['setIgnoreCaching'])
+            ->onlyMethods(['setProduct', 'getOptionValues'])
             ->disableOriginalConstructor()
             ->getMock();
         $optionsBlock->expects($this->once())->method('setIgnoreCaching')->with(true)->willReturnSelf();
@@ -97,14 +98,14 @@ class AjaxTest extends TestCase
 
         $layout = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['createBlock'])
+            ->onlyMethods(['createBlock'])
             ->getMockForAbstractClass();
         $layout->expects($this->once())->method('createBlock')
             ->with(Option::class)
             ->willReturn($optionsBlock);
 
         $request = $this->getMockBuilder(Http::class)
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->disableOriginalConstructor()
             ->getMock();
         $request->expects($this->once())->method('getParam')->with('store')

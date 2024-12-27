@@ -6,6 +6,8 @@
 
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
 
+use Magento\Newsletter\Model\Queue;
+
 /**
  * Newsletter queue edit form
  *
@@ -227,7 +229,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'value' => $queue->getTemplate()->getTemplateStyles()
                 ]
             );
-        } elseif (\Magento\Newsletter\Model\Queue::STATUS_NEVER != $queue->getQueueStatus()) {
+        } elseif (Queue::STATUS_NEVER != $queue->getQueueStatus() && $queue->getQueueStatus() != Queue::STATUS_PAUSE) {
             $fieldset->addField(
                 'text',
                 'textarea',

@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13641"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as admin -->
@@ -65,6 +66,9 @@
             <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
                 <argument name="productAttributeCode" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearAttributesGridFilter"/>
             <!--Clear products grid filter-->
@@ -110,5 +114,6 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProducts">
             <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

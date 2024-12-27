@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -73,10 +73,10 @@
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
-    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="Magento\Catalog\Model\MassAction" />
     <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
     <preference for="Magento\Catalog\Api\CategoryListDeleteBySkuInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
     <preference for="Magento\Theme\CustomerData\MessagesProviderInterface" type="Magento\Catalog\Model\Theme\CustomerData\MessagesProvider"/>
+    <preference for="Magento\Catalog\Api\ProductAttributeIsFilterableManagementInterface" type="Magento\Catalog\Model\Product\Attribute\IsFilterableManagement" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -554,6 +554,11 @@
     <type name="Magento\Catalog\Model\ResourceModel\Config">
         <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\ResourceModel\Config" />
     </type>
+    <type name="Magento\Catalog\Plugin\Model\ResourceModel\Config">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_eav_cache</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Catalog\Api\ProductLinkTypeListInterface" type="Magento\Catalog\Model\Product\LinkTypeProvider" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkAttributeInterface" type="Magento\Catalog\Model\ProductLink\Attribute" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkTypeInterface" type="Magento\Catalog\Model\ProductLink\Type" />
@@ -739,6 +744,7 @@
                 <item name="Magento\Catalog\Model\Product\Attribute\Backend\Category" xsi:type="string">int[]</item>
                 <item name="Magento\Catalog\Model\Product\Attribute\Backend\Stock" xsi:type="string">Magento\CatalogInventory\Api\Data\StockItemInterface[]</item>
                 <item name="Magento\Catalog\Model\Category\Attribute\Backend\Sortby" xsi:type="string">string[]</item>
+                <item name="Magento\Catalog\Model\Category\Attribute\Backend\DefaultSortby" xsi:type="string">string</item>
             </argument>
         </arguments>
     </type>
@@ -1181,7 +1187,7 @@
     <type name="Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand">
         <arguments>
             <argument name="dimensionSwitchers" xsi:type="array">
-                <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher</item>
+                <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher\Proxy</item>
             </argument>
         </arguments>
     </type>
@@ -1339,6 +1345,32 @@
             <argument name="validators" xsi:type="array">
                 <item name="catalog_product" xsi:type="array">
                     <item name="product_reserved_attribute_codes" xsi:type="object">\Magento\Catalog\Model\Product\ReservedAttributeCheckerAdapter</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface"
+                type="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver" />
+    <type name="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_Catalog::AttributeRepository" xsi:type="object">Magento\Catalog\Model\Category\AttributeRepository</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\LayoutCacheTagResolverFactory">
+        <arguments>
+            <argument name="cacheTagsResolvers" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product" xsi:type="object">
+                    Magento\Catalog\Model\Product\LayoutCacheTagResolver
+                </item>
+                <item name="Magento\Catalog\Model\Category" xsi:type="object">
+                    Magento\Catalog\Model\Category\LayoutCacheTagResolver
                 </item>
             </argument>
         </arguments>

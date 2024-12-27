@@ -26,6 +26,9 @@
                 <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
                 <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStoreGroup">
@@ -33,6 +36,9 @@
             </actionGroup>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteUpdatedStoreGroup">
                 <argument name="storeGroupName" value="SecondStoreGroupUnique.name"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -48,6 +54,9 @@
             <argument name="website" value="{{_defaultWebsite.name}}"/>
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="Default Category"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
         </actionGroup>
 
         <!--Search updated store group(from above step) in grid and verify AssertStoreGroupInGrid-->

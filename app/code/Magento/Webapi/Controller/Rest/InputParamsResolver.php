@@ -138,12 +138,34 @@ class InputParamsResolver
                 $serviceMethodName
             );
             $inputData = array_merge($inputData, $this->request->getParams());
+            $inputData = $this->filterInputData($inputData);
         } else {
             $inputData = $this->request->getRequestData();
         }
+
         $this->validateParameters($serviceClassName, $serviceMethodName, array_keys($route->getParameters()));
 
         return $this->paramsOverrider->override($inputData, $route->getParameters());
+    }
+
+    /**
+     * Validates InputData
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterInputData(array $inputData): array
+    {
+        $result = [];
+
+        $data = array_filter($inputData, function ($k) use (&$result) {
+            $key = is_string($k) ? strtolower(str_replace('_', "", $k)) : $k;
+            return !isset($result[$key]) && ($result[$key] = true);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return array_map(function ($value) {
+            return is_array($value) ? $this->filterInputData($value) : $value;
+        }, $data);
     }
 
     /**
@@ -175,7 +197,7 @@ class InputParamsResolver
     ): void {
         $methodParams = $this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName);
         foreach ($paramOverriders as $key => $param) {
-            $arrayKeys = explode('.', $param);
+            $arrayKeys = explode('.', $param ?? '');
             $value = array_shift($arrayKeys);
 
             foreach ($methodParams as $serviceMethodParam) {

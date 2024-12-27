@@ -232,7 +232,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function getComponentData(): array
+    public static function getComponentData(): array
     {
         $cachedData = new \ArrayObject(
             [
@@ -253,7 +253,7 @@ class ManagerTest extends TestCase
         return [
             [
                 'test_component1',
-                new \ArrayObject(),
+                $cachedData,
                 json_encode($cachedData->getArrayCopy()),
                 [],
                 [
@@ -345,7 +345,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function getComponentDataProvider(): array
+    public static function getComponentDataProvider(): array
     {
         return [
             [

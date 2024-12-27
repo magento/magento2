@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -52,25 +52,25 @@
 
         <!-- *.bmp is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="bmp.bmp" stepKey="attachBmp"/>
-        <waitForPageLoad stepKey="waitForUploadBmp"/>
+        <waitForElementVisible  selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadBmp"/>
         <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="bmp.bmp was not uploaded. Disallowed file type." stepKey="seeErrorBmp"/>
         <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalBmp"/>
 
         <!-- *.ico is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="ico.ico" stepKey="attachIco"/>
-        <waitForPageLoad stepKey="waitForUploadIco"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadIco"/>
         <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="ico.ico was not uploaded. Disallowed file type." stepKey="seeErrorIco"/>
         <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalIco"/>
 
         <!-- *.svg is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="svg.svg" stepKey="attachSvg"/>
-        <waitForPageLoad stepKey="waitForUploadSvg"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadSvg"/>
         <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="svg.svg was not uploaded. Disallowed file type." stepKey="seeErrorSvg"/>
         <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalSvg"/>
 
         <!-- 0kb size is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="empty.jpg" stepKey="attachEmpty"/>
-        <waitForPageLoad stepKey="waitForUploadEmpty"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadEmpty"/>
         <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="empty.jpg was not uploaded." stepKey="seeErrorEmpty"/>
         <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalEmpty"/>
 
@@ -110,16 +110,16 @@
         <waitForPageLoad stepKey="waitForStorefront"/>
 
         <!-- See all of the images that we uploaded -->
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('small')}}" stepKey="seeSmall"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('medium')}}" stepKey="seeMedium"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('gif')}}" stepKey="seeGif"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('jpg')}}" stepKey="seeJpg"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('png')}}" stepKey="seePng"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.imageFileInGallery('small')}}" stepKey="seeSmall"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.imageFileInGallery('medium')}}" stepKey="seeMedium"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.imageFileInGallery('large')}}" stepKey="seeLarge"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.imageFileInGallery('gif')}}" stepKey="seeGif"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.imageFileInGallery('jpg')}}" stepKey="seeJpg"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.imageFileInGallery('png')}}" stepKey="seePng"/>
 
         <!-- Go to the category page and see a placeholder image for the second product -->
         <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage"/>
-        <seeElement selector=".products-grid img[src*='placeholder/small_image.jpg']" stepKey="seePlaceholder"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image.jpg')}}" stepKey="seePlaceholder"/>
 
         <!-- Go to the second product edit page -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex2"/>
@@ -150,15 +150,15 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku3">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
-        <seeElement selector="img.admin__control-thumbnail[src*='/large']" stepKey="seeImgInGrid"/>
+        <waitForElementVisible selector="{{AdminProductGridSection.productThumbnailBySrc('/large')}}" stepKey="seeImgInGrid"/>
 
         <!-- Go to the category page and see the uploaded image -->
         <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage2"/>
-        <seeElement selector=".products-grid img[src*='/large']" stepKey="seeUploadedImg"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/large')}}" stepKey="seeUploadedImg"/>
 
         <!-- Go to the product page and see the uploaded image -->
         <amOnPage url="$$secondProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefront2"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
     </test>
 </tests>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test  name="CreateAnchorCategoryTest">
+        <annotations>
+            <stories value="Admin Can Create Category Anchor setting"/>
+            <title value="Create Anchor category"/>
+            <description value="Admin Can Create Category Anchor setting and it should work perfectly"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4587"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategoryA"/>
+            <createData entity="SubCategoryWithParent" stepKey="createCategoryB">
+                <requiredEntity createDataKey="createCategoryA"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createCategoryC">
+                <requiredEntity createDataKey="createCategoryB"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createCategoryD">
+                <requiredEntity createDataKey="createCategoryA"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createCategoryE">
+                <requiredEntity createDataKey="createCategoryD"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductA" stepKey="deleteProductA"/>
+            <deleteData createDataKey="createProductB" stepKey="deleteProductB"/>
+            <deleteData createDataKey="createProductC" stepKey="deleteProductC"/>
+            <deleteData createDataKey="createProductD" stepKey="deleteProductD"/>
+            <deleteData createDataKey="createProductE" stepKey="deleteProductE"/>
+            <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
+        </after>
+
+        <!--add product A to anchor category A and do storefront validation for product qty and visibility-->
+        <createData entity="_defaultProduct" stepKey="createProductA">
+            <requiredEntity createDataKey="createCategoryA"/>
+            <field key="name">A</field>
+        </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices1">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageFirstTime">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+        <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="verifyProductCountFirstTimeInCatA"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductAOnCategoryAPageFirstTime">
+            <argument name="productName" value="$$createProductA.name$$"/>
+        </actionGroup>
+
+        <!--disable anchor category B and add product B to it and do storefront validation for product qty and visibility in category A and category B-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPageFirstTime"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersFirstTime"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItemFirstTime">
+            <argument name="categoryName" value="$createCategoryB.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminToggleAnchorSwitchActionGroup" stepKey="disableAnchorSwitchForCatB"/>
+        <createData entity="_defaultProduct" stepKey="createProductB">
+            <requiredEntity createDataKey="createCategoryB"/>
+            <field key="name">B</field>
+        </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices2">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openCategoryBPage">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+        <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="productCountInCategoryB"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeFirstSimpleProductNameOnCategoryPage">
+            <argument name="productName" value="$$createProductB.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageSecondTime">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+        <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="verifyProductCountSecondTimeInCatA"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductAOnCategoryAPageSecondTime">
+            <argument name="productName" value="$$createProductA.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductBOnCategoryAPageFirstTime">
+            <argument name="productName" value="$$createProductB.name$$"/>
+        </actionGroup>
+
+        <!--disable anchor category C and add product C to it-->
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPageSecondTime"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersSecondTime"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryC">
+            <argument name="categoryName" value="$createCategoryC.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminToggleAnchorSwitchActionGroup" stepKey="disableAnchorSwitchForCatC"/>
+        <createData entity="_defaultProduct" stepKey="createProductC">
+            <requiredEntity createDataKey="createCategoryC"/>
+            <field key="name">C</field>
+        </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices3">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory1"/>
+
+        <!-- admin side category tree hierarchy validation for category A, category B and category C-->
+        <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForThree($createCategoryA.name$,$createCategoryB.name$,$createCategoryC.name$)}}"  stepKey="verifyThreeLayerCategoryTree"/>
+
+        <!--storefront validation for product qty and visibility in category A, category B and category C -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageThirdTime">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+        <see userInput="3" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="verifyProductCountThirdTimeInCatA"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductAOnCategoryAPageThirdTime">
+            <argument name="productName" value="$$createProductA.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductBOnCategoryAPageSecondTime">
+            <argument name="productName" value="$$createProductB.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductCOnCategoryAPageFirstTime">
+            <argument name="productName" value="$$createProductC.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openCategoryBPageSecondTime">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryB.name$$"/>
+        </actionGroup>
+        <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="verifyProductCountInCatB"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductBOnCategoryBPage">
+            <argument name="productName" value="$$createProductB.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToSubSubCategoryPageActionGroup" stepKey="openCategoryCPage">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryB.name$$"/>
+            <argument name="subSubCategoryName" value="$$createCategoryC.name$$"/>
+        </actionGroup>
+        <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="verifyProductCountInCatC"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductCOnCategoryCPage">
+            <argument name="productName" value="$$createProductC.name$$"/>
+        </actionGroup>
+
+        <!--add product D to anchor category D-->
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryThirdTime"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersThirdTime"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryD">
+            <argument name="categoryName" value="$createCategoryD.name$"/>
+        </actionGroup>
+        <createData entity="_defaultProduct" stepKey="createProductD">
+            <requiredEntity createDataKey="createCategoryD"/>
+            <field key="name">D</field>
+        </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices4">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory2"/>
+
+        <!-- admin side category tree hierarchy validation with product qty for category A, category B, category C and category D-->
+        <reloadPage stepKey="refreshEditCategoryDPage" />
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandAll"/>
+        <wait time="15" stepKey="waitForExpandAllFourCategoryTree" />
+        <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForFour($createCategoryA.name$,'4',$createCategoryB.name$,'1',$createCategoryC.name$,'1',$createCategoryD.name$,'1')}}" stepKey="verifyFourLayerCategoryTreeWithProductQty"/>
+
+        <!--storefront validation for product qty and visibility in category A-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageFourthTime">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+        <see userInput="4" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="verifyProductCountFourthTimeInCatA"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductAOnCategoryAPageFourthTime">
+            <argument name="productName" value="$$createProductA.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductBOnCategoryAPageThirdTime">
+            <argument name="productName" value="$$createProductB.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductCOnCategoryAPageSecondTime">
+            <argument name="productName" value="$$createProductC.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductDOnCategoryAPageFirstTime">
+            <argument name="productName" value="$$createProductD.name$$"/>
+        </actionGroup>
+
+        <!--disable anchor category E and add product E to it-->
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openAdminCategoryPageFourthTime"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFiltersFourthTime"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryE">
+            <argument name="categoryName" value="$createCategoryE.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminToggleAnchorSwitchActionGroup" stepKey="disableAnchorSwitchForCatE"/>
+        <createData entity="_defaultProduct" stepKey="createProductE">
+            <requiredEntity createDataKey="createCategoryE"/>
+            <field key="name">E</field>
+        </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices5">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory3"/>
+
+        <!-- admin side category tree hierarchy validation with product qty for category A, category B, category C, category D and category E-->
+        <reloadPage stepKey="refreshCategoryEPage" />
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandAllFiveCategoryTree"/>
+        <wait time="15" stepKey="waitForExpandAllFiveCategoryTree" />
+        <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForFive($createCategoryA.name$,'5',$createCategoryB.name$,'1',$createCategoryC.name$,'1',$createCategoryD.name$,'2',$createCategoryE.name$,'1')}}" stepKey="verifyFiveLayerCategoryTreeWithProductQty"/>
+
+        <!--storefront validation for product qty and visibility in category A and category D-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageFifthTime">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+        </actionGroup>
+        <see userInput="5" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="verifyProductCountFifthTimeInCatA"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductAOnCategoryAPageFifthTime">
+            <argument name="productName" value="$$createProductA.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductBOnCategoryAPageFourthTime">
+            <argument name="productName" value="$$createProductB.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductCOnCategoryAPageThirdTime">
+            <argument name="productName" value="$$createProductC.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductDOnCategoryAPageSecondTime">
+            <argument name="productName" value="$$createProductD.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductEOnCategoryAPageFirstTime">
+            <argument name="productName" value="$$createProductE.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openCategoryDPage">
+            <argument name="categoryName" value="$$createCategoryA.name$$"/>
+            <argument name="subCategoryName" value="$$createCategoryD.name$$"/>
+        </actionGroup>
+        <see userInput="2" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="verifyProductCountFirstTimeInCatD"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductDOnCategoryDPageFirstTime">
+            <argument name="productName" value="$$createProductD.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="verifyProductEOnCategoryDPageFirstTime">
+            <argument name="productName" value="$$createProductE.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

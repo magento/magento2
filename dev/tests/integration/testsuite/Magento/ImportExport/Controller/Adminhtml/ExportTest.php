@@ -82,7 +82,7 @@ class ExportTest extends AbstractBackendController
      *
      * @return array
      */
-    public function getEntityTypesDataProvider()
+    public static function getEntityTypesDataProvider()
     {
         return [
             'products' => [

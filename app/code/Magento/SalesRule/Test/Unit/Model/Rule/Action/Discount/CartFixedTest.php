@@ -87,7 +87,8 @@ class CartFixedTest extends TestCase
     protected function setUp(): void
     {
         $this->rule = $this->getMockBuilder(Rule::class)
-            ->setMethods(['getId', 'getApplyToShipping'])
+            ->addMethods([ 'getApplyToShipping'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->item = $this->createMock(AbstractItem::class);
@@ -98,10 +99,11 @@ class CartFixedTest extends TestCase
             ->onlyMethods(['getStore', 'getExtensionAttributes', 'isVirtual'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->address = $this->createPartialMock(
-            Address::class,
-            ['getShippingMethod']
-        );
+        $this->address = $this->getMockBuilder(Address::class)
+            ->onlyMethods(['getShippingMethod'])
+            ->addMethods(['getShippingInclTax', 'getShippingExclTax'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->item->expects($this->any())->method('getQuote')->willReturn($this->quote);
         $this->item->expects($this->any())->method('getAddress')->willReturn($this->address);
 
@@ -114,10 +116,10 @@ class CartFixedTest extends TestCase
         $dataFactory->method('create')->willReturn($this->data);
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['roundPrice'])
+            ->addMethods(['roundPrice'])
             ->getMockForAbstractClass();
         $this->deltaPriceRound = $this->getMockBuilder(DeltaPriceRound::class)
-            ->setMethods(['round'])
+            ->onlyMethods(['round'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartFixedDiscountHelper = $this->getMockBuilder(CartFixedDiscount::class)
@@ -129,7 +131,8 @@ class CartFixedTest extends TestCase
                 'getQuoteTotalsForMultiShipping',
                 'getQuoteTotalsForRegularShipping',
                 'getBaseRuleTotals',
-                'getAvailableDiscountAmount'])
+                'getAvailableDiscountAmount',
+                'applyDiscountOnPricesIncludedTax'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -177,24 +180,27 @@ class CartFixedTest extends TestCase
                     $ruleDetails['discounted_amount']
                 )
             );
+        $this->cartFixedDiscountHelper->expects($this->any())
+            ->method('applyDiscountOnPricesIncludedTax')
+            ->willReturn(true);
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingAssignments'])
+            ->addMethods(['getShippingAssignments'])
             ->getMockForAbstractClass();
         $this->quote->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
         $store = $this->createMock(Store::class);
         $this->priceCurrency
             ->expects($this->atLeastOnce())
             ->method('convert')
-            ->willReturnArgument($ruleDetails['rounded_amount']);
+            ->willReturnArgument((int)$ruleDetails['rounded_amount']);
         $this->priceCurrency
             ->expects($this->atLeastOnce())
             ->method('roundPrice')
-            ->willReturnArgument($ruleDetails['rounded_amount']);
+            ->willReturnArgument((int)$ruleDetails['rounded_amount']);
         $this->deltaPriceRound
             ->expects($this->any())
             ->method('round')
-            ->willReturnArgument($ruleDetails['base_items_price']);
+            ->willReturnArgument((int)$ruleDetails['base_items_price']);
         $this->quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->quote->method('isVirtual')
             ->willReturn(false);
@@ -212,6 +218,12 @@ class CartFixedTest extends TestCase
                     $shipping['shipping_method']
                 )
             );
+        $this->address->expects($this->any())
+            ->method('getShippingInclTax')
+            ->willReturn(15.00);
+        $this->address->expects($this->any())
+            ->method('getShippingExclTax')
+            ->willReturn(10.00);
 
         /** validators data */
         $this->validator

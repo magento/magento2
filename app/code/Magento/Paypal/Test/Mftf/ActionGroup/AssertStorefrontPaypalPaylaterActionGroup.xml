@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontPaypalPaylaterActionGroup">
+        <annotations>
+            <description>Goes to the 'Storefront Category' page for 'Paylater Message'. </description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminPaypalStandardConfigSection.categoryClick}}" stepKey="waitForCategryToClickable"/>
+        <click selector ="{{AdminPaypalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryeButton"/>
+        <waitForPageLoad stepKey="waitForCategrypageTobeLoaded"/>
+        <waitForElementVisible selector="{{AdminPaypalStandardConfigSection.payPalFrame}}" stepKey="waitForElement"/>
+        <switchToIFrame selector="{{AdminPaypalStandardConfigSection.payPalFrame}}" stepKey="switchToBuyNowPaylaterIFrame"/>
+        <waitForElementVisible selector="{{AdminPaypalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyBuyNowPaylaterMessage"/>
+        <switchToIFrame stepKey="switchBackToMainPaypalFrame"/>
+    </actionGroup>
+</actionGroups>

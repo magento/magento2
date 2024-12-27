@@ -135,8 +135,13 @@ class AttributeValidationTest extends TestCase
                 ->willReturn($attributeCode);
             $this->entityMock
                 ->method('getData')
-                ->withConsecutive([], [$attributeCode])
-                ->willReturnOnConsecutiveCalls([$attributeCode => null], null);
+                ->willReturnCallback(function ($arg1) use ($attributeCode) {
+                    if (empty($arg1)) {
+                        return [$attributeCode => null];
+                    } elseif ($arg1 == $attributeCode) {
+                        return null;
+                    }
+                });
         }
 
         $this->attributeValidation->aroundValidate($this->subjectMock, $this->proceedMock, $this->entityMock);
@@ -148,7 +153,7 @@ class AttributeValidationTest extends TestCase
      *
      * @return array
      */
-    public function aroundValidateDataProvider(): array
+    public static function aroundValidateDataProvider(): array
     {
         return [
             [true, false, '0'],

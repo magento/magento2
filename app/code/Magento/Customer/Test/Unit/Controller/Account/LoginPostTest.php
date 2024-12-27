@@ -108,12 +108,12 @@ class LoginPostTest extends TestCase
 
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['setUsername'])
+            ->onlyMethods(
                 [
                     'isLoggedIn',
                     'setCustomerDataAsLoggedIn',
-                    'regenerateId',
-                    'setUsername',
+                    'regenerateId'
                 ]
             )->getMock();
 
@@ -178,7 +178,7 @@ class LoginPostTest extends TestCase
     /**
      * @return array
      */
-    public function invalidFormKeyDataProvider()
+    public static function invalidFormKeyDataProvider()
     {
         return [
             [
@@ -470,7 +470,7 @@ class LoginPostTest extends TestCase
     /**
      * @return array
      */
-    public function exceptionDataProvider()
+    public static function exceptionDataProvider()
     {
         return [
             [
@@ -508,7 +508,7 @@ class LoginPostTest extends TestCase
 
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isPost',
                     'getPost',

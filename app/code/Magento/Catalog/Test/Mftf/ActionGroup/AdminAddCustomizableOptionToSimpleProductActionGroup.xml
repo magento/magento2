@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddCustomizableOptionToSimpleProductActionGroup">
+        <annotations>
+            <description value="Add a custom option of type date to simple product." />
+        </annotations>
+
+        <click selector="{{AdminProductCustomizableOptionSection.customizableOptionsToggle}}" stepKey="expandCustomOptions"/>
+        <scrollTo selector="{{AdminProductCustomizableOptionSection.customizableOptionsToggle}}" stepKey="scrollToCustomizableOptions"/>
+
+        <click selector="{{AdminProductCustomizableOptionSection.addButtonOption}}" stepKey="clickAddButtonOption"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionSection.customOptionXTitle}}" stepKey="waitForOptions"/>
+        <fillField selector="{{AdminProductCustomizableOptionSection.customOptionXTitle}}" userInput="custom option 1" stepKey="fillOptionTitle"/>
+
+        <click selector="{{AdminProductCustomizableOptionSection.customOptionSelectType}}" stepKey="selectType"/>
+        <click selector="{{AdminProductCustomizableOptionSection.customOptionSelectField}}" stepKey="selectField"/>
+        <click selector="{{AdminProductCustomizableOptionSection.uncheckRequired}}" stepKey="uncheckRequired"/>
+        <fillField selector="{{AdminProductCustomizableOptionSection.customizableOptionPrice}}" userInput="0" stepKey="fillPrice"/>
+
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionSection.save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{AdminProductCustomizableOptionSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <seeElement selector="{{AdminProductCustomizableOptionSection.successMessage}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

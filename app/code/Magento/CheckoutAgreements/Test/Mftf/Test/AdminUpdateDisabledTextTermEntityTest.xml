@@ -21,9 +21,7 @@
         </annotations>
 
         <after>
-            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{activeHtmlTerm.name}}"/>
-            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
         </after>
 
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">

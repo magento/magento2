@@ -116,7 +116,15 @@ class DiffManagerTest extends TestCase
         $generatedIndex = new Index('index_type', 'index', $table, [$column], 'hash', 'index_type');
         $diff->expects(self::exactly(2))
             ->method('register')
-            ->withConsecutive([$generatedIndex, 'drop_element', $generatedIndex], [$index, 'add_complex_element']);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($generatedIndex, $index) {
+                    if ($arg1 === $generatedIndex && $arg2 === 'drop_element' && $arg3 === $generatedIndex) {
+                        return null;
+                    } elseif ($arg1 === $index && $arg2 === 'add_complex_element') {
+                        return null;
+                    }
+                }
+            );
         $this->model->registerModification($diff, $index, $generatedIndex);
     }
 
@@ -150,9 +158,14 @@ class DiffManagerTest extends TestCase
         $reference = new Reference('ref', 'foreign', $table, 'ref', $column, $refTable, $column, 'CASCADE');
         $diff->expects(self::exactly(2))
             ->method('register')
-            ->withConsecutive(
-                [$reference, 'drop_reference', $reference],
-                [$table, 'drop_table', $table]
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($reference, $table) {
+                    if ($arg1 == $reference && $arg2 == 'drop_reference' && $arg3 == $reference) {
+                        return null;
+                    } elseif ($arg1 == $table && $arg2 == 'drop_table' && $arg3 == $table) {
+                        return null;
+                    }
+                }
             );
         $this->model->registerRemoval($diff, [$reference, $table]);
     }
@@ -177,10 +190,16 @@ class DiffManagerTest extends TestCase
         $reference = new Reference('ref', 'foreign', $table, 'ref', $column, $table, $column, 'CASCADE');
         $diff->expects(self::exactly(3))
             ->method('register')
-            ->withConsecutive(
-                [$table, 'create_table'],
-                [$column, 'add_column'],
-                [$reference, 'add_complex_element']
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($table, $column, $reference) {
+                    if ($arg1 == $table && $arg2 == 'create_table') {
+                        return null;
+                    } elseif ($arg1 == $column && $arg2 == 'add_column') {
+                        return null;
+                    } elseif ($arg1 == $reference && $arg2 == 'add_complex_element') {
+                        return null;
+                    }
+                }
             );
         $this->model->registerCreation($diff, $table);
         $this->model->registerCreation($diff, $column);

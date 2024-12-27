@@ -152,22 +152,20 @@ class GroupRepositoryTest extends TestCase
         $this->groupRegistry = $this->createMock(GroupRegistry::class);
         $this->groupFactory = $this->createPartialMock(GroupFactory::class, ['create']);
         $this->groupModel = $this->getMockBuilder(Group::class)
-            ->setMethods(
+            ->addMethods(['getTaxClassId', 'setTaxClassId'])
+            ->onlyMethods(
                 [
-                    'getTaxClassId',
                     'getTaxClassName',
                     'getId',
                     'getCode',
                     'setDataUsingMethod',
                     'setCode',
-                    'setTaxClassId',
                     'usesAsDefault',
                     'delete',
                     'getCollection',
                     'getData',
                 ]
             )
-            ->setMockClassName('groupModel')
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupDataFactory = $this->createPartialMock(
@@ -177,13 +175,13 @@ class GroupRepositoryTest extends TestCase
         $this->group = $this->getMockForAbstractClass(
             GroupInterface::class,
             [],
-            'group',
+            '',
             false
         );
         $this->factoryCreatedGroup = $this->getMockForAbstractClass(
             GroupInterface::class,
             [],
-            'group',
+            '',
             false
         );
 

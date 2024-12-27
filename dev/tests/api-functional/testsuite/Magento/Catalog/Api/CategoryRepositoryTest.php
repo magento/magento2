@@ -14,9 +14,11 @@ use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -211,16 +213,16 @@ class CategoryRepositoryTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function deleteSystemOrRootDataProvider(): array
+    public static function deleteSystemOrRootDataProvider(): array
     {
         return [
             'system_category' => [
-                'category_id' => Category::TREE_ROOT_ID,
-                'exception_message' => $this->buildExceptionMessage(Category::TREE_ROOT_ID),
+                'categoryId' => Category::TREE_ROOT_ID,
+                'exceptionMsg' => self::buildExceptionMessage(Category::TREE_ROOT_ID),
             ],
             'root_category' => [
-                'category_id' => 2,
-                'exception_message' => $this->buildExceptionMessage(2),
+                'categoryId' => 2,
+                'exceptionMsg' => self::buildExceptionMessage(2),
             ],
         ];
     }
@@ -231,7 +233,7 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @param int $categoryId
      * @return string
      */
-    private function buildExceptionMessage(int $categoryId): string
+    private static function buildExceptionMessage(int $categoryId): string
     {
         $translatedMsg = (string)__('Cannot delete category with id %1');
 
@@ -240,9 +242,9 @@ class CategoryRepositoryTest extends WebapiAbstract
             : $translatedMsg;
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
-     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
     public function testUpdate()
     {
         $categoryId = $this->fixtures->get('category')->getId();
@@ -267,12 +269,13 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->createdCategories = [$categoryId];
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
-     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category')
+    ]
     public function testUpdateWithDefaultSortByAttribute()
     {
-        $categoryId = 333;
+        $category = $this->fixtures->get('category');
+        $categoryId = $category->getId();
         $categoryData = [
             'name' => 'Update Category Test With default_sort_by Attribute',
             'is_active' => true,
@@ -280,7 +283,7 @@ class CategoryRepositoryTest extends WebapiAbstract
             'custom_attributes' => [
                 [
                     'attribute_code' => 'default_sort_by',
-                    'value' => ["name"],
+                    'value' => "price"
                 ],
             ],
         ];
@@ -291,13 +294,13 @@ class CategoryRepositoryTest extends WebapiAbstract
         $category = $model->load($categoryId);
         $this->assertTrue((bool)$category->getIsActive(), 'Category "is_active" must equal to true');
         $this->assertEquals("Update Category Test With default_sort_by Attribute", $category->getName());
-        $this->assertEquals("name", $category->getDefaultSortBy());
+        $this->assertEquals("price", $category->getDefaultSortBy());
         $this->createdCategories = [$categoryId];
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
-     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
     public function testUpdateUrlKey()
     {
         $this->_markTestAsRestOnly('Functionality available in REST mode only.');
@@ -600,9 +603,10 @@ class CategoryRepositoryTest extends WebapiAbstract
 
     /**
      * Check if repository does not override default values for attributes out of request
-     *
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
      */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
     public function testUpdateScopeAttribute()
     {
         $categoryId = $this->fixtures->get('category')->getId();

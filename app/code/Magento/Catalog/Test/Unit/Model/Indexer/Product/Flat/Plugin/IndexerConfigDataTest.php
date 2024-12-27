@@ -73,7 +73,7 @@ class IndexerConfigDataTest extends TestCase
     /**
      * @return array
      */
-    public function afterGetDataProvider()
+    public static function afterGetDataProvider()
     {
         $flatIndexerData = [
             'indexer_id' => 'catalog_product_flat',

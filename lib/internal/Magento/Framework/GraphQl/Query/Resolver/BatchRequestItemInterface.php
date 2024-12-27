@@ -11,6 +11,8 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * One of requests for a batch resolver to process.
+ *
+ * @api
  */
 interface BatchRequestItemInterface
 {

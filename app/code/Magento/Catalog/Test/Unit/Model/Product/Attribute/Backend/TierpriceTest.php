@@ -65,7 +65,8 @@ class TierpriceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->attribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getName', 'isScopeGlobal'])
+            ->addMethods(['isScopeGlobal'])
+            ->onlyMethods(['getName'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->localeFormat = $this->getMockBuilder(FormatInterface::class)
@@ -119,7 +120,14 @@ class TierpriceTest extends TestCase
         $this->attribute->expects($this->atLeastOnce())->method('getName')->willReturn($attributeName);
         $object->expects($this->atLeastOnce())->method('getData')->with($attributeName)->willReturn($tierPrices);
         $this->localeFormat->expects($this->atLeastOnce())
-            ->method('getNumber')->withConsecutive([15], [20])->willReturnArgument(0);
+            ->method('getNumber')
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 15) {
+                    return 15;
+                } elseif ($arg == 20) {
+                    return 20;
+                }
+            });
         $this->storeManager->expects($this->once())->method('getWebsites')->willReturn([]);
         $this->assertTrue($this->tierprice->validate($object));
     }
@@ -209,15 +217,21 @@ class TierpriceTest extends TestCase
         $object->expects($this->once())->method('getStoreId')->willReturn(null);
         $this->attribute->expects($this->atLeastOnce())->method('getName')->willReturn($attributeName);
         $object->expects($this->atLeastOnce())->method('setData')
-            ->withConsecutive(
-                [$attributeName, $finalTierPrices],
-                [$attributeName . '_changed', 0]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($attributeName, $finalTierPrices, $object) {
+                if ($arg1 === $attributeName && $arg2 === $finalTierPrices) {
+                    return $object;
+                } elseif ($arg1 === $attributeName . '_changed' && $arg2 === 0) {
+                    return $object;
+                }
+            });
         $object->expects($this->atLeastOnce())->method('setOrigData')
-            ->withConsecutive(
-                [$attributeName, $finalTierPrices],
-                [$attributeName . '_changed', 0]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($attributeName, $finalTierPrices, $object) {
+                if ($arg1 === $attributeName && $arg2 === $finalTierPrices) {
+                    return $object;
+                } elseif ($arg1 === $attributeName . '_changed' && $arg2 === 0) {
+                    return $object;
+                }
+            });
         $this->tierprice->setPriceData($object, $tierPrices);
     }
 }

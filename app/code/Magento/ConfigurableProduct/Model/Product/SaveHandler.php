@@ -9,12 +9,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
- * Class SaveHandler
+ * Class SaveHandler to update configurable options
  */
 class SaveHandler implements ExtensionInterface
 {
@@ -29,20 +31,29 @@ class SaveHandler implements ExtensionInterface
     private $resourceModel;
 
     /**
-     * SaveHandler constructor
-     *
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param ResourceModelConfigurable $resourceModel
      * @param OptionRepositoryInterface $optionRepository
+     * @param ProductRepositoryInterface|null $productRepository
      */
     public function __construct(
         ResourceModelConfigurable $resourceModel,
-        OptionRepositoryInterface $optionRepository
+        OptionRepositoryInterface $optionRepository,
+        ?ProductRepositoryInterface $productRepository = null
     ) {
         $this->resourceModel = $resourceModel;
         $this->optionRepository = $optionRepository;
+        $this->productRepository =
+            $productRepository ?: ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
     }
 
     /**
+     * Update product options
+     *
      * @param ProductInterface $entity
      * @param array $arguments
      * @return ProductInterface
@@ -59,6 +70,8 @@ class SaveHandler implements ExtensionInterface
             return $entity;
         }
 
+        // Refresh product in cache
+        $this->productRepository->get($entity->getSku(), false, null, true);
         if ($extensionAttributes->getConfigurableProductOptions() !== null) {
             $this->deleteConfigurableProductAttributes($entity);
         }

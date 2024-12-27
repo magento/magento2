@@ -35,4 +35,4 @@ Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store_r
 $reflectionClass = new \ReflectionClass(ResourceCurrency::class);
 $staticProperty = $reflectionClass->getProperty('_rateCache');
 $staticProperty->setAccessible(true);
-$staticProperty->setValue(null);
+$staticProperty->setValue(null, null);

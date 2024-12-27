@@ -60,8 +60,12 @@ class Hydrator
         if ($basicFieldsOnly) {
             $categoryData = $category->getData();
         } else {
-            $categoryData = $this->dataObjectProcessor->buildOutputDataArray($category, CategoryInterface::class);
+            $categoryData = $this->dataObjectProcessor->buildOutputDataArray(
+                $category,
+                CategoryInterface::class
+            );
         }
+
         $categoryData['id'] = $category->getId();
         $categoryData['uid'] = $this->uidEncoder->encode((string) $category->getId());
         $categoryData['children'] = [];

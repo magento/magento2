@@ -74,7 +74,7 @@ class PluginListTest extends TestCase
 
         $this->configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->setMethods(['get'])
+            ->addMethods(['get'])
             ->getMockForAbstractClass();
         // turn cache off
         $this->cacheMock->method('get')->willReturn(false);
@@ -86,7 +86,7 @@ class PluginListTest extends TestCase
         $omConfigMock->method('getOriginalInstanceType')->willReturnArgument(0);
 
         $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $objectManagerMock->method('get')->willReturnArgument(0);
         $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
@@ -278,7 +278,7 @@ class PluginListTest extends TestCase
     /**
      * @return array
      */
-    public function getPluginsDataProvider()
+    public static function getPluginsDataProvider()
     {
         return [
             [

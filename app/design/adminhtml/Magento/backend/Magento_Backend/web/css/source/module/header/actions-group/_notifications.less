@@ -15,9 +15,9 @@
 @notifications__color: @color-gray20;
 
 @notifications-action__color: @text__color;
-@notifications-action__padding-bottom: (@page-header-action__height - @notifications-action-icon__size) / 2 - .05rem;
+@notifications-action__padding-bottom: ((@page-header-action__height - @notifications-action-icon__size) / 2 - .05rem);
 @notifications-action__padding-side: 2rem;
-@notifications-action__padding-top: (@page-header-action__height - @notifications-action-icon__size) / 2 + .05rem;
+@notifications-action__padding-top: ((@page-header-action__height - @notifications-action-icon__size) / 2 + .05rem);
 @notifications-action__hover__color: darken(@action-dropdown__color, 20%);
 @notifications-action-icon__size: 1.9rem;
 @notifications-action-menu__z-index: @header__z-index;
@@ -177,7 +177,7 @@
 .notifications-close {
     &:extend(.abs-action-reset all);
     line-height: 1;
-    padding: @notifications-action__padding-side / 2;
+    padding: (@notifications-action__padding-side / 2);
     position: absolute;
     right: 0;
     top: .6rem;

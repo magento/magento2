@@ -266,6 +266,9 @@
             "customer_group_code": true,
             "tax_class_id": true
         },
+        "index": {
+            "CUSTOMER_GROUP_CUSTOMER_GROUP_CODE": true
+        },
         "constraint": {
             "PRIMARY": true
         }
@@ -283,7 +286,8 @@
             "is_used_in_grid": true,
             "is_visible_in_grid": true,
             "is_filterable_in_grid": true,
-            "is_searchable_in_grid": true
+            "is_searchable_in_grid": true,
+            "grid_filter_condition_type": true
         },
         "index": {
             "CUSTOMER_EAV_ATTRIBUTE_SORT_ORDER": true

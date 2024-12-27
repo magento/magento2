@@ -85,5 +85,5 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit\Framework\TestCas
      *
      * @return array
      */
-    abstract public function collectorPositionDataProvider();
+    abstract public static function collectorPositionDataProvider();
 }

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Email\Block\Adminhtml\Template\Preview;
 use Magento\Email\Model\AbstractTemplate;
 use Magento\Email\Model\Template;
@@ -18,6 +19,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filter\Input\MaliciousCode;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\Store;
@@ -73,12 +75,12 @@ class PreviewTest extends TestCase
         $designConfigData = [];
 
         $this->template = $this->getMockBuilder(Template::class)
-            ->setMethods(
+            ->addMethods(['getAppState'])
+            ->onlyMethods(
                 [
                     'setDesignConfig',
                     'getDesignConfig',
                     'getProcessedTemplate',
-                    'getAppState',
                     'revertDesign'
                 ]
             )
@@ -129,7 +131,7 @@ class PreviewTest extends TestCase
                     $scopeConfig
                 ]
             )
-            ->setMethods(['emulateAreaCode'])
+            ->onlyMethods(['emulateAreaCode'])
             ->disableOriginalConstructor()
             ->getMock();
         $appState->expects($this->any())
@@ -150,6 +152,17 @@ class PreviewTest extends TestCase
         $context->expects($this->any())->method('getDesignPackage')->willReturn($design);
         $context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
         $context->expects($this->once())->method('getAppState')->willReturn($appState);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManagerHelper->prepareObjectManager($objects);
 
         /** @var Preview $preview */
         $this->preview = $this->objectManagerHelper->getObject(
@@ -191,10 +204,10 @@ class PreviewTest extends TestCase
      *
      * @return array
      */
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider()
     {
         return [
-            ['data 1' => [
+            ['requestParamMap' => [
                 ['type', null, ''],
                 ['text', null, self::MALICIOUS_TEXT],
                 ['styles', null, ''],

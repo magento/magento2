@@ -16,6 +16,7 @@
             <severity value="MINOR"/>
             <testCaseId value="MC-29105"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

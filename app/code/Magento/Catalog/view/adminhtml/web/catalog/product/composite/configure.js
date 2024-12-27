@@ -230,7 +230,9 @@ define([
                             if (response.error) {
                                 this.blockMsg.show();
                                 this.blockMsgError.innerHTML = response.message;
-                                this.blockCancelBtn.hide();
+                                if(this.blockCancelBtn) {
+                                    this.blockCancelBtn.hide();
+                                }
                                 this.setConfirmCallback(listType, null);
                                 this._showWindow();
                             }
@@ -584,7 +586,9 @@ define([
                     this.blockFormFields.update();
                     this.blockMsg.hide();
                     this.blockMsgError.update();
-                    this.blockCancelBtn.show();
+                    if(this.blockCancelBtn) {
+                        this.blockCancelBtn.show();
+                    }
                     break;
                 default:
                     // search in list types for its cleaning
@@ -603,7 +607,9 @@ define([
                         this.blockFormFields.update();
                         this.blockMsg.hide();
                         this.blockMsgError.update();
-                        this.blockCancelBtn.show();
+                        if(this.blockCancelBtn) {
+                            this.blockCancelBtn.show();
+                        }
                     }
                     break;
             }

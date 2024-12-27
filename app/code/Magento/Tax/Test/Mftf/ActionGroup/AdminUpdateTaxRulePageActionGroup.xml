@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateTaxRulePageActionGroup">
+        <annotations>
+            <description>Open tax rule page to update country and region value of tax rate modal and verify successfully save message.</description>
+        </annotations>
+        <arguments>
+            <argument name="code" type="string"/>
+            <argument name="country" type="string"/>
+            <argument name="state" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{code}}" stepKey="fillTaxRuleCode"/>
+        <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
+        <wait stepKey="waitForSearch" time="5" />
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$initialTaxRate.code$$)}}" stepKey="selectNeededItem"  />
+        <click selector="{{AdminTaxRuleFormSection.taxRateEditButton}}" stepKey="selectNeededItem2"/>
+        <selectOption selector="{{AdminTaxRateFormSection.country}}" userInput="{{country}}" stepKey="selectCountry1"/>
+        <selectOption selector="{{AdminTaxRateFormSection.state}}" userInput="{{state}}" stepKey="selectState" />
+        <click selector="button.action-save.action-primary" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForTaxRateSaved" />
+        <click selector="{{AdminTaxRuleFormSection.save}}" stepKey="saveTaxRule" />
+        <waitForPageLoad stepKey="waitForTaxRuleSaved" />
+        <!-- Verify we see success message -->
+        <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="assertTaxRuleSuccessMessage" />
+
+    </actionGroup>
+</actionGroups>

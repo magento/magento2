@@ -73,7 +73,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->runTest();
     }
 
-    protected function runTest()
+    /**
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    protected function runTest(): mixed
     {
         $this->prepareFormMethod->invoke($this->block);
         $form = $this->block->getForm();
@@ -81,5 +85,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
             $this->assertNotNull($form->getElement($key));
         }
         $this->assertGreaterThan(0, strpos($form->getElement('insert_variable')->getData('text'), 'Insert Variable'));
+        return $form;
     }
 }

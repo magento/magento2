@@ -70,7 +70,7 @@ class Simple implements Fallback\ResolverInterface
      */
     public static function assertFilePathFormat($filePath)
     {
-        if (strpos(str_replace('\\', '/', $filePath), './') !== false) {
+        if ($filePath && strpos(str_replace('\\', '/', $filePath), './') !== false) {
             throw new \InvalidArgumentException("File path '{$filePath}' is forbidden for security reasons.");
         }
     }
@@ -85,7 +85,7 @@ class Simple implements Fallback\ResolverInterface
     private function checkFilePathAccess($fileName, $filePath)
     {
         // Check if file name not contains any references '/./', '/../'
-        if (strpos(str_replace('\\', '/', $fileName), './') === false) {
+        if (!$fileName || strpos(str_replace('\\', '/', $fileName), './') === false) {
             return true;
         }
 

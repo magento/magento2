@@ -70,7 +70,7 @@ class CatalogProductSaveAfterObserverTest extends TestCase
     /**
      * @return array
      */
-    public function statusUpdateDataProvider()
+    public static function statusUpdateDataProvider()
     {
         return [[125, 1], [100, 0]];
     }

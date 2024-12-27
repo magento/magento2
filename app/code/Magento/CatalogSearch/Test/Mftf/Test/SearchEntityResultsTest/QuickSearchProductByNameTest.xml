@@ -16,6 +16,7 @@
             <testCaseId value="MC-14791"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <!-- Overwrite search to use name -->
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">

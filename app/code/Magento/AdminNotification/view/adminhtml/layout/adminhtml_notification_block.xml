@@ -61,11 +61,13 @@
                             <item name="mark_as_read" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Mark as Read</item>
                                 <item name="url" xsi:type="string">*/*/massMarkAsRead</item>
+                                <item name="visible" xsi:type="object">Magento\AdminNotification\Block\Grid\MassAction\MarkAsReadVisibility</item>
                             </item>
                             <item name="remove" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Remove</item>
                                 <item name="url" xsi:type="string">*/*/massRemove</item>
                                 <item name="confirm" xsi:type="string" translate="true">Are you sure?</item>
+                                <item name="visible" xsi:type="object">Magento\AdminNotification\Block\Grid\MassAction\RemoveVisibility</item>
                             </item>
                         </argument>
                     </arguments>

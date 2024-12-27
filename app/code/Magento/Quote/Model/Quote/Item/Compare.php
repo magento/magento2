@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Quote\Model\Quote\Item;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\JsonValidator;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Compare quote items
@@ -71,7 +71,6 @@ class Compare
         if ($target->getProductId() != $compared->getProductId()) {
             return false;
         }
-
         $targetOptionByCode = $target->getOptionsByCode();
         $comparedOptionsByCode = $compared->getOptionsByCode();
         if (!$target->compareOptions($targetOptionByCode, $comparedOptionsByCode)) {

@@ -20,10 +20,9 @@
                 <queryReference clause="must" ref="visibility"/>
             </query>
             <query xsi:type="matchQuery" value="$search_term$" name="search">
-                <match field="*"/>
+                <match field="name" matchCondition="match_phrase_prefix"/>
             </query>
             <query xsi:type="matchQuery" value="$search_term$" name="partial_search">
-                <match field="*"/>
                 <match field="name" matchCondition="match_phrase_prefix"/>
                 <match field="sku" matchCondition="match_phrase_prefix"/>
             </query>
@@ -67,7 +66,7 @@
         <queries>
             <query xsi:type="boolQuery" name="advanced_search_container" boost="1">
                 <queryReference clause="should" ref="sku_query"/>
-                <queryReference clause="should" ref="price_query"/>
+                <queryReference clause="must" ref="price_query"/>
                 <queryReference clause="should" ref="category_query"/>
                 <queryReference clause="must" ref="visibility_query"/>
             </query>

@@ -363,22 +363,11 @@ class UrlTest extends TestCase
 
         $this->requestMock
             ->method('getBeforeForwardInfo')
-            ->withConsecutive(
-                ['route_name'],
-                ['route_name'],
-                ['controller_name'],
-                ['controller_name'],
-                ['action_name'],
-                ['action_name']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'adminhtml',
-                'adminhtml',
-                'catalog',
-                'catalog',
-                'index',
-                'index'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['route_name'] => 'adminhtml',
+                ['controller_name'] => 'catalog',
+                ['action_name'] => 'index'
+            });
 
         $this->model->setRequest($this->requestMock);
         $keyFromRequest = $this->model->getSecretKey();

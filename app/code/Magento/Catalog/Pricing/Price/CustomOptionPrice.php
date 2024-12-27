@@ -7,10 +7,10 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Pricing\Price;
-use Magento\Framework\Pricing\Price\AbstractPrice;
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Class OptionPrice
@@ -21,7 +21,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     /**
      * Price model code
      */
-    const PRICE_CODE = 'custom_option_price';
+    public const PRICE_CODE = 'custom_option_price';
 
     /**
      * @var array
@@ -124,6 +124,8 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     }
 
     /**
+     * Method to get custom amount.
+     *
      * @param float $amount
      * @param null|bool|string|array $exclude
      * @param null|array $context
@@ -178,13 +180,12 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
         }
         $this->value = 0.;
 
-        if ($optionIds) {
-            $values = explode(',', $optionIds->getValue());
-            $values = array_filter($values);
-            if (!empty($values)) {
-                $this->value = $this->processOptions($values);
-            }
+        $values = explode(',', $optionIds->getValue() ?? '');
+        $values = array_filter($values);
+        if (!empty($values)) {
+            $this->value = $this->processOptions($values);
         }
+
         return $this->value;
     }
 

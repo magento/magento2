@@ -19,6 +19,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
@@ -28,7 +29,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Bundle extends AbstractView
+class Bundle extends AbstractView implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -36,8 +37,6 @@ class Bundle extends AbstractView
     protected $options;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $catalogProduct;
@@ -405,7 +404,7 @@ class Bundle extends AbstractView
      */
     private function processOptions(string $optionId, array $options, DataObject $preConfiguredValues)
     {
-        $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/${optionId}") ?? [];
+        $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/{$optionId}") ?? [];
         $selections = $options[$optionId]['selections'];
         array_walk(
             $selections,
@@ -422,5 +421,14 @@ class Bundle extends AbstractView
         $options[$optionId]['selections'] = $selections;
 
         return $options;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->selectedOptions = [];
+        $this->optionsPosition = [];
     }
 }

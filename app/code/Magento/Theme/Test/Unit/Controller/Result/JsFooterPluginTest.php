@@ -41,7 +41,7 @@ class JsFooterPluginTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['isSetFlag'])
+            ->onlyMethods(['isSetFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -62,7 +62,7 @@ class JsFooterPluginTest extends TestCase
      *
      * @return array
      */
-    public function renderResultDataProvider(): array
+    public static function renderResultDataProvider(): array
     {
         return [
             'content_with_script_tag' => [
@@ -70,7 +70,7 @@ class JsFooterPluginTest extends TestCase
                     "<script type=\"text/x-magento-init\">test</script>" .
                     "<script type=\"text/x-magento-template\">test</script>" .
                     "<p>Test Content</p></body>",
-                "flag" => true,
+                "isSetFlag" => true,
                 "result" => "<body><h1>Test Title</h1>" .
                     "<script type=\"text/x-magento-template\">test</script>" .
                     "<p>Test Content</p>\n" .
@@ -79,12 +79,12 @@ class JsFooterPluginTest extends TestCase
             ],
             'content_with_config_disable' => [
                 "content" => "<body><p>Test Content</p></body>",
-                "flag" => false,
+                "isSetFlag" => false,
                 "result" => "<body><p>Test Content</p></body>"
             ],
             'content_without_script_tag' => [
                 "content" => "<body><p>Test Content</p></body>",
-                "flag" => true,
+                "isSetFlag" => true,
                 "result" => "<body><p>Test Content</p>\n</body>"
             ]
         ];
@@ -123,7 +123,7 @@ class JsFooterPluginTest extends TestCase
      *
      * @return array
      */
-    public function ifGetContentIsNotAStringDataProvider(): array
+    public static function ifGetContentIsNotAStringDataProvider(): array
     {
         return [
             'null' => [

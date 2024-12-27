@@ -6,7 +6,7 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="PayPalExpressCheckoutConfigSection">
         <element name="configureBtn" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}-head" parameterized="true"/>
         <element name="email" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_express_checkout_required_express_checkout_business_account" parameterized="true"/>
@@ -22,10 +22,22 @@
         <element name="payLaterConfigDropDown" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater-head" parameterized="true"/>
         <element name="enablePayLaterIn" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_paylater_enabled" parameterized="true" />
         <element name="payLaterCatalogPageConfigDropDown" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_productpage-head" parameterized="true" />
+        <element name="verifyPaylaterText" type="text" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater-head" parameterized="true"/>
+        <element name="payLaterHomePage" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_homepage-head" parameterized="true"/>
+        <element name="payLaterCheckoutCartPage" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_cartpage-head" parameterized="true"/>
+        <element name="payLaterCheckoutPaymentCheck" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_checkout_payment-head" parameterized="true"/>
+        <element name="payLaterCatalogCategoryPage" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_categorypage-head" parameterized="true"/>
         <element name="display" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_display" parameterized="true"/>
         <element name="position" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_position" parameterized="true"/>
         <element name="advancePaypalSettings" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced-head" parameterized="true" />
         <element name="paypalBillingAgreement" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_billing_agreement-head" parameterized="true" />
         <element name="billingDisable" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_settings_ec_advanced_express_checkout_billing_agreement_active" parameterized="true" />
+        <element name="disabledEnableSolution" type="input" selector="//*[@id='row_payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_enable_express_checkout']//label[@class='enabled']" parameterized="true"/>
+        <element name="disabledEnableInContextCheckoutExp" type="input" selector="//*[@id='row_payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_enable_in_context_checkout']//label[@class='enabled']" parameterized="true"/>
+        <element name="closeButton" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}-head span[class='state-opened']" parameterized="true"/>
+        <element name="basicPayPalSetting" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec-head" parameterized="true" />
+        <element name="basicPayPalSettingOpen" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec-head.open" parameterized="true" />
+        <element name="paymentAction" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_settings_ec_payment_action" parameterized="true" />
+        <element name="recommendedSolution" type="text" selector="#payment_{{countryCode}}_recommended_solutions-head" parameterized="true"/>
     </section>
 </sections>

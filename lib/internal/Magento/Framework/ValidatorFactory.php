@@ -7,6 +7,8 @@ namespace Magento\Framework;
 
 /**
  * Factory class for \Magento\Framework\Validator
+ *
+ * @api
  */
 class ValidatorFactory
 {

@@ -15,8 +15,11 @@ use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Catalog\Pricing\Render\FinalPriceBox;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Event\Test\Unit\ManagerStub;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
@@ -97,10 +100,26 @@ class FinalPriceBoxTest extends TestCase
     private $minimalPriceCalculator;
 
     /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var ObjectManagerInterface|MockObject
+     */
+    private $objectManagerMock;
+
+    /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
         $this->product = $this->getMockBuilder(Product::class)
             ->addMethods(['getCanShowPrice'])
             ->onlyMethods(['getPriceInfo', 'isSalable', 'getId'])
@@ -182,6 +201,11 @@ class FinalPriceBoxTest extends TestCase
         $this->salableResolverMock = $this->getMockBuilder(SalableResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        $this->deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
+        );
 
         $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
         $this->object = $objectManager->getObject(
@@ -339,10 +363,10 @@ class FinalPriceBoxTest extends TestCase
         $arguments = [
             'zone' => 'test_zone',
             'list_category_page' => true,
-            'display_label' => 'As low as',
+            'display_label' => __('As low as'),
             'price_id' => $priceId,
             'include_container' => false,
-            'skip_adjustments' => true
+            'skip_adjustments' => false
         ];
 
         $amountRender = $this->createPartialMock(Amount::class, ['toHtml']);
@@ -389,8 +413,13 @@ class FinalPriceBoxTest extends TestCase
 
         $this->priceInfo
             ->method('getPrice')
-            ->withConsecutive([RegularPrice::PRICE_CODE], [FinalPrice::PRICE_CODE])
-            ->willReturnOnConsecutiveCalls($regularPriceType, $finalPriceType);
+            ->willReturnCallback(function ($arg) use ($regularPriceType, $finalPriceType) {
+                if ($arg == RegularPrice::PRICE_CODE) {
+                    return $regularPriceType;
+                } elseif ($arg == FinalPrice::PRICE_CODE) {
+                    return $finalPriceType;
+                }
+            });
 
         $this->assertEquals($expectedResult, $this->object->hasSpecialPrice());
     }
@@ -398,7 +427,7 @@ class FinalPriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function hasSpecialPriceProvider(): array
+    public static function hasSpecialPriceProvider(): array
     {
         return [
             [10.0, 20.0, false],
@@ -455,6 +484,15 @@ class FinalPriceBoxTest extends TestCase
      */
     public function testGetCacheKey(): void
     {
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($this->deploymentConfig);
+
+        $this->deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
         $result = $this->object->getCacheKey();
         $this->assertStringEndsWith('list-category-page', $result);
     }
@@ -522,7 +560,7 @@ class FinalPriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function isProductListDataProvider(): array
+    public static function isProductListDataProvider(): array
     {
         return [
             'is_not_product_list' => [false],

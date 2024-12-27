@@ -24,22 +24,20 @@ use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GroupedTest extends TestCase
 {
     /**
      * Configurable product test Name
      */
-    const TEST_PRODUCT_NAME = 'Test Grouped';
+    public const TEST_PRODUCT_NAME = 'Test Grouped';
 
     /**
      * Configurable product test Type
      */
-    const TEST_PRODUCT_TYPE = 'grouped';
-
-    /**
-     * @var ProductImport
-     */
-    private $model;
+    public const TEST_PRODUCT_TYPE = 'grouped';
 
     /**
      * @var ObjectManagerInterface
@@ -59,7 +57,6 @@ class GroupedTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create(ProductImport::class);
     }
 
     /**
@@ -132,7 +129,6 @@ class GroupedTest extends TestCase
         return reset($items);
     }
 
-
     /**
      * Perform products import.
      *
@@ -141,19 +137,15 @@ class GroupedTest extends TestCase
      */
     private function import(string $pathToFile): void
     {
+        /** @var ProductImport $model */
+        $model = $this->objectManager->create(ProductImport::class);
         $filesystem = $this->objectManager->create(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(Csv::class, ['file' => $pathToFile, 'directory' => $directory]);
-        $errors = $this->model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
-            ]
-        )->validateData();
-
+        $model->setSource($source);
+        $model->setParameters(['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product',]);
+        $errors = $model->validateData();
         $this->assertTrue($errors->getErrorsCount() == 0);
-        $this->model->importData();
+        $model->importData();
     }
 }

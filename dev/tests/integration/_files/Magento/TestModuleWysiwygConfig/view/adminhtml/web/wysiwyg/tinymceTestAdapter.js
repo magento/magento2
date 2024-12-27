@@ -3,10 +3,9 @@
  * See COPYING.txt for license details.
  */
 
-/* global popups, tinyMceEditors, MediabrowserUtility, Base64 */
 /* eslint-disable strict */
 define([
-    'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter'
+    'mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter'
 ], function (tinyMCE) {
     'use strict';
 

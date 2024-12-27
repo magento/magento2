@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,7 +20,7 @@ class IdentifierTest extends TestCase
     /**
      * Test value for cache vary string
      */
-    const VARY = '123';
+    public const VARY = '123';
 
     /**
      * @var ObjectManager
@@ -149,7 +149,7 @@ class IdentifierTest extends TestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider(): array
+    public static function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }
@@ -179,6 +179,39 @@ class IdentifierTest extends TestCase
                     [
                         true,
                         'http://example.com/path1/',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
+
+    /**
+     * Test get identifier value with marketing parameters.
+     *
+     * @return void
+     */
+    public function testGetValueWithMarketingParameters(): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn('http://example.com/path1/?abc=123&gclid=456&utm_source=abc');
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com/path1/?abc=123',
                         self::VARY
                     ]
                 )

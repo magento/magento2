@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -43,5 +43,65 @@
         <data key="storeView">Default Store View</data>
         <data key="checkboxText" unique="suffix">test_checkbox</data>
         <data key="content">&lt;html&gt;</data>
+    </entity>
+    <entity name="newHtmlTerm" type="term">
+        <data key="name" unique="suffix">Test name</data>
+        <data key="isActive">Enabled</data>
+        <data key="isHtml">Text</data>
+        <data key="mode">Manually</data>
+        <data key="storeView">All Store Views</data>
+        <data key="checkboxText" unique="suffix">test_checkbox</data>
+        <data key="content" unique="suffix">TestMessage</data>
+    </entity>
+    <entity name="enableTextTerm" type="term">
+        <data key="name">Test Condition</data>
+        <data key="isActive">Enabled</data>
+        <data key="isHtml">Text</data>
+        <data key="mode">Manually</data>
+        <data key="checkboxText">Terms and Conditions</data>
+        <data key="content">terms text</data>
+    </entity>
+    <entity name="enableTermsAndConditions" type="term">
+        <data key="path">checkout/options/enable_agreements</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="disableTermsAndConditions" type="term">
+        <data key="path">checkout/options/enable_agreements</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="newHtmlAutomaticallyTerm" type="term">
+        <data key="name" unique="suffix">Test name</data>
+        <data key="isActive">Enabled</data>
+        <data key="isHtml">HTML</data>
+        <data key="mode">Automatically</data>
+        <data key="storeView">Default Store View</data>
+        <data key="checkboxText" unique="suffix">test_checkbox</data>
+        <data key="content" unique="suffix">TestMessage</data>
+    </entity>
+    <entity name="termAndCondition" type="term">
+        <data key="name" unique="suffix">Test Condition</data>
+        <data key="isActive">Enabled</data>
+        <data key="isHtml">Text</data>
+        <data key="mode">Automatically</data>
+        <data key="storeView">All Store Views</data>
+        <data key="checkboxText" unique="suffix">Terms and Conditions</data>
+        <data key="content" unique="suffix">TestMessage</data>
+    </entity>
+    <entity name="enableTermsAndConditions" type="term">
+        <data key="path">checkout/options/enable_agreements</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="disableTermsAndConditions" type="term">
+        <data key="path">checkout/options/enable_agreements</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="newHtmlAutomaticallyTerm" type="term">
+        <data key="name" unique="suffix">Test name</data>
+        <data key="isActive">Enabled</data>
+        <data key="isHtml">HTML</data>
+        <data key="mode">Automatically</data>
+        <data key="storeView">Default Store View</data>
+        <data key="checkboxText" unique="suffix">test_checkbox</data>
+        <data key="content" unique="suffix">TestMessage</data>
     </entity>
 </entities>

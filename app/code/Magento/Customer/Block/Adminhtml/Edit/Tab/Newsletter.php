@@ -46,8 +46,6 @@ class Newsletter extends Generic implements TabInterface
     protected $customerAccountManagement;
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
@@ -414,7 +412,7 @@ class Newsletter extends Generic implements TabInterface
      */
     public function getStatusChangedDate()
     {
-        $customer = $this->getCurrentCustomerId();
+        $customer = $this->getCurrentCustomer();
         if ($customer === null) {
             return '';
         }

@@ -37,7 +37,7 @@ class AdvancedTest extends TestCase
     {
         /** @var Attribute|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getBackendType'])
+            ->onlyMethods(['getBackendType'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock->expects($this->once())
@@ -55,7 +55,7 @@ class AdvancedTest extends TestCase
      *
      * @return array
      */
-    public function prepareConditionDataProvider()
+    public static function prepareConditionDataProvider()
     {
         return [
             ['string', 'string', 'string'],

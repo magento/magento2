@@ -78,7 +78,8 @@ class TaxRuleCollectionTest extends TestCase
         $this->searchResultsMock = $this->getMockForAbstractClass(TaxRateSearchResultsInterface::class);
         $this->taxRuleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getTaxRatesCodes'])
+            ->onlyMethods([
                 'getId',
                 'getCode',
                 'getPriority',
@@ -87,7 +88,6 @@ class TaxRuleCollectionTest extends TestCase
                 'getCustomerTaxClassIds',
                 'getProductTaxClassIds',
                 'getTaxRateIds',
-                'getTaxRatesCodes'
             ])
             ->getMock();
 

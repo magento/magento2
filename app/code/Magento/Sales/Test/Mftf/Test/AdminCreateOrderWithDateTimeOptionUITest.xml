@@ -17,6 +17,7 @@
             <stories value="Create order in Admin"/>
             <severity value="MINOR"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -34,7 +35,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteSimpleCustomer"/>
         </after>
 
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportSimpleProductImageLongNameTest">
+
+        <before>
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/test_image_long_name</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyProductBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderBaseImageLongName.file}}</argument>
+                <argument name="destination">var/import/images/test_image_long_name/{{placeholderBaseImageLongName.file}}</argument>
+            </helper>
+        </before>
+
+        <after>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/test_image_long_name</argument>
+            </helper>
+        </after>
+
+    </test>
+</tests>

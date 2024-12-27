@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenAccountInformationTabFromCustomerEditPageAllowAssistanceActionGroup">
+        <annotations>
+            <description>Click on Allow Assistance Button in Account Information Tab from Customer's edit page</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" stepKey="waitForAccountInformationTab"/>
+        <click selector="{{AdminCustomerAccountInformationSection.accountInformationTab}}" stepKey="clickAccountInformationTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{AdminCustomerAccountInformationSection.statusInactiveNew}}" dependentSelector="{{AdminCustomerAccountInformationSection.statusInactiveCheck}}" visible="false" stepKey="clickOnAllowAssistanceOnCondition"/>
+    </actionGroup>
+</actionGroups>

@@ -116,7 +116,7 @@ class FlagTest extends TestCase
             ->method('getResources')
             ->willReturn($appResource);
         $resourceMock = $this->getMockBuilder(FlagResource::class)
-            ->setMethods(['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'])
+            ->onlyMethods(['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'])
             ->setConstructorArgs(['context' => $dbContextMock])
             ->getMock();
 

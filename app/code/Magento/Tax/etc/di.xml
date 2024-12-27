@@ -62,6 +62,8 @@
     <preference for="Magento\Tax\Api\Data\GrandTotalDetailsInterface" type="Magento\Tax\Model\Calculation\GrandTotalDetails" />
     <preference for="Magento\Tax\Api\Data\GrandTotalRatesInterface" type="Magento\Tax\Model\Calculation\GrandTotalRates" />
     <preference for="Magento\Tax\Api\TaxAddressManagerInterface" type="Magento\Tax\Model\TaxAddressManager" />
+    <preference for="Magento\Tax\Api\Data\OrderTaxItemInterface" type="Magento\Sales\Model\Data\Order\Tax\Item" />
+    <preference for="Magento\Tax\Api\Data\OrderTaxInterface" type="Magento\Sales\Model\Data\Order\Tax" />
     <type name="Magento\Quote\Model\Quote\Address\ToOrder">
         <plugin name="add_tax_to_order" type="Magento\Tax\Model\Quote\ToOrderConverter"/>
     </type>
@@ -79,7 +81,7 @@
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
-        <plugin name="save_order_tax" type="Magento\Tax\Model\Plugin\OrderSave"/>
+        <plugin name="add_taxes_extension_attributes" type="Magento\Tax\Model\Plugin\AddTaxesExtensionAttribute"/>
     </type>
     <type name="Magento\Tax\Model\ResourceModel\Sales\Order\Tax">
         <arguments>
@@ -192,4 +194,11 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="OrderRelationsComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="applied_taxes" xsi:type="object">Magento\Tax\Model\ResourceModel\Sales\Order\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

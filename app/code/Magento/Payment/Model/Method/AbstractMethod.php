@@ -25,7 +25,7 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.0.6
  * @see \Magento\Payment\Model\Method\Adapter
- * @see https://devdocs.magento.com/guides/v2.4/payments-integrations/payment-gateway/payment-gateway-intro.html
+ * @see https://developer.adobe.com/commerce/php/development/payments-integrations/payment-gateway/
  * @since 100.0.2
  */
 abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
@@ -437,7 +437,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         for specific country, the flag will set up as 1
         */
         if ($this->getConfigData('allowspecific') == 1) {
-            $availableCountries = explode(',', $this->getConfigData('specificcountry'));
+            $availableCountries = explode(',', $this->getConfigData('specificcountry') ?? '');
             if (!in_array($country, $availableCountries)) {
                 return false;
             }

@@ -106,9 +106,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 
         $info = $this->getInfoInstance();
         $errorMsg = false;
-        $availableTypes = explode(',', $this->getConfigData('cctypes'));
+        $availableTypes = explode(',', $this->getConfigData('cctypes') ?? '');
 
-        $ccNumber = $info->getCcNumber();
+        $ccNumber = $info->getCcNumber() ?? '';
 
         // remove credit card number delimiters such as "-" and space
         $ccNumber = preg_replace('/[\-\s]+/', '', $ccNumber);
@@ -322,7 +322,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function validateCcNum($ccNumber)
     {
-        $cardNumber = strrev($ccNumber);
+        $cardNumber = $ccNumber !== null ? strrev($ccNumber) : '';
         $numSum = 0;
         $length = strlen($cardNumber);
 
@@ -363,7 +363,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function validateCcNumOther($ccNumber)
     {
-        return preg_match('/^\\d+$/', $ccNumber);
+        return preg_match('/^\\d+$/', (string)$ccNumber);
     }
 
     /**

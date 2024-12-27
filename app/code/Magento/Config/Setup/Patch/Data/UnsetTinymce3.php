@@ -6,9 +6,9 @@
 
 namespace Magento\Config\Setup\Patch\Data;
 
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Update config to Tinymce4 if Tinymce3 adapter is used.
@@ -46,7 +46,7 @@ class UnsetTinymce3 implements DataPatchInterface, PatchVersionInterface
                 )
                 ->where('path = ?', 'cms/wysiwyg/editor');
 
-            if (strpos($connection->fetchOne($select), 'Tinymce3/tinymce3Adapter') !== false) {
+            if (strpos($connection->fetchOne($select) ?? '', 'Tinymce3/tinymce3Adapter') !== false) {
                 $row = [
                     'value' => 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
                 ];

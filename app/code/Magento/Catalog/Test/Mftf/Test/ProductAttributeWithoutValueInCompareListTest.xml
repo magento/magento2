@@ -16,6 +16,7 @@
             <description value="The product attribute that has no value should output 'N/A' on the product comparison page."/>
             <severity value="MINOR"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -46,7 +47,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!--Open product page-->
         <amOnPage url="{{StorefrontProductPage.url($$createProductDefault.custom_attributes[url_key]$$)}}" stepKey="goToProductDefaultPage"/>

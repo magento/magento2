@@ -15,6 +15,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Elasticsearch client
+ * @deprecated 100.3.0 because of EOL for Elasticsearch7
+ * @see this class will be responsible for ES7 only
  */
 class Elasticsearch implements ClientInterface
 {
@@ -378,5 +380,27 @@ class Elasticsearch implements ClientInterface
             $properties = $preprocessor->process($properties);
         }
         return $properties;
+    }
+
+    /**
+     * Open point in time
+     *
+     * @param array $params
+     * @return array
+     */
+    public function openPointInTime(array $params = []): array
+    {
+        return $this->getElasticsearchClient()->openPointInTime($params);
+    }
+
+    /**
+     * Close point in time
+     *
+     * @param array $params
+     * @return array
+     */
+    public function closePointInTime(array $params = []): array
+    {
+        return $this->getElasticsearchClient()->closePointInTime($params);
     }
 }

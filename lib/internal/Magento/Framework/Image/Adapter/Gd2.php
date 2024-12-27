@@ -343,9 +343,14 @@ class Gd2 extends AbstractAdapter
         // fill image with indexed non-alpha transparency
         $transparentColor = false;
 
-        if ($transparentIndex >= 0 && $transparentIndex <= imagecolorstotal($this->_imageHandler)) {
-            list($red, $green, $blue) = array_values(imagecolorsforindex($this->_imageHandler, $transparentIndex));
-            $transparentColor = imagecolorallocate($imageResourceTo, (int) $red, (int) $green, (int) $blue);
+        if ($transparentIndex >= 0 && $transparentIndex < imagecolorstotal($this->_imageHandler)) {
+            try {
+                $colorsForIndex = imagecolorsforindex($this->_imageHandler, $transparentIndex);
+                list($red, $green, $blue) = array_values($colorsForIndex);
+                $transparentColor = imagecolorallocate($imageResourceTo, (int) $red, (int) $green, (int) $blue);
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+            } catch (\ValueError $e) {
+            }
         }
         if (false === $transparentColor) {
             throw new \InvalidArgumentException('Failed to allocate transparent color for image.');
@@ -364,7 +369,7 @@ class Gd2 extends AbstractAdapter
      */
     public function checkAlpha($fileName)
     {
-        return (ord(file_get_contents($fileName, false, null, 25, 1)) & 6 & 4) == 4;
+        return (ord(file_get_contents((string)$fileName, false, null, 25, 1)) & 6 & 4) == 4;
     }
 
     /**
@@ -387,7 +392,7 @@ class Gd2 extends AbstractAdapter
         if (IMAGETYPE_GIF === $fileType || IMAGETYPE_PNG === $fileType) {
             // check for specific transparent color
             $transparentIndex = imagecolortransparent($imageResource);
-            if ($transparentIndex >= 0) {
+            if ($transparentIndex >= 0 && $transparentIndex < imagecolorstotal($imageResource)) {
                 return $transparentIndex;
             } elseif (IMAGETYPE_PNG === $fileType) {
                 // assume that truecolor PNG has transparency
@@ -538,8 +543,8 @@ class Gd2 extends AbstractAdapter
         } elseif ($this->getWatermarkPosition() == self::POSITION_STRETCH) {
             $watermark = $this->createWaterMark($watermark, $this->_imageSrcWidth, $this->_imageSrcHeight);
         } elseif ($this->getWatermarkPosition() == self::POSITION_CENTER) {
-            $positionX = $this->_imageSrcWidth / 2 - imagesx($watermark) / 2;
-            $positionY = $this->_imageSrcHeight / 2 - imagesy($watermark) / 2;
+            $positionX = (int) ($this->_imageSrcWidth / 2 - imagesx($watermark) / 2);
+            $positionY = (int) ($this->_imageSrcHeight / 2 - imagesy($watermark) / 2);
             $this->imagecopymergeWithAlphaFix(
                 $this->_imageHandler,
                 $watermark,
@@ -822,7 +827,7 @@ class Gd2 extends AbstractAdapter
      */
     protected function _createImageFromText($text)
     {
-        $width = imagefontwidth($this->_fontSize) * strlen($text);
+        $width = imagefontwidth($this->_fontSize) * strlen((string)$text);
         $height = imagefontheight($this->_fontSize);
 
         $this->_createEmptyImage($width, $height);

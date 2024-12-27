@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCheckProductByIdOnProductGridActionGroup">
+        <annotations>
+            <description>Check the checkbox for the product on the Product Grid using Product ID</description>
+        </annotations>
+        <arguments>
+            <argument name="productId" type="string"/>
+        </arguments>
+
+        <waitForElementClickable selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" stepKey="waitForElementClickable" />
+        <scrollTo selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" x="-100" stepKey="scrollToProductCheckbox" />
+        <moveMouseOver selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" x="-100" stepKey="moveMouseOverProductCheckbox" />
+        <checkOption selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" stepKey="selectProduct"/>
+        <waitForPageLoad stepKey="waitForBackgroundProcessesToFinish" />
+    </actionGroup>
+</actionGroups>

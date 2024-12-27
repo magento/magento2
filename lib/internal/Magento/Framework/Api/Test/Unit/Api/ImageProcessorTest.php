@@ -93,7 +93,7 @@ class ImageProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->uploaderMock = $this->getMockBuilder(Uploader::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'processFileAttributes',
                     'setFilesDispersion',

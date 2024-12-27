@@ -12,8 +12,8 @@ use GraphQL\Utils\BuildSchema;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQl\Type\TypeManagement;
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 
 /**
  * Reads *.graphqls files from modules and combines the results as array to be used with a library to configure objects
@@ -193,7 +193,7 @@ class GraphQlReader implements ReaderInterface
 
         foreach ($schema->getTypeMap() as $typeName => $typeMeta) {
             // Only process custom types and skip built-in object types
-            if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof ScalarType))) {
+            if (!in_array($typeMeta, \GraphQL\Type\Definition\Type::builtInTypes())) {
                 $type = $this->typeReader->read($typeMeta);
                 if (!empty($type)) {
                     $partialResults[$typeName] = $type;
@@ -236,12 +236,12 @@ class GraphQlReader implements ReaderInterface
         $unionTypes = array_filter(
             $types,
             function ($t) {
-                return (strpos($t, 'union ') !== false) && (strpos($t, PHP_EOL . PHP_EOL) !== false);
+                return (strpos((string)$t, 'union ') !== false) && (strpos((string)$t, PHP_EOL . PHP_EOL) !== false);
             }
         );
 
         foreach ($unionTypes as $type => $schema) {
-            $splitSchema = explode(PHP_EOL . PHP_EOL, $schema);
+            $splitSchema = explode(PHP_EOL . PHP_EOL, (string)$schema);
             // Get the type data at the bottom, this will be the additional type data not related to the union
             $additionalTypeSchema = end($splitSchema);
             // Parse the additional type from the bottom so we can have its type key => schema pair
@@ -264,7 +264,7 @@ class GraphQlReader implements ReaderInterface
      */
     private function parseTypes(string $graphQlSchemaContent): array
     {
-        $typeKindsPattern = '(type|interface|union|enum|input)';
+        $typeKindsPattern = '(type|interface|union|enum|input|scalar)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
         $typeDefinitionPattern = '([^\{\}]*)(\{[^\}]*\})';
         $spacePattern = '[\s\t\n\r]+';
@@ -331,13 +331,15 @@ class GraphQlReader implements ReaderInterface
         $spacePatternNotMandatory = '[\s\t\n\r]*';
         preg_match_all(
             "/{$spacePattern}{$implementsKindsPattern}{$spacePattern}{$typeNamePattern}"
-            . "(,{$spacePatternNotMandatory}$typeNamePattern)*/im",
+            . "(,{$spacePatternNotMandatory}|({$spacePatternNotMandatory}&{$spacePatternNotMandatory})?"
+            . "$typeNamePattern)*/im",
             $graphQlSchemaContent,
             $allMatchesForImplements
         );
 
         if (!empty($allMatchesForImplements)) {
             foreach (array_unique($allMatchesForImplements[0]) as $implementsString) {
+                $implementsString = $implementsString ?? '';
                 $implementsStatementString = preg_replace(
                     "/{$spacePattern}{$implementsKindsPattern}{$spacePattern}/m",
                     '',
@@ -375,7 +377,7 @@ class GraphQlReader implements ReaderInterface
     private function addPlaceHolderInSchema(string $graphQlSchemaContent): string
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
-        $typesKindsPattern = '(type|interface|input|union)';
+        $typesKindsPattern = '(type|interface|input|union|scalar)';
         $enumKindsPattern = '(enum)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
         $typeDefinitionPattern = '([^\{\}]*)(\{[\s\t\n\r^\}]*\})';

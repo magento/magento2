@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifiesListAndGridModeActionGroup">
+        <annotations>
+            <description>Catalog Verifies List and Grid Modes.</description>
+        </annotations>
+
+        <!-- verify changes in List mode -->
+
+        <seeElement selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView"/>
+        <scrollTo selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="scrollToGridMode"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="clickGridMode"/>
+         <waitForPageLoad stepKey="waitForGridMode"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInGridView"/>
+        <click selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="clickListMode"/>
+        <waitForPageLoad stepKey="waitForListMode"/>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productLink}}" userInput="1" stepKey="seeNumberOfProductsInPage1"/>
+        <click selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="clickProductsPerPageButtonInListMode"/>
+        <waitForPageLoad stepKey="waitForProductsPerPage"/>
+        <click selector="{{AdminChecksListAndGridModeSection.allButton}}" stepKey="selectAllButton"/>
+        <waitForPageLoad stepKey="waitForSelectAll"/>
+       <seeElement selector="{{AdminChecksListAndGridModeSection.allProducts}}" stepKey="seeAllProducts"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode"/>
+         <seeElement selector="{{AdminChecksListAndGridModeSection.gridView}}" stepKey="seePageInGridView2"/>
+        <click selector="{{StorefrontCategoryProductSection.categoryListView}}" stepKey="switchToListMode1"/>
+         <seeElement selector="{{AdminChecksListAndGridModeSection.listView}}" stepKey="seePageInListView1"/>
+        <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode1"/>
+        <click selector="{{AdminChecksListAndGridModeSection.productsPerPage}}" stepKey="clickProductsPerPageButtonInGridMode"/>
+        <waitForPageLoad stepKey="waitForProductsPerPageOpen"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions('1')}}" stepKey="seePageOptions1"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions('2')}}" stepKey="seePageOptions2"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions('3')}}" stepKey="seePageOptions3"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions('4')}}" stepKey="seePageOptions4"/>
+        <seeElement selector="{{AdminChecksListAndGridModeSection.pageOptions('5')}}" stepKey="seePageOptions5"/>
+
+    </actionGroup>
+</actionGroups>

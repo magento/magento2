@@ -18,19 +18,19 @@ class Builder implements BuilderInterface
     /**
      * @var LocaleResolver
      */
-    protected $localeResolver;
+    private $localeResolver;
 
     /**
      * @var EsConfigInterface
      */
-    protected $esConfig;
+    private $esConfig;
 
     /**
      * Current store ID.
      *
      * @var int
      */
-    protected $storeId;
+    private $storeId;
 
     /**
      * @var SynonymReader
@@ -105,6 +105,12 @@ class Builder implements BuilderInterface
                 'tokenizer' => $tokenizer,
                 'filter' => array_merge($filter, $synonymFilter),
                 'char_filter' => $charFilter,
+                'normalizer' => [
+                    'folding' => [
+                        'type' => 'custom',
+                        'filter' => ['asciifolding', 'lowercase'],
+                    ],
+                ],
             ],
         ];
 
@@ -195,7 +201,7 @@ class Builder implements BuilderInterface
      */
     private function getSynonymFilter(): array
     {
-        $synonyms = $this->synonymReader->getAllSynonyms();
+        $synonyms = $this->synonymReader->getAllSynonymsForStoreViewId($this->storeId);
         $synonymFilter = [];
 
         if ($synonyms) {

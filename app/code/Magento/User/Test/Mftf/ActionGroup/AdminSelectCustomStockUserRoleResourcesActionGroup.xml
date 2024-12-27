@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectCustomStockUserRoleResourcesActionGroup">
+        <annotations>
+            <description>Goes to the Backend Custom User role page. Selecting required elements on roles resource page.</description>
+        </annotations>
+        <scrollTo selector="{{AdminEditRoleInfoSection.checkboxByRole('Magento_User::acl_users')}}" stepKey="scrollToTwoFactor"/>
+        <waitForElementClickable selector="{{AdminEditRoleInfoSection.checkboxByRole('Magento_TwoFactorAuth::tfa')}}" stepKey="waitForTwoFactorToBeClickable"/>
+        <click selector="{{AdminEditRoleInfoSection.checkboxByRole('Magento_TwoFactorAuth::tfa')}}" stepKey="checkTwoFactorCheckbox"/>
+        <scrollTo selector="{{AdminEditRoleResourcesSection.inventoryCheckbox}}" stepKey="scrollToInventoryCheckBox"/>
+        <waitForElementClickable selector="{{AdminEditRoleResourcesSection.stockCheckbox}}" stepKey="waitForStockToBeClickable"/>
+        <click selector="{{AdminEditRoleResourcesSection.stockCheckbox}}" stepKey="selectStock"/>
+        <waitForElementClickable selector="{{AdminEditRoleResourcesSection.editStockCheckbox}}" stepKey="waitForEditStockToBeClickable"/>
+        <click selector="{{AdminEditRoleResourcesSection.editStockCheckbox}}" stepKey="uncheckEditStock"/>
+        <waitForElementClickable selector="{{AdminEditRoleResourcesSection.deleteStockCheckbox}}" stepKey="waitForDeleteStockToBeClickable"/>
+        <click selector="{{AdminEditRoleResourcesSection.deleteStockCheckbox}}" stepKey="uncheckDeleteStock"/>
+    </actionGroup>
+</actionGroups>

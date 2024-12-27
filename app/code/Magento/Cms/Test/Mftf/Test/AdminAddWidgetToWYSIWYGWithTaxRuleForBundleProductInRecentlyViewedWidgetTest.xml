@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddWidgetToWYSIWYGWithTaxRuleForBundleProductInRecentlyViewedWidgetTest">
+        <annotations>
+            <stories value="Create tax rule for grouped product in recently viewed widget"/>
+            <title value="Create tax rule for grouped product in recently viewed widget"/>
+            <description value="Create tax rule for grouped product in recently viewed widget"/>
+            <testCaseId value="AC-6282"/>
+            <severity value="CRITICAL"/>
+            <skip>
+                <issueId value="https://github.com/magento/magento2/issues/37322"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
+            <createData entity="ApiGroupedProduct2" stepKey="createGroupedProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addFirstProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <updateData entity="OneMoreSimpleProductLink" createDataKey="addFirstProduct" stepKey="addSecondProduct">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </updateData>
+            <!-- Create tax rate for TX -->
+            <createData entity="TaxRateTexas" stepKey="createTaxRateTX"/>
+            <!-- Create tax rule -->
+            <actionGroup ref="AdminCreateTaxRuleWithTwoTaxRatesActionGroup" stepKey="createTaxRule">
+                <argument name="taxRate" value="$$createTaxRateTX$$"/>
+                <argument name="taxRate2" value="US_NY_Rate_1"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+            <magentoCLI command="config:set {{CustomDisplayProductPricesInCatalog.path}} {{CustomDisplayProductPricesInCatalog.value}}" stepKey="selectInclAndExlTax"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteProduct"/>
+            <deleteData stepKey="deleteTaxRate" createDataKey="initialTaxRate" />
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <!-- Delete tax rate for UK -->
+            <deleteData createDataKey="createTaxRateTX" stepKey="deleteTaxRateUK"/>
+            <!-- Delete customer -->
+            <magentoCLI command="config:set {{DisplayProductPricesInCatalog.path}} {{DisplayProductPricesInCatalog.value}}" stepKey="selectExlTax"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
+        <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <see userInput="Inserting a widget does not create a widget instance." stepKey="seeMessage" />
+        <!--see Insert Widget button disabled-->
+        <see selector="{{WidgetSection.InsertWidgetBtnDisabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetDisabled" />
+        <!--see Cancel button enabled-->
+        <see selector="{{WidgetSection.CancelBtnEnabled}}" userInput="Cancel" stepKey="seeCancelBtnEnabled" />
+        <!--Select "Widget Type"-->
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Recently Viewed Products" stepKey="selectRecentlyViewedProducts" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+        <!--see Insert Widget button enabled-->
+        <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
+        <fillField selector="{{WidgetSection.PageSize}}" userInput="5" stepKey="fillNoOfProductDisplay" />
+        <selectOption selector="{{WidgetSection.ProductAttribute}}" parameterArray="['Name','Image','Price','Learn More Link']" stepKey="selectSpecifiedOptions"/>
+        <selectOption selector="{{WidgetSection.ButtonToShow}}" userInput="Add to Cart" stepKey="selectBtnToShow" />
+        <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Viewed Products Grid Template" stepKey="selectTemplate" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Navigate to the product -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct2Page">
+            <argument name="product" value="$$createGroupedProduct$$"/>
+        </actionGroup>
+        <amOnPage url="$$createGroupedProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage" />
+        <waitForPageLoad stepKey="waitForPage" />
+        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="wait5" />
+        <!--see widget on Storefront-->
+        <see userInput="Hello CMS Page!" stepKey="seeContent"/>
+        <waitForPageLoad stepKey="wait6" />
+        <waitForText userInput="$$createGroupedProduct.name$$" stepKey="waitForProductVisible" />
+        <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductPrice}}" stepKey="grabRelatedProductPosition"/>
+        <assertStringContainsString stepKey="assertRelatedProductPrice">
+            <actualResult type="const">$grabRelatedProductPosition</actualResult>
+            <expectedResult type="string">$133.30</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>

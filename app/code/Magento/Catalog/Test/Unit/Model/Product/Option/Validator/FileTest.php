@@ -90,8 +90,15 @@ class FileTest extends TestCase
         $this->valueMock->expects($this->once())->method('getImageSizeY')->willReturn(15);
         $this->localeFormatMock
             ->method('getNumber')
-            ->withConsecutive([10], [], [15])
-            ->willReturnOnConsecutiveCalls(10, null, 15);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 10) {
+                    return 10;
+                } elseif (empty($arg)) {
+                    return null;
+                } elseif ($arg == 15) {
+                    return 15;
+                }
+            });
         $this->assertEmpty($this->validator->getMessages());
         $this->assertTrue($this->validator->isValid($this->valueMock));
     }
@@ -111,8 +118,13 @@ class FileTest extends TestCase
         $this->valueMock->expects($this->never())->method('getImageSizeY');
         $this->localeFormatMock
             ->method('getNumber')
-            ->withConsecutive([10], [-10])
-            ->willReturnOnConsecutiveCalls(10, -10);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 10) {
+                    return 10;
+                } elseif ($arg == -10) {
+                    return -10;
+                }
+            });
 
         $messages = [
             'option values' => 'Invalid option value',
@@ -136,8 +148,15 @@ class FileTest extends TestCase
         $this->valueMock->expects($this->once())->method('getImageSizeY')->willReturn(-10);
         $this->localeFormatMock
             ->method('getNumber')
-            ->withConsecutive([10], [], [-10])
-            ->willReturnOnConsecutiveCalls(10, null, -10);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 10) {
+                    return 10;
+                } elseif (empty($arg)) {
+                    return null;
+                } elseif ($arg == -10) {
+                    return -10;
+                }
+            });
         $messages = [
             'option values' => 'Invalid option value',
         ];

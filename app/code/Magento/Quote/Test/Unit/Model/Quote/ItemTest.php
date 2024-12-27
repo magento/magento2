@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,16 +83,16 @@ class ItemTest extends TestCase
      */
     private $serializer;
 
-    const PRODUCT_ID = 1;
-    const PRODUCT_TYPE = 'simple';
-    const PRODUCT_SKU = '12345';
-    const PRODUCT_NAME = 'test_product';
-    const PRODUCT_WEIGHT = '1lb';
-    const PRODUCT_TAX_CLASS_ID = 3;
-    const PRODUCT_COST = 9.00;
+    private const PRODUCT_ID = 1;
+    private const PRODUCT_TYPE = 'simple';
+    private const PRODUCT_SKU = '12345';
+    private const PRODUCT_NAME = 'test_product';
+    private const PRODUCT_WEIGHT = '1lb';
+    private const PRODUCT_TAX_CLASS_ID = 3;
+    private const PRODUCT_COST = 9.00;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -226,8 +226,15 @@ class ItemTest extends TestCase
 
         $this->localeFormat
             ->method('getNumber')
-            ->withConsecutive([$quantityToAdd], [$preparedQuantityToAdd + $existingQuantity])
-            ->willReturnOnConsecutiveCalls($preparedQuantityToAdd, $preparedQuantityToAdd + $existingQuantity);
+            ->willReturnCallback(
+                function ($arg1) use ($quantityToAdd, $existingQuantity, $preparedQuantityToAdd) {
+                    if ($arg1 == $quantityToAdd) {
+                        return $preparedQuantityToAdd;
+                    } elseif ($arg1 == $preparedQuantityToAdd + $existingQuantity) {
+                        return $preparedQuantityToAdd + $existingQuantity;
+                    }
+                }
+            );
 
         $this->model->addQty($quantityToAdd);
         $this->assertEquals($preparedQuantityToAdd, $this->model->getQtyToAdd());
@@ -1296,9 +1303,14 @@ class ItemTest extends TestCase
         $message2 = 'message2';
 
         $this->errorInfos->method('addItem')
-            ->withConsecutive(
-                [null, null, $message],
-                [null, null, $message2]
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($message, $message2) {
+                    if ($arg1 == null && $arg2 == null && $arg3 == $message) {
+                        return null;
+                    } elseif ($arg1 == null && $arg2 == null && $arg3 == $message2) {
+                        return null;
+                    }
+                }
             );
         $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message));
         $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message2));
@@ -1329,9 +1341,14 @@ class ItemTest extends TestCase
         $message2 = 'message2';
 
         $this->errorInfos->method('addItem')
-            ->withConsecutive(
-                [null, null, $message],
-                [null, null, $message2]
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($message, $message2) {
+                    if ($arg1 == null && $arg2 == null && $arg3 == $message) {
+                        return null;
+                    } elseif ($arg1 == null && $arg2 == null && $arg3 == $message2) {
+                        return null;
+                    }
+                }
             );
         $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message));
         $this->assertEquals($this->model, $this->model->addErrorInfo(null, null, $message2));

@@ -44,5 +44,12 @@
             <argument name="enabledOption" value="Yes"/>
             <argument name="countryCode" value="us"/>
         </actionGroup>
+        <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="Italy" stepKey="setMerchantCountry4"/>
+        <waitForPageLoad stepKey="waitForPageLoa4"/>
+        <actionGroup ref="AdminPayPalRegionalLinkOtherActionGroup" stepKey="verifyPayPalCommentCommentLink4">
+            <argument name="payPalConfigType" value="PayPalExpressCheckoutOtherCountryConfigSection"/>
+            <argument name="enabledOption" value="Yes"/>
+            <argument name="countryCode" value="it"/>
+        </actionGroup>
     </test>
 </tests>

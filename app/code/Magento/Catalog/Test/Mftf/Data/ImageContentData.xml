@@ -43,4 +43,8 @@
     <entity name="MagentoPlaceHolderImageContent" type="ImageContent">
         <data key="baseImage_md5">c0459a796c5b8ee74254472c235a7460</data>
     </entity>
+    <entity name="TestImageWithDotInFilenameImageContent" extends="MagentoLogoImageContent" type="ImageContent">
+        <data key="baseImage_md5">4aa2a3c3eefd29898585a8dd781e5bfd</data>
+        <data key="name" unique="prefix">m.agento-logo.png</data>
+    </entity>
 </entities>

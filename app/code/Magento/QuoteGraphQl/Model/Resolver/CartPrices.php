@@ -65,15 +65,25 @@ class CartPrices implements ResolverInterface
         $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
 
+        $appliedTaxes = $this->getAppliedTaxes($cartTotals, $currency);
+        $grandTotal = $cartTotals->getGrandTotal();
+
+        $totalAppliedTaxes = 0;
+        foreach ($appliedTaxes as $appliedTax) {
+            $totalAppliedTaxes += $appliedTax['amount']['value'];
+        }
+        $grandTotalExclTax = $grandTotal - $totalAppliedTaxes;
+
         return [
-            'grand_total' => ['value' => $cartTotals->getGrandTotal(), 'currency' => $currency],
+            'grand_total' => ['value' => $grandTotal, 'currency' => $currency],
+            'grand_total_excluding_tax' => ['value' => $grandTotalExclTax, 'currency' => $currency],
             'subtotal_including_tax' => ['value' => $cartTotals->getSubtotalInclTax(), 'currency' => $currency],
             'subtotal_excluding_tax' => ['value' => $cartTotals->getSubtotal(), 'currency' => $currency],
             'subtotal_with_discount_excluding_tax' => [
                 'value' => $this->getSubtotalWithDiscountExcludingTax($cartTotals),
                 'currency' => $currency
             ],
-            'applied_taxes' => $this->getAppliedTaxes($cartTotals, $currency),
+            'applied_taxes' => $appliedTaxes,
             'discount' => $this->getDiscount($cartTotals, $currency),
             'model' => $quote
         ];
@@ -95,12 +105,28 @@ class CartPrices implements ResolverInterface
             return $appliedTaxesData;
         }
 
+        $rates = [];
+
         foreach ($appliedTaxes as $appliedTax) {
+            $totalPercentage =  $appliedTax['percent'];
+            foreach ($appliedTax['rates'] as $appliedTaxRate) {
+                $rateTitle = $appliedTaxRate['title'];
+                if (!array_key_exists($rateTitle, $rates)) {
+                    $rates[$rateTitle] = 0.0;
+                }
+                $percentage = $appliedTaxRate['percent'];
+                $taxValue = ($percentage / $totalPercentage) * $appliedTax['amount'];
+                $rates[$rateTitle] += round((float) $taxValue, 2);
+            }
+        }
+
+        foreach ($rates as $title => $amount) {
             $appliedTaxesData[] = [
-                'label' => $appliedTax['id'],
-                'amount' => ['value' => $appliedTax['amount'], 'currency' => $currency]
+                'label' => $title,
+                'amount' => ['value' => $amount, 'currency' => $currency]
             ];
         }
+
         return $appliedTaxesData;
     }
 
@@ -117,7 +143,7 @@ class CartPrices implements ResolverInterface
             return null;
         }
         return [
-            'label' => explode(', ', $total->getDiscountDescription()),
+            'label' => $total->getDiscountDescription() !== null ? explode(', ', $total->getDiscountDescription()) : [],
             'amount' => ['value' => $total->getDiscountAmount(), 'currency' => $currency]
         ];
     }

@@ -1,0 +1,29 @@
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EnterAddressDetailOfStoreFrontCustomerActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer details (First/Last Name, Company, Phone # and Address) on the Admin Customer creation/edit page. Clicks on the Save button.</description>
+        </annotations>
+        <arguments>
+            <argument name="Address"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForAddressPage"/>
+        <fillField stepKey="fillFirstName" selector="{{StorefrontCustomerCreateAccountSection.firstName}}" userInput="{{Address.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{StorefrontCustomerCreateAccountSection.lastName}}" userInput="{{Address.lastname}}"/>
+        <fillField stepKey="fillCompany" selector="{{StorefrontCustomerCreateAccountSection.company}}" userInput="{{Address.company}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{StorefrontCustomerCreateAccountSection.phoneNumber}}" userInput="{{Address.telephone}}"/>
+        <fillField stepKey="fillStreetAddress1" selector="{{StorefrontCustomerCreateAccountSection.streetAddress1}}" userInput="{{Address.street[0]}}"/>
+        <fillField stepKey="fillStreetAddress2" selector="{{StorefrontCustomerCreateAccountSection.streetAddress2}}" userInput="{{Address.street[1]}}"/>
+        <fillField stepKey="fillCityName" selector="{{StorefrontCustomerCreateAccountSection.city}}" userInput="{{Address.city}}"/>
+        <selectOption stepKey="selectCounty" selector="{{StorefrontCustomerCreateAccountSection.country}}" userInput="{{Address.country_id}}"/>
+        <selectOption stepKey="selectState" selector="{{StorefrontCustomerCreateAccountSection.stateProvince}}" userInput="{{Address.state}}"/>
+        <fillField stepKey="fillZip" selector="{{StorefrontCustomerCreateAccountSection.zip}}" userInput="{{Address.postcode}}"/>
+    </actionGroup>
+</actionGroups>

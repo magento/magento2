@@ -230,7 +230,7 @@ class FieldsFilterTest extends TestCase
      *
      * @return array
      */
-    public function invalidFilterDataProvider()
+    public static function invalidFilterDataProvider()
     {
         return [
             ['  '],

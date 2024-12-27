@@ -11,8 +11,9 @@ use Magento\Framework\GraphQl\Schema\TypeInterface;
 
 /**
  * Interface for GraphQl WrappedType used to wrap other types like array or not null
+ *
+ * @api
  */
 interface WrappedTypeInterface extends \GraphQL\Type\Definition\WrappingType, TypeInterface
 {
-
 }

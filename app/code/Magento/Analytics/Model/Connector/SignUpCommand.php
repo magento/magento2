@@ -5,13 +5,13 @@
  */
 namespace Magento\Analytics\Model\Connector;
 
+use Laminas\Http\Request;
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
 use Magento\Analytics\Model\IntegrationManager;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\HTTP\ZendClient;
 use Magento\Store\Model\Store;
+use Psr\Log\LoggerInterface;
 
 /**
  * SignUp merchant for Free Tier project
@@ -98,7 +98,7 @@ class SignUpCommand implements CommandInterface
         if ($integrationToken) {
             $this->integrationManager->activateIntegration();
             $response = $this->httpClient->request(
-                ZendClient::POST,
+                Request::METHOD_POST,
                 $this->config->getValue($this->signUpUrlPath),
                 [
                     "token" => $integrationToken->getData('token'),
@@ -113,7 +113,9 @@ class SignUpCommand implements CommandInterface
                         'Subscription for MBI service has been failed. An error occurred during token exchange: %s.'
                         . ' Content-Type: %s',
                         !empty($response->getBody()) ? $response->getBody() : 'Response body is empty',
-                        $response->getHeader('Content-Type')
+                        $response->getHeaders()->has('Content-Type') ?
+                            $response->getHeaders()->get('Content-Type')->getFieldValue() :
+                            ''
                     )
                 );
             }

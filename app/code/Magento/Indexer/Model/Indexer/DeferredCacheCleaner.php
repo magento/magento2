@@ -10,11 +10,12 @@ namespace Magento\Indexer\Model\Indexer;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\Indexer\DeferredCacheCleanerInterface;
 
 /**
  * Deferred cache cleaner for indexers
  */
-class DeferredCacheCleaner
+class DeferredCacheCleaner implements DeferredCacheCleanerInterface
 {
     /**
      * @var EventManager

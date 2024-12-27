@@ -49,18 +49,12 @@ class Resolver implements ResolverInterface
     private $currentFixtureType = null;
 
     /**
-     * @var DataFixtureSetup
-     */
-    private $dataFixtureSetup;
-
-    /**
      * @param ConfigInterface $config
      */
     public function __construct(ConfigInterface $config)
     {
         $this->config = $config;
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->dataFixtureSetup = $this->objectManager->create(DataFixtureSetup::class);
     }
 
     /**
@@ -122,7 +116,8 @@ class Resolver implements ResolverInterface
         }
         /** @var DataFixtureApplier $dataFixtureApplier */
         $dataFixtureApplier = $this->getApplier($this->getCurrentTest(), $this->currentFixtureType);
-        $this->dataFixtureSetup->apply(['factory' => $dataFixtureApplier->replace($path)]);
+        $dataFixtureSetup = $this->objectManager->create(DataFixtureSetup::class);
+        $dataFixtureSetup->apply(['factory' => $dataFixtureApplier->replace($path)]);
     }
 
     /**

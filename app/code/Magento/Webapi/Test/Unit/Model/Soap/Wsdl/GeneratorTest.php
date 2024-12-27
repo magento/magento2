@@ -63,7 +63,7 @@ class GeneratorTest extends TestCase
         $_wsdlMock = $this->getMockBuilder(
             Wsdl::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'addSchemaTypeSection',
                     'addService',
@@ -81,7 +81,7 @@ class GeneratorTest extends TestCase
             )->getMock();
         $this->_wsdlFactoryMock = $this->getMockBuilder(
             WsdlFactory::class
-        )->setMethods(
+        )->onlyMethods(
             ['create']
         )->disableOriginalConstructor()
             ->getMock();

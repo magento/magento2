@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateNewDefaultAttributeForAsWithOptionActionGroup">
+        <annotations>
+            <description>Admin add default option for attribute.</description>
+        </annotations>
+        <arguments>
+            <argument name="defaultLabel" type="string"/>
+        </arguments>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.defaultLabel}}" stepKey="waitFprDefaultLabelInputField"/>
+        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{defaultLabel}}" stepKey="fillDefaultLabel"/>
+        <!--Add option 1 to attribute-->
+        <waitForElementClickable selector="{{AdminNewAttributePanel.addOption}}" stepKey="waitForAddOption"/>
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickOnAddOption"/>
+        <waitForElementClickable selector="{{AdminNewAttributePanel.isDefault('1')}}" time="30" stepKey="waitForOptionRow"/>
+        <click selector="{{AdminNewAttributePanel.isDefault('1')}}" stepKey="clickOnDefault"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.optionAdminValue('0')}}" stepKey="waitForAdminLabelForOptionToBecomeVisible"/>
+        <fillField selector="{{AdminNewAttributePanel.optionAdminValue('0')}}" userInput="8" stepKey="fillAdminLabelForOption1"/>
+    </actionGroup>
+</actionGroups>

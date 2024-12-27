@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateMixedNestedCategoryInWidgetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Validate the proper loading of mixed nested categories in the category widget"/>
+            <title value="Ensure mixed nested categories of Level 5 and beyond load correctly in the category widget"/>
+            <description value="This test verifies that mixed nested categories, including Level 5 and higher, with and without children, are loaded properly in the category widget in the admin panel."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-12647"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createBaseCategory"/>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelTwoCategory">
+                <field key="name">SubCategoryLvl-2</field>
+                <field key="parent_id">$$createBaseCategory.id$$</field>
+                <requiredEntity createDataKey="createBaseCategory"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelThreeCategory">
+                <field key="name">SubCategoryLvl-3</field>
+                <field key="parent_id">$$createLevelTwoCategory.id$$</field>
+                <requiredEntity createDataKey="createLevelTwoCategory"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelFourCategory">
+                <field key="name">SubCategoryLvl-4</field>
+                <field key="parent_id">$$createLevelThreeCategory.id$$</field>
+                <requiredEntity createDataKey="createLevelThreeCategory"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelFiveCategory">
+                <field key="name">SubCategoryLvl-5</field>
+                <field key="parent_id">$$createLevelFourCategory.id$$</field>
+                <requiredEntity createDataKey="createLevelFourCategory"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelSixCategory">
+                <field key="name">SubCategoryLvl-6</field>
+                <field key="parent_id">$$createLevelFiveCategory.id$$</field>
+                <requiredEntity createDataKey="createLevelFiveCategory"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelFiveSubCategory">
+                <field key="name">SubCategoryLvl-5-1</field>
+                <field key="parent_id">$$createLevelFiveCategory.id$$</field>
+                <requiredEntity createDataKey="createLevelFiveCategory"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelFiveOneSubCategory">
+                <field key="name">SubCategoryLvl-5-1-1</field>
+                <field key="parent_id">$$createLevelFiveSubCategory.id$$</field>
+                <requiredEntity createDataKey="createLevelFiveSubCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createLevelFiveOneSubCategory" stepKey="deleteLevelFiveOneSubCategory"/>
+            <deleteData createDataKey="createLevelFiveSubCategory" stepKey="deleteLevelFiveSubCategory"/>
+            <deleteData createDataKey="createLevelSixCategory" stepKey="deleteLevelSixCategory"/>
+            <deleteData createDataKey="createLevelFiveCategory" stepKey="deleteLevelFiveCategory"/>
+            <deleteData createDataKey="createLevelFourCategory" stepKey="deleteLevelFourCategory"/>
+            <deleteData createDataKey="createLevelThreeCategory" stepKey="deleteLevelThreeCategory"/>
+            <deleteData createDataKey="createLevelTwoCategory" stepKey="deleteLevelTwoCategory"/>
+            <deleteData createDataKey="createBaseCategory" stepKey="deleteDefaultCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Start creating a new widget. Note that we don't need to save it for the cause of the test. -->
+        <actionGroup ref="AdminCreateSpecificEntityWidgetActionGroup" stepKey="startCreatingWidget">
+            <argument name="widget" value="CatalogCategoryLinkSpecifiedCategory"/>
+        </actionGroup>
+        <click selector="{{AdminNewWidgetSection.storefrontProperties}}" stepKey="clickStorefrontProperties"/>
+
+        <!-- Expand all previously created categories one by one. -->
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandDefaultCategoryTree">
+            <argument name="CategoryName" value="Default Category"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFirstLevelCategoryTree">
+            <argument name="CategoryName" value="$createBaseCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandSecondLevelCategoryTree">
+            <argument name="CategoryName" value="$createLevelTwoCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandThirdLevelCategoryTree">
+            <argument name="CategoryName" value="$createLevelThreeCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFourthLevelCategoryTree">
+            <argument name="CategoryName" value="$createLevelFourCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFifthLevelCategoryTree">
+            <argument name="CategoryName" value="$createLevelFiveCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandSixthLevelCategoryTree">
+            <argument name="CategoryName" value="$createLevelSixCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFifthSubCategoryTree">
+            <argument name="CategoryName" value="$createLevelFiveSubCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFifthOneSubCategoryTree">
+            <argument name="CategoryName" value="$createLevelFiveOneSubCategory.name$"/>
+        </actionGroup>
+
+        <!-- Check the total number of expanded categories in the category tree widget ensuring all of them are loaded. -->
+        <actionGroup ref="AdminAssertCategoryCountInCategoryTreeWidgetActionGroup" stepKey="checkCategoryCount">
+            <argument name="ExpectedCount" value="9"/>
+        </actionGroup>
+    </test>
+</tests>

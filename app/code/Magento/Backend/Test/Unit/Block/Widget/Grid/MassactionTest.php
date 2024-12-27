@@ -17,6 +17,8 @@ use Magento\Framework\Data\Collection\AbstractDb as Collection;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -84,12 +86,15 @@ class MassactionTest extends TestCase
      */
     private $connectionMock;
 
+    /** @var Data */
+    protected $jsonHelperMock;
+
     protected function setUp(): void
     {
         $this->_gridMock = $this->getMockBuilder(Grid::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->setMethods(['getId', 'getCollection'])
+            ->onlyMethods(['getId', 'getCollection'])
             ->getMock();
         $this->_gridMock->expects($this->any())
             ->method('getId')
@@ -98,7 +103,8 @@ class MassactionTest extends TestCase
         $this->_layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
-            ->setMethods(['getParentName', 'getBlock', 'helper'])
+            ->addMethods(['helper'])
+            ->onlyMethods(['getParentName', 'getBlock'])
             ->getMock();
         $this->_layoutMock->expects($this->any())
             ->method('getParentName')
@@ -124,7 +130,7 @@ class MassactionTest extends TestCase
 
         $this->_authorizationMock = $this->getMockBuilder(Authorization::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isAllowed'])
+            ->onlyMethods(['isAllowed'])
             ->getMock();
 
         $this->gridCollectionMock = $this->createMock(Collection::class);
@@ -146,6 +152,17 @@ class MassactionTest extends TestCase
             'data' => ['massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id'],
             'authorization' => $this->_authorizationMock,
         ];
+
+        $this->jsonHelperMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var ObjectManagerInterface|MockObject $objectManagerMock */
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturn($this->jsonHelperMock);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject(
@@ -218,7 +235,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function itemsProcessingDataProvider()
+    public static function itemsProcessingDataProvider()
     {
         return [
             [
@@ -288,7 +305,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function selectedDataProvider()
+    public static function selectedDataProvider()
     {
         return [
             ['', '', []],
@@ -324,11 +341,18 @@ class MassactionTest extends TestCase
 
         $this->gridCollectionSelectMock->expects($this->exactly(4))
             ->method('reset')
-            ->withConsecutive(
-                [Select::ORDER],
-                [Select::LIMIT_COUNT],
-                [Select::LIMIT_OFFSET],
-                [Select::COLUMNS]
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == Select::ORDER) {
+                        return null;
+                    } elseif ($arg == Select::LIMIT_COUNT) {
+                        return null;
+                    } elseif ($arg == Select::LIMIT_OFFSET) {
+                        return null;
+                    } elseif ($arg == Select::COLUMNS) {
+                        return null;
+                    }
+                }
             );
 
         $this->gridCollectionSelectMock->expects($this->once())
@@ -385,7 +409,7 @@ class MassactionTest extends TestCase
     /**
      * @return array
      */
-    public function addItemDataProvider()
+    public static function addItemDataProvider()
     {
         return [
             [

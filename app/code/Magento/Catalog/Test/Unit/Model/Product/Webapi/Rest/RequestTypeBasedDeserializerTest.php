@@ -7,17 +7,23 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Webapi\Rest;
 
 use Magento\Catalog\Model\Product\Webapi\Rest\RequestTypeBasedDeserializer;
-use Magento\Framework\Webapi\Rest\Request\DeserializerFactory;
-use Magento\Framework\Webapi\Rest\Request;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Webapi\Rest\Request\DeserializerInterface;
-use Magento\Framework\Webapi\Rest\Request\Deserializer\Json as DeserializerJson;
-use Magento\Framework\Webapi\Rest\Request\Deserializer\Xml as DeserializerXml;
 use Magento\Framework\App\State;
 use Magento\Framework\Json\Decoder;
 use Magento\Framework\Serialize\Serializer\Json as SerializerJson;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Framework\Webapi\Rest\Request\Deserializer\Json as DeserializerJson;
+use Magento\Framework\Webapi\Rest\Request\Deserializer\Xml as DeserializerXml;
+use Magento\Framework\Webapi\Rest\Request\DeserializerFactory;
+use Magento\Framework\Webapi\Rest\Request\DeserializerInterface;
 use Magento\Framework\Xml\Parser as ParserXml;
+use Magento\Framework\Xml\ParserFactory as ParserXmlFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * A Test for RequestTypeBasedDeserializer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var RequestTypeBasedDeserializer */
@@ -59,9 +65,12 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
     public function testDeserialize(
         string $body,
         string $contentType,
-        DeserializerInterface $deserializer,
+        $deserializer,
         array $expectedResult
     ): void {
+        if (is_callable($deserializer)) {
+            $deserializer = $deserializer($this);
+        }
         $this->requestMock->method('getContentType')
             ->willReturn($contentType);
         $this->deserializeFactoryMock->expects($this->any())
@@ -71,7 +80,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->requestTypeBasedDeserializer->deserialize($body));
     }
 
-    public function getDeserializerDataProvider(): array
+    public static function getDeserializerDataProvider(): array
     {
         return [
             'request body with xml data' => [
@@ -84,8 +93,8 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
                                    <status>1</status>
 	                           </product>
                            </products>',
-                'content-type' => 'application/xml',
-                'deserializer' => $this->prepareXmlDeserializer(),
+                'contentType' => 'application/xml',
+                'deserializer' => static fn (self $testCase) => $testCase->prepareXmlDeserializer(),
                 'expectedResult' => [
                     'product' => [
                         'sku' => 'testSku1',
@@ -106,8 +115,8 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
                         "status": 0
                     }
                 }',
-                'content-type' => 'application/json',
-                'deserializer' => $this->prepareJsonDeserializer(),
+                'contentType' => 'application/json',
+                'deserializer' => static fn (self $testCase) => $testCase->prepareJsonDeserializer(),
                 'expectedResult' => [
                     'product' => [
                         'sku' => 'testSku2',
@@ -126,7 +135,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      *
      * @return DeserializerJson
      */
-    private function prepareJsonDeserializer(): DeserializerJson
+    protected function prepareJsonDeserializer(): DeserializerJson
     {
         /** @var Decoder|MockObject $decoder */
         $decoder = $this->createMock(Decoder::class);
@@ -141,11 +150,13 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      *
      * @return DeserializerXml
      */
-    private function prepareXmlDeserializer(): DeserializerXml
+    protected function prepareXmlDeserializer(): DeserializerXml
     {
         $parserXml = new ParserXml();
         /** @var State|MockObject $appStateMock */
         $appStateMock = $this->createMock(State::class);
-        return new DeserializerXml($parserXml, $appStateMock);
+        $parserXmlFactoryMock = $this->createMock(ParserXmlFactory::class);
+        $parserXmlFactoryMock->method('create')->willReturn($parserXml);
+        return new DeserializerXml($parserXml, $appStateMock, $parserXmlFactoryMock);
     }
 }

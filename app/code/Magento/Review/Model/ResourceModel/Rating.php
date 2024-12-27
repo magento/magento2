@@ -12,18 +12,14 @@ use Magento\Framework\App\ObjectManager;
  * Rating resource model
  *
  * @api
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    const RATING_STATUS_APPROVED = 'Approved';
+    public const RATING_STATUS_APPROVED = 'Approved';
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;

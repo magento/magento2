@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,7 +27,7 @@ class TaxTest extends TestCase
     /**
      * @var array
      */
-    private $calculatedData = [
+    private static $calculatedData = [
         'tax' => 'tax',
         'shipping_tax' => 'shipping_tax',
     ];
@@ -48,7 +48,7 @@ class TaxTest extends TestCase
     private $taxOrderFactory;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -71,17 +71,20 @@ class TaxTest extends TestCase
     /**
      * Test method for getFullTaxInfo
      *
-     * @param Order|null $source
+     * @param Order|null|\Closure $source
      * @param array $expectedResult
      * @return void
      *
      * @dataProvider getFullTaxInfoDataProvider
      */
-    public function testGetFullTaxInfo(?Order $source, array $expectedResult): void
+    public function testGetFullTaxInfo($source, array $expectedResult): void
     {
+        if ($source != null) {
+            $source = $source($this);
+        }
         $this->taxHelperMock->expects($this->any())
             ->method('getCalculatedTaxes')
-            ->willReturn($this->calculatedData);
+            ->willReturn(self::$calculatedData);
         $this->taxMock->expects($this->once())
             ->method('getOrder')
             ->willReturn($source);
@@ -93,7 +96,7 @@ class TaxTest extends TestCase
     /**
      * Test method for getFullTaxInfo with invoice or creditmemo
      *
-     * @param Invoice|Creditmemo $source
+     * @param \Closure $source
      * @param array $expectedResult
      * @return void
      *
@@ -101,9 +104,10 @@ class TaxTest extends TestCase
      */
     public function testGetFullTaxInfoWithCreditAndInvoice($source, array $expectedResult): void
     {
+        $source = $source($this);
         $this->taxHelperMock->expects($this->any())
             ->method('getCalculatedTaxes')
-            ->willReturn($this->calculatedData);
+            ->willReturn(self::$calculatedData);
         $this->taxMock->expects($this->once())
             ->method('getSource')
             ->willReturn($source);
@@ -172,15 +176,15 @@ class TaxTest extends TestCase
      *
      * @return array
      */
-    public function getFullTaxInfoDataProvider(): array
+    public static function getFullTaxInfoDataProvider(): array
     {
-        $salesModelOrderMock = $this->createMock(Order::class);
+        $salesModelOrderMock = static fn (self $testCase) => $testCase->createMock(Order::class);
 
         return [
             'source is not an instance of \Magento\Sales\Model\Order' => [null, []],
             'source is an instance of \Magento\Sales\Model\Order and has reasonable data' => [
                 $salesModelOrderMock,
-                $this->calculatedData,
+                self::$calculatedData,
             ]
         ];
     }
@@ -192,14 +196,14 @@ class TaxTest extends TestCase
      *
      * @return array
      */
-    public function getCreditAndInvoiceFullTaxInfoDataProvider(): array
+    public static function getCreditAndInvoiceFullTaxInfoDataProvider(): array
     {
-        $invoiceMock = $this->createMock(Invoice::class);
-        $creditMemoMock = $this->createMock(Creditmemo::class);
+        $invoiceMock = static fn (self $testCase) => $testCase->createMock(Invoice::class);
+        $creditMemoMock = static fn (self $testCase) => $testCase->createMock(Creditmemo::class);
 
         return [
-            'invoice' => [$invoiceMock, $this->calculatedData],
-            'creditMemo' => [$creditMemoMock, $this->calculatedData]
+            'invoice' => [$invoiceMock, self::$calculatedData],
+            'creditMemo' => [$creditMemoMock, self::$calculatedData]
         ];
     }
 }

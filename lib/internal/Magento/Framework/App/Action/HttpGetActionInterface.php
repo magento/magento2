@@ -11,7 +11,9 @@ namespace Magento\Framework\App\Action;
 use Magento\Framework\App\ActionInterface;
 
 /**
- * Marker for actions processing GET and HEAD requests.
+ * Marker for actions processing GET requests.
+ *
+ * @api
  */
 interface HttpGetActionInterface extends ActionInterface
 {

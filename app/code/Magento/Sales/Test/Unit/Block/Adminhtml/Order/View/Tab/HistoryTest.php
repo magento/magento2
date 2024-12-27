@@ -60,7 +60,7 @@ class HistoryTest extends TestCase
 
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLocaleDate'])
+            ->onlyMethods(['getLocaleDate'])
             ->getMock();
 
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)

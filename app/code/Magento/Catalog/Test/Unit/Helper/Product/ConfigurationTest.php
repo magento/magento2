@@ -18,6 +18,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\StringUtils;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Escaper;
 
 class ConfigurationTest extends TestCase
 {
@@ -31,6 +32,11 @@ class ConfigurationTest extends TestCase
      */
     protected $helper;
 
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaper;
+
     protected function setUp(): void
     {
         $contextMock = $this->createMock(Context::class);
@@ -38,13 +44,15 @@ class ConfigurationTest extends TestCase
         $filterManagerMock = $this->createMock(FilterManager::class);
         $stringUtilsMock = $this->createMock(StringUtils::class);
         $this->serializer = $this->createMock(Json::class);
+        $this->escaper = $this->createMock(Escaper::class);
 
         $this->helper = new Configuration(
             $contextMock,
             $optionFactoryMock,
             $filterManagerMock,
             $stringUtilsMock,
-            $this->serializer
+            $this->serializer,
+            $this->escaper
         );
     }
 

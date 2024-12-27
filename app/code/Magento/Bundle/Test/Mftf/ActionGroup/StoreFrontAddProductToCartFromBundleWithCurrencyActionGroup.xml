@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StoreFrontAddProductToCartFromBundleWithCurrencyActionGroup">
+        <annotations>
+            <description>Adds a Bundled Product to the Cart with a specified Currency Value.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="currency" type="string" defaultValue="US Dollar"/>
+        </arguments>
+
+        <waitForElementClickable selector="{{StorefrontBundledSection.currencyTrigger}}" stepKey="waitForCurrencyTriggerClickable" />
+        <click selector="{{StorefrontBundledSection.currencyTrigger}}" stepKey="openCurrencyTrigger"/>
+        <waitForElementClickable selector="{{StorefrontBundledSection.currency(currency)}}" stepKey="waitForChooseCurrencyClickable" />
+        <click selector="{{StorefrontBundledSection.currency(currency)}}" stepKey="chooseCurrency"/>
+        <waitForElementClickable selector="{{StorefrontBundledSection.addToCart}}" stepKey="waitForCustomizeButtonClickable" />
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+        <waitForPageLoad stepKey="waitForBundleOpen"/>
+        <checkOption selector="{{StorefrontBundledSection.productInBundle(product.name)}}" stepKey="chooseProduct"/>
+        <waitForElementClickable selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="waitForAddToCartButtonClickable" />
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="addToCartProduct"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+    </actionGroup>
+</actionGroups>

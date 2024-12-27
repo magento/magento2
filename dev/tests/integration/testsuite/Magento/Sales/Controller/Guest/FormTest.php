@@ -91,7 +91,7 @@ class FormTest extends AbstractController
     private function prepareRequestData($invalidData = false)
     {
         $orderId = 100000001;
-        $email = $invalidData ? 'wrong@example.com' : 'customer@null.com';
+        $email = $invalidData ? 'wrong@example.com' : 'customer@example.com';
 
         /** @var FormKey $formKey */
         $formKey = $this->_objectManager->get(FormKey::class);

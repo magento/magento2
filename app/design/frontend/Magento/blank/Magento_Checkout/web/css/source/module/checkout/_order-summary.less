@@ -70,6 +70,7 @@
 
         .not-calculated {
             font-style: italic;
+            white-space: normal;
         }
 
         //
@@ -82,15 +83,7 @@
                 border-bottom: @border-width__base solid @border-color__base;
                 .lib-css(padding, @indent__s @indent__xl @indent__s 0);
                 cursor: pointer;
-                .lib-icon-font(
-                @icon-down,
-                @_icon-font-size: 30px,
-                @_icon-font-line-height: 12px,
-                @_icon-font-text-hide: true,
-                @_icon-font-margin: 3px 0 0,
-                @_icon-font-position: after,
-                @_icon-font-display: block
-                );
+                .lib-icon-font(@icon-down, @_icon-font-size: 30px, @_icon-font-line-height: 12px, @_icon-font-text-hide: true, @_icon-font-margin: 3px 0 0, @_icon-font-position: after, @_icon-font-display: block);
                 margin-bottom: 0;
                 position: relative;
 
@@ -109,10 +102,7 @@
 
             &.active {
                 > .title {
-                    .lib-icon-font-symbol(
-                    @_icon-font-content: @icon-up,
-                    @_icon-font-position: after
-                    );
+                    .lib-icon-font-symbol(@_icon-font-content: @icon-up, @_icon-font-position: after);
                 }
             }
 

@@ -29,7 +29,7 @@ class DecimalTest extends TestCase
             DecimalFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $instance = $objectManager->getObject(
             Decimal::class,

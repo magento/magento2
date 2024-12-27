@@ -27,7 +27,7 @@ class ProgressTest extends TestCase
     /**
      * return array
      */
-    public function constructorExceptionInvalidTotalDataProvider()
+    public static function constructorExceptionInvalidTotalDataProvider()
     {
         return [[0,0], [0, 1], [[], 1]];
     }
@@ -87,7 +87,7 @@ class ProgressTest extends TestCase
     /**
      * @return array
      */
-    public function ratioDataProvider()
+    public static function ratioDataProvider()
     {
         $data = [];
         for ($i = 10; $i <= 20; $i++) {

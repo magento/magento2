@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DisplayPriceForShippingRateOnShoppingCartPageWithSpecificTaxDisplaySettingsTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Display price for shipping rate on Shopping Cart page according to setting Shipping Price = Including Tax with specific tax display settings"/>
+            <title value="Display price for shipping rate on Shopping Cart page with specific tax display settings"/>
+            <description value="Admin can set specific configuration tax display setting for shipping method on Shopping Cart page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4977"/>
+        </annotations>
+        <before>
+            <!-- Enable flatRate -->
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <!-- Login Into Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Go to tax rule page and create a tax rule -->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
+            <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
+            <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
+            <!-- Go to the tax rate page -->
+            <click stepKey="addNewTaxRate1" selector="{{AdminTaxRulesSection.addNewTaxRate}}"/>
+
+            <!-- Fill out a new tax rate -->
+            <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="NewTaxRate"/>
+            <fillField stepKey="fillZipCode" selector="{{AdminTaxRulesSection.zipCode}}" userInput="*"/>
+            <selectOption stepKey="selectState" selector="{{AdminTaxRulesSection.state}}" userInput="*"/>
+            <selectOption stepKey="selectCountry" selector="{{AdminTaxRulesSection.country}}" userInput="United States"/>
+            <fillField stepKey="fillRate" selector="{{AdminTaxRulesSection.rate}}" userInput="20"/>
+
+            <!-- Save the tax rate -->
+            <click stepKey="saveTaxRate" selector="{{AdminTaxRulesSection.save}}"/>
+            <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!--Create Product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">10</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- change required configurations -->
+            <actionGroup ref="SetTaxClassForShippingActionGroup" stepKey="setTaxClass"/>
+            <magentoCLI command="config:set {{CustomCatalogPrices.path}} {{CustomCatalogPrices.value}}" stepKey="setInclTaxCatalogPrice"/>
+            <magentoCLI command="config:set {{CustomShippingPricesConfigData.path}} {{CustomShippingPricesConfigData.value}}" stepKey="setShippingPrices"/>
+            <magentoCLI command="config:set {{DisplayShippingAmountConfigData.path}} {{DisplayShippingAmountConfigData.value}}" stepKey="setDisplayShippingAmount"/>
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="setCaliforniaShippingOrigin"/>
+        </before>
+        <after>
+            <!-- delete created product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- delete created category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory1"/>
+            <!-- delete created Tax Rate & Rule -->
+            <!-- Go to the tax rule page and delete the row created-->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="SampleRule"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Go to the tax rate page -->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <!-- Delete the tax rate that was created -->
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteTaxRate">
+                <argument name="name" value="NewTaxRate"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <!-- Revert configurations -->
+            <actionGroup ref="ResetTaxClassForShippingActionGroup" stepKey="resetTaxClassForShipping"/>
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
+            <magentoCLI command="config:set {{DisplayShippingAmountConfigData.path}} {{DisplayShippingAmountConfigData.value}}" stepKey="ResetDisplayShippingAmount"/>
+            <magentoCLI command="config:set {{ShippingPricesConfigData.path}} {{ShippingPricesConfigData.value}}" stepKey="ResetShippingPrices"/>
+            <magentoCLI command="config:set {{CatalogPrices.path}} {{CatalogPrices.value}}" stepKey="ResetCatalogPrice"/>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+            <!-- reindex and flush cache -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+               <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <!-- Go to storefront product page -->
+            <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
+               <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+            </actionGroup>
+            <!--Add to cart -->
+            <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product2AddToCart"/>
+            <!--Click on mini cart-->
+            <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+            <!--Click on view and edit cart link-->
+            <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMiniCart"/>
+            <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+            <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.estimateShippingAndTaxSummary}}" visible="false" stepKey="openEstimateShippingAndTaxSection"/>
+            <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectCountry"/>
+            <waitForPageLoad stepKey="waitForSelectCountry"/>
+            <!-- Assert tax and flatRate amount -->
+            <see selector="{{CheckoutCartSummarySection.shippingPrice}}" userInput="$4.17" stepKey="assertFlatRate"/>
+            <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$2.50" stepKey="assertTaxAmount"/>
+            <!--Assert Shopping Cart Summary-->
+            <actionGroup ref="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" stepKey="AssertCartSummary" >
+               <argument name="subtotal" value="$8.33"/>
+               <argument name="shipping" value="$4.17"/>
+               <argument name="total" value="$15.00"/>
+           </actionGroup>
+    </test>
+</tests>

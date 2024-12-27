@@ -10,7 +10,7 @@ namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleSku;
 use Magento\Framework\Stdlib\ArrayManager;
 
-class BundleSkuTest extends AbstractModifierTest
+class BundleSkuTest extends AbstractModifierTestCase
 {
     /**
      * @return BundleSku

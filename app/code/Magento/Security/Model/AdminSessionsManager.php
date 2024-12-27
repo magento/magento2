@@ -266,17 +266,20 @@ class AdminSessionsManager
      */
     public function logoutOtherUserSessions()
     {
-        $collection = $this->createAdminSessionInfoCollection()
-            ->filterByUser(
-                $this->authSession->getUser()->getId(),
-                \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
-                $this->authSession->getAdminSessionInfoId()
-            )
-            ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
-            ->loadData();
+        $user = $this->authSession->getUser();
+        if ($user) {
+            $collection = $this->createAdminSessionInfoCollection()
+                ->filterByUser(
+                    $user->getId(),
+                    \Magento\Security\Model\AdminSessionInfo::LOGGED_IN,
+                    $this->authSession->getAdminSessionInfoId()
+                )
+                ->filterExpiredSessions($this->securityConfig->getAdminSessionLifetime())
+                ->loadData();
 
-        $collection->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY)
-            ->save();
+            $collection->setDataToAll('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY)
+                ->save();
+        }
 
         return $this;
     }
@@ -304,11 +307,12 @@ class AdminSessionsManager
      */
     protected function createNewSession()
     {
+        $user = $this->authSession->getUser();
         $adminSessionInfo = $this->adminSessionInfoFactory
             ->create()
             ->setData(
                 [
-                    'user_id' => $this->authSession->getUser()->getId(),
+                    'user_id' => $user ? $user->getId() : null,
                     'ip' => $this->remoteAddress->getRemoteAddress(),
                     'status' => AdminSessionInfo::LOGGED_IN
                 ]

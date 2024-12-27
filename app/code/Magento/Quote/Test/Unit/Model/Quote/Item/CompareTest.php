@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,12 +61,12 @@ class CompareTest extends TestCase
         );
         $this->itemMock = $this->getMockBuilder(Item::class)
             ->addMethods(['getProductId'])
-            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode'])
+            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode', 'getSku'])
             ->setConstructorArgs($constrArgs)
             ->getMock();
         $this->comparedMock = $this->getMockBuilder(Item::class)
             ->addMethods(['getProductId'])
-            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode'])
+            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode', 'getSku'])
             ->setConstructorArgs($constrArgs)
             ->getMock();
         $this->optionMock = $this->getMockBuilder(Option::class)
@@ -75,7 +75,7 @@ class CompareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
+            ->onlyMethods(['unserialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $serializer->expects($this->any())

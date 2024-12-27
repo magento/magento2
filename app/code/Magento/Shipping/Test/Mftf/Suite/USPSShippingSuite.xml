@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="USPSShippingSuite">
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Configure USPS shipping method-->
+            <magentoCLI command="config:set {{AdminEnableUSPSConfigData.path}} {{AdminEnableUSPSConfigData.value}}" stepKey="enableUSPS"/>
+            <magentoCLI command="config:set {{AdminUserIDUSPSConfigData.path}} {{AdminUserIDUSPSConfigData.value}}" stepKey="fillUserIDUSPS"/>
+            <magentoCLI command="config:set {{AdminPasswordUSPSConfigData.path}} {{AdminPasswordUSPSConfigData.value}}" stepKey="fillPasswordUSPS"/>
+            <magentoCLI command="config:set {{AdminEnableDebugUSPSConfigData.path}} {{AdminEnableDebugUSPSConfigData.value}}" stepKey="enableDebugUSPS"/>
+            <magentoCLI command="config:set {{AdminEnableShowMethodUSPSConfigData.path}} {{AdminEnableShowMethodUSPSConfigData.value}}" stepKey="enableShowMethodUSPS"/>
+            <!--Flush cache post configuration-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostConfiguring">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Disable USPS shipping carrier-->
+            <magentoCLI command="config:set {{AdminDisableUSPSConfigData.path}} {{AdminDisableUSPSConfigData.value}}" stepKey="disableUSPS"/>
+            <magentoCLI command="config:set {{AdminDisableDebugUSPSConfigData.path}} {{AdminDisableDebugUSPSConfigData.value}}" stepKey="disableDebugUSPS"/>
+            <magentoCLI command="config:set {{AdminDisableShowMethodUSPSConfigData.path}} {{AdminDisableShowMethodUSPSConfigData.value}}" stepKey="disableShowMethodUSPS"/>
+        </after>
+        <include>
+            <group name="EnableUSPSShippingSuite"/>
+        </include>
+    </suite>
+</suites>

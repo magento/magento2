@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Interface for merging decoded queue messages.
+ * @api
  */
 interface MergerInterface
 {

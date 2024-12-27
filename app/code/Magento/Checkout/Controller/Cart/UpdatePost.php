@@ -83,6 +83,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpGetAct
                 $this->cart->updateItems($cartData)->save();
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->cart->save();
             $this->messageManager->addErrorMessage(
                 $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
             );

@@ -8,7 +8,6 @@ namespace Magento\UrlRewrite\Block\Cms\Page;
 /**
  * CMS pages grid for URL rewrites
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid

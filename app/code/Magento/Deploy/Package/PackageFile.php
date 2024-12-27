@@ -10,6 +10,8 @@ use Magento\Framework\View\Asset\Repository;
 
 /**
  * Deployment Package File class
+ *
+ * @api
  */
 class PackageFile extends Asset
 {

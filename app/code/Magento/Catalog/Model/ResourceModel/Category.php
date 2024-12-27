@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -20,13 +20,14 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Resource model for category entity
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Category extends AbstractResource
+class Category extends AbstractResource implements ResetAfterRequestInterface
 {
     /**
      * Category tree object
@@ -36,8 +37,6 @@ class Category extends AbstractResource
     protected $_tree;
 
     /**
-     * Catalog products table name
-     *
      * @var string
      */
     protected $_categoryProductTable;
@@ -48,15 +47,11 @@ class Category extends AbstractResource
     private $entitiesWhereAttributesIs;
 
     /**
-     * Id of 'is_active' category attribute
-     *
      * @var int
      */
     protected $_isActiveAttributeId = null;
 
     /**
-     * Id of store
-     *
      * @var int
      */
     protected $_storeId = null;
@@ -454,7 +449,7 @@ class Category extends AbstractResource
                     'position' => (int)$position,
                 ];
             }
-            $connection->insertMultiple($this->getCategoryProductTable(), $data);
+            $connection->insertOnDuplicate($this->getCategoryProductTable(), $data, ['position']);
         }
 
         /**
@@ -1054,7 +1049,7 @@ class Category extends AbstractResource
         if ($afterCategoryId) {
             $select = $connection->select()->from($table, 'position')->where('entity_id = :entity_id');
             $position = $connection->fetchOne($select, ['entity_id' => $afterCategoryId]);
-            $position++;
+            $position = (int)$position + 1;
         } else {
             $position = 1;
         }
@@ -1171,5 +1166,15 @@ class Category extends AbstractResource
             )->order('path');
 
         return $connection->fetchAll($select);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->entitiesWhereAttributesIs = [];
+        $this->_storeId = null;
     }
 }

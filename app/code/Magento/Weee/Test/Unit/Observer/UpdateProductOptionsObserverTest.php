@@ -127,7 +127,7 @@ class UpdateProductOptionsObserverTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function updateProductOptionsProvider()
+    public static function updateProductOptionsProvider()
     {
         return [
             'weee not enabled' => [

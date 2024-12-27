@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -56,6 +59,7 @@ class ReorderTest extends GraphQlAbstract
         } catch (NoSuchEntityException $e) {
         }
     }
+
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php
      */
@@ -184,6 +188,12 @@ class ReorderTest extends GraphQlAbstract
         $expectedResponse['cart']['items'][0]['quantity'] = 20;
 
         $this->assertResponseFields($response['reorderItems'], $expectedResponse);
+        $customer = ObjectManager::getInstance()->get(CustomerRepository::class)
+            ->get(self::CUSTOMER_EMAIL);
+        $quoteRepository = ObjectManager::getInstance()->get(QuoteRepository::class);
+        $quote = $quoteRepository->getActiveForCustomer($customer->getId());
+        $quote->setIsActive(false);
+        $quoteRepository->save($quote);
     }
 
     /**

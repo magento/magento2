@@ -41,11 +41,11 @@ use Magento\Store\Model\Website;
  */
 class StoresFixture extends Fixture
 {
-    const DEFAULT_WEBSITE_COUNT = 1;
+    private const DEFAULT_WEBSITE_COUNT = 1;
 
-    const DEFAULT_STORE_COUNT = 1;
+    private const DEFAULT_STORE_COUNT = 1;
 
-    const DEFAULT_STORE_VIEW_COUNT = 1;
+    private const DEFAULT_STORE_VIEW_COUNT = 1;
 
     /**
      * @var int
@@ -133,6 +133,11 @@ class StoresFixture extends Fixture
     private $storeViewIds;
 
     /**
+     * @var string[]
+     */
+    private $websiteCodes = [];
+
+    /**
      * @var ManagerInterface
      */
     private $eventManager;
@@ -173,7 +178,8 @@ class StoresFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -183,31 +189,25 @@ class StoresFixture extends Fixture
         $this->storeGroupsCount = $this->fixtureModel->getValue('store_groups', self::DEFAULT_STORE_COUNT);
         $this->storesCount = $this->fixtureModel->getValue('store_views', self::DEFAULT_STORE_VIEW_COUNT);
         $this->singleRootCategory = (bool)$this->fixtureModel->getValue('assign_entities_to_all_websites', false);
-
         if ($this->websitesCount <= self::DEFAULT_WEBSITE_COUNT
             && $this->storeGroupsCount <= self::DEFAULT_STORE_COUNT
             && $this->storesCount <= self::DEFAULT_STORE_VIEW_COUNT
         ) {
             return;
         }
-
         //Get existing entities counts
         $storeGroups = $this->storeManager->getGroups();
         $this->storeGroupsIds= array_keys($storeGroups);
-
         foreach ($storeGroups as $storeGroupId => $storeGroup) {
             $this->storeGroupsToWebsites[$storeGroupId] = $storeGroup->getWebsiteId();
         }
-
         $this->websiteIds = array_values(array_unique($this->storeGroupsToWebsites));
-
         $this->defaultWebsite = $this->storeManager->getWebsite();
         $this->defaultStoreGroup = $this->storeManager->getGroup();
         $this->defaultWebsiteId = $this->defaultWebsite->getId();
         $this->defaultStoreGroupId = $this->defaultStoreGroup->getId();
         $this->defaultStoreView = $this->storeManager->getDefaultStoreView();
         $this->storeViewIds = array_keys($this->storeManager->getStores());
-
         $this->generateWebsites();
         $this->generateStoreGroups();
         $this->generateStoreViews();
@@ -215,12 +215,12 @@ class StoresFixture extends Fixture
 
     /**
      * Generating web sites
+     *
      * @return void
      */
     private function generateWebsites()
     {
         $existedWebsitesCount = count($this->websiteIds) + self::DEFAULT_WEBSITE_COUNT;
-
         while ($existedWebsitesCount <= $this->websitesCount) {
             $website = clone $this->defaultWebsite;
             $websiteCode = sprintf('website_%d', $existedWebsitesCount);
@@ -236,23 +236,23 @@ class StoresFixture extends Fixture
             $website->save();
             $this->websiteIds[] = $website->getId();
             $existedWebsitesCount++;
+            $this->websiteCodes[] = $websiteCode;
         }
     }
 
     /**
      * Generating store groups ('stores' on frontend)
+     *
      * @return void
      */
     private function generateStoreGroups()
     {
         $existedStoreGroupCount = count($this->storeGroupsIds);
         $existedWebsitesCount = count($this->websiteIds);
-
         while ($existedStoreGroupCount < $this->storeGroupsCount) {
             $websiteId = $this->websiteIds[$existedStoreGroupCount % $existedWebsitesCount];
             $storeGroupName = sprintf('Store Group %d - website_id_%d', ++$existedStoreGroupCount, $websiteId);
             $storeGroupCode = sprintf('store_group_%d', $existedStoreGroupCount);
-
             $storeGroup = clone $this->defaultStoreGroup;
             $storeGroup->addData(
                 [
@@ -271,16 +271,15 @@ class StoresFixture extends Fixture
 
     /**
      * Generating store views
+     *
      * @return void
      */
     private function generateStoreViews()
     {
         $localesList = $this->localeConfig->getAllowedLocales();
         $localesListCount = count($localesList);
-
         $existedStoreViewsCount = count($this->storeViewIds);
         $existedStoreGroupCount = count($this->storeGroupsIds);
-
         while ($existedStoreViewsCount < $this->storesCount) {
             $groupId = $this->storeGroupsIds[$existedStoreViewsCount % $existedStoreGroupCount];
             $websiteId = $this->storeGroupsToWebsites[$groupId];
@@ -292,7 +291,6 @@ class StoresFixture extends Fixture
                 $websiteId,
                 $groupId
             );
-
             $store->addData(
                 [
                     'store_id' => null,
@@ -302,12 +300,13 @@ class StoresFixture extends Fixture
                     'code' => $storeCode
                 ]
             )->save();
-
             $this->saveStoreLocale($store->getId(), $localesList[$existedStoreViewsCount % $localesListCount]);
         }
     }
 
     /**
+     * Saves store into locale
+     *
      * @param int $storeId
      * @param string $localeCode
      * @return void
@@ -343,13 +342,12 @@ class StoresFixture extends Fixture
                 ->setDefaultSortBy('name')
                 ->setIsActive(true)
                 ->save();
-
             return $category->getId();
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -357,7 +355,7 @@ class StoresFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -379,5 +377,15 @@ class StoresFixture extends Fixture
             $this->defaultParentCategoryId = $this->storeManager->getStore()->getRootCategoryId();
         }
         return $this->defaultParentCategoryId;
+    }
+
+    /**
+     * Gets the website codes that were created by this object
+     *
+     * @return string[]
+     */
+    public function getWebsiteCodes()
+    {
+        return $this->websiteCodes;
     }
 }

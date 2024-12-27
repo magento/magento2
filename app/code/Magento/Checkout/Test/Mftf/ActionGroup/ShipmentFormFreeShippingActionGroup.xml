@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Fill shipment form for free shipping-->
+    <actionGroup name="ShipmentFormFreeShippingActionGroup" deprecated="This action group must not be used because it violated Technical guidelines on how to write tests.">
+        <annotations>
+            <description>Fills in the Customer details for the 'Shipping Address' section of the Storefront Checkout page. Selects 'Free Shipping'. Clicks on Next. Validates that the URL is present and correct.</description>
+        </annotations>
+
+        <!--    [DO NOT USE!] This action group must not be used because it violated Technical guidelines on how to write tests.    -->
+        <!--    Instead use combination of FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup, StorefrontSetShippingMethodActionGroup, StorefrontCheckoutClickNextOnShippingStepActionGroup    -->
+
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{CustomerEntityOne.email}}" stepKey="setCustomerEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="SetCustomerFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="SetCustomerLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{CustomerAddressSimple.street}}" stepKey="SetCustomerStreetAddress"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="SetCustomerCity"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="SetCustomerZipCode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="SetCustomerPhoneNumber"/>
+        <click selector="{{CheckoutShippingSection.region}}" stepKey="clickToSetState"/>
+        <click selector="{{CheckoutShippingSection.state}}" stepKey="clickToChooseState"/>
+        <see userInput="$0.00	Free	Free Shipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free Shipping')}}" stepKey="seeShippingMethod" after="clickToChooseState"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Free Shipping')}}" stepKey="selectFlatShippingMethod" after="seeShippingMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMask" after="selectFlatShippingMethod"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickToSaveShippingInfo"/>
+        <waitForPageLoad time="5" stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
+        <seeInCurrentUrl url="payment" stepKey="reviewAndPaymentIsShown"/>
+    </actionGroup>
+</actionGroups>

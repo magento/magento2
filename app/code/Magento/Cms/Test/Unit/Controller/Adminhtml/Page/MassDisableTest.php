@@ -10,10 +10,10 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 use Magento\Cms\Controller\Adminhtml\Page\MassDisable;
 use Magento\Cms\Model\ResourceModel\Page\Collection;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
-use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTest;
+use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class MassDisableTest extends AbstractMassActionTest
+class MassDisableTest extends AbstractMassActionTestCase
 {
     /**
      * @var MassDisable

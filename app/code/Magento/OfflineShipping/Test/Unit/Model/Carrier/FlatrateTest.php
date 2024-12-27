@@ -75,7 +75,8 @@ class FlatrateTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'isSetFlag', 'getValue'])
+            ->addMethods(['create'])
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMockForAbstractClass();
 
         $this->errorFactoryMock = $this
@@ -89,19 +90,19 @@ class FlatrateTest extends TestCase
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->methodFactoryMock = $this
             ->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->priceCalculatorMock = $this
             ->getMockBuilder(ItemPriceCalculator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingPricePerOrder'])
+            ->onlyMethods(['getShippingPricePerOrder'])
             ->getMock();
 
         $this->helper = new ObjectManager($this);
@@ -130,12 +131,12 @@ class FlatrateTest extends TestCase
 
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
+            ->onlyMethods(['getAllItems', 'getPackageQty', 'getFreeShipping'])
             ->getMock();
 
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getProduct',
                     'getParentItem',
@@ -150,7 +151,7 @@ class FlatrateTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isVirtual'])
+            ->onlyMethods(['isVirtual'])
             ->getMock();
 
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(true);
@@ -180,13 +181,13 @@ class FlatrateTest extends TestCase
 
         $method = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setPrice', 'setCost'])
+            ->onlyMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setPrice', 'setCost'])
             ->getMock();
         $this->methodFactoryMock->expects($this->once())->method('create')->willReturn($method);
 
         $result = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->setMethods(['append'])
+            ->onlyMethods(['append'])
             ->getMock();
         $this->resultFactoryMock->expects($this->once())->method('create')->willReturn($result);
 
@@ -236,7 +237,7 @@ class FlatrateTest extends TestCase
     /**
      * @return array
      */
-    public function collectRatesWithGlobalFreeShippingDataProvider()
+    public static function collectRatesWithGlobalFreeShippingDataProvider()
     {
         return [
             ['freeshipping' => true],

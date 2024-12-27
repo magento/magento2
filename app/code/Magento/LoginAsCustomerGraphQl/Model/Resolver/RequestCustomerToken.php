@@ -11,13 +11,13 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface as LoginAsCustomerConfig;
 use Magento\LoginAsCustomerGraphQl\Model\LoginAsCustomer\CreateCustomerToken;
 
@@ -76,7 +76,8 @@ class RequestCustomerToken implements ResolverInterface
         array $args = null
     ) {
         $isAllowedLogin = $this->authorization->isAllowed('Magento_LoginAsCustomer::login');
-        $isAlllowedShoppingAssistance = $this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance');
+        $isAlllowedShoppingAssistance =
+            $this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance');
         $isEnabled = $this->config->isEnabled();
 
         /* Get input params */
@@ -86,7 +87,7 @@ class RequestCustomerToken implements ResolverInterface
             throw new GraphQlInputException(__('Check input params.'));
         }
 
-        if (empty(trim($args['customer_email'], " "))) {
+        if (empty($args['customer_email']) || !trim($args['customer_email'], " ")) {
             throw new GraphQlInputException(__('Specify the "customer email" value.'));
         }
 
@@ -103,7 +104,7 @@ class RequestCustomerToken implements ResolverInterface
                 __('Allow remote shopping assistance is disabled.')
             );
         }
-        
+
         return $this->createCustomerToken->execute(
             $args['customer_email'],
             $context->getExtensionAttributes()->getStore()

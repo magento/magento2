@@ -28,24 +28,24 @@ use Magento\Framework\Webapi\Exception as WebapiException;
  */
 class ErrorProcessor
 {
-    const DEFAULT_SHUTDOWN_FUNCTION = 'apiShutdownFunction';
+    public const DEFAULT_SHUTDOWN_FUNCTION = 'apiShutdownFunction';
 
-    const DEFAULT_ERROR_HTTP_CODE = 500;
+    public const DEFAULT_ERROR_HTTP_CODE = 500;
 
-    const DEFAULT_RESPONSE_CHARSET = 'UTF-8';
+    public const DEFAULT_RESPONSE_CHARSET = 'UTF-8';
 
-    const INTERNAL_SERVER_ERROR_MSG = 'Internal Error. Details are available in Magento log file. Report ID: %s';
+    public const INTERNAL_SERVER_ERROR_MSG = 'Internal Error. Details are available in Magento log file. Report ID: %s';
 
-    /**#@+
+    /**
      * Error data representation formats.
      */
-    const DATA_FORMAT_JSON = 'json';
+    public const DATA_FORMAT_JSON = 'json';
 
-    const DATA_FORMAT_XML = 'xml';
+    public const DATA_FORMAT_XML = 'xml';
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var \Magento\Framework\Json\Encoder $encoder
+     */
     protected $encoder;
 
     /**

@@ -52,7 +52,7 @@ class CreateCustomerToken
      */
     public function execute(string $email, StoreInterface $store): array
     {
-        $customer = $this->customerFactory->create()->setWebsiteId((int)$store->getId())->loadByEmail($email);
+        $customer = $this->customerFactory->create()->setWebsiteId((int)$store->getWebsiteId())->loadByEmail($email);
 
         /* Check if customer email exist */
         if (!$customer->getId()) {

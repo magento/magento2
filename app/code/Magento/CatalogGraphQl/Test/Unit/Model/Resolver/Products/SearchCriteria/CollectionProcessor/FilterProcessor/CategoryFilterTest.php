@@ -9,6 +9,8 @@ namespace Magento\CatalogGraphQl\Test\Unit\Model\Resolver\Products\SearchCriteri
 
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\JoinMinimalPosition;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\CollectionProcessor\FilterProcessor\CategoryFilter;
 use Magento\Framework\Api\Filter;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,6 +37,11 @@ class CategoryFilterTest extends TestCase
     private $categoryResourceModel;
 
     /**
+     * @var JoinMinimalPosition
+     */
+    private $joinMinimalPosition;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -42,32 +49,67 @@ class CategoryFilterTest extends TestCase
         parent::setUp();
         $this->categoryFactory = $this->createMock(CategoryFactory::class);
         $this->categoryResourceModel = $this->createMock(Category::class);
+        $this->joinMinimalPosition = $this->createMock(JoinMinimalPosition::class);
         $this->model = new CategoryFilter(
             $this->categoryFactory,
-            $this->categoryResourceModel
+            $this->categoryResourceModel,
+            $this->joinMinimalPosition
         );
     }
 
     /**
-     * Test that category filter works correctly wity condition type "eq"
+     * Test that category filter works correctly with condition type "in" and multiple categories
      */
-    public function testApplyWithConditionTypeEq(): void
+    public function testApplyWithConditionTypeInAndMultipleCategories(): void
     {
         $filter = new Filter();
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $filter->setConditionType('eq');
-        $categoryId = 1;
-        $filter->setValue($categoryId);
-        $this->categoryFactory->expects($this->once())
+        $category1 = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getChildren'])
+            ->addMethods(['getIsAnchor'])
+            ->getMock();
+        $category3 = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getChildren'])
+            ->addMethods(['getIsAnchor'])
+            ->getMock();
+        $collection = $this->createMock(Collection::class);
+        $filter->setConditionType('in');
+        $filter->setValue('1,3');
+        $this->categoryFactory->expects($this->exactly(2))
             ->method('create')
-            ->willReturn($category);
-        $this->categoryResourceModel->expects($this->once())
+            ->willReturnOnConsecutiveCalls($category1, $category3);
+        $this->categoryResourceModel->expects($this->exactly(2))
             ->method('load')
-            ->with($category, $categoryId);
+            ->willReturnCallback(function (...$args) use ($category1, $category3) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$category1, 1],
+                    [$category3, 3]
+                ];
+                $index++;
+                if ($args === $expectedArgs[$index - 1]) {
+                    return null;
+                }
+            });
+        $collection->expects($this->never())
+            ->method('addCategoryFilter');
         $collection->expects($this->once())
-            ->method('addCategoryFilter')
-            ->with($category);
+            ->method('addCategoriesFilter')
+            ->with(['in' => [1, 2, 3]]);
+        $category1->expects($this->once())
+            ->method('getIsAnchor')
+            ->willReturn(true);
+        $category1->expects($this->once())
+            ->method('getChildren')
+            ->with(true)
+            ->willReturn('2');
+        $category3->expects($this->once())
+            ->method('getIsAnchor')
+            ->willReturn(false);
+        $this->joinMinimalPosition->expects($this->once())
+            ->method('execute')
+            ->with($collection, [1, 3]);
         $this->model->apply($filter, $collection);
     }
 
@@ -83,7 +125,7 @@ class CategoryFilterTest extends TestCase
             ->onlyMethods(['getChildren'])
             ->addMethods(['getIsAnchor'])
             ->getMock();
-        $collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $collection = $this->createMock(Collection::class);
         $filter->setConditionType($condition);
         $categoryId = 1;
         $filter->setValue($categoryId);
@@ -111,9 +153,9 @@ class CategoryFilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithOtherSupportedConditionTypesDataProvider(): array
+    public static function applyWithOtherSupportedConditionTypesDataProvider(): array
     {
-        return [['neq'], ['in'], ['nin'],];
+        return [['neq'], ['nin'],];
     }
 
     /**
@@ -123,7 +165,7 @@ class CategoryFilterTest extends TestCase
     public function testApplyWithUnsupportedConditionTypes(string $condition): void
     {
         $filter = new Filter();
-        $collection = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $collection = $this->createMock(Collection::class);
         $filter->setConditionType($condition);
         $categoryId = 1;
         $filter->setValue($categoryId);
@@ -141,7 +183,7 @@ class CategoryFilterTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithUnsupportedConditionTypesDataProvider(): array
+    public static function applyWithUnsupportedConditionTypesDataProvider(): array
     {
         return [['gteq'], ['lteq'], ['gt'], ['lt'], ['like'], ['nlike']];
     }

@@ -62,7 +62,6 @@ class SuccessTest extends TestCase
 
         $this->layout = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->checkoutSession = $this->getMockBuilder(Session::class)
@@ -71,17 +70,14 @@ class SuccessTest extends TestCase
 
         $eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $scopeConfig->expects($this->any())
             ->method('getValue')
@@ -95,7 +91,7 @@ class SuccessTest extends TestCase
 
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLayout', 'getEventManager', 'getUrlBuilder', 'getScopeConfig', 'getStoreManager'])
+            ->onlyMethods(['getLayout', 'getEventManager', 'getUrlBuilder', 'getScopeConfig', 'getStoreManager'])
             ->getMock();
         $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
         $context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
@@ -170,7 +166,7 @@ class SuccessTest extends TestCase
     /**
      * @return array
      */
-    public function invisibleStatusesProvider()
+    public static function invisibleStatusesProvider()
     {
         return [
             [[Order::STATE_PENDING_PAYMENT, 'status2'],  false],

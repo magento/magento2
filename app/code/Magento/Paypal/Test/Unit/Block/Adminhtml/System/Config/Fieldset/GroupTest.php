@@ -121,7 +121,7 @@ class GroupTest extends TestCase
     /**
      * @return array
      */
-    public function isCollapseStateDataProvider()
+    public static function isCollapseStateDataProvider()
     {
         return [
             [null, 0],

@@ -19,6 +19,7 @@
             <group value="catalog"/>
             <group value="configurableProduct"/>
             <group value="swatch"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -106,7 +107,9 @@
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption3"/>
 
             <!-- Reindex invalidated indices after product attribute has been created -->
-           <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterCreateAttributes"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndicesAfterCreateAttributes">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -115,14 +118,16 @@
             </actionGroup>
             <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForDeleteSuccessMessage"/>
             <see selector="{{AdminMessagesSection.success}}" userInput="A total of 4 record(s) have been deleted." stepKey="seeDeleteSuccessMessage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteProductVisualSwatchAttribute">
                 <argument name="ProductAttribute" value="$createVisualSwatchAttribute$"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributeGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- Reindex invalidated indices after product attribute has been created -->
-           <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterDeleteAttributes"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndicesAfterDeleteAttributes">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">

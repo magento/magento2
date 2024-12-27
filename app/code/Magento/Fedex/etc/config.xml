@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -10,12 +10,14 @@
         <carriers>
             <fedex>
                 <account backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <meter_number backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <tracking_api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <tracking_api_secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <sandbox_mode>0</sandbox_mode>
-                <production_webservices_url><![CDATA[https://ws.fedex.com:443/web-services/]]></production_webservices_url>
-                <sandbox_webservices_url><![CDATA[https://wsbeta.fedex.com:443/web-services/]]></sandbox_webservices_url>
+                <production_webservices_url><![CDATA[https://apis.fedex.com/]]></production_webservices_url>
+                <sandbox_webservices_url><![CDATA[https://apis-sandbox.fedex.com/]]></sandbox_webservices_url>
+                <pickup_type>DROPOFF_AT_FEDEX_LOCATION</pickup_type>
                 <shipment_requesttype>0</shipment_requesttype>
                 <active>0</active>
                 <sallowspecific>0</sallowspecific>

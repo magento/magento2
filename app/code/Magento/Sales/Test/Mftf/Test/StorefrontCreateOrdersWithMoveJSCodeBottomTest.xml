@@ -14,10 +14,13 @@
             <title value="Create a product and orders with set 'Move Js code to the bottom' to 'Yes'."/>
             <description value="Create a product and orders with a set 'Move JS code to the bottom of the page' to 'Yes' for registered customers and guests."/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableMoveJsCodeBottom.path}} {{StorefrontEnableMoveJsCodeBottom.value}}" stepKey="moveJsCodeBottomEnable"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
             <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">
@@ -36,13 +39,16 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="productName" value="_defaultProduct.name"/>
             </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <magentoCLI command="config:set {{StorefrontDisableMoveJsCodeBottom.path}} {{StorefrontDisableMoveJsCodeBottom.value}}" stepKey="moveJsCodeBottomDisable"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </after>
 
         <!-- Go to Storefront and place order for guest -->
@@ -97,6 +103,6 @@
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutReview2"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="customerPlaceOrder" />
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="singOutCustomer" />
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="singOutCustomer" />
     </test>
 </tests>

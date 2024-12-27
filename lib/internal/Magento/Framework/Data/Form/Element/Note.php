@@ -1,18 +1,17 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/**
- * Form note element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Form note element
+ */
 class Note extends AbstractElement
 {
     /**
@@ -32,6 +31,8 @@ class Note extends AbstractElement
     }
 
     /**
+     * Get element HTML
+     *
      * @return string
      */
     public function getElementHtml()

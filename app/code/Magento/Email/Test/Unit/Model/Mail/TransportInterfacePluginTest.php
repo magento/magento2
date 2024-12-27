@@ -76,7 +76,7 @@ class TransportInterfacePluginTest extends TestCase
      * Data provider for testAroundSendMessage
      * @return array
      */
-    public function sendMessageDataProvider()
+    public static function sendMessageDataProvider()
     {
         return [
             [false, true],

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRetainLocalCacheStorageTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Local cache storage is not retained for the expected period."/>
+            <title value="Verify that Local cache storage is retained for the expected period."/>
+            <description value="Verify that Local cache storage is retained for the expected period."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-3635"/>
+            <group value="customer"/>
+            <skip>
+            <issueId value="ACQE-4352"/>
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="config:set general/locale/timezone UTC" stepKey="setTimezone"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set general/locale/timezone America/Los_Angeles" stepKey="setTimezone"/>
+            <!--Restore default configuration settings.-->
+            <magentoCLI command="config:set {{DefaultWebCookieLifetimeConfigData.path}} {{DefaultWebCookieLifetimeConfigData.value}}" stepKey="setDefaultCookieLifetime"/>
+            <!--Clear cache and perform reindex-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessage"/>
+
+        <!--Grab timezone offset-->
+        <executeJS function="return new Date().getTimezoneOffset();" stepKey="getTimezoneOffset"/>
+        <!--Verify default expiry date for cookies-->
+        <actionGroup ref="StorefrontVerifyCustomerDefaultCookieExpiryDateActionGroup" stepKey="VerifyCookiesExpiryDate">
+            <argument name="timezoneOffset" value="{$getTimezoneOffset}"/>
+        </actionGroup>
+
+        <!--Logout customer before in case of it logged in from previous test-->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+
+        <!--Login as admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
+
+        <!--Clear browser locale storage for magento site-->
+        <resetCookie userInput="section_data_ids" stepKey="resetCookieForMagentoCacheSectionDataIds"/>
+        <resetCookie userInput="mage-cache-sessid" stepKey="resetCookieForMagentoCacheSessionId"/>
+        <resetCookie userInput="mage-cache-storage" stepKey="resetCookieForMagentoCacheStorage"/>
+
+        <!--Set-Cookie Lifetime to 30 days (2592000) under Stores > Configuration > General > Web > Default Cookie Settings-->
+        <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="goToCurrencySetupPage"/>
+        <!--Ensure the checkbox `use system value` is unchecked.-->
+        <uncheckOption selector="{{AdminDefaultCookieSettingsSection.DefaultCookieLifetimeSystemValueCheckbox}}" stepKey="uncheckCheckboxForSystemValue"/>
+        <fillField userInput="2592000" selector="{{AdminDefaultCookieSettingsSection.DefaultCookieLifetime}}" stepKey="fillDefaultLabel"/>
+        <click selector="{{AdminDefaultCookieSettingsSection.Save}}" stepKey="clickSaveConfig"/>
+
+        <!--Clear cache and perform reindex-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+        <!--Login storefront again using registered customer credentials-->
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCustomerData">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonFirstAttempt"/>
+
+        <!--Grab current timezone offset after 30 days-->
+        <executeJS function="return {$getTimezoneOffset} + (30*24*60);" stepKey="getTimezoneOffsetAfterReset"/>
+        <actionGroup ref="StorefrontVerifyCustomerDefaultCookieExpiryDateActionGroup" stepKey="VerifyCookiesExpiryDateAfterReset">
+            <argument name="timezoneOffset" value="{$getTimezoneOffsetAfterReset}"/>
+        </actionGroup>
+    </test>
+</tests>

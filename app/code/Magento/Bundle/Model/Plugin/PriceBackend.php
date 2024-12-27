@@ -1,18 +1,21 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Model\Plugin;
 
 /**
- * Class PriceBackend
- *
- *  Make price validation optional for bundle dynamic
+ * Make price validation optional for bundle dynamic
  */
 class PriceBackend
 {
     /**
+     * Around validate
+     *
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Price $subject
      * @param \Closure $proceed
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $object
@@ -30,6 +33,7 @@ class PriceBackend
         ) {
             return true;
         }
+
         return $proceed($object);
     }
 }

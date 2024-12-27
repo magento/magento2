@@ -94,7 +94,7 @@ class ImageTest extends MediaTest
      * Data provider for testPrepare
      * @return array
      */
-    public function prepareDataProvider(): array
+    public static function prepareDataProvider(): array
     {
         return [
             [['maxFileSize' => 10], 10, ['maxFileSize' => 10]],

@@ -50,7 +50,7 @@ class PriceTest extends TestCase
             ->getMock();
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->currencyMock = $this->getMockBuilder(Currency::class)
-            ->setMethods(['load', 'format'])
+            ->onlyMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
@@ -76,8 +76,7 @@ class PriceTest extends TestCase
         array $dataSource,
         string $currencyCode,
         ?int $expectedStoreId = null
-    ): void
-    {
+    ): void {
         $itemName = 'itemName';
         $oldItemValue = 'oldItemValue';
         $newItemValue = 'newItemValue';
@@ -118,7 +117,7 @@ class PriceTest extends TestCase
      *
      * @return array
      */
-    public function testPrepareDataSourceDataProvider(): array
+    public static function testPrepareDataSourceDataProvider(): array
     {
         $dataSource1 = [
             'data' => [
@@ -159,11 +158,24 @@ class PriceTest extends TestCase
                 ]
             ]
         ];
+        $dataSource5 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue',
+                        'store_id' => '123Test',
+                        'base_currency_code' => '',
+                    ]
+                ]
+            ]
+        ];
+
         return [
             [true, $dataSource1, 'US'],
             [false, $dataSource2, 'SAR'],
             [false, $dataSource3, 'SAR', 2],
             [false, $dataSource4, 'SAR'],
+            [false, $dataSource5, 'INR'],
         ];
     }
 }

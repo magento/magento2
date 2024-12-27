@@ -7,8 +7,6 @@ namespace Magento\User\Model\ResourceModel\Role\User;
 
 /**
  * Admin role users collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

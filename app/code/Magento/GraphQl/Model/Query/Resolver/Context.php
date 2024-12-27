@@ -8,19 +8,23 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Model\Query\Resolver;
 
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Do not use this class. It was kept for backward compatibility.
  *
- * @deprecated 100.3.3 \Magento\GraphQl\Model\Query\Context is used instead of this
+ * @deprecated 100.3.3
+ * @see \Magento\GraphQl\Model\Query\Context
  */
-class Context extends \Magento\Framework\Model\AbstractExtensibleModel implements ContextInterface
+class Context extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    ContextInterface,
+    ResetAfterRequestInterface
 {
     /**#@+
      * Constants defined for type of context
      */
-    const USER_TYPE_ID  = 'user_type';
-    const USER_ID = 'user_id';
+    public const USER_TYPE_ID  = 'user_type';
+    public const USER_ID = 'user_id';
     /**#@-*/
 
     /**
@@ -85,5 +89,13 @@ class Context extends \Magento\Framework\Model\AbstractExtensibleModel implement
     public function setUserType(int $typeId) : ContextInterface
     {
         return $this->setData(self::USER_TYPE_ID, $typeId);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
     }
 }

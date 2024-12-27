@@ -9,7 +9,6 @@ namespace Magento\Bundle\ViewModel;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Magento\Catalog\Block\Product\View as ProductView;
 
 /**
  * ViewModel for Bundle Option Block
@@ -22,26 +21,23 @@ class ValidateQuantity implements ArgumentInterface
     private $serializer;
 
     /**
-     * @var ProductView
-     */
-    private $productView;
-
-    /**
      * @param Json $serializer
-     * @param ProductView $productView
      */
     public function __construct(
-        Json $serializer,
-        ProductView $productView
+        Json $serializer
     ) {
         $this->serializer = $serializer;
-        $this->productView = $productView;
     }
 
+    /**
+     * Returns quantity validator.
+     *
+     * @return string
+     */
     public function getQuantityValidators(): string
     {
-        return $this->serializer->serialize(
-            $this->productView->getQuantityValidators()
-        );
+        $validators['validate-item-quantity'] = [];
+
+        return $this->serializer->serialize($validators);
     }
 }

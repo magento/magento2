@@ -67,7 +67,7 @@ class UploadTest extends TestCase
 
         $this->fileUploaderFactory = $this->getMockBuilder(FileUploaderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->customerMetadataService = $this->getMockBuilder(CustomerMetadataInterface::class)

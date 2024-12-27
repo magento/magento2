@@ -19,5 +19,6 @@
         <element name="shippingMethod" type="button" selector="//label[contains(text(), 'Fixed')]" timeout="60"/>
         <element name="fixedPriceShippingMethod" type="button" selector="#s_method_{{methodName}}_{{methodTitle}}"  parameterized="true"/>
         <element name="getShippingMethod" type="button" selector="#order-shipping-method-summary a"/>
+        <element name="selectUSPSType" type="radio" selector="//label[contains(text(),'Priority Mail Express International Flat Rate Envelope -')]//ancestor::label[@class='admin__field-label']"/>
     </section>
 </sections>

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Acl;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Access Control List Builder. Retrieves required role/rule/resource loaders
  * and uses them to populate provided ACL object. Acl object is put to cache after creation.
@@ -13,7 +15,7 @@ namespace Magento\Framework\Acl;
  * @api
  * @since 100.0.2
  */
-class Builder
+class Builder implements ResetAfterRequestInterface
 {
     /**
      * Acl object
@@ -84,5 +86,13 @@ class Builder
     {
         $this->_acl = null;
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->resetRuntimeAcl();
     }
 }

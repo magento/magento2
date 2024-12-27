@@ -70,7 +70,7 @@ class CartItemErrors implements ResolverInterface
         $errors = [];
         foreach ($cartItem->getErrorInfos() as $error) {
             $errorType = $error['code'] ?? self::ERROR_UNDEFINED;
-            $message = $error['message'] ?? $cartItem->getMessage();
+            $message = (string) ($error['message'] ?? $cartItem->getMessage());
             $errorEnumCode = $this->enumLookup->getEnumValueFromField(
                 'CartItemErrorType',
                 (string)$errorType

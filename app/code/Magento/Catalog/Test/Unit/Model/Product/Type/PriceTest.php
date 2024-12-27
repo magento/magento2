@@ -29,9 +29,9 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
-    const KEY_TIER_PRICE = 'tier_price';
-    const PRICE_SCOPE_GLOBAL = 0;
-    const PRICE_SCOPE_WEBSITE = 1;
+    private const KEY_TIER_PRICE = 'tier_price';
+    private const PRICE_SCOPE_GLOBAL = 0;
+    private const PRICE_SCOPE_WEBSITE = 1;
 
     /**
      * @var \Magento\Catalog\Model\Product\Type\Price
@@ -152,21 +152,21 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function nullPricesDataProvider(): array
+    public static function nullPricesDataProvider(): array
     {
         return [
-            'testGetTierPricesWithNull' => [$this::KEY_TIER_PRICE, 'setTierPrices']
+            'testGetTierPricesWithNull' => [self::KEY_TIER_PRICE, 'setTierPrices']
         ];
     }
 
     /**
      * @return array
      */
-    public function pricesDataProvider(): array
+    public static function pricesDataProvider(): array
     {
         return [
-            'global price scope' => [$this::PRICE_SCOPE_GLOBAL, 0],
-            'website price scope' => [$this::PRICE_SCOPE_WEBSITE, 2]
+            'global price scope' => [self::PRICE_SCOPE_GLOBAL, 0],
+            'website price scope' => [self::PRICE_SCOPE_WEBSITE, 2]
         ];
     }
 

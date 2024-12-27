@@ -52,13 +52,13 @@
     &:before {
         border-color: @form-el__color transparent transparent transparent;
         border-style: solid;
-        border-width: @select-check__height @select-check__width / 2 0 @select-check__width / 2;
+        border-width: @select-check__height (@select-check__width / 2) 0 (@select-check__width / 2);
         content: '';
         height: 0;
         margin-right: -(@select-check__width / 2);
         margin-top: -(@select-check__height / 2);
         position: absolute;
-        right: @select-check__size / 2;
+        right: (@select-check__size / 2);
         top: 50%;
         width: 0;
         z-index: -1;

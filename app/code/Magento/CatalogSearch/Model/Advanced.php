@@ -51,65 +51,47 @@ use Magento\Framework\App\ObjectManager;
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * User friendly search criteria list
-     *
      * @var array
      */
     protected $_searchCriterias = [];
 
     /**
-     * Product collection
-     *
      * @var ProductCollection
      */
     protected $_productCollection;
 
     /**
-     * Initialize dependencies
-     *
      * @deprecated 101.0.2
      * @var Config
      */
     protected $_catalogConfig;
 
     /**
-     * Catalog product visibility
-     *
      * @var Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Attribute collection factory
-     *
      * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Product factory
-     *
      * @var ProductFactory
      */
     protected $_productFactory;
 
     /**
-     * Currency factory
-     *
      * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * Advanced Collection Factory
-     *
      * @deprecated
      * @see $collectionProvider
      * @var ProductCollectionFactory
@@ -197,12 +179,15 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if (!isset($values[$attribute->getAttributeCode()])) {
                 continue;
             }
-            if ($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea') {
-                if (!trim($values[$attribute->getAttributeCode()])) {
-                    continue;
-                }
-            }
+
             $value = $values[$attribute->getAttributeCode()];
+
+            if (($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea')
+                && (!is_string($value) || !trim($value))
+            ) {
+                continue;
+            }
+
             $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
             if (false === $preparedSearchValue) {
                 continue;

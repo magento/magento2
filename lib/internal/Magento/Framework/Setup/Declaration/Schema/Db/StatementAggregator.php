@@ -10,6 +10,8 @@ namespace Magento\Framework\Setup\Declaration\Schema\Db;
  * Statement aggregator.
  *
  * Statements are concatenated conditionally, decides which statements go separately and which may be concatenated.
+ *
+ * @api
  */
 class StatementAggregator
 {

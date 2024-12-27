@@ -154,6 +154,37 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_custom_option_dropdown.php
+     *
+     * @throws Exception
+     */
+    public function testShouldValidateCustomDropdownOptionValue(): void
+    {
+        $product = $this->getConfigurableProductInfo();
+        $qty = 2;
+        $childSku = $product['variants'][0]['product']['sku'];
+        $parentSku = $product['sku'];
+        $selectedOptions = array_column($product['variants'][0]['attributes'], 'uid');
+        $optionId = $product['options'][0]['uid'];
+        $customOptions = [$optionId => 'invalid-option-id'];
+        $additionalInput = $this->getSelectedOptionsQuery($selectedOptions)
+            . PHP_EOL
+            . $this->getCustomOptionsQuery($customOptions);
+
+        $query = $this->getQuery($parentSku, $childSku, $qty, $additionalInput);
+        $response = $this->graphQlMutation($query, [], '', $this->getHeadersMap());
+
+        $this->assertArrayHasKey('addProductsToWishlist', $response);
+        $this->assertNotEmpty($response['addProductsToWishlist']['user_errors']);
+        $this->assertEquals(
+            'Some of the selected item options are not currently available.',
+            $response['addProductsToWishlist']['user_errors'][0]['message']
+        );
+    }
+
+    /**
      * Authentication header map
      *
      * @param string $username

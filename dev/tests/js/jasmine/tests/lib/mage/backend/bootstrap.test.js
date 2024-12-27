@@ -22,11 +22,20 @@ define([
 
         describe('"sendPostponeRequest" method', function () {
             it('should insert "Error" notification if request failed', function () {
+                var data = {
+                        jqXHR: {
+                            responseText: 'error',
+                            status: '503',
+                            readyState: 4
+                        },
+                        textStatus: 'error'
+                    };
+
                 $pageMainActions.appendTo('body');
                 $('body').notification();
 
                 // eslint-disable-next-line jquery-no-event-shorthand
-                $.ajaxSettings.error();
+                $.ajaxSettings.error(data.jqXHR, data.textStatus);
 
                 expect($('.message-error').length).toBe(1);
                 expect(

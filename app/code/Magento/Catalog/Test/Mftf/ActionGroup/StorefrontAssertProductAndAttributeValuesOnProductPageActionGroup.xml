@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertProductAndAttributeValuesOnProductPageActionGroup">
+        <annotations>
+            <description>Storefront assert attribute values on product details page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string" defaultValue="simple-product-UPDATED"/>
+            <argument name="productPrice" type="string" defaultValue="5.50"/>
+            <argument name="taxValue" type="string" defaultValue="Taxable Goods"/>
+            <argument name="weightValue" type="string" defaultValue="10.000000"/>
+            <argument name="country" type="string" defaultValue="Zimbabwe"/>
+        </arguments>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{productName}}" stepKey="seeProductNameInTitle"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.price}}" userInput="{{productPrice}}" stepKey="seeProductPrice"/>
+        <waitForText selector="{{StorefrontProductPageSection.attributeTypes('Tax Class')}}" userInput="{{taxValue}}" stepKey="assertTaxAttribute"/>
+        <waitForText selector="{{StorefrontProductPageSection.attributeTypes('Weight')}}" userInput="{{weightValue}}" stepKey="assertWeightAttribute"/>
+        <waitForText selector="{{StorefrontProductPageSection.attributeTypes('Country of Manufacture')}}" userInput="{{country}}" stepKey="assertCountryOfManufactureAttribute"/>
+    </actionGroup>
+</actionGroups>

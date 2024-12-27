@@ -51,21 +51,21 @@ class SubstitutionTest extends TestCase
         $this->layout = $this->getMockBuilder(
             LayoutInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 []
             )->getMock();
 
         $eventManager = $this->getMockBuilder(
             ManagerInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 []
             )->getMock();
 
         $scopeConfig = $this->getMockBuilder(
             ScopeConfigInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 []
             )->getMock();
         $scopeConfig->expects(
@@ -84,7 +84,7 @@ class SubstitutionTest extends TestCase
         $context = $this->getMockBuilder(
             Context::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getLayout', 'getEventManager', 'getScopeConfig']
             )->getMock();
         $context->expects(
@@ -124,10 +124,7 @@ class SubstitutionTest extends TestCase
     {
         $abstractBlock = $this->getMockBuilder(
             AbstractBlock::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                []
-            )->getMock();
+        )->disableOriginalConstructor()->getMock();
         $childAbstractBlock = clone($abstractBlock);
 
         $abstractBlock->expects($this->any())->method('getParentBlock')->willReturn($childAbstractBlock);
@@ -137,10 +134,7 @@ class SubstitutionTest extends TestCase
 
         $infoMock = $this->getMockBuilder(
             Info::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                []
-            )->getMock();
+        )->disableOriginalConstructor()->getMock();
         $methodMock = $this->getMockBuilder(
             MethodInterface::class
         )->getMockForAbstractClass();

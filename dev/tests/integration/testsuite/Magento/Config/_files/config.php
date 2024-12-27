@@ -14,7 +14,7 @@ return [
                     'test_value_3' => 'value3.local_config.default.test',
                     'test_value_4' => 'value4.local_config.default.test',
                 ],
-            ],
+            ]
         ],
         'websites' => [
             'base' => [
@@ -28,6 +28,27 @@ return [
                     ],
                 ],
             ],
+            'SecondWebsite' => [
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => '',
+                    ]
+                ]
+            ],
+            'THIRD_WEBSITE' => [
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.website_third_website.test',
+                    ]
+                ]
+            ],
+            'fourthWebsite' => [
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.website_fourthwebsite.test',
+                    ]
+                ]
+            ]
         ],
         'stores' => [
             'default' => [
@@ -40,7 +61,33 @@ return [
                         'test_value_4' => 'value4.local_config.store_default.test',
                     ],
                 ],
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.store_default.test'
+                    ]
+                ]
             ],
+            'SecondStore' => [
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.store_secondstore.test',
+                    ]
+                ]
+            ],
+            'THIRD_STORE' => [
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => '',
+                    ]
+                ]
+            ],
+            'fourthStore' => [
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.store_fourthstore.test',
+                    ]
+                ]
+            ]
         ],
     ]
 ];

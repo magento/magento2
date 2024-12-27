@@ -448,18 +448,18 @@ class LinkManagementTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function errorsDataProvider(): array
+    public static function errorsDataProvider(): array
     {
         return [
             'simple_instead_of_configurable' => [
-                'parent_sku' => 'simple2',
-                'child_sku' => 'configurable',
-                'error_message' => (string)__("The parent product doesn't have configurable product options."),
+                'parentSku' => 'simple2',
+                'childSku' => 'configurable',
+                'errorMessage' => (string)__("The parent product doesn't have configurable product options."),
             ],
             'simple_with_empty_configurable_attribute_value' => [
-                'parent_sku' => 'configurable',
-                'child_sku' => 'simple2',
-                'error_message' => TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+                'parentSku' => 'configurable',
+                'childSku' => 'simple2',
+                'errorMessage' => TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
                     ? (string)__(
                         'The child product doesn\'t have the "%1" attribute value. Verify the value and try again.'
                     )

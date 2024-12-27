@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Session;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\App\Action\Action;
@@ -22,7 +23,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -209,6 +210,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
             //phpcs:ignore Magento2.Legacy.ObsoleteResponse
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
+
         $category = $this->_initCategory();
         if ($category) {
             $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
@@ -247,6 +249,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 ->addBodyClass('categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($category))
                 ->addBodyClass('category-' . $category->getUrlKey());
 
+            if ($this->shouldRedirectOnToolbarAction()) {
+                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            }
             return $page;
         } elseif (!$this->getResponse()->isRedirect()) {
             $result = $this->resultForwardFactory->create()->forward('noroute');
@@ -293,5 +298,22 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         if ($settings->getPageLayoutHandles()) {
             $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
+    }
+
+    /**
+     * Checks for toolbar actions
+     *
+     * @return bool
+     */
+    private function shouldRedirectOnToolbarAction(): bool
+    {
+        $params = $this->getRequest()->getParams();
+
+        return $this->toolbarMemorizer->isMemorizingAllowed() && empty(array_intersect([
+                Toolbar::ORDER_PARAM_NAME,
+                Toolbar::DIRECTION_PARAM_NAME,
+                Toolbar::MODE_PARAM_NAME,
+                Toolbar::LIMIT_PARAM_NAME
+            ], array_keys($params))) === false;
     }
 }

@@ -18,6 +18,7 @@
             <testCaseId value="MC-27895"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -28,6 +29,7 @@
             <!--Create New Role-->
             <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
                 <argument name="roleName" value="{{roleSales.name}}"/>
+                <argument name="userPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
             </actionGroup>
             <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveNewRole"/>
         </before>
