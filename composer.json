@@ -22,6 +22,7 @@
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-dom": "*",
+        "ext-ftp": "*",
         "ext-gd": "*",
         "ext-hash": "*",
         "ext-iconv": "*",
@@ -40,7 +41,7 @@
         "colinmollenhour/credis": "^1.15",
         "colinmollenhour/php-redis-session-abstract": "^2.0",
         "composer/composer": "^2.0, !=2.2.16",
-        "elasticsearch/elasticsearch": "~7.17.0 || ~8.5.0",
+        "elasticsearch/elasticsearch": "^7.17 || ^8.15",
         "ezyang/htmlpurifier": "^4.17",
         "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-captcha": "^2.17",
@@ -400,3 +401,4 @@
     },
     "prefer-stable": true
 }
+

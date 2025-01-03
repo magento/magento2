@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -297,6 +297,7 @@ class EmailNotification implements EmailNotificationInterface
             $storeId
         );
 
+        $this->emulation->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_FRONTEND);
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => 'frontend', 'store' => $storeId])
             ->setTemplateVars($templateParams)
@@ -304,7 +305,6 @@ class EmailNotification implements EmailNotificationInterface
             ->addTo($email, $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
 
-        $this->emulation->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_FRONTEND);
         $transport->sendMessage();
         $this->emulation->stopEnvironmentEmulation();
     }

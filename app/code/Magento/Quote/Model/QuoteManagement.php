@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -565,10 +565,10 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         if (!$quote->getCustomerIsGuest()) {
             if ($quote->getCustomerId()) {
                 $this->_prepareCustomerQuote($quote);
-                $this->customerManagement->validateAddresses($quote);
             }
             $this->customerManagement->populateCustomerInfo($quote);
         }
+        $this->customerManagement->validateAddresses($quote);
         $addresses = [];
         $quote->reserveOrderId();
         if ($quote->isVirtual()) {

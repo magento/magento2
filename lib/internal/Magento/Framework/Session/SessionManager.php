@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Session;
 
@@ -258,12 +258,8 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
     protected function registerSaveHandler()
     {
         return session_set_save_handler(
-            [$this->saveHandler, 'open'],
-            [$this->saveHandler, 'close'],
-            [$this->saveHandler, 'read'],
-            [$this->saveHandler, 'write'],
-            [$this->saveHandler, 'destroy'],
-            [$this->saveHandler, 'gc']
+            $this->saveHandler,
+            true
         );
     }
 

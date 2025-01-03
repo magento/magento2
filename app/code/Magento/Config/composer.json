@@ -13,7 +13,8 @@
         "magento/module-directory": "*",
         "magento/module-email": "*",
         "magento/module-media-storage": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-encryption-key": "*"
     },
     "type": "magento2-module",
     "license": [

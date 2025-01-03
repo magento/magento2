@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Wishlist\CustomerData;
 
@@ -85,7 +85,8 @@ class Wishlist implements SectionSourceInterface
         return [
             'counter' => $counter,
             'items' => $counter ? $this->getItems() : [],
-            'websiteId' => $this->storeManager->getWebsite()->getId()
+            'websiteId' => $this->storeManager->getWebsite()->getId(),
+            'storeId' => $this->storeManager->getStore()->getId()
         ];
     }
 

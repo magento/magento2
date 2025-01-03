@@ -10,6 +10,7 @@
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-checkout": "*",
+        "magento/module-configurable-product": "*",
         "magento/module-customer": "*",
         "magento/module-directory": "*",
         "magento/module-eav": "*",

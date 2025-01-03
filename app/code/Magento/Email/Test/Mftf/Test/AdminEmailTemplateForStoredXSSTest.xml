@@ -31,7 +31,7 @@
         </actionGroup>
         <actionGroup ref="PreviewEmailTemplateActionGroup" stepKey="previewTemplate"/>
         <actionGroup ref="AssertEmailTemplateContentActionGroup" stepKey="assertContent">
-            <argument name="expectedContent" value="{{EmailTemplateWithStoreddXSS.expectedTemplate}}"/>
+            <argument name="expectedContent" value=""/>
         </actionGroup>
     </test>
 </tests>

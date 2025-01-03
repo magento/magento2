@@ -20,8 +20,8 @@ lib/web/jquery/jstree/jquery.jstree.js
 // MINIFIED FILES
 app/code/**/*.min.js
 lib/web/legacy-build.min.js
-lib/web/tiny_mce_7/**/*.js
-lib/web/tiny_mce_7/***/*.js
+lib/web/tiny_mce_6/**/*.js
+lib/web/tiny_mce_6/***/*.js
 lib/web/jquery/uppy/dist/uppy.min.js
 
 // TEST
