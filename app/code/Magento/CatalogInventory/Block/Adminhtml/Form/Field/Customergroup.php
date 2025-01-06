@@ -90,6 +90,8 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
     }
 
     /**
+     * Set input name
+     *
      * @param string $value
      * @return $this
      * @deprecated
