@@ -1246,5 +1246,18 @@
             "SALES_ORDER_STATUS_LABEL_STATUS_SALES_ORDER_STATUS_STATUS": true,
             "SALES_ORDER_STATUS_LABEL_STORE_ID_STORE_STORE_ID": true
         }
+    },
+    "sales_order_status_change_history": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_STATUS_CHANGE_HISTORY_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
     }
 }

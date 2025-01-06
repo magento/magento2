@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,13 +11,16 @@ use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
+use Magento\CatalogImportExport\Model\Export\ProductFilterInterface;
 use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Logger\Monolog;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
@@ -25,6 +28,7 @@ use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -139,6 +143,21 @@ class ProductTest extends TestCase
      */
     protected $object;
 
+    /**
+     * @var ProductFilterInterface|MockObject
+     */
+    private $filter;
+
+    /**
+     * @var StockConfigurationInterface|MockObject
+     */
+    private $stockConfiguration;
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->localeDate = $this->createMock(Timezone::class);
@@ -210,6 +229,9 @@ class ProductTest extends TestCase
             'getContents',
         ]);
 
+        $this->filter = $this->createMock(ProductFilterInterface::class);
+        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
+
         $constructorMethods = [
             'initTypeModels',
             'initAttributes',
@@ -255,7 +277,10 @@ class ProductTest extends TestCase
             $this->attributeColFactory,
             $this->typeFactory,
             $this->linkTypeProvider,
-            $this->rowCustomizer
+            $this->rowCustomizer,
+            [],
+            $this->filter,
+            $this->stockConfiguration
         );
         $this->setPropertyValue($this->product, 'metadataPool', $this->metadataPool);
 
@@ -409,5 +434,119 @@ class ProductTest extends TestCase
         $reflectionProperty->setValue($object, $value);
 
         return $object;
+    }
+
+    /**
+     * Test for getItemsPerPage and adjustItemsPerPageByAttributeOptions methods
+     *
+     * @return void
+     * @throws \ReflectionException
+     *
+     * @dataProvider getItemsPerPageDataProvider
+     */
+    public function testGetItemsPerPage($scenarios)
+    {
+
+        $reflection = new \ReflectionClass(get_class($this->object));
+        $method = $reflection->getMethod('getItemsPerPage');
+
+        $currentMemoryLimit = ini_get('memory_limit');
+
+        foreach ($scenarios as $scenario) {
+            if ($currentMemoryLimit !== "-1" && $currentMemoryLimit < $scenario['memory_limit']) {
+                $this->markTestSkipped('Memory limit is too low for this test');
+            }
+            ini_set('memory_limit', $scenario['memory_limit']);
+            $this->setPropertyValue(
+                $this->product,
+                '_attributeValues',
+                ['test_attribute' => $scenario['options'] ?? []]
+            );
+            $result = $method->invoke($this->product);
+            $this->assertLessThanOrEqual(
+                $scenario['expected_items_per_page'],
+                $result,
+                'Memory limit: ' . $scenario['memory_limit'] . ' Options count: ' . count($scenario['options'])
+            );
+            $this->setPropertyValue($this->product, '_itemsPerPage', null);
+            ini_set('memory_limit', $currentMemoryLimit);
+        }
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getItemsPerPageDataProvider(): array
+    {
+        $options = [];
+
+        // Simulate different scenarios without attribute options
+        $scenarios['Attribute options: ' . count($options)] = [[
+            [
+                'memory_limit' => '4G',
+                'options' => $options,
+                'expected_items_per_page' => 5000,
+            ],
+            [
+                'memory_limit' => '3G',
+                'options' => $options,
+                'expected_items_per_page' => 5000,
+            ],
+            [
+                'memory_limit' => '2G',
+                'options' => $options,
+                'expected_items_per_page' => 5000,
+            ]
+        ]];
+
+        $options = [];
+        for ($i = 0; $i <= 5000; $i++) {
+            $options[] = ['label' => 'Option ' . $i, 'value' => $i];
+        }
+
+        // Simulate different scenarios with attribute options over 5000
+        $scenarios['Attribute options: ' . count($options)] = [[
+            [
+                'memory_limit' => '4G',
+                'options' => $options,
+                'expected_items_per_page' => 1800,
+            ],
+            [
+                'memory_limit' => '3G',
+                'options' => $options,
+                'expected_items_per_page' => 1500,
+            ],
+            [
+                'memory_limit' => '2G',
+                'options' => $options,
+                'expected_items_per_page' => 1000,
+            ]
+        ]];
+
+        $options = [];
+        for ($i = 0; $i <= 2500; $i++) {
+            $options[] = ['label' => 'Option ' . $i, 'value' => $i];
+        }
+
+        // Simulate different scenarios with attribute options over 2500
+        $scenarios['Attribute options: ' . count($options)] = [[
+            [
+                'memory_limit' => '4G',
+                'options' => $options,
+                'expected_items_per_page' => 3500,
+            ],
+            [
+                'memory_limit' => '3G',
+                'options' => $options,
+                'expected_items_per_page' => 3000,
+            ],
+            [
+                'memory_limit' => '2G',
+                'options' => $options,
+                'expected_items_per_page' => 2500,
+            ]
+        ]];
+
+        return $scenarios;
     }
 }

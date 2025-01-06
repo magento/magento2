@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2020 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="TinyMCESection">
         <element name="checkIfContentTabOpen" type="button" selector="//span[text()='Content']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
         <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
         <element name="TinyMCE" type="text" selector=".tox-tinymce"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
-        <element name="InsertWidgetIcon" type="button" selector="button[aria-label='Insert Widget']" timeout="30"/>
+        <element name="InsertWidgetIcon" type="button" selector="button[title='Insert Widget']" timeout="30"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
-        <element name="InsertVariableIcon" type="button" selector="button[aria-label='Insert Variable']"/>
+        <element name="InsertVariableIcon" type="button" selector="button[title='Insert Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
-        <element name="InsertImageIcon" type="button" selector="button[aria-label='Insert/edit image']" timeout="30"/>
-        <element name="Style" type="button" selector="button[aria-label='Block Paragraph']"/>
-        <element name="Bold" type="button" selector="button[aria-label='Bold']"/>
-        <element name="Italic" type="button" selector="button[aria-label='Italic']"/>
-        <element name="Underline" type="button" selector="button[aria-label='Underline']"/>
-        <element name="AlignLeft" type="button" selector="button[aria-label='Align left']"/>
-        <element name="AlignCenter" type="button" selector="button[aria-label='Align center']"/>
-        <element name="AlignRight" type="button" selector="button[aria-label='Align right']"/>
-        <element name="Bullet" type="button" selector="div[aria-label='Bullet list']"/>
-        <element name="Numlist" type="button" selector="div[aria-label='Numbered list']"/>
-        <element name="InsertLink" type="button" selector="button[aria-label='Insert/edit link']"/>
-        <element name="InsertTable" type="button" selector="button[aria-label='Table']"/>
-        <element name="SpecialCharacter" type="button" selector="button[aria-label='Special character']"/>
+        <element name="InsertImageIcon" type="button" selector="button[title='Insert/edit image']" timeout="30"/>
+        <element name="Style" type="button" selector="button[title='Block Paragraph']"/>
+        <element name="Bold" type="button" selector="button[title='Bold']"/>
+        <element name="Italic" type="button" selector="button[title='Italic']"/>
+        <element name="Underline" type="button" selector="button[title='Underline']"/>
+        <element name="AlignLeft" type="button" selector="button[title='Align left']"/>
+        <element name="AlignCenter" type="button" selector="button[title='Align center']"/>
+        <element name="AlignRight" type="button" selector="button[title='Align right']"/>
+        <element name="Bullet" type="button" selector="div[title='Bullet list']"/>
+        <element name="Numlist" type="button" selector="div[title='Numbered list']"/>
+        <element name="InsertLink" type="button" selector="button[title='Insert/edit link']"/>
+        <element name="InsertTable" type="button" selector="button[title='Table']"/>
+        <element name="SpecialCharacter" type="button" selector="button[title='Special character']"/>
         <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
         <element name="EditorContent" type="input" selector="#tinymce"/>
         <element name="Content" type="textarea" selector="textarea"/>

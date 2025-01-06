@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -182,7 +182,7 @@ class PriceTiers implements ResolverInterface, ResetAfterRequestInterface
             "discount" => $discount,
             "quantity" => $tierPrice->getQty(),
             "final_price" => [
-                "value" => $tierPrice->getValue() * $tierPrice->getQty(),
+                "value" => $tierPrice->getValue(),
                 "currency" => $currencyCode
             ]
         ];

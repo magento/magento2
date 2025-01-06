@@ -1,21 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\RelatedProductGraphQl\Model\Resolver\Batch;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\ProductFieldsSelector;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\RelatedProductGraphQl\Model\DataProvider\RelatedProductDataProvider;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\RelatedProductGraphQl\Model\ResourceModel\RelatedProductsByStoreId;
 
 /**
  * Resolve linked product lists.
@@ -43,21 +47,30 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var RelatedProductsByStoreId
+     */
+    private $relatedProductsByStoreId;
+
+    /**
      * @param ProductFieldsSelector $productFieldsSelector
      * @param RelatedProductDataProvider $relatedProductDataProvider
      * @param ProductDataProvider $productDataProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RelatedProductsByStoreId|null $relatedProductsByStoreId
      */
     public function __construct(
         ProductFieldsSelector $productFieldsSelector,
         RelatedProductDataProvider $relatedProductDataProvider,
         ProductDataProvider $productDataProvider,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        ?RelatedProductsByStoreId $relatedProductsByStoreId = null
     ) {
         $this->productFieldsSelector = $productFieldsSelector;
         $this->relatedProductDataProvider = $relatedProductDataProvider;
         $this->productDataProvider = $productDataProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->relatedProductsByStoreId = $relatedProductsByStoreId ??
+            ObjectManager::getInstance()->get(RelatedProductsByStoreId::class);
     }
 
     /**
@@ -77,19 +90,29 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
     /**
      * Find related products.
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface[] $products
+     * @param ProductInterface[] $products
      * @param string[] $loadAttributes
      * @param int $linkType
-     * @return \Magento\Catalog\Api\Data\ProductInterface[][]
+     * @param string $websiteId
+     * @return ProductInterface[][]
+     * @throws LocalizedException
      */
-    private function findRelations(array $products, array $loadAttributes, int $linkType): array
-    {
+    private function findRelations(
+        array $products,
+        array $loadAttributes,
+        int $linkType,
+        string $websiteId
+    ): array {
         //Loading relations
         $relations = $this->relatedProductDataProvider->getRelations($products, $linkType);
         if (!$relations) {
             return [];
         }
-        $relatedIds = array_unique(array_merge([], ...array_values($relations)));
+        //get related product ids by website id
+        $relatedIds = $this->relatedProductsByStoreId->execute(
+            array_unique(array_merge([], ...array_values($relations))),
+            $websiteId
+        );
         //Loading products data.
         $this->searchCriteriaBuilder->addFilter('entity_id', $relatedIds, 'in');
         $relatedSearchResult = $this->productDataProvider->getList(
@@ -97,9 +120,9 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
             $loadAttributes
         );
         //Filling related products map.
-        /** @var \Magento\Catalog\Api\Data\ProductInterface[] $relatedProducts */
+        /** @var ProductInterface[] $relatedProducts */
         $relatedProducts = [];
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $item */
+        /** @var ProductInterface $item */
         foreach ($relatedSearchResult->getItems() as $item) {
             $relatedProducts[$item->getId()] = $item;
         }
@@ -127,10 +150,10 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
      */
     public function resolve(ContextInterface $context, Field $field, array $requests): BatchResponse
     {
-        /** @var \Magento\Catalog\Api\Data\ProductInterface[] $products */
+        /** @var ProductInterface[] $products */
         $products = [];
         $fields = [];
-        /** @var \Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface $request */
+        /** @var BatchRequestItemInterface $request */
         foreach ($requests as $request) {
             //Gathering fields and relations to load.
             if (empty($request->getValue()['model'])) {
@@ -141,14 +164,16 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
         }
         $fields = array_unique(array_merge([], ...$fields));
 
+        $store = $context->getExtensionAttributes()->getStore();
+        $websiteId = $store->getWebsiteId();
         //Finding relations.
-        $related = $this->findRelations($products, $fields, $this->getLinkType());
+        $related = $this->findRelations($products, $fields, $this->getLinkType(), (string) $websiteId);
 
         //Matching requests with responses.
         $response = new BatchResponse();
-        /** @var \Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface $request */
+        /** @var BatchRequestItemInterface $request */
         foreach ($requests as $request) {
-            /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+            /** @var ProductInterface $product */
             $product = $request->getValue()['model'];
             $result = [];
             if (array_key_exists($product->getId(), $related)) {

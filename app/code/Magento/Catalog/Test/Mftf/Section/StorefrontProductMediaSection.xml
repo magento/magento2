@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -16,7 +16,7 @@
         <element name="productImageFullscreen" type="text" selector="//*[@data-gallery-role='gallery' and contains(@class, 'fullscreen')]//img[contains(@src, '{{filename}}') and contains(@class, 'full')]" parameterized="true" />
         <element name="closeFullscreenImage" type="button" selector="//*[@data-gallery-role='gallery' and contains(@class, 'fullscreen')]//*[@data-gallery-role='fotorama__fullscreen-icon']" />
         <element name="imageFile" type="text" selector="//div[contains(@class, 'fotorama__active')]//img[contains(@src, '{{filename}}')]" parameterized="true"/>
-        <element name="imageFileInGallery" type="text" selector="//div[contains(@class, 'fotorama__loaded--img')]//img[contains(@src, '{{filename}}')]" parameterized="true"/>
+        <element name="imageFileInGallery" type="text" selector="//div[contains(@class, 'gallery-placeholder')]//img[contains(@src, '{{filename}}')]" parameterized="true"/>
         <element name="productImageActive" type="text" selector=".product.media div[data-active=true] > img[src*='{{filename}}']" parameterized="true"/>
         <element name="productImageInFotorama" type="file" selector=".fotorama__nav__shaft img[src*='{{imageName}}']" parameterized="true" timeout="30"/>
         <element name="fotoramaPrevButton" type="button" selector="//*[@data-gallery-role='gallery']//*[@data-gallery-role='nav-wrap']//*[@data-gallery-role='arrow' and contains(@class, 'fotorama__thumb__arr--left')]" timeout="30"/>
