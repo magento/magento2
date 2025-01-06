@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
@@ -90,6 +90,17 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
     }
 
     /**
+     * @param string $value
+     * @return $this
+     * @deprecated
+     * @see Nothing
+     */
+    public function setInputName($value)
+    {
+        return $this->setName($value);
+    }
+
+    /**
      * Render block HTML
      *
      * @return string
@@ -104,6 +115,7 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
                 );
             }
             foreach ($this->_getCustomerGroups() as $groupId => $groupLabel) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $this->addOption($groupId, addslashes($groupLabel));
             }
         }
