@@ -576,6 +576,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             $ruleTotalBaseItemsDiscountAmount = 0;
             $validItemsCount = 0;
 
+            $affectedItems = [];
             /** @var Quote\Item $item */
             foreach ($items as $item) {
                 if (!$this->isValidItemForRule($item, $rule)) {
@@ -587,6 +588,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                 $ruleTotalItemsDiscountAmount += $item->getDiscountAmount();
                 $ruleTotalBaseItemsDiscountAmount += $item->getBaseDiscountAmount();
                 $validItemsCount++;
+                $affectedItems[] = $item;
             }
 
             $this->_rulesItemTotals[$rule->getId()] = [
@@ -595,6 +597,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                 'base_items_price' => $ruleTotalBaseItemsPrice,
                 'base_items_discount_amount' => $ruleTotalBaseItemsDiscountAmount,
                 'items_count' => $validItemsCount,
+                'affected_items' => $affectedItems
             ];
         }
 

@@ -16,6 +16,7 @@
             <description value="Testcase verifies On storefront Available shipping rate is changed on fly according to inputed data"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-9283"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createProduct">
