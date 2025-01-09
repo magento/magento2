@@ -87,6 +87,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
         $currentUserPasswordField = \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD;
         $isCurrentUserPasswordValid = isset($data[$currentUserPasswordField])
             && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
+        // @phpstan-ignore-next-line to avoid return statement is missing error in execute
         try {
             if (!($isCurrentUserPasswordValid)) {
                 throw new AuthenticationException(
