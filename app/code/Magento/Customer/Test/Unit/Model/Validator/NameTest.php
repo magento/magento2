@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model\Validator;
 
 use Magento\Customer\Model\Validator\Name;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Validator\Pattern\NameValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,11 @@ class NameTest extends TestCase
     private Name $nameValidator;
 
     /**
+     * @var NameValidator|MockObject
+     */
+    private MockObject $nameValidatorMock;
+
+    /**
      * @var Customer|MockObject
      */
     private MockObject $customerMock;
@@ -32,7 +38,8 @@ class NameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new Name;
+        $this->nameValidatorMock = $this->createMock(NameValidator::class);
+        $this->nameValidator = new Name($this->nameValidatorMock);
         $this->customerMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -41,7 +48,7 @@ class NameTest extends TestCase
     }
 
     /**
-     * Test for allowed apostrophe and other punctuation characters in customer names
+     * Test for allowed punctuation characters in customer names
      *
      * @param string $firstName
      * @param string $middleName

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
+use Magento\Framework\Validator\Exception as ValidatorException;
+use Magento\Framework\Validator\Factory as ValidatorFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -58,10 +60,16 @@ class SubscriptionManager implements SubscriptionManagerInterface
     private $customerSubscriberCache;
 
     /**
+     * @var ValidatorFactory
+     */
+    protected $validatorFactory;
+
+    /**
      * @param SubscriberFactory $subscriberFactory
      * @param LoggerInterface $logger
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
+     * @param ValidatorFactory $validatorFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerSubscriberCache|null $customerSubscriberCache
@@ -71,6 +79,7 @@ class SubscriptionManager implements SubscriptionManagerInterface
         LoggerInterface $logger,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
+        ValidatorFactory $validatorFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
         CustomerSubscriberCache $customerSubscriberCache = null
@@ -79,6 +88,7 @@ class SubscriptionManager implements SubscriptionManagerInterface
         $this->logger = $logger;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
+        $this->validatorFactory = $validatorFactory;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->customerSubscriberCache = $customerSubscriberCache
@@ -90,6 +100,10 @@ class SubscriptionManager implements SubscriptionManagerInterface
      */
     public function subscribe(string $email, int $storeId): Subscriber
     {
+        if ($email) {
+            $this->_validate($email);
+        }
+        
         $websiteId = (int)$this->storeManager->getStore($storeId)->getWebsiteId();
         $subscriber = $this->subscriberFactory->create()->loadBySubscriberEmail($email, $websiteId);
         $currentStatus = (int)$subscriber->getStatus();
@@ -109,6 +123,28 @@ class SubscriptionManager implements SubscriptionManagerInterface
         $this->sendEmailAfterChangeStatus($subscriber);
 
         return $subscriber;
+    }
+
+    /**
+     * Validate the subscriber's email for guest subscribers.
+     *
+     * @param string $email
+     * @return void
+     * @throws ValidatorException
+     */
+    protected function _validate(string $email): void
+    {
+        // Create the validator using the entity and group defined in the XML
+        $validator = $this->validatorFactory->createValidator('newsletter_subscriber', 'save');
+
+        // Check if the email is valid
+        if (!$validator->isValid($email)) {
+            throw new ValidatorException(
+                null,
+                null,
+                $validator->getMessages()
+            );
+        }
     }
 
     /**

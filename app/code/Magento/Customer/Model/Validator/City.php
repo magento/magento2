@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Customer\Model\Validator\Pattern\CityValidator;
 
 /**
  * Customer city fields validator.
@@ -16,46 +17,60 @@ use Magento\Framework\Validator\AbstractValidator;
 class City extends AbstractValidator
 {
     /**
-     * Allowed characters:
-     *
-     * \p{L}: Unicode letters.
-     * \p{M}: Unicode marks (diacritic marks, accents, etc.).
-     * ': Apostrophe mark.
-     * \s: Whitespace characters (spaces, tabs, newlines, etc.).
+     * @var CityValidator
      */
-    private const PATTERN_CITY = '/(?:[\p{L}\p{M}\s\-\']{1,100})/u';
+    private CityValidator $cityValidator;
 
     /**
-     * Validate city fields.
+     * Constructor.
      *
-     * @param Customer $customer
+     * @param CityValidator $cityValidator
+     */
+    public function __construct(CityValidator $cityValidator)
+    {
+        $this->cityValidator = $cityValidator;
+    }
+
+    /**
+     * Validate city field.
+     *
+     * @param Customer $entity
      * @return bool
      */
-    public function isValid($customer)
+    public function isValid($entity): bool
     {
-        if (!$this->isValidCity($customer->getCity())) {
-            parent::_addMessages([[
-                'city' => "Invalid City. Please use A-Z, a-z, 0-9, -, ', spaces"
-            ]]);
+        if (!$this->cityValidator->isValidationEnabled()) {
+            return true;
+        }
+
+        $cityField = $entity->getCity();
+        if (empty($cityField)) {
+            return true;
+        }
+
+        if (!$this->validateCityField($cityField)) {
+            parent::_addMessages(
+                [
+                    __(
+                        '%1 is not valid! Allowed characters: %2',
+                        'City',
+                        $this->cityValidator->allowedCharsDescription
+                    ),
+                ]
+            );
         }
 
         return count($this->_messages) == 0;
     }
 
     /**
-     * Check if city field is valid.
+     * Validate the city field.
      *
      * @param string|null $cityValue
      * @return bool
      */
-    private function isValidCity($cityValue)
+    private function validateCityField(?string $cityValue): bool
     {
-        if ($cityValue != null) {
-            if (preg_match(self::PATTERN_CITY, $cityValue, $matches)) {
-                return $matches[0] == $cityValue;
-            }
-        }
-
-        return true;
+        return $this->cityValidator->isValid($cityValue);
     }
 }

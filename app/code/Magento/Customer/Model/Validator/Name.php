@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,13 +9,27 @@ namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Customer\Model\Validator\Pattern\NameValidator;
 
 /**
  * Customer name fields validator.
  */
 class Name extends AbstractValidator
 {
-    private const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`&\s\d]){1,255}+/u';
+    /**
+     * @var NameValidator
+     */
+    private NameValidator $nameValidator;
+
+    /**
+     * Constructor.
+     *
+     * @param NameValidator $nameValidator
+     */
+    public function __construct(NameValidator $nameValidator)
+    {
+        $this->nameValidator = $nameValidator;
+    }
 
     /**
      * Validate name fields.
@@ -23,8 +37,8 @@ class Name extends AbstractValidator
      * @param Customer $customer
      * @return bool
      */
-    public function isValid($customer)
-    {
+    public function isValid($customer): bool
+    {        
         if (!$this->isValidName($customer->getFirstname())) {
             parent::_addMessages([['firstname' => 'First Name is not valid!']]);
         }
@@ -36,24 +50,18 @@ class Name extends AbstractValidator
         if (!$this->isValidName($customer->getMiddlename())) {
             parent::_addMessages([['middlename' => 'Middle Name is not valid!']]);
         }
-
+        
         return count($this->_messages) == 0;
     }
 
     /**
-     * Check if name field is valid.
+     * Check if name field is valid using the NameValidator.
      *
      * @param string|null $nameValue
      * @return bool
      */
-    private function isValidName($nameValue)
+    private function isValidName($nameValue): bool
     {
-        if ($nameValue != null) {
-            if (preg_match(self::PATTERN_NAME, $nameValue, $matches)) {
-                return $matches[0] == $nameValue;
-            }
-        }
-
-        return true;
+        return $this->nameValidator->isValid($nameValue);
     }
 }

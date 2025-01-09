@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
+    <entity name="contact">
+        <rules>
+            <rule name="check_email">
+                <entity_constraints>
+                    <constraint alias="email_validator" class="Magento\Contact\Model\Validator\Email" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_pattern">
+                <entity_constraints>
+                    <constraint alias="pattern_validator" class="Magento\Contact\Model\Validator\ForbiddenPattern" />
+                </entity_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="save">
+                <uses>
+                    <use rule="check_email"/>
+                    <use rule="check_pattern"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+</validation>

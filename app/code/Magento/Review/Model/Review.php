@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Review\Model;
@@ -12,6 +12,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\ValidateException;
 use Magento\Framework\Validator\ValidatorChain;
+use Magento\Framework\Validator\Factory as ValidatorFactory;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductCollection;
 use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollection;
 
@@ -123,7 +125,12 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
      * @var \Magento\Framework\UrlInterface
      */
     protected $_urlModel;
-
+    
+    /**
+     * @var ValidatorFactory
+     */
+    protected $validatorFactory;
+    
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -149,6 +156,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
         \Magento\Review\Model\Review\Summary $reviewSummary,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlModel,
+        ValidatorFactory $validatorFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -160,6 +168,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
         $this->_reviewSummary = $reviewSummary;
         $this->_storeManager = $storeManager;
         $this->_urlModel = $urlModel;
+        $this->validatorFactory = $validatorFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -292,12 +301,32 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
             $errors[] = __('Please enter a review.');
         }
 
+        $this->_validate();
+
         if (empty($errors)) {
             return true;
         }
         return $errors;
     }
+    
+    /**
+     * Validate review using custom validator.
+     *
+     * @throws ValidatorException
+     */
+    protected function _validate()
+    {
+        $validator = $this->validatorFactory->createValidator('review', 'save');
 
+        if (!$validator->isValid($this)) {
+            throw new ValidatorException(
+                null, 
+                null, 
+                $validator->getMessages()
+            );
+        }
+    }
+    
     /**
      * Perform actions after object delete
      *

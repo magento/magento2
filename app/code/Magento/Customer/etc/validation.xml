@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 -->
 <validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
@@ -23,12 +23,30 @@
                     <constraint alias="name_validator" class="Magento\Customer\Model\Validator\Name" />
                 </entity_constraints>
             </rule>
+            <rule name="check_email">
+                <entity_constraints>
+                    <constraint alias="email_validator" class="Magento\Customer\Model\Validator\Email" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_phone">
+                <entity_constraints>
+                    <constraint alias="phone_validator" class="Magento\Customer\Model\Validator\Telephone" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_pattern">
+                <entity_constraints>
+                    <constraint alias="pattern_validator" class="Magento\Customer\Model\Validator\ForbiddenPattern" />
+                </entity_constraints>
+            </rule>
         </rules>
         <groups>
             <group name="save">
                 <uses>
                     <use rule="check_eav"/>
                     <use rule="check_name"/>
+                    <use rule="check_email"/>
+                    <use rule="check_phone"/>
+                    <use rule="check_pattern"/>
                 </uses>
             </group>
             <group name="form">
@@ -38,7 +56,6 @@
             </group>
         </groups>
     </entity>
-
     <entity name="customer_address">
         <rules>
             <rule name="check_eav">
@@ -51,9 +68,14 @@
                     <constraint alias="name_validator" class="Magento\Customer\Model\Validator\Name" />
                 </entity_constraints>
             </rule>
-            <rule name="check_street">
+            <rule name="check_email">
                 <entity_constraints>
-                    <constraint alias="street_validator" class="Magento\Customer\Model\Validator\Street" />
+                    <constraint alias="email_validator" class="Magento\Customer\Model\Validator\Email" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_phone">
+                <entity_constraints>
+                    <constraint alias="phone_validator" class="Magento\Customer\Model\Validator\Telephone" />
                 </entity_constraints>
             </rule>
             <rule name="check_city">
@@ -61,9 +83,14 @@
                     <constraint alias="city_validator" class="Magento\Customer\Model\Validator\City" />
                 </entity_constraints>
             </rule>
-            <rule name="check_telephone">
+            <rule name="check_pattern">
                 <entity_constraints>
-                    <constraint alias="telephone_validator" class="Magento\Customer\Model\Validator\Telephone" />
+                    <constraint alias="pattern_validator" class="Magento\Customer\Model\Validator\ForbiddenPattern" />
+                </entity_constraints>
+            </rule>
+            <rule name="check_street">
+                <entity_constraints>
+                    <constraint alias="street_validator" class="Magento\Customer\Model\Validator\Street" />
                 </entity_constraints>
             </rule>
         </rules>
@@ -72,9 +99,11 @@
                 <uses>
                     <use rule="check_eav"/>
                     <use rule="check_name"/>
+                    <use rule="check_email"/>
+                    <use rule="check_phone"/>
+                    <use rule="check_pattern"/>
                     <use rule="check_street"/>
                     <use rule="check_city"/>
-                    <use rule="check_telephone"/>
                 </uses>
             </group>
         </groups>

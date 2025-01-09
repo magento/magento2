@@ -1,39 +1,47 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Validator;
 
-use Magento\Customer\Model\Validator\Street;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Validator\Street;
+use Magento\Customer\Model\Validator\Pattern\StreetValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Customer street validator tests
+ * Test for validating street field in address.
  */
 class StreetTest extends TestCase
 {
     /**
      * @var Street
      */
-    private Street $nameValidator;
+    private Street $streetValidator;
+
+    /**
+     * @var StreetValidator|MockObject
+     */
+    private MockObject $streetValidatorMock;
 
     /**
      * @var Customer|MockObject
      */
-    private MockObject $customerMock;
+    private MockObject $addressMock;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->nameValidator = new Street;
-        $this->customerMock = $this
+        $this->streetValidatorMock = $this->createMock(StreetValidator::class);
+        $this->streetValidator = new Street($this->streetValidatorMock);
+        
+        $this->addressMock = $this
             ->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->addMethods(['getStreet'])
@@ -41,24 +49,26 @@ class StreetTest extends TestCase
     }
 
     /**
-     * Test for allowed apostrophe and other punctuation characters in customer names
+     * Test for valid street name
      *
      * @param array $street
      * @param string $message
      * @return void
-     * @dataProvider expectedPunctuationInNamesDataProvider
+     * @dataProvider expectedPunctuationInStreetDataProvider
      */
-    public function testValidateCorrectPunctuationInNames(
+    public function testValidateStreetName(
         array $street,
         string $message
-    ) {
-        $this->customerMock->expects($this->once())->method('getStreet')->willReturn($street);
+    ): void {
+        $this->addressMock->expects($this->once())->method('getStreet')->willReturn($street);
 
-        $isValid = $this->nameValidator->isValid($this->customerMock);
+        $isValid = $this->streetValidator->isValid($this->addressMock);
         $this->assertTrue($isValid, $message);
     }
 
     /**
+     * Data provider for street names
+     *
      * @return array
      */
     public static function expectedPunctuationInNamesDataProvider(): array
@@ -102,7 +112,7 @@ class StreetTest extends TestCase
                     'O`Connell Street',
                     '321 Birch Boulevard ’Willow Retreat’'
                 ],
-                'message' => 'quotes must be allowed in street'
+                'message' => 'Quotes must be allowed in street'
             ],
             [
                 'street' => [
@@ -127,6 +137,14 @@ class StreetTest extends TestCase
                     '876 Elm Way'
                 ],
                 'message' => 'Digits must be allowed in street'
+            ],
+            [
+                'street' => [
+                    '1234 Elm St. [Apartment 5]',
+                    'Main St. (Suite 200)',
+                    '456 Pine St. [Unit 10]'
+                ],
+                'message' => 'Square brackets and parentheses must be allowed in street'
             ]
         ];
     }

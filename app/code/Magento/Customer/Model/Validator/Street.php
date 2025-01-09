@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Customer\Model\Validator;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Validator\AbstractValidator;
+use Magento\Customer\Model\Validator\Pattern\StreetValidator;
 
 /**
  * Customer street fields validator.
@@ -16,33 +17,47 @@ use Magento\Framework\Validator\AbstractValidator;
 class Street extends AbstractValidator
 {
     /**
-     * Allowed characters:
-     *
-     * \p{L}: Unicode letters.
-     * \p{M}: Unicode marks (diacritic marks, accents, etc.).
-     * ,: Comma.
-     * -: Hyphen.
-     * .: Period.
-     * `'’: Single quotes, both regular and right single quotation marks.
-     * &: Ampersand.
-     * \s: Whitespace characters (spaces, tabs, newlines, etc.).
-     * \d: Digits (0-9).
+     * @var StreetValidator
      */
-    private const PATTERN_STREET = "/(?:[\p{L}\p{M}\"[],-.'’`&\s\d]){1,255}+/u";
+    private StreetValidator $streetValidator;
 
     /**
-     * Validate street fields.
+     * Constructor.
+     *
+     * @param StreetValidator $streetValidator
+     */
+    public function __construct(StreetValidator $streetValidator)
+    {
+        $this->streetValidator = $streetValidator;
+    }
+
+    /**
+     * Validate street field.
      *
      * @param Customer $customer
      * @return bool
      */
-    public function isValid($customer)
+    public function isValid($customer): bool
     {
-        foreach ($customer->getStreet() as $street) {
-            if (!$this->isValidStreet($street)) {
-                parent::_addMessages([[
-                    'street' => "Invalid Street Address. Please use A-Z, a-z, 0-9, , - . ' ’ ` & spaces"
-                ]]);
+        if (!$this->streetValidator->isValidationEnabled()) {
+            return true;
+        }
+
+        $streets = $customer->getStreet();
+        if (empty($streets)) {
+            return true;
+        }
+
+        foreach ($streets as $street) {
+            if (!$this->validateStreetField($street)) {
+                parent::_addMessages(
+                    [
+                        'street' => __(
+                            'Street is not valid! Allowed characters: %1',
+                            $this->streetValidator->allowedCharsDescription
+                        ),
+                    ]
+                );
             }
         }
 
@@ -50,19 +65,13 @@ class Street extends AbstractValidator
     }
 
     /**
-     * Check if street field is valid.
+     * Validate the street field.
      *
      * @param string|null $streetValue
      * @return bool
      */
-    private function isValidStreet($streetValue)
+    private function validateStreetField(?string $streetValue): bool
     {
-        if ($streetValue != null) {
-            if (preg_match(self::PATTERN_STREET, $streetValue, $matches)) {
-                return $matches[0] == $streetValue;
-            }
-        }
-
-        return true;
+        return $this->streetValidator->isValid($streetValue);
     }
 }
