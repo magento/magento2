@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
- * Copyright 2023 Adobe
- * All Rights Reserved.
- */
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="CustomerOrderCancellationFromOrderHistoryTest">
@@ -14,9 +14,10 @@
             <description value="Customer cancels an order from order history page."/>
             <severity value="AVERAGE"/>
             <testCaseId value="LYNX-180"/>
+            <!-- Will be fixed in the scope of ACQE-7314 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <!-- Enable configuration -->
             <magentoCLI command="config:set sales/cancellation/enabled 1" stepKey="EnablingSalesCancellation"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -82,7 +83,6 @@
         <!--Go to Admin Sales Order View Page-->
         <amOnPage url="{{AdminSalesOrderViewPage.url({$getOrderId})}}" stepKey="navigateToSalesOrderViewPage"/>
         <waitForPageLoad stepKey="waitForAdminSalesOrderViewPageLoad"/>
-
         <!--Check Order History block-->
         <waitForElementVisible selector="{{AdminSalesOrderViewSection.orderHistoryNoteListFirstComment}}" stepKey="waitForReteriveOrderCancellationReason"/>
         <grabTextFrom selector="{{AdminSalesOrderViewSection.orderHistoryNoteListFirstComment}}" stepKey="getOrderCancellationReason"/>

@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+#  Copyright 2024 Adobe
+#  All Rights Reserved.
 
 type Query {
     """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
@@ -487,14 +487,21 @@ type Order @doc(description: "Contains the order ID.") {
     order_id: String @deprecated(reason: "Use `order_number` instead.")
 }
 
-type CartUserInputError @doc(description:"An error encountered while adding an item to the the cart.") {
+interface Error @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartErrorTypeResolver") @doc(description:"An error encountered while adding an item to the the cart.") {
     message: String! @doc(description: "A localized error message.")
     code: CartUserInputErrorType! @doc(description: "A cart-specific error code.")
 }
 
+type CartUserInputError implements Error {
+}
+
+type InsufficientStockError implements Error {
+    quantity: Float @doc(description: "Amount of available stock")
+}
+
 type AddProductsToCartOutput @doc(description: "Contains details about the cart after adding products to it.") {
     cart: Cart! @doc(description: "The cart after products have been added.")
-    user_errors: [CartUserInputError!]! @doc(description: "Contains errors encountered while adding an item to the cart.")
+    user_errors: [Error!]! @doc(description: "Contains errors encountered while adding an item to the cart.")
 }
 
 enum CartUserInputErrorType {

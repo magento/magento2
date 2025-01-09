@@ -3,6 +3,8 @@
  /**
   * Copyright © Magento, Inc. All rights reserved.
   * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -50,6 +52,12 @@
         </actionGroup>
         <actionGroup ref="AssertStorefrontCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionUSD">
             <argument name="price" value="12.3"/>
+        </actionGroup>
+         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+            <argument name="tags" value="config full_page"/>
         </actionGroup>
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchEURCurrency">
             <argument name="currency" value="EUR"/>
