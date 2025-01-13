@@ -13,6 +13,9 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Utility
 {
     /**
@@ -133,13 +136,11 @@ class Utility
      *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param float $qty
      * @return void
      */
     public function minFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
-        $qty
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item
     ) {
         $itemPrice = $this->getItemPrice($item);
         $baseItemPrice = $this->getItemBasePrice($item);
@@ -147,8 +148,9 @@ class Utility
         $itemDiscountAmount = $item->getDiscountAmount();
         $itemBaseDiscountAmount = $item->getBaseDiscountAmount();
 
-        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $qty);
-        $baseDiscountAmount = min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $qty);
+        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $item->getQty());
+        $baseDiscountAmount =
+            min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $item->getQty());
 
         $discountData->setAmount($discountAmount);
         $discountData->setBaseAmount($baseDiscountAmount);

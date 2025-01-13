@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -418,6 +418,17 @@ class TableTest extends TestCase
                 false,
                 [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
                 [['value' => '16', 'label' => 'blck'], ['value' => '17', 'label' => 'wht']],
+                [
+                    ['label' => ' ', 'value' => ''],
+                    ['value' => '16', 'label' => 'black'],
+                    ['value' => '17', 'label' => 'white']
+                ]
+            ],
+            [
+                true,
+                true,
+                [['value' => '16', 'label' => 'default sv black'], ['value' => '17', 'label' => 'default sv white']],
+                [['value' => '16', 'label' => 'black'], ['value' => '17', 'label' => 'white']],
                 [
                     ['label' => ' ', 'value' => ''],
                     ['value' => '16', 'label' => 'black'],

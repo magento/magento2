@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -132,7 +132,9 @@ class Validate extends ImportResultController implements HttpPostActionInterface
         $errors = $errorAggregator->getAllErrors();
         $rowNumber = [];
         foreach ($errors as $error) {
-            $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+            if ($error->getRowNumber()) {
+                $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+            }
         }
         (count($rowNumber) < $totalRows)? $this->_validateRowError = true : $this->_validateRowError = false;
         return $this->_validateRowError;

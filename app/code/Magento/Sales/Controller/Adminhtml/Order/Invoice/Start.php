@@ -11,6 +11,13 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 class Start extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View implements HttpGetActionInterface
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
+    /**
      * Start create invoice action
      *
      * @return \Magento\Framework\Controller\ResultInterface

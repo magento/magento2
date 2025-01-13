@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\ObjectManager\Config;
 
@@ -152,10 +152,17 @@ class Config implements ConfigInterface
      *
      * @param string $instanceName
      * @return mixed
+     * @throws \LogicException
      */
     public function getInstanceType($instanceName)
     {
         while (isset($this->_virtualTypes[$instanceName])) {
+            if ($instanceName === $this->_virtualTypes[$instanceName]) {
+                throw new \LogicException(
+                    'unsupported self-referencing virtual type: '
+                    .$instanceName
+                );
+            }
             $instanceName = $this->_virtualTypes[$instanceName];
         }
         return $instanceName;

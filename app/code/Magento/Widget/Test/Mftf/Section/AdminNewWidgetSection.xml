@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -60,6 +60,13 @@
         <element name="cacheLifetime" type="input" selector="[name='parameters[cache_lifetime]']"/>
         <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
         <element name="CountDeleteButtons" type="button" selector="#page_group_container > .fieldset-wrapper.page_group_container > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
+        <element name="secondConditionOperator" type="button" selector="//input[@id='conditions__1--2__type']/following::a[@class='label'][1]"/>
+        <element name="secondSelectOperator" type="button" selector="//input[@id='conditions__1--2__type']/following::a[@class='label'][1]/..//span//select"/>
+        <element name="secondRuleParameter" type="select" selector="//input[@id='conditions__1--2__type']/following::a[@class='label'][2]"/>
+        <element name="setSecondRuleParameter" type="input" selector="#conditions__1--2__value"/>
+        <element name="selectPage" type="button" selector="//span[contains(text(),'Select Page')]"/>
+        <element name="enableCookies" type="button" selector="//tbody//tr//td[contains(text(),'Enable Cookies')]"/>
+        <element name="conditions" type="button" selector="//label[@class='label admin__field-label']//span[text()='Conditions']"/>
     </section>
 </sections>
 

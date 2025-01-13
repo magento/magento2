@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Quote;
 
@@ -188,10 +188,10 @@ class Discount extends AbstractTotal
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
-        $totalDiscount = 0;
         $address->setBaseDiscountAmount(0);
         /** @var Rule $rule */
         foreach ($rules as $rule) {
+            $ruleTotalDiscount = 0;
             /** @var Item $item */
             foreach ($itemsToApplyRules as $key => $item) {
                 if ($item->getNoDiscount() || !$this->calculator->canApplyDiscount($item) || $item->getParentItem()) {
@@ -221,9 +221,14 @@ class Discount extends AbstractTotal
                     unset($itemsToApplyRules[$key]);
                 }
 
-                $totalDiscount += $item->getBaseDiscountAmount();
+                if ($item->getChildren() && $item->isChildrenCalculated()) {
+                    foreach ($item->getChildren() as $child) {
+                        $ruleTotalDiscount += $child->getBaseDiscountAmount();
+                    }
+                }
+                $ruleTotalDiscount += $item->getBaseDiscountAmount();
             }
-            $address->setBaseDiscountAmount($totalDiscount);
+            $address->setBaseDiscountAmount($ruleTotalDiscount);
         }
         $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {

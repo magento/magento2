@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+#  Copyright 2024 Adobe
+#  All Rights Reserved.
 
 type StoreConfig {
     required_character_classes_number : String @doc(description: "The number of different character classes (lowercase, uppercase, digits, special characters) required in a password.")
@@ -146,9 +146,19 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     id: Int @doc(description: "The ID assigned to the customer.") @deprecated(reason: "`id` is not needed as part of `Customer`, because on the server side, it can be identified based on the customer token used for authentication. There is no need to know customer ID on the client side.")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\NewsletterGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
+    addressesV2(
+        currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
+        pageSize: Int = 5 @doc(description: "Specifies the maximum number of results to return at once. The default value is 5."),
+    ): CustomerAddresses @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressesV2")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
     custom_attributes(attributeCodes: [ID!]): [AttributeValueInterface] @doc(description: "Customer's custom attributes.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomAttributeFilter")
     confirmation_status: ConfirmationStatusEnum! @doc(description: "The customer's confirmation status.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\ConfirmationStatus")
+}
+
+type CustomerAddresses {
+    items: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.")
+    page_info: SearchResultPageInfo @doc(description: "Contains pagination metadata.")
+    total_count: Int @doc(description: "The total count of customer addresses.")
 }
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){

@@ -22,7 +22,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::ship';
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader

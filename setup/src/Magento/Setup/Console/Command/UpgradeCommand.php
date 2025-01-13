@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -34,6 +34,8 @@ class UpgradeCommand extends AbstractSetupCommand
      * Option to skip deletion of generated/code directory.
      */
     public const INPUT_KEY_KEEP_GENERATED = 'keep-generated';
+
+    public const NAME = 'setup:upgrade';
 
     /**
      * Installer service factory.
@@ -125,7 +127,7 @@ class UpgradeCommand extends AbstractSetupCommand
                 false
             )
         ];
-        $this->setName('setup:upgrade')
+        $this->setName(self::NAME)
             ->setDescription('Upgrades the Magento application, DB data, and schema')
             ->setDefinition($options);
         parent::configure();
