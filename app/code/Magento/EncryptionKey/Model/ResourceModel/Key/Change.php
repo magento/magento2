@@ -14,6 +14,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
@@ -21,6 +22,9 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 
 /**
  * Encryption key changer resource model
@@ -72,12 +76,36 @@ class Change extends AbstractDb
     protected $random;
 
     /**
+     * Indexer Config
+     *
+     * @var IndexerConfig
+     */
+    protected $indexerConfig;
+
+    /**
+     * Json Encoder
+     *
+     * @var Encoder
+     */
+    protected $encoder;
+
+    /**
+     * Indexer State Collection Factory
+     *
+     * @var IndexerStateCollection
+     */
+    protected $indexerStateCollection;
+
+    /**
      * @param Context $context
      * @param Filesystem $filesystem
      * @param Structure $structure
      * @param EncryptorInterface $encryptor
      * @param Writer $writer
      * @param Random $random
+     * @param ConfigInterface $indexerConfig
+     * @param EncoderInterface $encoder
+     * @param CollectionFactory $indexerStateCollection
      * @param string $connectionName
      */
     public function __construct(
@@ -87,6 +115,9 @@ class Change extends AbstractDb
         EncryptorInterface $encryptor,
         Writer $writer,
         Random $random,
+        ConfigInterface $indexerConfig,
+        EncoderInterface $encoder,
+        CollectionFactory $indexerStateCollection,
         $connectionName = null
     ) {
         $this->encryptor = clone $encryptor;
@@ -95,6 +126,9 @@ class Change extends AbstractDb
         $this->structure = $structure;
         $this->writer = $writer;
         $this->random = $random;
+        $this->indexerConfig = $indexerConfig;
+        $this->encoder = $encoder;
+        $this->indexerStateCollection = $indexerStateCollection;
     }
 
     /**
@@ -139,6 +173,7 @@ class Change extends AbstractDb
         try {
             $this->_reEncryptSystemConfigurationValues();
             $this->_reEncryptCreditCardNumbers();
+            $this->_updateIndexersHash();
             $this->writer->saveConfig($configData);
             $this->commit();
             return $key;
@@ -205,6 +240,33 @@ class Change extends AbstractDb
                 ['cc_number_enc' => $this->encryptor->encrypt($this->encryptor->decrypt($value))],
                 ['entity_id = ?' => (int)$valueId]
             );
+        }
+    }
+
+    /**
+     * Retrieve indexer state and update the hash with new encryption key
+     *
+     * @return void
+     */
+    protected function _updateIndexersHash(){
+        
+        $stateIndexers = [];
+        $stateCollection = $this->indexerStateCollection->create();
+        foreach ($stateCollection->getItems() as $state) {
+            /** @var \Magento\Indexer\Model\Indexer\State $state */
+            $stateIndexers[$state->getIndexerId()] = $state;
+        }
+        
+        foreach ($this->indexerConfig->getIndexers() as $indexerId => $indexerConfig) {
+            $newHashConfig = $this->encryptor->hash(
+                $this->encoder->encode($indexerConfig),
+                Encryptor::HASH_VERSION_MD5
+            );
+
+            if (isset($stateIndexers[$indexerId])) {
+                $stateIndexers[$indexerId]->setHashConfig($newHashConfig);
+                $stateIndexers[$indexerId]->save();
+            }
         }
     }
 }
