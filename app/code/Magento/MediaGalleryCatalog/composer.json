@@ -2,7 +2,7 @@
     "name": "magento/module-media-gallery-catalog",
     "description": "Magento module responsible for catalog gallery processor delete operation handling",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-catalog": "*"

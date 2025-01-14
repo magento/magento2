@@ -66,8 +66,8 @@ class CustomerManagement
         CustomerAddressRepository $customerAddressRepository,
         AccountManagement $accountManagement,
         AddressInterfaceFactory $customerAddressFactory,
-        ValidatorFactory $validatorFactory = null,
-        AddressFactory $addressFactory = null
+        ?ValidatorFactory $validatorFactory = null,
+        ?AddressFactory $addressFactory = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->customerAddressRepository = $customerAddressRepository;

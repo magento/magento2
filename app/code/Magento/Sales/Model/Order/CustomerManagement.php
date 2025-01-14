@@ -78,8 +78,8 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory,
         \Magento\Customer\Api\Data\RegionInterfaceFactory $regionFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        QuoteAddressFactory $quoteAddressFactory = null,
-        OrderCustomerExtractor $orderCustomerExtractor = null
+        ?QuoteAddressFactory $quoteAddressFactory = null,
+        ?OrderCustomerExtractor $orderCustomerExtractor = null
     ) {
         $this->objectCopyService = $objectCopyService;
         $this->accountManagement = $accountManagement;

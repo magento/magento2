@@ -35,7 +35,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart implements HttpGetAct
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Checkout\Model\Cart $cart,
-        RequestQuantityProcessor $quantityProcessor = null
+        ?RequestQuantityProcessor $quantityProcessor = null
     ) {
         parent::__construct(
             $context,

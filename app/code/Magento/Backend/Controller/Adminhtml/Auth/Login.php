@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\Auth;
 
@@ -57,10 +57,10 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        FrontNameResolver $frontNameResolver = null,
-        BackendAppList $backendAppList = null,
-        UrlFactory $backendUrlFactory = null,
-        Http $http = null
+        ?FrontNameResolver $frontNameResolver = null,
+        ?BackendAppList $backendAppList = null,
+        ?UrlFactory $backendUrlFactory = null,
+        ?Http $http = null
     ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
@@ -116,6 +116,7 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
     {
         $requestUri = $this->getRequest()->getRequestUri();
         $backendApp = $this->backendAppList->getCurrentApp();
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $baseUrl = parse_url($this->backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
         if (!$backendApp) {
             $backendFrontName = $this->frontNameResolver->getFrontName();

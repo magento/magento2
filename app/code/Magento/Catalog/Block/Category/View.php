@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Category;
 
@@ -46,7 +46,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Category $categoryHelper,
         array $data = [],
-        \Magento\Catalog\Helper\Data $catalogData = null
+        ?\Magento\Catalog\Helper\Data $catalogData = null
     ) {
         $this->_categoryHelper = $categoryHelper;
         $this->_catalogLayer = $layerResolver->get();

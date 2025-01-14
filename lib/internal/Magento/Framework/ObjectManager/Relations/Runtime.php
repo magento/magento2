@@ -22,7 +22,7 @@ class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
     /**
      * @param \Magento\Framework\Code\Reader\ClassReaderInterface $classReader
      */
-    public function __construct(\Magento\Framework\Code\Reader\ClassReaderInterface $classReader = null)
+    public function __construct(?\Magento\Framework\Code\Reader\ClassReaderInterface $classReader = null)
     {
         $this->_classReader = $classReader ?: new \Magento\Framework\Code\Reader\ClassReader();
     }

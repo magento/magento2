@@ -112,11 +112,11 @@ class ProductScopeRewriteGenerator
         CategoriesUrlRewriteGenerator $categoriesUrlRewriteGenerator,
         CurrentUrlRewritesRegenerator $currentUrlRewritesRegenerator,
         AnchorUrlRewriteGenerator $anchorUrlRewriteGenerator,
-        MergeDataProviderFactory $mergeDataProviderFactory = null,
-        CategoryRepositoryInterface $categoryRepository = null,
-        ScopeConfigInterface $config = null,
-        ProductRepositoryInterface $productRepository = null,
-        GetVisibleForStores $visibleForStores = null
+        ?MergeDataProviderFactory $mergeDataProviderFactory = null,
+        ?CategoryRepositoryInterface $categoryRepository = null,
+        ?ScopeConfigInterface $config = null,
+        ?ProductRepositoryInterface $productRepository = null,
+        ?GetVisibleForStores $visibleForStores = null
     ) {
         $this->storeViewService = $storeViewService;
         $this->storeManager = $storeManager;

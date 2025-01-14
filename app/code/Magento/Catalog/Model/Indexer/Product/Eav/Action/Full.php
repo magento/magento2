@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,12 +73,12 @@ class Full extends AbstractAction
     public function __construct(
         DecimalFactory $eavDecimalFactory,
         SourceFactory $eavSourceFactory,
-        MetadataPool $metadataPool = null,
-        BatchProviderInterface $batchProvider = null,
-        BatchSizeCalculator $batchSizeCalculator = null,
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        ScopeConfigInterface $scopeConfig = null,
-        QueryGenerator $batchQueryGenerator = null
+        ?MetadataPool $metadataPool = null,
+        ?BatchProviderInterface $batchProvider = null,
+        ?BatchSizeCalculator $batchSizeCalculator = null,
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?QueryGenerator $batchQueryGenerator = null
     ) {
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(
             ScopeConfigInterface::class

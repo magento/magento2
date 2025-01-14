@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
@@ -153,10 +153,10 @@ abstract class AbstractAction implements ResetAfterRequestInterface
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $config,
-        QueryGenerator $queryGenerator = null,
-        MetadataPool $metadataPool = null,
-        TableMaintainer $tableMaintainer = null,
-        Visibility $visibility = null
+        ?QueryGenerator $queryGenerator = null,
+        ?MetadataPool $metadataPool = null,
+        ?TableMaintainer $tableMaintainer = null,
+        ?Visibility $visibility = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();

@@ -48,7 +48,7 @@ class AttributeProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
         foreach ($attributeNames as $name) {
             $this->addAttribute($collection, $name);

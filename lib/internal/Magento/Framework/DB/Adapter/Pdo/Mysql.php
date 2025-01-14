@@ -286,7 +286,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         LoggerInterface $logger,
         SelectFactory $selectFactory,
         array $config = [],
-        SerializerInterface $serializer = null,
+        ?SerializerInterface $serializer = null,
         ?DtoFactoriesTable $dtoFactoriesTable = null
     ) {
         $this->pid = getmypid();

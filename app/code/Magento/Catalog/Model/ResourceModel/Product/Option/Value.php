@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Option;
 
@@ -69,7 +69,7 @@ class Value extends AbstractDb
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $config,
         $connectionName = null,
-        Data $dataHelper = null
+        ?Data $dataHelper = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;

@@ -52,8 +52,8 @@ class RequestGuestOrderCancel implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $this->validateRequest->validateInput($args['input'] ?? []);
         list($number, $email, $postcode) = $this->getNumberEmailPostcode($args['input']['token']);

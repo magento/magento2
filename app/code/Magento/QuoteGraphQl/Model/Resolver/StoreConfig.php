@@ -23,8 +23,8 @@ class StoreConfig implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         return (strtoupper($value[$field->getName()]));
     }

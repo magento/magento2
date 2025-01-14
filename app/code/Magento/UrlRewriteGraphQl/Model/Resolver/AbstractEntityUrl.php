@@ -56,8 +56,8 @@ abstract class AbstractEntityUrl implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $this->validateArgs($args);
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();

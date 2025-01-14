@@ -59,7 +59,7 @@ class Collection extends SearchResult
         ResolverInterface $localeResolver,
         $mainTable = 'customer_grid_flat',
         $resourceModel = Customer::class,
-        TimezoneInterface $timeZone = null
+        ?TimezoneInterface $timeZone = null
     ) {
         $this->localeResolver = $localeResolver;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);

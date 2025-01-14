@@ -21,7 +21,7 @@ class WithOptional
      * @param DiParent|null $parent
      * @param Child|null $child
      */
-    public function __construct(DiParent $parent = null, Child $child = null)
+    public function __construct(?DiParent $parent = null, ?Child $child = null)
     {
         $this->parent = $parent;
         $this->child = $child;

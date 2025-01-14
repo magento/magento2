@@ -69,7 +69,7 @@ class Builder
      */
     public function __construct(
         ExpressionFactory $expressionFactory,
-        AttributeRepositoryInterface $attributeRepository = null
+        ?AttributeRepositoryInterface $attributeRepository = null
     ) {
         $this->_expressionFactory = $expressionFactory;
         $this->attributeRepository = $attributeRepository ?:

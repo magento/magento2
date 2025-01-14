@@ -98,8 +98,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         Context $context,
         Data $backendHelper,
         array $data = [],
-        DecoderInterface $urlDecoder = null,
-        Parameters $parameters = null
+        ?DecoderInterface $urlDecoder = null,
+        ?Parameters $parameters = null
     ) {
         $this->urlDecoder = $urlDecoder ?? ObjectManager::getInstance()->get(
             DecoderInterface::class

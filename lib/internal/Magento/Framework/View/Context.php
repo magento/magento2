@@ -168,7 +168,7 @@ class Context
         Logger $logger,
         AppState $appState,
         LayoutInterface $layout,
-        SessionManagerInterface $sessionManager = null
+        ?SessionManagerInterface $sessionManager = null
     ) {
         $this->request = $request;
         $this->eventManager = $eventManager;

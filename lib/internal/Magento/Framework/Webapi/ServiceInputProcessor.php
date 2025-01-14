@@ -131,10 +131,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         AttributeValueFactory $attributeValueFactory,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
-        ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
-        ConfigInterface $config = null,
+        ?ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
+        ?ConfigInterface $config = null,
         array $customAttributePreprocessors = [],
-        ServiceInputValidatorInterface $serviceInputValidator = null,
+        ?ServiceInputValidatorInterface $serviceInputValidator = null,
         int $defaultPageSize = 20,
         ?DefaultPageSizeSetter $defaultPageSizeSetter = null
     ) {
