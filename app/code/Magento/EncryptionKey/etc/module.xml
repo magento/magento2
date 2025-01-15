@@ -10,7 +10,6 @@
         <sequence>
             <module name="Magento_Customer"/>
             <module name="Magento_User"/>
-            <module name="Magento_Indexer"/>
         </sequence>
     </module>
 </config>

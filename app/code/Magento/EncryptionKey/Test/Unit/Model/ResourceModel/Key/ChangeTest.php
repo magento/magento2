@@ -23,6 +23,9 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
 
 /**
  * Test Class For Magento\EncryptionKey\Model\ResourceModel\Key\Change
@@ -66,6 +69,15 @@ class ChangeTest extends TestCase
     /** @var Change */
     protected $model;
 
+    /** @var ConfigInterface|MockObject */
+    protected $indexerConfigMock;
+    
+    /** @var EncoderInterface|MockObject */
+    protected $encoderMock;
+
+    /** @var CollectionFactory|MockObject */
+    protected $indexerStateCollectionMock;
+
     protected function setUp(): void
     {
         $this->encryptMock = $this->createPartialMockWithReflection(
@@ -95,6 +107,15 @@ class ChangeTest extends TestCase
         $this->transactionMock = $this->createMock(TransactionManagerInterface::class);
         $this->objRelationMock = $this->createMock(ObjectRelationProcessor::class);
         $this->randomMock = $this->createMock(Random::class);
+        $this->indexerConfigMock = $this->getMockBuilder(ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->encoderMock = $this->getMockBuilder(EncoderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->indexerStateCollectionMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $contextMock = $this->createPartialMock(
             Context::class,
