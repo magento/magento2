@@ -244,11 +244,12 @@ class Change extends AbstractDb
     }
 
     /**
-     * Retrieve indexer state and update the hash with new encryption key
+     * Refresh the indexer hash to avoid grid data regeneration
      *
      * @return void
      */
-    protected function _updateIndexersHash(){
+    protected function _updateIndexersHash()
+    {
         
         $stateIndexers = [];
         $stateCollection = $this->indexerStateCollection->create();
