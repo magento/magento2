@@ -107,6 +107,8 @@ class Change extends AbstractDb
      * @param EncoderInterface $encoder
      * @param CollectionFactory $indexerStateCollection
      * @param string $connectionName
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
