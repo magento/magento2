@@ -47,8 +47,8 @@ class GuestOrder implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         list($number, $email, $postcode) = $this->getNumberEmailPostcode($args['input'] ?? []);
         $order = $this->getOrder($number);

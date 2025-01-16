@@ -27,6 +27,6 @@ interface GuestCartTotalManagementInterface
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         $shippingCarrierCode = null,
         $shippingMethodCode = null,
-        \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
+        ?\Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
     );
 }

@@ -42,7 +42,7 @@ class Postcode extends Text
         $entityTypeCode,
         $isAjax,
         DirectoryHelper $directoryHelper,
-        StringUtils $stringHelper = null
+        ?StringUtils $stringHelper = null
     ) {
         $this->directoryHelper = $directoryHelper;
         $stringHelper = $stringHelper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(StringUtils::class);

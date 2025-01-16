@@ -65,7 +65,7 @@ class PageActions extends Column
         array $components = [],
         array $data = [],
         $editUrl = self::CMS_URL_PATH_EDIT,
-        \Magento\Cms\ViewModel\Page\Grid\UrlBuilder $scopeUrlBuilder = null
+        ?\Magento\Cms\ViewModel\Page\Grid\UrlBuilder $scopeUrlBuilder = null
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->actionUrlBuilder = $actionUrlBuilder;

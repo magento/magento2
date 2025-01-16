@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\App\Area;
@@ -86,8 +86,8 @@ class FrontNameResolver implements FrontNameResolverInterface
         Config $config,
         DeploymentConfig $deploymentConfig,
         ScopeConfigInterface $scopeConfig,
-        Uri $uri = null,
-        RequestInterface $request = null
+        ?Uri $uri = null,
+        ?RequestInterface $request = null
     ) {
         $this->config = $config;
         $this->defaultFrontName = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME);

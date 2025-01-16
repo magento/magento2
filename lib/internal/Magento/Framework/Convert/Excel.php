@@ -57,7 +57,7 @@ class Excel
     public function __construct(
         \Iterator $iterator,
         $rowCallback = [],
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_iterator = $iterator;
         $this->_rowCallback = $rowCallback;

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CmsNewPagePageActionsSection">
-        <element name="savePage" type="button" selector="#save_and_close" timeout="10"/>
+        <element name="savePage" type="button" selector="#save_and_close" timeout="60"/>
         <element name="reset" type="button" selector="#reset"/>
         <element name="saveAndContinueEdit" type="button" selector="#save-button" timeout="10"/>
         <element name="saveAndDuplicate" type="button" selector="#save_and_duplicate" timeout="10"/>

@@ -50,8 +50,8 @@ class HostedProUrl implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $customerId = $context->getUserId();
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();

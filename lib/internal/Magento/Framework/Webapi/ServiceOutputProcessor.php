@@ -44,7 +44,7 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
         MethodsMap $methodsMapProcessor,
-        TypeProcessor $typeProcessor = null
+        ?TypeProcessor $typeProcessor = null
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;

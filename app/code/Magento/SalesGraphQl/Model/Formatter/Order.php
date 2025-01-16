@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Formatter;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesGraphQl\Model\Order\OrderAddress;
@@ -20,11 +23,14 @@ class Order
     /**
      * @param OrderAddress $orderAddress
      * @param OrderPayments $orderPayments
+     * @param TimezoneInterface|null $timezone
      */
     public function __construct(
         private readonly OrderAddress $orderAddress,
-        private readonly OrderPayments $orderPayments
+        private readonly OrderPayments $orderPayments,
+        private ?TimezoneInterface $timezone = null
     ) {
+        $this->timezone = $timezone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -42,7 +48,8 @@ class Order
             'id' => base64_encode((string)$orderModel->getEntityId()),
             'increment_id' => $orderModel->getIncrementId(),
             'number' => $orderModel->getIncrementId(),
-            'order_date' => $orderModel->getCreatedAt(),
+            'order_date' => $this->timezone->date($orderModel->getCreatedAt())
+                ->format(DateTime::DATETIME_PHP_FORMAT),
             'order_number' => $orderModel->getIncrementId(),
             'status' => $orderModel->getStatusLabel(),
             'email' => $orderModel->getCustomerEmail(),

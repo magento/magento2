@@ -90,7 +90,7 @@ class LockGuardedCacheLoader
         int $delayTimeout = 20,
         int $loadTimeout = 10000,
         int $minimalDelayTimeout = 5,
-        DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->locker = $locker;
         $this->lockTimeout = $lockTimeout;

@@ -101,7 +101,7 @@ class Config implements ResetAfterRequestInterface
     public function __construct(
         DeploymentConfig $config,
         $connectionName = 'amqp',
-        ConnectionFactory $connectionFactory = null
+        ?ConnectionFactory $connectionFactory = null
     ) {
         $this->deploymentConfig = $config;
         $this->connectionName = $connectionName;

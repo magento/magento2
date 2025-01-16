@@ -38,8 +38,8 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
-        \Magento\GiftMessage\Model\ResourceModel\Message $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\GiftMessage\Model\ResourceModel\Message $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_typeFactory = $typeFactory;

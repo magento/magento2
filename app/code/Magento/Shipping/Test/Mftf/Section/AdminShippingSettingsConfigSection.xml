@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -21,5 +21,6 @@
         <element name="shippingPolicyParametersOpened" type="block" selector="#shipping_shipping_policy-head.open" timeout="30"/>
         <element name="shippingPolicy" type="block" selector="#row_shipping_shipping_policy_shipping_policy_content"/>
         <element name="dropdownShippingPolicy" type="select" selector="#row_shipping_shipping_policy_enable_shipping_policy select"/>
+        <element name="stateField" type="input" selector="input[name='groups[origin][fields][region_id][value]']"/>
     </section>
 </sections>

@@ -33,8 +33,8 @@ class TypeDuplication implements ValidatorInterface
      * @param \Magento\Framework\Code\Reader\ScalarTypesProvider|null $scalarTypesProvider
      */
     public function __construct(
-        \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null,
-        \Magento\Framework\Code\Reader\ScalarTypesProvider $scalarTypesProvider = null
+        ?\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null,
+        ?\Magento\Framework\Code\Reader\ScalarTypesProvider $scalarTypesProvider = null
     ) {
         $this->_argumentsReader = $argumentsReader ?: new \Magento\Framework\Code\Reader\ArgumentsReader();
         $this->scalarTypesProvider = $scalarTypesProvider ?: new \Magento\Framework\Code\Reader\ScalarTypesProvider();

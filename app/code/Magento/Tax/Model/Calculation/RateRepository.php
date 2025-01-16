@@ -102,7 +102,7 @@ class RateRepository implements TaxRateRepositoryInterface
         RegionFactory $regionFactory,
         \Magento\Tax\Model\ResourceModel\Calculation\Rate $rateResource,
         JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->converter = $converter;
         $this->rateRegistry = $rateRegistry;

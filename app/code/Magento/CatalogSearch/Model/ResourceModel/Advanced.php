@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All rights reserved.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel;
 
@@ -64,7 +64,7 @@ class Advanced extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function prepareCondition($attribute, $value)
     {
-        $condition = $value;
+        $condition = false;
 
         if (is_array($value)) {
             if ($attribute->getBackendType() == 'varchar') { // multiselect

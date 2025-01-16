@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 
@@ -23,22 +22,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements 
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
-    
-    /*
+
+    /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
      */
     private $attributeSetFactory;
-    
-    /*
+
+    /**
      * @var \Magento\Framework\Filter\FilterManager
      */
     private $filterManager;
-    
-    /*
+
+    /**
      * @var \Magento\Framework\Json\Helper\Data
      */
     private $jsonHelper;
-    
+
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -53,9 +52,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements 
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory = null,
-        \Magento\Framework\Filter\FilterManager $filterManager = null,
-        \Magento\Framework\Json\Helper\Data $jsonHelper = null
+        ?\Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory = null,
+        ?\Magento\Framework\Filter\FilterManager $filterManager = null,
+        ?\Magento\Framework\Json\Helper\Data $jsonHelper = null
     ) {
         parent::__construct($context, $coreRegistry);
         $this->layoutFactory = $layoutFactory;

@@ -79,7 +79,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         PriceCurrencyInterface $priceCurrency,
-        PaymentFailuresInterface $paymentFailures = null
+        ?PaymentFailuresInterface $paymentFailures = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;

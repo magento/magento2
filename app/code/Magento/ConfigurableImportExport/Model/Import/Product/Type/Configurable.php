@@ -227,8 +227,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac,
-        MetadataPool $metadataPool = null,
-        SkuStorage $skuStorage = null
+        ?MetadataPool $metadataPool = null,
+        ?SkuStorage $skuStorage = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->_productTypesConfig = $productTypesConfig;

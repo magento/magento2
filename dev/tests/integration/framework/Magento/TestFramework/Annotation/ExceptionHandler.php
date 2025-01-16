@@ -25,8 +25,8 @@ class ExceptionHandler
     public static function handle(
         string $message,
         string $testClass,
-        string $testMethod = null,
-        \Throwable $previous = null
+        ?string $testMethod = null,
+        ?\Throwable $previous = null
     ): void {
         try {
             $reflected = new ReflectionClass($testClass);

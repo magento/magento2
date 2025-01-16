@@ -136,7 +136,7 @@ class Media implements AppInterface
         State $state,
         ImageResize $imageResize,
         File $file,
-        CatalogMediaConfig $catalogMediaConfig = null
+        ?CatalogMediaConfig $catalogMediaConfig = null
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;

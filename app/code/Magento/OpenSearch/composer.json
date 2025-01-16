@@ -1,15 +1,21 @@
 {
     "name": "magento/module-open-search",
     "description": "N/A",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:djadobe16/opensearch-php.git"
+        }
+    ],
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-advanced-search": "*",
         "magento/module-catalog-search": "*",
         "magento/module-elasticsearch": "*",
         "magento/module-search": "*",
         "magento/module-config": "*",
-        "opensearch-project/opensearch-php": "^2.2"
+        "opensearch-project/opensearch-php": "dev-php84-support"
     },
     "type": "magento2-module",
     "license": [

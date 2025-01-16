@@ -33,7 +33,7 @@ class ElementHistory
      * @param ElementInterface $new
      * @param ElementInterface $old
      */
-    public function __construct(ElementInterface $new, ElementInterface $old = null)
+    public function __construct(ElementInterface $new, ?ElementInterface $old = null)
     {
         $this->new = $new;
         $this->old = $old;

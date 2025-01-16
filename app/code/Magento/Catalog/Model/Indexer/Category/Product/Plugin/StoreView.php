@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
@@ -30,7 +30,7 @@ class StoreView extends StoreGroup
      *
      * @return AbstractDb
      */
-    public function afterSave(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $store = null)
+    public function afterSave(AbstractDb $subject, AbstractDb $objectResource, ?AbstractModel $store = null)
     {
         if ($store->isObjectNew()) {
             $this->tableMaintainer->createTablesForStore($store->getId());

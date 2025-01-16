@@ -115,11 +115,11 @@ class EavSetup
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,
-        Code $attributeCodeValidator = null,
-        AddOptionToAttribute $addAttributeOption = null,
-        ReservedAttributeCheckerInterface $reservedAttributeChecker = null,
-        AttributeFactory $attributeFactory = null,
-        Config $eavConfig = null
+        ?Code $attributeCodeValidator = null,
+        ?AddOptionToAttribute $addAttributeOption = null,
+        ?ReservedAttributeCheckerInterface $reservedAttributeChecker = null,
+        ?AttributeFactory $attributeFactory = null,
+        ?Config $eavConfig = null
     ) {
         $this->cache = $cache;
         $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;

@@ -49,8 +49,8 @@ class MetadataConfigTypeProcessor implements PostProcessorInterface
     public function __construct(
         ProcessorFactory $processorFactory,
         Initial $initialConfig,
-        ConfigSourceInterface $configSource = null,
-        ConfigPathResolver $configPathResolver = null
+        ?ConfigSourceInterface $configSource = null,
+        ?ConfigPathResolver $configPathResolver = null
     ) {
         $this->_processorFactory = $processorFactory;
         $this->_metadata = $initialConfig->getMetadata();

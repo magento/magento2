@@ -1,15 +1,18 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Catalog\Controller\Adminhtml\Category\Widget;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widget
 {
     /**
-     * Core registry
+     * Core registry var
      *
      * @var \Magento\Framework\Registry
      */
@@ -45,6 +48,11 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
     public function execute()
     {
         $categoryId = (int)$this->getRequest()->getPost('id');
+        // If categoryId is not provided, return an empty JSON response or an error
+        if (!$categoryId) {
+            $resultJson = $this->resultJsonFactory->create();
+            return $resultJson->setJsonData(json_encode(['error' => 'Category ID is required']));
+        }
         if ($categoryId) {
             $selected = $this->getRequest()->getPost('selected', '');
             $category = $this->_objectManager->create(\Magento\Catalog\Model\Category::class)->load($categoryId);
