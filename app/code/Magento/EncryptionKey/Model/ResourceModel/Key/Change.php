@@ -33,9 +33,9 @@ use Magento\Indexer\Model\ResourceModel\Indexer\State\CollectionFactory;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 100.0.2
+ * @since                                          100.0.2
  * @deprecated
- * @see Extensible Reencryption Mechanism
+ * @see                                            Extensible Reencryption Mechanism
  */
 class Change extends AbstractDb
 {
@@ -70,13 +70,13 @@ class Change extends AbstractDb
     /**
      * Random string generator
      *
-     * @var Random
+     * @var   Random
      * @since 100.0.4
      */
     protected $random;
 
     /**
-     * Indexer Config
+     * Indexer Configuration
      *
      * @var IndexerConfig
      */
@@ -97,17 +97,17 @@ class Change extends AbstractDb
     protected $indexerStateCollection;
 
     /**
-     * @param Context $context
-     * @param Filesystem $filesystem
-     * @param Structure $structure
+     * @param Context            $context
+     * @param Filesystem         $filesystem
+     * @param Structure          $structure
      * @param EncryptorInterface $encryptor
-     * @param Writer $writer
-     * @param Random $random
-     * @param ConfigInterface $indexerConfig
-     * @param EncoderInterface $encoder
-     * @param CollectionFactory $indexerStateCollection
-     * @param string $connectionName
-     * 
+     * @param Writer             $writer
+     * @param Random             $random
+     * @param ConfigInterface    $indexerConfig
+     * @param EncoderInterface   $encoder
+     * @param CollectionFactory  $indexerStateCollection
+     * @param string             $connectionName
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -146,11 +146,11 @@ class Change extends AbstractDb
     /**
      * Change encryption key
      *
-     * @param string|null $key
-     * @return null|string
-     * @throws FileSystemException|LocalizedException|Exception
+     * @param      string|null $key
+     * @return     null|string
+     * @throws     FileSystemException|LocalizedException|Exception
      * @deprecated
-     * @see Extensible Reencryption Mechanism
+     * @see        Extensible Reencryption Mechanism
      */
     public function changeEncryptionKey($key = null)
     {
@@ -188,14 +188,16 @@ class Change extends AbstractDb
     /**
      * Gather all encrypted system config values and re-encrypt them
      *
-     * @return void
+     * @return     void
      * @deprecated
-     * @see Extensible Reencryption Mechanism
+     * @see        Extensible Reencryption Mechanism
      */
     protected function _reEncryptSystemConfigurationValues()
     {
         // look for encrypted node entries in all system.xml files
-        /** @var Structure $configStructure  */
+        /**
+         * @var Structure $configStructure
+        */
         $configStructure = $this->structure;
         $paths = $configStructure->getFieldPathsByAttribute(
             'backend_model',
@@ -225,9 +227,9 @@ class Change extends AbstractDb
     /**
      * Gather saved credit card numbers from sales order payments and re-encrypt them
      *
-     * @return void
+     * @return     void
      * @deprecated
-     * @see Extensible Reencryption Mechanism
+     * @see        Extensible Reencryption Mechanism
      */
     protected function _reEncryptCreditCardNumbers()
     {
@@ -256,7 +258,9 @@ class Change extends AbstractDb
         $stateIndexers = [];
         $stateCollection = $this->indexerStateCollection->create();
         foreach ($stateCollection->getItems() as $state) {
-            /** @var \Magento\Indexer\Model\Indexer\State $state */
+            /**
+             * @var \Magento\Indexer\Model\Indexer\State $state
+            */
             $stateIndexers[$state->getIndexerId()] = $state;
         }
         

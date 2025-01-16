@@ -136,7 +136,7 @@ class ChangeTest extends TestCase
                 'random' => $this->randomMock,
                 'indexerConfig' => $this->indexerConfigMock,
                 'encoder' => $this->encoderMock,
-                'indexerStateCollection' => $this->indexerStateCollectionMock,
+                'indexerStateCollection' => $this->indexerStateCollectionMock
             ]
         );
     }
