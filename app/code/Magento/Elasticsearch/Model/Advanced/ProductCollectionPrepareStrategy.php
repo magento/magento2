@@ -32,7 +32,7 @@ class ProductCollectionPrepareStrategy implements ProductCollectionPrepareStrate
      */
     public function __construct(
         Config $catalogConfig,
-        Visibility $catalogProductVisibility = null
+        ?Visibility $catalogProductVisibility = null
     ) {
         $this->catalogConfig = $catalogConfig;
         $this->catalogProductVisibility = $catalogProductVisibility

@@ -2259,4 +2259,18 @@ class ProductTest extends AbstractImportTestCase
             ]
         ];
     }
+
+    /**
+     * get remote file content
+     */
+    public function testGetRemoteFileContent()
+    {
+        $reflector = new \ReflectionClass($this->importProduct);
+        $property = $reflector->getMethod('getRemoteFileContent');
+        $property->setAccessible(true);
+        $this->assertEquals(
+            '',
+            $property->invokeArgs($this->importProduct, ['php://filter'])
+        );
+    }
 }

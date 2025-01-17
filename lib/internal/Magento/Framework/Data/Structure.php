@@ -33,7 +33,7 @@ class Structure implements ResetAfterRequestInterface
      *
      * @param array $elements
      */
-    public function __construct(array $elements = null)
+    public function __construct(?array $elements = null)
     {
         if (null !== $elements) {
             $this->importElements($elements);

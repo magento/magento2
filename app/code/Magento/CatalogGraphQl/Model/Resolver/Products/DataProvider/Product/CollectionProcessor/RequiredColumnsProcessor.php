@@ -33,7 +33,7 @@ class RequiredColumnsProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
         $collection->addAttributeToSelect('special_price');
         $collection->addAttributeToSelect('special_from_date');

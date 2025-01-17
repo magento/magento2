@@ -46,13 +46,13 @@ class AccountManagement
      * @param \Magento\Framework\App\RequestInterface $request
      * @param SecurityManager $securityManager
      * @param int $passwordRequestEvent
-     * @param ScopeInterface $scope
+     * @param ScopeInterface|null $scope
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Security\Model\SecurityManager $securityManager,
         $passwordRequestEvent = PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST,
-        ScopeInterface $scope = null
+        ?ScopeInterface $scope = null
     ) {
         $this->request = $request;
         $this->securityManager = $securityManager;

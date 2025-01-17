@@ -49,7 +49,7 @@ class DynamicStorage extends BaseDbStorage
         ResourceConnection $resource,
         ScopeConfigInterface $config,
         ProductFactory $productFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($urlRewriteFactory, $dataObjectHelper, $resource, $logger);
         $this->config = $config;

@@ -86,11 +86,11 @@ class RulesApplier
         CalculatorFactory $calculatorFactory,
         ManagerInterface $eventManager,
         Utility $utility,
-        ChildrenValidationLocator $childrenValidationLocator = null,
-        DataFactory $discountDataFactory = null,
-        RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
-        DiscountDataInterfaceFactory $discountDataInterfaceFactory = null,
-        SelectRuleCoupon $selectRuleCoupon = null
+        ?ChildrenValidationLocator $childrenValidationLocator = null,
+        ?DataFactory $discountDataFactory = null,
+        ?RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
+        ?DiscountDataInterfaceFactory $discountDataInterfaceFactory = null,
+        ?SelectRuleCoupon $selectRuleCoupon = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;

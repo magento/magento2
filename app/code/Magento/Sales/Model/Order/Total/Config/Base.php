@@ -52,7 +52,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory,
         $sourceData = null,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($configCacheType, $logger, $salesConfig, $sourceData, $serializer);
         $this->_orderTotalFactory = $orderTotalFactory;

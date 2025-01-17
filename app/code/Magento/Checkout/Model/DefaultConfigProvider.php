@@ -260,10 +260,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         UrlInterface $urlBuilder,
         CaptchaConfigPostProcessorInterface $configPostProcessor,
-        AddressMetadataInterface $addressMetadata = null,
-        AttributeOptionManagementInterface $attributeOptionManager = null,
-        CustomerAddressDataProvider $customerAddressData = null,
-        Escaper $escaper = null
+        ?AddressMetadataInterface $addressMetadata = null,
+        ?AttributeOptionManagementInterface $attributeOptionManager = null,
+        ?CustomerAddressDataProvider $customerAddressData = null,
+        ?Escaper $escaper = null
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;

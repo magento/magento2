@@ -86,6 +86,8 @@
                 <item name="Could not find cart item" xsi:type="string">COULD_NOT_FIND_CART_ITEM</item>
                 <item name="Required parameter" xsi:type="string">REQUIRED_PARAMETER_MISSING</item>
                 <item name="The fewest you may purchase" xsi:type="string">INVALID_PARAMETER_VALUE</item>
+                <item name="Not enough items for sale" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="Only %s of %s available" xsi:type="string">INSUFFICIENT_STOCK</item>
             </argument>
         </arguments>
     </type>

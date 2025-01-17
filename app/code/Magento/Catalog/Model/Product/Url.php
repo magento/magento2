@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -65,7 +65,7 @@ class Url extends \Magento\Framework\DataObject
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         UrlFinderInterface $urlFinder,
         array $data = [],
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($data);
         $this->urlFactory = $urlFactory;

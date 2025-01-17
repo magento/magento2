@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -373,14 +373,14 @@ class ProductPriceTest extends GraphQlAbstract
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
-                            'final_price' =>['value'=> 9 * 2],
+                            'final_price' =>['value'=> 9],
                             'quantity' => 2
                         ]
                     ],
                     "simple2" => [
                         0 => [
                             'discount' =>['amount_off' => 2, 'percent_off' => 10],
-                            'final_price' =>['value'=> 18 * 2],
+                            'final_price' =>['value'=> 18],
                             'quantity' => 2
                         ]
                     ]
@@ -419,14 +419,14 @@ class ProductPriceTest extends GraphQlAbstract
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
-                            'final_price' =>['value'=> 9 * 2 ],
+                            'final_price' =>['value'=> 9],
                             'quantity' => 2
                         ]
                     ],
                     "simple2" => [
                         0 => [
                             'discount' =>['amount_off' => 2, 'percent_off' => 10],
-                            'final_price' =>['value'=> 18 * 2],
+                            'final_price' =>['value'=> 18],
                             'quantity' => 2
                         ]
                     ]
@@ -606,7 +606,7 @@ class ProductPriceTest extends GraphQlAbstract
                         'amount_off' => 1,
                         'percent_off' => 10
                     ],
-                    'final_price' =>['value'=> 9 * 2],
+                    'final_price' =>['value'=> 9],
                     'quantity' => 2
                 ]
             ]
@@ -809,7 +809,7 @@ class ProductPriceTest extends GraphQlAbstract
                                 2
                             )
                         ],
-                        'final_price' =>['value'=> $tierPriceData[0]['value'] * 2],
+                        'final_price' =>['value'=> $tierPriceData[0]['value']],
                         'quantity' => 2
                     ]
                 ]
@@ -887,7 +887,7 @@ class ProductPriceTest extends GraphQlAbstract
                          'amount_off' => 3,
                          'percent_off' => 30
                     ],
-                    'final_price' =>['value'=> 7 * 2],
+                    'final_price' =>['value'=> 7],
                     'quantity' => 2
                 ]
             ]

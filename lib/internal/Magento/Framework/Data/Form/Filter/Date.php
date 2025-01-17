@@ -34,8 +34,8 @@ class Date implements FilterInterface
      * @param ResolverInterface|null $localeResolver
      */
     public function __construct(
-        string $format = null,
-        ResolverInterface $localeResolver = null
+        ?string $format = null,
+        ?ResolverInterface $localeResolver = null
     ) {
         $this->_dateFormat = $format ?? DateTime::DATE_INTERNAL_FORMAT;
         $this->localeResolver = $localeResolver;

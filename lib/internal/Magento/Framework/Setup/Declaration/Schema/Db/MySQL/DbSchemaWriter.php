@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -18,9 +20,12 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Reference;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 
 /**
  * @inheritdoc
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DbSchemaWriter implements DbSchemaWriterInterface
 {
@@ -67,11 +72,19 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     private $sqlVersionProvider;
 
+    /***
+     * @var DtoFactoriesTable
+     */
+    private DtoFactoriesTable $columnConfig;
+
+    private const COLUMN_TYPE = ['varchar', 'char', 'text', 'mediumtext', 'longtext'];
+
     /**
      * @param ResourceConnection $resourceConnection
      * @param StatementFactory $statementFactory
      * @param DryRunLogger $dryRunLogger
      * @param SqlVersionProvider $sqlVersionProvider
+     * @param DtoFactoriesTable|null $dtoFactoriesTable
      * @param array $tableOptions
      */
     public function __construct(
@@ -79,11 +92,13 @@ class DbSchemaWriter implements DbSchemaWriterInterface
         StatementFactory $statementFactory,
         DryRunLogger $dryRunLogger,
         SqlVersionProvider $sqlVersionProvider,
+        ?DtoFactoriesTable $dtoFactoriesTable = null,
         array $tableOptions = []
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->statementFactory = $statementFactory;
         $this->dryRunLogger = $dryRunLogger;
+        $this->columnConfig = $dtoFactoriesTable ?: ObjectManager::getInstance()->get(DtoFactoriesTable::class);
         $this->tableOptions = array_replace($this->tableOptions, $tableOptions);
         $this->sqlVersionProvider = $sqlVersionProvider;
     }
@@ -93,6 +108,15 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     public function createTable($tableName, $resource, array $definition, array $options)
     {
+        if (count($definition)) {
+            foreach ($definition as $index => $value) {
+                if ($this->isColumnExists($value, self::COLUMN_TYPE)) {
+                    if (str_contains($index, 'column')) {
+                        $definition[$index] = $this->setDefaultCharsetAndCollation($value);
+                    }
+                }
+            }
+        }
         $sql = sprintf(
             "(\n%s\n) ENGINE=%s DEFAULT CHARSET=%s DEFAULT COLLATE=%s %s",
             implode(", \n", $definition),
@@ -213,6 +237,10 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     public function modifyColumn($columnName, $resource, $tableName, $columnDefinition)
     {
+        if ($this->isColumnExists($columnDefinition, self::COLUMN_TYPE)) {
+            $columnDefinition = $this->setDefaultCharsetAndCollation($columnDefinition);
+        }
+
         $sql = sprintf(
             'MODIFY COLUMN %s',
             $columnDefinition
@@ -320,7 +348,8 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     private function isNeedToSplitSql() : bool
     {
         return str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_4_VERSION) ||
-            str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_6_VERSION);
+            str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_10_6_VERSION) ||
+            str_contains($this->sqlVersionProvider->getSqlVersion(), SqlVersionProvider::MARIA_DB_11_4_VERSION);
     }
 
     /**
@@ -451,5 +480,35 @@ class DbSchemaWriter implements DbSchemaWriterInterface
             }
         }
         return $result;
+    }
+
+    /**
+     * Set default collation & charset (e.g. utf8mb4_general_ci and utf8mb4) for tables
+     *
+     * @param string $columnDefinition
+     * @return string
+     */
+    private function setDefaultCharsetAndCollation(string $columnDefinition): string
+    {
+        $charset = $this->columnConfig->getDefaultCharset();
+        $collate = $this->columnConfig->getDefaultCollation();
+        $columnLevelConfig = 'CHARACTER SET ' . $charset . ' COLLATE ' . $collate;
+        $columnsAttribute  = explode(' ', $columnDefinition);
+        array_splice($columnsAttribute, 2, 0, $columnLevelConfig);
+        return implode(" ", $columnsAttribute);
+    }
+
+    /**
+     * Checks if any column of type varchar,char or text (mediumtext/longtext)
+     *
+     * @param string $definition
+     * @param array $columntypes
+     * @return bool
+     */
+    private function isColumnExists(string $definition, array $columntypes): bool
+    {
+        $type = explode(' ', $definition);
+        $pattern = '/\b(' . implode('|', array_map('preg_quote', $columntypes)) . ')\b/i';
+        return preg_match($pattern, $type[1]) === 1;
     }
 }

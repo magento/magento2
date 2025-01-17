@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPlaceOrderUsingUPSOnlineShippingCarrierForRegisteredCustomerTest">
+        <annotations>
+            <stories value="Place order using UPS Shipping carrier"/>
+            <title value="Use UPS online shipping carrier during order placement in admin for registered customer Test"/>
+            <description value="Select UPS online shipping method while order placement from backend for a registered customer"/>
+            <testCaseId value="AC-4884"/>
+            <severity value="MAJOR"/>
+            <features value="Shipping"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminToConfig"/>
+            <!-- Create product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!--Create UK customer-->
+            <createData entity="UKCustomer" stepKey="createUKCustomer"/>
+            <!-- Enabling Check/Money Order Payment Method -->
+            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <!--Set Shipping settings origin data-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
+                <argument name="country" value="United States"/>
+                <argument name="state" value="California"/>
+                <argument name="postcode" value="90034"/>
+            </actionGroup>
+            <!--Navigate to shipping method configuration for enabling UPS-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForEnablingUPS"/>
+            <!--Configure UPS shipping method with enable for checkout = Yes-->
+            <actionGroup ref="AdminEnableUPSActionGroup" stepKey="enableUPSShippingMethod">
+                <argument name="shipping" value="UPSShippingMethod"/>
+            </actionGroup>
+            <!--Cache flush-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostConfiguring">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Reset Shipping Origin configurations to default | default address - US California-->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="resetShippingOriginConfig"/>
+            <!--delete UK customer-->
+            <deleteData createDataKey="createUKCustomer" stepKey="deleteCustomer"/>
+            <!--delete product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <!--Configure UPS shipping method with enable for checkout = No-->
+            <actionGroup ref="AdminUPSDisableActionGroup" stepKey="disableUPSShippingMethod"/>
+            <!--Logout Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminToRollBackConfig"/>
+        </after>
+        <!--Navigate to create new order with existing customer-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createUKCustomer$$"/>
+        </actionGroup>
+        <!--Admin add simple product to order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Admin add new UK billing address while creating order-->
+        <selectOption userInput="Add New Address" selector="{{AdminOrderFormBillingAddressSection.selectAddress}}" stepKey="addNewBillingAddress" />
+        <actionGroup ref="AdminFillAddressInformationInOrderActionGroup" stepKey="FillOrderNewShippingAddress">
+            <argument name="customer" value="$$createUKCustomer$$"/>
+            <argument name="address" value="UK_Not_Default_Address"/>
+        </actionGroup>
+        <!--Scroll to element & click to reflect details as per defined address & customer-->
+        <scrollTo selector="{{AdminOrderFormBillingAddressSection.Phone}}" stepKey="scrollToElementInteractable"/>
+        <click selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" stepKey="clickToReflectDetailsAccordingToInputData"/>
+        <!--Checkout select Check/Money Order payment-->
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!--click on get shipping methods link-->
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.upsOption}}" stepKey="waitForShippingOptions"/>
+        <click selector="{{AdminOrderFormPaymentSection.upsOption}}" stepKey="selectUPSMethod"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoadPostSelectingUPSShippingMethod"/>
+        <!--Submit Order and verify information-->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <!--Assert order created-->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="checkOrderSuccessfullyCreated"/>
+    </test>
+</tests>

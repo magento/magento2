@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,11 +60,11 @@ abstract class Category extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
-        \Magento\Framework\Registry $registry = null,
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwigConfig = null,
-        \Magento\Backend\Model\Auth\Session $authSession = null
+        ?\Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter = null,
+        ?\Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        ?\Magento\Framework\Registry $registry = null,
+        ?\Magento\Cms\Model\Wysiwyg\Config $wysiwigConfig = null,
+        ?\Magento\Backend\Model\Auth\Session $authSession = null
     ) {
         $this->dateFilter = $dateFilter;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(

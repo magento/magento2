@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -473,6 +473,17 @@
         <data key="is_used_in_grid">true</data>
         <data key="is_visible_in_grid">true</data>
         <data key="is_filterable_in_grid">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeAgeGroupDropdown" type="ProductAttribute">
+        <data key="default_frontend_label" unique="suffix">Age Group</data>
+        <data key="attribute_code" unique="suffix">agegroup</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">website</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">false</data>
+        <data key="is_used_for_promo_rules">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
 </entities>

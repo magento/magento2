@@ -44,7 +44,7 @@ class Websites implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['entity_id'])) {
             throw new LocalizedException(__('"model" value should be specified'));

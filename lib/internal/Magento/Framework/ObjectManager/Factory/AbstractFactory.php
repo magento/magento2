@@ -59,8 +59,8 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      */
     public function __construct(
         \Magento\Framework\ObjectManager\ConfigInterface $config,
-        ObjectManagerInterface $objectManager = null,
-        \Magento\Framework\ObjectManager\DefinitionInterface $definitions = null,
+        ?ObjectManagerInterface $objectManager = null,
+        ?\Magento\Framework\ObjectManager\DefinitionInterface $definitions = null,
         $globalArguments = []
     ) {
         $this->config = $config;

@@ -74,7 +74,7 @@ class Filter implements ProductQueryInterface
         FieldSelection $fieldSelection,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ScopeConfigInterface $scopeConfig,
-        ArgumentsProcessorInterface $argsSelection = null
+        ?ArgumentsProcessorInterface $argsSelection = null
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;

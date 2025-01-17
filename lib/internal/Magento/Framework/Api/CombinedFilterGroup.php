@@ -45,7 +45,7 @@ class CombinedFilterGroup extends AbstractSimpleObject
      * @return $this
      * @codeCoverageIgnore
      */
-    public function setFilters(array $filters = null): self
+    public function setFilters(?array $filters = null): self
     {
         return $this->setData(self::FILTERS, $filters);
     }
