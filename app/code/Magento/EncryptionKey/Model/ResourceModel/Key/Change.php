@@ -97,16 +97,16 @@ class Change extends AbstractDb
     protected $indexerStateCollection;
 
     /**
-     * @param Context            $context
-     * @param Filesystem         $filesystem
-     * @param Structure          $structure
-     * @param EncryptorInterface $encryptor
-     * @param Writer             $writer
-     * @param Random             $random
-     * @param ConfigInterface    $indexerConfig
-     * @param EncoderInterface   $encoder
-     * @param CollectionFactory  $indexerStateCollection
-     * @param string             $connectionName
+     * @param Context                $context
+     * @param Filesystem             $filesystem
+     * @param Structure              $structure
+     * @param EncryptorInterface     $encryptor
+     * @param Writer                 $writer
+     * @param Random                 $random
+     * @param ConfigInterface        $indexerConfig
+     * @param EncoderInterface       $encoder
+     * @param CollectionFactory      $indexerStateCollection
+     * @param string                 $connectionName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -117,9 +117,9 @@ class Change extends AbstractDb
         EncryptorInterface $encryptor,
         Writer $writer,
         Random $random,
-        ConfigInterface $indexerConfig  = null,
-        EncoderInterface $encoder  = null,
-        CollectionFactory $indexerStateCollection  = null,
+        ConfigInterface $indexerConfig,
+        EncoderInterface $encoder,
+        CollectionFactory $indexerStateCollection,
         $connectionName = null
     ) {
         $this->encryptor = clone $encryptor;
@@ -128,10 +128,9 @@ class Change extends AbstractDb
         $this->structure = $structure;
         $this->writer = $writer;
         $this->random = $random;
-
-        $this->indexerConfig = $indexerConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
-        $this->encoder = $encoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
-        $this->indexerStateCollection = $indexerStateCollection->create() ?: ObjectManager::getInstance()->create(CollectionFactory::class);
+        $this->indexerConfig = $indexerConfig;
+        $this->encoder = $encoder;
+        $this->indexerStateCollection = $indexerStateCollection;
     }
 
     /**
@@ -176,7 +175,7 @@ class Change extends AbstractDb
         try {
             $this->_reEncryptSystemConfigurationValues();
             $this->_reEncryptCreditCardNumbers();
-            $this->_updateIndexersHash();
+            $this->updateIndexersHash();
             $this->writer->saveConfig($configData);
             $this->commit();
             return $key;
@@ -253,11 +252,12 @@ class Change extends AbstractDb
      *
      * @return void
      */
-    protected function _updateIndexersHash()
+    protected function updateIndexersHash()
     {
         
         $stateIndexers = [];
-        foreach ($this->indexerStateCollection->getItems() as $state) {
+        $stateCollection = $this->indexerStateCollection->create();
+        foreach ($stateCollection->getItems() as $state) {
             /**
              * @var \Magento\Indexer\Model\Indexer\State $state
             */
