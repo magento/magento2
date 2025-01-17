@@ -117,9 +117,9 @@ class Change extends AbstractDb
         EncryptorInterface $encryptor,
         Writer $writer,
         Random $random,
-        ConfigInterface $indexerConfig,
-        EncoderInterface $encoder,
-        CollectionFactory $indexerStateCollection,
+        ConfigInterface $indexerConfig  = null,
+        EncoderInterface $encoder  = null,
+        CollectionFactory $indexerStateCollection  = null,
         $connectionName = null
     ) {
         $this->encryptor = clone $encryptor;
@@ -128,9 +128,10 @@ class Change extends AbstractDb
         $this->structure = $structure;
         $this->writer = $writer;
         $this->random = $random;
-        $this->indexerConfig = $indexerConfig;
-        $this->encoder = $encoder;
-        $this->indexerStateCollection = $indexerStateCollection;
+
+        $this->indexerConfig = $indexerConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->encoder = $encoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
+        $this->indexerStateCollection = $indexerStateCollection->create() ?: ObjectManager::getInstance()->create(CollectionFactory::class);
     }
 
     /**
@@ -256,8 +257,7 @@ class Change extends AbstractDb
     {
         
         $stateIndexers = [];
-        $stateCollection = $this->indexerStateCollection->create();
-        foreach ($stateCollection->getItems() as $state) {
+        foreach ($this->indexerStateCollection->getItems() as $state) {
             /**
              * @var \Magento\Indexer\Model\Indexer\State $state
             */
