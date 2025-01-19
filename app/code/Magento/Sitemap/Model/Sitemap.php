@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sitemap\Model;
@@ -576,9 +576,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             foreach ($images->getCollection() as $image) {
                 $row .= '<image:image>';
                 $row .= '<image:loc>' . $this->_escaper->escapeUrl($image->getUrl()) . '</image:loc>';
-                $row .= '<image:title>' . $this->escapeXmlText($images->getTitle()) . '</image:title>';
+                $row .= '<image:title>' . $this->escapeXmlText((string)$images->getTitle()) . '</image:title>';
                 if ($image->getCaption()) {
-                    $row .= '<image:caption>' . $this->escapeXmlText($image->getCaption()) . '</image:caption>';
+                    $row .= '<image:caption>' . $this->escapeXmlText((string)$image->getCaption()) . '</image:caption>';
                 }
                 $row .= '</image:image>';
             }
@@ -815,6 +815,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @return bool
      * @deprecated 100.1.5 Because the robots.txt file is not generated anymore,
      *             this method is not needed and will be removed in major release.
+     * @see Nothing
      */
     protected function _isEnabledSubmissionRobots()
     {
@@ -829,6 +830,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      * @return void
      * @deprecated 100.1.5 Because the robots.txt file is not generated anymore,
      *             this method is not needed and will be removed in major release.
+     * @see Nothing
      */
     protected function _addSitemapToRobotsTxt($sitemapFileName)
     {
