@@ -62,7 +62,7 @@ class HttpTest extends TestCase
      */
     public static function dataProviderForTestIsExists(): array
     {
-        return [['200 OK', true], ['404 Not Found', false]];
+        return [['200 OK', true], ['200', true], ['404 Not Found', false]];
     }
 
     /**

@@ -36,7 +36,7 @@ class Http extends File
             $status = $headers[1];
         }
 
-        return !(strpos($status, '200 OK') === false);
+        return !(strpos($status, '200') === false);
     }
 
     /**
