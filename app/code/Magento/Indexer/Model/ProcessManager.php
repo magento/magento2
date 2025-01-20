@@ -52,10 +52,10 @@ class ProcessManager
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Framework\Registry $registry = null,
-        int $threadsCount = null,
-        LoggerInterface $logger = null,
-        AmqpConfigPool $amqpConfigPool = null
+        ?\Magento\Framework\Registry $registry = null,
+        ?int $threadsCount = null,
+        ?LoggerInterface $logger = null,
+        ?AmqpConfigPool $amqpConfigPool = null
     ) {
         $this->resource = $resource;
         if (null === $registry) {

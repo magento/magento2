@@ -32,7 +32,7 @@ class ExpiredException extends JwtException
         ?int $expiresAt = null,
         ?int $activeFrom = null,
         $message = "JWT has expired/not active yet",
-        \Throwable $previous = null
+        ?\Throwable $previous = null
     ) {
         parent::__construct($message, 0, $previous);
         if (!$expiresAt && !$activeFrom) {

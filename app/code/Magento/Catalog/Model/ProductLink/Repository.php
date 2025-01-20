@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,8 +112,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Catalog\Model\ProductLink\Management $linkManagement,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
-        \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory = null,
+        ?\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
+        ?\Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory = null,
         ?ProductLinkQuery $query = null
     ) {
         $this->productRepository = $productRepository;

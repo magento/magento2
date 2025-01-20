@@ -63,8 +63,8 @@ class ConfigurableObject implements InterpreterInterface
         ObjectManagerInterface $objectManager,
         InterpreterInterface $argumentInterpreter,
         array $classWhitelist = [],
-        ClassReader $classReader = null,
-        ConfigInterface $objectManagerConfig = null,
+        ?ClassReader $classReader = null,
+        ?ConfigInterface $objectManagerConfig = null,
         array $deniedClassList = []
     ) {
         $this->objectManager = $objectManager;

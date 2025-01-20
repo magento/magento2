@@ -84,8 +84,8 @@ class Express extends PaypalExpress
         TransactionRepositoryInterface $transactionRepository,
         BuilderInterface $transactionBuilder,
         AuthorizeCommand $authCommand,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         $data = []
     ) {
         $this->authCommand = $authCommand;

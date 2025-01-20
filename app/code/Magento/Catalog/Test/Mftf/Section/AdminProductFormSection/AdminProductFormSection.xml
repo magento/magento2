@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -91,6 +91,6 @@
         <element name="customTextAttribute" type="input" selector="//input[@name='product[{{attribute_code}}]']" parameterized="true"/>
         <element name="customSelectAttribute" type="select" selector="//select[@name='product[{{attribute_code}}]']" parameterized="true"/>
         <element name="customSwitcherAttribute" type="checkbox" selector="//input[@name='product[{{attribute_code}}]' and @value='{{checked_value}}']/parent::div[@data-role='switcher']" parameterized="true"/>
-
+        <element name="attributeOptionUncheckDefaultValue" type="checkbox" selector="input[name='use_default[{{attribute_code}}]']" parameterized="true"/>
     </section>
 </sections>

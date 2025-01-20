@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -81,8 +81,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Config $eavConfig = null,
-        \Psr\Log\LoggerInterface $logger = null
+        ?\Magento\Eav\Model\Config $eavConfig = null,
+        ?\Psr\Log\LoggerInterface $logger = null
     ) {
         parent::__construct($context, $dateFilter);
         $this->resultRawFactory = $resultRawFactory;
@@ -99,6 +99,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
      * Filter category data
      *
      * @deprecated 101.0.8
+     * @see MAGETWO-71174
      * @param array $rawData
      * @return array
      */

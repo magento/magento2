@@ -16,6 +16,7 @@
             <description value="Testcase verifies On storefront Available shipping rate is changed on fly according to inputed data"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-9283"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createProduct">
@@ -67,6 +68,14 @@
         </actionGroup>
         <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="againWaitForFreeShippingLabelNotVisible"/>
         <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyFlatRateShippingMethodAfterCountryChangeToUS"/>
-        <actionGroup ref="StorefrontVerifyFedexShippingMethodPricesActionGroup" stepKey="verifyFedexShippingMethodPrices"/>
+        <actionGroup ref="StorefrontVerifyFedexShippingMethodPricesActionGroup" stepKey="verifyFedexShippingMethodPrices">
+            <argument name="smartPostPrice" value="$15.93"/>
+            <argument name="groundPrice" value="$13.72"/>
+            <argument name="expressSaverPrice" value="$35.87"/>
+            <argument name="twoDayPrice" value="$42.01"/>
+            <argument name="twoDayAMPrice" value="$48.81"/>
+            <argument name="standardOvernightPrice" value="$88.21"/>
+            <argument name="priorityOvernightPrice" value="$98.27"/>
+        </actionGroup>
     </test>
 </tests>

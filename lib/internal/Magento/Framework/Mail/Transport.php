@@ -39,7 +39,7 @@ class Transport implements TransportInterface
      * @param null|string|array|\Traversable $parameters
      * @param LoggerInterface|null $logger
      */
-    public function __construct(MessageInterface $message, $parameters = null, LoggerInterface $logger = null)
+    public function __construct(MessageInterface $message, $parameters = null, ?LoggerInterface $logger = null)
     {
         $this->laminasTransport = new Sendmail($parameters);
         $this->message = $message;

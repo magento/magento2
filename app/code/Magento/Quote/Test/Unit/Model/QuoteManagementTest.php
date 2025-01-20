@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -203,7 +203,7 @@ class QuoteManagementTest extends TestCase
     private $lockManagerMock;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1074,7 +1074,7 @@ class QuoteManagementTest extends TestCase
         int $customerId,
         int $id,
         array $quoteItems,
-        Address $shippingAddress = null,
+        ?Address $shippingAddress,
         bool $setIsActive
     ): MockObject {
         $quote = $this->getMockBuilder(Quote::class)
@@ -1171,8 +1171,8 @@ class QuoteManagementTest extends TestCase
         OrderPaymentInterface $payment,
         array $items,
         int $quoteId,
-        OrderAddressInterface $shippingAddress = null,
-        int $customerId = null
+        ?OrderAddressInterface $shippingAddress = null,
+        ?int $customerId = null
     ): MockObject {
         $order = $this->getMockBuilder(Order::class)
             ->addMethods(['addAddresses', 'setAddresses'])

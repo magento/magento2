@@ -79,7 +79,7 @@ abstract class AbstractCollection extends \Magento\Catalog\Model\ResourceModel\P
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(
             $entityFactory,

@@ -126,7 +126,7 @@ class Transport implements TransportInterface
         MessageInterface $message,
         ScopeConfigInterface $scopeConfig,
         $parameters = null,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->isSetReturnPath = (int) $scopeConfig->getValue(
             self::XML_PATH_SENDING_SET_RETURN_PATH,

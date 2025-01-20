@@ -59,8 +59,8 @@ class Onepage extends \Magento\Framework\View\Element\Template
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        \Magento\Framework\Serialize\SerializerInterface $serializerInterface = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\SerializerInterface $serializerInterface = null
     ) {
         parent::__construct($context, $data);
         $this->formKey = $formKey;

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,8 +59,8 @@ class MassDelete extends Product implements HttpPostActionInterface
         Builder $productBuilder,
         Filter $filter,
         CollectionFactory $collectionFactory,
-        ProductRepositoryInterface $productRepository = null,
-        LoggerInterface $logger = null
+        ?ProductRepositoryInterface $productRepository = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;

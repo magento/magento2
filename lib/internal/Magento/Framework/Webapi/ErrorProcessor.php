@@ -89,7 +89,7 @@ class ErrorProcessor
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->encoder = $encoder;
         $this->_appState = $appState;

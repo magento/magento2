@@ -75,7 +75,7 @@ class Authentication implements AuthenticationInterface
         ConfigInterface $backendConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         Encryptor $encryptor,
-        CustomerAuthUpdate $customerAuthUpdate = null
+        ?CustomerAuthUpdate $customerAuthUpdate = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->customerRegistry = $customerRegistry;

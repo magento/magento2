@@ -162,11 +162,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Rule $rule,
         Conditions $conditionsHelper,
         array $data = [],
-        Json $json = null,
-        LayoutFactory $layoutFactory = null,
-        EncoderInterface $urlEncoder = null,
-        CategoryRepositoryInterface $categoryRepository = null,
-        OptionsData $optionsData = null
+        ?Json $json = null,
+        ?LayoutFactory $layoutFactory = null,
+        ?EncoderInterface $urlEncoder = null,
+        ?CategoryRepositoryInterface $categoryRepository = null,
+        ?OptionsData $optionsData = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;

@@ -157,7 +157,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\App\Response\Http $response,
-        AccountConfirmation $accountConfirmation = null
+        ?AccountConfirmation $accountConfirmation = null
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerUrl = $customerUrl;

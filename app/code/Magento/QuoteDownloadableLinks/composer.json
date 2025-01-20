@@ -2,7 +2,7 @@
     "name": "magento/module-quote-downloadable-links",
     "description": "Magento module provides data provider for creating buy request for links of downloadable products",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-quote": "*"
     },

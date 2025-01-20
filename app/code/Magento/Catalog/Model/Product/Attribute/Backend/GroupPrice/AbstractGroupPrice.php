@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
@@ -67,7 +67,7 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         GroupManagementInterface $groupManagement,
-        ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_groupManagement = $groupManagement;

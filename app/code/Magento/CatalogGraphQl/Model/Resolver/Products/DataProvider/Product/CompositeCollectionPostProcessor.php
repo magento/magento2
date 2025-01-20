@@ -31,7 +31,7 @@ class CompositeCollectionPostProcessor implements CollectionPostProcessorInterfa
     /**
      * @inheritdoc
      */
-    public function process(Collection $collection, array $attributeNames, ContextInterface $context = null): Collection
+    public function process(Collection $collection, array $attributeNames, ?ContextInterface $context = null): Collection
     {
         foreach ($this->collectionPostProcessors as $collectionPostProcessor) {
             $collection = $collectionPostProcessor->process($collection, $attributeNames, $context);

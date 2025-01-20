@@ -88,7 +88,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
         BookmarkInterfaceFactory $bookmarkFactory,
         UserContextInterface $userContext,
         DecoderInterface $jsonDecoder,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         parent::__construct($context, $factory);
         $this->bookmarkRepository = $bookmarkRepository;

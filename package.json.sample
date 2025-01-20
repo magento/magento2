@@ -20,7 +20,7 @@
     "grunt-contrib-jasmine": "~4.0.0",
     "grunt-contrib-less": "~3.0.0",
     "grunt-contrib-watch": "~1.1.0",
-    "grunt-eslint": "~25.0.0",
+    "grunt-eslint": "~24.3.0",
     "grunt-exec": "~3.0.0",
     "grunt-replace": "~2.0.2",
     "grunt-styledocco": "~0.3.0",

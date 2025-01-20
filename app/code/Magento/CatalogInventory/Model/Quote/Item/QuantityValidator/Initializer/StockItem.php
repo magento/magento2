@@ -50,7 +50,7 @@ class StockItem
         ConfigInterface $typeConfig,
         QuoteItemQtyList $quoteItemQtyList,
         StockStateInterface $stockState,
-        StockStateProviderInterface $stockStateProvider = null
+        ?StockStateProviderInterface $stockStateProvider = null
     ) {
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;

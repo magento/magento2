@@ -40,7 +40,7 @@ class Operator
      * @param string|null $value
      * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException
      */
-    public function __construct(string $value = null)
+    public function __construct(?string $value = null)
     {
         if (!$value) {
             $value = self::AND;

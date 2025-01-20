@@ -77,7 +77,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
         \Magento\MediaStorage\Helper\File\Media $mediaHelper,
         \Magento\MediaStorage\Model\ResourceModel\File\Storage\Database $resource,
         \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $connectionName = null,
         array $data = []
     ) {

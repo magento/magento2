@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedSearch\Model\ResourceModel;
 
@@ -67,8 +67,8 @@ class Index extends AbstractDb
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
         $connectionName = null,
-        TableResolver $tableResolver = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null
+        ?TableResolver $tableResolver = null,
+        ?DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         parent::__construct($context, $connectionName);
         $this->storeManager = $storeManager;
