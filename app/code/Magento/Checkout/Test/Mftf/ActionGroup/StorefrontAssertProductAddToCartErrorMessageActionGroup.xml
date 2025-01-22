@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,7 +12,7 @@
         <arguments>
             <argument name="message" type="string" defaultValue=""/>
         </arguments>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.error}}" stepKey="waitForProductAddedMessage"/>
-        <see selector="{{StorefrontMessagesSection.error}}" userInput="{{message}}" stepKey="seeAddToCartErrorMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductAddedMessage"/>
+        <waitForText selector="{{StorefrontMessagesSection.error}}" time="120" userInput="{{message}}" stepKey="seeAddToCartErrorMessage"/>
     </actionGroup>
 </actionGroups>

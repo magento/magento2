@@ -73,9 +73,9 @@ class CommentRepository implements InvoiceCommentRepositoryInterface
         InvoiceCommentInterfaceFactory $commentFactory,
         InvoiceCommentSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        InvoiceCommentSender $invoiceCommentSender = null,
-        InvoiceRepositoryInterface $invoiceRepository = null,
-        LoggerInterface $logger = null
+        ?InvoiceCommentSender $invoiceCommentSender = null,
+        ?InvoiceRepositoryInterface $invoiceRepository = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;

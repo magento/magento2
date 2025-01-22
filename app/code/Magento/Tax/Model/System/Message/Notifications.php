@@ -72,7 +72,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Tax\Model\Config $taxConfig,
         $notifications = [],
-        \Magento\Framework\Escaper $escaper = null
+        ?\Magento\Framework\Escaper $escaper = null
     ) {
         $this->storeManager = $storeManager;
         $this->urlBuilder = $urlBuilder;

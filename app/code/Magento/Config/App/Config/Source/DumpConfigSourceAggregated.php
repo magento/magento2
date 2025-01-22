@@ -86,7 +86,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     public function __construct(
         ExcludeList $excludeList,
         array $sources = [],
-        TypePool $typePool = null,
+        ?TypePool $typePool = null,
         array $rules = []
     ) {
         $this->sources = $sources;

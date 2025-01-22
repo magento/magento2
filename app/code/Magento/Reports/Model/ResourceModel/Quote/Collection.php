@@ -37,8 +37,8 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Customer\Model\ResourceModel\Customer $customerResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
             $entityFactory,

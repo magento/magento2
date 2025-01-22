@@ -56,7 +56,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         GetCartForUser $getCartForUser,
         AssignShippingAddressToCart $assignShippingAddressToCart,
         GetShippingAddress $getShippingAddress,
-        QuoteRepository $quoteRepository = null
+        ?QuoteRepository $quoteRepository = null
     ) {
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
         $this->getCartForUser = $getCartForUser;

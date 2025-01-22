@@ -2,15 +2,6 @@
 /**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -126,9 +117,16 @@ MUTATION;
             }
           }
 MUTATION;
-        $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("The entity that was requested doesn't exist. Verify the entity and try again.");
-        $this->graphQlMutation($query);
+
+        $this->assertEquals(
+            [
+                'confirmCancelOrder' => [
+                    'error' => 'The entity that was requested doesn\'t exist. Verify the entity and try again.',
+                    'order' => null
+                ]
+            ],
+            $this->graphQlMutation($query)
+        );
     }
 
     /**
@@ -349,9 +347,18 @@ MUTATION;
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
         $query = $this->getConfirmCancelOrderMutation($order);
-        $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("The order cancellation could not be confirmed.");
-        $this->graphQlMutation($query);
+        $this->assertEquals(
+            [
+                'confirmCancelOrder' =>
+                    [
+                        'errorV2' => [
+                            'message' => 'The order cancellation could not be confirmed.'
+                        ],
+                        'order' => null
+                    ]
+            ],
+            $this->graphQlMutation($query)
+        );
     }
 
     #[
@@ -410,9 +417,18 @@ MUTATION;
         $this->confirmationKey->execute($order, 'Simple reason');
 
         $query = $this->getConfirmCancelOrderMutation($order);
-        $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("The order cancellation could not be confirmed.");
-        $this->graphQlMutation($query);
+        $this->assertEquals(
+            [
+                'confirmCancelOrder' =>
+                    [
+                        'errorV2' => [
+                            'message' => 'The order cancellation could not be confirmed.'
+                        ],
+                        'order' => null
+                    ]
+            ],
+            $this->graphQlMutation($query)
+        );
     }
 
     #[

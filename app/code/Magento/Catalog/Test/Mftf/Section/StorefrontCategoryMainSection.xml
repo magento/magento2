@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -50,5 +50,7 @@
         <element name="productNameWithPriceOrLabel" type="text" selector="//div[@class='product details product-item-details']//a[contains(text(),'{{ProductName}}')]//parent::strong/following-sibling::div//span[contains(text(),'{{PriceLabelOrPrice}}')]" parameterized="true"/>
         <element name="sortByDropdownContent" type="select" selector="//select[@id='sorter']//option[contains(text(),'{{arg}}')]" parameterized="true"/>
         <element name="productInOrderDisplay" type="text" selector="//li[@class='item product product-item'][{{index}}]//a[@class='product-item-link' and contains(text(),'{{product_name}}')]" parameterized="true"/>
+        <element name="enableCookies" type="text" selector="//a//span[contains(text(),'Enable Cookies')]"/>
+        <element name="CatalogDescriptionWithoutPTag" type="text" selector="//div[@class='category-description']"/>
     </section>
 </sections>

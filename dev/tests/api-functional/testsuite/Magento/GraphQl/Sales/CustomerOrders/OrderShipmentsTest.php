@@ -211,7 +211,7 @@ class OrderShipmentsTest extends GraphQlAbstract
      * @param string|null $orderId
      * @return string
      */
-    private function getQuery(string $orderId = null)
+    private function getQuery(?string $orderId = null)
     {
         $filter = $orderId ? "(filter:{number:{eq:\"$orderId\"}})" : "";
         return <<<QUERY

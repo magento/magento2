@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Sales\Order\Items;
 
@@ -32,7 +32,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Json::class);

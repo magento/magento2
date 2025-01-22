@@ -1,12 +1,16 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
-class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Email\Model\Template\Config
@@ -29,7 +33,7 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Email\Model\Template\Config $emailConfig,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->emailConfig = $emailConfig;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()

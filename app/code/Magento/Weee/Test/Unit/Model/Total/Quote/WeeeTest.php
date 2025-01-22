@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -837,6 +837,49 @@ class WeeeTest extends TestCase
             'addressData' => [
                 'subtotal_incl_tax' => 60,
                 'base_subtotal_incl_tax' => 60,
+                'weee_total_excl_tax' => 0,
+                'weee_base_total_excl_tax' => 0
+            ]
+        ];
+
+        $data['price_excl_tax_weee_taxable_unit_included_in_subtotal_PARENT_ITEM'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new DataObject(
+                        [
+                            'name' => 'FPT',
+                            'amount' => 10
+                        ]
+                    )
+                ]
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20
+            ],
+            'item_qty' => 2,
+            'parent_qty' => 1,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
                 'weee_total_excl_tax' => 0,
                 'weee_base_total_excl_tax' => 0
             ]

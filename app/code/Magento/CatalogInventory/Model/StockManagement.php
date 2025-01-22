@@ -74,7 +74,7 @@ class StockManagement implements StockManagementInterface, RegisterProductSaleIn
         StockConfigurationInterface $stockConfiguration,
         ProductRepositoryInterface $productRepository,
         QtyCounterInterface $qtyCounter,
-        StockRegistryStorage $stockRegistryStorage = null
+        ?StockRegistryStorage $stockRegistryStorage = null
     ) {
         $this->stockRegistryProvider = $stockRegistryProvider;
         $this->stockState = $stockState;

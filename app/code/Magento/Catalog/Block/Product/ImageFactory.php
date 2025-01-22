@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -133,7 +133,7 @@ class ImageFactory
      * @param array|null $attributes
      * @return ImageBlock
      */
-    public function create(Product $product, string $imageId, array $attributes = null): ImageBlock
+    public function create(Product $product, string $imageId, ?array $attributes = null): ImageBlock
     {
         $viewImageConfig = $this->presentationConfig->getViewConfig()->getMediaAttributes(
             'Magento_Catalog',

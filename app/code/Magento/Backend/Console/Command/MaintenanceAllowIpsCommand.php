@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Console\Command;
 
@@ -22,9 +22,10 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     /**
      * Names of input arguments or options
      */
-    const INPUT_KEY_IP = 'ip';
-    const INPUT_KEY_NONE = 'none';
-    const INPUT_KEY_ADD = 'add';
+    public const INPUT_KEY_IP = 'ip';
+    public const INPUT_KEY_NONE = 'none';
+    public const INPUT_KEY_ADD = 'add';
+    public const NAME = 'maintenance:allow-ips';
 
     /**
      * @var MaintenanceMode
@@ -76,7 +77,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
                 'Add the IP address to existing list'
             ),
         ];
-        $this->setName('maintenance:allow-ips')
+        $this->setName(self::NAME)
             ->setDescription('Sets maintenance mode exempt IPs')
             ->setDefinition(array_merge($arguments, $options));
 

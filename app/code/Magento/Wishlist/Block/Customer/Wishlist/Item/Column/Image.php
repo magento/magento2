@@ -35,9 +35,9 @@ class Image extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = [],
-        ConfigInterface $config = null,
-        UrlBuilder $urlBuilder = null,
-        ItemResolverInterface $itemResolver = null
+        ?ConfigInterface $config = null,
+        ?UrlBuilder $urlBuilder = null,
+        ?ItemResolverInterface $itemResolver = null
     ) {
         $this->itemResolver = $itemResolver ?: ObjectManager::getInstance()->get(ItemResolverInterface::class);
         parent::__construct(

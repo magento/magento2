@@ -125,13 +125,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Directory\Model\Currency\FilterFactory $currencyFilterFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CurrencyConfig $currencyConfig = null,
-        LocalResolverInterface $localeResolver = null,
-        \Magento\Framework\NumberFormatterFactory $numberFormatterFactory = null,
-        Json $serializer = null
+        ?CurrencyConfig $currencyConfig = null,
+        ?LocalResolverInterface $localeResolver = null,
+        ?\Magento\Framework\NumberFormatterFactory $numberFormatterFactory = null,
+        ?Json $serializer = null
     ) {
         parent::__construct(
             $context,

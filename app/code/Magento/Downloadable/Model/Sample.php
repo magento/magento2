@@ -44,8 +44,8 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -229,7 +229,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
      * @return $this
      */
-    public function setSampleFileContent(\Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null)
+    public function setSampleFileContent(?\Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null)
     {
         return $this->setData(self::KEY_SAMPLE_FILE_CONTENT, $sampleFileContent);
     }

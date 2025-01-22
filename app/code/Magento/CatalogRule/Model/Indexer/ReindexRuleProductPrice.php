@@ -68,7 +68,7 @@ class ReindexRuleProductPrice
         TimezoneInterface $localeDate,
         RuleProductPricesPersistor $pricesPersistor,
         bool $useWebsiteTimezone = true,
-        ReindexRuleProductsPriceProcessor $reindexRuleProductsPriceProcessor = null
+        ?ReindexRuleProductsPriceProcessor $reindexRuleProductsPriceProcessor = null
     ) {
         $this->storeManager = $storeManager;
         $this->ruleProductsSelectBuilder = $ruleProductsSelectBuilder;

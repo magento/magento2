@@ -62,7 +62,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\SalesRule\Model\Rule\Metadata\ValueProvider $metadataValueProvider,
         array $meta = [],
         array $data = [],
-        DataPersistorInterface $dataPersistor = null
+        ?DataPersistorInterface $dataPersistor = null
     ) {
         $this->collection = $collectionFactory->create();
         $this->coreRegistry = $registry;

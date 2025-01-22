@@ -81,7 +81,7 @@ interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Customer\Api\Data\RegionInterface $region
      * @return $this
      */
-    public function setRegion(RegionInterface $region = null);
+    public function setRegion(?RegionInterface $region = null);
 
     /**
      * Get region ID

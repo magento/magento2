@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Image;
@@ -10,7 +11,6 @@ namespace Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -21,6 +21,11 @@ use Magento\Framework\View\ConfigInterface;
  */
 class RemoveDeletedImagesFromCache
 {
+    /**
+     * Current hashing algorithm
+     */
+    private const HASH_ALGORITHM = 'md5';
+
     /**
      * @var ConfigInterface
      */
@@ -103,10 +108,10 @@ class RemoveDeletedImagesFromCache
                 unset($imageMiscParams['image_type']);
             }
 
-            $cacheId = $this->encryptor->hash(
+            $cacheId = hash(
+                self::HASH_ALGORITHM,
                 implode('_', $this->convertImageMiscParamsToReadableFormat
-                    ->convertImageMiscParamsToReadableFormat($imageMiscParams)),
-                Encryptor::HASH_VERSION_MD5
+                ->convertImageMiscParamsToReadableFormat($imageMiscParams))
             );
 
             foreach ($files as $filePath) {

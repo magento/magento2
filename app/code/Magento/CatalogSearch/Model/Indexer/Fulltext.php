@@ -124,7 +124,7 @@ class Fulltext implements
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
         array $data = [],
-        ProcessManager $processManager = null,
+        ?ProcessManager $processManager = null,
         ?int $batchSize = null,
         ?DeploymentConfig $deploymentConfig = null
     ) {
@@ -160,7 +160,7 @@ class Fulltext implements
      * @throws \InvalidArgumentException|\Exception
      * @since 101.0.0
      */
-    public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, ?\Traversable $entityIds = null)
     {
         if (count($dimensions) > 1 || !isset($dimensions[StoreDimensionProvider::DIMENSION_NAME])) {
             throw new \InvalidArgumentException('Indexer "' . self::INDEXER_ID . '" support only Store dimension');

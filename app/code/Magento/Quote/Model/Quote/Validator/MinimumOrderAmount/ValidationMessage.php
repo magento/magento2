@@ -39,7 +39,7 @@ class ValidationMessage
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\CurrencyInterface $currency,
-        \Magento\Framework\Pricing\Helper\Data $priceHelper = null
+        ?\Magento\Framework\Pricing\Helper\Data $priceHelper = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;

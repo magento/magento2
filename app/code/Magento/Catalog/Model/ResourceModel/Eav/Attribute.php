@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\ResourceModel\Eav;
@@ -24,7 +24,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method bool getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -34,11 +33,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     \Magento\Catalog\Api\Data\ProductAttributeInterface,
     \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
 {
-    const MODULE_NAME = 'Magento_Catalog';
+    public const MODULE_NAME = 'Magento_Catalog';
 
-    const ENTITY = 'catalog_eav_attribute';
+    public const ENTITY = 'catalog_eav_attribute';
 
-    const KEY_IS_GLOBAL = 'is_global';
+    public const KEY_IS_GLOBAL = 'is_global';
 
     private const ALLOWED_INPUT_TYPES = [
         'boolean'     => true,
@@ -72,8 +71,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     protected static $_labels = null;
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'catalog_entity_attribute';
@@ -146,10 +143,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper,
         LockValidatorInterface $lockValidator,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
+        ?\Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;

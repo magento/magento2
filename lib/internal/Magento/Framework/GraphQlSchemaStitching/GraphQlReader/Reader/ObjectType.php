@@ -58,8 +58,8 @@ class ObjectType implements TypeMetaReaderInterface
         FieldMetaReader $fieldMetaReader,
         DocReader $docReader,
         ImplementsReader $implementsAnnotation,
-        CacheAnnotationReader $cacheAnnotationReader = null,
-        DeprecatedAnnotationReader $deprecatedAnnotationReader = null
+        ?CacheAnnotationReader $cacheAnnotationReader = null,
+        ?DeprecatedAnnotationReader $deprecatedAnnotationReader = null
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;

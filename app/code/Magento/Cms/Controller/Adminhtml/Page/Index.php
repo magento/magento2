@@ -41,7 +41,7 @@ class Index extends \Magento\Backend\App\Action implements HttpGetActionInterfac
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-        DataPersistorInterface $dataPersistor = null
+        ?DataPersistorInterface $dataPersistor = null
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;

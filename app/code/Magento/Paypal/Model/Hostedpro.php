@@ -112,8 +112,8 @@ class Hostedpro extends Direct
         \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\Paypal\Model\CartFactory $cartFactory,
         \Magento\Paypal\Model\Hostedpro\RequestFactory $hostedproRequestFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->hostedproRequestFactory = $hostedproRequestFactory;

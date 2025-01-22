@@ -75,7 +75,7 @@ class PaymentTokenRepository implements PaymentTokenRepositoryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory,
         CollectionFactory $collectionFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->resourceModel = $resourceModel;
         $this->paymentTokenFactory = $paymentTokenFactory;
