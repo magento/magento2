@@ -59,9 +59,9 @@ class ProcessLayoutRenderElement implements ObserverInterface
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
-        EntitySpecificHandlesList $entitySpecificHandlesList = null,
-        Json $jsonSerializer = null,
-        Base64Json $base64jsonSerializer = null
+        ?EntitySpecificHandlesList $entitySpecificHandlesList = null,
+        ?Json $jsonSerializer = null,
+        ?Base64Json $base64jsonSerializer = null
     ) {
         $this->_config = $config;
         $this->entitySpecificHandlesList = $entitySpecificHandlesList

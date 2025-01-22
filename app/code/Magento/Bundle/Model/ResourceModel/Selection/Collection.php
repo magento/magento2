@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Model\ResourceModel\Selection;
 
@@ -97,11 +97,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
-        \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItem = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        ?\Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
+        ?\Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItem = null
     ) {
         parent::__construct(
             $entityFactory,

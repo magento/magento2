@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,11 +17,17 @@
             <argument name="price_from" type="string" defaultValue=""/>
             <argument name="price_to" type="string" defaultValue=""/>
         </arguments>
+        <clearField selector="{{StorefrontCatalogSearchAdvancedFormSection.ProductName}}" stepKey="clearName"/>
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ProductName}}" userInput="{{productName}}" stepKey="fillName"/>
+        <clearField selector="{{StorefrontCatalogSearchAdvancedFormSection.SKU}}" stepKey="clearSku"/>
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.SKU}}" userInput="{{sku}}" stepKey="fillSku"/>
+        <clearField selector="{{StorefrontCatalogSearchAdvancedFormSection.Description}}" stepKey="clearDescription"/>
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.Description}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <clearField selector="{{StorefrontCatalogSearchAdvancedFormSection.ShortDescription}}" stepKey="clearShortDescription"/>
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.ShortDescription}}" userInput="{{short_description}}" stepKey="fillShortDescription"/>
+        <clearField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceFrom}}" stepKey="clearPriceFrom"/>
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceFrom}}" userInput="{{price_from}}" stepKey="fillPriceFrom"/>
+        <clearField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceTo}}" stepKey="clearPriceTo"/>
         <fillField selector="{{StorefrontCatalogSearchAdvancedFormSection.PriceTo}}" userInput="{{price_to}}" stepKey="fillPriceTo"/>
         <scrollTo selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="scrollToSubmitButton"/>
         <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="clickSubmit"/>

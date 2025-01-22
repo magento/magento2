@@ -101,8 +101,8 @@ class File extends AbstractData
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
         UploaderFactory $uploaderFactory,
-        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
-        IoFile $ioFile = null
+        ?\Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
+        ?IoFile $ioFile = null
     ) {
         $value = $this->prepareFileValue($value);
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);

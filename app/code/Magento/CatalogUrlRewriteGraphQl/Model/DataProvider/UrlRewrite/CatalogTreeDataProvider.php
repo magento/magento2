@@ -59,8 +59,8 @@ class CatalogTreeDataProvider implements EntityDataProviderInterface
     public function getData(
         string $entity_type,
         int $id,
-        ResolveInfo $info = null,
-        int $storeId = null
+        ?ResolveInfo $info = null,
+        ?int $storeId = null
     ): array {
         $categoryId = (int)$id;
         $categoriesTree = $this->categoryTree->getTreeCollection($info, $categoryId, $storeId);

@@ -27,7 +27,7 @@ class ResetPasswordPost extends Auth
     public function __construct(
         Context $context,
         UserFactory $userFactory,
-        Data $backendDataHelper = null
+        ?Data $backendDataHelper = null
     ) {
         parent::__construct($context, $userFactory);
         $this->backendDataHelper = $backendDataHelper ?: ObjectManager::getInstance()->get(Data::class);

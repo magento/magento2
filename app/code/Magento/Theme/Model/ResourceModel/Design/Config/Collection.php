@@ -36,8 +36,8 @@ class Collection extends ConfigCollection
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         ValueProcessor $valueProcessor,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ?AdapterInterface $connection = null,
+        ?AbstractDb $resource = null
     ) {
         $this->valueProcessor = $valueProcessor;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);

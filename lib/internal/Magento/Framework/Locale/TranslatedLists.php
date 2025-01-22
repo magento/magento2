@@ -213,7 +213,7 @@ class TranslatedLists implements ListsInterface
             $locale = $this->localeResolver->getLocale();
         }
 
-        $translation = (new RegionBundle())->get($locale)['Countries'][$value];
+        $translation = $value ? (new RegionBundle())->get($locale)['Countries'][$value] : null;
 
         return $translation ? (string)__($translation) : $translation;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CheckoutAgreements\Model;
 
@@ -52,8 +52,8 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,
         \Magento\Framework\Escaper $escaper,
-        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
-        ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
+        ?\Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $checkoutAgreementsList = null,
+        ?ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
     ) {
         $this->scopeConfiguration = $scopeConfiguration;
         $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
@@ -96,11 +96,14 @@ class AgreementsConfigProvider implements ConfigProviderInterface
         $agreementConfiguration['isEnabled'] = (bool)($isAgreementsEnabled && count($agreementsList) > 0);
 
         foreach ($agreementsList as $agreement) {
+            $isAgreementHtmlType = $agreement->getIsHtml();
             $agreementConfiguration['agreements'][] = [
-                'content' => $agreement->getIsHtml()
+                'content' => $isAgreementHtmlType
                     ? $agreement->getContent()
                     : nl2br($this->escaper->escapeHtml($agreement->getContent())),
-                'checkboxText' => $this->escaper->escapeHtml($agreement->getCheckboxText()),
+                'checkboxText' => $isAgreementHtmlType
+                    ? $agreement->getCheckboxText()
+                    : nl2br($this->escaper->escapeHtml($agreement->getCheckboxText())),
                 'mode' => $agreement->getMode(),
                 'agreementId' => $agreement->getAgreementId(),
                 'contentHeight' => $agreement->getContentHeight()

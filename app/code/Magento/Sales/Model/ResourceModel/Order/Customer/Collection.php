@@ -65,7 +65,7 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         Snapshot $entitySnapshot,
         Config $fieldsetConfig,
         StoreManagerInterface $storeManager,
-        AdapterInterface $connection = null,
+        ?AdapterInterface $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         $this->storeManager = $storeManager;

@@ -241,7 +241,7 @@ class Filter extends Template
         $variables = [],
         array $directiveProcessors = [],
         ?StoreInformation $storeInformation = null,
-        StateInterface $inlineTranslationState = null
+        ?StateInterface $inlineTranslationState = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;

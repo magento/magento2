@@ -53,7 +53,7 @@ class CommandManager implements CommandManagerInterface
      * @throws CommandException
      * @since 100.1.0
      */
-    public function executeByCode($commandCode, InfoInterface $payment = null, array $arguments = [])
+    public function executeByCode($commandCode, ?InfoInterface $payment = null, array $arguments = [])
     {
         $commandSubject = $arguments;
         if ($payment !== null) {
@@ -75,7 +75,7 @@ class CommandManager implements CommandManagerInterface
      * @throws CommandException
      * @since 100.1.0
      */
-    public function execute(CommandInterface $command, InfoInterface $payment = null, array $arguments = [])
+    public function execute(CommandInterface $command, ?InfoInterface $payment = null, array $arguments = [])
     {
         $commandSubject = $arguments;
         if ($payment !== null) {

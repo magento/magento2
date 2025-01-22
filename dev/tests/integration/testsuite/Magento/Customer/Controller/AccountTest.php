@@ -194,7 +194,7 @@ class AccountTest extends AbstractController
      * @param int $customerId
      * @param string|null $confirmation
      */
-    private function assertCustomerConfirmationEquals(int $customerId, string $confirmation = null)
+    private function assertCustomerConfirmationEquals(int $customerId, ?string $confirmation = null)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()

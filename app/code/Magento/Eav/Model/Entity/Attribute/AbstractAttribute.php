@@ -187,11 +187,11 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory $optionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavExtensionFactory = null,
-        FrontendLabelFactory $frontendLabelFactory = null
+        ?\Magento\Eav\Api\Data\AttributeExtensionFactory $eavExtensionFactory = null,
+        ?FrontendLabelFactory $frontendLabelFactory = null
     ) {
         parent::__construct(
             $context,
@@ -1191,7 +1191,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null)
+    public function setOptions(?array $options = null)
     {
         if ($options !== null) {
             $optionDataArray = [];
@@ -1299,7 +1299,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @param \Magento\Eav\Api\Data\AttributeFrontendLabelInterface[] $frontendLabels
      * @return $this
      */
-    public function setFrontendLabels(array $frontendLabels = null)
+    public function setFrontendLabels(?array $frontendLabels = null)
     {
         return $this->setData(self::FRONTEND_LABELS, $frontendLabels);
     }
@@ -1366,7 +1366,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * @return $this
      * @codeCoverageIgnore
      */
-    public function setValidationRules(array $validationRules = null)
+    public function setValidationRules(?array $validationRules = null)
     {
         return $this->setData(self::VALIDATE_RULES, $validationRules);
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,5 +14,6 @@
         <element name="dropdownSelectOption" type="select" selector="//div[@class='control']/select"/>
         <element name="dropdownProductSelection" type="select" selector="//div[@class='control']/select/option[contains(.,'{{productName}}')]" parameterized="true"/>
         <element name="customOptionField" type="select" selector="[class='input-text product-custom-option']"/>
+        <element name="bundleOption" type="text" selector="//*[@id='product-options-wrapper']//div[@class='control']//span[text()='{{productName}}']" parameterized="true"/>
     </section>
 </sections>

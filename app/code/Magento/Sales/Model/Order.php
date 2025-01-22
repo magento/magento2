@@ -419,18 +419,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ResolverInterface $localeResolver = null,
-        ProductOption $productOption = null,
-        OrderItemRepositoryInterface $itemRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        ScopeConfigInterface $scopeConfig = null,
-        RegionFactory $regionFactory = null,
-        RegionResource $regionResource = null,
-        StatusLabel $statusLabel = null,
-        CreditmemoValidator $creditmemoValidator = null
+        ?ResolverInterface $localeResolver = null,
+        ?ProductOption $productOption = null,
+        ?OrderItemRepositoryInterface $itemRepository = null,
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?RegionFactory $regionFactory = null,
+        ?RegionResource $regionResource = null,
+        ?StatusLabel $statusLabel = null,
+        ?CreditmemoValidator $creditmemoValidator = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -1079,7 +1079,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
+    public function setBillingAddress(?\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getBillingAddress();
         if (!empty($old) && !empty($address)) {
@@ -1099,7 +1099,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
+    public function setShippingAddress(?\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getShippingAddress();
         if (!empty($old) && !empty($address)) {
@@ -1698,7 +1698,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      */
-    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
+    public function setPayment(?\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
     {
         $this->setData(OrderInterface::PAYMENT, $payment);
         if ($payment !== null) {
@@ -3617,7 +3617,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      */
-    public function setStatusHistories(array $statusHistories = null)
+    public function setStatusHistories(?array $statusHistories = null)
     {
         return $this->setData(OrderInterface::STATUS_HISTORIES, $statusHistories);
     }

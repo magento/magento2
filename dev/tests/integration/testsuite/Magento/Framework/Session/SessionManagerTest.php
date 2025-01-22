@@ -122,7 +122,6 @@ namespace Magento\Framework\Session {
         {
             $this->sessionName = 'frontEndSession';
 
-            ini_set('session.use_only_cookies', '0');
             ini_set('session.name', $this->sessionName);
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

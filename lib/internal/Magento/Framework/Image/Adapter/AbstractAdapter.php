@@ -1,13 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Psr\Log\LoggerInterface;
 
 /**
  * Image abstract adapter
@@ -151,17 +155,17 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Filesystem instance
      *
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write
+     * @var Write
      */
     protected $directoryWrite;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -268,14 +272,14 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initialize default values
      *
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param Filesystem $filesystem
+     * @param LoggerInterface $logger
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        \Psr\Log\LoggerInterface $logger,
+        Filesystem $filesystem,
+        LoggerInterface $logger,
         array $data = []
     ) {
         $this->_filesystem = $filesystem;
@@ -558,6 +562,9 @@ abstract class AbstractAdapter implements AdapterInterface
             }
         }
 
+        $frameWidth = (float)$frameWidth;
+        $frameHeight = (float)$frameHeight;
+
         // define coordinates of image inside new frame
         $srcX = 0;
         $srcY = 0;
@@ -578,17 +585,17 @@ abstract class AbstractAdapter implements AdapterInterface
 
         return [
             'src' => ['x' => $srcX, 'y' => $srcY],
-            'dst' => ['x' => $dstX, 'y' => $dstY, 'width' => $dstWidth, 'height' => $dstHeight],
+            'dst' => ['x' => $dstX, 'y' => $dstY, 'width' => round($dstWidth), 'height' => round($dstHeight)],
             // size for new image
-            'frame' => ['width' => $frameWidth, 'height' => $frameHeight]
+            'frame' => ['width' => round($frameWidth), 'height' => round($frameHeight)]
         ];
     }
 
     /**
      * Check aspect ratio
      *
-     * @param int $frameWidth
-     * @param int $frameHeight
+     * @param int|float $frameWidth
+     * @param int|float $frameHeight
      * @return int[]
      */
     protected function _checkAspectRatio($frameWidth, $frameHeight)
@@ -605,10 +612,7 @@ abstract class AbstractAdapter implements AdapterInterface
             }
             // keep aspect ratio
             if ($this->_imageSrcWidth / $this->_imageSrcHeight >= $frameWidth / $frameHeight) {
-                $dstHeight = max(
-                    1,
-                    round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight)
-                );
+                $dstHeight = max(1, round($dstWidth / $this->_imageSrcWidth * $this->_imageSrcHeight));
             } else {
                 $dstWidth = round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
             }
@@ -694,7 +698,7 @@ abstract class AbstractAdapter implements AdapterInterface
         if (!is_writable($destination)) {
             try {
                 $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
-            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+            } catch (FileSystemException $e) {
                 $this->logger->critical($e);
                 //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \DomainException(

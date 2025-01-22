@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
@@ -24,6 +24,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     protected $_uploaderFactory;
 
@@ -31,6 +32,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @var \Magento\Framework\Filesystem
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     protected $_filesystem;
 
@@ -38,6 +40,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     protected $_fileUploaderFactory;
 
@@ -45,6 +48,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @var \Psr\Log\LoggerInterface
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     protected $_logger;
 
@@ -74,8 +78,8 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory,
-        StoreManagerInterface $storeManager = null,
-        ImageUploader $imageUploader = null
+        ?StoreManagerInterface $storeManager = null,
+        ?ImageUploader $imageUploader = null
     ) {
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
