@@ -36,7 +36,7 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
     {
         $config->addData([
             'tinymce' => [
-                'toolbar' => ' blocks fontfamily fontsize| formatselect | bold italic underline ' .
+                'toolbar' => ' blocks fontfamily fontsizeinput| formatselect | bold italic underline ' .
                     '| alignleft aligncenter alignright | bullist numlist | link table charmap',
                 'plugins' => implode(
                     ' ',
