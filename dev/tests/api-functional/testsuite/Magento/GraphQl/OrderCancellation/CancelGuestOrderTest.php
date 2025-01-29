@@ -467,14 +467,14 @@ MUTATION;
         return Bootstrap::getObjectManager()->create(Token::class)->encrypt(
             $order->getIncrementId(),
             $order->getBillingAddress()->getEmail(),
-            $order->getBillingAddress()->getPostcode()
+            $order->getBillingAddress()->getLastname()
         );
     }
 
     /**
      * @return array[]
      */
-    public function orderStatusProvider(): array
+    public static function orderStatusProvider(): array
     {
         return [
             'On Hold status' => [

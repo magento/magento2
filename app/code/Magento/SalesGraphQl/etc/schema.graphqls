@@ -3,7 +3,7 @@
 
 type Query {
     customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @deprecated(reason: "Use the `customer` query instead.") @cache(cacheable: false)
-    guestOrder(input: OrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and postcode.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
+    guestOrder(input: OrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and billing last name.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
     guestOrderByToken(input: OrderTokenInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on token.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
 }
 
@@ -310,7 +310,7 @@ input OrderTokenInput @doc(description: "Input to retrieve an order based on tok
 input OrderInformationInput @doc(description: "Input to retrieve an order based on details.") {
     number: String! @doc(description: "Order number.")
     email: String! @doc(description: "Order billing address email.")
-    postcode: String! @doc(description: "Order billing address postcode.")
+    lastname: String! @doc(description: "Order billing address lastname.")
 }
 
 enum OrderActionType @doc(description: "The list of available order actions.") {
