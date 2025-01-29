@@ -1007,10 +1007,7 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * Retrieve root category identifier
-     *
-     * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @inheritDoc
      */
     public function getRootCategoryId()
     {
