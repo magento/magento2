@@ -89,7 +89,7 @@ class SaveInventoryDataObserver implements ObserverInterface
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
-        StockItemValidator $stockItemValidator = null,
+        ?StockItemValidator $stockItemValidator = null,
         array $parentItemProcessorPool = []
     ) {
         $this->stockConfiguration = $stockConfiguration;

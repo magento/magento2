@@ -42,7 +42,7 @@ class InputObjectType implements TypeMetaReaderInterface
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
-        CacheAnnotationReader $cacheAnnotationReader = null
+        ?CacheAnnotationReader $cacheAnnotationReader = null
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;

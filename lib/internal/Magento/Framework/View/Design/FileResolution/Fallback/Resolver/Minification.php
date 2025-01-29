@@ -50,7 +50,7 @@ class Minification implements ResolverInterface
      * @param string|null $module
      * @return string|false
      */
-    public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
+    public function resolve($type, $file, $area = null, ?ThemeInterface $theme = null, $locale = null, $module = null)
     {
         $file = $this->minification->addMinifiedSign($file);
         $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);

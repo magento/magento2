@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model\Config\Backend;
 
@@ -23,7 +23,7 @@ class CollectionTime extends Value
     /**
      * The path to config setting of schedule of collection data cron.
      */
-    const CRON_SCHEDULE_PATH = 'crontab/default/jobs/analytics_collect_data/schedule/cron_expr';
+    public const CRON_SCHEDULE_PATH = 'crontab/default/jobs/analytics_collect_data/schedule/cron_expr';
 
     /**
      * @var WriterInterface
@@ -46,8 +46,8 @@ class CollectionTime extends Value
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         WriterInterface $configWriter,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->configWriter = $configWriter;
@@ -55,7 +55,7 @@ class CollectionTime extends Value
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * {@inheritdoc}. Set schedule setting for cron.
      *

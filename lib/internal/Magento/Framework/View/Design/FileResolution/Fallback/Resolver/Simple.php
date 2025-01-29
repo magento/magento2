@@ -47,7 +47,7 @@ class Simple implements Fallback\ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
+    public function resolve($type, $file, $area = null, ?ThemeInterface $theme = null, $locale = null, $module = null)
     {
         $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
         foreach ($params as $key => $param) {

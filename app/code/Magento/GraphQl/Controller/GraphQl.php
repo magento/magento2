@@ -146,13 +146,13 @@ class GraphQl implements FrontControllerInterface
         ContextInterface $resolverContext,
         HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
-        JsonFactory $jsonFactory = null,
-        HttpResponse $httpResponse = null,
-        ContextFactoryInterface $contextFactory = null,
-        LogData $logDataHelper = null,
-        LoggerPool $loggerPool = null,
-        AreaList $areaList = null,
-        QueryParser $queryParser = null
+        ?JsonFactory $jsonFactory = null,
+        ?HttpResponse $httpResponse = null,
+        ?ContextFactoryInterface $contextFactory = null,
+        ?LogData $logDataHelper = null,
+        ?LoggerPool $loggerPool = null,
+        ?AreaList $areaList = null,
+        ?QueryParser $queryParser = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;

@@ -48,7 +48,7 @@ class LocalizedToNormalized implements FilterInterface
      * @param array|null $options
      * @return LocalizedToNormalized
      */
-    public function setOptions(array $options = null)
+    public function setOptions(?array $options = null)
     {
         $this->_options = $options + $this->_options;
 

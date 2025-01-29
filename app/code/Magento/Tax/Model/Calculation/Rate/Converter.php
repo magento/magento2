@@ -38,7 +38,7 @@ class Converter
     public function __construct(
         \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
         \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
-        FormatInterface $format = null
+        ?FormatInterface $format = null
     ) {
         $this->taxRateDataObjectFactory = $taxRateDataObjectFactory;
         $this->taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;

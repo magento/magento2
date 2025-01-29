@@ -54,8 +54,8 @@ class ProductAttributeSortInput
         \Magento\Framework\GraphQl\Config\Element\Field $field,
         ContextInterface $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ): array {
 
         $data = $this->getDataFromRequest($this->request);

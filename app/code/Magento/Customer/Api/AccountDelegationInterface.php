@@ -28,6 +28,6 @@ interface AccountDelegationInterface
      */
     public function createRedirectForNew(
         CustomerInterface $customer,
-        array $mixedData = null
+        ?array $mixedData = null
     ): Redirect;
 }

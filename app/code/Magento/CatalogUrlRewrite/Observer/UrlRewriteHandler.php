@@ -106,10 +106,10 @@ class UrlRewriteHandler
         UrlPersistInterface $urlPersist,
         CollectionFactory $productCollectionFactory,
         CategoryProductUrlPathGenerator $categoryBasedProductRewriteGenerator,
-        MergeDataProviderFactory $mergeDataProviderFactory = null,
-        Json $serializer = null,
-        ProductScopeRewriteGenerator $productScopeRewriteGenerator = null,
-        ScopeConfigInterface $scopeConfig = null
+        ?MergeDataProviderFactory $mergeDataProviderFactory = null,
+        ?Json $serializer = null,
+        ?ProductScopeRewriteGenerator $productScopeRewriteGenerator = null,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;

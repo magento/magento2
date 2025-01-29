@@ -55,8 +55,8 @@ class ProductImagePlugin
         Field $field,
         ContextInterface $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ): array {
 
         /* @var $cartItem Item */

@@ -71,7 +71,7 @@ class Utility
         CustomerFactory $customerFactory,
         DataObjectFactory $objectFactory,
         PriceCurrencyInterface $priceCurrency,
-        ValidateCoupon $validateCoupon = null
+        ?ValidateCoupon $validateCoupon = null
     ) {
         $this->couponFactory = $couponFactory;
         $this->customerFactory = $customerFactory;

@@ -63,7 +63,7 @@ class StructurePlugin
     public function __construct(
         ScopeDefiner $scopeDefiner,
         BackendHelper $backendHelper,
-        PaymentSectionModifier $paymentSectionModifier = null
+        ?PaymentSectionModifier $paymentSectionModifier = null
     ) {
         $this->scopeDefiner = $scopeDefiner;
         $this->backendHelper = $backendHelper;

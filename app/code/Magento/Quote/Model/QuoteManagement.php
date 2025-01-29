@@ -234,11 +234,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         CustomerSession $customerSession,
         AccountManagementInterface $accountManagement,
         QuoteFactory $quoteFactory,
-        QuoteIdMaskFactory $quoteIdMaskFactory = null,
-        AddressRepositoryInterface $addressRepository = null,
-        RequestInterface $request = null,
-        RemoteAddress $remoteAddress = null,
-        LockManagerInterface $lockManager = null,
+        ?QuoteIdMaskFactory $quoteIdMaskFactory = null,
+        ?AddressRepositoryInterface $addressRepository = null,
+        ?RequestInterface $request = null,
+        ?RemoteAddress $remoteAddress = null,
+        ?LockManagerInterface $lockManager = null,
         ?CartMutexInterface $cartMutex = null
     ) {
         $this->eventManager = $eventManager;
@@ -397,7 +397,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     /**
      * @inheritdoc
      */
-    public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
+    public function placeOrder($cartId, ?PaymentInterface $paymentMethod = null)
     {
         return $this->cartMutex->execute(
             (int)$cartId,
@@ -417,7 +417,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function placeOrderRun($cartId, PaymentInterface $paymentMethod = null)
+    private function placeOrderRun($cartId, ?PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $customer = $quote->getCustomer();

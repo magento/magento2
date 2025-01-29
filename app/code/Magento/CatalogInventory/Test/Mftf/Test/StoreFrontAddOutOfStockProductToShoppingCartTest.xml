@@ -30,7 +30,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create SimpleProductwithPrice100 -->
-            <createData entity="SimpleProductQty100" stepKey="simpleProductOne">
+            <createData entity="ApiSimpleProduct" stepKey="simpleProductOne">
                 <requiredEntity createDataKey="createSubcategory"/>
             </createData>
             <!-- Go To Subcategory Page-->

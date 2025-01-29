@@ -51,7 +51,7 @@ class IntegrationConfig
     public function __construct(
         TypeIntegration $configCacheType,
         Reader $configReader,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;

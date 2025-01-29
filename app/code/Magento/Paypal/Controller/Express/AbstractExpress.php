@@ -125,7 +125,7 @@ abstract class AbstractExpress extends AppAction implements
         \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
-        CartRepositoryInterface $quoteRepository = null
+        ?CartRepositoryInterface $quoteRepository = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession;
@@ -148,7 +148,7 @@ abstract class AbstractExpress extends AppAction implements
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _initCheckout(CartInterface $quoteObject = null)
+    protected function _initCheckout(?CartInterface $quoteObject = null)
     {
         $quote = $quoteObject ? $quoteObject : $this->_getQuote();
         if (!$quote->hasItems() || $quote->getHasError()) {

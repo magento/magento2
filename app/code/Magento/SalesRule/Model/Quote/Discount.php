@@ -92,9 +92,9 @@ class Discount extends AbstractTotal
         StoreManagerInterface $storeManager,
         Validator $validator,
         PriceCurrencyInterface $priceCurrency,
-        RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
-        DiscountDataInterfaceFactory $discountDataInterfaceFactory = null,
-        RulesApplier $rulesApplier = null
+        ?RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
+        ?DiscountDataInterfaceFactory $discountDataInterfaceFactory = null,
+        ?RulesApplier $rulesApplier = null
     ) {
         $this->setCode(self::COLLECTOR_TYPE_CODE);
         $this->eventManager = $eventManager;

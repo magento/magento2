@@ -66,7 +66,7 @@ class QueryComplexityLimiter
         int $queryDepth,
         int $queryComplexity,
         IntrospectionConfiguration $introspectionConfig,
-        QueryParser $queryParser = null
+        ?QueryParser $queryParser = null
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;

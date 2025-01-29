@@ -53,7 +53,7 @@ class Data extends AbstractHelper
     public function __construct(
         Context $context,
         \Magento\GoogleAnalytics\Helper\Data $analyticsHelper,
-        GtagConfiguration $gtagConfiguration = null
+        ?GtagConfiguration $gtagConfiguration = null
     ) {
         $this->_analyticsHelper = $analyticsHelper;
         $this->gtagConfiguration = $gtagConfiguration ?: ObjectManager::getInstance()->get(GtagConfiguration::class);

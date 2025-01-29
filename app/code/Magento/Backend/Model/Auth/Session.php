@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,7 +95,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         \Magento\Framework\Acl\Builder $aclBuilder,
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\App\ConfigInterface $config,
-        ManagerInterface $messageManager = null
+        ?ManagerInterface $messageManager = null
     ) {
         $this->_config = $config;
         $this->_aclBuilder = $aclBuilder;

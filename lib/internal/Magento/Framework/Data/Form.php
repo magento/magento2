@@ -78,7 +78,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      *
      * @return void
      */
-    public static function setElementRenderer(RendererInterface $renderer = null)
+    public static function setElementRenderer(?RendererInterface $renderer = null)
     {
         self::$_defaultElementRenderer = $renderer;
     }
@@ -90,7 +90,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      *
      * @return void
      */
-    public static function setFieldsetRenderer(RendererInterface $renderer = null)
+    public static function setFieldsetRenderer(?RendererInterface $renderer = null)
     {
         self::$_defaultFieldsetRenderer = $renderer;
     }
@@ -102,7 +102,7 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
      *
      * @return void
      */
-    public static function setFieldsetElementRenderer(RendererInterface $renderer = null)
+    public static function setFieldsetElementRenderer(?RendererInterface $renderer = null)
     {
         self::$_defaultFieldsetElementRenderer = $renderer;
     }

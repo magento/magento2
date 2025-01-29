@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-checkout": "*",
@@ -13,8 +13,8 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-authorization": "*",
-        "laminas/laminas-captcha": "^2.12",
-        "laminas/laminas-db": "^2.19"
+        "laminas/laminas-captcha": "^2.18",
+        "magento/laminas-db": "^1.0.0"
     },
     "type": "magento2-module",
     "license": [

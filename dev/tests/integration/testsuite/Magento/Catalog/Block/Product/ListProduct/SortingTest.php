@@ -96,7 +96,7 @@ class SortingTest extends TestCase
         string $sortBy,
         string $direction,
         array $expectation,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
             $this->markTestSkipped($incompleteReason);
@@ -119,7 +119,7 @@ class SortingTest extends TestCase
         string $sortBy,
         string $direction,
         array $expectation,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
             $this->markTestSkipped($incompleteReason);
@@ -196,7 +196,7 @@ class SortingTest extends TestCase
         string $direction,
         array $expectation,
         string $defaultSortBy,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
             $this->markTestSkipped($incompleteReason);
@@ -224,7 +224,7 @@ class SortingTest extends TestCase
         string $direction,
         array $expectation,
         string $defaultSortBy,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
             $this->markTestSkipped($incompleteReason);

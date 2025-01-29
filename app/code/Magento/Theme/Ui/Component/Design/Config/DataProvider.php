@@ -57,7 +57,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         StoreManagerInterface $storeManager,
         array $meta = [],
         array $data = [],
-        ResourceConnection $resourceConnection = null
+        ?ResourceConnection $resourceConnection = null
     ) {
         parent::__construct(
             $name,

@@ -279,10 +279,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AccountConfirmation $accountConfirmation = null,
-        Random $mathRandom = null
+        ?AccountConfirmation $accountConfirmation = null,
+        ?Random $mathRandom = null
     ) {
         $this->metadataService = $metadataService;
         $this->_scopeConfig = $scopeConfig;

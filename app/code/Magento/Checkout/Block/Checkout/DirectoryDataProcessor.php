@@ -61,7 +61,7 @@ class DirectoryDataProcessor implements \Magento\Checkout\Block\Checkout\LayoutP
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollection,
         StoreResolverInterface $storeResolver,
         DirectoryHelper $directoryHelper,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->countryCollectionFactory = $countryCollection;
         $this->regionCollectionFactory = $regionCollection;

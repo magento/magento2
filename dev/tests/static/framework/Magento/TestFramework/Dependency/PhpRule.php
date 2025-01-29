@@ -112,8 +112,8 @@ class PhpRule implements RuleInterface
         ConfigReader $configReader,
         array $pluginMap = [],
         array $whitelists = [],
-        ClassScanner $classScanner = null,
-        RouteMapper $routeMapper = null
+        ?ClassScanner $classScanner = null,
+        ?RouteMapper $routeMapper = null
     ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
