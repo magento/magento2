@@ -65,12 +65,12 @@ class CancelOrderGuest
      */
     private function sendConfirmationKeyEmail(Order $order, string $reason): void
     {
-        $confirmationKey = $this->confirmationKey->execute($order, $reason);
-        $this->confirmationKeySender->execute($order, $confirmationKey);
+        $this->confirmationKeySender->execute($order, $this->confirmationKey->execute($order, $reason));
 
         // add comment in order about confirmation key send
         $order->addCommentToStatusHistory(
             'Order cancellation confirmation key was sent via email.',
+            $order->getStatus(),
             true
         );
         $this->orderRepository->save($order);
