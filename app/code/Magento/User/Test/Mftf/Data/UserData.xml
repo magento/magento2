@@ -34,8 +34,8 @@
         </array>
     </entity>
     <entity name="AdminUserWithUpdatedUserRoleToSales" extends="NewAdminUser">
-        <data key="password">123123qA</data>
-        <data key="password_confirmation">123123qA</data>
+        <data key="password">123123qA1234</data>
+        <data key="password_confirmation">123123qA1234</data>
         <data key="role">{{roleSales.rolename}}</data>
     </entity>
 
@@ -98,7 +98,7 @@
         <data key="username" unique="suffix">admin</data>
         <data key="firstName">John</data>
         <data key="lastName">Smith</data>
-        <data key="password">admin123</data>
+        <data key="password">admin@123456</data>
     </entity>
     <entity name="Admin3" type="user">
         <data key="username" unique="suffix">admin3</data>
