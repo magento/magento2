@@ -19,11 +19,16 @@ class ElementTest extends TestCase
     {
         /** @var Element $xml */
         $xml = simplexml_load_file($xmlData[0], $xmlData[1]);
-        $this->assertObjectHasAttribute('node4', $xml->node3);
-        $xml->node3->unsetSelf();
-        $this->assertObjectNotHasAttribute('node4', $xml->node3);
-        $this->assertObjectNotHasAttribute('node3', $xml);
-        $this->assertObjectHasAttribute('node1', $xml);
+        $xmlNode3 = $xml->node3;
+        $this->assertIsObject($xmlNode3);
+        $this->assertTrue(property_exists($xmlNode3, 'node4'));
+        $xmlNode3->unsetSelf();
+        $this->assertIsObject($xmlNode3);
+        $this->assertFalse(property_exists($xmlNode3, 'node4'));
+        $this->assertIsObject($xml);
+        $this->assertFalse(property_exists($xml, 'node3'));
+        $this->assertIsObject($xml);
+        $this->assertTrue(property_exists($xml, 'node1'));
     }
 
     /**
@@ -116,7 +121,7 @@ XML;
     /**
      * @return array
      */
-    public function setAttributeDataProvider()
+    public static function setAttributeDataProvider()
     {
         return [
             ['name', 'test'],

@@ -199,14 +199,17 @@ class SubscriptionTest extends TestCase
 
         $triggerMock
             ->method('addStatement')
-            ->withConsecutive(
-                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);"],
-                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
-                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);"],
-                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
-                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);"],
-                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);"]
-            )->willReturn($triggerMock);
+            ->willReturnCallback(
+                function ($arg1) use ($triggerMock) {
+                    if ($arg1 == "INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);") {
+                        return $triggerMock;
+                    } elseif ($arg1 == "INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);") {
+                        return $triggerMock;
+                    } elseif ($arg1 == "INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);") {
+                        return $triggerMock;
+                    }
+                }
+            );
 
         $changelogMock = $this->getMockForAbstractClass(
             ChangelogInterface::class,

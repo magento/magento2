@@ -58,7 +58,7 @@ class ProfilerDisableCommandTest extends TestCase
      *
      * @return array
      */
-    public function commandDataProvider()
+    public static function commandDataProvider()
     {
         return [
             [true, 'Something went wrong while disabling the profiler.'],

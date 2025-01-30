@@ -6,6 +6,8 @@
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
 use Magento\Framework\GetParameterClassTrait;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -96,7 +98,7 @@ class ObjectManager
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->disallowMockingUnknownTypes()
-            ->setMethods(['getIdFieldName', '__sleep', '__wakeup'])
+            ->onlyMethods(['getIdFieldName', '__sleep', '__wakeup'])
             ->getMock();
         $resourceMock->expects(
             $this->_testObject->any()
@@ -194,7 +196,8 @@ class ObjectManager
                 ->disableOriginalClone()
                 ->disableArgumentCloning()
                 ->disallowMockingUnknownTypes()
-                ->setMethods(['populateWithArray', 'populate', 'create'])
+                ->addMethods(['populateWithArray', 'populate'])
+                ->onlyMethods(['create'])
                 ->getMock();
 
             $objectFactory->expects($this->_testObject->any())
@@ -358,5 +361,25 @@ class ObjectManager
         $reflectionProperty = $reflection->getProperty($propertyName);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
+    }
+
+    /**
+     * Helper method to get mock of ObjectManagerInterface
+     *
+     * @param array $map
+     */
+    public function prepareObjectManager(array $map = [])
+    {
+        $objectManagerMock = $this->_testObject->getMockBuilder(ObjectManagerInterface::class)
+            ->addMethods(['getInstance'])
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+
+        $objectManagerMock->method('getInstance')->willReturnSelf();
+        $objectManagerMock->method('get')->willReturnMap($map);
+
+        $reflectionProperty = new \ReflectionProperty(AppObjectManager::class, '_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock, $objectManagerMock);
     }
 }

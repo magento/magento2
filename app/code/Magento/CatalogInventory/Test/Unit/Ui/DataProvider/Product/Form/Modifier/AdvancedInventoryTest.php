@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTestCase;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
@@ -17,7 +17,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class AdvancedInventoryTest extends AbstractModifierTest
+class AdvancedInventoryTest extends AbstractModifierTestCase
 {
     /**
      * @var StockRegistryInterface|MockObject
@@ -48,13 +48,13 @@ class AdvancedInventoryTest extends AbstractModifierTest
     {
         parent::setUp();
         $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->getMockForAbstractClass();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
@@ -154,7 +154,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
     /**
      * @return array
      */
-    public function modifyDataProvider()
+    public static function modifyDataProvider()
     {
         return [
             [1, 1, 1],

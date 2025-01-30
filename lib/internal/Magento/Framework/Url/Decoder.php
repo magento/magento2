@@ -31,7 +31,7 @@ class Decoder implements DecoderInterface
      */
     public function decode($url)
     {
-        $url = $url !== null ? base64_decode(strtr($url, '-_,', '+/=')) : '';
+        $url = $url !== null ? base64_decode(strtr($url, '-_~', '+/=')) : '';
         return $this->urlBuilder->sessionUrlVar($url);
     }
 }

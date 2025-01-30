@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute;
 
@@ -25,8 +25,8 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
@@ -37,8 +37,8 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_eavEntityFactory = $eavEntityFactory;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $eavConfig, $connection, $resource);
@@ -91,6 +91,7 @@ class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Colle
 
     /**
      * Specify attribute entity type filter.
+     *
      * Entity type is defined.
      *
      * @param  int $typeId

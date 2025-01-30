@@ -43,7 +43,7 @@ class PriceCurrencyTest extends TestCase
 
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);

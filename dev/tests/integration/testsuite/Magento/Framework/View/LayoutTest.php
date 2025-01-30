@@ -230,7 +230,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function createBlockDataProvider(): array
+    public static function createBlockDataProvider(): array
     {
         return [
             'named block' => [Template::class,
@@ -260,7 +260,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function blockNotExistsDataProvider(): array
+    public static function blockNotExistsDataProvider(): array
     {
         return [[''], ['block_not_exists']];
     }
@@ -305,7 +305,7 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function addContainerDataProvider(): array
+    public static function addContainerDataProvider(): array
     {
         return [
             ['aside'],

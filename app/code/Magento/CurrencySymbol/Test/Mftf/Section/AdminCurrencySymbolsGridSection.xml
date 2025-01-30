@@ -12,5 +12,8 @@
         <element name="currencyElement" type="input" selector="#currency-symbols-form #custom_currency_symbol{{currency}}" parameterized="true"/>
         <element name="currencyCheckElement" type="checkbox" selector="#currency-symbols-form #custom_currency_symbol_inherit{{currency}}" parameterized="true"/>
         <element name="saveCurrencySymbols" type="button" selector="//button[@title='Save Currency Symbols']"/>
+        <element name="currencyCheckBox" type="button" selector="//input[@id='custom_currency_symbol_inheritUSD']"/>
+        <element name="inputCurrencySymbol" type="input" selector="//input[@id='custom_currency_symbolUSD']"/>
+        <element name="currencySymbolOfProduct" type="button" selector="//span[@data-price-type='finalPrice']//span"/>
     </section>
 </sections>

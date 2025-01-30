@@ -45,7 +45,7 @@ class DomainTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'notString' => [['array'], 'Invalid domain name: must be a string'],

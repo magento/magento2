@@ -43,6 +43,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Escaper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -85,6 +86,11 @@ class DefaultConfigProviderTest extends TestCase
     private $configPostProcessor;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -122,6 +128,7 @@ class DefaultConfigProviderTest extends TestCase
         $this->addressMetadata = $this->createMock(AddressMetadataInterface::class);
         $attributeOptionManager = $this->createMock(AttributeOptionManagementInterface::class);
         $customerAddressData = $this->createMock(CustomerAddressDataProvider::class);
+        $this->escaper = $this->createMock(Escaper::class);
         $this->model = new DefaultConfigProvider(
             $checkoutHelper,
             $this->checkoutSession,
@@ -152,7 +159,8 @@ class DefaultConfigProviderTest extends TestCase
             $this->configPostProcessor,
             $this->addressMetadata,
             $attributeOptionManager,
-            $customerAddressData
+            $customerAddressData,
+            $this->escaper
         );
     }
 
@@ -235,7 +243,7 @@ class DefaultConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigQuoteAddressDataDataProvider(): array
+    public static function getConfigQuoteAddressDataDataProvider(): array
     {
         return [
             [

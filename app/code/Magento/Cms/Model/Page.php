@@ -91,12 +91,12 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ?CustomLayoutRepository $customLayoutRepository = null,
         ?WYSIWYGValidatorInterface $wysiwygValidator = null,
-        CompositeUrlKey $compositeUrlValidator = null
+        ?CompositeUrlKey $compositeUrlValidator = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->customLayoutRepository = $customLayoutRepository

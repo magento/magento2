@@ -419,18 +419,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ResolverInterface $localeResolver = null,
-        ProductOption $productOption = null,
-        OrderItemRepositoryInterface $itemRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        ScopeConfigInterface $scopeConfig = null,
-        RegionFactory $regionFactory = null,
-        RegionResource $regionResource = null,
-        StatusLabel $statusLabel = null,
-        CreditmemoValidator $creditmemoValidator = null
+        ?ResolverInterface $localeResolver = null,
+        ?ProductOption $productOption = null,
+        ?OrderItemRepositoryInterface $itemRepository = null,
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?RegionFactory $regionFactory = null,
+        ?RegionResource $regionResource = null,
+        ?StatusLabel $statusLabel = null,
+        ?CreditmemoValidator $creditmemoValidator = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -721,7 +721,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canCreditmemo()
     {
-        if ($this->hasForcedCanCreditmemo()) {
+        if ($this->hasForcedCanCreditmemo() && $this->getData('forced_can_creditmemo') === true) {
             return $this->getForcedCanCreditmemo();
         }
 
@@ -735,25 +735,25 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * for this we have additional diapason for 0
          * TotalPaid - contains amount, that were not rounded.
          */
-        $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
+        $totalRefundable = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
         if (abs((float) $this->getGrandTotal()) < .0001) {
-            return $this->canCreditmemoForZeroTotal($totalRefunded);
+            return $this->canCreditmemoForZeroTotal($totalRefundable);
         }
 
-        return $this->canCreditmemoForZeroTotalRefunded($totalRefunded);
+        return $this->canCreditmemoForZeroTotalRefunded($totalRefundable);
     }
 
     /**
      * Retrieve credit memo for zero total refunded availability.
      *
-     * @param float $totalRefunded
+     * @param float $totalRefundable
      * @return bool
      */
-    private function canCreditmemoForZeroTotalRefunded($totalRefunded)
+    private function canCreditmemoForZeroTotalRefunded($totalRefundable)
     {
-        $isRefundZero = abs((float) $totalRefunded) < .0001;
+        $isRefundZero = abs((float) $totalRefundable) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
-        $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
+        $hasAdjustmentFee = abs($totalRefundable - $this->getAdjustmentNegative()) < .0001;
         $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
         if ($isRefundZero || $hasAdjustmentFee || $hasActionFlag) {
             return false;
@@ -765,10 +765,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Retrieve credit memo for zero total availability.
      *
-     * @param float $totalRefunded
+     * @param float $totalRefundable
      * @return bool
      */
-    private function canCreditmemoForZeroTotal($totalRefunded)
+    private function canCreditmemoForZeroTotal($totalRefundable)
     {
         if ($this->areThereRefundableItems()) {
             return true;
@@ -785,7 +785,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if ($hasDueAmount ||
             $paidAmtIsRefunded ||
-            (!$checkAmtTotalPaid && abs($totalRefunded - $this->getAdjustmentNegative()) < .0001)) {
+            (!$checkAmtTotalPaid && abs($totalRefundable - $this->getAdjustmentNegative()) < .0001)) {
             return false;
         }
         return true;
@@ -861,7 +861,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve order shipment availability
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function canShip()
     {
@@ -877,27 +876,26 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return false;
         }
 
+        return $this->checkItemShipping();
+    }
+
+    /**
+     * Check if at least one of the order items can be shipped
+     *
+     * @return bool
+     */
+    private function checkItemShipping(): bool
+    {
         foreach ($this->getAllItems() as $item) {
             $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
                 $item->getQtyToShip() : $item->getSimpleQtyToShip();
 
-            if ($qtyToShip > 0 && !$item->getIsVirtual() &&
-                !$item->getLockedDoShip() && !$this->isRefunded($item)) {
+            if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
                 return true;
             }
         }
-        return false;
-    }
 
-    /**
-     * Check if item is refunded.
-     *
-     * @param OrderItemInterface $item
-     * @return bool
-     */
-    private function isRefunded(OrderItemInterface $item)
-    {
-        return $item->getQtyRefunded() == $item->getQtyOrdered();
+        return false;
     }
 
     /**
@@ -1081,7 +1079,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
+    public function setBillingAddress(?\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getBillingAddress();
         if (!empty($old) && !empty($address)) {
@@ -1101,7 +1099,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
+    public function setShippingAddress(?\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getShippingAddress();
         if (!empty($old) && !empty($address)) {
@@ -1378,9 +1376,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $this->setShippingCanceled($this->getShippingAmount() - $this->getShippingInvoiced());
             $this->setBaseShippingCanceled($this->getBaseShippingAmount() - $this->getBaseShippingInvoiced());
 
-            $this->setDiscountCanceled(abs((float) $this->getDiscountAmount()) - $this->getDiscountInvoiced());
+            $this->setDiscountCanceled(
+                abs((float) $this->getDiscountAmount()) - abs((float) $this->getDiscountInvoiced())
+            );
             $this->setBaseDiscountCanceled(
-                abs((float) $this->getBaseDiscountAmount()) - $this->getBaseDiscountInvoiced()
+                abs((float) $this->getBaseDiscountAmount()) - abs((float) $this->getBaseDiscountInvoiced())
             );
 
             $this->setTotalCanceled($this->getGrandTotal() - $this->getTotalPaid());
@@ -1698,7 +1698,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      */
-    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
+    public function setPayment(?\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
     {
         $this->setData(OrderInterface::PAYMENT, $payment);
         if ($payment !== null) {
@@ -3617,7 +3617,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      */
-    public function setStatusHistories(array $statusHistories = null)
+    public function setStatusHistories(?array $statusHistories = null)
     {
         return $this->setData(OrderInterface::STATUS_HISTORIES, $statusHistories);
     }

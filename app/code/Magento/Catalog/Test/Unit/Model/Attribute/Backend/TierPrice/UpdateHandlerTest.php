@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 class UpdateHandlerTest extends TestCase
 {
     /**
-     * Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $objectManager;
 
@@ -72,23 +72,22 @@ class UpdateHandlerTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->attributeRepository = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllCustomersGroup'])
+            ->onlyMethods(['getAllCustomersGroup'])
             ->getMockForAbstractClass();
         $this->metadataPoll = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMetadata'])
+            ->onlyMethods(['getMetadata'])
             ->getMock();
         $this->tierPriceResource = $this->getMockBuilder(Tierprice::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->updateHandler = $this->objectManager->getObject(
@@ -128,7 +127,7 @@ class UpdateHandlerTest extends TestCase
         /** @var MockObject $product */
         $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData','setData', 'getStoreId', 'getOrigData'])
+            ->addMethods(['getData','setData', 'getStoreId', 'getOrigData'])
             ->getMockForAbstractClass();
         $product->expects($this->atLeastOnce())->method('getData')->willReturnMap(
             [
@@ -151,14 +150,14 @@ class UpdateHandlerTest extends TestCase
             ->with('tier_price_changed', 1);
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteId'])
+            ->onlyMethods(['getWebsiteId'])
             ->getMockForAbstractClass();
         $store->expects($this->atLeastOnce())->method('getWebsiteId')->willReturn(0);
         $this->storeManager->expects($this->atLeastOnce())->method('getStore')->willReturn($store);
         /** @var MockObject $attribute */
         $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'isScopeGlobal'])
+            ->addMethods(['getName', 'isScopeGlobal'])
             ->getMockForAbstractClass();
         $attribute->expects($this->atLeastOnce())->method('getName')->willReturn('tier_price');
         $attribute->expects($this->atLeastOnce())->method('isScopeGlobal')->willReturn(true);
@@ -166,7 +165,7 @@ class UpdateHandlerTest extends TestCase
             ->willReturn($attribute);
         $productMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLinkField'])
+            ->onlyMethods(['getLinkField'])
             ->getMockForAbstractClass();
         $productMetadata->expects($this->atLeastOnce())->method('getLinkField')->willReturn($linkField);
         $this->metadataPoll->expects($this->atLeastOnce())->method('getMetadata')
@@ -174,7 +173,7 @@ class UpdateHandlerTest extends TestCase
             ->willReturn($productMetadata);
         $customerGroup = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $customerGroup->expects($this->atLeastOnce())->method('getId')->willReturn(3200);
         $this->groupManagement->expects($this->atLeastOnce())->method('getAllCustomersGroup')
@@ -195,7 +194,7 @@ class UpdateHandlerTest extends TestCase
         /** @var MockObject $attribute */
         $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'isScopeGlobal'])
+            ->addMethods(['getName', 'isScopeGlobal'])
             ->getMockForAbstractClass();
         $attribute->expects($this->atLeastOnce())->method('getName')->willReturn('tier_price');
         $this->attributeRepository->expects($this->atLeastOnce())->method('get')->with('tier_price')
@@ -203,7 +202,7 @@ class UpdateHandlerTest extends TestCase
         /** @var MockObject $product */
         $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData','setData', 'getStoreId', 'getOrigData'])
+            ->addMethods(['getData','setData', 'getStoreId', 'getOrigData'])
             ->getMockForAbstractClass();
         $product->expects($this->atLeastOnce())->method('getData')->with('tier_price')->willReturn(1);
 
@@ -215,7 +214,7 @@ class UpdateHandlerTest extends TestCase
      *
      * @return array
      */
-    public function configDataProvider()
+    public static function configDataProvider()
     {
         return [
             [

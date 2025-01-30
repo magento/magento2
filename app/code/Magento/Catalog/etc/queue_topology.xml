@@ -9,5 +9,6 @@
     <exchange name="magento">
         <binding id="updateBinding" topic="product_action_attribute.update" destination="product_action_attribute.update"/>
         <binding id="updateBindingWebsite" topic="product_action_attribute.website.update" destination="product_action_attribute.website.update"/>
+        <binding id="catalog_website_attribute_value_sync" topic="catalog_website_attribute_value_sync" destination="catalog_website_attribute_value_sync"/>
     </exchange>
 </config>

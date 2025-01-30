@@ -49,8 +49,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);

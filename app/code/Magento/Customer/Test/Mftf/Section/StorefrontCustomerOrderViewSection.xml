@@ -37,5 +37,14 @@
         <element name="FPT" type="text" selector="//tr[@class='weee_ord_totals']//td[@data-th='FPT']/span"/>
         <element name="taxRule" type="text" selector="//table[contains(@class, 'data table table-order-items')]//td[normalize-space(.)='Canada-GST-5% (5%)']/following-sibling::td//span[@class='price']"/>
         <element name="taxRule1" type="text" selector="//table[contains(@class, 'data table table-order-items')]//td[normalize-space(.)='Canada-GST-PST-5% (5%)']/following-sibling::td//span[@class='price']"/>
+        <element name="productRate" type="text" selector="//table[contains(@class, 'data table table-order-items')]//td[normalize-space(.)='Product Rate CA (10%)']/following-sibling::td//span[@class='price']"/>
+        <element name="shippingRate" type="text" selector="//table[contains(@class, 'data table table-order-items')]//td[normalize-space(.)='Shipping Rate CA (5%)']/following-sibling::td//span[@class='price']"/>
+        <element name="subtotalExclTax" type="text" selector="//tr[@class='subtotal_excl']//td[@data-th='Subtotal (Excl.Tax)']/span"/>
+        <element name="subtotalInclTax" type="text" selector="//tr[@class='subtotal_incl']//td[@data-th='Subtotal (Incl.Tax)']/span"/>
+        <element name="shippingAndHandlingExclTax" type="text" selector="//tr[@class='shipping']//td[@data-th='Shipping &amp; Handling (Excl.Tax)']/span"/>
+        <element name="shippingAndHandlingInclTax" type="text" selector="//tr[@class='shipping_incl']//td[@data-th='Shipping &amp; Handling (Incl.Tax)']/span"/>
+        <element name="grandTotalExclTax" type="text" selector="//tr[@class='grand_total']//td[@data-th='Grand Total (Excl.Tax)']"/>
+        <element name="grandTotalInclTax" type="text" selector="//tr[@class='grand_total_incl']//td[@data-th='Grand Total (Incl.Tax)']"/>
+        <element name="grandTotalToBeCharged" type="text" selector=".base_grandtotal .price"/>
     </section>
 </sections>

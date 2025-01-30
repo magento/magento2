@@ -83,13 +83,13 @@ class UpdateCustomizedOptionsTest extends TestCase
 
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', 'getItemById'])
+            ->onlyMethods(['getStore', 'getItemById'])
             ->getMock();
 
         $this->quoteItem = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getProduct', 'getProductType', 'getChildren'])
-            ->setMethods(['getQty', 'getSku'])
+            ->onlyMethods(['getQty', 'getSku'])
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -182,7 +182,7 @@ class UpdateCustomizedOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function updateCustomizedOptionsDataProvider()
+    public static function updateCustomizedOptionsDataProvider()
     {
         return [
             'test customized options for simple product' => [

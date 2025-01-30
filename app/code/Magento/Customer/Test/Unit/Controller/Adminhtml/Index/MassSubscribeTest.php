@@ -119,7 +119,7 @@ class MassSubscribeTest extends TestCase
         $this->customerCollectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
         $redirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()

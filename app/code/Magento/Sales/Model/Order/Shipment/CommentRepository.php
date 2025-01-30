@@ -73,9 +73,9 @@ class CommentRepository implements ShipmentCommentRepositoryInterface
         ShipmentCommentInterfaceFactory $commentFactory,
         ShipmentCommentSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        ShipmentCommentSender $shipmentCommentSender = null,
-        ShipmentRepositoryInterface $shipmentRepository = null,
-        LoggerInterface $logger = null
+        ?ShipmentCommentSender $shipmentCommentSender = null,
+        ?ShipmentRepositoryInterface $shipmentRepository = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;

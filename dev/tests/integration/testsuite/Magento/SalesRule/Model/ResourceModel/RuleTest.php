@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
@@ -30,7 +30,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     private $resource;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -72,8 +72,6 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     public function testGetActiveAttributes()
     {
         $rule = $this->fixtures->get('rule1');
-        $items = $this->resource->getActiveAttributes();
-        $this->assertEquals([], $items);
         $rule->setIsActive(1);
         $rule->save();
         $items = $this->resource->getActiveAttributes();

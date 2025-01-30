@@ -46,7 +46,7 @@ class SkipTest extends SkipAbstractClass implements SkipInterface
     /**
      * @return array
      */
-    public function skipDataProvider(): array
+    public static function skipDataProvider(): array
     {
         return [
             'first_data_set' => ['This test should be skipped in data set node inherited from abstract class'],

@@ -115,7 +115,7 @@ class OrderStatusTest extends TestCase
         $this->requestInterface = $this->getMockForAbstractClass(RequestInterface::class);
         $this->orderStatusFactory =
             $this->getMockBuilder(OrderStatusFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
@@ -123,7 +123,7 @@ class OrderStatusTest extends TestCase
         $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->order = $this->getMockBuilder(Order::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getIncrementId',
                     'getId',
@@ -183,7 +183,7 @@ class OrderStatusTest extends TestCase
             );
 
         $resource = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatus::class)
-            ->setMethods(['getAllCommentCollection'])
+            ->onlyMethods(['getAllCommentCollection'])
             ->disableOriginalConstructor()
             ->getMock();
         $comment = [
@@ -296,7 +296,7 @@ class OrderStatusTest extends TestCase
      *
      * @return array
      */
-    public function getCacheKeyDataProvider()
+    public static function getCacheKeyDataProvider()
     {
         // phpcs:disable
         return [

@@ -217,8 +217,10 @@ class AddCommentTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['id'], ['invoice_id'])
-            ->willReturnOnConsecutiveCalls($invoiceId, $invoiceId);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['id'] => $invoiceId,
+                ['invoice_id'] => $invoiceId
+            });
         $this->requestMock
             ->method('getPost')
             ->with('comment')

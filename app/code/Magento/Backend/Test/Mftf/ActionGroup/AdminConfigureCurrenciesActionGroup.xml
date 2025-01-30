@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigureCurrenciesActionGroup">
+        <annotations>
+            <description> Admin uncheck currency option system values.</description>
+        </annotations>
+        <arguments>
+            <argument name="baseValue" type="string" defaultValue="Norwegian Krone"/>
+            <argument name="defaultValue" type="string" defaultValue="British Pound"/>
+            <argument name="allowedValue" type="string" defaultValue="['British Pound']"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminConfigSection.baseCurrency}}" stepKey="waitForBaseCurrencyToVisible"/>
+        <selectOption selector="{{AdminConfigSection.baseCurrency}}" userInput="{{baseValue}}" stepKey="selectBaseCurrency"/>
+        <waitForElementVisible selector="{{AdminConfigSection.defaultCurrency}}" stepKey="waitForDefaultCurrencyToVisible"/>
+        <selectOption selector="{{AdminConfigSection.defaultCurrency}}" userInput="{{defaultValue}}" stepKey="selectDefaultDisplayCurrency"/>
+        <waitForElementVisible selector="{{AdminConfigSection.allowedCurrencies}}" stepKey="waitForAllowedCurrencyToVisible"/>
+        <selectOption selector="{{AdminConfigSection.allowedCurrencies}}" parameterArray="{{allowedValue}}" stepKey="selectAllowedDisplayCurrency"/>
+    </actionGroup>
+</actionGroups>

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -82,7 +82,6 @@
     <preference for="Magento\Framework\Json\DecoderInterface" type="Magento\Framework\Json\Decoder" />
     <preference for="Magento\Framework\Message\ManagerInterface" type="Magento\Framework\Message\Manager" />
     <preference for="Magento\Framework\App\Config\ValueInterface" type="Magento\Framework\App\Config\Value" />
-    <preference for="Magento\Framework\Interception\ChainInterface" type="Magento\Framework\Interception\Chain\Chain" />
     <preference for="Magento\Framework\Module\Output\ConfigInterface" type="Magento\Framework\Module\Output\Config" />
     <preference for="Magento\Framework\View\Design\Theme\CustomizationInterface" type="Magento\Framework\View\Design\Theme\Customization" />
     <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Framework\View\Asset\Config" />
@@ -94,6 +93,7 @@
     <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="Magento\Framework\Stdlib\Cookie\CookieScope" />
     <preference for="Magento\Framework\Stdlib\Cookie\CookieReaderInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieReader" />
     <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
+    <preference for="Magento\Framework\Stdlib\CookieDisablerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieDisabler" />
     <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate" />
     <preference for="Magento\Framework\Config\ScopeListInterface" type="interceptionConfigScope" />
     <preference for="Magento\Framework\View\Design\Theme\Label\ListInterface" type="Magento\Theme\Model\ResourceModel\Theme\Collection" />
@@ -417,6 +417,11 @@
         </arguments>
     </type>
     <type name="Magento\Framework\Acl" shared="false" />
+    <type name="Magento\Framework\App\Router\ActionList">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\ObjectManager\ConfigLoader">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
@@ -448,7 +453,7 @@
     </type>
     <type name="Magento\Framework\Interception\PluginList\PluginList">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig\Proxy</argument>
             <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">plugin-list</argument>
             <argument name="scopePriorityScheme" xsi:type="array">
@@ -877,6 +882,7 @@
     </type>
     <type name="Magento\Framework\Event\Config\Data">
         <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig</argument>
             <argument name="reader" xsi:type="object">Magento\Framework\Event\Config\Reader\Proxy</argument>
         </arguments>
     </type>
@@ -1857,8 +1863,10 @@
         <arguments>
             <argument name="supportedVersionPatterns" xsi:type="array">
                 <item name="MySQL-8" xsi:type="string">^8\.0\.</item>
+                <item name="MySQL-8.4" xsi:type="string">^8\.4\.</item>
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
                 <item name="MariaDB-(10.2-10.6)" xsi:type="string">^10\.[2-6]\.</item>
+                <item name="MariaDB-11.4" xsi:type="string">^11\.4\.</item>
             </argument>
         </arguments>
     </type>
@@ -2004,4 +2012,13 @@
     </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
     <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
+    <preference for="Magento\Framework\App\State\ReloadProcessorInterface" type="Magento\Framework\App\State\ReloadProcessorComposite" />
+    <preference for="Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface" type="Magento\Framework\Indexer\Config\Converter\SortingAdjustment" />
+
+    <!-- @api -->
+    <virtualType name="shellBackground" type="Magento\Framework\Shell">
+        <arguments>
+            <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
+        </arguments>
+    </virtualType>
 </config>

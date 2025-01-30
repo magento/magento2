@@ -92,8 +92,10 @@ class MinimalTierPriceCalculatorTest extends TestCase
 
         $this->priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
-            ->withConsecutive([TierPrice::PRICE_CODE], [FinalPrice::PRICE_CODE])
-            ->willReturnOnConsecutiveCalls($this->price, $notMinAmount);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [TierPrice::PRICE_CODE] => $this->price,
+                [FinalPrice::PRICE_CODE] => $notMinAmount
+            });
 
         $this->saleable->expects($this->atLeastOnce())->method('getPriceInfo')->willReturn($this->priceInfo);
         return $minPrice;

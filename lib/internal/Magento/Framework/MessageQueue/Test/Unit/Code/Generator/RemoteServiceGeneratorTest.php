@@ -92,7 +92,7 @@ class RemoteServiceGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function interfaceDataProvider()
+    public static function interfaceDataProvider()
     {
         return [
             [

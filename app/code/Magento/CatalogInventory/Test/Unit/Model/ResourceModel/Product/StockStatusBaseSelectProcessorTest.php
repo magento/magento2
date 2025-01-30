@@ -67,11 +67,16 @@ class StockStatusBaseSelectProcessorTest extends TestCase
 
         $this->select->expects($this->exactly(2))
             ->method('where')
-            ->withConsecutive(
-                ['stock.stock_status = ?', Stock::STOCK_IN_STOCK, null],
-                ['stock.website_id = ?', 0, null]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$args) {
+                static $index = 0;
+                $expectedArgs = [
+                    ['stock.stock_status = ?', Stock::STOCK_IN_STOCK, null],
+                    ['stock.website_id = ?', 0, null]
+                ];
+                $returnValue = $this->select;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
 
         $this->stockStatusBaseSelectProcessor->process($this->select);
     }

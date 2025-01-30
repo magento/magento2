@@ -71,7 +71,7 @@ class EntityArrayValidatorTest extends TestCase
     public function testFailsDataWhenAboveLimitUsingRouteInputLimit()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Maximum items of type "foo" is 4');
+        $this->expectExceptionMessage('Maximum items of type "foo" is 4');
         $this->configMock->expects(self::once())
             ->method('isInputLimitingEnabled')
             ->willReturn(true);
@@ -123,7 +123,7 @@ class EntityArrayValidatorTest extends TestCase
     public function testFailsDataWhenAboveLimit()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Maximum items of type "foo" is 3');
+        $this->expectExceptionMessage('Maximum items of type "foo" is 3');
         $this->configMock->expects(self::once())
             ->method('isInputLimitingEnabled')
             ->willReturn(true);
@@ -142,7 +142,7 @@ class EntityArrayValidatorTest extends TestCase
     public function testFailsDataWhenAboveLimitUsingConfig()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectErrorMessage('Maximum items of type "foo" is 6');
+        $this->expectExceptionMessage('Maximum items of type "foo" is 6');
         $this->configMock->expects(self::once())
             ->method('isInputLimitingEnabled')
             ->willReturn(true);

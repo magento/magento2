@@ -60,10 +60,10 @@ class Export extends ExportController implements HttpPostActionInterface
     public function __construct(
         Context $context,
         FileFactory $fileFactory,
-        SessionManagerInterface $sessionManager = null,
-        PublisherInterface $publisher = null,
-        ExportInfoFactory $exportInfoFactory = null,
-        ResolverInterface $localeResolver = null
+        ?SessionManagerInterface $sessionManager = null,
+        ?PublisherInterface $publisher = null,
+        ?ExportInfoFactory $exportInfoFactory = null,
+        ?ResolverInterface $localeResolver = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->sessionManager = $sessionManager
@@ -99,7 +99,8 @@ class Export extends ExportController implements HttpPostActionInterface
                     $params['entity'],
                     $params['export_filter'],
                     $params['skip_attr'],
-                    $this->localeResolver->getLocale()
+                    $this->localeResolver->getLocale(),
+                    isset($params['fields_enclosure']) ? (bool) $params['fields_enclosure'] : null
                 );
 
                 $this->messagePublisher->publish('import_export.export', $dataObject);

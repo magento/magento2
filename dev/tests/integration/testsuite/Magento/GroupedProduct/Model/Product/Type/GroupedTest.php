@@ -201,7 +201,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function outOfStockSubProductDataProvider()
+    public static function outOfStockSubProductDataProvider()
     {
         return [
             'Out of stock product are shown #1' => [

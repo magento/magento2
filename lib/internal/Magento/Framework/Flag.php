@@ -50,11 +50,11 @@ class Flag extends Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $json = null,
-        \Magento\Framework\Serialize\Serializer\Serialize $serialize = null
+        ?\Magento\Framework\Serialize\Serializer\Json $json = null,
+        ?\Magento\Framework\Serialize\Serializer\Serialize $serialize = null
     ) {
         $this->json = $json ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);

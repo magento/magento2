@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Action;
 
+use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Catalog\Model\Product\Type;
@@ -96,6 +98,14 @@ class RowsTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                CacheContext::class,
+                $this->createMock(CacheContext::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->config = $this->createMock(ScopeConfigInterface::class);
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->currencyFactory = $this->createMock(CurrencyFactory::class);

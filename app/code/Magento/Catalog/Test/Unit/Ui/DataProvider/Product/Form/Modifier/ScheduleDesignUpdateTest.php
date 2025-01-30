@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\ScheduleDesignUpdate;
 
-class ScheduleDesignUpdateTest extends AbstractModifierTest
+class ScheduleDesignUpdateTest extends AbstractModifierTestCase
 {
     /**
      * {@inheritdoc}

@@ -196,27 +196,27 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider(): array
+    public static function validateDataProvider(): array
     {
         return [
             [
-                'attribute_value' => '12:12',
-                'parsed_value' => '12:12',
-                'new_value' => '12:13',
+                'attributeValue' => '12:12',
+                'parsedValue' => '12:12',
+                'newValue' => '12:13',
                 'operator' => '>=',
                 'input' => ['method' => 'getBackendType', 'type' => 'input_type']
             ],
             [
-                'attribute_value' => '1',
-                'parsed_value' => '1',
-                'new_value' => '2',
+                'attributeValue' => '1',
+                'parsedValue' => '1',
+                'newValue' => '2',
                 'operator' => '>=',
                 'input' => ['method' => 'getBackendType', 'type' => 'input_type']
             ],
             [
-                'attribute_value' => '1',
-                'parsed_value' => ['1' => '0'],
-                'new_value' => ['1' => '1'],
+                'attributeValue' => '1',
+                'parsedValue' => ['1' => '0'],
+                'newValue' => ['1' => '1'],
                 'operator' => '!()',
                 'input' => ['method' => 'getFrontendInput', 'type' => 'multiselect']
             ]

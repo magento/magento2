@@ -248,16 +248,18 @@ class SaveHandlerTest extends TestCase
             ->willReturn($customerGroup);
         $this->tierPriceResource
             ->method('savePriceData')
-            ->withConsecutive(
-                [new \Magento\Framework\DataObject($tierPricesExpected[0])],
-                [new \Magento\Framework\DataObject($tierPricesExpected[1])],
-                [new \Magento\Framework\DataObject($tierPricesExpected[2])]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->tierPriceResource,
-                $this->tierPriceResource,
-                $this->tierPriceResource
-            );
+            ->willReturnCallback(function (...$args) use ($tierPricesExpected) {
+                static $index = 0;
+                $expectedArgs = [
+                    [new \Magento\Framework\DataObject($tierPricesExpected[0])],
+                    [new \Magento\Framework\DataObject($tierPricesExpected[1])],
+                    [new \Magento\Framework\DataObject($tierPricesExpected[2])]
+                ];
+                $returnValue = $this->tierPriceResource;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
+        
         $this->tierPriceResource
             ->expects($this->atLeastOnce())
             ->method('loadPriceData')
@@ -269,7 +271,7 @@ class SaveHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function executeWithWebsitePriceDataProvider(): array
+    public static function executeWithWebsitePriceDataProvider(): array
     {
         $productId = 10;
         return [[

@@ -217,8 +217,15 @@ class ConfigurationTest extends TestCase
             ->willReturn($product);
         $this->item
             ->method('getOptionByCode')
-            ->withConsecutive(['bundle_option_ids'], ['bundle_selection_ids'])
-            ->willReturnOnConsecutiveCalls($itemOption, $selectionOption);
+            ->willReturnCallback(
+                function ($arg1) use ($itemOption, $selectionOption) {
+                    if ($arg1 == 'bundle_option_ids') {
+                        return $itemOption;
+                    } elseif ($arg1 == 'bundle_selection_ids') {
+                        return $selectionOption;
+                    }
+                }
+            );
 
         $this->assertEquals([], $this->helper->getBundleOptions($this->item));
     }
@@ -277,8 +284,14 @@ class ConfigurationTest extends TestCase
         if ($displayCartPriceBoth) {
             $this->taxHelper->expects($this->any())
                 ->method('getTaxPrice')
-                ->withConsecutive([$product, 15.00, !$includingTax], [$product, 15.00, $includingTax])
-                ->willReturnOnConsecutiveCalls(15.00, 15.00);
+                ->willReturnCallback(
+                    function ($product, $amount, $includingTax) {
+                        if ($product && $amount == 15.00 && ($includingTax || !$includingTax)) {
+                            return 15.00;
+                        }
+                    }
+                );
+
         } else {
             $this->taxHelper->expects($this->any())
                 ->method('getTaxPrice')
@@ -318,8 +331,10 @@ class ConfigurationTest extends TestCase
         $this->item->expects($this->any())->method('getProduct')->willReturn($product);
         $this->item
             ->method('getOptionByCode')
-            ->withConsecutive(['bundle_option_ids'], ['bundle_selection_ids'])
-            ->willReturnOnConsecutiveCalls($itemOption, $selectionOption);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['bundle_option_ids'] => $itemOption,
+                ['bundle_selection_ids'] => $selectionOption
+            });
         $this->productConfiguration->expects($this->once())->method('getCustomOptions')->with($this->item)
             ->willReturn([0 => ['label' => 'title', 'value' => 'value']]);
 
@@ -346,7 +361,7 @@ class ConfigurationTest extends TestCase
      *
      * @return array
      */
-    public function getTaxConfiguration(): array
+    public static function getTaxConfiguration(): array
     {
         return [
             [null, false],

@@ -18,5 +18,6 @@
 
         <!-- I had to use executeJS to perform the click to get around the use of CSS ::before and ::after -->
         <executeJS function="jQuery('#swatch_window_option_option_{{index}}').click()" stepKey="clickSwatch1"/>
+        <scrollTo selector="{{AdminManageSwatchSection.swatchWindow(index)}}" stepKey="scrollToSwatchWindow"/>
     </actionGroup>
 </actionGroups>

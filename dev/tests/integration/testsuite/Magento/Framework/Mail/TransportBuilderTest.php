@@ -102,7 +102,7 @@ class TransportBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function emailDataProvider(): array
+    public static function emailDataProvider(): array
     {
         return [
             [
@@ -175,7 +175,7 @@ class TransportBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function invalidEmailDataProvider(): array
+    public static function invalidEmailDataProvider(): array
     {
         return [
             [

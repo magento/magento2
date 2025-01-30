@@ -44,7 +44,9 @@ type SelectedBundleOptionValue @doc(description: "Contains details about a value
     uid: ID! @doc(description: "The unique ID for a `SelectedBundleOptionValue` object")
     label: String! @doc(description: "The display name of the value for the selected bundle product option.")
     quantity: Float! @doc(description: "The quantity of the value for the selected bundle product option.")
-    price: Float! @doc(description: "The price of the value for the selected bundle product option.")
+    price: Float! @deprecated(reason: "Use priceV2 instead.") @doc(description: "The price of the value for the selected bundle product option.")
+    priceV2: Money! @doc(description: "The price of the value for the selected bundle product option.")
+    original_price: Money! @doc(description: "The original price of the value for the selected bundle product option.")
 }
 
 type PriceDetails @doc(description: "Can be used to retrieve the main price details in case of bundle product") {

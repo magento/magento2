@@ -116,7 +116,7 @@ class AbstractActionTest extends \Magento\TestFramework\TestCase\AbstractBackend
      *
      * @return array
      */
-    public function nodesWithAcl()
+    public static function nodesWithAcl()
     {
         return [
             ['notification_window', 'Magento_AdminNotification::show_toolbar', true],

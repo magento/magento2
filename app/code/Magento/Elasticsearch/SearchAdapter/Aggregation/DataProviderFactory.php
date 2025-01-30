@@ -14,6 +14,8 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 /**
  * It's a factory which allows to override instance of DataProviderInterface
  * with the instance of the same class but with injected search query.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DataProviderFactory
 {
@@ -54,7 +56,7 @@ class DataProviderFactory
      */
     public function create(
         DataProviderInterface $dataProvider,
-        QueryContainer $query = null,
+        ?QueryContainer $query = null,
         ?string $aggregationFieldName = null
     ) {
         $result = $dataProvider;

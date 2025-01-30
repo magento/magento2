@@ -90,6 +90,17 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
+        foreach ($this->config->getIndexers() as $index) {
+            $indexerId = $index['indexer_id'];
+            $state = $this->stateFactory->create();
+            $state->loadByIndexer($indexerId);
+            //  If state does not exist, create default index mode to scheduled
+            if (empty($state->getData('state_id'))) {
+                $indexer = $this->indexerFactory->create()->load($indexerId);
+                $indexer->setScheduled(true);
+            }
+        }
+
         /** @var State[] $stateIndexers */
         $stateIndexers = [];
         $states = $this->statesFactory->create();
@@ -121,7 +132,14 @@ class Recurring implements InstallSchemaInterface
 
             $indexer = $this->indexerFactory->create()->load($indexerId);
             if ($indexer->isScheduled()) {
-                $indexer->getView()->unsubscribe()->subscribe();
+                // The purpose of the following two lines is to ensure that any
+                // database triggers are correctly set up for this indexer. We
+                // are calling methods on the view directly because we want to
+                // choose to not drop the changelog tables at this time. This
+                // also intentionally bypasses the $indexer->invalidate() call
+                // within $indexer->setScheduled().
+                $indexer->getView()->unsubscribe(false);
+                $indexer->getView()->subscribe();
             }
         }
     }

@@ -286,10 +286,15 @@ class AgreementsTest extends TestCase
         $transport = new DataObject(['html' => '']);
         $this->eventManager
             ->method('dispatch')
-            ->withConsecutive(
-                ['view_block_abstract_to_html_before', ['block' => $this->block]],
-                ['view_block_abstract_to_html_after', ['block' => $this->block, 'transport' => $transport]]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($transport) {
+                if ($arg1 == 'view_block_abstract_to_html_before' && $arg2 == ['block' => $this->block]) {
+                    return null;
+                } elseif ($arg1 == 'view_block_abstract_to_html_after' &&
+                     $arg2 == ['block' => $this->block, 'transport' => $transport]) {
+                    return null;
+                }
+            });
+
         $this->scopeConfig
             ->expects($this->once())
             ->method('getValue')

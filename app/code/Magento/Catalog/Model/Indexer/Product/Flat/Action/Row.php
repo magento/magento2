@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
@@ -52,7 +52,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         FlatTableBuilder $flatTableBuilder,
         Indexer $flatItemWriter,
         Eraser $flatItemEraser,
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         parent::__construct(
             $resource,

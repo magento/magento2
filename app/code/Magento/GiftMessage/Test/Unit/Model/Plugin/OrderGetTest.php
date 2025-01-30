@@ -7,20 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Api\OrderItemRepositoryInterface;
 use Magento\GiftMessage\Api\OrderRepositoryInterface;
 use Magento\GiftMessage\Model\Plugin\OrderGet;
 use Magento\Sales\Api\Data\OrderExtension;
-use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemExtension;
-use Magento\Sales\Api\Data\OrderItemExtensionFactory;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,16 +38,6 @@ class OrderGetTest extends TestCase
      * @var MockObject
      */
     private $giftMessageOrderItemRepositoryMock;
-
-    /**
-     * @var MockObject
-     */
-    private $orderExtensionFactoryMock;
-
-    /**
-     * @var MockObject
-     */
-    private $orderItemExtensionFactoryMock;
 
     /**
      * @var MockObject
@@ -96,25 +82,25 @@ class OrderGetTest extends TestCase
         $this->giftMessageOrderItemRepositoryMock = $this->createMock(
             OrderItemRepositoryInterface::class
         );
-        $this->orderExtensionFactoryMock = $this->createPartialMock(
-            OrderExtensionFactory::class,
-            ['create']
-        );
-        $this->orderItemExtensionFactoryMock = $this->createPartialMock(
-            OrderItemExtensionFactory::class,
-            ['create']
-        );
-        $this->orderMock = $this->createMock(
-            OrderInterface::class
-        );
-        $this->orderExtensionMock = $this->getOrderExtensionMock();
+        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getGiftMessageId'])
+            ->getMockForAbstractClass();
+        $this->orderExtensionMock = $this->getMockBuilder(OrderExtension::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getGiftMessage', 'setGiftMessage'])
+            ->getMock();
         $this->giftMessageMock = $this->createMock(
             MessageInterface::class
         );
-        $this->orderItemMock = $this->createMock(
-            OrderItemInterface::class
-        );
-        $this->orderItemExtensionMock = $this->getOrderItemExtensionMock();
+        $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getGiftMessageId'])
+            ->getMockForAbstractClass();
+        $this->orderItemExtensionMock = $this->getMockBuilder(OrderItemExtension::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getGiftMessage', 'setGiftMessage'])
+            ->getMock();
         $this->orderRepositoryMock = $this->createMock(
             \Magento\Sales\Api\OrderRepositoryInterface::class
         );
@@ -123,16 +109,19 @@ class OrderGetTest extends TestCase
 
         $this->plugin = new OrderGet(
             $this->giftMessageOrderRepositoryMock,
-            $this->giftMessageOrderItemRepositoryMock,
-            $this->orderExtensionFactoryMock,
-            $this->orderItemExtensionFactoryMock
+            $this->giftMessageOrderItemRepositoryMock
         );
     }
 
-    public function testAfterGetGiftMessageOnOrderLevel()
+    /**
+     * @return void
+     */
+    public function testAfterGetGiftMessageOnOrderLevel(): void
     {
         //set Gift Message for Order
         $orderId = 1;
+        $messageId = 1;
+        $this->orderMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
         $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
         $this->orderMock
             ->expects($this->once())
@@ -160,12 +149,17 @@ class OrderGetTest extends TestCase
         $this->plugin->afterGet($this->orderRepositoryMock, $this->orderMock);
     }
 
-    public function testAfterGetGiftMessageOnItemLevel()
+    /**
+     * @return void
+     */
+    public function testAfterGetGiftMessageOnItemLevel(): void
     {
         //set Gift Message for Order
         $orderId = 1;
         $orderItemId = 2;
+        $messageId = 1;
         $this->orderItemMock->expects($this->once())->method('getItemId')->willReturn($orderItemId);
+        $this->orderItemMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
         $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
         $this->orderMock
             ->expects($this->once())
@@ -198,23 +192,23 @@ class OrderGetTest extends TestCase
         $this->plugin->afterGet($this->orderRepositoryMock, $this->orderMock);
     }
 
-    public function testGetAfterWhenMessagesAreNotSet()
+    /**
+     * @return void
+     */
+    public function testGetAfterWhenMessagesAreNotSet(): void
     {
-        $orderId = 1;
-        $orderItemId = 2;
         //set Gift Message for Order
-        $this->orderMock->expects($this->exactly(2))->method('getEntityId')->willReturn($orderId);
-        $this->orderItemMock->expects($this->once())->method('getItemId')->willReturn($orderItemId);
+        $this->orderMock->expects($this->never())->method('getEntityId');
+        $this->orderItemMock->expects($this->never())->method('getItemId');
+        $this->orderItemMock->expects($this->once())->method('getGiftMessageId')->willReturn(null);
         $this->orderMock
             ->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->orderExtensionMock);
         $this->orderExtensionMock->expects($this->once())->method('getGiftMessage')->willReturn([]);
         $this->giftMessageOrderRepositoryMock
-            ->expects($this->once())
-            ->method('get')
-            ->with($orderId)
-            ->willThrowException(new NoSuchEntityException());
+            ->expects($this->never())
+            ->method('get');
         $this->orderExtensionMock
             ->expects($this->never())
             ->method('setGiftMessage');
@@ -227,10 +221,8 @@ class OrderGetTest extends TestCase
             ->willReturn($this->orderItemExtensionMock);
         $this->orderItemExtensionMock->expects($this->once())->method('getGiftMessage')->willReturn([]);
         $this->giftMessageOrderItemRepositoryMock
-            ->expects($this->once())
-            ->method('get')
-            ->with($orderId, $orderItemId)
-            ->willThrowException(new NoSuchEntityException());
+            ->expects($this->never())
+            ->method('get');
         $this->orderItemExtensionMock
             ->expects($this->never())
             ->method('setGiftMessage');
@@ -238,11 +230,16 @@ class OrderGetTest extends TestCase
         $this->plugin->afterGet($this->orderRepositoryMock, $this->orderMock);
     }
 
-    public function testAfterGetList()
+    /**
+     * @return void
+     */
+    public function testAfterGetList(): void
     {
         //set Gift Message List for Order
         $orderId = 1;
+        $messageId = 1;
         $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
+        $this->orderMock->expects($this->once())->method('getGiftMessageId')->willReturn($messageId);
         $this->orderMock
             ->expects($this->once())
             ->method('getExtensionAttributes')
@@ -268,39 +265,5 @@ class OrderGetTest extends TestCase
         $this->orderMock->expects($this->once())->method('getItems')->willReturn([]);
         $this->collectionMock->expects($this->once())->method('getItems')->willReturn([$this->orderMock]);
         $this->plugin->afterGetList($this->orderRepositoryMock, $this->collectionMock);
-    }
-
-    /**
-     * Build order extension mock.
-     *
-     * @return MockObject
-     */
-    private function getOrderExtensionMock(): MockObject
-    {
-        $mockObject = $this->getMockBuilder(OrderExtension::class);
-        try {
-            $mockObject->addMethods(['getGiftMessage', 'setGiftMessage']);
-        } catch (RuntimeException $e) {
-            // Order extension already generated.
-        }
-
-        return $mockObject->getMock();
-    }
-
-    /**
-     * Build order item extension mock.
-     *
-     * @return MockObject
-     */
-    private function getOrderItemExtensionMock(): MockObject
-    {
-        $mockObject = $this->getMockBuilder(OrderItemExtension::class);
-        try {
-            $mockObject->addMethods(['getGiftMessage', 'setGiftMessage']);
-        } catch (RuntimeException $e) {
-            // Order extension already generated.
-        }
-
-        return $mockObject->getMock();
     }
 }

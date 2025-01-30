@@ -118,23 +118,23 @@ class SpecialPriceTest extends TestCase
     /**
      * @return array
      */
-    public function specialPriceDataProvider()
+    public static function specialPriceDataProvider()
     {
         return [
             'validInterval' => [
-                'is_valid_date' => true,
-                'special_price' => 50.15,
-                'expected'      => 50.15,
+                'isValidInterval' => true,
+                'specialPrice' => 50.15,
+                'specialPriceValue'      => 50.15,
             ],
             'validZeroValue' => [
-                'is_valid_date' => true,
-                'special_price' => 0.,
-                'expected'      => 0.,
+                'isValidInterval' => true,
+                'specialPrice' => 0.,
+                'specialPriceValue'      => 0.,
             ],
             'invalidInterval' => [
-                'is_valid_date' => false,
-                'special_price' => 20.,
-                'expected'      => false,
+                'isValidInterval' => false,
+                'specialPrice' => 20.,
+                'specialPriceValue'      => false,
             ]
         ];
     }

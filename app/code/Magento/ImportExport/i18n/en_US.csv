@@ -29,6 +29,7 @@ Import,Import
 "File to Import","File to Import"
 "Select File to Import","Select File to Import"
 "Images File Directory","Images File Directory"
+"Import History id","Import History id"
 "For Type ""Local Server"" use relative path to &lt;Magento root directory&gt;/var/import/images, e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br><br>For example, in case <i>product_images</i>, files should be placed into <i>&lt;Magento root directory&gt;/var/import/images/product_images</i> folder.","For Type ""Local Server"" use relative path to &lt;Magento root directory&gt;/var/import/images, e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br><br>For example, in case <i>product_images</i>, files should be placed into <i>&lt;Magento root directory&gt;/var/import/images/product_images</i> folder."
 "Download Sample File","Download Sample File"
 "Please correct the data sent value.","Please correct the data sent value."

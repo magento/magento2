@@ -11,6 +11,8 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -33,6 +35,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
  * @since 100.0.2
@@ -64,15 +67,31 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Directory country models
      *
      * @var \Magento\Directory\Model\Country[]
+     * @deprecated
+     * @see $countryModelsCache
      */
     protected static $_countryModels = [];
+
+    /**
+     * @var CountryModelsCache
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly CountryModelsCache $countryModelsCache;
 
     /**
      * Directory region models
      *
      * @var \Magento\Directory\Model\Region[]
+     * @deprecated
+     * @see $regionModelsCache
      */
     protected static $_regionModels = [];
+
+    /**
+     * @var RegionModelsCache
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly RegionModelsCache $regionModelsCache;
 
     /**
      * @var \Magento\Directory\Helper\Data
@@ -145,6 +164,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param CompositeValidator $compositeValidator
+     * @param CountryModelsCache|null $countryModelsCache
+     * @param RegionModelsCache|null $regionModelsCache
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -162,10 +183,12 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CompositeValidator $compositeValidator = null
+        ?CompositeValidator $compositeValidator = null,
+        ?CountryModelsCache $countryModelsCache = null,
+        ?RegionModelsCache $regionModelsCache = null,
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -179,6 +202,10 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         $this->dataObjectHelper = $dataObjectHelper;
         $this->compositeValidator = $compositeValidator ?: ObjectManager::getInstance()
             ->get(CompositeValidator::class);
+        $this->countryModelsCache = $countryModelsCache ?: ObjectManager::getInstance()
+            ->get(CountryModelsCache::class);
+        $this->regionModelsCache = $regionModelsCache ?: ObjectManager::getInstance()
+            ->get(RegionModelsCache::class);
         parent::__construct(
             $context,
             $registry,
@@ -287,9 +314,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
         } elseif (self::CUSTOM_ATTRIBUTES === $key && is_array($value)) {
-            foreach ($value as &$attribute) {
-                $attribute = is_array($attribute) ? $attribute : $attribute->__toArray();
-                $attribute = $this->processCustomAttribute($attribute);
+            $value = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value])[self::CUSTOM_ATTRIBUTES];
+            foreach ($value as $attribute) {
+                $this->processCustomAttribute($attribute);
             }
         }
 
@@ -502,13 +529,12 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function getCountryModel()
     {
-        if (!isset(self::$_countryModels[$this->getCountryId()])) {
+        if (!($country = $this->countryModelsCache->get($this->getCountryId()))) {
             $country = $this->_createCountryInstance();
             $country->load($this->getCountryId());
-            self::$_countryModels[$this->getCountryId()] = $country;
+            $this->countryModelsCache->add($this->getCountryId(), $country);
         }
-
-        return self::$_countryModels[$this->getCountryId()];
+        return $country;
     }
 
     /**
@@ -522,14 +548,12 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         if ($regionId === null) {
             $regionId = $this->getRegionId();
         }
-
-        if (!isset(self::$_regionModels[$regionId])) {
+        if (!($region = $this->regionModelsCache->get($regionId))) {
             $region = $this->_createRegionInstance();
             $region->load($regionId);
-            self::$_regionModels[$regionId] = $region;
+            $this->regionModelsCache->add($regionId, $region);
         }
-
-        return self::$_regionModels[$regionId];
+        return $region;
     }
 
     /**
@@ -724,22 +748,16 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     }
 
     /**
-     * Unify attribute format.
+     * Normalize custom attribute value
      *
-     * @param array $attribute
-     * @return array
+     * @param \Magento\Framework\Api\AttributeInterface $attribute
+     * @return void
      */
-    private function processCustomAttribute(array $attribute): array
+    private function processCustomAttribute(\Magento\Framework\Api\AttributeInterface $attribute): void
     {
-        if (isset($attribute['attribute_code']) &&
-            isset($attribute['value']) &&
-            is_array($attribute['value']) &&
-            $this->isAddressMultilineAttribute($attribute['attribute_code'])
-        ) {
-            $attribute['value'] = $this->_implodeArrayValues($attribute['value']);
+        if (is_array($attribute->getValue()) && $this->isAddressMultilineAttribute($attribute->getAttributeCode())) {
+            $attribute->setValue($this->_implodeArrayValues($attribute->getValue()));
         }
-
-        return $attribute;
     }
 
     /**

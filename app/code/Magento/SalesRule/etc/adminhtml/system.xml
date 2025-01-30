@@ -19,17 +19,22 @@
                     <comment>Excluding prefix, suffix and separators.</comment>
                     <frontend_class>validate-digits</frontend_class>
                 </field>
-                <field id="format" translate="label" type="select" sortOrder="20" showInDefault="1" canRestore="1">
+                <field id="quantity_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" canRestore="1">
+                    <label>Code Quantity Limit</label>
+                    <comment>For better performance max value allowed is 250,000. Set 0 to disable it.</comment>
+                    <frontend_class>required-entry validate-number-range number-range-0-250000</frontend_class>
+                </field>
+                <field id="format" translate="label" type="select" sortOrder="30" showInDefault="1" canRestore="1">
                     <label>Code Format</label>
                     <source_model>Magento\SalesRule\Model\System\Config\Source\Coupon\Format</source_model>
                 </field>
-                <field id="prefix" translate="label" type="text" sortOrder="30" showInDefault="1">
+                <field id="prefix" translate="label" type="text" sortOrder="40" showInDefault="1">
                     <label>Code Prefix</label>
                 </field>
-                <field id="suffix" translate="label" type="text" sortOrder="40" showInDefault="1">
+                <field id="suffix" translate="label" type="text" sortOrder="50" showInDefault="1">
                     <label>Code Suffix</label>
                 </field>
-                <field id="dash" translate="label comment" type="text" sortOrder="50" showInDefault="1">
+                <field id="dash" translate="label comment" type="text" sortOrder="60" showInDefault="1">
                     <label>Dash Every X Characters</label>
                     <comment>If empty no separation.</comment>
                     <frontend_class>validate-digits</frontend_class>

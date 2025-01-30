@@ -16,6 +16,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Model\Metadata\Form\File;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -136,6 +137,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param SessionCleanerInterface|null $sessionCleaner
      * @param AccountConfirmation|null $accountConfirmation
      * @param Url|null $customerUrl
+     * @param Mapper|null $customerMapper
      */
     public function __construct(
         Context $context,
@@ -149,7 +151,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         ?Filesystem $filesystem = null,
         ?SessionCleanerInterface $sessionCleaner = null,
         ?AccountConfirmation $accountConfirmation = null,
-        ?Url $customerUrl = null
+        ?Url $customerUrl = null,
+        ?Mapper $customerMapper = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -164,6 +167,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
         $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
+        $this->customerMapper = $customerMapper ?: ObjectManager::getInstance()->get(Mapper::class);
     }
 
     /**
@@ -233,9 +237,15 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $customer = $this->getCustomerDataObject($this->session->getCustomerId());
             $customerCandidate = $this->populateNewCustomerDataObject($this->_request, $customer);
 
-            $attributeToDelete = $this->_request->getParam('delete_attribute_value');
-            if ($attributeToDelete !== null) {
-                $this->deleteCustomerFileAttribute($customerCandidate, $attributeToDelete);
+            $attributeToDelete = (string)$this->_request->getParam('delete_attribute_value');
+            if ($attributeToDelete !== "") {
+                $attributesToDelete = $this->prepareAttributesToDelete($attributeToDelete);
+                foreach ($attributesToDelete as $attribute) {
+                    $uploadedValue = $this->_request->getParam($attribute . File::UPLOADED_FILE_SUFFIX);
+                    if ((string)$uploadedValue === "") {
+                        $this->deleteCustomerFileAttribute($customerCandidate, $attribute);
+                    }
+                }
             }
 
             try {
@@ -298,6 +308,26 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $resultRedirect->setPath('*/*/edit');
 
         return $resultRedirect;
+    }
+
+    /**
+     * Convert comma-separated list of attributes to delete into array
+     *
+     * @param string $attribute
+     * @return array
+     */
+    private function prepareAttributesToDelete(string $attribute) : array
+    {
+        $result = [];
+        if ($attribute !== "") {
+            if (str_contains($attribute, ',')) {
+                $result = explode(',', $attribute);
+            } else {
+                $result[] = $attribute;
+            }
+            $result = array_unique($result);
+        }
+        return $result;
     }
 
     /**
@@ -468,11 +498,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         string $attributeToDelete
     ) : void {
         if ($attributeToDelete !== '') {
-            if (strpos($attributeToDelete, ',') !== false) {
-                $attributes = explode(',', $attributeToDelete);
-            } else {
-                $attributes[] = $attributeToDelete;
-            }
+            $attributes = $this->prepareAttributesToDelete($attributeToDelete);
             foreach ($attributes as $attr) {
                 $attributeValue = $customerCandidateDataObject->getCustomAttribute($attr);
                 if ($attributeValue!== null) {

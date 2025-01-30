@@ -131,13 +131,13 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAmount'])
+            ->onlyMethods(['getAmount'])
             ->getMock();
 
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
 
         $baseAmount->expects($this->any())
@@ -172,12 +172,12 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAmount'])
+            ->onlyMethods(['getAmount'])
             ->getMock();
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
 
         $baseAmount->expects($this->any())
@@ -204,7 +204,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function getDisplayAmountDataProvider()
+    public static function getDisplayAmountDataProvider()
     {
         return [[true], [false]];
     }
@@ -223,13 +223,13 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem'])
+            ->onlyMethods(['getSaleableItem'])
             ->getMock();
 
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
 
         $amountRender->expects($this->any())
@@ -251,7 +251,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function buildIdWithPrefixDataProvider()
+    public static function buildIdWithPrefixDataProvider()
     {
         return [
             ['some_prefix_', null, '_suffix', 'some_prefix__suffix'],
@@ -378,7 +378,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function dataPriceTypeDataProvider(): array
+    public static function dataPriceTypeDataProvider(): array
     {
         return [['finalPrice', 'basePrice'], [null, '']];
     }

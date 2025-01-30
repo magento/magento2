@@ -105,15 +105,15 @@ class OptionTest extends TestCase
         $this->quoteItemMock->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'setIsChildItem',
                     'setSuppressCheckQtyIncrements',
                     'unsIsChildItem',
-                    'getItemId',
                     'setProductName'
                 ]
             )
+            ->onlyMethods(['getItemId'])
             ->getMockForAbstractClass();
         $this->productMock = $this->createPartialMock(Product::class, ['getId', 'getStore']);
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
@@ -125,7 +125,14 @@ class OptionTest extends TestCase
         );
         $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->addMethods(
-                ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getOrigQty', 'getMessage', 'getItemBackorders', 'getItemQty']
+                [
+                    'getItemIsQtyDecimal',
+                    'getHasQtyOptionUpdate',
+                    'getOrigQty',
+                    'getMessage',
+                    'getItemBackorders',
+                    'getItemQty'
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();

@@ -60,7 +60,7 @@ class ImageTest extends TestCase
         $this->imageInterfaceFactory = $this->getMockBuilder(
             ImageInterfaceFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

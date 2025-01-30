@@ -46,7 +46,7 @@ class OperationManagementTest extends TestCase
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getTableName'])
+            ->onlyMethods(['getConnection', 'getTableName'])
             ->getMock();
 
         $this->model = new OperationManagement(

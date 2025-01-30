@@ -48,26 +48,26 @@ class PriceTest extends TestCase
     {
         $this->productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMaxPrice'])
+            ->onlyMethods(['getMaxPrice'])
             ->getMock();
         $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductCollection'])
+            ->onlyMethods(['getProductCollection'])
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getProductCollection')
             ->willReturn($this->productCollection);
         $this->coreRegistry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMockForAbstractClass();
         $this->resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Price::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCount'])
+            ->onlyMethods(['getCount'])
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -117,7 +117,7 @@ class PriceTest extends TestCase
         /** @var Category|MockObject $category */
         $category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFilterPriceRange'])
+            ->addMethods(['getFilterPriceRange'])
             ->getMock();
         $priceRange = 10;
         $category->expects($this->once())
@@ -135,7 +135,7 @@ class PriceTest extends TestCase
         /** @var Category|MockObject $category */
         $category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFilterPriceRange'])
+            ->addMethods(['getFilterPriceRange'])
             ->getMock();
         $priceRange = 0;
         $category->expects($this->once())
@@ -174,17 +174,17 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function validateFilterDataProvider()
+    public static function validateFilterDataProvider()
     {
         return [
-            ['filter' => '0-10', 'result' => ['0', '10']],
-            ['filter' => '0-10-20', 'result' => false],
-            ['filter' => '', 'result' => false],
-            ['filter' => '-', 'result' => ['', '']],
-            ['filter' => '0', 'result' => false],
-            ['filter' => 0, 'result' => false],
-            ['filter' => '100500INF', 'result' => false],
-            ['filter' => '-10\'[0]', 'result' => false],
+            ['filter' => '0-10', 'expectedResult' => ['0', '10']],
+            ['filter' => '0-10-20', 'expectedResult' => false],
+            ['filter' => '', 'expectedResult' => false],
+            ['filter' => '-', 'expectedResult' => ['', '']],
+            ['filter' => '0', 'expectedResult' => false],
+            ['filter' => 0, 'expectedResult' => false],
+            ['filter' => '100500INF', 'expectedResult' => false],
+            ['filter' => '-10\'[0]', 'expectedResult' => false],
         ];
     }
 

@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Test related/upsell/crosssel products UI modifier
  */
-class RelatedTest extends AbstractModifierTest
+class RelatedTest extends AbstractModifierTestCase
 {
     /**
      * @var ProductLinkRepositoryInterface|MockObject
@@ -175,7 +175,7 @@ class RelatedTest extends AbstractModifierTest
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function sortingDataProvider(): array
+    public static function sortingDataProvider(): array
     {
         return [
             [

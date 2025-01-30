@@ -47,7 +47,7 @@ class GenericTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['isReadonly', 'isDuplicable'])
+            ->addMethods(['isReadonly', 'isDuplicable'])
             ->getMockForAbstractClass();
 
         $this->registryMock->expects($this->any())

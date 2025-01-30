@@ -6,8 +6,6 @@
 
 /**
  * Customer Address EAV additional attribute resource collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute;
 

@@ -13,5 +13,41 @@
         <add id="Magento_Backend::system_report_magento_invite_general" title="Invite" module="Magento_Backend" sortOrder="20" parent="Magento_Backend::system_report" resource="Magento_Backend::report_magento_invite_general"/>
         <add id="Magento_Backend::system_report_private_sales" title="Private Sales" module="Magento_Backend" sortOrder="10" parent="Magento_Backend::system_report" resource="Magento_Backend::report_private_sales" />
         <add id="Magento_Backend::system_report_magento_invite_customer" title="Invited Customers" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::system_report" resource="Magento_Backend::report_magento_invite_customer"/>
+        <add id="Magento_Cms::test1" title="Test 1"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::test2" title="Test 2"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::test3" title="Test 3"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::test4" title="Test 4"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::test5" title="Test 5"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::test6" title="Test 6"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::test7" title="Test 7"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::test8" title="Test 8"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
+        <add id="Magento_Cms::test9" title="Test 9"
+             translate="title" module="Magento_Cms" sortOrder="100"
+             action="test/test/test"
+             parent="Magento_Backend::system" resource="Magento_Cms::page"/>
     </menu>
 </config>

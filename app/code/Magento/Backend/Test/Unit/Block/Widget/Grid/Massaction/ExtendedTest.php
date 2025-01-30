@@ -14,8 +14,10 @@ use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Massaction;
 use Magento\Backend\Block\Widget\Grid\Massaction\Extended;
 use Magento\Backend\Model\Url;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -98,6 +100,18 @@ class ExtendedTest extends TestCase
         ];
 
         $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->_block = $objectManagerHelper->getObject(
             Extended::class,
             $arguments
@@ -168,7 +182,7 @@ class ExtendedTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetGridIdsJsonWithUseSelectAll()
+    public static function dataProviderGetGridIdsJsonWithUseSelectAll()
     {
         return [
             [

@@ -536,7 +536,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getSingleStoreIds(): array
+    public static function getSingleStoreIds(): array
     {
         return [
             [
@@ -628,18 +628,18 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getCategoryCollectionCollectionNullDataProvider(): array
+    public static function getCategoryCollectionCollectionNullDataProvider(): array
     {
         return [
             [
-                '$initCategoryCollection' => null,
-                '$getIdResult' => 'getIdResult value',
-                '$productIdCached' => 'productIdCached value'
+                'initCategoryCollection' => null,
+                'getIdResult' => 'getIdResult value',
+                'productIdCached' => 'productIdCached value'
             ],
             [
-                '$initCategoryCollection' => 'value',
-                '$getIdResult' => 'getIdResult value',
-                '$productIdCached' => 'not getIdResult value'
+                'initCategoryCollection' => 'value',
+                'getIdResult' => 'getIdResult value',
+                'productIdCached' => 'not getIdResult value'
             ]
         ];
     }
@@ -772,7 +772,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function getProductReindexProvider(): array
+    public static function getProductReindexProvider(): array
     {
         return [
             'set 1' => [true, false, 1, 1],
@@ -821,6 +821,9 @@ class ProductTest extends TestCase
         bool $isDeleted = false,
         bool $isNew = false
     ): void {
+        if (!empty($data['extension_attributes']) && is_callable($data['extension_attributes'])) {
+            $data['extension_attributes'] = $data['extension_attributes']($this);
+        }
         $this->model->setIdFieldName('id');
         if (is_array($origData)) {
             foreach ($origData as $key => $value) {
@@ -835,10 +838,7 @@ class ProductTest extends TestCase
         $this->assertEquals($expected, $this->model->getIdentities());
     }
 
-    /**
-     * @return array
-     */
-    public function getIdentitiesProvider(): array
+    protected function getMockForExtensionAttribute()
     {
         $extensionAttributesMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
@@ -848,7 +848,20 @@ class ProductTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $extensionAttributesMock->expects($this->any())->method('getStockItem')->willReturn($stockItemMock);
-        $stockItemMock->expects($this->any())->method('getIsInStock')->willReturn(true);
+        return $extensionAttributesMock;
+    }
+    /**
+     * @return array
+     */
+    public static function getIdentitiesProvider(): array
+    {
+        $extensionAttributesMock = static fn (self $testCase)
+        => $testCase->getMockForExtensionAttribute();
+        /** Unused lines of code */
+//        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
+//            ->disableOriginalConstructor()
+//            ->getMockForAbstractClass();
+//        $stockItemMock->expects($this->any())->method('getIsInStock')->willReturn(true);
 
         return [
             'no changes' => [
@@ -856,8 +869,8 @@ class ProductTest extends TestCase
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]]
             ],
-            'new product' => $this->getNewProductProviderData(),
-            'new disabled product' => $this->getNewDisabledProductProviderData(),
+            'new product' => self::getNewProductProviderData(),
+            'new disabled product' => self::getNewDisabledProductProviderData(),
             'status and category change' => [
                 [0 => 'cat_p_1', 1 => 'cat_c_p_1', 2 => 'cat_c_p_2'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_DISABLED],
@@ -892,13 +905,13 @@ class ProductTest extends TestCase
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => Status::STATUS_DISABLED],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => Status::STATUS_ENABLED]
             ],
-            'status changed, category unassigned' => $this->getStatusAndCategoryChangesData(),
+            'status changed, category unassigned' => self::getStatusAndCategoryChangesData(),
             'no status changes' => [
                 [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_ENABLED],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_ENABLED]
             ],
-            'no stock status changes' => $this->getNoStockStatusChangesData($extensionAttributesMock),
+            'no stock status changes' => self::getNoStockStatusChangesData($extensionAttributesMock),
             'no stock status data 1' => [
                 [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_ENABLED],
@@ -921,7 +934,7 @@ class ProductTest extends TestCase
                     'stock_data' => ['is_in_stock' => true]
                 ]
             ],
-            'stock status changes for enabled product' => $this->getStatusStockProviderData($extensionAttributesMock),
+            'stock status changes for enabled product' => self::getStatusStockProviderData($extensionAttributesMock),
             'stock status changes for disabled product' => [
                 [0 => 'cat_p_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => Status::STATUS_DISABLED],
@@ -940,7 +953,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    private function getStatusAndCategoryChangesData(): array
+    private static function getStatusAndCategoryChangesData(): array
     {
         return [
             [0 => 'cat_p_1', 1 => 'cat_c_p_5'],
@@ -957,11 +970,11 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @param MockObject $extensionAttributesMock
+     * @param $extensionAttributesMock
      *
      * @return array
      */
-    private function getNoStockStatusChangesData(MockObject $extensionAttributesMock): array
+    private static function getNoStockStatusChangesData($extensionAttributesMock): array
     {
         return [
             [0 => 'cat_p_1'],
@@ -971,7 +984,7 @@ class ProductTest extends TestCase
                 'name' => 'value',
                 'category_ids' => [1],
                 'status' => Status::STATUS_ENABLED,
-                'stock_data' => ['is_in_stock' => true],
+                'stock_data' => ['is_in_stock' => false],
                 ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock
             ]
         ];
@@ -980,10 +993,10 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    private function getNewProductProviderData(): array
+    private static function getNewProductProviderData(): array
     {
         return [
-            ['cat_p_1', 'cat_c_p_1'],
+            ['cat_p_1', 'cat_c_p_1', 'cat_p_new', 'rss_p_new'],
             null,
             [
                 'id' => 1,
@@ -1000,7 +1013,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    private function getNewDisabledProductProviderData(): array
+    private static function getNewDisabledProductProviderData(): array
     {
         return [
             ['cat_p_1'],
@@ -1019,11 +1032,11 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @param MockObject $extensionAttributesMock
+     * @param $extensionAttributesMock
      *
      * @return array
      */
-    private function getStatusStockProviderData(MockObject $extensionAttributesMock): array
+    private static function getStatusStockProviderData($extensionAttributesMock): array
     {
         return [
             [0 => 'cat_p_1', 1 => 'cat_c_p_1'],
@@ -1033,7 +1046,7 @@ class ProductTest extends TestCase
                 'name' => 'value',
                 'category_ids' => [1],
                 'status' => Status::STATUS_ENABLED,
-                'stock_data' => ['is_in_stock' => false],
+                'stock_data' => ['is_in_stock' => true],
                 ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock
             ]
         ];
@@ -1595,9 +1608,12 @@ class ProductTest extends TestCase
             ]
         );
         $imagesCollectionMock->expects(self::exactly(2))->method('addItem')
-            ->withConsecutive(
-                [$expectedImageDataObject],
-                [$expectedSmallImageDataObject]
+            ->willReturnCallback(
+                function ($arg1) use ($expectedImageDataObject, $expectedSmallImageDataObject) {
+                    if ($arg1 == $expectedImageDataObject || $arg1 == $expectedSmallImageDataObject) {
+                        return null;
+                    }
+                }
             );
         $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
 

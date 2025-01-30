@@ -55,7 +55,7 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey
      * @return $this
      */
-    public function setTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null);
+    public function setTaxClassKey(?\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null);
 
     /**
      * Get unit price

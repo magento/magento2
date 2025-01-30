@@ -48,7 +48,7 @@ class AggregateInvoker
     {
         $results = [
             \PHPUnit\Framework\IncompleteTestError::class => [],
-            \PHPUnit\Framework\SkippedTestError::class => [],
+            \PHPUnit\Framework\SkippedWithMessageException::class => [],
             \PHPUnit\Framework\AssertionFailedError::class => [],
         ];
         $passed = 0;
@@ -58,7 +58,7 @@ class AggregateInvoker
                 $passed++;
             } catch (\PHPUnit\Framework\IncompleteTestError $exception) {
                 $results[get_class($exception)][] = $this->prepareMessage($exception, $dataSetName, $dataSet);
-            } catch (\PHPUnit\Framework\SkippedTestError $exception) {
+            } catch (\PHPUnit\Framework\SkippedWithMessageException $exception) {
                 $results[get_class($exception)][] = $this->prepareMessage($exception, $dataSetName, $dataSet);
             } catch (\PHPUnit\Framework\AssertionFailedError $exception) {
                 $results[\PHPUnit\Framework\AssertionFailedError::class][] = $this->prepareMessage(
@@ -86,7 +86,7 @@ class AggregateInvoker
         }
         if ($exception instanceof \PHPUnit\Framework\AssertionFailedError
             && !$exception instanceof \PHPUnit\Framework\IncompleteTestError
-            && !$exception instanceof \PHPUnit\Framework\SkippedTestError
+            && !$exception instanceof \PHPUnit\Framework\SkippedWithMessageException
             || $this->_options['verbose']) {
             $dataSetName = 'Data set: ' . $dataSetName . PHP_EOL;
         } else {
@@ -110,7 +110,7 @@ class AggregateInvoker
             $passed,
             count($results[\PHPUnit\Framework\AssertionFailedError::class]),
             count($results[\PHPUnit\Framework\IncompleteTestError::class]),
-            count($results[\PHPUnit\Framework\SkippedTestError::class])
+            count($results[\PHPUnit\Framework\SkippedWithMessageException::class])
         );
         if ($results[\PHPUnit\Framework\AssertionFailedError::class]) {
             $this->_testCase->fail(
@@ -119,7 +119,7 @@ class AggregateInvoker
             );
         }
         if (!$results[\PHPUnit\Framework\IncompleteTestError::class] &&
-            !$results[\PHPUnit\Framework\SkippedTestError::class]) {
+            !$results[\PHPUnit\Framework\SkippedWithMessageException::class]) {
             return;
         }
         $message = $totalCountsMessage . PHP_EOL . implode(
@@ -127,11 +127,11 @@ class AggregateInvoker
             $results[\PHPUnit\Framework\IncompleteTestError::class]
         ) . PHP_EOL . implode(
             PHP_EOL,
-            $results[\PHPUnit\Framework\SkippedTestError::class]
+            $results[\PHPUnit\Framework\SkippedWithMessageException::class]
         );
         if ($results[\PHPUnit\Framework\IncompleteTestError::class]) {
             $this->_testCase->markTestSkipped($message);
-        } elseif ($results[\PHPUnit\Framework\SkippedTestError::class]) {
+        } elseif ($results[\PHPUnit\Framework\SkippedWithMessageException::class]) {
             $this->_testCase->markTestSkipped($message);
         }
     }

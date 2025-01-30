@@ -1,0 +1,23 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminPaypalStandardPaylaterDefaultValuesCartPageActionGroup">
+        <annotations>
+            <description>Validate the Default Dropdown values In Paylater</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <seeOptionIsSelected selector="{{AdminPaypalStandardConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
+        <seeOptionIsSelected selector="{{AdminPaypalStandardConfigSection.styleLayout(countryCode)}}" userInput="Flex" stepKey="seeSelectedStylelayout"/>
+        <seeOptionIsSelected selector="{{AdminPaypalStandardConfigSection.ratio(countryCode)}}" userInput="20x1" stepKey="seeSelectedRatio"/>
+        <seeOptionIsSelected selector="{{AdminPaypalStandardConfigSection.color(countryCode)}}" userInput="Blue" stepKey="seeSelectedColor"/>
+        <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForConfiguBtn" />
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfiguration"/>
+    </actionGroup>
+</actionGroups>

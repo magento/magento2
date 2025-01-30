@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCatalogPurchaseProductWithSeveralCustomOptionsAndPriceModificationsTest">
+        <annotations>
+            <stories value="Pricing"/>
+            <title value="Purchase a product with several Custom Options and price modifications"/>
+            <description value="The test verifies price calculation for a product that has several custom options with its own prices, tier price and a special price"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4370"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">80</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData entity="productWithMultiCustomOption" createDataKey="createProduct" stepKey="addCustomOptions">
+                <requiredEntity createDataKey="createProduct"/>
+            </updateData>
+            <!--Go to Admin Product page .-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <!--Fill tier price and save the product.-->
+            <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="openAdvancedPricingDialog"/>
+            <actionGroup ref="AdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="addTierPrice">
+                <argument name="website" value="{{tierPriceForCustomProduct.website}}"/>
+                <argument name="customerGroup" value="{{tierPriceForCustomProduct.customer_group}}"/>
+                <argument name="quantity" value="{{tierPriceForCustomProduct.qty}}"/>
+                <argument name="priceType" value="Fixed"/>
+                <argument name="amount" value="{{tierPriceForCustomProduct.price}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickOnDone"/>
+            <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Go to storefront add the product into cart with option 1 and option 2 and check the qty -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductPageOnStorefront">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionDropDownActionGroup" stepKey="selectDropDownOptionForValue1"/>
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionCheckBoxActionGroup" stepKey="selectCustomOptionCheckBoxForValue1"/>
+        <actionGroup ref="StorefrontAddQuantityOnProductPageActionGroup" stepKey="fillQty"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.productPriceFinal('110')}}" stepKey="assertProductFinalPrice"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', tierPriceForCustomProduct.qty)}}" stepKey="grabFirstTierPriceText"/>
+        <assertEquals stepKey="assertTierPriceTextOnProductPage">
+            <expectedResult type="string">Buy {{tierPriceForCustomProduct.qty}} for ${{tierPriceForCustomProduct.price}} each and save 13%</expectedResult>
+            <actualResult type="variable">grabFirstTierPriceText</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart"/>
+        <!--Validate qty in mini cart .-->
+        <grabTextFrom selector="{{StorefrontMinicartSection.productCount}}" stepKey="grabMiniCartIconQtyShow"/>
+        <assertEquals stepKey="assertQtyShowInMiniCart">
+            <expectedResult type="string">1</expectedResult>
+            <actualResult type="variable">grabMiniCartIconQtyShow</actualResult>
+        </assertEquals>
+        <!-- add 9 product into cart with option 1 and option 2 -->
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionFieldActionGroup" stepKey="addSimpleProductWithCustomFields">
+            <argument name="testValue" value="Test text"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddQuantityOnProductPageActionGroup" stepKey="fillProdQty">
+            <argument name="quantity" value="9"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.productPriceFinal('160')}}" stepKey="assertFinalPrice"/>
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addSimpleProduct"/>
+        <!--Validate qty in mini cart .-->
+        <grabTextFrom selector="{{StorefrontMinicartSection.productCount}}" stepKey="miniCartIconQty"/>
+        <assertEquals stepKey="assertQtyShowMiniCart">
+            <expectedResult type="string">10</expectedResult>
+            <actualResult type="variable">miniCartIconQty</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="clickCart"/>
+        <!--Validate the price of 10 product in mini cart .-->
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="miniCartSubtotalValidation"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,550.00" stepKey="assertCartSubtotal">
+            <expectedResult type="string">$1,550.00</expectedResult>
+            <actualResult type="variable">miniCartSubtotalValidation</actualResult>
+        </assertEquals>
+        <!--Remove 9 product form mini cart and Validate 1 product price in mini cart .-->
+        <actionGroup ref="StorefrontRemoveProductFromMiniCartPopupActionGroup" stepKey="removeProductFromMiniCartPopup">
+            <argument name="qty" value="9"/>
+        </actionGroup>
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="subtotalValidationInMiniCart"/>
+        <assertEquals message="Shopping cart should contain subtotal $110.00" stepKey="assertMiniCartSubtotal">
+            <expectedResult type="string">$110.00</expectedResult>
+            <actualResult type="variable">subtotalValidationInMiniCart</actualResult>
+        </assertEquals>
+        <!--Remove option 3 data add 9 product in cart .-->
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionFieldActionGroup" stepKey="addSimpleProductWithCustomFieldEmpty">
+            <argument name="testValue" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCloseMiniCartActionGroup" stepKey="closeMiniCart"/>
+        <actionGroup ref="StorefrontAddQuantityOnProductPageActionGroup" stepKey="fillQtyOfProduct">
+            <argument name="quantity" value="9"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.productPriceFinal('110')}}" stepKey="assertProductFinalPriceAgain"/>
+        <!--Validate the success msg and check the 10 qty in mini cart .-->
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCartAgain"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.productCount}}" stepKey="miniCartIconQtyShow"/>
+        <assertEquals stepKey="assertQtyInMiniCart">
+            <expectedResult type="string">10</expectedResult>
+            <actualResult type="variable">miniCartIconQtyShow</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <!--Validate 10 product price in mini cart .-->
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="subtotalValidation"/>
+        <assertEquals message="Shopping cart should contain subtotal $975.00" stepKey="assertCartSubtotalFor9Qty">
+            <expectedResult type="string">$975.00</expectedResult>
+            <actualResult type="variable">subtotalValidation</actualResult>
+        </assertEquals>
+        <!--Remove 10 product from cart .-->
+        <actionGroup ref="StorefrontRemoveProductFromMiniCartPopupActionGroup" stepKey="removeProductFromMiniCart">
+            <argument name="qty" value="10"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCloseMiniCartActionGroup" stepKey="closeMiniCarAgain"/>
+        <!--Goto storefront add the product into cart Again -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionDropDownActionGroup" stepKey="selectCustomOptionDropDownForValue2">
+            <argument name="dropDownOption" value="Value2 +$20.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionCheckBoxActionGroup" stepKey="selectCustomOptionCheckBoxForValue2">
+            <argument name="checkBoxValue" value="Value2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddQuantityOnProductPageActionGroup" stepKey="fillQtyProduct">
+            <argument name="quantity" value="9"/>
+        </actionGroup>
+        <!--Add 9 product in cart and validate it .-->
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCartAgain"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.productCount}}" stepKey="grabMiniCartIconQtyProduct"/>
+        <assertEquals stepKey="assertQtyShowInMiniCartProduct">
+            <expectedResult type="string">9</expectedResult>
+            <actualResult type="variable">grabMiniCartIconQtyProduct</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="clickCartAgain"/>
+        <!--Validate the 9 product total price in cart and close the mini cart pop .-->
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabMiniCartSubtotalValidationProduct"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,260.00" stepKey="assertCartSubtotalFor9QtyProduct">
+            <expectedResult type="string">$1,260.00</expectedResult>
+            <actualResult type="variable">grabMiniCartSubtotalValidationProduct</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontCloseMiniCartActionGroup" stepKey="closeCart"/>
+        <!--select option2 value 1 and add 1 product in cart and verify the price .-->
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionCheckBoxActionGroup" stepKey="selectValue2ForCustomOptionCheckBox">
+            <argument name="checkBoxValue" value="Value2"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionCheckBoxActionGroup" stepKey="selectCustomOptionCheckBoxForValue1Again">
+            <argument name="checkBoxValue" value="Value1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddQuantityOnProductPageActionGroup" stepKey="qtyFill"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.productPriceFinal('120')}}" stepKey="againAssertProductFinalPrice"/>
+        <!--validate success msg and validate mimi cart qty for 10 product in cart .-->
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.productCount}}" stepKey="grabMiniCartIconQtyShowProduct"/>
+        <assertEquals stepKey="assertQtyShowInMiniCart1">
+            <expectedResult type="string">10</expectedResult>
+            <actualResult type="variable">grabMiniCartIconQtyShowProduct</actualResult>
+        </assertEquals>
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="clickCartForTenAgain"/>
+        <!--Validate 10 product price in mini cart .-->
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabMiniCartSubtotalValidationForTenQtyProduct"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,380.00" stepKey="assertCartSubtotalForTenQtyProduct">
+            <expectedResult type="string">$1,380.00</expectedResult>
+            <actualResult type="variable">grabMiniCartSubtotalValidationForTenQtyProduct</actualResult>
+        </assertEquals>
+        <!--Remove 10 product from cart product qty wise and close the mini cart  .-->
+        <actionGroup ref="StorefrontRemoveProductFromMiniCartPopupActionGroup" stepKey="removeNineProductFromMiniCardPopupAgain">
+            <argument name="qty" value="9"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontRemoveProductFromMiniCartPopupActionGroup" stepKey="removeOneProductFromMiniCardPopup">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCloseMiniCartActionGroup" stepKey="miniCartClose"/>
+        <!--Go to Admin product page-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPageAgain">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <!-- Open Advanced Pricing and add Special Price to Product-->
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForProduct">
+            <argument name="price" value="50"/>
+        </actionGroup>
+        <!-- Save Product Page-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!--Goto storefront verify old and new price product .-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront123">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.productPriceFinal('50')}}" stepKey="waitForOldPriceElementToBeClickable"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" userInput="$80.00" stepKey="validateRegularPrice"/>
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionDropDownActionGroup" stepKey="selectCustomOptionDorpDownAgain"/>
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionCheckBoxActionGroup" stepKey="againSelectCustomOptionCheckBoxForValue1"/>
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionFieldActionGroup" stepKey="addSimpleProductWithCustomOptionField"/>
+        <actionGroup ref="StorefrontAddQuantityOnProductPageActionGroup" stepKey="qtyProductFill"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.productPriceFinal('122.50')}}" stepKey="validateFinalPrice"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" userInput="$160.00" stepKey="assertRegularPrice"/>
+        <!--Add 10 product in cart and verify the qty in mini cart .-->
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addOneSimpleProductToCartAfterRegularPrice"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.qtyInput}}" stepKey="waitForQtyInputToBeVisible"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="10" stepKey="fillProductQtyTenAfterRegularPrice"/>
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addTenSimpleProductToCartAfterRegularPrice"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.productCount}}" stepKey="miniCartIconQtyShowTenProductAfterRegularPrice"/>
+        <assertEquals stepKey="assertAgainQtyInMiniCart">
+            <expectedResult type="string">11</expectedResult>
+            <actualResult type="variable">miniCartIconQtyShowTenProductAfterRegularPrice</actualResult>
+        </assertEquals>
+        <!--Validate the 11 product total price in cart .-->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="clickCartForEleven"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="miniCartSubtotalValidationAfterRegularPrice"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,347.50" stepKey="assertAgainCartSubtotal">
+            <expectedResult type="string">$1,347.50</expectedResult>
+            <actualResult type="variable">miniCartSubtotalValidationAfterRegularPrice</actualResult>
+        </assertEquals>
+        <!--Proceed to checkout and shipping method .-->
+        <actionGroup ref="StorefrontGuestCheckoutProceedActionGroup" stepKey="proceedToCheckout"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!-- Go to sales < Order open the created Order and verify order in admin portal -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminOrderItemsOrderedSection.productNameColumn}}" stepKey="scrollToField"/>
+        <!--validate Simple product, Price = 122.50$; subtotal=1347.50$;Option 1: Value 1 Option 2: Value 1 Option 3: test value in Admin order page .-->
+        <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.nameOfProduct($$createProduct.name$$)}}" stepKey="seeProductInGrid"/>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.priceColumn}}" stepKey="seeProductPrice"/>
+        <assertEquals message="validate Product Price value" stepKey="assertsProductPrice">
+            <expectedResult type="string">$122.50</expectedResult>
+            <actualResult type="variable">seeProductPrice</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.subtotalColumn}}" stepKey="grabProductSubtotal"/>
+        <assertEquals message="validate Product subtotal value" stepKey="assertsProductSubtotal">
+            <expectedResult type="string">$1,347.50</expectedResult>
+            <actualResult type="variable">grabProductSubtotal</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.customOption('Option 1:','1')}}" stepKey="grabAssertsOption1Value1"/>
+        <assertEquals message="validate the option1 is having Value 1 Product" stepKey="assertsOption1Value1">
+            <expectedResult type="string">Value1</expectedResult>
+            <actualResult type="variable">grabAssertsOption1Value1</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.customOption('Option 2:','2')}}" stepKey="grabAssertsOption2Value1"/>
+        <assertEquals message="validate the option2 is having Value 1 Product" stepKey="assertsOption2Value1">
+            <expectedResult type="string">Value1</expectedResult>
+            <actualResult type="variable">grabAssertsOption2Value1</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.customOption('Option 3:','3')}}" stepKey="grabAssertsOption3ValueTest"/>
+        <assertEquals message="validate the option3 is having Test value Product" stepKey="assertsOption3ValueTest">
+            <expectedResult type="string">Test value</expectedResult>
+            <actualResult type="variable">grabAssertsOption3ValueTest</actualResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -208,8 +208,10 @@ class CancelTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $transactionMock->method('addObject')
-            ->withConsecutive([$invoiceMock], [$orderMock])
-            ->willReturnOnConsecutiveCalls($transactionMock, $transactionMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$invoiceMock] => $transactionMock,
+                [$orderMock] => $transactionMock
+            });
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')

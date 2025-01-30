@@ -31,7 +31,7 @@ class ReorderTest extends TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var MockObject|\Magento\Sales\Model\Store
+     * @var MockObject|\Magento\Store\Model\Store
      */
     protected $storeParam;
 
@@ -56,7 +56,7 @@ class ReorderTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock = $this->getMockBuilder(Context::class)
@@ -78,7 +78,7 @@ class ReorderTest extends TestCase
             $this->repositoryMock
         );
 
-        $this->storeParam = $this->getMockBuilder(\Magento\Sales\Model\Store::class)
+        $this->storeParam = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -115,7 +115,7 @@ class ReorderTest extends TestCase
     /**
      * @return array
      */
-    public function getScopeConfigValue()
+    public static function getScopeConfigValue()
     {
         return [
             [true],
@@ -217,7 +217,7 @@ class ReorderTest extends TestCase
     /**
      * @return array
      */
-    public function getOrderCanReorder()
+    public static function getOrderCanReorder()
     {
         return [
             [true],

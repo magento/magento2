@@ -99,7 +99,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null)
+    public function setAppliedTaxes(?array $appliedTaxes = null)
     {
         return $this->setData(self::KEY_APPLIED_TAXES, $appliedTaxes);
     }

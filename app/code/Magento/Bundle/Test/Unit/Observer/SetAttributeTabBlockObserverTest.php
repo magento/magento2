@@ -60,7 +60,7 @@ class SetAttributeTabBlockObserverTest extends TestCase
         $this->observerMock = $this->createMock(Observer::class);
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

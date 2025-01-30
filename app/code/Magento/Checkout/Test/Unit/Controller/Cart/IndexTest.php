@@ -126,7 +126,7 @@ class IndexTest extends TestCase
             ->getMockForAbstractClass();
         $this->resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

@@ -152,16 +152,13 @@ class RuntimeConfigSourceTest extends TestCase
             ->willReturnArgument(1);
         $this->converterMock->expects($this->exactly(3))
             ->method('convert')
-            ->withConsecutive(
-                [['dev/test/setting' => true]],
-                [['dev/test/setting2' => false]],
-                [['dev/test/setting2' => false]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                ['dev/test/setting' => true],
-                ['dev/test/setting2' => false],
-                ['dev/test/setting2' => false]
-            );
+            ->willReturnCallback(function ($args) {
+                if ($args === ['dev/test/setting' => true]) {
+                    return ['dev/test/setting' => true];
+                } elseif ($args === ['dev/test/setting2' => false]) {
+                    return ['dev/test/setting2' => false];
+                }
+            });
 
         $this->assertEquals(
             [
@@ -262,7 +259,7 @@ class RuntimeConfigSourceTest extends TestCase
      *
      * @return array
      */
-    public function configDataProvider(): array
+    public static function configDataProvider(): array
     {
         return [
             'config value 0' => ['default/test/option', ['test' => ['option' => 0]], '0'],

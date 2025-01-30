@@ -377,7 +377,7 @@ class RouterTest extends TestCase
     /**
      * @return array
      */
-    public function customInternalRedirectDataProvider()
+    public static function customInternalRedirectDataProvider()
     {
         return [
             ['request-path', 'target-path', true],
@@ -420,7 +420,7 @@ class RouterTest extends TestCase
     /**
      * @return array
      */
-    public function externalRedirectTargetPathDataProvider()
+    public static function externalRedirectTargetPathDataProvider()
     {
         return [
             ['http://example.com'],

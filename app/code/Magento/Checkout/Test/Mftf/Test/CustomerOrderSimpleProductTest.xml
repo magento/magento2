@@ -54,6 +54,7 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFlatRate"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
 
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>

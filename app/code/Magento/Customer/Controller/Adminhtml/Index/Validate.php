@@ -7,10 +7,12 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Address\Mapper;
+use Magento\Customer\Model\SetCustomerStore;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -32,6 +34,11 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
      * @var StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var SetCustomerStore|null
+     */
+    private $customerStore;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -60,7 +67,9 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param StoreManagerInterface|null $storeManager
+     * @param SetCustomerStore|null $customerStore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -88,7 +97,8 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        ?StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null,
+        ?SetCustomerStore $customerStore = null
     ) {
         parent::__construct(
             $context,
@@ -117,8 +127,8 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             $resultForwardFactory,
             $resultJsonFactory
         );
-
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->customerStore = $customerStore ?? ObjectManager::getInstance()->get(SetCustomerStore::class);
     }
 
     /**
@@ -145,6 +155,9 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             );
             $customerForm->setInvisibleIgnored(true);
 
+            $this->customerStore->setStore(
+                $this->getRequest()->getParam(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER)
+            );
             $data = $customerForm->extractData($this->getRequest(), 'customer');
 
             if ($customer->getWebsiteId()) {
@@ -160,11 +173,6 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             if (isset($submittedData['entity_id'])) {
                 $entity_id = $submittedData['entity_id'];
                 $customer->setId($entity_id);
-            }
-            if (isset($data['website_id']) && is_numeric($data['website_id'])) {
-                $website = $this->storeManager->getWebsite($data['website_id']);
-                $storeId = current($website->getStoreIds());
-                $this->storeManager->setCurrentStore($storeId);
             }
             $errors = $this->customerAccountManagement->validate($customer)->getMessages();
         } catch (\Magento\Framework\Validator\Exception $exception) {

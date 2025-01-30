@@ -50,15 +50,15 @@ class GtagConfigTest extends TestCase
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    private $scopeConfigMock;
+    private static $scopeConfigMock;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
+        self::$scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -66,7 +66,7 @@ class GtagConfigTest extends TestCase
         $this->gtagConfig = $objectManager->getObject(
             GtagConfig::class,
             [
-                'scopeConfig' => $this->scopeConfigMock
+                'scopeConfig' => self::$scopeConfigMock
             ]
         );
     }
@@ -90,16 +90,16 @@ class GtagConfigTest extends TestCase
         $testAccountId,
         $result
     ): void {
-        $this->scopeConfigMock->expects($this->any())
+        self::$scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE)
             ->willReturn($flagGaActive);
-        $this->scopeConfigMock
+        self::$scopeConfigMock
             ->method('getValue')
             ->willReturnMap([
                 [self::XML_PATH_MEASUREMENT_ID, ScopeInterface::SCOPE_STORE, null, $testMeasurementId]
             ]);
-        $this->scopeConfigMock->expects($this->any())
+        self::$scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE)
             ->willReturn($flagGaActive);
@@ -112,7 +112,7 @@ class GtagConfigTest extends TestCase
      *
      * @return array
      */
-    public function gaDataProvider(): array
+    public static function gaDataProvider(): array
     {
         return [
             [true, 'G-1234', 'G-1234', true],
@@ -132,7 +132,7 @@ class GtagConfigTest extends TestCase
      */
     public function testGetMeasurementId($testMeasurementId, $result): void
     {
-        $this->scopeConfigMock
+        self::$scopeConfigMock
             ->method('getValue')
             ->willReturnMap([
                 [self::XML_PATH_MEASUREMENT_ID, ScopeInterface::SCOPE_STORE, null, $testMeasurementId]
@@ -143,7 +143,7 @@ class GtagConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive(): array
+    public static function dataProviderForTestIsActive(): array
     {
         return [
             [true, 'AW-1234', true],
@@ -163,7 +163,7 @@ class GtagConfigTest extends TestCase
      */
     public function testIsGoogleAdwordsActive($isActive, $returnConfigValue, $returnValue): void
     {
-        $this->scopeConfigMock->expects(
+        self::$scopeConfigMock->expects(
             $this->any()
         )->method(
             'isSetFlag'
@@ -172,7 +172,7 @@ class GtagConfigTest extends TestCase
         )->willReturn(
             $isActive
         );
-        $this->scopeConfigMock->method('getValue')->with($this->isType('string'))->willReturnCallback(
+        self::$scopeConfigMock->method('getValue')->with($this->isType('string'))->willReturnCallback(
             function () use ($returnConfigValue) {
                 return $returnConfigValue;
             }
@@ -184,7 +184,7 @@ class GtagConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestStoreConfig(): array
+    public static function dataProviderForTestStoreConfig(): array
     {
         return [
             ['getConversionId', self::XML_PATH_CONVERSION_ID, 'AW-123'],
@@ -202,7 +202,7 @@ class GtagConfigTest extends TestCase
      */
     public function testGetStoreConfigValue($method, $xmlPath, $returnValue): void
     {
-        $this->scopeConfigMock->expects(
+        self::$scopeConfigMock->expects(
             $this->once()
         )->method(
             'getValue'
@@ -220,7 +220,7 @@ class GtagConfigTest extends TestCase
      *
      * @return array
      */
-    public function dataGetMeasurementId(): array
+    public static function dataGetMeasurementId(): array
     {
         return [
             ['G-1234', 'G-1234']

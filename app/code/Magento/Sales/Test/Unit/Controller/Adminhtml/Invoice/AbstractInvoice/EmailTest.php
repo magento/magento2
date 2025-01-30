@@ -207,8 +207,10 @@ class EmailTest extends TestCase
             ->willReturn($order);
         $this->objectManager
             ->method('create')
-            ->withConsecutive([InvoiceRepositoryInterface::class], [$cmNotifierClassName])
-            ->willReturnOnConsecutiveCalls($invoiceRepository, $this->invoiceManagement);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [InvoiceRepositoryInterface::class] => $invoiceRepository,
+                [$cmNotifierClassName] => $this->invoiceManagement
+            });
 
         $this->invoiceManagement->expects($this->once())
             ->method('notify')

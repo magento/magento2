@@ -55,7 +55,7 @@ class ExportTest extends AbstractBackendController
      */
     public function testGetFilterAction(
         string $entityType,
-        string $customerEntityType = null,
+        ?string $customerEntityType = null,
         array $expectedAttributes = []
     ) {
         $this->getRequest()->setParam('isAjax', true);
@@ -82,7 +82,7 @@ class ExportTest extends AbstractBackendController
      *
      * @return array
      */
-    public function getEntityTypesDataProvider()
+    public static function getEntityTypesDataProvider()
     {
         return [
             'products' => [

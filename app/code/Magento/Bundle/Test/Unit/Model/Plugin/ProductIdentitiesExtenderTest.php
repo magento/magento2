@@ -37,11 +37,11 @@ class ProductIdentitiesExtenderTest extends TestCase
 
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'getTypeId'])
+            ->onlyMethods(['getEntityId', 'getTypeId'])
             ->getMock();
         $this->type = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParentIdsByChild'])
+            ->onlyMethods(['getParentIdsByChild'])
             ->getMock();
 
         $this->plugin = $objectManager->getObject(

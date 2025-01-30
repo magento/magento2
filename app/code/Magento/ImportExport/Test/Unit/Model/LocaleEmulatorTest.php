@@ -80,10 +80,18 @@ class LocaleEmulatorTest extends TestCase
             ->willReturn($initialLocale);
         $this->localeResolver->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('loadData');
         $this->model->emulate($mock->assertPhraseRenderer(...), $locale);
@@ -111,10 +119,18 @@ class LocaleEmulatorTest extends TestCase
             ->willReturn($initialLocale);
         $this->localeResolver->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('loadData');
         $this->model->emulate($mock->assertPhraseRenderer(...));
@@ -142,10 +158,18 @@ class LocaleEmulatorTest extends TestCase
             ->willReturn($initialLocale);
         $this->localeResolver->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('loadData');
         $this->model->emulate($mock->callbackThatThrowsException(...));

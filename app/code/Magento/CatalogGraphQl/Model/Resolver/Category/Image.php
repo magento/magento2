@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,8 +52,8 @@ class Image implements ResolverInterface
     public function __construct(
         DirectoryList $directoryList,
         FileInfo $fileInfo,
-        Repository $assetRepo = null,
-        LoggerInterface $logger = null
+        ?Repository $assetRepo = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->directoryList = $directoryList;
         $this->fileInfo = $fileInfo;
@@ -68,8 +68,8 @@ class Image implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));

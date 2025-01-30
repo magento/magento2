@@ -73,8 +73,14 @@ class FileIteratorTest extends TestCase
         }
         $this->fileReadFactory
             ->method('create')
-            ->withConsecutive(...$createWithArgs)
-            ->willReturnOnConsecutiveCalls(...$createWillReturnArgs);
+            ->willReturnCallback(function ($createWithArgs) use ($createWillReturnArgs) {
+                if (!empty($createWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $createWillReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
         $this->fileRead
             ->method('readAll')
             ->willReturnOnConsecutiveCalls(...$readAllWillReturnArgs);
@@ -102,8 +108,14 @@ class FileIteratorTest extends TestCase
         }
         $this->fileReadFactory
             ->method('create')
-            ->withConsecutive(...$createWithArgs)
-            ->willReturnOnConsecutiveCalls(...$createWillReturnArgs);
+            ->willReturnCallback(function ($createWithArgs) use ($createWillReturnArgs) {
+                if (!empty($createWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $createWillReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
         $this->fileRead
             ->method('readAll')
             ->willReturnOnConsecutiveCalls(...$readAllWillReturnArgs);

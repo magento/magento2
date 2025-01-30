@@ -107,7 +107,7 @@ class ReviewTest extends TestCase
     /**
      * @return array
      */
-    public function getViewFileUrlDataProvider()
+    public static function getViewFileUrlDataProvider()
     {
         return [[true], [false]];
     }
@@ -183,7 +183,7 @@ class ReviewTest extends TestCase
 
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingMethod', 'getGroupedAllShippingRates', '__wakeup'])
+            ->onlyMethods(['getShippingMethod', 'getGroupedAllShippingRates', '__wakeup'])
             ->getMock();
         $quote->expects($this->any())->method('getShippingAddress')->willReturn($address);
 

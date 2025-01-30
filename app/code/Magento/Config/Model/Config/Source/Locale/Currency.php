@@ -44,7 +44,7 @@ class Currency implements \Magento\Framework\Option\ArrayInterface
      */
     public function __construct(
         ListsInterface $localeLists,
-        ScopeConfigInterface $config = null
+        ?ScopeConfigInterface $config = null
     ) {
         $this->_localeLists = $localeLists;
         $this->config = $config ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);

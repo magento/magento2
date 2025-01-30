@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddProductTaxClassConditionalActionGroup">
+        <annotations>
+            <description>Adds the provided Product Tax Class to a Tax Rule. Before click on Save check Class Exist or not.</description>
+        </annotations>
+        <arguments>
+            <argument name="prodTaxClassName" type="string"/>
+        </arguments>
+
+        <!--Click Additional Settings-->
+        <click stepKey="clickAdditionalSettings" selector="{{AdminTaxRulesSection.additionalSettings}}"/>
+        <!--Click Product Add New Tax Class Button-->
+        <click stepKey="clickProdAddNewTaxClassBtn" selector="{{AdminTaxRulesSection.productAddNewTaxClass}}"/>
+        <!--Fill field-->
+        <fillField stepKey="fillProdNewTaxClass" selector="{{AdminTaxRulesSection.fieldProdNewTaxClass}}" userInput="{{prodTaxClassName}}"/>
+        <!-- Save Product tax rate -->
+        <conditionalClick stepKey="saveProdTaxRate" selector="{{AdminTaxRulesSection.saveProdNewTaxClass}}" dependentSelector="{{AdminTaxRulesSection.selectProductTaxClass('prodTaxClassName')}}" visible="false"/>
+    </actionGroup>
+</actionGroups>

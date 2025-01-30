@@ -229,11 +229,11 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         array $data = [],
-        \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null,
-        AllowedCountries $allowedCountryReader = null,
-        Multishipping\PlaceOrderFactory $placeOrderFactory = null,
-        LoggerInterface $logger = null,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper = null
+        ?\Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null,
+        ?AllowedCountries $allowedCountryReader = null,
+        ?Multishipping\PlaceOrderFactory $placeOrderFactory = null,
+        ?LoggerInterface $logger = null,
+        ?\Magento\Framework\Api\DataObjectHelper $dataObjectHelper = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;

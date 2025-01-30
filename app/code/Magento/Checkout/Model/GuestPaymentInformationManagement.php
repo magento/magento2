@@ -128,7 +128,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         $this->paymentsRateLimiter->limit();
         try {
@@ -171,7 +171,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if (!$this->saveRateLimitDisabled) {
             try {

@@ -185,7 +185,7 @@ class ConsumersRunnerTest extends TestCase
     /**
      * @return array
      */
-    public function runDataProvider()
+    public static function runDataProvider()
     {
         return [
             [
@@ -320,11 +320,10 @@ class ConsumersRunnerTest extends TestCase
 
         $this->lockManagerMock->expects(self::exactly(2))
             ->method('isLocked')
-            ->withConsecutive(
-                [md5($consumerName . '-' . 1)], //phpcs:ignore
-                [md5($consumerName . '-' . 2)]  //phpcs:ignore
-            )
-            ->willReturnOnConsecutiveCalls($isLocked[0], $isLocked[1]);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [md5($consumerName . '-' . 1)] => $isLocked[0],    //phpcs:ignore
+                [md5($consumerName . '-' . 2)] => $isLocked[1]     //phpcs:ignore
+            });
 
         $this->shellBackgroundMock->expects(self::exactly($shellBackgroundExpects))
             ->method('execute')
@@ -336,7 +335,7 @@ class ConsumersRunnerTest extends TestCase
     /**
      * @return array
      */
-    public function runMultiProcessesDataProvider()
+    public static function runMultiProcessesDataProvider()
     {
         return [
             [
@@ -455,7 +454,7 @@ class ConsumersRunnerTest extends TestCase
     /**
      * @return array
      */
-    public function runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider()
+    public static function runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider()
     {
         return [
             [

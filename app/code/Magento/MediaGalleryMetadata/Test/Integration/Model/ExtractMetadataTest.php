@@ -84,7 +84,7 @@ class ExtractMetadataTest extends TestCase
      *
      * @return array[]
      */
-    public function filesProvider(): array
+    public static function filesProvider(): array
     {
         return [
             [

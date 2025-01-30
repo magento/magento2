@@ -55,7 +55,7 @@ class ProTest extends TestCase
         );
         /** @var \Magento\Paypal\Model\Pro $pro */
         $this->pro = $this->getMockBuilder(Pro::class)
-            ->setMethods(['_isPaymentReviewRequired'])
+            ->onlyMethods(['_isPaymentReviewRequired'])
             ->setConstructorArgs($args)
             ->getMock();
         $this->pro->setMethod(PaypalConfig::METHOD_PAYMENT_PRO, $storeId);
@@ -79,7 +79,7 @@ class ProTest extends TestCase
         $payment = $this->getMockBuilder(
             Info::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getAdditionalInformation', '__wakeup']
             )->getMock();
         $payment->expects(
@@ -98,7 +98,7 @@ class ProTest extends TestCase
     /**
      * @return array
      */
-    public function canReviewPaymentDataProvider()
+    public static function canReviewPaymentDataProvider()
     {
         return [
             [\Magento\Paypal\Model\Info::PAYMENTSTATUS_REVIEW, true, false],
@@ -152,11 +152,11 @@ class ProTest extends TestCase
     {
         $infoFactory = $this->getMockBuilder(InfoFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $infoMock = $this->getMockBuilder(\Magento\Paypal\Model\Info::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isPaymentReviewRequired'])
+            ->onlyMethods(['isPaymentReviewRequired'])
             ->getMock();
         $infoFactory->expects(static::any())->method('create')->willReturn($infoMock);
         return $infoFactory;
@@ -175,7 +175,7 @@ class ProTest extends TestCase
             ->getMock();
         $configFactory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $configFactory->expects(static::any())
@@ -197,7 +197,7 @@ class ProTest extends TestCase
     {
         $apiFactory = $this->getMockBuilder(\Magento\Paypal\Model\Api\Type\Factory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $httpClient = $this->getMockBuilder(Curl::class)
@@ -212,7 +212,7 @@ class ProTest extends TestCase
 
         $curlFactory = $this->getMockBuilder(CurlFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $curlFactory->expects(static::any())->method('create')->willReturn($httpClient);
 
@@ -225,14 +225,10 @@ class ProTest extends TestCase
         );
         $this->apiMock = $this->getMockBuilder($apiType)
             ->setConstructorArgs($args)
-            ->setMethods(
+            ->addMethods(['__wakeup', 'getTransactionId', 'setAuthorizationId', 'setIsCaptureComplete', 'setAmount'])
+            ->onlyMethods(
                 [
-                    '__wakeup',
-                    'getTransactionId',
                     'getDataUsingMethod',
-                    'setAuthorizationId',
-                    'setIsCaptureComplete',
-                    'setAmount'
                 ]
             )
             ->getMock();
@@ -249,7 +245,7 @@ class ProTest extends TestCase
     {
         $paymentMock = $this->getMockBuilder(Info::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getParentTransactionId', 'getOrder', 'getShouldCloseParentTransaction', 'isCaptureFinal',
             ])
             ->getMock();
@@ -274,7 +270,7 @@ class ProTest extends TestCase
         ];
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrencyCode', 'getIncrementId', 'getId', 'getBillingAddress', 'getShippingAddress'])
+            ->onlyMethods(['getBaseCurrencyCode', 'getIncrementId', 'getId', 'getBillingAddress', 'getShippingAddress'])
             ->getMock();
 
         $orderMock->expects(static::once())

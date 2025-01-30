@@ -133,15 +133,27 @@ class MapperTest extends TestCase
         }
         $this->_configStructureMock
             ->method('getElement')
-            ->withConsecutive(...$configStructureMockWithArgs)
-            ->willReturn(...$configStructureMockWillReturnArgs);
+            ->willReturnCallback(function ($configStructureMockWithArgs) use ($configStructureMockWillReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $configStructureMockWillReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
         $this->_fieldFactoryMock
             ->method('create')
-            ->withConsecutive(...$fieldFactoryMockWithArgs)
-            ->willReturnOnConsecutiveCalls(...$fieldFactoryMockWillReturnArgs);
+            ->willReturnCallback(function ($fieldFactoryMockWithArgs) use ($fieldFactoryMockWillReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $fieldFactoryMockWillReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
         $this->_scopeConfigMock->method('getValue')
-            ->withConsecutive(...$scopeConfigMockWithArgs)
-            ->willReturnOnConsecutiveCalls(...$scopeConfigMockWillReturnArgs);
+            ->willReturnCallback(function ($scopeConfigMockWithArgs) use ($scopeConfigMockWillReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $scopeConfigMockWillReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $actual = $this->_model->getDependencies($this->_testData, self::STORE_CODE, self::FIELD_PREFIX);
         $this->assertEquals($expected, $actual);
@@ -150,7 +162,7 @@ class MapperTest extends TestCase
     /**
      * @return array
      */
-    public function getDependenciesDataProvider(): array
+    public static function getDependenciesDataProvider(): array
     {
         return [[true], [false]];
     }
@@ -188,12 +200,23 @@ class MapperTest extends TestCase
         }
         $this->_configStructureMock
             ->method('getElement')
-            ->withConsecutive(...$configStructureMockWithArgs)
-            ->willReturn(...$configStructureMockWillReturnArgs);
+            ->willReturnCallback(function (...$args)
+ use ($configStructureMockWithArgs, $configStructureMockWillReturnArgs) {
+                $index = array_search($args, $configStructureMockWithArgs);
+                if ($index !== false) {
+                    return $configStructureMockWillReturnArgs[$index];
+                } else {
+                    return null;
+                }
+            });
         $this->_fieldFactoryMock
             ->method('create')
-            ->withConsecutive(...$fieldFactoryMockWithArgs)
-            ->willReturnOnConsecutiveCalls(...$fieldFactoryMockWillReturnArgs);
+            ->willReturnCallback(function ($fieldFactoryMockWithArgs) use ($fieldFactoryMockWillReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $fieldFactoryMockWillReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $actual = $this->_model->getDependencies($this->_testData, self::STORE_CODE, self::FIELD_PREFIX);
         $this->assertEquals($expected, $actual);

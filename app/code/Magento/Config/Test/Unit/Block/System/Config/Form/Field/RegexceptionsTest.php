@@ -72,8 +72,11 @@ class RegexceptionsTest extends TestCase
             ->getMock();
         $this->elementMock = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                ['setForm', 'setName', 'setHtmlId', 'setValues', 'getName', 'getHtmlId', 'getValues', 'getElementHtml']
+            ->addMethods(
+                ['setName', 'setHtmlId', 'setValues', 'getValues']
+            )
+            ->onlyMethods(
+                ['setForm', 'getName', 'getHtmlId', 'getElementHtml']
             )
             ->getMock();
 
@@ -84,6 +87,7 @@ class RegexceptionsTest extends TestCase
                 'element' => $this->elementMock
             ],
         ];
+        $objectManager->prepareObjectManager();
         $this->object = $objectManager->getObject(
             Regexceptions::class,
             $data

@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Block\User\Edit\Tab;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Block\User\Edit\Tab\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,15 +36,24 @@ class RolesTest extends TestCase
     {
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->model = $objectManagerHelper->getObject(
             Roles::class,
             [

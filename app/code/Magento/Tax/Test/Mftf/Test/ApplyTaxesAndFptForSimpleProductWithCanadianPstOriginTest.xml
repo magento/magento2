@@ -34,6 +34,8 @@
             </actionGroup>
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <!-- change tax classes configuration -->
             <actionGroup ref="SetTaxClassForShippingActionGroup" stepKey="setTaxClass"/>
             <actionGroup ref="AdminChangeTaxAndFptConfigActionGroup" stepKey="changeTaxConfigs"/>

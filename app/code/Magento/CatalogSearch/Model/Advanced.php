@@ -138,8 +138,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         ProductCollectionFactory $productCollectionFactory,
         AdvancedFactory $advancedFactory,
         array $data = [],
-        ItemCollectionProviderInterface $collectionProvider = null,
-        ProductCollectionPrepareStrategyProvider $productCollectionPrepareStrategyProvider = null
+        ?ItemCollectionProviderInterface $collectionProvider = null,
+        ?ProductCollectionPrepareStrategyProvider $productCollectionPrepareStrategyProvider = null
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;

@@ -249,7 +249,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function emptyElementDataProvider()
+    public static function emptyElementDataProvider()
     {
         return [
             ['someSection/group_1/nonexisting_field', 'field', 'nonexisting_field', 'someSection/group_1'],
@@ -354,7 +354,8 @@ class StructureTest extends TestCase
     {
         $tabMock = $this->getMockBuilder(Structure\Element\Tab::class)
             ->disableOriginalConstructor()
-            ->setMethods(['current', 'getChildren', 'rewind'])
+            ->addMethods(['current', 'rewind'])
+            ->onlyMethods(['getChildren'])
             ->getMock();
 
         $tabMock->expects($this->any())
@@ -364,7 +365,7 @@ class StructureTest extends TestCase
             ->method('rewind');
         $section = $this->getMockBuilder(Section::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isVisible', 'getData'])
+            ->onlyMethods(['isVisible', 'getData'])
             ->getMock();
         $section->expects($this->any())
             ->method('isVisible')
@@ -449,7 +450,7 @@ class StructureTest extends TestCase
      *
      * @return array
      */
-    public function getFieldPathsByAttributeDataProvider()
+    public static function getFieldPathsByAttributeDataProvider()
     {
         return [
             [
@@ -485,7 +486,7 @@ class StructureTest extends TestCase
      *
      * @return array
      */
-    public function getFieldPaths(): array
+    public static function getFieldPaths(): array
     {
         return  [
             [

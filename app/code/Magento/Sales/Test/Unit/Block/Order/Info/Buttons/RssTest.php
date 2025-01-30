@@ -85,7 +85,7 @@ class RssTest extends TestCase
     public function testGetLink()
     {
         $order = $this->getMockBuilder(Order::class)
-            ->setMethods(['getId', 'getCustomerId', 'getIncrementId', 'load'])
+            ->onlyMethods(['getId', 'getCustomerId', 'getIncrementId', 'load'])
             ->disableOriginalConstructor()
             ->getMock();
         $order->expects($this->once())->method('load')->willReturnSelf();

@@ -47,10 +47,8 @@
             <!-- Go to the tax rate page -->
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
             <!-- Delete the tax rate that was created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
-                <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <comment userInput="Preserve BiC" stepKey="deleteCARate"/>
             <!-- Revert back configuration -->
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <!-- reindex and flush cache -->
@@ -98,6 +96,10 @@
             <argument name="state" value="California"/>
             <argument name="postcode" value="90310"/>
         </actionGroup>
+        <!-- Cache Flush-->
+    	<actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
+    	    <argument name="tags" value="config"/>
+    	</actionGroup>
         <!-- Assert tax and order amount -->
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="8.25" stepKey="assertTaxAmount"/>
         <actionGroup ref="AssertStorefrontShoppingCartSummaryItemsActionGroup" stepKey="assertCartTotals">

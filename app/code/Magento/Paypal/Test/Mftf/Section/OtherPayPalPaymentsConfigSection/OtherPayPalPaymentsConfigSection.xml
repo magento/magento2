@@ -6,9 +6,12 @@
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="OtherPayPalPaymentsConfigSection">
         <element name="expandTab" type="button" selector="#payment_{{countryCode}}_other_paypal_payment_solutions-head" parameterized="true"/>
+        <element name="expandTab1" type="button" selector="//a[@id='payment_{{countryCode}}_other_paypal_payment_solutions-head']" parameterized="true"/>
         <element name="expandedTab" type="button" selector="#payment_{{countryCode}}_other_paypal_payment_solutions-head.open" parameterized="true"/>
+        <element name="expandTabNew" type="button" selector="//a[@id='payment_{{countryCode}}_paypal_payment_gateways-head']" parameterized="true"/>
+        <element name="expandedTabNew" type="button" selector="//a[@id='payment_{{countryCode}}_paypal_payment_gateways-head' and @class='open']" parameterized="true"/>
     </section>
 </sections>

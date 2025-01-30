@@ -39,6 +39,7 @@ $mainImageData = $mainImage ?
         <?= $imageWidth ? 'width="'. $escaper->escapeHtmlAttr($imageWidth) .'"' : '' ?>
         <?= $imageHeight ? 'height="'. $escaper->escapeHtmlAttr($imageHeight) .'"' : '' ?>
     />
+    <link itemprop="image" href="<?= /* @noEscape */ $mainImageData ?>">
 </div>
 <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">

@@ -60,7 +60,7 @@ class TemplateDirectiveTest extends TestCase
         self::assertEquals($expect, $result);
     }
 
-    public function useCaseProvider()
+    public static function useCaseProvider()
     {
         $prefix = '{{template config_path=$path param1=myparam ';
         $expect = 'path=varpath/myparamabc/varpath';

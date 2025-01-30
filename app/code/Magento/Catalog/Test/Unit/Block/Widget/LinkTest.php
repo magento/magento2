@@ -13,10 +13,12 @@ use Magento\Catalog\Model\ResourceModel\AbstractResource;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -57,6 +59,19 @@ class LinkTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
 
@@ -68,7 +83,7 @@ class LinkTest extends TestCase
         $this->entityResource =
             $this->createMock(AbstractResource::class);
 
-        $this->block = (new ObjectManager($this))->getObject(
+        $this->block = $objectManager->getObject(
             Link::class,
             [
                 'context' => $context,
@@ -265,7 +280,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
+    public static function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
     {
         return [
             ['/accessories.html', null, true, 'french/accessories.html'],

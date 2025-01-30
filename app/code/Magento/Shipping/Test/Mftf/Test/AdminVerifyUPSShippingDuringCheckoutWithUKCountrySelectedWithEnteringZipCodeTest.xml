@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyUPSShippingDuringCheckoutWithUKCountrySelectedWithEnteringZipCodeTest"  extends="AdminConfigUPSShippingMethodAndAddProductInStorefrontTest">
+        <annotations>
+            <stories value="Verify UPS Shipping in checkout with entering zip code"/>
+            <title value="Verify UPS shipping on UI during checkout if UK country is selected with entering zip code"/>
+            <description value="Admin Verify in storefront UPS shipping on UI during checkout if UK country is selected with entering zip code"/>
+            <testCaseId value="AC-9343"/>
+            <severity value="MINOR"/>
+            <features value="Shipping"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <!-- Open Estimate Shipping and Tax section for united Kingdom-->
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxInShoppingCartActionGroup" stepKey="setEstimateShippingAndTaxInitialAddressToUnitedKingdomWithZipCode">
+            <argument name="country" value="United Kingdom"/>
+            <argument name="state" value="Bristol"/>
+            <argument name="postcode" value="BS10"/>
+        </actionGroup>
+        <!-- Verify UPS shipping method is available for united Kingdom with zipcode -->
+        <!-- Verify no errors are displayed and UPS shipping method is available  -->
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.upsShippingMethod}}" stepKey="verifyUPSShippingMethodIsAvailable"/>
+        <waitForElementNotVisible selector="{{CheckoutCartSummarySection.verifyErrorMessageOfShippingMethod}}" stepKey="verifyNoErrorMessageRelatedToUPSShippingMethod"/>
+        <!-- Set Estimate Shipping And Tax Initial Address To United Kingdom Without ZipCode-->
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxInShoppingCartActionGroup" stepKey="changeTheZipCodeAndVerifyUPSShippingMethodIsAvailable">
+            <argument name="country" value="United Kingdom"/>
+            <argument name="state" value="Bristol"/>
+            <argument name="postcode" value="BS11"/>
+        </actionGroup>
+        <!-- Verify no errors are displayed and UPS shipping method is available again  -->
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.upsShippingMethod}}" stepKey="verifyUPSShippingMethodIsAvailableAgain"/>
+        <waitForElementNotVisible selector="{{CheckoutCartSummarySection.verifyErrorMessageOfShippingMethod}}" stepKey="verifyNoErrorMessageRelatedToUPSShippingMethodAgain"/>
+        <!-- Select other shipping method available -->
+        <waitForElement selector="{{CheckoutCartSummarySection.upsShippingMethod}}" stepKey="waitForUPSShippingMethod"/>
+        <click selector="{{CheckoutCartSummarySection.upsShippingMethod}}" stepKey="selectUPSShippingMethod"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
+        <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <!--Place order-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
+    </test>
+</tests>

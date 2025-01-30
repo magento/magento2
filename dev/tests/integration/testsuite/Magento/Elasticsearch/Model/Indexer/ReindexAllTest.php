@@ -212,7 +212,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($specificProduct->getId(), $result[0]['_id']);
     }
 
-    public function searchSpecificProductDataProvider(): array
+    public static function searchSpecificProductDataProvider(): array
     {
         return [
             'search by numeric name' => ['12345', 'configurable_12345', 1],

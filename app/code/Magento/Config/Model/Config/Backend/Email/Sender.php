@@ -30,6 +30,12 @@ class Sender extends \Magento\Framework\App\Config\Value
             );
         }
 
+        if (str_contains($value, ":")) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The sender name "%1" is not valid. The colon character is not allowed.', $value)
+            );
+        }
+
         if (strlen($value) > 255) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Maximum sender name length is 255. Please correct your settings.')

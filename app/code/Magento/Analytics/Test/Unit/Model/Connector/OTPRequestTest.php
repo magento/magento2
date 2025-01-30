@@ -82,7 +82,7 @@ class OTPRequestTest extends TestCase
      *
      * @return array
      */
-    private function getTestData()
+    private static function getTestData()
     {
         return [
             'otp' => 'thisisotp',

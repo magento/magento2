@@ -92,7 +92,7 @@ class BasePriceStorageTest extends TestCase
             PricePersistenceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pricePersistence = $this->getMockBuilder(PricePersistence::class)
             ->disableOriginalConstructor()
@@ -101,7 +101,7 @@ class BasePriceStorageTest extends TestCase
             BasePriceInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->basePriceInterface = $this->getMockBuilder(BasePriceInterface::class)
             ->disableOriginalConstructor()
@@ -183,18 +183,27 @@ class BasePriceStorageTest extends TestCase
         $this->basePriceInterface
             ->expects($this->atLeastOnce())
             ->method('setSku')
-            ->withConsecutive(['sku_1'], ['sku_2'])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'sku_1' || $arg == 'sku_2') {
+                    return $this->basePriceInterface;
+                }
+            });
         $this->basePriceInterface
             ->expects($this->atLeastOnce())
             ->method('setPrice')
-            ->withConsecutive([15], [35])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 15 || $arg == 35) {
+                    return $this->basePriceInterface;
+                }
+            });
         $this->basePriceInterface
             ->expects($this->atLeastOnce())
             ->method('setStoreId')
-            ->withConsecutive([1], [1])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 1 || $arg == 1) {
+                    return $this->basePriceInterface;
+                }
+            });
 
         $this->model->get($skus);
     }
@@ -211,14 +220,14 @@ class BasePriceStorageTest extends TestCase
     public function testUpdate(bool $isScopeWebsite, bool $isScopeGlobal, array $formattedPrices)
     {
         $website = $this->getMockBuilder(WebsiteInterface::class)
-            ->setMethods([
+            ->addMethods([
                 'getStoreIds',
             ])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $website->method('getStoreIds')->willReturn([1 => 1, 2 => 2]);
         $store = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods([
+            ->addMethods([
                 'getWebsite',
             ])
             ->disableOriginalConstructor()
@@ -254,7 +263,7 @@ class BasePriceStorageTest extends TestCase
         $this->pricePersistence->expects($this->any())->method('update')->with($formattedPrices);
         $this->validationResult->expects($this->any())->method('getFailedItems')->willReturn([]);
         $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->setMethods([
+            ->addMethods([
                 'isScopeWebsite',
                 'isScopeGlobal'
             ])
@@ -273,6 +282,7 @@ class BasePriceStorageTest extends TestCase
      * Test update method without SKU and with negative price.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testUpdateWithoutSkuAndWithNegativePrice()
     {
@@ -293,32 +303,30 @@ class BasePriceStorageTest extends TestCase
             ->getMockForAbstractClass();
         $this->validationResult->expects($this->atLeastOnce())
             ->method('addFailedItem')
-            ->withConsecutive(
-                [
-                    0,
-                    __(
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 === 0 &&
+                    $arg2 == __(
                         'Invalid attribute %fieldName = %fieldValue.',
                         ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
-                    ),
-                    ['fieldName' => 'SKU', 'fieldValue' => null]
-                ],
-                [
-                    0,
-                    __(
+                    ) &&
+                    $arg3 == ['fieldName' => 'SKU', 'fieldValue' => null]) {
+                    return $this->validationResult;
+                } elseif ($arg1 === 0 &&
+                    $arg2 == __(
                         'Invalid attribute %fieldName = %fieldValue.',
                         ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
-                    ),
-                    ['fieldName' => 'Price', 'fieldValue' => -10]
-                ],
-                [
-                    0,
-                    __(
+                    ) &&
+                    $arg3 == ['fieldName' => 'Price', 'fieldValue' => -10]) {
+                    return $this->validationResult;
+                } elseif ($arg1 === 0 &&
+                    $arg2 == __(
                         'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.',
                         ['SKU' => null, 'storeId' => 10]
-                    ),
-                    ['SKU' => null, 'storeId' => 10]
-                ]
-            );
+                    ) &&
+                    $arg3 == ['SKU' => null, 'storeId' => 10]) {
+                    return $this->validationResult;
+                }
+            });
         $this->basePriceInterface->expects($this->atLeastOnce())->method('getStoreId')->willReturn(10);
         $this->storeRepository->expects($this->once())->method('getById')->with(10)->willThrowException($exception);
         $this->validationResult->expects($this->once())->method('getFailedRowIds')->willReturn([0 => 0]);
@@ -336,7 +344,7 @@ class BasePriceStorageTest extends TestCase
      *
      * @return array
      */
-    public function updateProvider(): array
+    public static function updateProvider(): array
     {
         return
             [

@@ -84,7 +84,7 @@ class NewProductsTest extends TestCase
 
         $this->storeManager = $this->createMock(StoreManager::class);
         $store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getId', 'getFrontendName'])->disableOriginalConstructor()
+            ->onlyMethods(['getId', 'getFrontendName'])->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())->method('getId')->willReturn(1);
         $store->expects($this->any())->method('getFrontendName')->willReturn('Store 1');
@@ -107,7 +107,7 @@ class NewProductsTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public static function isAllowedDataProvider()
     {
         return [
             [1, true],

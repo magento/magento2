@@ -84,7 +84,7 @@ class AccountConfirmationTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsConfirmationRequired()
+    public static function dataProviderIsConfirmationRequired()
     {
         return [
             [null, 'customer@example.com', null, true, true],

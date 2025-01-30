@@ -85,7 +85,7 @@ class Repository implements ResetAfterRequestInterface
     private $remoteFactory;
 
     /**
-     * @var ThemeProviderInterface
+     * @var ThemeProviderInterface|null
      */
     private $themeProvider;
 
@@ -477,5 +477,7 @@ class Repository implements ResetAfterRequestInterface
     {
         $this->fallbackContext = null;
         $this->fileContext = null;
+        $this->defaults = null;
+        $this->themeProvider = null;
     }
 }

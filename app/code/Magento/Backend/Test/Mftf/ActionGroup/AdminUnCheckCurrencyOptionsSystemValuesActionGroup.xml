@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUnCheckCurrencyOptionsSystemValuesActionGroup">
+        <annotations>
+            <description> Admin uncheck currency option system values.</description>
+        </annotations>
+        <waitForElementClickable selector="{{CurrencySetupSection.currencyOptions}}" stepKey="waitForCurrencyOptionsHeaderToBeClickable"/>
+        <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.CheckCurrencyOptionsIfTabExpand}}" stepKey="checkCurrencyTabOpen" visible="true"/>
+        <waitForElementClickable selector="{{CurrencySetupSection.baseCurrencyUseDefault}}" stepKey="waitForBaseCurrencySystemToBeClickable"/>
+        <uncheckOption selector="{{CurrencySetupSection.baseCurrencyUseDefault}}" stepKey="unCheckBaseCurrencySystemValue"/>
+        <waitForElementClickable selector="{{CurrencySetupSection.defaultdisplayCurrency}}" stepKey="waitForDisplayCurrencySystemToBeClickable"/>
+        <uncheckOption selector="{{CurrencySetupSection.defaultdisplayCurrency}}" stepKey="unCheckDisplayCurrencySystemValue"/>
+        <waitForElementClickable selector="{{CurrencySetupSection.allowcurrenciescheckbox}}" stepKey="waitForAllowedCurrencySystemToBeClickable"/>
+        <uncheckOption selector="{{CurrencySetupSection.allowcurrenciescheckbox}}" stepKey="unCheckAllowedCyCurrencySystemValue"/>
+    </actionGroup>
+</actionGroups>

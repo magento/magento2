@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Helper\Product;
@@ -89,7 +89,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
         array $messageGroups = [],
-        \Magento\Framework\Stdlib\StringUtils $string = null,
+        ?\Magento\Framework\Stdlib\StringUtils $string = null,
         ?LayoutUpdateManager $layoutUpdateManager = null
     ) {
         $this->_catalogSession = $catalogSession;
@@ -130,14 +130,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $pageConfig->setKeywords($product->getName());
         }
 
-        $description = $product->getMetaDescription();
-        if ($description) {
-            $pageConfig->setDescription($description);
-        } else {
-            $productDescription = is_string($product->getDescription()) ?
-                $this->string->substr(strip_tags($product->getDescription()), 0, 255) : '';
-            $pageConfig->setDescription($productDescription);
-        }
+        $pageConfig->setDescription($product->getMetaDescription());
 
         if ($this->_catalogProduct->canUseCanonicalTag()) {
             $pageConfig->addRemotePageAsset(

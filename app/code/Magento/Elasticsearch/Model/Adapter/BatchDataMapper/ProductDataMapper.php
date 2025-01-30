@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
@@ -17,9 +17,13 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 
 /**
  * Map product index data to search engine metadata
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class ProductDataMapper implements BatchDataMapperInterface
 {
+    private const MAX_STRING_LENGTH = 32766;
+
     /**
      * @var AttributeOptionInterface[]
      */
@@ -313,7 +317,9 @@ class ProductDataMapper implements BatchDataMapperInterface
             && in_array($attribute->getAttributeCode(), $this->sortableAttributesValuesToImplode)
             && count($attributeValues) > 1
         ) {
-            $attributeValues = [$productId => implode(' ', $attributeValues)];
+            $attributeValues = [
+                $productId => trim(substr(implode("\n", $attributeValues), 0, self::MAX_STRING_LENGTH)),
+            ];
         }
 
         if (in_array($attribute->getAttributeCode(), $this->sortableCaseSensitiveAttributes)) {

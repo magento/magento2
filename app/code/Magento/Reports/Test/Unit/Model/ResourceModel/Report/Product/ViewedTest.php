@@ -209,6 +209,7 @@ class ViewedTest extends TestCase
      * @param InvokedCount $deleteCount
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @dataProvider intervalsDataProvider
      */
     public function testAggregate($from, $to, InvokedCount $truncateCount, InvokedCount $deleteCount): void
@@ -218,29 +219,23 @@ class ViewedTest extends TestCase
 
         $this->helperMock
             ->method('updateReportRatingPos')
-            ->withConsecutive(
-                [
-                    $this->connectionMock,
-                    'day',
-                    'views_num',
-                    'report_viewed_product_aggregated_daily',
-                    'report_viewed_product_aggregated_daily'
-                ],
-                [
-                    $this->connectionMock,
-                    'month',
-                    'views_num',
-                    'report_viewed_product_aggregated_daily',
-                    'report_viewed_product_aggregated_monthly'
-                ],
-                [
-                    $this->connectionMock,
-                    'year',
-                    'views_num',
-                    'report_viewed_product_aggregated_daily',
-                    'report_viewed_product_aggregated_yearly'
-                ]
-            )->willReturnOnConsecutiveCalls($this->helperMock, $this->helperMock, $this->helperMock);
+        ->willReturnCallback(function ($connection, $type, $column, $mainTable, $aggregationTable) {
+            if ($connection == $this->connectionMock && $type == 'day' && $column == 'views_num' &&
+                $mainTable == 'report_viewed_product_aggregated_daily' &&
+                $aggregationTable == 'report_viewed_product_aggregated_daily') {
+                return $this->helperMock;
+            } elseif ($connection == $this->connectionMock && $type == 'month' &&
+                $column == 'views_num' &&
+                $mainTable == 'report_viewed_product_aggregated_daily' &&
+                $aggregationTable == 'report_viewed_product_aggregated_monthly') {
+                return $this->helperMock;
+            } elseif ($connection == $this->connectionMock && $type == 'year' &&
+                $column == 'views_num' &&
+                $mainTable == 'report_viewed_product_aggregated_daily' &&
+                $aggregationTable == 'report_viewed_product_aggregated_yearly') {
+                return $this->helperMock;
+            }
+        });
 
         $this->flagMock->expects($this->once())->method('unsetData')->willReturnSelf();
         $this->flagMock->expects($this->once())->method('loadSelf')->willReturnSelf();
@@ -258,20 +253,20 @@ class ViewedTest extends TestCase
     /**
      * @return array
      */
-    public function intervalsDataProvider(): array
+    public static function intervalsDataProvider(): array
     {
         return [
             [
                 'from' => new \DateTime('+3 day'),
                 'to' => new \DateTime('-3 day'),
-                'truncateCount' => $this->never(),
-                'deleteCount' => $this->once()
+                'truncateCount' => self::never(),
+                'deleteCount' => self::once()
             ],
             [
                 'from' => null,
                 'to' => null,
-                'truncateCount' => $this->once(),
-                'deleteCount' => $this->never()
+                'truncateCount' => self::once(),
+                'deleteCount' => self::never()
             ]
         ];
     }

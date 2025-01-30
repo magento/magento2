@@ -34,7 +34,7 @@ class PhpScanner implements ScannerInterface
      * @param Log $log
      * @param TypeProcessor|null $typeProcessor
      */
-    public function __construct(Log $log, TypeProcessor $typeProcessor = null)
+    public function __construct(Log $log, ?TypeProcessor $typeProcessor = null)
     {
         $this->_log = $log;
         $this->typeProcessor = $typeProcessor

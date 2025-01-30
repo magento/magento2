@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableDHLEUConfigurationActionGroup">
+        <annotations>
+            <description>Enables DHL EU shipping method on configuration page.</description>
+        </annotations>
+        <magentoCLI command="config:set {{AdminDHLEnableConfigData.path}} {{AdminDHLEnableConfigData.value}}" stepKey="enableDHL"/>
+        <magentoCLI command="config:set {{AdminCarriersDHLId.path}} {{AdminCarriersDHLEUId.value}}" stepKey="CarrierDHLID"/>
+        <magentoCLI command="config:set {{AdminCarriersDHLPassword.path}} {{AdminCarriersDHLEUPassword.value}}" stepKey="DHLPassword"/>
+        <magentoCLI command="config:set {{AdminCarriersDHLAccount.path}} {{AdminCarriersDHLEUAccount.value}}" stepKey="DHLAccount"/>
+        <magentoCLI command="config:set {{AdminEnableDHLShowMethod.path}} {{AdminEnableDHLShowMethod.value}}" stepKey="enableDHLShowMethod"/>
+        <magentoCLI command="config:set {{AdminEnableDHLDebug.path}} {{AdminEnableDHLDebug.value}}" stepKey="enableDHLDebug"/>
+        <magentoCLI command="config:set {{AdminEnableSandboxMode.path}} {{AdminEnableSandboxMode.value}}" stepKey="enableSandboxMode"/>
+    </actionGroup>
+</actionGroups>
