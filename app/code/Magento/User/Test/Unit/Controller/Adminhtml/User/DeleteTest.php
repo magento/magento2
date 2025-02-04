@@ -92,7 +92,7 @@ class DeleteTest extends TestCase
 
         $this->userMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getId', 'performIdentityCheck', 'delete'])
+            ->onlyMethods(['getId', 'performIdentityCheck', 'delete', 'load'])
             ->getMock();
 
         $this->userFactoryMock = $this->getMockBuilder(UserFactory::class)
