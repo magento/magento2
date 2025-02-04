@@ -40,7 +40,7 @@ class Factory
      * @param bool $isBase
      * @return \Magento\Framework\View\File
      */
-    public function create($filename, $module = '', ThemeInterface $theme = null, $isBase = false)
+    public function create($filename, $module = '', ?ThemeInterface $theme = null, $isBase = false)
     {
         return $this->objectManager->create(
             \Magento\Framework\View\File::class,

@@ -2,10 +2,10 @@
     "name": "magento/module-elasticsearch-7",
     "description": "N/A",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-elasticsearch": "*",
-        "elasticsearch/elasticsearch": "^7.17",
+        "magento/elasticsearch": "^1.0.0",
         "magento/module-advanced-search": "*",
         "magento/module-catalog-search": "*",
         "magento/module-search": "*"

@@ -39,8 +39,8 @@ class ProductResolver implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['associatedProduct'])) {
             throw new LocalizedException(__('Missing key "associatedProduct" in Order Item value data'));

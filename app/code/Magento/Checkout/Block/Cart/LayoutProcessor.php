@@ -43,7 +43,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
         \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection,
         \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection,
-        \Magento\Directory\Model\TopDestinationCountries $topDestinationCountries = null
+        ?\Magento\Directory\Model\TopDestinationCountries $topDestinationCountries = null
     ) {
         $this->merger = $merger;
         $this->countryCollection = $countryCollection;

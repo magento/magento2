@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types = 1);
@@ -293,11 +293,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $rows = [];
         $headers = [];
-        foreach (str_getcsv($exportData, "\n") as $row) {
+        foreach (str_getcsv($exportData, "\n", '"', '\\') as $row) {
             if (!$headers) {
-                $headers = str_getcsv($row);
+                $headers = str_getcsv($row, ',', '"', '\\');
             } else {
-                $rows[] = array_combine($headers, str_getcsv($row));
+                $rows[] = array_combine($headers, str_getcsv($row, ',', '"', '\\'));
             }
         }
         return $rows;

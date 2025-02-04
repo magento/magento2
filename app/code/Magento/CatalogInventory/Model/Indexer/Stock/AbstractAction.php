@@ -86,7 +86,7 @@ abstract class AbstractAction
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Indexer\CacheContext $cacheContext,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         $this->_resource = $resource;
         $this->_indexerFactory = $indexerFactory;

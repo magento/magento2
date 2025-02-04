@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,6 +20,15 @@
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchDefaultWebsite">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="enableTableRatesShippingMethodForDefaultWebsite">
+                <argument name="status" value="0"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
+
             <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">50.00</field>

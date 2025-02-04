@@ -48,7 +48,7 @@ class Rss extends \Magento\Framework\View\Element\Template
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
         array $data = [],
-        Signature $signature = null
+        ?Signature $signature = null
     ) {
         $this->orderFactory = $orderFactory;
         $this->rssUrlBuilder = $rssUrlBuilder;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
@@ -116,7 +116,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implement
         \Magento\Catalog\Model\Category $catalogCategory,
         \Psr\Log\LoggerInterface $logger,
         $connectionName = null,
-        TableMaintainer $tableMaintainer = null
+        ?TableMaintainer $tableMaintainer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;

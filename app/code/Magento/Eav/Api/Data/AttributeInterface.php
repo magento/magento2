@@ -136,10 +136,10 @@ interface AttributeInterface extends CustomAttributesDataInterface, MetadataObje
     /**
      * Set options of the attribute (key => value pairs for select)
      *
-     * @param \Magento\Eav\Api\Data\AttributeOptionInterface[] $options
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface[]|null $options
      * @return $this
      */
-    public function setOptions(array $options = null);
+    public function setOptions(?array $options = null);
 
     /**
      * Whether current attribute has been defined by a user.
@@ -181,10 +181,10 @@ interface AttributeInterface extends CustomAttributesDataInterface, MetadataObje
     /**
      * Set frontend label for each store
      *
-     * @param \Magento\Eav\Api\Data\AttributeFrontendLabelInterface[] $frontendLabels
+     * @param \Magento\Eav\Api\Data\AttributeFrontendLabelInterface[]|null $frontendLabels
      * @return $this
      */
-    public function setFrontendLabels(array $frontendLabels = null);
+    public function setFrontendLabels(?array $frontendLabels = null);
 
     /**
      * Get the note attribute for the element.
@@ -304,7 +304,7 @@ interface AttributeInterface extends CustomAttributesDataInterface, MetadataObje
      * @param \Magento\Eav\Api\Data\AttributeValidationRuleInterface[] $validationRules
      * @return $this
      */
-    public function setValidationRules(array $validationRules = null);
+    public function setValidationRules(?array $validationRules = null);
 
     /**
      * @return \Magento\Eav\Api\Data\AttributeExtensionInterface|null

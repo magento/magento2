@@ -100,7 +100,7 @@ class GuestValidation
         $cartId,
         $email,
         PaymentInterface $paymentMethod,
-        AddressInterface $billingAddress = null
+        ?AddressInterface $billingAddress = null
     ) {
         if ($this->isAgreementEnabled()) {
             $quote = $this->quoteRepository->get($cartId);

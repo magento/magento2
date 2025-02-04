@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
@@ -30,7 +30,8 @@
         "magento/module-theme": "*",
         "magento/module-ui": "*",
         "magento/module-widget": "*",
-        "magento/module-wishlist": "*"
+        "magento/module-wishlist": "*",
+        "magento/module-encryption-key": "*"
     },
     "suggest": {
         "magento/module-sales-sample-data": "*"

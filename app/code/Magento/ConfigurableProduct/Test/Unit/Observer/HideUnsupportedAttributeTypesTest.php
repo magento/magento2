@@ -91,7 +91,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
      * @return EventObserver|\PHPUnit\Framework\MockObject\MockObject
      * @internal param null|MockObject $block
      */
-    private function createEventMock(MockObject $form = null)
+    private function createEventMock(?MockObject $form = null)
     {
         $event = $this->getMockBuilder(EventObserver::class)
             ->addMethods(['getForm', 'getBlock'])

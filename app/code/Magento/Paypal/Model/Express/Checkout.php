@@ -608,7 +608,7 @@ class Checkout
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function returnFromPaypal($token, string $payerIdentifier = null)
+    public function returnFromPaypal($token, ?string $payerIdentifier = null)
     {
         $this->_getApi()
             ->setToken($token)
@@ -1116,7 +1116,7 @@ class Checkout
      * @param \Magento\Quote\Model\Quote\Address|null $address
      * @return void
      */
-    private function setShippingOptions(PaypalCart $cart, Address $address = null)
+    private function setShippingOptions(PaypalCart $cart, ?Address $address = null)
     {
         // for included tax always disable line items (related to paypal amount rounding problem)
         $this->_getApi()->setIsLineItemsEnabled($this->_config->getValue(PaypalConfig::TRANSFER_CART_LINE_ITEMS));

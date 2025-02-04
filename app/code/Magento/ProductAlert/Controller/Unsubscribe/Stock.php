@@ -52,8 +52,8 @@ class Stock extends UnsubscribeController implements HttpPostActionInterface
         Context $context,
         CustomerSession $customerSession,
         ProductRepositoryInterface $productRepository,
-        StoreManagerInterface $storeManager = null,
-        StockFactory $stockFactory = null
+        ?StoreManagerInterface $storeManager = null,
+        ?StockFactory $stockFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);

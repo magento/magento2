@@ -150,10 +150,10 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CookieMetadataFactory $cookieMetadataFactory = null
+        ?CookieMetadataFactory $cookieMetadataFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_transportBuilder = $transportBuilder;

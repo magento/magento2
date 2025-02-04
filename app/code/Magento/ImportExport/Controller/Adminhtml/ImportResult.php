@@ -66,7 +66,7 @@ abstract class ImportResult extends Import
         ReportProcessorInterface $reportProcessor,
         ModelHistory $historyModel,
         Report $reportHelper,
-        Escaper $escaper = null,
+        ?Escaper $escaper = null,
         ?RenderErrorMessages $renderErrorMessages = null
     ) {
         parent::__construct($context);

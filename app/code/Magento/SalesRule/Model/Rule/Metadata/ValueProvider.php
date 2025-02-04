@@ -65,7 +65,7 @@ class ValueProvider
         SearchCriteriaBuilder $searchCriteriaBuilder,
         DataObject $objectConverter,
         RuleFactory $salesRuleFactory,
-        SimpleActionOptionsProvider $simpleActionOptionsProvider = null
+        ?SimpleActionOptionsProvider $simpleActionOptionsProvider = null
     ) {
         $this->store = $store;
         $this->groupRepository = $groupRepository;

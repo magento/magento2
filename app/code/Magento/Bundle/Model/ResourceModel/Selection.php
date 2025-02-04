@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Model\ResourceModel;
 
@@ -42,7 +42,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         Context $context,
         MetadataPool $metadataPool,
         $connectionName = null,
-        EntityManager $entityManager = null
+        ?EntityManager $entityManager = null
     ) {
         parent::__construct(
             $context,

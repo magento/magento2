@@ -1376,15 +1376,26 @@
 
         submit: function () {
             var $editForm = jQuery('#edit_form'),
+                $submitButton = jQuery('#submit_order_top_button'),
                 beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
+                $submitButton.prop('disabled', true);
+
                 $editForm.trigger('processStart');
                 beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
                 $editForm.trigger(beforeSubmitOrderEvent);
+
                 if (beforeSubmitOrderEvent.result !== false) {
                     $editForm.trigger('submitOrder');
+                } else {
+                    $submitButton.prop('disabled', false);
                 }
+
+                $editForm.on('submitOrderComplete', function () {
+                    $submitButton.prop('disabled', false);
+                    $editForm.trigger('processStop');
+                });
             }
         },
 

@@ -361,12 +361,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ExtensibleDataObjectConverter $dataObjectConverter = null,
-        StoreManagerInterface $storeManager = null,
-        CustomAttributeListInterface $customAttributeList = null,
-        OrderRepositoryInterface $orderRepositoryInterface = null,
-        HttpRequest $request = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?ExtensibleDataObjectConverter $dataObjectConverter = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?CustomAttributeListInterface $customAttributeList = null,
+        ?OrderRepositoryInterface $orderRepositoryInterface = null,
+        ?HttpRequest $request = null,
         ?SpecificationFactory $paymentMethodSpecificationFactory = null,
         array $paymentMethodSpecifications = []
     ) {

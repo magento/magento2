@@ -65,7 +65,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = null,
-        CategorySelectBuilder $categorySelectBuilder = null
+        ?CategorySelectBuilder $categorySelectBuilder = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_categoryResource = $categoryResource;

@@ -84,7 +84,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         array $indexUsageEnforcements = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;

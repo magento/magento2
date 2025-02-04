@@ -64,7 +64,7 @@ abstract class Create extends \Magento\Backend\App\Action
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
-        ValidateCoupon $validateCoupon = null
+        ?ValidateCoupon $validateCoupon = null
     ) {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);

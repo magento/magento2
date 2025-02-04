@@ -54,7 +54,7 @@ class IndexStructure implements IndexStructureInterface
     public function __construct(
         ResourceConnection $resource,
         IndexScopeResolverInterface $indexScopeResolver,
-        IndexStructureFactory $indexStructureFactory = null
+        ?IndexStructureFactory $indexStructureFactory = null
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;

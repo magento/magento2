@@ -52,9 +52,9 @@ class ImageProvider
     public function __construct(
         \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository,
         \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool,
-        \Magento\Checkout\CustomerData\DefaultItem $customerDataItem = null,
-        \Magento\Catalog\Helper\Image $imageHelper = null,
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
+        ?\Magento\Checkout\CustomerData\DefaultItem $customerDataItem = null,
+        ?\Magento\Catalog\Helper\Image $imageHelper = null,
+        ?\Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null
     ) {
         $this->itemRepository = $itemRepository;
         $this->itemPool = $itemPool;

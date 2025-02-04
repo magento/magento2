@@ -87,9 +87,9 @@ class AddressSave extends Order implements HttpPostActionInterface
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
-        RegionFactory $regionFactory = null,
-        OrderAddressRepositoryInterface $orderAddressRepository = null,
-        AttributeMetadataDataProvider $attributeMetadataDataProvider = null
+        ?RegionFactory $regionFactory = null,
+        ?OrderAddressRepositoryInterface $orderAddressRepository = null,
+        ?AttributeMetadataDataProvider $attributeMetadataDataProvider = null
     ) {
         $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
         $this->orderAddressRepository = $orderAddressRepository ?: ObjectManager::getInstance()

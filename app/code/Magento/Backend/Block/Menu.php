@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block;
@@ -101,9 +101,9 @@ class Menu extends \Magento\Backend\Block\Template
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = [],
-        MenuItemChecker $menuItemChecker = null,
-        AnchorRenderer $anchorRenderer = null,
-        \Magento\Framework\App\Route\ConfigInterface $routeConfig = null
+        ?MenuItemChecker $menuItemChecker = null,
+        ?AnchorRenderer $anchorRenderer = null,
+        ?\Magento\Framework\App\Route\ConfigInterface $routeConfig = null
     ) {
         $this->_url = $url;
         $this->_iteratorFactory = $iteratorFactory;

@@ -183,10 +183,10 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         AddressInterfaceFactory $addressDataFactory,
         RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CompositeValidator $compositeValidator = null,
+        ?CompositeValidator $compositeValidator = null,
         ?CountryModelsCache $countryModelsCache = null,
         ?RegionModelsCache $regionModelsCache = null,
     ) {

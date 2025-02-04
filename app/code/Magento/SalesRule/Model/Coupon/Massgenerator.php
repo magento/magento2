@@ -74,8 +74,8 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->salesRuleCoupon = $salesRuleCoupon;

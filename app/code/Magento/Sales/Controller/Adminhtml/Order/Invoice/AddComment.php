@@ -69,7 +69,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         JsonFactory $resultJsonFactory,
         PageFactory $resultPageFactory,
         RawFactory $resultRawFactory,
-        InvoiceRepositoryInterface $invoiceRepository = null
+        ?InvoiceRepositoryInterface $invoiceRepository = null
     ) {
         $this->invoiceCommentSender = $invoiceCommentSender;
         $this->resultJsonFactory = $resultJsonFactory;

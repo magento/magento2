@@ -2014,4 +2014,11 @@
     <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
     <preference for="Magento\Framework\App\State\ReloadProcessorInterface" type="Magento\Framework\App\State\ReloadProcessorComposite" />
     <preference for="Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface" type="Magento\Framework\Indexer\Config\Converter\SortingAdjustment" />
+
+    <!-- @api -->
+    <virtualType name="shellBackground" type="Magento\Framework\Shell">
+        <arguments>
+            <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
+        </arguments>
+    </virtualType>
 </config>

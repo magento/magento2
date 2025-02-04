@@ -107,7 +107,7 @@ class ProductUrlRewriteGenerator
         ObjectRegistryFactory         $objectRegistryFactory,
         StoreViewService              $storeViewService,
         StoreManagerInterface         $storeManager,
-        GetVisibleForStores           $visibleForStores = null
+        ?GetVisibleForStores           $visibleForStores = null
     ) {
         $this->canonicalUrlRewriteGenerator = $canonicalUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;

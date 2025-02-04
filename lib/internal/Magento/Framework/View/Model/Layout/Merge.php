@@ -208,10 +208,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\View\Model\Layout\Update\Validator $validator,
         \Psr\Log\LoggerInterface $logger,
         ReadFactory $readFactory,
-        \Magento\Framework\View\Design\ThemeInterface $theme = null,
+        ?\Magento\Framework\View\Design\ThemeInterface $theme = null,
         $cacheSuffix = '',
-        LayoutCacheKeyInterface $layoutCacheKey = null,
-        SerializerInterface $serializer = null,
+        ?LayoutCacheKeyInterface $layoutCacheKey = null,
+        ?SerializerInterface $serializer = null,
         ?int $cacheLifetime = null
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
