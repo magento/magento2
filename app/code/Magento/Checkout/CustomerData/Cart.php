@@ -89,6 +89,19 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
     public function getSectionData()
     {
         $totals = $this->getQuote()->getTotals();
+        if(null === $this->getQuote()->getId()) {
+            return [
+                'summary_count' => null,
+                'subtotalAmount' => null,
+                'subtotal' => null,
+                'possible_onepage_checkout' => null,
+                'items' => null,
+                'extra_actions' => null,
+                'isGuestCheckoutAllowed' => null,
+                'website_id' => null,
+                'storeId' => null
+            ];
+        }
         $subtotalAmount = $totals['subtotal']->getValue();
         return [
             'summary_count' => $this->getSummaryCount(),
