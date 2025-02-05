@@ -25,7 +25,7 @@ class CustomerCachedMetadata extends CachedMetadata implements CustomerMetadataI
      */
     public function __construct(
         CustomerMetadata $metadata,
-        AttributeMetadataCache $attributeMetadataCache = null
+        ?AttributeMetadataCache $attributeMetadataCache = null
     ) {
         parent::__construct($metadata, $attributeMetadataCache);
     }

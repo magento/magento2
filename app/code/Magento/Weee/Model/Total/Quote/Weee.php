@@ -318,7 +318,7 @@ class Weee extends AbstractTotal
      * @param AbstractItem|null $childItem
      * @return void
      */
-    protected function recalculateParent(AbstractItem $item, AbstractItem $childItem = null)
+    protected function recalculateParent(AbstractItem $item, ?AbstractItem $childItem = null)
     {
         $associatedTaxables = [];
         foreach ($item->getChildren() as $child) {

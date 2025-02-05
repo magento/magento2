@@ -253,10 +253,10 @@ class Import extends AbstractModel
         History $importHistoryModel,
         DateTime $localeDate,
         array $data = [],
-        ManagerInterface $messageManager = null,
-        Random $random = null,
-        Upload $upload = null,
-        LocaleEmulatorInterface $localeEmulator = null
+        ?ManagerInterface $messageManager = null,
+        ?Random $random = null,
+        ?Upload $upload = null,
+        ?LocaleEmulatorInterface $localeEmulator = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;

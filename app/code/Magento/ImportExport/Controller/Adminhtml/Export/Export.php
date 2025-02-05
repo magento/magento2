@@ -60,10 +60,10 @@ class Export extends ExportController implements HttpPostActionInterface
     public function __construct(
         Context $context,
         FileFactory $fileFactory,
-        SessionManagerInterface $sessionManager = null,
-        PublisherInterface $publisher = null,
-        ExportInfoFactory $exportInfoFactory = null,
-        ResolverInterface $localeResolver = null
+        ?SessionManagerInterface $sessionManager = null,
+        ?PublisherInterface $publisher = null,
+        ?ExportInfoFactory $exportInfoFactory = null,
+        ?ResolverInterface $localeResolver = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->sessionManager = $sessionManager

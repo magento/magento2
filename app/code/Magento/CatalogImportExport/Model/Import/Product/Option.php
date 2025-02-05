@@ -400,7 +400,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = [],
-        ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
+        ?ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
         ?TransactionManagerInterface $transactionManager = null,
         ?SkuStorage $skuStorage = null
     ) {

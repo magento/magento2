@@ -74,8 +74,8 @@ class PhpCookieManager implements CookieManagerInterface
     public function __construct(
         CookieScopeInterface $scope,
         CookieReaderInterface $reader,
-        LoggerInterface $logger = null,
-        HttpHeader $httpHeader = null
+        ?LoggerInterface $logger = null,
+        ?HttpHeader $httpHeader = null
     ) {
         $this->scope = $scope;
         $this->reader = $reader;
@@ -97,7 +97,7 @@ class PhpCookieManager implements CookieManagerInterface
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function setSensitiveCookie($name, $value, SensitiveCookieMetadata $metadata = null)
+    public function setSensitiveCookie($name, $value, ?SensitiveCookieMetadata $metadata = null)
     {
         $metadataArray = $this->scope->getSensitiveCookieMetadata($metadata)->__toArray();
         $this->setCookie((string)$name, (string)$value, $metadataArray);
@@ -117,7 +117,7 @@ class PhpCookieManager implements CookieManagerInterface
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function setPublicCookie($name, $value, PublicCookieMetadata $metadata = null)
+    public function setPublicCookie($name, $value, ?PublicCookieMetadata $metadata = null)
     {
         $metadataArray = $this->scope->getPublicCookieMetadata($metadata)->__toArray();
         $this->setCookie((string)$name, (string)$value, $metadataArray);
@@ -297,7 +297,7 @@ class PhpCookieManager implements CookieManagerInterface
      *     received and accepted the request to delete this cookie.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function deleteCookie($name, CookieMetadata $metadata = null)
+    public function deleteCookie($name, ?CookieMetadata $metadata = null)
     {
         $metadataArray = $this->scope->getCookieMetadata($metadata)->__toArray();
 

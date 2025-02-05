@@ -61,7 +61,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\ResourceModel\Report $resource,
         \Magento\SalesRule\Model\ResourceModel\Report\RuleFactory $ruleFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $resource->init($this->_aggregationTable);

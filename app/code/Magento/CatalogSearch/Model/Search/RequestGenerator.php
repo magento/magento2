@@ -45,7 +45,7 @@ class RequestGenerator
      */
     public function __construct(
         CollectionFactory $productAttributeCollectionFactory,
-        GeneratorResolver $generatorResolver = null
+        ?GeneratorResolver $generatorResolver = null
     ) {
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
         $this->generatorResolver = $generatorResolver

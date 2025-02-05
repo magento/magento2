@@ -54,7 +54,7 @@ class Minsaleqty implements ResetAfterRequestInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Math\Random $mathRandom,
         GroupManagementInterface $groupManagement,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->mathRandom = $mathRandom;

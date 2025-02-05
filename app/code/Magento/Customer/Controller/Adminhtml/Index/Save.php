@@ -143,7 +143,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         ForwardFactory $resultForwardFactory,
         JsonFactory $resultJsonFactory,
         SubscriptionManagerInterface $subscriptionManager,
-        AddressRegistry $addressRegistry = null,
+        ?AddressRegistry $addressRegistry = null,
         ?StoreManagerInterface $storeManager = null,
         ?SetCustomerStore $customerStore = null
     ) {

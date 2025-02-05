@@ -212,11 +212,11 @@ class Storage extends \Magento\Framework\DataObject
         array $extensions = [],
         array $dirs = [],
         array $data = [],
-        \Magento\Framework\Filesystem\DriverInterface $file = null,
-        \Magento\Framework\Filesystem\Io\File $ioFile = null,
-        \Psr\Log\LoggerInterface $logger = null,
-        \Magento\Framework\File\Mime $mime = null,
-        ScopeConfigInterface $coreConfig = null
+        ?\Magento\Framework\Filesystem\DriverInterface $file = null,
+        ?\Magento\Framework\Filesystem\Io\File $ioFile = null,
+        ?\Psr\Log\LoggerInterface $logger = null,
+        ?\Magento\Framework\File\Mime $mime = null,
+        ?ScopeConfigInterface $coreConfig = null
     ) {
         $this->_session = $session;
         $this->_backendUrl = $backendUrl;

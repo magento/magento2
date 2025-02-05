@@ -42,8 +42,8 @@ class Page implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($args['id']) && !isset($args['identifier'])) {
             throw new GraphQlInputException(__('"Page id/identifier should be specified'));

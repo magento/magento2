@@ -64,8 +64,8 @@ class RatingSummary implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ): float {
         if (false === $this->reviewsConfig->isEnabled()) {
             return 0;

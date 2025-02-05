@@ -164,9 +164,9 @@ class Elasticsearch
         BatchDataMapperInterface $batchDocumentDataMapper,
         Data $helper,
         $options = [],
-        ProductAttributeRepositoryInterface $productAttributeRepository = null,
-        StaticField $staticFieldProvider = null,
-        ArrayManager $arrayManager = null,
+        ?ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        ?StaticField $staticFieldProvider = null,
+        ?ArrayManager $arrayManager = null,
         array $responseErrorExceptionList = []
     ) {
         $this->connectionManager = $connectionManager;

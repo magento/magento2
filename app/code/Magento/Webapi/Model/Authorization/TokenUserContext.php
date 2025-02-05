@@ -89,9 +89,9 @@ class TokenUserContext implements UserContextInterface, ResetAfterRequestInterfa
         \Magento\Framework\App\RequestInterface $request,
         TokenFactory $tokenFactory,
         IntegrationServiceInterface $integrationService,
-        DateTime $dateTime = null,
-        Date $date = null,
-        OauthHelper $oauthHelper = null,
+        ?DateTime $dateTime = null,
+        ?Date $date = null,
+        ?OauthHelper $oauthHelper = null,
         ?UserTokenReaderInterface $tokenReader = null,
         ?UserTokenValidatorInterface $tokenValidator = null
     ) {

@@ -67,7 +67,7 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Helper\View $customerViewHelper,
         array $data = [],
-        ProductCollectionFactory $productCollectionFactory = null
+        ?ProductCollectionFactory $productCollectionFactory = null
     ) {
         $this->_coreRegistry = $registry;
         $this->customerRepository = $customerRepository;

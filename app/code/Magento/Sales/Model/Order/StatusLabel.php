@@ -54,7 +54,7 @@ class StatusLabel
      * @param int|null $storeId
      * @return string|null
      */
-    public function getStatusFrontendLabel(?string $code, string $area, int $storeId = null): ?string
+    public function getStatusFrontendLabel(?string $code, string $area, ?int $storeId = null): ?string
     {
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);

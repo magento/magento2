@@ -245,7 +245,7 @@ class DeploymentConfig
      * @return array
      * @throws RuntimeException
      */
-    private function flattenParams(array $params, ?string $path = null, array &$flattenResult = null): array
+    private function flattenParams(array $params, ?string $path = null, ?array &$flattenResult = null): array
     {
         if (null === $flattenResult) {
             $flattenResult = [];

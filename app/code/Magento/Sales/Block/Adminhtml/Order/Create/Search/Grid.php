@@ -69,7 +69,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\Config $salesConfig,
         array $data = [],
-        ProductCollection $productCollectionProvider = null
+        ?ProductCollection $productCollectionProvider = null
     ) {
         $this->_productFactory = $productFactory;
         $this->_catalogConfig = $catalogConfig;

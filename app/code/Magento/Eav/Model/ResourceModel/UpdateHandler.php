@@ -76,7 +76,7 @@ class UpdateHandler implements AttributeInterface
         AttributePersistor $attributePersistor,
         ReadSnapshot $readSnapshot,
         ScopeResolver $scopeResolver,
-        AttributeLoader $attributeLoader = null
+        ?AttributeLoader $attributeLoader = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;

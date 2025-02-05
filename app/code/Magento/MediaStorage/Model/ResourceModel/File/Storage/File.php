@@ -38,7 +38,7 @@ class File
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Psr\Log\LoggerInterface $log,
-        FileIo $fileIo = null
+        ?FileIo $fileIo = null
     ) {
         $this->_logger = $log;
         $this->_filesystem = $filesystem;

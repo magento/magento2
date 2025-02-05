@@ -32,7 +32,7 @@ class DateOfFirstOrderResolver implements ResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): ?string
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null): ?string
     {
         if ($context->getExtensionAttributes()->getIsCustomer() === false) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));

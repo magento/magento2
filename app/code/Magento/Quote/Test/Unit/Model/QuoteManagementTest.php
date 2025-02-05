@@ -1074,7 +1074,7 @@ class QuoteManagementTest extends TestCase
         int $customerId,
         int $id,
         array $quoteItems,
-        Address $shippingAddress = null,
+        ?Address $shippingAddress,
         bool $setIsActive
     ): MockObject {
         $quote = $this->getMockBuilder(Quote::class)
@@ -1171,8 +1171,8 @@ class QuoteManagementTest extends TestCase
         OrderPaymentInterface $payment,
         array $items,
         int $quoteId,
-        OrderAddressInterface $shippingAddress = null,
-        int $customerId = null
+        ?OrderAddressInterface $shippingAddress = null,
+        ?int $customerId = null
     ): MockObject {
         $order = $this->getMockBuilder(Order::class)
             ->addMethods(['addAddresses', 'setAddresses'])

@@ -49,7 +49,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
-        \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
+        ?\Magento\Sales\Api\PaymentFailuresInterface $paymentFailures = null
     ) {
         parent::__construct(
             $context,
