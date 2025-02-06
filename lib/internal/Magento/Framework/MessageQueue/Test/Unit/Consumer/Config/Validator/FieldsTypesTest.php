@@ -39,7 +39,7 @@ class FieldsTypesTest extends TestCase
     /**
      * @return array
      */
-    public function validConfigDataProvider()
+    public static function validConfigDataProvider()
     {
         return [
             'valid' => [
@@ -137,7 +137,7 @@ class FieldsTypesTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function invalidConfigDataProvider()
+    public static function invalidConfigDataProvider()
     {
         return [
             'invalid name' => [

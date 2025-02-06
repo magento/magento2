@@ -234,12 +234,12 @@ class AfterImportDataObserver implements ObserverInterface
         UrlPersistInterface $urlPersist,
         UrlRewriteFactory $urlRewriteFactory,
         UrlFinderInterface $urlFinder,
-        MergeDataProviderFactory $mergeDataProviderFactory = null,
-        CategoryCollectionFactory $categoryCollectionFactory = null,
-        ScopeConfigInterface $scopeConfig = null,
-        CollectionFactory $collectionFactory = null,
-        AttributeValue $attributeValue = null,
-        SkuStorage $skuStorage = null
+        ?MergeDataProviderFactory $mergeDataProviderFactory = null,
+        ?CategoryCollectionFactory $categoryCollectionFactory = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?CollectionFactory $collectionFactory = null,
+        ?AttributeValue $attributeValue = null,
+        ?SkuStorage $skuStorage = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;

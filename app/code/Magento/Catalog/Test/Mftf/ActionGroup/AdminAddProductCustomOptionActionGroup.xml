@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add custom option, title and type -->
     <actionGroup name="AdminAddProductCustomOptionActionGroup">
@@ -17,9 +17,10 @@
             <argument name="customOptionTitle" type="string"/>
             <argument name="customOptionType" type="string"/>
         </arguments>
-        
+
         <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomizableOptionsSection"/>
         <waitForPageLoad stepKey="waitForScrolling"/>
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
         <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
         <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
         <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionTitle}}"/>

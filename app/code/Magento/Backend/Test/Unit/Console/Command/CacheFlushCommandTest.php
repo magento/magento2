@@ -48,7 +48,7 @@ class CacheFlushCommandTest extends AbstractCacheManageCommandTestCase
     /**
      * {@inheritdoc}
      */
-    public function getExpectedExecutionOutput(array $types)
+    public static function getExpectedExecutionOutput(array $types)
     {
         return 'Flushed cache types:' . PHP_EOL . implode(PHP_EOL, $types) . PHP_EOL;
     }

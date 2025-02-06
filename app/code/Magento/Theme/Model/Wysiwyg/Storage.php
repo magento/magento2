@@ -115,8 +115,8 @@ class Storage
         \Magento\Framework\Image\AdapterFactory $imageFactory,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\Filesystem\Io\File $file = null,
-        DriverInterface $filesystemDriver = null
+        ?\Magento\Framework\Filesystem\Io\File $file = null,
+        ?DriverInterface $filesystemDriver = null
     ) {
         $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_helper = $helper;

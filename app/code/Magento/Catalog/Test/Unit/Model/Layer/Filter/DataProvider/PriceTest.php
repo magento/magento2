@@ -177,14 +177,14 @@ class PriceTest extends TestCase
     public static function validateFilterDataProvider()
     {
         return [
-            ['filter' => '0-10', 'result' => ['0', '10']],
-            ['filter' => '0-10-20', 'result' => false],
-            ['filter' => '', 'result' => false],
-            ['filter' => '-', 'result' => ['', '']],
-            ['filter' => '0', 'result' => false],
-            ['filter' => 0, 'result' => false],
-            ['filter' => '100500INF', 'result' => false],
-            ['filter' => '-10\'[0]', 'result' => false],
+            ['filter' => '0-10', 'expectedResult' => ['0', '10']],
+            ['filter' => '0-10-20', 'expectedResult' => false],
+            ['filter' => '', 'expectedResult' => false],
+            ['filter' => '-', 'expectedResult' => ['', '']],
+            ['filter' => '0', 'expectedResult' => false],
+            ['filter' => 0, 'expectedResult' => false],
+            ['filter' => '100500INF', 'expectedResult' => false],
+            ['filter' => '-10\'[0]', 'expectedResult' => false],
         ];
     }
 

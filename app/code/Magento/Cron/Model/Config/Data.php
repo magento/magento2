@@ -26,7 +26,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Cron\Model\Config\Reader\Db $dbReader,
         $cacheId = 'crontab_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
         $this->merge($dbReader->get());

@@ -233,8 +233,8 @@ abstract class AbstractEntity extends AbstractResource implements
     public function __construct(
         Context $context,
         $data = [],
-        UniqueValidationInterface $uniqueValidator = null,
-        AttributeLoaderInterface $attributeLoader = null
+        ?UniqueValidationInterface $uniqueValidator = null,
+        ?AttributeLoaderInterface $attributeLoader = null
     ) {
         $this->_eavConfig = $context->getEavConfig();
         $this->_resource = $context->getResource();

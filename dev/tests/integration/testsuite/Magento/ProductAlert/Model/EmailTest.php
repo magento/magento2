@@ -120,7 +120,7 @@ class EmailTest extends TestCase
         );
     }
 
-    public function customerFunctionDataProvider()
+    public static function customerFunctionDataProvider()
     {
         return [
             [true],

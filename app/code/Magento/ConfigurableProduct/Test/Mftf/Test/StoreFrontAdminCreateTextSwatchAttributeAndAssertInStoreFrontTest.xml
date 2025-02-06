@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -109,7 +109,7 @@
         <!--Add created attribute to default attribute set-->
         <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
         <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
-        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('size')}}" selector2="{{AdminProductAttributeSetSection.attribute('Product Details')}}" stepKey="assignTestAttributes"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute(sizeAttribute.attribute_code)}}" selector2="{{AdminProductAttributeSetSection.attribute('Product Details')}}" stepKey="assignTestAttributes"/>
         <waitForElementClickable selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="waitToClickOnAttributeSetSaveButton"/>
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickAttributeSetSave"/>
         <!-- Navigate to Catalog-> Products and click On Configurable product dropdown -->

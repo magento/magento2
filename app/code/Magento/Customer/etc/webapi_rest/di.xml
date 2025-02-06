@@ -31,9 +31,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
-        <plugin name="validateCustomerData" type="Magento\Customer\Plugin\Webapi\Controller\Rest\ValidateCustomerData" sortOrder="1" disabled="false" />
-    </type>
     <preference for="Magento\Customer\Api\AccountManagementInterface"
                 type="Magento\Customer\Model\AccountManagementApi" />
 </config>

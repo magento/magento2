@@ -118,7 +118,7 @@ class CurlTest extends TestCase
     /**
      * @return array
      */
-    public function writeDataProvider()
+    public static function writeDataProvider()
     {
         return [
             'headers is empty' => [
@@ -169,7 +169,7 @@ class CurlTest extends TestCase
     /**
      * @return array
      */
-    public function readDataProvider()
+    public static function readDataProvider()
     {
         return [
             [file_get_contents(__DIR__ . '/_files/curl_response1.txt')],

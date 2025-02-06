@@ -280,7 +280,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
+    public static function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
     {
         return [
             ['/accessories.html', null, true, 'french/accessories.html'],

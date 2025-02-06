@@ -18,7 +18,7 @@ class Area extends AbstractText
     /**
      * @inheritdoc
      */
-    protected function getType(): string
+    protected static function getType(): string
     {
         return ProductCustomOptionInterface::OPTION_TYPE_AREA;
     }

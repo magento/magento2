@@ -326,12 +326,26 @@
 
             if (this.isBillingField(fieldName)) {
                 syncName = fieldName.replace('billing', 'shipping');
+
+                if (fieldName.indexOf('country')) {
+                    jQuery('#order-shipping_address_region').css(
+                        'display',
+                        jQuery('#order-billing_address_region').css('display')
+                    );
+                    jQuery('#order-shipping_address_region_id').css(
+                        'display',
+                        jQuery('#order-billing_address_region_id').css('display')
+                    );
+                }
             }
 
             $(container).select('[name="' + syncName + '"]').each(function (element) {
                 if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
                     if (element.type === "checkbox") {
                         element.checked = fieldValue.checked;
+                    } else if (element.type === "select" || element.type === "select-one") {
+                        element.innerHTML = fieldValue.innerHTML;
+                        element.value = fieldValue.value;
                     } else {
                         element.value = fieldValue.value;
                     }
@@ -1362,15 +1376,26 @@
 
         submit: function () {
             var $editForm = jQuery('#edit_form'),
+                $submitButton = jQuery('#submit_order_top_button'),
                 beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
+                $submitButton.prop('disabled', true);
+
                 $editForm.trigger('processStart');
                 beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
                 $editForm.trigger(beforeSubmitOrderEvent);
+
                 if (beforeSubmitOrderEvent.result !== false) {
                     $editForm.trigger('submitOrder');
+                } else {
+                    $submitButton.prop('disabled', false);
                 }
+
+                $editForm.on('submitOrderComplete', function () {
+                    $submitButton.prop('disabled', false);
+                    $editForm.trigger('processStop');
+                });
             }
         },
 

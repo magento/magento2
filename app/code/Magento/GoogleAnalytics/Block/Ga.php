@@ -43,7 +43,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollection,
         \Magento\GoogleAnalytics\Helper\Data $googleAnalyticsData,
         array $data = [],
-        \Magento\Cookie\Helper\Cookie $cookieHelper = null
+        ?\Magento\Cookie\Helper\Cookie $cookieHelper = null
     ) {
         $this->_googleAnalyticsData = $googleAnalyticsData;
         $this->_salesOrderCollection = $salesOrderCollection;

@@ -115,7 +115,7 @@ class ReorderTest extends TestCase
     /**
      * @return array
      */
-    public function getScopeConfigValue()
+    public static function getScopeConfigValue()
     {
         return [
             [true],
@@ -217,7 +217,7 @@ class ReorderTest extends TestCase
     /**
      * @return array
      */
-    public function getOrderCanReorder()
+    public static function getOrderCanReorder()
     {
         return [
             [true],

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -101,22 +101,38 @@
             <executeJS function="var orderID = '{$grabOrderIdForThirdOrder}'.replace(/\D|^0+/g, ''); return (orderID);" stepKey="thirdOrderID"/>
             <grabTextFrom selector="{{AdminShipmentAddressInformationSection.multiCheckoutOrderId('4')}}" stepKey="grabOrderIdForFourthOrder"/>
             <executeJS function="var orderID = '{$grabOrderIdForFourthOrder}'.replace(/\D|^0+/g, ''); return (orderID);" stepKey="fourthOrderID"/>
-            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="openFirstOrder">
+            <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="goToMyOrdersForFirstOrder"/>
+            <actionGroup ref="StorefrontOpenOrderLinkOnMyOrdersPageActionGroup" stepKey="openFirstOrder">
+                 <argument name="orderID" value="{$firstOrderID}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="againOpenFirstOrder">
                 <argument name="orderId" value="$firstOrderID"/>
             </actionGroup>
             <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderInformationAddress('Berlin')}}" stepKey="waitForOrderInformationForBerlin"/>
             <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderShippingMethod('DHL - Express easy')}}" stepKey="waitForShippingMethodForDHL"/>
-            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="openSecondOrder">
+            <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="goToMyOrdersForSecondOrder"/>
+            <actionGroup ref="StorefrontOpenOrderLinkOnMyOrdersPageActionGroup" stepKey="openSecondOrder">
+                <argument name="orderID" value="{$secondOrderID}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="againOpenSecondOrder">
                 <argument name="orderId" value="$secondOrderID"/>
             </actionGroup>
             <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderInformationAddress('London')}}" stepKey="waitForOrderInformationForLondon"/>
             <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderShippingMethod('United Parcel Service - UPS Worldwide Expedited')}}" stepKey="waitForShippingMethodForUPS"/>
-            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="openThirdOrder">
+            <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="goToMyOrdersForThirdOrder"/>
+            <actionGroup ref="StorefrontOpenOrderLinkOnMyOrdersPageActionGroup" stepKey="openThirdOrder">
+                <argument name="orderID" value="{$thirdOrderID}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="againOpenThirdOrder">
                 <argument name="orderId" value="$thirdOrderID"/>
             </actionGroup>
             <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderInformationAddress('New York')}}" stepKey="waitForOrderInformationForNY"/>
             <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderShippingMethod('United States Postal Service - Library Mail Parcel')}}" stepKey="waitForShippingMethodForUSPS"/>
-            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="openFourthOrder">
+            <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="goToMyOrdersForFourthOrder"/>
+            <actionGroup ref="StorefrontOpenOrderLinkOnMyOrdersPageActionGroup" stepKey="openFourthOrder">
+                <argument name="orderID" value="{$fourthOrderID}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="againOpenFourthOrder">
                 <argument name="orderId" value="$fourthOrderID"/>
             </actionGroup>
             <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderInformationAddress('Culver City')}}" stepKey="waitForOrderInformationForCulverCity"/>

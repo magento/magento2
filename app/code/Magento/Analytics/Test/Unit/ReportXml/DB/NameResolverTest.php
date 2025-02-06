@@ -75,7 +75,7 @@ class NameResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getAliasDataProvider()
+    public static function getAliasDataProvider()
     {
         return [
             'ElementConfigWithAliases' => [

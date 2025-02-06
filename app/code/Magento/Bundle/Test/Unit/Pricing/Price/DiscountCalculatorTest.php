@@ -149,7 +149,7 @@ class DiscountCalculatorTest extends TestCase
     /**
      * @return array
      */
-    public function providerForWithDifferentAmount()
+    public static function providerForWithDifferentAmount()
     {
         return [
             'test case 1 with discount amount' => [20, 50, 10],

@@ -449,7 +449,7 @@ class StorageTest extends TestCase
      *
      * @return array[]
      */
-    public function fileItemsDataProvider()
+    public static function fileItemsDataProvider()
     {
         return [
             // Images files with the size of 0 bytes should generate proper warnings

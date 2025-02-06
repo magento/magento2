@@ -79,7 +79,7 @@ class Manager implements ManagerInterface
         Event\ManagerInterface $eventManager,
         LoggerInterface $logger,
         $defaultGroup = self::DEFAULT_GROUP,
-        ExceptionMessageFactoryInterface $exceptionMessageFactory = null
+        ?ExceptionMessageFactoryInterface $exceptionMessageFactory = null
     ) {
         $this->session = $session;
         $this->messageFactory = $messageFactory;

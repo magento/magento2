@@ -77,7 +77,7 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\ConfigurableProduct\Api\Data\OptionValueInterface[] $values
      * @return $this
      */
-    public function setValues(array $values = null);
+    public function setValues(?array $values = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

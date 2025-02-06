@@ -100,7 +100,7 @@ class ButtonTest extends TestCase
      *
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [
             'Store With ID = 1 and enable module' => [

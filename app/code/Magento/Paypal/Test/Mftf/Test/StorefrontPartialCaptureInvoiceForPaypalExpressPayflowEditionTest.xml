@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-4846"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Simple product is created -->

@@ -132,7 +132,7 @@ class DefaultColumnTest extends TestCase
     /**
      * @return array
      */
-    public function getScopeConfigSalesPriceDataProvider(): array
+    public static function getScopeConfigSalesPriceDataProvider(): array
     {
         return [
             ['2', 16.9, 13.52, 1.35],

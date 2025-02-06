@@ -37,7 +37,7 @@ class KeyValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function isValidDataProvider() : array
+    public static function isValidDataProvider() : array
     {
         return [
             '32 numbers' => ['12345678901234567890123456789012'],

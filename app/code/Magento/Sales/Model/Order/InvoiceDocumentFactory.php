@@ -49,9 +49,9 @@ class InvoiceDocumentFactory
     public function create(
         OrderInterface $order,
         $items = [],
-        InvoiceCommentCreationInterface $comment = null,
+        ?InvoiceCommentCreationInterface $comment = null,
         $appendComment = false,
-        InvoiceCreationArgumentsInterface $arguments = null
+        ?InvoiceCreationArgumentsInterface $arguments = null
     ) {
         $invoiceItems = $this->itemsToArray($items);
         $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);

@@ -162,7 +162,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function getByPeriodDataProvider(): array
+    public static function getByPeriodDataProvider(): array
     {
         $dateStart = new \DateTime();
         $expectedYear = $dateStart->format('Y');

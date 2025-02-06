@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Api\Data;
@@ -117,7 +116,7 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Bundle\Api\Data\LinkInterface[] $productLinks
      * @return $this
      */
-    public function setProductLinks(array $productLinks = null);
+    public function setProductLinks(?array $productLinks = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

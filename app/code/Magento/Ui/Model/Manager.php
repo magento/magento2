@@ -121,7 +121,7 @@ class Manager implements ManagerInterface
         AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
         CacheInterface $cache,
         InterpreterInterface $argumentInterpreter,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->componentConfigProvider = $componentConfigProvider;
         $this->domMerger = $domMerger;

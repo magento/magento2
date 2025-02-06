@@ -44,7 +44,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateIpsNoneAllowedDataProvider(): array
+    public static function validateIpsNoneAllowedDataProvider(): array
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],
@@ -72,7 +72,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateIpsNoneNotAllowedDataProvider()
+    public static function validateIpsNoneNotAllowedDataProvider()
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],

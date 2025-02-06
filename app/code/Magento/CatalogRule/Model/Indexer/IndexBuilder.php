@@ -232,19 +232,19 @@ class IndexBuilder
         DateTime\DateTime $dateTime,
         ProductFactory $productFactory,
         $batchCount = 1000,
-        ProductPriceCalculator $productPriceCalculator = null,
-        ReindexRuleProduct $reindexRuleProduct = null,
-        ReindexRuleGroupWebsite $reindexRuleGroupWebsite = null,
-        RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
-        ReindexRuleProductPrice $reindexRuleProductPrice = null,
-        RuleProductPricesPersistor $pricesPersistor = null,
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        ProductLoader $productLoader = null,
-        TableSwapper $tableSwapper = null,
-        TimezoneInterface $localeDate = null,
-        ProductCollectionFactory $productCollectionFactory = null,
-        IndexerRegistry $indexerRegistry = null,
-        ReindexRuleProductsPrice $reindexRuleProductsPrice = null,
+        ?ProductPriceCalculator $productPriceCalculator = null,
+        ?ReindexRuleProduct $reindexRuleProduct = null,
+        ?ReindexRuleGroupWebsite $reindexRuleGroupWebsite = null,
+        ?RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
+        ?ReindexRuleProductPrice $reindexRuleProductPrice = null,
+        ?RuleProductPricesPersistor $pricesPersistor = null,
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?ProductLoader $productLoader = null,
+        ?TableSwapper $tableSwapper = null,
+        ?TimezoneInterface $localeDate = null,
+        ?ProductCollectionFactory $productCollectionFactory = null,
+        ?IndexerRegistry $indexerRegistry = null,
+        ?ReindexRuleProductsPrice $reindexRuleProductsPrice = null,
         int $productBatchSize = 1000
     ) {
         $this->resource = $resource;
@@ -620,7 +620,7 @@ class IndexBuilder
      * @see ReindexRuleProductPrice::execute
      * @see ReindexRuleGroupWebsite::execute
      */
-    protected function applyAllRules(Product $product = null)
+    protected function applyAllRules(?Product $product = null)
     {
         $this->reindexRuleProductPrice->execute($this->batchCount, $product->getId());
         $this->reindexRuleGroupWebsite->execute();
@@ -675,7 +675,7 @@ class IndexBuilder
      * @deprecated 101.0.0
      * @see RuleProductsSelectBuilder::build
      */
-    protected function getRuleProductsStmt($websiteId, Product $product = null)
+    protected function getRuleProductsStmt($websiteId, ?Product $product = null)
     {
         return $this->ruleProductsSelectBuilder->build((int) $websiteId, (int) $product->getId());
     }

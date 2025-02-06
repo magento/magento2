@@ -47,7 +47,7 @@ class SenderTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['Mr. Real Name', 'Mr. Real Name'],

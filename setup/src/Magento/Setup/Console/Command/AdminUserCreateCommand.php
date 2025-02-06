@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -21,6 +21,7 @@ use Symfony\Component\Console\Question\Question;
  */
 class AdminUserCreateCommand extends AbstractSetupCommand
 {
+    public const NAME = 'admin:user:create';
     /**
      * @var InstallerFactory
      */
@@ -49,7 +50,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $this->setName('admin:user:create')
+        $this->setName(self::NAME)
             ->setDescription('Creates an administrator')
             ->setDefinition($this->getOptionsList());
         parent::configure();

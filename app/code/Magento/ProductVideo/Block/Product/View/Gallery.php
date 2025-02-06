@@ -38,7 +38,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\ProductVideo\Helper\Media $mediaHelper,
         array $data = [],
-        \Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory = null,
+        ?\Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface $imagesConfigFactory = null,
         array $galleryImagesConfig = []
     ) {
         parent::__construct(

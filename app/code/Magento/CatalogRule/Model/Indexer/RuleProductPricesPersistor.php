@@ -45,7 +45,7 @@ class RuleProductPricesPersistor
         \Magento\Framework\Stdlib\DateTime $dateFormat,
         \Magento\Framework\App\ResourceConnection $resource,
         ActiveTableSwitcher $activeTableSwitcher,
-        TableSwapper $tableSwapper = null
+        ?TableSwapper $tableSwapper = null
     ) {
         $this->dateFormat = $dateFormat;
         $this->resource = $resource;

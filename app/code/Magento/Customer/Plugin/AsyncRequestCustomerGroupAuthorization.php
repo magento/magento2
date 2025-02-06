@@ -57,8 +57,8 @@ class AsyncRequestCustomerGroupAuthorization
         MassSchedule $massSchedule,
         string       $topic,
         array        $entitiesArray,
-        string       $groupId = null,
-        string       $userId = null
+        ?string       $groupId = null,
+        ?string       $userId = null
     ) {
         foreach ($entitiesArray as $entityParams) {
             foreach ($entityParams as $entity) {

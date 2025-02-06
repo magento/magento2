@@ -103,12 +103,12 @@ class Full extends AbstractAction
         ProductType $catalogProductType,
         CacheContext $cacheContext,
         EventManager $eventManager,
-        MetadataPool $metadataPool = null,
-        BatchSizeManagementInterface $batchSizeManagement = null,
-        BatchProviderInterface $batchProvider = null,
+        ?MetadataPool $metadataPool = null,
+        ?BatchSizeManagementInterface $batchSizeManagement = null,
+        ?BatchProviderInterface $batchProvider = null,
         array $batchRowsCount = [],
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        QueryGenerator $batchQueryGenerator = null,
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?QueryGenerator $batchQueryGenerator = null,
         ?DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct(

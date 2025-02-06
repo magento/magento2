@@ -107,7 +107,7 @@ class NewProductsTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public static function isAllowedDataProvider()
     {
         return [
             [1, true],

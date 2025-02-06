@@ -99,7 +99,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function wrongXmlDataProvider()
+    public static function wrongXmlDataProvider()
     {
         return [
             [

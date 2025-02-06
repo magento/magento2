@@ -84,9 +84,18 @@ class AbstractCreateTest extends TestCase
      */
     public function testGetProduct($item)
     {
+        $item = $item($this);
         $product = $this->model->getProduct($item);
 
         self::assertInstanceOf(Product::class, $product);
+    }
+
+    protected function getMockForItemClass() {
+        $productMock = $this->createMock(Product::class);
+        $itemMock = $this->createMock(Item::class);
+        $itemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
+
+        return $itemMock;
     }
 
     /**
@@ -94,12 +103,10 @@ class AbstractCreateTest extends TestCase
      *
      * @return array
      */
-    public function getProductDataProvider()
+    public static function getProductDataProvider()
     {
-        $productMock = $this->createMock(Product::class);
-
-        $itemMock = $this->createMock(Item::class);
-        $itemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
+        $productMock = static fn (self $testCase) => $testCase->createMock(Product::class);
+        $itemMock = static fn (self $testCase) => $testCase->getMockForItemClass();
 
         return [
             [$productMock],

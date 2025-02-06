@@ -101,7 +101,7 @@ class Renderer implements RendererInterface
         Escaper $escaper,
         StringUtils $string,
         LoggerInterface $logger,
-        MsApplicationTileImage $msApplicationTileImage = null
+        ?MsApplicationTileImage $msApplicationTileImage = null
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMergeService = $assetMergeService;

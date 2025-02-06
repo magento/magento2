@@ -1,9 +1,9 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2024 Adobe
+# All Rights Reserved.
 
 type Query {
     customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @deprecated(reason: "Use the `customer` query instead.") @cache(cacheable: false)
-    guestOrder(input: OrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and postcode.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
+    guestOrder(input: OrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and billing last name.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
     guestOrderByToken(input: OrderTokenInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on token.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
 }
 
@@ -82,6 +82,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     is_virtual: Boolean! @doc(description: "`TRUE` if the order is virtual") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderIsVirtual")
     available_actions: [OrderActionType!]! @doc(description: "List of available order actions.") @resolver(class: "\\Magento\\SalesGraphQl\\Model\\Resolver\\OrderAvailableActions")
     customer_info: OrderCustomerInfo! @doc(description: "Returns customer information from order.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderCustomerInfo")
+    order_status_change_date: String! @doc(description: "The date the order status was last updated.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderStatusChangeDate")
 }
 
 type OrderCustomerInfo {
@@ -309,9 +310,27 @@ input OrderTokenInput @doc(description: "Input to retrieve an order based on tok
 input OrderInformationInput @doc(description: "Input to retrieve an order based on details.") {
     number: String! @doc(description: "Order number.")
     email: String! @doc(description: "Order billing address email.")
-    postcode: String! @doc(description: "Order billing address postcode.")
+    lastname: String! @doc(description: "Order billing address lastname.")
 }
 
 enum OrderActionType @doc(description: "The list of available order actions.") {
     REORDER
+}
+
+type StoreConfig {
+    display_product_prices_in_catalog: Boolean! @doc(description: "Configuration data from tax/display/type")
+    display_shipping_prices: Boolean! @doc(description: "Configuration data from tax/display/shipping")
+    orders_invoices_credit_memos_display_price: Boolean! @doc(description: "Configuration data from tax/sales_display/price")
+    orders_invoices_credit_memos_display_subtotal: Boolean! @doc(description: "Configuration data from tax/sales_display/subtotal")
+    orders_invoices_credit_memos_display_shipping_amount: Boolean! @doc(description: "Configuration data from tax/sales_display/shipping")
+    orders_invoices_credit_memos_display_grandtotal: Boolean! @doc(description: "Configuration data from tax/sales_display/grandtotal")
+    orders_invoices_credit_memos_display_full_summary: Boolean! @doc(description: "Configuration data from tax/sales_display/full_summary")
+    orders_invoices_credit_memos_display_zero_tax: Boolean! @doc(description: "Configuration data from tax/sales_display/zero_tax")
+    fixed_product_taxes_enable: Boolean! @doc(description: "Configuration data from tax/weee/enable")
+    fixed_product_taxes_display_prices_in_product_lists: Int @doc(description: "Configuration data from tax/weee/display_list")
+    fixed_product_taxes_display_prices_on_product_view_page: Int @doc(description: "Configuration data from tax/weee/display")
+    fixed_product_taxes_display_prices_in_sales_modules: Int @doc(description: "Configuration data from tax/weee/display_sales")
+    fixed_product_taxes_display_prices_in_emails: Int @doc(description: "Configuration data from tax/weee/display_email")
+    fixed_product_taxes_apply_tax_to_fpt: Boolean! @doc(description: "Configuration data from tax/weee/apply_vat")
+    fixed_product_taxes_include_fpt_in_subtotal: Boolean! @doc(description: "Configuration data from tax/weee/include_in_subtotal")
 }

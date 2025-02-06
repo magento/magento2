@@ -356,6 +356,11 @@ class QuoteTest extends TestCase
      */
     public function testIsMultipleShippingAddresses($addresses, $expected): void
     {
+        $finalAddress = [];
+        foreach ($addresses as $address) {
+            $finalAddress[] = $address($this);
+        }
+
         $this->quoteAddressCollectionMock->expects(
             $this->any()
         )->method(
@@ -368,7 +373,7 @@ class QuoteTest extends TestCase
         )->method(
             'getIterator'
         )->willReturn(
-            new \ArrayIterator($addresses)
+            new \ArrayIterator($finalAddress)
         );
 
         $this->assertEquals($expected, $this->quote->isMultipleShippingAddresses());
@@ -406,15 +411,15 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function isMultipleShippingAddressesDataProvider(): array
+    public static function isMultipleShippingAddressesDataProvider(): array
     {
         return [
             [
-                [$this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_SHIPPING)],
+                [static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING), static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING)],
                 true,
             ],
             [
-                [$this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_BILLING)],
+                [static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING), static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_BILLING)],
                 false
             ]
         ];
@@ -1168,7 +1173,7 @@ class QuoteTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderForTestAddProductItem(): array
+    public static function dataProviderForTestAddProductItem(): array
     {
         return [
             'not_invalid_product_add' => [null, false],

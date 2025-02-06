@@ -47,14 +47,12 @@ define([
          * @return {Boolean} - Prevent default event action and event propagation.
          */
         _selectAllRelated: function (e) {
-            var innerHTML = this.options.relatedProductsCheckFlag ?
-                this.options.selectAllMessage : this.options.unselectAllMessage;
+            let isChecked = this.options.relatedProductsCheckFlag;
 
-            $(e.target).html(innerHTML);
-            $(this.options.relatedCheckbox + ':visible').attr(
-                'checked',
-                this.options.relatedProductsCheckFlag = !this.options.relatedProductsCheckFlag
-            );
+            $(e.target).html(isChecked ? this.options.selectAllMessage : this.options.unselectAllMessage);
+            this.options.relatedProductsCheckFlag = !isChecked;
+
+            $(this.options.relatedCheckbox + ':visible').prop('checked', this.options.relatedProductsCheckFlag);
             this._addRelatedToProduct();
 
             return false;

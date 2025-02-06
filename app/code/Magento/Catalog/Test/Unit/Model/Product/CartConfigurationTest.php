@@ -30,7 +30,7 @@ class CartConfigurationTest extends TestCase
     /**
      * @return array
      */
-    public function isProductConfiguredDataProvider()
+    public static function isProductConfiguredDataProvider()
     {
         return [
             'simple' => ['simple', [], false],

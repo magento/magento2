@@ -53,7 +53,7 @@ class InputException extends AbstractAggregateException
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
+    public function __construct(?Phrase $phrase = null, ?\Exception $cause = null, $code = 0)
     {
         if ($phrase === null) {
             $phrase = new Phrase('One or more input exceptions have occurred.');
@@ -69,7 +69,7 @@ class InputException extends AbstractAggregateException
      * @param \Exception $cause   Cause of the InputException
      * @return \Magento\Framework\Exception\InputException
      */
-    public static function invalidFieldValue($fieldName, $fieldValue, \Exception $cause = null)
+    public static function invalidFieldValue($fieldName, $fieldValue, ?\Exception $cause = null)
     {
         return new self(
             new Phrase(

@@ -341,21 +341,21 @@ class ViewTest extends TestCase
     {
         return [
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
                     [['displaymode' => 'products'], null, false]
                 ]
             ],
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
                     [['displaymode' => 'page'], null, false]
                 ]
             ],
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default'], null, false],
                     [['displaymode' => 'poducts_and_page'], null, false]

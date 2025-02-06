@@ -56,7 +56,7 @@ class Generator implements NonceGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateNonce(ConsumerInterface $consumer = null)
+    public function generateNonce(?ConsumerInterface $consumer = null)
     {
         return $this->_oauthHelper->generateRandomString($this->_nonceLength);
     }

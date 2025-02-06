@@ -96,7 +96,7 @@ class GroupedTest extends TestCase
     /**
      * @return array
      */
-    public function productTypeDataProvider()
+    public static function productTypeDataProvider()
     {
         return [
             [Type::TYPE_SIMPLE],
@@ -149,7 +149,7 @@ class GroupedTest extends TestCase
     /**
      * @return array
      */
-    public function linksDataProvider()
+    public static function linksDataProvider()
     {
         return [
             [[5 => ['id' => '2', 'qty' => '100', 'position' => '1']]]

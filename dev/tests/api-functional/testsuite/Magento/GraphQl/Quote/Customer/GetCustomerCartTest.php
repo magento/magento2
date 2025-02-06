@@ -7,9 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
-use Exception;
+use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Framework\ObjectManagerInterface;
@@ -35,11 +44,17 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     private $objectManager;
 
+    /**
+     * @var DataFixtureStorage;
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -131,6 +146,41 @@ class GetCustomerCartTest extends GraphQlAbstract
 
         $customerCartQuery = $this->getCustomerCartQuery();
         $this->graphQlQuery($customerCartQuery);
+    }
+
+    /**
+     * Test graphql customer cart should expect an exception when customer doesn't belong to given website
+     */
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id$' ]], as: 'product'),
+        DataFixture(
+            Customer::class,
+            [
+                'store_id' => '$store2.id$',
+                'website_id' => '$website2.id$',
+                'addresses' => [[]]
+            ],
+            as: 'customer'
+        )
+    ]
+    public function testGetCustomerCartCustomerNotBelongingToWebsite()
+    {
+        $this->expectException(\Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('The request is allowed for logged in customer');
+
+        $customer = $this->fixtures->get('customer');
+        $customStore = $this->fixtures->get('store2');
+
+        $generateTokenQuery = $this->generateCustomerToken($customer->getEmail(), 'password');
+
+        $tokenResponse = $this->graphQlMutation($generateTokenQuery, [], '', ['Store' => $customStore->getCode()]);
+        $token = $tokenResponse['generateCustomerToken']['token'];
+
+        $customerCartQuery = $this->getCustomerCartQuery();
+        $this->graphQlMutation($customerCartQuery, [], '', ['Authorization' => 'Bearer ' . $token]);
     }
 
     /**
@@ -261,5 +311,26 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
         return $headerMap;
+    }
+
+    /**
+     * Get customer login token query
+     *
+     * @param string $email
+     * @param string $password
+     * @return string
+     */
+    private function generateCustomerToken(string $email, string $password) : string
+    {
+        return <<<MUTATION
+mutation {
+    generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
     }
 }

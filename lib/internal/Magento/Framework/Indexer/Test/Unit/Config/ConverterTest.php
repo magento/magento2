@@ -62,7 +62,7 @@ class ConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithDependenciesDataProvider()
+    public static function convertWithDependenciesDataProvider()
     {
         return [
             [
@@ -129,18 +129,18 @@ XML
     /**
      * @return array
      */
-    public function convertWithCircularDependenciesDataProvider()
+    public static function convertWithCircularDependenciesDataProvider()
     {
         return [
             'Circular dependency on the first level' => [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_2"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_1"/></dependencies></indexer>'
                     . '</config>',
                 'exceptionMessage' => "Circular dependency references from 'indexer_2' to 'indexer_1'.",
             ],
             'Circular dependency a deeper than the first level' => [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_2"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_3"/></dependencies></indexer>'
                     . '<indexer id="indexer_3"><dependencies><indexer id="indexer_4"/></dependencies></indexer>'
@@ -168,11 +168,11 @@ XML
     /**
      * @return array
      */
-    public function convertWithDependencyOnNotExistingIndexerDataProvider()
+    public static function convertWithDependencyOnNotExistingIndexerDataProvider()
     {
         return [
             [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_3"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_1"/></dependencies></indexer>'
                     . '</config>',

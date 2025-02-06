@@ -99,21 +99,21 @@ class WebapiTest extends TestCase
     {
         return [
             'null data' => [
-                null,
-                true
+                'integrationData' => null,
+                'expectedValue' => true
             ],
             'empty integration data' => [
-                [],
-                true
+                'integrationData' => [],
+                'expectedValue' => true
             ],
             'manual integration data' => [
-                Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL,
-                true
+                'integrationData' => [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL],
+                'expectedValue' => true
             ],
             'config integration data' => [
-                [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG],
-                false
-            ],
+                'integrationData' => [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG],
+                'expectedValue' => false
+            ]
         ];
     }
 
@@ -227,7 +227,7 @@ class WebapiTest extends TestCase
     /**
      * @param array $integrationData
      * @param array $selectedResources
-     * @return Webapi
+     * @return Webapi|object
      */
     private function getWebapiBlock($integrationData = [], array $selectedResources = [])
     {

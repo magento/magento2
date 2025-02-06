@@ -91,7 +91,7 @@ class IntegerTypeTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldTypeProvider()
+    public static function getFieldTypeProvider()
     {
         return [
             ['category_ids', true, true, 'something'],

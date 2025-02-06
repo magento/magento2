@@ -217,9 +217,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\ResourceModel\Item $resource,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        TableMaintainer $tableMaintainer = null,
-        ConfigInterface $salesConfig = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?TableMaintainer $tableMaintainer = null,
+        ?ConfigInterface $salesConfig = null,
         ?CollectionBuilderInterface $productCollectionBuilder = null,
         ?StockStatusFilterInterface $stockStatusFilter = null
     ) {

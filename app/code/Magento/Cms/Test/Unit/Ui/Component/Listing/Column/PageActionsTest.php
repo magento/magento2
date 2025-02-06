@@ -144,7 +144,7 @@ class PageActionsTest extends TestCase
      *
      * @return array
      */
-    public function configDataProvider():array
+    public static function configDataProvider():array
     {
         $pageId = 1;
         $title = 'page title';

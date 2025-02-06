@@ -135,7 +135,7 @@ class LinkProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function diConfigDataProvider()
+    public static function diConfigDataProvider()
     {
         return [
             [3, [

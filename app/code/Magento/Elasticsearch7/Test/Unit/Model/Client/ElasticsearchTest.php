@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Elasticsearch7\Test\Unit\Model\Client;
 
 use Elasticsearch\Client;
 use Elasticsearch\Namespaces\IndicesNamespace;
-use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField;
 use Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\IntegerMapper;
 use Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\PositionMapper;
@@ -25,11 +23,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class ElasticsearchTest to test Elasticsearch 7
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ElasticsearchTest extends TestCase
 {
     /**
-     * @var ElasticsearchClient
+     * @var Elasticsearch
      */
     private $model;
 
@@ -65,6 +65,8 @@ class ElasticsearchTest extends TestCase
                     'search',
                     'scroll',
                     'info',
+                    'openPointInTime',
+                    'closePointInTime',
                 ]
             )
             ->disableOriginalConstructor()
@@ -191,24 +193,24 @@ class ElasticsearchTest extends TestCase
     {
         return [
             [
-                'without_protocol' => [
+                'options' => [
                     'hostname' => 'localhost',
                     'port' => '9200',
                     'timeout' => 15,
                     'index' => 'magento2',
                     'enableAuth' => 0,
                 ],
-                'expected_result' => 'http://localhost:9200',
+                'expectedResult' => 'http://localhost:9200',
             ],
             [
-                'with_protocol' => [
+                'options' => [
                     'hostname' => 'https://localhost',
                     'port' => '9200',
                     'timeout' => 15,
                     'index' => 'magento2',
                     'enableAuth' => 0,
                 ],
-                'expected_result' => 'https://localhost:9200',
+                'expectedResult' => 'https://localhost:9200',
             ],
         ];
     }
@@ -262,10 +264,15 @@ class ElasticsearchTest extends TestCase
      */
     public function testBulkQuery()
     {
+        $result = [
+            'errors' => false,
+            'items' => [],
+        ];
         $this->elasticsearchClientMock->expects($this->once())
             ->method('bulk')
-            ->with([]);
-        $this->model->bulkQuery([]);
+            ->with([])
+            ->willReturn($result);
+        $this->assertEquals($result, $this->model->bulkQuery([]));
     }
 
     /**
@@ -707,5 +714,26 @@ class ElasticsearchTest extends TestCase
             'username' => 'user',
             'password' => 'passwd',
         ];
+    }
+
+    public function testOpenPointInTime(): void
+    {
+        $params = ['keep_alive' => '1m'];
+        $pit = ['id' => 'abc'];
+        $this->elasticsearchClientMock->expects($this->once())
+            ->method('openPointInTime')
+            ->with($params)
+            ->willReturn($pit);
+        $this->assertEquals($pit, $this->model->openPointInTime($params));
+    }
+
+    public function testClosePointInTime(): void
+    {
+        $params = ['body' => ['id' => 'abc']];
+        $this->elasticsearchClientMock->expects($this->once())
+            ->method('closePointInTime')
+            ->with($params)
+            ->willReturn([]);
+        $this->model->closePointInTime($params);
     }
 }

@@ -204,7 +204,7 @@ class CookieAndSessionMisuse extends AbstractRule implements ClassAware
      * @param ClassNode|ASTClass $node
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function apply(AbstractNode $node)
+    public function apply(AbstractNode $node): void
     {
         try {
             $class = new \ReflectionClass($node->getFullQualifiedName());

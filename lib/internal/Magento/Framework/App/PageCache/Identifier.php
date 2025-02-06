@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\PageCache;
 
@@ -36,7 +36,7 @@ class Identifier implements IdentifierInterface
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\Http\Context $context,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->request = $request;
         $this->context = $context;
@@ -50,13 +50,46 @@ class Identifier implements IdentifierInterface
      */
     public function getValue()
     {
+        $pattern = $this->getMarketingParameterPatterns();
+        $replace = array_fill(0, count($pattern), '');
         $data = [
             $this->request->isSecure(),
-            $this->request->getUriString(),
+            preg_replace($pattern, $replace, (string)$this->request->getUriString()),
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
 
         return sha1($this->serializer->serialize($data));
+    }
+
+    /**
+     * Pattern detect marketing parameters
+     *
+     * @return array
+     */
+    public function getMarketingParameterPatterns(): array
+    {
+        return [
+            '/&?gad_source\=[^&]+/',
+            '/&?gbraid\=[^&]+/',
+            '/&?wbraid\=[^&]+/',
+            '/&?_gl\=[^&]+/',
+            '/&?dclid\=[^&]+/',
+            '/&?gclsrc\=[^&]+/',
+            '/&?srsltid\=[^&]+/',
+            '/&?msclkid\=[^&]+/',
+            '/&?_kx\=[^&]+/',
+            '/&?gclid\=[^&]+/',
+            '/&?cx\=[^&]+/',
+            '/&?ie\=[^&]+/',
+            '/&?cof\=[^&]+/',
+            '/&?siteurl\=[^&]+/',
+            '/&?zanpid\=[^&]+/',
+            '/&?origin\=[^&]+/',
+            '/&?fbclid\=[^&]+/',
+            '/&?mc_(.*?)\=[^&]+/',
+            '/&?utm_(.*?)\=[^&]+/',
+            '/&?_bta_(.*?)\=[^&]+/',
+        ];
     }
 }

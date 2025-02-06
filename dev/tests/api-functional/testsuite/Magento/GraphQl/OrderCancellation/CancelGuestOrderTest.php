@@ -2,15 +2,6 @@
 /**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -18,7 +9,8 @@ namespace Magento\GraphQl\OrderCancellation;
 
 use Exception;
 use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -43,6 +35,7 @@ use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
 use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
 use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\SalesGraphQl\Model\Order\Token;
 
 /**
  * Test coverage for cancel order mutation for guest order
@@ -66,27 +59,14 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 class CancelGuestOrderTest extends GraphQlAbstract
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        $this->objectManager = Bootstrap::getObjectManager();
-    }
-
-    /**
      * @return void
      * @throws Exception
      */
-    public function testAttemptToCancelOrderWhenMissingOrderId()
+    public function testAttemptToCancelOrderWhenMissingToken()
     {
         $query = <<<MUTATION
         mutation {
-            cancelOrder(
+            requestGuestOrderCancel(
               input: {
                 reason: "Cancel sample reason"
               }
@@ -99,7 +79,7 @@ class CancelGuestOrderTest extends GraphQlAbstract
           }
 MUTATION;
         $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("Field CancelOrderInput.order_id of required type ID! was not provided.");
+        $this->expectExceptionMessage('Field GuestOrderCancelInput.token of required type String! was not provided.');
         $this->graphQlMutation($query);
     }
 
@@ -111,9 +91,9 @@ MUTATION;
     {
         $query = <<<MUTATION
         mutation {
-            cancelOrder(
+            requestGuestOrderCancel(
               input: {
-                order_id: 9999999
+                token: "TestToken"
               }
             ){
                 error
@@ -124,7 +104,32 @@ MUTATION;
           }
 MUTATION;
         $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("Field CancelOrderInput.reason of required type String! was not provided.");
+        $this->expectExceptionMessage("Field GuestOrderCancelInput.reason of required type String! was not provided.");
+        $this->graphQlMutation($query);
+    }
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testAttemptToCancelOrderWithInvalidToken()
+    {
+        $query = <<<MUTATION
+        mutation {
+            requestGuestOrderCancel(
+              input: {
+                token: "TestToken"
+                reason: "Cancel sample reason"
+              }
+            ){
+                error
+                order {
+                    status
+                }
+            }
+          }
+        MUTATION;
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('We couldn\'t locate an order with the information provided.');
         $this->graphQlMutation($query);
     }
 
@@ -132,6 +137,7 @@ MUTATION;
      * @return void
      * @throws AuthenticationException
      * @throws LocalizedException
+     * @throws Exception
      */
     #[
         Config('sales/cancellation/enabled', 0)
@@ -142,26 +148,14 @@ MUTATION;
          * @var $order OrderInterface
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
+        $query = $this->getMutation($order);
 
-        $query = <<<MUTATION
-        mutation {
-            cancelOrder(
-              input: {
-                order_id: {$order->getEntityId()},
-                reason: "Sample reason"
-              }
-            ){
-                error
-                order {
-                    status
-                }
-            }
-          }
-MUTATION;
         $this->assertEquals(
             [
-                'cancelOrder' => [
-                    'error' => 'Order cancellation is not enabled for requested store.',
+                'requestGuestOrderCancel' => [
+                    'errorV2' => [
+                        'message' => 'Order cancellation is not enabled for requested store.'
+                    ],
                     'order' => null
                 ]
             ],
@@ -175,6 +169,7 @@ MUTATION;
      * @return void
      * @throws AuthenticationException
      * @throws LocalizedException
+     * @throws Exception
      *
      * @dataProvider orderStatusProvider
      */
@@ -191,15 +186,16 @@ MUTATION;
         $order->setState($status);
 
         /** @var OrderRepositoryInterface $orderRepo */
-        $orderRepo = $this->objectManager->get(OrderRepository::class);
+        $orderRepo = Bootstrap::getObjectManager()->create(OrderRepository::class);
         $orderRepo->save($order);
 
-        $query = $this->getCancelOrderMutation($order);
+        $query = $this->getMutation($order);
         $this->assertEquals(
             [
-                'cancelOrder' =>
-                    [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                'requestGuestOrderCancel' => [
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold'
+                        ],
                         'order' => [
                             'status' => $expectedStatus
                         ]
@@ -213,6 +209,7 @@ MUTATION;
      * @return void
      * @throws AuthenticationException
      * @throws LocalizedException
+     * @throws Exception
      */
     #[
         DataFixture(Store::class),
@@ -235,12 +232,13 @@ MUTATION;
          * @var $order OrderInterface
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getCancelOrderMutation($order);
+        $query = $this->getMutation($order);
         $this->assertEquals(
             [
-                'cancelOrder' =>
-                    [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                'requestGuestOrderCancel' => [
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold'
+                        ],
                         'order' => [
                             'status' => 'Complete'
                         ]
@@ -254,6 +252,7 @@ MUTATION;
      * @return void
      * @throws AuthenticationException
      * @throws LocalizedException
+     * @throws Exception
      */
     #[
         DataFixture(Store::class),
@@ -289,12 +288,13 @@ MUTATION;
          * @var $order OrderInterface
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getCancelOrderMutation($order);
+        $query = $this->getMutation($order);
         $this->assertEquals(
             [
-                'cancelOrder' =>
-                    [
-                        'error' => 'Order with one or more items shipped cannot be cancelled',
+                'requestGuestOrderCancel' => [
+                        'errorV2' => [
+                            'message' => 'Order with one or more items shipped cannot be cancelled'
+                        ],
                         'order' => [
                             'status' => 'Processing'
                         ]
@@ -308,6 +308,7 @@ MUTATION;
      * @return void
      * @throws AuthenticationException
      * @throws LocalizedException
+     * @throws Exception
      */
     #[
         DataFixture(Store::class),
@@ -330,12 +331,13 @@ MUTATION;
          * @var $order OrderInterface
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getCancelOrderMutation($order);
+        $query = $this->getMutation($order);
         $this->assertEquals(
             [
-                'cancelOrder' =>
-                    [
-                        'error' => 'Order already closed, complete, cancelled or on hold',
+                'requestGuestOrderCancel' => [
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold'
+                        ],
                         'order' => [
                             'status' => 'Closed'
                         ]
@@ -345,6 +347,9 @@ MUTATION;
         );
     }
 
+    /**
+     * @throws LocalizedException
+     */
     #[
         DataFixture(Store::class),
         DataFixture(ProductFixture::class, as: 'product'),
@@ -364,12 +369,11 @@ MUTATION;
          * @var $order OrderInterface
          */
         $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getCancelOrderMutation($order);
+        $query = $this->getMutation($order);
         $this->assertEquals(
             [
-                'cancelOrder' =>
-                    [
-                        'error' => null,
+                'requestGuestOrderCancel' => [
+                        'errorV2' => null,
                         'order' => [
                             'status' => 'Pending'
                         ]
@@ -384,28 +388,87 @@ MUTATION;
     }
 
     /**
-     * Get cancel order mutation
+     * @throws AuthenticationException
+     * @throws LocalizedException
+     * @throws Exception
+     */
+    #[
+        DataFixture(Store::class),
+        DataFixture(
+            Customer::class,
+            [
+                'email' => 'customer@example.com',
+                'password' => 'password'
+            ],
+            'customer'
+        ),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$product.id$',
+                'qty' => 3
+            ]
+        ),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+        Config('sales/cancellation/enabled', 1)
+    ]
+    public function testOrderCancellationForLoggedInCustomerUsingToken()
+    {
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('Please login to view the order.');
+
+        /** @var OrderInterface $order */
+        $order = DataFixtureStorageManager::getStorage()->get('order');
+        $this->graphQlMutation($this->getMutation($order));
+    }
+
+    /**
+     * Get request guest order cancellation by token mutation
      *
-     * @param Order $order
+     * @param OrderInterface $order
      * @return string
      */
-    private function getCancelOrderMutation(OrderInterface $order): string
+    private function getMutation(OrderInterface $order): string
     {
         return <<<MUTATION
         mutation {
-            cancelOrder(
+            requestGuestOrderCancel(
               input: {
-                order_id: "{$order->getEntityId()}"
-                reason: "Cancel sample reason"
+                token: "{$this->getOrderToken($order)}",
+                reason: "Sample reason"
               }
             ){
-                error
+                errorV2 {
+                    message
+                }
                 order {
                     status
                 }
             }
           }
 MUTATION;
+    }
+
+    /**
+     * Get token from order
+     *
+     * @param OrderInterface $order
+     * @return string
+     */
+    private function getOrderToken(OrderInterface $order): string
+    {
+        return Bootstrap::getObjectManager()->create(Token::class)->encrypt(
+            $order->getIncrementId(),
+            $order->getBillingAddress()->getEmail(),
+            $order->getBillingAddress()->getLastname()
+        );
     }
 
     /**

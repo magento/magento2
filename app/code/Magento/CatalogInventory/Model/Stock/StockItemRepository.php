@@ -133,8 +133,8 @@ class StockItemRepository implements StockItemRepositoryInterface
         TimezoneInterface $localeDate,
         Processor $indexProcessor,
         DateTime $dateTime,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory = null,
-        PsrLogger $psrLogger = null,
+        ?\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory = null,
+        ?PsrLogger $psrLogger = null,
         ?StockRegistryStorage $stockRegistryStorage = null
     ) {
         $this->stockConfiguration = $stockConfiguration;

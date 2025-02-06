@@ -119,7 +119,7 @@ class ToolbarTest extends TestCase
     /**
      * @return array
      */
-    public function stringParamProvider()
+    public static function stringParamProvider()
     {
         return [
             ['stringParam']
@@ -129,7 +129,7 @@ class ToolbarTest extends TestCase
     /**
      * @return array
      */
-    public function intParamProvider()
+    public static function intParamProvider()
     {
         return [
             ['2'],

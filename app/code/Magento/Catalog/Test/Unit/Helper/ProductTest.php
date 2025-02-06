@@ -38,48 +38,42 @@ class ProductTest extends TestCase
      */
     public function testIsDataForPriceIndexerWasChanged($data, $result)
     {
+        if (is_callable($data)) {
+            $data = $data($this);
+        }
         $this->assertEquals($this->_productHelper->isDataForPriceIndexerWasChanged($data), $result);
     }
 
+    protected function getMockForCatalogProduct($method)
+    {
+        $product = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        if ($method!=null) {
+            $product->expects(
+                $this->once()
+            )->method(
+                $method
+            )->with(
+                'attribute'
+            )->willReturn(
+                true
+            );
+        }
+        return $product;
+    }
     /**
      * Data provider for testIsDataForPriceIndexerWasChanged
      * @return array
      */
-    public function getData()
+    public static function getData()
     {
-        $product1 = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $product1 = static fn (self $testCase) => $testCase->getMockForCatalogProduct(null);
 
-        $product2 = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $product2 = static fn (self $testCase) => $testCase->getMockForCatalogProduct("getData");
 
-        $product2->expects(
-            $this->once()
-        )->method(
-            'getData'
-        )->with(
-            'attribute'
-        )->willReturn(
-            true
-        );
-
-        $product3 = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $product3->expects(
-            $this->once()
-        )->method(
-            'dataHasChangedFor'
-        )->with(
-            'attribute'
-        )->willReturn(
-            true
-        );
+        $product3 = static fn (self $testCase) => $testCase->getMockForCatalogProduct("dataHasChangedFor");
 
         return [
             [$product1, false],

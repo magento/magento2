@@ -140,7 +140,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReindexRow()
+    public static function dataProviderReindexRow()
     {
         return [
             [false, false, null],
@@ -212,7 +212,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReindexList()
+    public static function dataProviderReindexList()
     {
         return [
             [false, false, null],
