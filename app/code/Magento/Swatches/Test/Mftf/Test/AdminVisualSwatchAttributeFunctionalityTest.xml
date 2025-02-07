@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -59,7 +59,7 @@
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
         <actionGroup ref="AssertSwatchColorActionGroup" stepKey="assertSwatch1">
             <argument name="nthSwatch" value="2"/>
-            <argument name="expectedStyle" value="background: rgb(231, 77, 60);"/>
+            <argument name="expectedStyle" value="background: rgb(231, 76, 60);"/>
         </actionGroup>
         <!-- Add file swatch-->
         <actionGroup ref="AdminUploadFileInVisualSwatchActionGroup" stepKey="addFileSwatch">
