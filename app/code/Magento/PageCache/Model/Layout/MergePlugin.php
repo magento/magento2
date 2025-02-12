@@ -42,7 +42,7 @@ class MergePlugin
     public function beforeValidateUpdate(\Magento\Framework\View\Model\Layout\Merge $subject, $handle, $updateXml)
     {
         if (in_array($handle, $this->entitySpecificHandlesList->getHandles())
-            && (strpos($updateXml, 'ttl=') !== false)
+            && ($updateXml && strpos($updateXml, 'ttl=') !== false)
         ) {
             throw new \LogicException(
                 "Handle '{$handle}' must not contain blocks with 'ttl' attribute specified. "

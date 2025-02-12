@@ -14,11 +14,13 @@
             "updated_at": true
         },
         "index": {
-            "SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY": true,
-            "SEARCH_QUERY_STORE_ID": true,
+            "SEARCH_QUERY_QUERY_TEXT_STORE_ID_NUM_RESULTS_POPULARITY": true,
             "SEARCH_QUERY_IS_PROCESSED": true,
             "SEARCH_QUERY_SYNONYM_FOR": true,
-            "SEARCH_QUERY_STORE_ID_POPULARITY": true
+            "SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY": false,
+            "SEARCH_QUERY_STORE_ID_NUM_RESULTS_POPULARITY": true,
+            "SEARCH_QUERY_STORE_ID": false,
+            "SEARCH_QUERY_STORE_ID_POPULARITY": false
         },
         "constraint": {
             "PRIMARY": true,

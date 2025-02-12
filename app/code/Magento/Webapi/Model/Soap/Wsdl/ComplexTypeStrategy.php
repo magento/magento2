@@ -16,12 +16,12 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      *  Array item key value for element.
      */
-    const ARRAY_ITEM_KEY_NAME = 'item';
+    public const ARRAY_ITEM_KEY_NAME = 'item';
 
     /**
      * Appinfo nodes namespace.
      */
-    const APP_INF_NS = 'inf';
+    public const APP_INF_NS = 'inf';
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
@@ -119,7 +119,9 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                 $this->_processParameter($element, $isRequired, $parameterData, $parameterType, $callInfo);
             }
 
-            $this->addAnnotation($element, $parameterData['documentation'], $default, $callInfo);
+            if (isset($parameterData['documentation'])) {
+                $this->addAnnotation($element, $parameterData['documentation'], $default, $callInfo);
+            }
             $sequence->appendChild($element);
         }
 
@@ -222,13 +224,13 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         $appInfoNode->setAttributeNS(
             Wsdl::XML_NS_URI,
             Wsdl::XML_NS . ':' . self::APP_INF_NS,
-            $this->getContext()->getTargetNamespace()
+            (string) $this->getContext()->getTargetNamespace()
         );
 
         $this->_processDefaultValueAnnotation($elementType, $default, $appInfoNode);
         $this->_processElementType($elementType, $documentation, $appInfoNode);
 
-        if (preg_match_all('/{([a-z]+):(.+)}/Ui', $documentation, $matches)) {
+        if ($documentation && preg_match_all('/{([a-z]+):(.+)}/Ui', $documentation, $matches)) {
             $count = count($matches[0]);
             for ($i = 0; $i < $count; $i++) {
                 $appinfoTag = $matches[0][$i];
@@ -245,7 +247,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                         $this->_processDocInstructions($appInfoNode, $tagValue);
                         break;
                     default:
-                        $nodeValue = trim($tagValue);
+                        $nodeValue = $tagValue !== null ? trim($tagValue) : '';
                         $simpleTextNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $tagName);
                         $simpleTextNode->appendChild($this->_getDom()->createTextNode($nodeValue));
                         $appInfoNode->appendChild($simpleTextNode);
@@ -256,7 +258,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         }
         $this->_processCallInfo($appInfoNode, $callInfo);
         $documentationNode = $this->_getDom()->createElement(Wsdl::XSD_NS . ':documentation');
-        $documentationText = trim($documentation);
+        $documentationText = $documentation ? trim($documentation) : '';
         $documentationNode->appendChild($this->_getDom()->createTextNode($documentationText));
         $annotationNode->appendChild($documentationNode);
         $annotationNode->appendChild($appInfoNode);
@@ -334,7 +336,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      */
     protected function _processRequiredAnnotation($annotation, $documentation, \DOMElement $appInfoNode)
     {
-        if (!preg_match("/{{$annotation}:.+}/Ui", $documentation)) {
+        if (!$documentation || !preg_match("/{{$annotation}:.+}/Ui", $documentation)) {
             $annotationNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $annotation);
             $appInfoNode->appendChild($annotationNode);
         }
@@ -382,7 +384,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      */
     protected function _processDocInstructions(\DOMElement $appInfoNode, $tagValue)
     {
-        if (preg_match('/(input|output):(.+)/', $tagValue, $docMatches)) {
+        if ($tagValue && preg_match('/(input|output):(.+)/', $tagValue, $docMatches)) {
             $docInstructionsNode = $this->_getDom()->createElement(self::APP_INF_NS . ':docInstructions');
             $directionNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $docMatches[1]);
             $directionValueNode = $this->_getDom()->createElement(self::APP_INF_NS . ':' . $docMatches[2]);
@@ -401,7 +403,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      */
     protected function _processSeeLink(\DOMElement $appInfoNode, $tagValue)
     {
-        if (preg_match('|([http://]?.+):(.+):(.+)|i', $tagValue, $matches)) {
+        if ($tagValue && preg_match('|([http://]?.+):(.+):(.+)|i', $tagValue, $matches)) {
             $seeLink = ['url' => $matches[1], 'title' => $matches[2], 'for' => $matches[3]];
             $seeLinkNode = $this->_getDom()->createElement(self::APP_INF_NS . ':seeLink');
             foreach (['url', 'title', 'for'] as $subNodeName) {
@@ -451,8 +453,8 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         $callInfoRegExp = '/([a-z].+):(returned|requiredInput):(yes|no|always|conditionally)/i';
         if (preg_match($callInfoRegExp, $tagValue)) {
             list($callName, $direction, $condition) = explode(':', $tagValue);
-            $condition = strtolower($condition);
-            if (preg_match('/allCallsExcept\(([a-zA-Z].+)\)/', $callName, $calls)) {
+            $condition = $condition !== null ? strtolower($condition) : '';
+            if ($callName && preg_match('/allCallsExcept\(([a-zA-Z].+)\)/', $callName, $calls)) {
                 $callInfo[$direction][$condition] = [
                     'allCallsExcept' => $calls[1],
                 ];

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingBundleSKUsCreationTest">
+        <annotations>
+            <title value="Checking Bundle SKUs creation"/>
+            <stories value="Checking Bundle SKUs creation"/>
+            <description value="Checking Bundle product SKUs in items ordered page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3898"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- create category, four simple products -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="sku">sp1</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="sku">sp2</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="sku">sp3</field>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct4">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="sku">sp4</field>
+            </createData>
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="bundleProduct">
+                <field key="sku">bp1</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="CheckboxOption" stepKey="bundleOption1">
+                <requiredEntity createDataKey="bundleProduct"/>
+            </createData>
+            <createData entity="CheckboxOption" stepKey="bundleOption2">
+                <requiredEntity createDataKey="bundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkProduct2ToOption1">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption1"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkProduct4ToOption1">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption1"/>
+                <requiredEntity createDataKey="simpleProduct4"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkProduct1ToOption2">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption2"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkProduct3ToOption2">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption2"/>
+                <requiredEntity createDataKey="simpleProduct3"/>
+            </createData>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer_NY" stepKey="customer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- delete created data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$customer$"/>
+        </actionGroup>
+        <!-- Navigate to product on storeFront -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="$bundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!--Click "Customize and Add to Cart" button-->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+        <click stepKey="selectFourthProduct" selector="{{StorefrontBundledSection.productCheckbox('1','2')}}"/>
+        <click stepKey="selectFirstProduct" selector="{{StorefrontBundledSection.productCheckbox('2','1')}}"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCart"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="navigateToCheckoutPage"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" stepKey="grabSku"/>
+        <assertEquals stepKey="assertSKU">
+            <actualResult type="variable">$grabSku</actualResult>
+            <expectedResult type="string"><![CDATA[SKU: bp1-sp4-sp1]]></expectedResult>
+        </assertEquals>
+    </test>
+</tests>

@@ -53,6 +53,10 @@
 //  Utilities
 //  ---------------------------------------------
 
+/**
+ * @codingStandardsIgnoreStart
+ */
+
 .admin__menu-link() {
     color: @menu-item__color;
     display: block;
@@ -177,7 +181,7 @@
     display: block;
     height: @menu-line-before__height;
     left: 0;
-    margin-left: (100% - @_menu-separator__width) / 2;
+    margin-left: ((100% - @_menu-separator__width) / 2);
     position: absolute;
     top: 0;
     width: @_menu-separator__width;
@@ -520,7 +524,6 @@
     }
 
     //  This part hides Submenu Group Titles only for menus with single groups.
-    .submenu .column:only-of-type .submenu-group-title,
     .level-0 > .submenu > ul > .level-1:only-of-type > .submenu-group-title {
         display: none;
     }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEmailTemplatePreviewFromGridNewTabTest" extends="AdminEmailTemplatePreviewFromGridTest">
+        <annotations>
+            <features value="Email"/>
+            <stories value="Preview email template from grid opens in a new tab"/>
+            <title value="Check email template preview from grid"/>
+            <description value="Check if email template preview action in the grid opens in a new tab"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6988"/>
+            <useCaseId value="ACP2E-1323"/>
+            <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <!-- Capture the parent and the preview window sizes for comparison -->
+        <executeJS function="return window.outerWidth + ',' + window.outerHeight;" after="createTemplate" stepKey="parentWindowSize"/>
+        <executeJS function="return window.outerWidth + ',' + window.outerHeight;" after="previewTemplateFromGrid" stepKey="previewWindowSize"/>
+
+        <!-- Assert the preview window has the same dimensions as its parent -->
+        <assertEquals after="previewWindowSize" stepKey="assertThatPreviewWindowSizeIsTheSameAsParent">
+            <actualResult type="const">$previewWindowSize</actualResult>
+            <expectedResult type="const">$parentWindowSize</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

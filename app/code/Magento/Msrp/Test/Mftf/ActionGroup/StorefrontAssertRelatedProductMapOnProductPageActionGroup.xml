@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertRelatedProductMapOnProductPageActionGroup" extends="StorefrontAssertRelatedProductOnProductPageActionGroup">
+        <annotations>
+            <description>Validates provided Product Name and Minimum Advertised Price on Product details page.</description>
+        </annotations>
+        <arguments>
+            <argument name="relatedProductMap" type="string"/>
+        </arguments>
+
+        <seeElement selector="{{StorefrontCategoryProductSection.relatedProductMapPrice}}" stepKey="seeFirstRelatedProductMapPrice"/>
+        <grabTextFrom selector="{{StorefrontCategoryProductSection.relatedProductMapPrice}}" stepKey="grabFirstRelatedProductMapPrice"/>
+        <assertEquals stepKey="assertFirstRelatedProductMapPrice">
+            <actualResult type="const">($grabFirstRelatedProductMapPrice)</actualResult>
+            <expectedResult type="string">${{relatedProductMap}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

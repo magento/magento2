@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoryWithAPIForMultiStoresTest">
+        <annotations>
+            <stories value="Create categories"/>
+            <title value="Create Category Using API post"/>
+            <description value="Create Category Using API post when there are more than stores existing"/>
+            <testCaseId value="AC-5384"/>
+            <severity value="MAJOR"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!--Create a new additional store view for the default website and store-->
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createNewSecondStoreviewForDefaultStore">
+                <argument name="storeView" value="SecondStoreGroupUnique"/>
+            </actionGroup>
+            <!--Create a new second store for the default website-->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStoreForMainWebsite">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <!--Create a store view for the second store-->
+            <actionGroup ref="CreateCustomStoreViewActionGroup" stepKey="createStoreviewForSecondStore"/>
+            <!--Create a second custom website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createNewWebsite">
+                <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
+                <argument name="websiteCode" value="{{secondCustomWebsite.code}}"/>
+            </actionGroup>
+            <!--Create a store for the second website-->
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createStoreForNewWebsite">
+                <argument name="website" value="{{secondCustomWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <!--Create a store view of the new store of second website-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="staticSecondStore"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!--Delete the created category-->
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
+                <argument name="categoryEntity" value="SimpleSubCategory"/>
+            </actionGroup>
+            <!--Set the main website as default-->
+            <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setMainWebsiteAsDefault">
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+            <!--Delete the second created website-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCreatedWebsite">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <!--Create a second store created for main website-->
+            <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCreatedCustomWebsiteStore">
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
+            </actionGroup>
+            <!--Create a second store view created for main website-->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCreatedCustomStoreview">
+                <argument name="customStore" value="SecondStoreGroupUnique"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Create a category and check that in storefront -->
+        <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory"/>
+        <see userInput="$$createCategory.name$$" stepKey="assertCategoryNameOnStorefront" selector="{{StorefrontCategoryMainSection.CategoryTitle}}"/>
+        <waitForPageLoad stepKey="waitForCustomerCategoryPageLoad"/>
+        <!--Switch to second store view and check that created category in storefront-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToSecondMainStoreView">
+            <argument name="storeView" value="SecondStoreGroupUnique"/>
+        </actionGroup>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory2"/>
+        <see userInput="$$createCategory.name$$" stepKey="assertCategoryNameOnSecondMainStoreView" selector="{{StorefrontCategoryMainSection.CategoryTitle}}"/>
+        <waitForPageLoad stepKey="waitForCustomerCategoryPageLoad2"/>
+        <!--Switch to second store and check that created category in storefront-->
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToSecondMainStore">
+            <argument name="storeName" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory3"/>
+        <see userInput="$$createCategory.name$$" stepKey="assertCategoryNameOnSecondMainStore" selector="{{StorefrontCategoryMainSection.CategoryTitle}}"/>
+        <waitForPageLoad stepKey="waitForCustomerCategoryPageLoad3"/>
+        <!--Switch to second website and check that created category in storefront-->
+        <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setNewWebsiteAsDefault">
+            <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage2"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="cartClickCategory4"/>
+        <see userInput="$$createCategory.name$$" stepKey="assertCategoryNameOnSecondWebsite" selector="{{StorefrontCategoryMainSection.CategoryTitle}}"/>
+        <waitForPageLoad stepKey="waitForCustomerCategoryPageLoad4"/>
+    </test>
+</tests>

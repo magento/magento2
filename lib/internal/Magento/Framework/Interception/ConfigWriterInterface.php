@@ -9,6 +9,8 @@ namespace Magento\Framework\Interception;
 
 /**
  * Interception config writer interface.
+ *
+ * @api
  */
 interface ConfigWriterInterface
 {

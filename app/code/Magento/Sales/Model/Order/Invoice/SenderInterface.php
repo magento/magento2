@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Invoice;
 
 /**
  * Interface for notification sender for Invoice.
+ * @api
  */
 interface SenderInterface
 {
@@ -23,7 +24,7 @@ interface SenderInterface
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         $forceSyncMode = false
     );
 }

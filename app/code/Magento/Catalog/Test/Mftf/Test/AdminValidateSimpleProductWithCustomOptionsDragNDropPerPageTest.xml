@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateSimpleProductWithCustomOptionsDragNDropPerPageTest" extends="AdminValidateSimpleProductWithCustomOptionsPerPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Customizable options Drag and drop issue"/>
+            <title value="Customizable options Drag&amp;Drop records across pages"/>
+            <description value="Validate product's customizable option records Drag&amp;Drop functionality across pages in Admin"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6086"/>
+            <useCaseId value="ACP2E-980"/>
+            <group value="SimpleProduct"/>
+        </annotations>
+
+        <!-- Create two more custom options with 2 values -->
+        <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createSecondCustomOption">
+            <argument name="customOptionName" value="{{ProductOptionDropDown.title}}2"/>
+            <argument name="firstOption" value="ProductOptionValueDropdown1"/>
+            <argument name="secondOption" value="ProductOptionValueDropdown2"/>
+        </actionGroup>
+
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomOptionsSection"/>
+
+        <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createThirdCustomOption">
+            <argument name="customOptionName" value="{{ProductOptionDropDown.title}}3"/>
+            <argument name="firstOption" value="ProductOptionValueDropdown1"/>
+            <argument name="secondOption" value="ProductOptionValueDropdown2"/>
+        </actionGroup>
+
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomOptionsSection2"/>
+
+        <!-- Validate custom options records per page -->
+        <actionGroup ref="AdminOpenAndApplyCustomOptionRecordsPerPageActionGroup" stepKey="decreaseNumberOfCustomOptionsPerPage">
+            <argument name="perPageInputValue" value="1"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionsTableRecords}}" stepKey="waitForCustomOptionsToBeVisible"/>
+        <seeNumberOfElements selector="{{AdminProductCustomizableOptionsSection.customOptionsTableRecords}}" userInput="1" stepKey="see1CustomOptionRecord"/>
+
+        <!-- Multi page Drag&Drop -->
+        <actionGroup ref="AdminOpenAndApplyCustomOptionRecordsPerPageActionGroup" stepKey="increaseNumberOfCustomOptionsPerPage">
+            <argument name="perPageInputValue" value="3"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionsTableRecords}}" stepKey="waitForCustomOptionsToBeVisible2"/>
+
+        <!-- Validate drag&drop -->
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customOptionRecordTitle('2')}}" stepKey="scrollToSeeThirdCustomOption"/>
+        <dragAndDrop selector1="{{AdminProductCustomizableOptionsSection.dragCustomOptionRecord('3')}}" selector2="{{AdminProductCustomizableOptionsSection.dragCustomOptionRecord('2')}}" stepKey="moveCustomOptionRecord"/>
+        <waitForPageLoad stepKey="waitForDragAndDrop"/>
+        <see userInput="{{ProductOptionDropDown.title}}3" selector="{{AdminProductCustomizableOptionsSection.customOptionRecordTitle('2')}}" stepKey="seeCustomOptionRecord"/>
+
+        <!-- Prepare fore after hook -->
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToCustomOptionsSection3"/>
+    </test>
+</tests>

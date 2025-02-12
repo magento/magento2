@@ -5,9 +5,6 @@
  */
 declare(strict_types=1);
 
-/**
- * Test class for \Magento\Backend\Model\Menu\Director\Director
- */
 namespace Magento\Backend\Test\Unit\Model\Menu\Director;
 
 use Magento\Backend\Model\Menu\Builder;
@@ -18,63 +15,76 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Test class for \Magento\Backend\Model\Menu\Director\Director
+ */
 class DirectorTest extends TestCase
 {
     /**
      * @var Director
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var MockObject
      */
-    protected $_commandFactoryMock;
+    protected $commandFactoryMock;
 
     /**
      * @var MockObject
      */
-    protected $_builderMock;
+    protected $builderMock;
 
     /**
      * @var MockObject
      */
-    protected $_logger;
+    protected $logger;
 
     /**
      * @var MockObject
      */
-    protected $_commandMock;
+    protected $commandMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->_builderMock = $this->createMock(Builder::class);
-        $this->_logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->_commandMock = $this->createPartialMock(
+        $this->builderMock = $this->createMock(Builder::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->commandMock = $this->createPartialMock(
             AbstractCommand::class,
             ['getId', '_execute', 'execute', 'chain']
         );
-        $this->_commandFactoryMock = $this->createPartialMock(
+        $this->commandFactoryMock = $this->createPartialMock(
             CommandFactory::class,
             ['create']
         );
-        $this->_commandFactoryMock->expects(
+        $this->commandFactoryMock->expects(
             $this->any()
         )->method(
             'create'
         )->willReturn(
-            $this->_commandMock
+            $this->commandMock
         );
 
-        $this->_commandMock->expects($this->any())->method('getId')->willReturn(true);
-        $this->_model = new Director($this->_commandFactoryMock);
+        $this->commandMock->expects($this->any())->method('getId')->willReturn(true);
+        $this->model = new Director($this->commandFactoryMock);
     }
 
-    public function testDirectWithExistKey()
+    /**
+     * @return void
+     */
+    public function testDirectWithExistKey(): void
     {
         $config = [['type' => 'update'], ['type' => 'remove'], ['type' => 'added']];
-        $this->_builderMock->expects($this->at(2))->method('processCommand')->with($this->_commandMock);
-        $this->_logger->expects($this->at(1))->method('debug');
-        $this->_commandMock->expects($this->at(1))->method('getId');
-        $this->_model->direct($config, $this->_builderMock, $this->_logger);
+        $this->builderMock
+            ->method('processCommand')
+            ->with($this->commandMock);
+        $this->logger
+            ->method('debug');
+        $this->commandMock
+            ->method('getId');
+        $this->model->direct($config, $this->builderMock, $this->logger);
     }
 }

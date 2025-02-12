@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCustomerSelectWebsiteGroupStoreActionGroup">
+        <annotations>
+            <description>Select Website, Group, Send Welcome Email From on the Customer creation/edit page Account Information Tab.</description>
+        </annotations>
+        <arguments>
+            <argument name="website" type="string"/>
+            <argument name="customerGroup" type="string"/>
+            <argument name="store" type="string"/>
+        </arguments>
+        <selectOption stepKey="selectWebSite" selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{website}}"/>
+        <click selector="{{AdminCustomerAccountInformationSection.group}}" stepKey="clickToExpandGroup"/>
+        <click selector="{{AdminCustomerAccountInformationSection.customerGroupOption(customerGroup)}}" stepKey="clickToSelectCustomerGroup"/>
+        <selectOption stepKey="selectStoreView" selector="{{AdminCustomerAccountInformationSection.storeView}}" userInput="{{store}}"/>
+        <waitForElement selector="{{AdminCustomerAccountInformationSection.storeView}}" stepKey="waitForCustomerStoreViewExpand"/>
+        <click stepKey="saveCustomer" selector="{{AdminCustomerAccountInformationSection.saveCustomer}}"/>
+        <waitForPageLoad stepKey="waitForCustomersPage"/>
+        <see stepKey="seeCustomerSaveSuccessMessage" userInput="You saved the customer."/>
+    </actionGroup>
+</actionGroups>

@@ -11,7 +11,7 @@ namespace Magento\Framework\View\Asset;
 class Collection
 {
     /**
-     * Assets
+     * Collection of Assets
      *
      * @var AssetInterface[]
      */
@@ -30,6 +30,8 @@ class Collection
     }
 
     /**
+     * Insert Asset after specified key
+     *
      * @param string $identifier
      * @param AssetInterface $asset
      * @param string $key
@@ -47,7 +49,9 @@ class Collection
             }
         }
 
-        $this->assets = $result;
+        if (!empty($result)) {
+            $this->assets = $result;
+        }
     }
 
     /**

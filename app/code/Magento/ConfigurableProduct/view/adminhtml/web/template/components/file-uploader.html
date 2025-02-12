@@ -14,15 +14,15 @@
         <img class="file-uploader-image" attr="src: $data.thumbnailUrl()"/>
         <!-- /ko -->
         <!-- ko if: !$data.processedFile().url && !$data.thumbnail() -->
-        <text args="$data.processedFile().name"/>
+        <text args="$data.processedFile().name"></text>
         <!-- /ko -->
         <div class="file-uploader-area">
             <input type="file"
                    class="file-uploader-input"
                    afterRender="onElementRender"
                    attr="id: uid, name: fileInputName, multiple: isMultipleFiles"/>
-            <label class="file-uploader-button" attr="for: uid, title: $t('Upload Image')"><span translate="'Upload Image'"/></label>
-            <span class="file-uploader-spinner"/>
+            <label class="file-uploader-button" attr="for: uid, title: $t('Upload Image')"><span translate="'Upload Image'"></span></label>
+            <span class="file-uploader-spinner"></span>
         </div>
     </div>
     <!-- ko if: $data.processedFile().url || $data.thumbnail() -->
@@ -30,7 +30,7 @@
     css : {'_active': $data.actionsListOpened()},
     outerClick: $data.closeList.bind($data)"
     >
-        <button type="button" class="action-select" data-bind="click: function(){ $data.toggleActionsList(); }"/>
+        <button type="button" class="action-select" data-bind="click: function(){ $data.toggleActionsList(); }"></button>
         <ul class="action-menu" data-bind="css: {'_active': $data.actionsListOpened()}">
             <li>
                 <a class="action-menu-item" data-bind="

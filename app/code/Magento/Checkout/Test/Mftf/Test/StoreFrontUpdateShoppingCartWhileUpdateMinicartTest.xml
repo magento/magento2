@@ -30,7 +30,7 @@
         </after>
 
         <!--Add product to cart-->
-        <amOnPage url="$$createProduct.name$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createProduct.name$$"/>

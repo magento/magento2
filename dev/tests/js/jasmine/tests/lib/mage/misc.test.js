@@ -2,11 +2,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/* eslint-disable max-nested-callbacks */
 define([
     'mageUtils',
-    'moment'
-], function (utils, moment) {
+    'moment',
+    'jquery'
+], function (utils, moment, $) {
     'use strict';
 
     describe('mageUtils', function () {
@@ -680,6 +681,24 @@ define([
                     expect(m.format(momentFormat)).toBe(expectedValue);
                 }
             }
+        });
+
+        it('Check ajaxSubmit method', function () {
+            var options = {
+                data: {}
+            },
+            config = {
+                ajaxSaveType: 'default'
+            },
+            d = new $.Deferred();
+
+            spyOn($, 'ajax').and.callFake(function () {
+                d.reject();
+
+                return d.promise();
+            });
+            utils.ajaxSubmit(options, config);
+            expect($.ajax).toHaveBeenCalled();
         });
     });
 });

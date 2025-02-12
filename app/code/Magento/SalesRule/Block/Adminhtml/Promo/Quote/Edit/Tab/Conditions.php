@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
 use Magento\SalesRule\Model\Rule;
 
 /**
@@ -57,7 +57,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Rule\Block\Conditions $conditions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
         array $data = [],
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory = null
+        ?\Magento\SalesRule\Model\RuleFactory $ruleFactory = null
     ) {
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
@@ -163,7 +163,9 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
-        $renderer = $this->_rendererFieldset->setTemplate(
+
+        $renderer = $this->getLayout()->createBlock(Fieldset::class);
+        $renderer->setTemplate(
             'Magento_CatalogRule::promo/fieldset.phtml'
         )->setNewChildUrl(
             $newChildUrl

@@ -82,6 +82,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->customerCollection->getSize();
@@ -92,6 +93,7 @@ class Source implements \IteratorAggregate, \Countable, SourceProviderInterface
      *
      * @return Traversable
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $this->customerCollection->setPageSize($this->batchSize);

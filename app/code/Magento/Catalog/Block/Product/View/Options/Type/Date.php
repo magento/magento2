@@ -26,8 +26,6 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     protected $_fillLeadingZeros = true;
 
     /**
-     * Catalog product option type date
-     *
      * @var \Magento\Catalog\Model\Product\Option\Type\Date
      */
     protected $_catalogProductOptionTypeDate;
@@ -95,7 +93,10 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         $yearStart = $this->_catalogProductOptionTypeDate->getYearStart();
         $yearEnd = $this->_catalogProductOptionTypeDate->getYearEnd();
 
-        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
+        $fieldsSeparator = '/';
+        $fieldsOrder = $this->_catalogProductOptionTypeDate->getConfigData('date_fields_order') ?? '';
+        $fieldsOrder = str_replace(",", $fieldsSeparator, $fieldsOrder);
+        $dateFormat = $fieldsOrder !== "m/d/y" ? $fieldsOrder : $this->_localeDate->getDateFormatWithLongYear();
         /** Escape RTL characters which are present in some locales and corrupt formatting */
         $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
         $value = null;
@@ -137,7 +138,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     public function getDropDownsDateHtml()
     {
         $fieldsSeparator = '&nbsp;';
-        $fieldsOrder = $this->_catalogProductOptionTypeDate->getConfigData('date_fields_order');
+        $fieldsOrder = $this->_catalogProductOptionTypeDate->getConfigData('date_fields_order') ?? '';
         $fieldsOrder = str_replace(',', $fieldsSeparator, $fieldsOrder);
 
         $monthsHtml = $this->_getSelectFromToHtml('month', 1, 12);

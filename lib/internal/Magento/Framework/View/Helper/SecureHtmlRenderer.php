@@ -119,7 +119,7 @@ class SecureHtmlRenderer
                             if (event && event.target) {
                                 targetElement = event.target;
                             }
-                            {$listenerFunction}.apply(targetElement);
+                            return {$listenerFunction}.apply(targetElement);
                         };
                     }
                 });
@@ -158,15 +158,20 @@ class SecureHtmlRenderer
                 $exploded[1] = join('', array_slice($exploded, 1));
             }
             $styleValue = str_replace('\'', '\\\'', trim($exploded[1]));
-            $stylesAssignments .= "$elementVariable.style.$styleAttribute = '$styleValue';\n";
+            $stylesAssignments .= "element.style.$styleAttribute = '$styleValue';\n";
         }
 
-        return $this->renderTag(
-            'script',
-            ['type' => 'text/javascript'],
-            "var $elementVariable = document.querySelector('$selector');\n"
-            . "if ($elementVariable) {\n{$stylesAssignments}}",
-            false
-        );
+        $script = <<<script
+            var {$elementVariable}Array = document.querySelectorAll('{$selector}');
+            if({$elementVariable}Array.length !== 'undefined'){
+                {$elementVariable}Array.forEach(function(element) {
+                    if (element) {
+                        {$stylesAssignments}
+                    }
+                });
+            }
+        script;
+
+        return $this->renderTag('script', ['type' => 'text/javascript'], $script, false);
     }
 }

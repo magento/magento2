@@ -36,7 +36,7 @@ class Scope implements ScopeInterface
     public function __construct(
         $identifier,
         $value,
-        ScopeInterface $fallback = null
+        ?ScopeInterface $fallback = null
     ) {
         $this->identifier = $identifier;
         $this->value = $value;

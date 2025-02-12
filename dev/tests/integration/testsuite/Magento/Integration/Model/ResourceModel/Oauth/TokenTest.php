@@ -7,6 +7,7 @@
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Integration\Model\Oauth\Token;
 
 /**
@@ -16,10 +17,10 @@ use Magento\Integration\Model\Oauth\Token;
  */
 class TokenTest extends \PHPUnit\Framework\TestCase
 {
-    const TOKEN_LIFETIME = 1; // in hours
-    
-    const BASE_CREATED_AT_TIMESTAMP = 100000;
-    
+    public const TOKEN_LIFETIME = 1; // in hours
+
+    public const BASE_CREATED_AT_TIMESTAMP = 100000;
+
     /**
      * @var array
      */
@@ -45,6 +46,11 @@ class TokenTest extends \PHPUnit\Framework\TestCase
      */
     private $tokenFactory;
 
+    /**
+     * @var Oauth
+     */
+    private $oauthHelper;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -59,6 +65,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
             \Magento\Integration\Model\ResourceModel\Oauth\Token::class,
             ['date' => $this->dateTimeMock]
         );
+        $this->oauthHelper = $this->objectManager->create(Oauth::class);
 
         $this->generatedTokens = $this->generateTokens();
 
@@ -148,7 +155,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function deleteExpiredTokenUsingObserverDataProvider()
+    public static function deleteExpiredTokenUsingObserverDataProvider()
     {
         return [
             "Clean up long before default admin and default customer token life time" => [
@@ -209,7 +216,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function deleteExpiredTokensDataProvider()
+    public static function deleteExpiredTokensDataProvider()
     {
         return [
           "Clean up for admin tokens which were created ('token_lifetime' + 1 second) ago" => [
@@ -280,5 +287,25 @@ class TokenTest extends \PHPUnit\Framework\TestCase
                 "Token {$tokenNumber} was NOT expected to be deleted after clean up"
             );
         }
+    }
+
+    public function testSave(): void
+    {
+        $token = $this->oauthHelper->generateToken();
+        $tokenSecret = $this->oauthHelper->generateTokenSecret();
+        $model = $this->tokenFactory->create();
+        $model->setData(
+            [
+                'token' => $token,
+                'secret' => $tokenSecret,
+                 'type' => Token::TYPE_ACCESS
+            ]
+        );
+        $model->save();
+
+        $tokenResourceModel = $model->getResource();
+
+        $this->assertEquals($tokenSecret, $model->getSecret());
+        $this->assertNotEquals($model->getSecret(), $tokenResourceModel->load($model, 'secret'));
     }
 }

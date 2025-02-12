@@ -12,6 +12,8 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
  * Element history container.
  *
  * This class holds history about element modifications.
+ *
+ * @api
  */
 class ElementHistory
 {
@@ -31,7 +33,7 @@ class ElementHistory
      * @param ElementInterface $new
      * @param ElementInterface $old
      */
-    public function __construct(ElementInterface $new, ElementInterface $old = null)
+    public function __construct(ElementInterface $new, ?ElementInterface $old = null)
     {
         $this->new = $new;
         $this->old = $old;

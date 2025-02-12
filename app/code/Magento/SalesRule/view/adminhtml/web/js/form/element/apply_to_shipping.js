@@ -12,7 +12,9 @@ define([
         defaults: {
             imports: {
                 toggleDisabled: '${ $.parentName }.simple_action:value'
-            }
+            },
+            noticePerSimpleAction: {},
+            selectedSimpleAction: ''
         },
 
         /**
@@ -28,6 +30,21 @@ define([
 
             if (this.disabled()) {
                 this.checked(false);
+            }
+            this.selectedSimpleAction = action;
+            this.chooseNotice();
+        },
+
+        /**
+         * @inheritdoc
+         */
+        chooseNotice: function () {
+            var checkedNoticeNumber = Number(this.checked());
+
+            if (checkedNoticeNumber === 1 && this.noticePerSimpleAction.hasOwnProperty(this.selectedSimpleAction)) {
+                this.notice = this.noticePerSimpleAction[this.selectedSimpleAction];
+            } else {
+                this._super();
             }
         }
     });

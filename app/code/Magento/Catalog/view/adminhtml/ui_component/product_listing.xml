@@ -132,7 +132,7 @@
             <settings>
                 <addField>true</addField>
                 <filter>text</filter>
-                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <bodyTmpl>Magento_Catalog/grid/cells/preserved</bodyTmpl>
                 <label translate="true">Name</label>
             </settings>
         </column>
@@ -155,7 +155,7 @@
         <column name="sku" sortOrder="60">
             <settings>
                 <filter>text</filter>
-                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <bodyTmpl>Magento_Catalog/grid/cells/preserved</bodyTmpl>
                 <label translate="true">SKU</label>
             </settings>
         </column>
@@ -190,6 +190,16 @@
                 <options class="Magento\Store\Model\ResourceModel\Website\Collection"/>
                 <dataType>text</dataType>
                 <label translate="true">Websites</label>
+            </settings>
+        </column>
+        <column name="updated_at"
+                class="Magento\Ui\Component\Listing\Columns\Date"
+                component="Magento_Ui/js/grid/columns/date"
+                sortOrder="110">
+            <settings>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <label translate="true">Last Updated At</label>
             </settings>
         </column>
         <actionsColumn name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions" sortOrder="200">

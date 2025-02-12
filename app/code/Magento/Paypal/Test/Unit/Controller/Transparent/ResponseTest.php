@@ -13,7 +13,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Magento\Framework\Session\Generic as Session;
+use Magento\Checkout\Model\Session;
 use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\Result\Layout;
 use Magento\Framework\View\Result\LayoutFactory;
@@ -77,19 +77,20 @@ class ResponseTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPostValue'])
+            ->addMethods(['getPostValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
-            ->setMethods(['register'])
+            ->onlyMethods(['register'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultLayoutMock = $this->getMockBuilder(Layout::class)
-            ->setMethods(['addDefaultHandle', 'getLayout', 'getUpdate', 'load'])
+            ->addMethods(['getUpdate', 'load'])
+            ->onlyMethods(['addDefaultHandle', 'getLayout'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultLayoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultLayoutFactoryMock->expects($this->once())
@@ -97,11 +98,12 @@ class ResponseTest extends TestCase
             ->willReturn($this->resultLayoutMock);
         $this->transactionMock = $this->getMockBuilder(
             Transaction::class
-        )->setMethods(['getResponseObject', 'validateResponse', 'savePaymentInQuote'])
+        )->onlyMethods(['getResponseObject', 'savePaymentInQuote'])
+            ->addMethods(['validateResponse'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest'])
+            ->onlyMethods(['getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())
@@ -113,15 +115,14 @@ class ResponseTest extends TestCase
             ->getMock();
         $this->payflowFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['handle'])
+            ->onlyMethods(['handle'])
             ->getMockForAbstractClass();
         $this->sessionTransparent = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuoteId'])
+            ->onlyMethods(['getQuoteId'])
             ->getMock();
 
         $this->object = new Response(
@@ -204,7 +205,7 @@ class ResponseTest extends TestCase
         $processorInterfaceMock = $this->getMockBuilder(ProcessorInterface::class)
             ->getMockForAbstractClass();
         $layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
-            ->setMethods(['getUpdate'])
+            ->onlyMethods(['getUpdate'])
             ->disableOriginalConstructor()
             ->getMock();
         $layoutMock->expects($this->once())

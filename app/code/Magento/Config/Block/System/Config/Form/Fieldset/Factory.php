@@ -9,6 +9,7 @@ namespace Magento\Config\Block\System\Config\Form\Fieldset;
 /**
  * Magento\Config\Block\System\Config\Form\Fieldset Class Factory
  *
+ * @api
  * @codeCoverageIgnore
  */
 class Factory

@@ -13,9 +13,48 @@
     </virtualType>
     <type name="Magento\SomeModule\Model\Test">
         <arguments>
+            <!-- non-existing class proxy - inline -->
             <argument name="proxy" xsi:type="object">\Magento\SomeModule\Model\Element\Proxy</argument>
+            <argument name="proxy2" xsi:type="object">Magento\SomeModule\Model\Element\Proxy</argument>
+            <!-- non-existing class proxy - multi-line -->
+            <argument name="proxy3" xsi:type="object">
+                \Magento\SomeModule\Model\Element2\Proxy
+            </argument>
+            <argument name="proxy4" xsi:type="object">
+                Magento\SomeModule\Model\Element2\Proxy
+            </argument>
+            <!-- existing class proxy - multi-line -->
+            <argument name="proxy5" xsi:type="object">
+                \Magento\SomeModule\Element\Proxy
+            </argument>
+            <argument name="proxy6" xsi:type="object">
+                Magento\SomeModule\Element\Proxy
+            </argument>
+            <!-- existing class proxy - inline -->
+            <argument name="proxy7" xsi:type="object">\Magento\SomeModule\Element\Proxy</argument>
+            <argument name="proxy8" xsi:type="object">Magento\SomeModule\Element\Proxy</argument>
+
             <argument name="array" xsi:type="array">
+                <!-- non-existing class proxy - inline -->
                 <item name="proxy" xsi:type="object">\Magento\SomeModule\Model\Nested\Element\Proxy</item>
+                <item name="proxy2" xsi:type="object">Magento\SomeModule\Model\Nested\Element\Proxy</item>
+                <!-- non-existing class proxy - multi-line -->
+                <item name="proxy3" xsi:type="object">
+                    \Magento\SomeModule\Model\Nested\Element2\Proxy
+                </item>
+                <item name="proxy4" xsi:type="object">
+                    \Magento\SomeModule\Model\Nested\Element2\Proxy
+                </item>
+                <!-- existing class proxy - multi-line -->
+                <item name="proxy5" xsi:type="object">
+                    \Magento\SomeModule\NestedElement\Proxy
+                </item>
+                <item name="proxy6" xsi:type="object">
+                    Magento\SomeModule\NestedElement\Proxy
+                </item>
+                <!-- existing class proxy - inline -->
+                <item name="proxy7" xsi:type="object">\Magento\SomeModule\NestedElement\Proxy</item>
+                <item name="proxy8" xsi:type="object">Magento\SomeModule\NestedElement\Proxy</item>
             </argument>
         </arguments>
     </type>

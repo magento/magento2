@@ -52,7 +52,9 @@ class CurrentTest extends TestCase
     }
 
     /**
-     * Test get Url
+     * Test get Url.
+     *
+     * @return void
      */
     public function testGetUrl(): void
     {
@@ -70,21 +72,30 @@ class CurrentTest extends TestCase
     }
 
     /**
-     * Test if set current
+     * Test if set current.
+     *
+     * @return void
      */
     public function testIsCurrentIfIsset(): void
     {
+        $pathStub = '';
+        $this->_urlBuilderMock->method('getUrl')
+            ->with($pathStub)
+            ->willReturn('http://example.com/');
+        $this->currentLink->setPath($pathStub);
         $this->currentLink->setCurrent(true);
         $this->assertTrue($this->currentLink->isCurrent());
     }
 
     /**
-     * Test if the current url is the same as link path
+     * Test if the current url is the same as link path.
      *
      * @param string $pathStub
      * @param string $urlStub
      * @param array $request
      * @param bool $expected
+     *
+     * @return void
      * @dataProvider isCurrentDataProvider
      */
     public function testIsCurrent($pathStub, $urlStub, $request, $expected): void
@@ -102,36 +113,47 @@ class CurrentTest extends TestCase
             ->method('getActionName')
             ->will($this->returnValue($request['actionStub']));
 
-        $this->_urlBuilderMock->expects($this->at(0))
-            ->method('getUrl')
-            ->with($pathStub)
-            ->will($this->returnValue($urlStub));
-        $this->_urlBuilderMock->expects($this->at(1))
-            ->method('getUrl')
-            ->with($request['mcaStub'])
-            ->will($this->returnValue($request['getUrl']));
+        $withArgs = $willReturnArgs = [];
+
+        $withArgs[] = [$pathStub];
+        $willReturnArgs[] = $this->returnValue($urlStub);
+        $withArgs[] = [$request['mcaStub']];
+        $willReturnArgs[] = $this->returnValue($request['getUrl']);
+        $withArgs[] = ['*/*/*', ['_current' => false, '_use_rewrite' => true]];
 
         if ($request['mcaStub'] == '') {
-            $this->_urlBuilderMock->expects($this->at(2))
-                ->method('getUrl')
-                ->with('*/*/*', ['_current' => false, '_use_rewrite' => true])
-                ->will($this->returnValue($urlStub));
+            $willReturnArgs[] = $this->returnValue($urlStub);
+        } else {
+            $willReturnArgs[] = $this->returnValue('');
         }
+        $this->_urlBuilderMock
+            ->method('getUrl')
+            ->willReturnCallback(function ($arg) use ($withArgs, $willReturnArgs) {
+                static $callCount = 0;
+                $currentWithArg = $withArgs[$callCount];
+                $currentReturnArg = (array) $willReturnArgs[$callCount];
+                $callCount++;
+                if ($arg == $currentWithArg[0]) {
+                    return  $currentReturnArg;
+                }
+            });
 
         $this->currentLink->setPath($pathStub);
         $this->assertEquals($expected, $this->currentLink->isCurrent());
     }
 
     /**
-     * Data provider for is current
+     * Data provider for is current.
+     *
+     * @return array
      */
-    public function isCurrentDataProvider(): array
+    public static function isCurrentDataProvider(): array
     {
         return [
             'url with MCA' => [
                 'pathStub' => 'test/path',
                 'urlStub' => 'http://example.com/asdasd',
-                'requestStub' => [
+                'request' => [
                     'pathInfoStub' => '/test/index/',
                     'moduleStub' => 'test',
                     'controllerStub' => 'index',
@@ -139,12 +161,12 @@ class CurrentTest extends TestCase
                     'mcaStub' => 'test/index',
                     'getUrl' => 'http://example.com/asdasd/'
                 ],
-                'excepted' => true
+                'expected' => true
             ],
             'url with CMS' => [
                 'pathStub' => 'test',
                 'urlStub' => 'http://example.com/test',
-                'requestStub' => [
+                'request' => [
                     'pathInfoStub' => '//test//',
                     'moduleStub' => 'cms',
                     'controllerStub' => 'page',
@@ -152,12 +174,12 @@ class CurrentTest extends TestCase
                     'mcaStub' => '',
                     'getUrl' => 'http://example.com/'
                 ],
-                'excepted' => true
+                'expected' => true
             ],
             'Test if is current false' => [
                 'pathStub' => 'test/path',
                 'urlStub' => 'http://example.com/tests',
-                'requestStub' => [
+                'request' => [
                     'pathInfoStub' => '/test/index/',
                     'moduleStub' => 'test',
                     'controllerStub' => 'index',
@@ -165,7 +187,7 @@ class CurrentTest extends TestCase
                     'mcaStub' => 'test/index',
                     'getUrl' => 'http://example.com/asdasd/'
                 ],
-                'excepted' => false
+                'expected' => false
             ]
         ];
     }

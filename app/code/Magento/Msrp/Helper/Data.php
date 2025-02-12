@@ -52,6 +52,11 @@ class Data extends AbstractHelper
     private $msrpPriceCalculator;
 
     /**
+     * @var \Magento\Msrp\Model\Msrp
+     */
+    private $msrp;
+
+    /**
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Msrp\Model\Product\Options $productOptions
@@ -69,7 +74,7 @@ class Data extends AbstractHelper
         \Magento\Msrp\Model\Config $config,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         ProductRepositoryInterface $productRepository,
-        MsrpPriceCalculatorInterface $msrpPriceCalculator = null
+        ?MsrpPriceCalculatorInterface $msrpPriceCalculator = null
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;

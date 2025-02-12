@@ -1,9 +1,7 @@
 <?php
 /**
- * *
- *  * Copyright © Magento, Inc. All rights reserved.
- *  * See COPYING.txt for license details.
- *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
@@ -50,15 +48,14 @@ class SearchWeightTest extends TestCase
     protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
-            ->setMethods(['reset'])
+            ->onlyMethods(['reset'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attribute = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['isObjectNew', 'dataHasChangedFor'])
+            ->onlyMethods(['isObjectNew', 'dataHasChangedFor'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->attributeResourceModel = $this->getMockBuilder(Attribute::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->closure = function (AbstractModel $model) {

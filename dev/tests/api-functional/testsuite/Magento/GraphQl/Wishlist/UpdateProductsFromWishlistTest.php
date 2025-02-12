@@ -114,7 +114,7 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
         self::assertCount(1, $response['updateProductsInWishlist']['wishlist']['items_v2']);
         self::assertArrayHasKey('user_errors', $response['updateProductsInWishlist']);
         self::assertCount(1, $response['updateProductsInWishlist']['user_errors']);
-        $message = 'The quantity of a wish list item cannot be 0';
+        $message = 'The quantity of a wishlist item cannot be 0';
         self::assertEquals(
             $message,
             $response['updateProductsInWishlist']['user_errors'][0]['message']

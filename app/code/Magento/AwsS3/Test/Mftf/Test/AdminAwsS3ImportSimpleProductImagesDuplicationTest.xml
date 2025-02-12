@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ImportSimpleProductImagesDuplicationTest" extends="AdminImportSimpleProductImagesDuplicationTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Import Products"/>
+            <title value="S3 - Duplicated images should not be created if the CSV file is imported more than once"/>
+            <description value="Duplicated images should not be created if the CSV file is imported more than once"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-42986"/>
+            <useCaseId value="MC-42330"/>
+            <group value="catalog_import_export"/>
+            <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
+            <group value="remote_storage_disabled"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/test_image_duplication</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copyFromLocal" stepKey="copyProductBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderBaseImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderBaseImage.file}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copyFromLocal" stepKey="copyProductSmallImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderSmallImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderSmallImage.file}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copyFromLocal" stepKey="copyProductThumbImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderThumbnailImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderThumbnailImage.file}}</argument>
+            </helper>
+
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" after="copyProductThumbImage"/>
+            <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage" after="enableRemoteStorage"/>
+
+            <comment userInput="BIC workaround" stepKey="createDirectoryForImportFilesInS3" after="syncRemoteStorage"/>
+            <comment userInput="BIC workaround" stepKey="copyProductBaseImageS3" after="createDirectoryForImportFilesInS3"/>
+            <comment userInput="BIC workaround" stepKey="copyProductSmallImageS3" after="copyProductBaseImageS3"/>
+            <comment userInput="BIC workaround" stepKey="copyProductThumbImageS3" after="copyProductSmallImageS3"/>
+        </before>
+
+        <after>
+            <!-- Delete S3 Data -->
+            <remove keyForRemoval="deleteProductImageDirectory"/>
+            <comment userInput="BIC workaround" stepKey="deleteImportFilesDirectoryS3" after="deleteCategory"/>
+
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportImagesFilesDirectoryS3" after="deleteImportFilesDirectoryS3">
+                <argument name="path">var/import/images/test_image_duplication</argument>
+            </helper>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache" after="deleteImportImagesFilesDirectoryS3">
+                <argument name="tags" value=""/>
+            </actionGroup>
+
+            <!-- Disable AWS S3 Remote Storage & Delete Local Data -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
+            <comment userInput="BIC workaround" stepKey="deleteImportFilesDirectoryLocal" after="disableRemoteStorage"/>
+        </after>
+    </test>
+</tests>

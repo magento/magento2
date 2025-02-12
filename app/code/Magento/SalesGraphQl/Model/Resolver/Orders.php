@@ -41,8 +41,8 @@ class Orders implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
@@ -61,6 +61,7 @@ class Orders implements ResolverInterface
                 'created_at' => $order->getCreatedAt(),
                 'grand_total' => $order->getGrandTotal(),
                 'status' => $order->getStatus(),
+                'model' => $order
             ];
         }
         return ['items' => $items];

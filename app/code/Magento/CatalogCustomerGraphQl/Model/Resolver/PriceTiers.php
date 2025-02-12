@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,13 +18,13 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Resolver for price_tiers
  */
-class PriceTiers implements ResolverInterface
+class PriceTiers implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var TiersFactory
@@ -107,8 +107,8 @@ class PriceTiers implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -152,7 +152,8 @@ class PriceTiers implements ResolverInterface
         array $tierPrices,
         string $currencyCode
     ): array {
-
+        $this->formatAndFilterTierPrices = [];
+        $this->tierPricesQty = [];
         foreach ($tierPrices as $key => $tierPrice) {
             $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
             $this->formatTierPrices($productPrice, $currencyCode, $tierPrice);
@@ -211,5 +212,16 @@ class PriceTiers implements ResolverInterface
         } else {
             $this->tierPricesQty[$qty] = $key;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->tierPricesQty = [];
+        $this->formatAndFilterTierPrices = [];
+        $this->customerGroupId = null;
+        $this->tiers = null;
     }
 }

@@ -122,6 +122,7 @@ class CreateCustomerAccount
             $customerDataObject,
             CustomerInterface::class
         );
+
         $data = array_merge($requiredDataAttributes, $data);
         $this->validateCustomerData->execute($data);
         $this->dataObjectHelper->populateWithArray(

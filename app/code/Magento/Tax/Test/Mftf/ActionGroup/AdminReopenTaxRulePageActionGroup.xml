@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminReopenTaxRulePageActionGroup">
+        <annotations>
+            <description>Open tax rule page. Update country and region value of tax rate modal.</description>
+        </annotations>
+        <arguments>
+            <argument name="code" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{code}}" stepKey="fillTaxRuleCode"/>
+        <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForTaxRuleSearch"/>
+        <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForTaxRulePage"/>
+        <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
+        <wait stepKey="waitForTaxRateSearch" time="5" />
+        <click selector="{{AdminTaxRuleFormSection.taxRateOption($$initialTaxRate.code$$)}}" stepKey="selectNeededItem3"  />
+        <click selector="{{AdminTaxRuleFormSection.taxRateEditButton}}" stepKey="clickMultiSelectEdit"/>
+        <wait stepKey="waitForTaxRateModal" time="5" />
+  </actionGroup>
+</actionGroups>

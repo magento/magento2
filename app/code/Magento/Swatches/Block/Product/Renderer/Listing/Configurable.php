@@ -74,10 +74,10 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
         array $data = [],
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        \Magento\Framework\Locale\Format $localeFormat = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
-        Resolver $layerResolver = null
+        ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        ?\Magento\Framework\Locale\Format $localeFormat = null,
+        ?\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
+        ?Resolver $layerResolver = null
     ) {
         parent::__construct(
             $context,
@@ -100,6 +100,23 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );
         $this->layerResolver = $layerResolver ?: ObjectManager::getInstance()->get(Resolver::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCacheKey()
+    {
+        $key = parent::getCacheKey();
+        $configurableAttributes = $this->getLayeredAttributesIfExists(
+            $this->getProduct(),
+            $this->getRequest()->getQuery()->toArray()
+        );
+        if (!empty($configurableAttributes)) {
+            $key .= '-' . sha1(json_encode($configurableAttributes));
+        }
+
+        return $key;
     }
 
     /**

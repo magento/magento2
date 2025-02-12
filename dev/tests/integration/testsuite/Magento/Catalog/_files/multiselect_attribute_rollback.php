@@ -14,5 +14,8 @@ $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
 $attribute->load('multiselect_attribute', 'attribute_code');
 $attribute->delete();
 
+$attribute->load('multiselect_attribute_text', 'attribute_code');
+$attribute->delete();
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

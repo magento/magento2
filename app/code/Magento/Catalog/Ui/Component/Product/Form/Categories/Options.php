@@ -43,7 +43,7 @@ class Options implements OptionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {
@@ -70,7 +70,8 @@ class Options implements OptionSourceInterface
 
             /** @var \Magento\Catalog\Model\Category $category */
             foreach ($matchingNamesCollection as $category) {
-                foreach (explode('/', $category->getPath()) as $parentId) {
+
+                foreach (explode('/', $category->getPath() ?? '') as $parentId) {
                     $shownCategoriesIds[$parentId] = 1;
                 }
             }

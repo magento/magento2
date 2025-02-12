@@ -11,5 +11,6 @@
     <section name="AdminNewWebsiteSection">
         <element name="name" type="input" selector="#website_name"/>
         <element name="code" type="input" selector="#website_code"/>
+        <element name="setAsDefault" type="checkbox" selector="#is_default"/>
     </section>
 </sections>

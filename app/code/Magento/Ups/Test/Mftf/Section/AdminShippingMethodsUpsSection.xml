@@ -16,6 +16,7 @@
         <element name="carriersUPSTypeSystem" type="input" selector="#carriers_ups_type_inherit"/>
         <element name="carriersUPSAccountLive" type="input" selector="#carriers_ups_is_account_live_inherit"/>
         <element name="carriersUPSGatewayXMLUrl" type="input" selector="#carriers_ups_gateway_xml_url_inherit"/>
+        <element name="carriersUPSGatewayUrl" type="input" selector="#carriers_ups_gateway_url_inherit"/>
         <element name="carriersUPSModeXML" type="input" selector="#carriers_ups_mode_xml_inherit"/>
         <element name="carriersUPSOriginShipment" type="input" selector="#carriers_ups_origin_shipment_inherit"/>
         <element name="carriersUPSTitle" type="input" selector="#carriers_ups_title_inherit"/>
@@ -24,7 +25,7 @@
         <element name="carriersUPSShipmentRequestType" type="input" selector="#carriers_ups_shipment_requesttype_inherit"/>
         <element name="carriersUPSContainer" type="input" selector="#carriers_ups_container_inherit"/>
         <element name="carriersUPSDestType" type="input" selector="#carriers_ups_dest_type_inherit"/>
-        <element name="carriersUPSTrackingXmlUrl" type="input" selector="#carriers_ups_tracking_xml_url_inherit"/>
+        <element name="carriersUPSTrackingUrl" type="input" selector="#carriers_ups_tracking_url_inherit"/>
         <element name="carriersUPSUnitOfMeasure" type="input" selector="#carriers_ups_unit_of_measure_inherit"/>
         <element name="carriersUPSMaxPackageWeight" type="input" selector="#carriers_ups_max_package_weight_inherit"/>
         <element name="carriersUPSPickup" type="input" selector="#carriers_ups_pickup_inherit"/>

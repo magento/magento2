@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-70192"/>
             <group value="catalogRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create two Categories: CAT1 and CAT2 -->
@@ -72,6 +73,9 @@
             <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct2" stepKey="deleteConfigProductAttribute2"/>
             <!--Delete Cart Price Rule -->
             <deleteData  createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1: Create a cart price rule applying to CAT1 with discount -->
@@ -108,6 +112,9 @@
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigurableProductToCart4">
             <argument name="product" value="$$createConfigProductCreateConfigurableProduct2$$"/>
             <argument name="productCount" value="4"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfterConfigurationChange">
+                <argument name="indices" value=""/>
         </actionGroup>
         <!-- Discount  amount is applied -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToCart2"/>

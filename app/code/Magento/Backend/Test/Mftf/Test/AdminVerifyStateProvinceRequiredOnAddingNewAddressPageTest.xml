@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyStateProvinceRequiredOnAddingNewAddressPageTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Verification of required fields on new address page test"/>
+            <title value="Admin verifies State/Province should be required fields on add new address page test"/>
+            <description value="Admin verifies State/Province should be required fields on add new address page test"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3912"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <!-- Set locale options to United Kingdom-->
+            <magentoCLI stepKey="localeUK" command="config:set general/locale/code en_GB"/>
+            <!-- Deploy static content with United Kingdom locale-->
+            <magentoCLI command="setup:static-content:deploy en_GB" stepKey="deployStaticContentWithUnitedKingdomLocale"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Set locale options to en_US-->
+            <magentoCLI stepKey="localeUS" command="config:set general/locale/code en_US"/>
+            <!-- Change Admin locale to default -->
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminAccountToUnitedStates">
+                <argument name="InterfaceLocaleByValue" value="en_US" />
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Open Admin Store Configuration Page -->
+        <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage" />
+
+        <!--"Choose United Kingdom" as State Option Required and save configuration -->
+        <conditionalClick selector="{{StateOptionsSection.stateOptions}}" dependentSelector="{{StateOptionsSection.countriesWithRequiredRegions}}" visible="false" stepKey="expandStateOptionsTab"/>
+        <waitForAjaxLoad stepKey="waitForAjax"/>
+        <scrollTo selector="{{StateOptionsSection.countriesWithRequiredRegions}}" stepKey="scrollToForm"/>
+        <selectOption selector="{{StateOptionsSection.countriesWithRequiredRegions}}" userInput="United Kingdom" stepKey="selectCountriesWithRequiredRegion"/>
+        <click selector="#save" stepKey="saveStateOptionsConfig"/>
+        <waitForPageLoad stepKey="waitForSavingConfig"/>
+
+        <!-- create customer on storefront -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+
+        <!-- Open AddressBook and set Country as "United Kingdom" -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+
+        <!-- Choose Country as "United Kingdom" -->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="United Kingdom" stepKey="selectCountry"/>
+        <click selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="saveCustomerAddress"/>
+
+        <!-- Assert the error message -->
+        <seeElement selector="{{StorefrontCustomerMessagesSection.assertErrorMessage}}" stepKey="assetErrorMessage"/>
+    </test>
+</tests>

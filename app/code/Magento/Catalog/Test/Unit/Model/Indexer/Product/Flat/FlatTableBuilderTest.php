@@ -125,6 +125,11 @@ class FlatTableBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testBuild()
     {
         $storeId = 1;
@@ -161,8 +166,15 @@ class FlatTableBuilderTest extends TestCase
                 ]
             );
         $this->flatIndexerMock->expects($this->atLeastOnce())->method('getTable')
-            ->withConsecutive([$tableName], ['catalog_product_website'])
-            ->willReturnOnConsecutiveCalls($tableName, 'catalog_product_website');
+                ->willReturnCallback(
+                    function ($arg) use ($tableName) {
+                        if ($arg == $tableName) {
+                            return $tableName;
+                        } elseif ($arg == 'catalog_product_website') {
+                            return 'catalog_product_website';
+                        }
+                    }
+                );
         $this->flatIndexerMock->expects($this->once())->method('getAttribute')
             ->with('status')
             ->willReturn($statusAttributeMock);
@@ -191,29 +203,46 @@ class FlatTableBuilderTest extends TestCase
         )->willReturnSelf();
         $selectMock->expects($this->atLeastOnce())->method('joinInner')->willReturnSelf();
         $selectMock->expects($this->exactly(3))->method('joinLeft')
-            ->withConsecutive(
-                [
-                    ['dstatus' => $attributeTable],
-                    sprintf(
-                        'e.%s = dstatus.%s AND dstatus.store_id = %s AND dstatus.attribute_id = %s',
-                        $linkField,
-                        $linkField,
-                        $storeId,
-                        $statusId
-                    ),
-                    []
-                ],
-                [
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2,
+                    $arg3
+                ) use (
+                    $selectMock,
+                    $attributeTable,
+                    $linkField,
+                    $storeId,
+                    $statusId,
                     $temporaryTableName,
-                    "e.{$linkField} = {$temporaryTableName}.{$linkField}",
-                    [$linkField, $eavCustomField]
-                ],
-                [
+                    $eavCustomField,
                     $temporaryValueTableName,
-                    "e.{$linkField} = {$temporaryValueTableName}.{$linkField}",
-                    [$eavCustomValueField]
-                ]
-            )->willReturnSelf();
+                    $eavCustomValueField
+                ) {
+                    if ($arg1 === ['dstatus' => $attributeTable] &&
+                        $arg2 ===
+                        sprintf(
+                            'e.%s = dstatus.%s AND dstatus.store_id = %s AND dstatus.attribute_id = %s',
+                            $linkField,
+                            $linkField,
+                            $storeId,
+                            $statusId
+                        )
+                        && empty($arg3)) {
+                            return $selectMock;
+
+                    } elseif ($arg1 === $temporaryTableName &&
+                        $arg2 === "e.{$linkField} = {$temporaryTableName}.{$linkField}" &&
+                        $arg3 === [$linkField, $eavCustomField]) {
+                            return $selectMock;
+
+                    } elseif ($arg1 === $temporaryValueTableName &&
+                        $arg2 === "e.{$linkField} = {$temporaryValueTableName}.{$linkField}" &&
+                        $arg3 === [$eavCustomValueField]) {
+                            return $selectMock;
+                    }
+                }
+            );
         $this->metadataPoolMock->expects($this->atLeastOnce())->method('getMetadata')->with(ProductInterface::class)
             ->willReturn($this->metadataMock);
         $storeMock = $this->getMockBuilder(StoreInterface::class)

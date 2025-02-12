@@ -29,6 +29,9 @@
                 <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore">
                     <argument name="storeGroupName" value="customStore.name"/>
                 </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
@@ -36,6 +39,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
                 <argument name="StoreGroup" value="customStore"/>
                 <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->

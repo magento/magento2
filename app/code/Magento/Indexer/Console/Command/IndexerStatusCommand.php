@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Indexer;
 use Magento\Framework\Mview;
 use Symfony\Component\Console\Helper\Table;
@@ -71,6 +72,8 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
 
         $table->addRows($rows);
         $table->render();
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -91,6 +94,9 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
                 break;
             case \Magento\Framework\Indexer\StateInterface::STATUS_WORKING:
                 $status = 'Processing';
+                break;
+            case \Magento\Framework\Indexer\StateInterface::STATUS_SUSPENDED:
+                $status = 'Suspended';
                 break;
         }
         return $status;

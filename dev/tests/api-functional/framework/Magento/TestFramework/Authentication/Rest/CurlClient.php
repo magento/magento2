@@ -13,7 +13,7 @@ use OAuth\Common\Http\Uri\UriInterface;
 class CurlClient extends \OAuth\Common\Http\Client\CurlClient
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function retrieveResponse(
         UriInterface $endpoint,
@@ -23,5 +23,19 @@ class CurlClient extends \OAuth\Common\Http\Client\CurlClient
     ) {
         $this->setCurlParameters([CURLOPT_FAILONERROR => true]);
         return parent::retrieveResponse($endpoint, $requestBody, $extraHeaders, $method);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function normalizeHeaders($headers): array
+    {
+        $normalizeHeaders = [];
+        foreach ($headers as $key => $val) {
+            $val = ucfirst(strtolower($key)) . ': ' . $val;
+            $normalizeHeaders[$key] = $val;
+        }
+
+        return $normalizeHeaders;
     }
 }

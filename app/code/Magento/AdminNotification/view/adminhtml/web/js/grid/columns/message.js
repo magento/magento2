@@ -36,6 +36,16 @@ define([
             return record[this.messageIndex];
         },
 
+        /**
+         * Proxy to getLabel function with UnsanitizedHtml suffix
+         *
+         * @param {Object} record
+         * @returns {String}
+         */
+        getLabelUnsanitizedHtml: function (record) {
+            return this.getLabel(record);
+        },
+
         /** @inheritdoc */
         getFieldClass: function ($row) {
             var status = this.statusMap[$row.status] || 'warning',

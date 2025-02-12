@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
-use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Controller\Account\Logout;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -49,11 +48,6 @@ class LogoutTest extends TestCase
     /** @var RedirectInterface|MockObject */
     protected $redirect;
 
-    /**
-     * @var SessionCleanerInterface|MockObject
-     */
-    private $sessionCleanerMock;
-
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -61,9 +55,9 @@ class LogoutTest extends TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'logout', 'setBeforeAuthUrl', 'setLastCustomerId'])
+            ->addMethods(['setLastCustomerId'])
+            ->onlyMethods(['getId', 'logout', 'setBeforeAuthUrl'])
             ->getMock();
-        $this->sessionCleanerMock = $this->createMock(SessionCleanerInterface::class);
 
         $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
@@ -90,7 +84,7 @@ class LogoutTest extends TestCase
             ->method('getRedirect')
             ->willReturn($this->redirect);
 
-        $this->controller = new Logout($this->contextMock, $this->sessionMock, $this->sessionCleanerMock);
+        $this->controller = new Logout($this->contextMock, $this->sessionMock);
 
         $refClass = new \ReflectionClass(Logout::class);
         $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
@@ -123,11 +117,6 @@ class LogoutTest extends TestCase
         $this->sessionMock->expects($this->once())
             ->method('setLastCustomerId')
             ->with($customerId);
-
-        $this->sessionCleanerMock->expects($this->once())
-            ->method('clearFor')
-            ->with($customerId)
-            ->willReturnSelf();
 
         $this->cookieManager->expects($this->once())
             ->method('getCookie')

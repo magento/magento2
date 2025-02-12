@@ -75,6 +75,8 @@ class Improved implements AlgorithmInterface
         for ($key = 0; $key < $dataSize; $key++) {
             if (isset($data[$key + 1])) {
                 $data[$key]['to'] = $data[$key + 1]['from'];
+            } else {
+                $data[$key]['to'] = max($data[$key]['to'], $aggregations['max'] + 0.01);
             }
         }
 

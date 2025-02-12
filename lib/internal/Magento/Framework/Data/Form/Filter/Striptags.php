@@ -21,7 +21,7 @@ class Striptags implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function inputFilter($value)
     {
-        return strip_tags($value);
+        return $value !== null ? strip_tags($value) : '';
     }
 
     /**

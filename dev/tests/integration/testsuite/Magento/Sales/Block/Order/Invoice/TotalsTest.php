@@ -45,6 +45,25 @@ class TotalsTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Sales/_files/order_with_free_shipping_by_coupon_and_invoice.php
+     *
+     * @return void
+     */
+    public function testCollectTotals(): void
+    {
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
+        $invoice = $order->getInvoiceCollection()->getFirstItem();
+
+        $this->block->setOrder($order);
+        $this->block->setInvoice($invoice);
+
+        $this->block->toHtml();
+        $totals = $this->block->getTotals();
+        $this->assertArrayHasKey('shipping', $totals);
+        $this->assertEquals('0.0000', $totals['shipping']['value']);
+        $this->assertEquals('Shipping & Handling (1234567890)', $totals['shipping']['label']);
+    }
+    /**
      * @magentoDataFixture Magento/Sales/_files/invoices_for_items.php
      *
      * @return void

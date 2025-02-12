@@ -9,6 +9,8 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface ObserverInterface
+ *
+ * @api
  */
 interface ObserverInterface
 {

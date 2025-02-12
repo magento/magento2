@@ -75,7 +75,7 @@ class PublisherTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->envelopeFactory = $this->getMockBuilder(EnvelopeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)
@@ -131,8 +131,8 @@ class PublisherTest extends TestCase
             [
                 'body' => $encodedMessage,
                 'properties' => [
-                    'delivery_mode' => 2,
                     'message_id' => $messageId,
+                    'topic_name' => $topicName
                 ]
             ]
         )->willReturn($envelope);

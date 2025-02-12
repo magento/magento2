@@ -86,7 +86,7 @@ class EditTest extends TestCase
             ->getMock();
 
         $viewFilesystem = $this->getMockBuilder(FilesystemView::class)
-            ->setMethods(['getTemplateFileName'])
+            ->onlyMethods(['getTemplateFileName'])
             ->disableOriginalConstructor()
             ->getMock();
         $viewFilesystem->expects(

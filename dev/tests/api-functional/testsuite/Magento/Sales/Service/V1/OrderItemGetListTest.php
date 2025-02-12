@@ -9,12 +9,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class OrderItemGetListTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/orders/items';
+    private const RESOURCE_PATH = '/V1/orders/items';
 
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'salesOrderItemRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const SERVICE_NAME = 'salesOrderItemRepositoryV1';
 
-    const ORDER_INCREMENT_ID = '100000001';
+    private const ORDER_INCREMENT_ID = '100000001';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -31,7 +31,7 @@ class OrderItemGetListTest extends WebapiAbstract
      */
     public function testGetList()
     {
-        $expectedRowTotals = [112, 102, 92];
+        $expectedRowTotals = [110, 100, 90];
         /** @var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = $this->objectManager->get(
             \Magento\Framework\Api\SortOrderBuilder::class

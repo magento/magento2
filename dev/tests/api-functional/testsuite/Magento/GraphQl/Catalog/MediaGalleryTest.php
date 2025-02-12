@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -143,6 +148,9 @@ QUERY;
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
     items {
+      small_image {
+        url
+      }
       media_gallery {
       	label
         url
@@ -209,6 +217,79 @@ QUERY;
             'magento_image.jpg',
             $response['products']['items'][0]['media_gallery_entries'][0]['file']
         );
+    }
+
+    /**
+     *  Tests the sorting of media gallery entries by their position attribute for a given product.
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    #[
+        DataFixture(CategoryFixture::class, ['name' => 'Category'], 'category'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'name' => 'Product 1',
+                'sku' => 'product-1',
+                'category_ids' => ['$category.id$'],
+                'price' => 10,
+                'media_gallery_entries' => [
+                    [
+                        'label' => 'image',
+                        'media_type' => 'image',
+                        'position' => 0,
+                        'disabled' => false,
+                        'types' => [
+                            'image',
+                            'small_image',
+                            'thumbnail'
+                        ],
+                        'file' => '/m/product1.jpg',
+                    ],
+                    [
+                        'label' => 'image',
+                        'media_type' => 'image',
+                        'position' => 2,
+                        'disabled' => false,
+                        'file' => '/m/product3.jpg',
+                    ],
+                    [
+                        'label' => 'image',
+                        'media_type' => 'image',
+                        'position' => 1,
+                        'disabled' => false,
+                        'file' => '/m/product2.jpg',
+                    ],
+                ],
+            ],
+            'product1'
+        ),
+    ]
+    public function testProductMediaGalleryEntriesPositionSort()
+    {
+        $product = DataFixtureStorageManager::getStorage()->get('product1');
+        $productSku = $product->getSku();
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {
+      name
+      sku
+      media_gallery_entries {
+        id
+        position
+        file
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        self::assertCount(3, $response['products']['items'][0]['media_gallery_entries']);
+        foreach ($response['products']['items'][0]['media_gallery_entries'] as $key => $mediaGalleryEntry) {
+            self::assertEquals($key, $mediaGalleryEntry['position']);
+        }
     }
 
     /**

@@ -18,6 +18,7 @@
             <severity value="MAJOR"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="newDefaultCategory"/>

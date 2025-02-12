@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="WebSetupPageLicenseSection">
+        <element name="section" type="text" selector="section[data-section=license]"/>
+        <element name="license_text" type="text" selector="section[data-section=license] div.license-text"/>
+        <element name="go_back_button" type="button" selector="section[data-section=license] div.page-license-footer button[onclick^='showSection'][onclick*='landing']"/>
+    </section>
+</sections>

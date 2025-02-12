@@ -40,7 +40,7 @@ class ProductLinksTest extends TestCase
     private function getMockedProduct()
     {
         $mockBuilder = $this->getMockBuilder(Product::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getRelatedReadonly',
                     'getUpsellReadonly',

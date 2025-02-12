@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReportsOrderTotalDatePickerTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Calendar Date  Button"/>
+            <title value="UI issue in Order Total Report Date picker"/>
+            <description value="Admin should be able to navigate to Reports > Order Total. And select the From/To date picker and select the date.
+            The UI will not show 'Select Date' text"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="ACP2E-1104"/>
+            <useCaseId value="AC-6529"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsOrderTotalPage">
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsCustomersOrderTotal.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyOrdersTotalDatePickerActionGroup" stepKey="verifyDatePickerDoesNotShowSelectButtonText">
+        </actionGroup>
+    </test>
+</tests>

@@ -7,8 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-    <exchange name="magento-db" type="topic" connection="db">
-        <binding id="MediaContentSynchronization" topic="media.content.synchronization"
-                 destinationType="queue" destination="media.content.synchronization"/>
+    <exchange name="magento">
+        <binding id="MediaContentSynchronization" topic="media.content.synchronization" destination="media.content.synchronization"/>
     </exchange>
 </config>

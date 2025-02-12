@@ -1,9 +1,5 @@
 <?php
 /**
- * CatalogRule Rule Job model
- *
- * Uses for encapsulate some logic of rule model and for having ability change behavior (for example, in controller)
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,6 +10,8 @@ use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 
 /**
  * Catalog Rule job model
+ *
+ * Uses for encapsulate some logic of rule model and for having ability change behavior (for example, in controller)
  *
  * @method \Magento\CatalogRule\Model\Rule\Job setSuccess(string $errorMessage)
  * @method \Magento\CatalogRule\Model\Rule\Job setError(string $errorMessage)
@@ -52,7 +50,6 @@ class Job extends \Magento\Framework\DataObject
      * Dispatch event "catalogrule_apply_all" and set success or error message depends on result
      *
      * @return \Magento\CatalogRule\Model\Rule\Job
-     * @api
      */
     public function applyAll()
     {

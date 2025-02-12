@@ -12,7 +12,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images;
 /**
  * @method \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images getModel
  */
-class ImagesTest extends AbstractModifierTest
+class ImagesTest extends AbstractModifierTestCase
 {
     /**
      * {@inheritdoc}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectStoreDuringOrderCreationActionGroup">
+        <annotations>
+            <description>Selects provided Store View.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+
+        <waitForElementClickable selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="waitForStoreOption" />
+        <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeTree}}" userInput="{{storeView.name}}" stepKey="selectStoreView"/>
+        <waitForPageLoad stepKey="waitForLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+        <waitForElementClickable selector="{{OrdersGridSection.addProducts}}" stepKey="waitForAddProductsButton" />
+    </actionGroup>
+</actionGroups>

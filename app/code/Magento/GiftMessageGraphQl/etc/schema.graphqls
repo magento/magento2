@@ -45,3 +45,7 @@ type SalesItemInterface {
 type CustomerOrder {
     gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Order\\GiftMessage")  @doc(description: "The entered gift message for the order")
 }
+
+interface OrderItemInterface {
+    gift_message: GiftMessage @resolver(class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Order\\Item\\GiftMessage") @doc(description: "The selected gift message for the order item")
+}

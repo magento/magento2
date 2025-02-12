@@ -34,7 +34,7 @@ class ConverterType implements ParserInterface
     {
         $result = [];
         $domXPath = new \DOMXPath($node->ownerDocument);
-        $nodeList = $domXPath->query(trim($data['value']), $node);
+        $nodeList = $domXPath->query(trim($data['value'] ?? ''), $node);
         foreach ($nodeList as $itemNode) {
             $result = $this->converter->convert($itemNode, $data);
         }

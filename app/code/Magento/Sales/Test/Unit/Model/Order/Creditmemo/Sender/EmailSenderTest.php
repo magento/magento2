@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -120,7 +120,13 @@ class EmailSenderTest extends TestCase
      */
     private $senderBuilderFactoryMock;
 
+    private const CREDITMEMO_ID = 1;
+
+    private const ORDER_ID = 1;
+
     /**
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -130,7 +136,7 @@ class EmailSenderTest extends TestCase
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
-            ->setMethods(['getStoreId'])
+            ->addMethods(['getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -143,7 +149,7 @@ class EmailSenderTest extends TestCase
 
         $this->senderMock = $this->getMockBuilder(Sender::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send', 'sendCopyTo'])
+            ->addMethods(['send', 'sendCopyTo'])
             ->getMock();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
@@ -152,8 +158,11 @@ class EmailSenderTest extends TestCase
 
         $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setSendEmail', 'setEmailSent'])
+            ->onlyMethods(['setEmailSent', 'getId'])
+            ->addMethods(['setSendEmail'])
             ->getMock();
+        $this->creditmemoMock->method('getId')
+            ->willReturn(self::CREDITMEMO_ID);
 
         $this->commentMock = $this->getMockBuilder(CreditmemoCommentCreationInterface::class)
             ->disableOriginalConstructor()
@@ -189,6 +198,8 @@ class EmailSenderTest extends TestCase
         $this->orderMock->expects($this->any())
             ->method('getPayment')
             ->willReturn($this->paymentInfoMock);
+        $this->orderMock->method('getId')
+            ->willReturn(self::ORDER_ID);
 
         $this->paymentHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -227,11 +238,9 @@ class EmailSenderTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->senderBuilderFactoryMock = $this->getMockBuilder(
-            SenderBuilderFactory::class
-        )
+        $this->senderBuilderFactoryMock = $this->getMockBuilder(SenderBuilderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->subject = new EmailSender(
@@ -253,13 +262,16 @@ class EmailSenderTest extends TestCase
      * @param bool $isComment
      * @param bool $emailSendingResult
      *
-     * @dataProvider sendDataProvider
-     *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider sendDataProvider
      */
-    public function testSend($configValue, $forceSyncMode, $isComment, $emailSendingResult)
-    {
+    public function testSend(
+        int $configValue,
+        bool $forceSyncMode,
+        bool $isComment,
+        bool $emailSendingResult
+    ): void {
         $this->globalConfigMock->expects($this->once())
             ->method('getValue')
             ->with('sales_email/general/async_sending')
@@ -281,7 +293,9 @@ class EmailSenderTest extends TestCase
         if (!$configValue || $forceSyncMode) {
             $transport = [
                 'order' => $this->orderMock,
+                'order_id' => self::ORDER_ID,
                 'creditmemo' => $this->creditmemoMock,
+                'creditmemo_id' => self::CREDITMEMO_ID,
                 'comment' => $isComment ? 'Comment text' : '',
                 'billing' => $this->addressMock,
                 'payment_html' => 'Payment Info Block',
@@ -292,8 +306,8 @@ class EmailSenderTest extends TestCase
                     'customer_name' => 'Customer name',
                     'is_not_virtual' => true,
                     'email_customer_note' => null,
-                    'frontend_status_label' => 'Pending',
-                ],
+                    'frontend_status_label' => 'Pending'
+                ]
             ];
             $transport = new DataObject($transport);
 
@@ -366,12 +380,15 @@ class EmailSenderTest extends TestCase
                 ->method('setEmailSent')
                 ->with(null);
 
-            $this->creditmemoResourceMock->expects($this->at(0))
+            $this->creditmemoResourceMock
                 ->method('saveAttribute')
-                ->with($this->creditmemoMock, 'email_sent');
-            $this->creditmemoResourceMock->expects($this->at(1))
-                ->method('saveAttribute')
-                ->with($this->creditmemoMock, 'send_email');
+                ->willReturnCallback(function ($arg1, $arg2) {
+                    if ($arg1 == $this->creditmemoMock &&
+                        $arg2 == 'email_sent' ||
+                        $arg2 == 'send_email') {
+                        return null;
+                    }
+                });
 
             $this->assertFalse(
                 $this->subject->send(
@@ -387,14 +404,14 @@ class EmailSenderTest extends TestCase
     /**
      * @return array
      */
-    public function sendDataProvider()
+    public static function sendDataProvider(): array
     {
         return [
             'Successful sync sending with comment' => [0, false, true, true],
             'Successful sync sending without comment' => [0, false, false, true],
             'Failed sync sending with comment' => [0, false, true, false],
             'Successful forced sync sending with comment' => [1, true, true, true],
-            'Async sending' => [1, false, false, false],
+            'Async sending' => [1, false, false, false]
         ];
     }
 }

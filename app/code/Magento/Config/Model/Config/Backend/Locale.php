@@ -61,8 +61,8 @@ class Locale extends \Magento\Framework\App\Config\Value
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_configsFactory = $configsFactory;
@@ -73,8 +73,10 @@ class Locale extends \Magento\Framework\App\Config\Value
     }
 
     /**
-     * @return $this
+     * @inheritdoc
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterSave()
     {
@@ -82,7 +84,7 @@ class Locale extends \Magento\Framework\App\Config\Value
         $collection = $this->_configsFactory->create();
         $collection->addPathFilter('currency/options');
 
-        $values = explode(',', $this->getValue());
+        $values = $this->getValue() !== null ? explode(',', $this->getValue()) : [];
         $exceptions = [];
 
         foreach ($collection as $data) {

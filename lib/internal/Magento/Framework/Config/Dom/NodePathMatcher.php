@@ -32,9 +32,9 @@ class NodePathMatcher
      */
     protected function simplifyXpath($xpath)
     {
-        $result = $xpath;
+        $result = $xpath ?: '';
         $result = preg_replace('/\[@[^\]]+?\]/', '', $result);
-        $result = preg_replace('/\/[^:]+?\:/', '/', $result);
-        return $result;
+
+        return preg_replace('/\/[^:]+?\:/', '/', $result);
     }
 }

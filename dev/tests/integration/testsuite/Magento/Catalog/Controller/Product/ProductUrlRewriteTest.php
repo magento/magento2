@@ -22,7 +22,6 @@ use Magento\TestFramework\TestCase\AbstractController;
 /**
  * Checks product availability on storefront by url rewrite
  *
- * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
  * @magentoDbIsolation enabled
  */
 class ProductUrlRewriteTest extends AbstractController
@@ -64,6 +63,7 @@ class ProductUrlRewriteTest extends AbstractController
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @return void
      */
@@ -77,6 +77,7 @@ class ProductUrlRewriteTest extends AbstractController
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @return void
      */
@@ -91,6 +92,7 @@ class ProductUrlRewriteTest extends AbstractController
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @return void
      */
@@ -110,6 +112,7 @@ class ProductUrlRewriteTest extends AbstractController
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php

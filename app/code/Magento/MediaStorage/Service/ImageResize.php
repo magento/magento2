@@ -124,8 +124,8 @@ class ImageResize
         ThemeCustomizationConfig $themeCustomizationConfig,
         ThemeCollection $themeCollection,
         Filesystem $filesystem,
-        FileStorageDatabase $fileStorageDatabase = null,
-        StoreManagerInterface $storeManager = null
+        ?FileStorageDatabase $fileStorageDatabase = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->appState = $appState;
         $this->imageConfig = $imageConfig;
@@ -171,17 +171,18 @@ class ImageResize
      * Create resized images of different sizes from themes.
      *
      * @param array|null $themes
+     * @param bool $skipHiddenImages
      * @return Generator
      * @throws NotFoundException
      */
-    public function resizeFromThemes(array $themes = null): Generator
+    public function resizeFromThemes(?array $themes = null, bool $skipHiddenImages = false): Generator
     {
-        $count = $this->productImage->getCountUsedProductImages();
+        $count = $this->getCountProductImages($skipHiddenImages);
         if (!$count) {
             throw new NotFoundException(__('Cannot resize images - product images not found'));
         }
 
-        $productImages = $this->productImage->getUsedProductImages();
+        $productImages = $this->getProductImages($skipHiddenImages);
         $viewImages = $this->getViewImages($themes ?? $this->getThemesInUse());
 
         foreach ($productImages as $image) {
@@ -208,6 +209,26 @@ class ImageResize
 
             yield ['filename' => $originalImageName, 'error' => (string) $error] => $count;
         }
+    }
+
+    /**
+     * @param bool $skipHiddenImages
+     * @return int
+     */
+    public function getCountProductImages(bool $skipHiddenImages = false): int
+    {
+        return $skipHiddenImages ?
+            $this->productImage->getCountUsedProductImages() : $this->productImage->getCountAllProductImages();
+    }
+
+    /**
+     * @param bool $skipHiddenImages
+     * @return Generator
+     */
+    public function getProductImages(bool $skipHiddenImages = false): \Generator
+    {
+        return $skipHiddenImages ?
+            $this->productImage->getUsedProductImages() : $this->productImage->getAllProductImages();
     }
 
     /**

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Validator;
 
 use Magento\Catalog\Model\Product\Option;
-use Zend_Validate_Exception;
+use Magento\Framework\Validator\ValidateException;
 
 /**
  * Product option default validator
@@ -15,15 +15,11 @@ use Zend_Validate_Exception;
 class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
-     * Product option types
-     *
      * @var string[]
      */
     protected $productOptionTypes;
 
     /**
-     * Price types
-     *
      * @var string[]
      */
     protected $priceTypes;
@@ -41,7 +37,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     public function __construct(
         \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig,
         \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig,
-        \Magento\Framework\Locale\FormatInterface $localeFormat = null
+        ?\Magento\Framework\Locale\FormatInterface $localeFormat = null
     ) {
         foreach ($productOptionConfig->getAll() as $option) {
             foreach ($option['types'] as $type) {
@@ -66,7 +62,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param  \Magento\Catalog\Model\Product\Option $value
      * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @throws ValidateException If validation of $value is impossible
      */
     public function isValid($value)
     {

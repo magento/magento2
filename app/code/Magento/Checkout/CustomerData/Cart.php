@@ -16,7 +16,7 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 class Cart extends \Magento\Framework\DataObject implements SectionSourceInterface
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Checkout\Model\Session
      */
     protected $checkoutSession;
 

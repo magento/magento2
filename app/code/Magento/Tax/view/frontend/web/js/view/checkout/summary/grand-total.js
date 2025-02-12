@@ -53,20 +53,27 @@ define([
                 price = this.totals()['base_grand_total'];
             }
 
-            return priceUtils.formatPrice(price, quote.getBasePriceFormat());
+            return priceUtils.formatPriceLocale(price, quote.getBasePriceFormat());
         },
 
         /**
          * @return {*}
          */
         getGrandTotalExclTax: function () {
-            var total = this.totals();
+            var total = this.totals(),
+                amount;
 
             if (!total) {
                 return 0;
             }
 
-            return this.getFormattedPrice(total['grand_total']);
+            amount = total['grand_total'] - total['tax_amount'];
+
+            if (amount < 0) {
+                amount = 0;
+            }
+
+            return this.getFormattedPrice(amount);
         },
 
         /**

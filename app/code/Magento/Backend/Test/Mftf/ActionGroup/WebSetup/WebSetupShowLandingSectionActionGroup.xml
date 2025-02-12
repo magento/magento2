@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="WebSetupShowLandingSectionActionGroup">
+        <annotations>
+            <description>Action for showing landing section and closing license section on Web Setup Page</description>
+        </annotations>
+
+        <click selector="{{WebSetupPageLicenseSection.go_back_button}}" stepKey="showLandingSection"/>
+        <waitForElementVisible selector="{{WebSetupPageLandingSection.section}}" stepKey="waitForVisibleWebSetupPageLandingSection" time="5"/>
+    </actionGroup>
+</actionGroups>

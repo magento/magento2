@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Test for Magento\Sales\Model\Order\Email\Sender\CreditmemoSender class.
  */
-class CreditmemoSenderTest extends AbstractSenderTest
+class CreditmemoSenderTest extends AbstractSenderTestCase
 {
     private const CREDITMEMO_ID = 1;
 
@@ -40,6 +40,9 @@ class CreditmemoSenderTest extends AbstractSenderTest
      */
     protected $creditmemoResourceMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->stepMockSetup();
@@ -82,21 +85,27 @@ class CreditmemoSenderTest extends AbstractSenderTest
             $this->paymentHelper,
             $this->creditmemoResourceMock,
             $this->globalConfig,
-            $this->eventManagerMock
+            $this->eventManagerMock,
+            $this->appEmulator
         );
     }
 
     /**
      * @param int $configValue
-     * @param bool|null $forceSyncMode
-     * @param bool|null $customerNoteNotify
+     * @param int|null $forceSyncMode
+     * @param int|null $customerNoteNotify
      * @param bool|null $emailSendingResult
-     * @dataProvider sendDataProvider
+     *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider sendDataProvider
      */
-    public function testSend($configValue, $forceSyncMode, $customerNoteNotify, $emailSendingResult)
-    {
+    public function testSend(
+        int $configValue,
+        ?int $forceSyncMode,
+        ?int $customerNoteNotify,
+        ?bool $emailSendingResult
+    ): void {
         $comment = 'comment_test';
         $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
@@ -170,6 +179,8 @@ class CreditmemoSenderTest extends AbstractSenderTest
                     ]
                 );
 
+            $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+            $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
             $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
@@ -208,12 +219,17 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->creditmemoResourceMock->expects($this->at(0))
+            $this->creditmemoResourceMock
                 ->method('saveAttribute')
-                ->with($this->creditmemoMock, 'email_sent');
-            $this->creditmemoResourceMock->expects($this->at(1))
-                ->method('saveAttribute')
-                ->with($this->creditmemoMock, 'send_email');
+                ->willReturnCallback(
+                    function ($arg1, $arg2) {
+                        if ($arg1 === $this->creditmemoMock && $arg2 === 'email_sent') {
+                            return null;
+                        } elseif ($arg1 === $this->creditmemoMock && $arg2 === 'send_email') {
+                            return null;
+                        }
+                    }
+                );
 
             $this->assertFalse(
                 $this->sender->send($this->creditmemoMock)
@@ -224,7 +240,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendDataProvider()
+    public static function sendDataProvider(): array
     {
         return [
             [0, 0, 1, true],
@@ -245,8 +261,11 @@ class CreditmemoSenderTest extends AbstractSenderTest
      * @return void
      * @dataProvider sendVirtualOrderDataProvider
      */
-    public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
-    {
+    public function testSendVirtualOrder(
+        bool $isVirtualOrder,
+        int $formatCallCount,
+        ?string $expectedShippingAddress
+    ): void {
         $billingAddress = 'address_test';
         $customerName = 'test customer';
         $frontendStatusLabel = 'Complete';
@@ -316,6 +335,8 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 ]
             );
 
+        $this->appEmulator->expects($this->once())->method('startEnvironmentEmulation');
+        $this->appEmulator->expects($this->once())->method('stopEnvironmentEmulation');
         $this->identityContainerMock->expects($this->exactly(2))
             ->method('isEnabled')
             ->willReturn(false);
@@ -330,7 +351,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendVirtualOrderDataProvider()
+    public static function sendVirtualOrderDataProvider(): array
     {
         return [
             [true, 1, null],

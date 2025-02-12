@@ -19,6 +19,6 @@
 
         <seeInCurrentUrl url="/{{product.custom_attributes[url_key]}}.html" stepKey="checkUrl"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile(image.filename)}}" stepKey="seeImage"/>
     </actionGroup>
 </actionGroups>

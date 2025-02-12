@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CustomerReorderConfigurableProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product"/>
+            <title value="Reordering Configurable Product"/>
+            <description value="Customer Reorder Configurable Product"/>
+            <testCaseId value="MC-26757"/>
+            <severity value="MAJOR"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!-- create customer -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+
+            <!-- Login as an Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create Configurable Product having color attribute -->
+            <actionGroup ref="CreateConfigurableProductActionGroupWithDefaultColorAttributeActionGroup" stepKey="createConfigurableProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+
+            <!-- Assigning quantities to each SKU's -->
+            <actionGroup ref="AdminSetProductQuantityToEachSkusConfigurableProductActionGroup" stepKey="saveConfigurableProduct"/>
+
+            <!-- Login as customer to Customer Portal -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+
+            <!-- Add configurable product to the cart  -->
+            <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+                <argument name="urlKey" value="{{_defaultProduct.urlKey}}" />
+                <argument name="productAttribute" value="Color"/>
+                <argument name="productOption" value="{{colorProductAttribute2.name}}"/>
+                <argument name="qty" value="1"/>
+            </actionGroup>
+
+            <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+            <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+
+            <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+                <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+                <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+            </actionGroup>
+
+            <!-- order number is captured for future validation -->
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
+
+
+            <!-- Go to orders page in Admin Panel and validate the order details -->
+            <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+                <argument name="orderId" value="{$getOrderNumber}"/>
+            </actionGroup>
+
+            <!--Create Invoice -->
+            <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
+
+            <!--Create credit memo-->
+            <actionGroup ref="AdminStartCreateCreditMemoFromOrderPageActionGroup" stepKey="startToCreateCreditMemo"/>
+            <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+            <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Closed" stepKey="seeOrderClosed"/>
+            <!--Credit memo action is not available after full refund-->
+            <dontSeeElement selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="creditMemoActionNotAvailable"/>
+        </before>
+
+        <after>
+            <!-- Delete Created Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteSubCategory"/>
+
+            <!-- Delete configurable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
+
+            <!-- Delete Created Customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Logout from Admin Area -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+
+        <!-- Open My Account Page from Customer dropdown -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+
+        <!-- Goto Orders tab from Sidebar menu in Storefront page -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+            <argument name="menu" value="My Orders"/>
+        </actionGroup>
+
+        <!-- Clicking View Order from My Orders Grid -->
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+
+        <!-- Reordering the configurable product -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="reorderConfigurableProduct">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+
+    </test>
+</tests>

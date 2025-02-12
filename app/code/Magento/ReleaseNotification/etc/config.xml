@@ -9,7 +9,7 @@
     <default>
         <system>
             <release_notification>
-                <content_url>magento.com/release_notifications</content_url>
+                <content_url/>
                 <use_https>1</use_https>
             </release_notification>
         </system>

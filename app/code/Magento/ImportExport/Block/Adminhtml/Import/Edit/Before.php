@@ -6,8 +6,6 @@
 
 /**
  * Block before edit form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 

@@ -27,7 +27,7 @@ class Cron extends \Magento\Framework\Event\Observer
      */
     public function isValidFor(\Magento\Framework\Event $event)
     {
-        $e = preg_split('#\s+#', $this->getCronExpr(), null, PREG_SPLIT_NO_EMPTY);
+        $e = $this->getCronExpr() !== null ? preg_split('#\s+#', $this->getCronExpr(), -1, PREG_SPLIT_NO_EMPTY) : [];
         if (count($e) !== 5) {
             return false;
         }
@@ -82,7 +82,7 @@ class Cron extends \Magento\Framework\Event\Observer
         }
 
         // handle multiple options
-        if (strpos($expr, ',') !== false) {
+        if ($expr && strpos($expr, ',') !== false) {
             foreach (explode(',', $expr) as $e) {
                 if ($this->matchCronExpression($e, $num)) {
                     return true;
@@ -92,7 +92,7 @@ class Cron extends \Magento\Framework\Event\Observer
         }
 
         // handle modulus
-        if (strpos($expr, '/') !== false) {
+        if ($expr && strpos($expr, '/') !== false) {
             $e = explode('/', $expr);
             if (count($e) !== 2) {
                 return false;
@@ -107,7 +107,7 @@ class Cron extends \Magento\Framework\Event\Observer
         }
 
         // handle range
-        if (strpos($expr, '-') !== false) {
+        if ($expr && strpos($expr, '-') !== false) {
             $e = explode('-', $expr);
             if (count($e) !== 2) {
                 return false;

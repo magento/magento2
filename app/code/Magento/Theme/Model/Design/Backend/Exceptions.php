@@ -39,10 +39,10 @@ class Exceptions extends ArraySerialized
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_design = $design;
         parent::__construct(
@@ -82,7 +82,7 @@ class Exceptions extends ArraySerialized
             }
 
             // Empty string (match all) is not supported, because it means setting a default theme. Remove such entries.
-            if (!strlen($row['search'])) {
+            if (!isset($row['search']) || !strlen($row['search'])) {
                 unset($exceptions[$rowKey]);
                 continue;
             }
@@ -131,7 +131,7 @@ class Exceptions extends ArraySerialized
      */
     protected function _isRegexp($search)
     {
-        if (strlen($search) < 3) {
+        if ($search === null || strlen($search) < 3) {
             return false;
         }
 

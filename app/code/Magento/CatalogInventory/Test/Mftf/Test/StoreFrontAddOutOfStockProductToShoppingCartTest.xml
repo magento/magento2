@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+* Copyright 2024 Adobe
+* All Rights Reserved.
+*/
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontAddOutOfStockProductToShoppingCartTest">
+        <annotations>
+            <features value="[Disabled Inventory Check] Add Out of Stock Product to the Shopping Cart"/>
+            <stories value="[Disabled Inventory Check] Add Out of Stock Product to the Shopping Cart"/>
+            <title value="Checking Add Out of Stock Products to the Shopping Cart"/>
+            <description value="Placing the order for out of stock products and zero quantity"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5262"/>
+            <group value="cloud"/>
+            <!-- Will be fixed in scope of ACQE-7385 -->
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <!-- Set Enable Inventory Check On Cart Load = No -->
+            <magentoCLI command="config:set {{DisableInventoryCheckOnCartLoad.path}} {{DisableInventoryCheckOnCartLoad.value}}" stepKey="disableCartLoad"/>
+            <!-- Create default category with subcategory -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="SubCategoryWithParent" stepKey="createSubcategory">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create SimpleProductwithPrice100 -->
+            <createData entity="ApiSimpleProduct" stepKey="simpleProductOne">
+                <requiredEntity createDataKey="createSubcategory"/>
+            </createData>
+            <!-- Go To Subcategory Page-->
+            <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="goToCategoryC">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+            <argument name="subCategoryName" value="$$createSubcategory.name$$"/>
+        </actionGroup>
+        </before>
+        <!-- Delete the Data after execution-->
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set {{EnableInventoryCheckOnCartLoad.path}} {{EnableInventoryCheckOnCartLoad.value}}" stepKey="enableCartLoad"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Open New tab-->
+        <openNewTab stepKey="openNewTab"/>
+        <!-- Open Product From AdminPage-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPageinNewTab">
+            <argument name="productId" value="$simpleProductOne.id$"/>
+        </actionGroup>
+        <!-- Set Stock Status of Product to Out Of Stock-->
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatus">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <!-- Save Product-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clicksaveProduct"/>
+        <!-- Switch to Previous tab and Check Error message Product that you are trying to add is not available -->
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <!-- Mouse Hover Product On Category Page-->
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
+        <!-- Select Add to cart-->
+        <waitForElementClickable selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="waitForAddToCartButton"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="toCategory"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="wait"/>
+        <!-- Assert the Error Message-->
+        <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Product that you are trying to add is not available." stepKey="seeErrorMessage"/>
+    </test>
+
+</tests>

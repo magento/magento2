@@ -16,8 +16,11 @@
             <argument name="productVar"/>
         </arguments>
 
+        <waitForPageLoad stepKey="waitForProductPageOpenedAndLoaded" />
+        <waitForElementClickable selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="waitForAddToCompareButtonClickable" />
         <click selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="clickAddToCompare"/>
-        <waitForElement selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForAddProductToCompareSuccessMessage"/>
+        <waitForElement selector="{{StorefrontMessagesSection.success}}" stepKey="waitForAddProductToCompareSuccessMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added product {{productVar.name}} to the comparison list." stepKey="assertAddProductToCompareSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForAdditionToFinish" />
     </actionGroup>
 </actionGroups>

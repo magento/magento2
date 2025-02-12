@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
+use Magento\Quote\Api\Data\TotalsItemInterface;
+
 /**
  * Subselect conditions for product.
  */
@@ -68,7 +70,13 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      */
     public function loadAttributeOptions()
     {
-        $this->setAttributeOption(['qty' => __('total quantity'), 'base_row_total' => __('total amount')]);
+        $this->setAttributeOption(
+            [
+                'qty' => __('total quantity'),
+                'base_row_total' => __('total amount (excl. tax)'),
+                'base_row_total_incl_tax' => __('total amount (incl. tax)')
+            ]
+        );
         return $this;
     }
 
@@ -163,9 +171,12 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
                     }
                 }
             }
+            if ($attr !== TotalsItemInterface::KEY_BASE_ROW_TOTAL) {
+                $childrenAttrTotal *= $item->getQty();
+            }
             if ($hasValidChild || parent::validate($item)) {
-                $total += ($hasValidChild && $useChildrenTotal)
-                    ? $childrenAttrTotal * $item->getQty()
+                $total += ($hasValidChild && $useChildrenTotal && $childrenAttrTotal > 0)
+                    ? $childrenAttrTotal
                     : $item->getData($attr);
             }
         }

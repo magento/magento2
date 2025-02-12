@@ -12,8 +12,31 @@
         <element name="giftOptions" type="button" selector=".action.action-gift"/>
         <element name="fieldTo" type="input" selector=".gift-options-content .field-to input"/>
         <element name="fieldFrom" type="input" selector=".gift-options-content .field-from input"/>
-        <element name="message" type="textarea" selector="#gift-message-whole-message"/>
+        <element name="message" type="textarea" selector=".gift-options-content .field.text .input-text"/>
         <element name="update" type="button" selector=".action-update"/>
         <element name="cancel" type="button" selector=".action-cancel"/>
+        <element name="viewGiftOptions" type="button" selector="//tbody[@class='cart item']//a[text()='{{product_name}}']/../../../../..//tr[@class='item-actions']//button[@class='action action-gift']" parameterized="true"/>
+        <element name="giftWrapIcon" type="button" selector="//img[@title='{{var}}']" parameterized="true"/>
+        <element name="giftWrapIconPreview" type="button" selector="//div[@class='gift-wrapping-preview']//img[@title='{{var}}']" parameterized="true"/>
+        <element name="giftsWrappingItemAmt" type="button" selector="//td[@data-th='Gift Wrapping for Items' and text()='${{amt}}']" parameterized="true"/>
+        <element name="giftsWrappingOrderAmt" type="button" selector="//td[@data-th='Gift Wrapping for Order' and text()='${{amt}}']" parameterized="true"/>
+        <element name="giftsWrappingPrintedCard" type="button" selector="//td[@data-th='Printed Card' and text()='${{amt}}']" parameterized="true"/>
+        <element name="editGiftSummary" type="button" selector="//div[@class='gift-summary']//button[@title='Edit']"/>
+        <element name="removeGift_Wrapping" type="button" selector="//div[@class='gift-wrapping-title']//button[@class='action action-remove']"/>
+        <element name="giftOptionsMessageSummary" type="text" selector="//div[@class='gift-message-summary' and text()='{{var}}']" parameterized="true"/>
+        <element name="viewGiftOptionsOrderLevel" type="button" selector="//div[@id='gift-options-cart']//span[text()='Gift options']"/>
+        <element name="itemLevelGiftsWrapping" type="button" selector="//tbody[@class='cart item']//a[text()='{{product_name}}']/../../../../..//div[@class='gift-summary']//span[@class='gift-wrapping-name' and text()='{{gift_wrapping_name}}']" parameterized="true"/>
+        <element name="itemLevelGiftsWrappingPrice" type="button" selector="//tbody[@class='cart item']//a[text()='{{product_name}}']/../../../../..//div[@class='gift-summary']//span[@class='price' and text()='${{gift_wrapping_price}}']" parameterized="true"/>
+        <element name="itemLevelGiftsWrappingMsg" type="button" selector="//tbody[@class='cart item']//div[@class='gift-message-summary']"/>
+        <element name="giftOptionsOrderLevel" type="button" selector="//div[@class='cart-gift-item']//span[text()='Gift options']"/>
+        <element name="giftReceipt" type="checkbox" selector="//div[@class='field choice gift-receipt']//input[@type='checkbox']"/>
+        <element name="printedCard" type="checkbox" selector="//div[@class='field choice gift-printed-card']//input[@type='checkbox']"/>
+        <element name="orderLevelGiftsWrapping" type="button" selector="//div[@id='gift-options-cart']//span[@class='gift-wrapping-name' and text()='{{giftsWrappingName}}']" parameterized="true"/>
+        <element name="orderLevelGiftsWrappingPrice" type="button" selector="//div[@id='gift-options-cart']//span[@class='price' and text()='${{gift_wrapping_price}}']" parameterized="true"/>
+        <element name="orderLevelGiftsWrappingMsg" type="button" selector="//div[@class='cart-gift-item']//div[@class='gift-message-summary']"/>
+        <element name="orderLevelPrintedCard" type="button" selector="//div[@id='gift-options-cart']//span[text()='Printed card']"/>
+        <element name="orderLevelPrintedCardPrice" type="button" selector="//div[@id='gift-options-cart']//span[@data-bind='text: getPrintedCardPrice()' and text()='${{printedCard_price}}']" parameterized="true"/>
+        <element name="orderLevelGiftsReceipt" type="button" selector="//div[@id='gift-options-cart']//span[text()='Gift receipt']"/>
     </section>
 </sections>
+

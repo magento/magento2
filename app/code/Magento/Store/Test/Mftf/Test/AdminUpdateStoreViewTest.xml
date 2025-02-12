@@ -16,6 +16,7 @@
                 <severity value="CRITICAL"/>
                 <group value="store"/>
                 <group value="mtf_migrated"/>
+                <group value="cloud"/>
             </annotations>
             <before>
                 <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -24,6 +25,9 @@
                     <argument name="StoreGroup" value="_defaultStoreGroup"/>
                     <argument name="customStore" value="storeViewData"/>
                 </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
             </before>
             <after>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
@@ -31,6 +35,9 @@
                 </actionGroup>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteUpdatedStoreView">
                     <argument name="customStore" value="SecondStoreUnique"/>
+                </actionGroup>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
                 </actionGroup>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
@@ -64,17 +71,24 @@
             </actionGroup>
 
             <!--Go to store configuration page and verify AssertStoreBackend-->
-            <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
-            <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad" />
-            <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
-            <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
-            <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{SecondStoreUnique.name}}" stepKey="seeAssertUpdateStoreViewInDefaultConfigDropdown"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigStoreConfigurationPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSystemStoreConfigurationPageLoad"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickDefaultConfigButton"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
+            <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="seeAssertUpdateStoreViewInDefaultConfigDropdown">
+                <argument name="storeView1" value="{{storeViewData.name}}"/>
+                <argument name="storeView2" value="{{SecondStoreUnique.name}}"/>
+            </actionGroup>
 
             <!--Go to storefront and verify AssertStoreFrontend-->
-            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
-            <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="selectStoreSwitcher"/>
-            <waitForPageLoad stepKey="waitForFirstStoreView"/>
-            <see selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewOnStorefront"/>
-            <see selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{SecondStoreUnique.name}}" stepKey="seeAssertUpdatedStoreViewOnStorefront"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToStorefrontPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForFirstStoreView"/>
+            <actionGroup ref="AssertStorefrontStoreVisibleInHeaderActionGroup" stepKey="seeAssertStoreViewOnStorefront">
+                <argument name="store" value="{{storeViewData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertStorefrontStoreVisibleInHeaderActionGroup" stepKey="seeAssertUpdatedStoreViewOnStorefront">
+                <argument name="store" value="{{SecondStoreUnique.name}}"/>
+            </actionGroup>
         </test>
 </tests>

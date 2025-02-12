@@ -22,6 +22,13 @@ define(
              */
             execute: function () {
                 fullScreenLoader.startLoader();
+                this.redirectToSuccessPage();
+            },
+
+            /**
+             * Redirect to success page.
+             */
+            redirectToSuccessPage: function () {
                 window.location.replace(url.build(this.redirectUrl));
             }
         };

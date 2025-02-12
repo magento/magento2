@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCaptchaOnApplyingCouponCodesFormsTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Applying coupon codes with enabled captcha"/>
+            <title value="Captcha on applying coupon code forms"/>
+            <description value="Customer should be able apply coupon codes with enabled captcha"/>
+            <severity value="MINOR"/>
+            <group value="captcha"/>
+            <group value="storefront_captcha_enabled"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SalesRuleSpecificCouponWithFixedDiscount" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+            <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols"/>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnApplyingCouponCodeFormsConfigData.path}} {{StorefrontCaptchaOnApplyingCouponCodeFormsConfigData.value}}" stepKey="enableCaptchaOnApplyingCouponsForms"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAlwaysConfigData.path}} {{StorefrontCustomerCaptchaModeAlwaysConfigData.value}}" stepKey="setCaptchaAlwaysVisible"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="disableBankTransferPayment"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="setCaptchaDefaultVisibility"/>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="navigateToShoppingCart"/>
+        <actionGroup ref="AssertStorefrontCaptchaVisibleOnShoppingCartApplyCouponCodeFormActionGroup" stepKey="assertCaptchaIsPresent"/>
+        <actionGroup ref="StorefrontShoppingCartFillCouponCodeFieldActionGroup" stepKey="fillDiscountField">
+            <argument name="discountCode" value="$$createCouponForCartPriceRule.code$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontShoppingCartFillCaptchaFieldOnApplyDiscountFormActionGroup" stepKey="fillCaptchaWithIncorrectValues">
+            <argument name="captcha" value="{{WrongCaptcha.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontShoppingCartClickApplyDiscountButtonActionGroup" stepKey="clickApplyButton"/>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertErrorMessage">
+            <argument name="message" value="Incorrect CAPTCHA"/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontShoppingCartFillCouponCodeFieldActionGroup" stepKey="fillDiscountCodeField">
+            <argument name="discountCode" value="$$createCouponForCartPriceRule.code$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontShoppingCartFillCaptchaFieldOnApplyDiscountFormActionGroup" stepKey="fillCaptchaWithCorrectValues">
+            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontShoppingCartClickApplyDiscountButtonActionGroup" stepKey="clickApplyDiscountButton"/>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value='You used coupon code "$$createCouponForCartPriceRule.code$$".'/>
+        </actionGroup>
+    </test>
+</tests>

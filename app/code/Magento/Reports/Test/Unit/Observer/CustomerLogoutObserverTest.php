@@ -55,7 +55,7 @@ class CustomerLogoutObserverTest extends TestCase
 
         $this->productIndexFactoryMock = $this->getMockBuilder(
             ViewedFactory::class
-        )->setMethods(['create'])
+        )->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productIndexMock = $this->getMockBuilder(Viewed::class)
@@ -74,7 +74,7 @@ class CustomerLogoutObserverTest extends TestCase
             ComparedFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productCompFactoryMock->expects($this->any())
             ->method('create')
@@ -116,7 +116,7 @@ class CustomerLogoutObserverTest extends TestCase
             ->getMock();
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])->getMock();
+            ->addMethods(['getProduct'])->getMock();
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();

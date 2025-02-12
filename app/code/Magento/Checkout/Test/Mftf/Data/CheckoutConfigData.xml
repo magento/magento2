@@ -32,4 +32,16 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="EnableRedirectToShoppingCart">
+        <data key="path">checkout/cart/redirect_to_cart</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableRedirectToShoppingCart">
+        <data key="path">checkout/cart/redirect_to_cart</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

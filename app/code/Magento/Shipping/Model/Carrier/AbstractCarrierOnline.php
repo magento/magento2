@@ -15,37 +15,32 @@ use Magento\Framework\Xml\Security;
 /**
  * Abstract online shipping carrier model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {
-    const USA_COUNTRY_ID = 'US';
+    public const USA_COUNTRY_ID = 'US';
 
-    const PUERTORICO_COUNTRY_ID = 'PR';
+    public const PUERTORICO_COUNTRY_ID = 'PR';
 
-    const GUAM_COUNTRY_ID = 'GU';
+    public const GUAM_COUNTRY_ID = 'GU';
 
-    const GUAM_REGION_CODE = 'GU';
+    public const GUAM_REGION_CODE = 'GU';
 
     /**
-     * Array of quotes
-     *
      * @var array
      */
     protected static $_quotesCache = [];
 
     /**
-     * Flag for check carriers for activity
-     *
      * @var string
      */
     protected $_activeFlag = 'active';
 
     /**
-     * Directory data
-     *
      * @var \Magento\Directory\Helper\Data
      */
     protected $_directoryData = null;
@@ -108,8 +103,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_rawRequest = null;
 
     /**
-     * The security scanner XML document
-     *
      * @var Security
      */
     protected $xmlSecurity;
@@ -172,7 +165,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $code
      * @return $this
-     * @api
      */
     public function setActiveFlag($code = 'active')
     {
@@ -196,7 +188,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $tracking
      * @return string|false
-     * @api
      */
     public function getTrackingInfo($tracking)
     {
@@ -269,7 +260,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param RateRequest $request
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @api
      */
     public function getAllItems(RateRequest $request)
     {
@@ -438,6 +428,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     protected function _prepareServiceName($name)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $name = html_entity_decode((string)$name);
         $name = strip_tags(preg_replace('#&\w+;#', '', $name));
 
@@ -454,10 +445,10 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     {
         $phonePattern = '/[\s\_\-\(\)]+/';
         $phoneNumber = $request->getShipperContactPhoneNumber();
-        $phoneNumber = preg_replace($phonePattern, '', $phoneNumber);
+        $phoneNumber = is_string($phoneNumber) ? preg_replace($phonePattern, '', $phoneNumber) : '';
         $request->setShipperContactPhoneNumber($phoneNumber);
         $phoneNumber = $request->getRecipientContactPhoneNumber();
-        $phoneNumber = preg_replace($phonePattern, '', $phoneNumber);
+        $phoneNumber = is_string($phoneNumber) ? preg_replace($phonePattern, '', $phoneNumber) : '';
         $request->setRecipientContactPhoneNumber($phoneNumber);
     }
 
@@ -566,7 +557,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @todo implement rollback logic
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @api
      */
     public function rollBack($data)
     {
@@ -617,7 +607,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param null|string $carrierMethodCode
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @api
      */
     public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
@@ -629,7 +618,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param \Magento\Framework\DataObject|null $request
      * @return $this
-     * @api
      */
     public function setRawRequest($request)
     {
@@ -644,7 +632,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $cost
      * @param string $method
      * @return float|string
-     * @api
      */
     public function getMethodPrice($cost, $method = '')
     {
@@ -654,7 +641,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             'free_shipping_enable'
         ) && $this->getConfigData(
             'free_shipping_subtotal'
-        ) <= $this->_rawRequest->getBaseSubtotalInclTax() ? '0.00' : $this->getFinalPriceWithHandlingFee(
+        ) <= $this->_rawRequest->getValueWithDiscount() ? '0.00' : $this->getFinalPriceWithHandlingFee(
             $cost
         );
     }
@@ -666,8 +653,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $customSimplexml
      * @return \SimpleXMLElement|bool
      * @throws LocalizedException
-     *
-     * @api
      */
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {

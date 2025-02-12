@@ -9,6 +9,8 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminExportMainSection">
         <element name="entityType" type="select" selector="#entity"/>
+        <element name="fileFormat" type="select" selector="#file_format"/>
+        <element name="fieldsEnclosure" type="input" selector="#fields_enclosure"/>
         <element name="entityAttributes" type="select" selector="#export_filter_form"/>
     </section>
 </sections>

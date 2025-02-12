@@ -60,7 +60,7 @@ define([
                          * @param {String} msg
                          */
                         insertMethod: function (msg) {
-                            var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
+                            var $wrapper = $('<div></div>').addClass(messagesClass).html(msg);
 
                             $('.page-main-actions', selectorPrefix).after($wrapper);
                             $('html, body').animate({

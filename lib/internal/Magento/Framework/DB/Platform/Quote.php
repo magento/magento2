@@ -7,12 +7,11 @@ namespace Magento\Framework\DB\Platform;
 
 use Magento\Framework\DB\Select;
 
-/**
- * Class Quote
- */
 class Quote
 {
     /**
+     * Return quoted identifier
+     *
      * @param string $identifier
      * @return string
      */
@@ -22,6 +21,8 @@ class Quote
     }
 
     /**
+     * Return quoted column with alias
+     *
      * @param string $identifier
      * @param string|null $alias
      * @return string
@@ -32,6 +33,8 @@ class Quote
     }
 
     /**
+     * Return quoted table with alias
+     *
      * @param string $identifier
      * @param string|null $alias
      * @return string
@@ -42,6 +45,8 @@ class Quote
     }
 
     /**
+     * Return quoted identifier with alias
+     *
      * @param string $identifier
      * @param string|null $alias
      * @return string
@@ -81,16 +86,20 @@ class Quote
     }
 
     /**
+     * Replace quote symbol
+     *
      * @param string $value
      * @return string
      */
     protected function replaceQuoteSymbol($value)
     {
         $symbol = $this->getQuoteIdentifierSymbol();
-        return ($symbol . str_replace("$symbol", "$symbol$symbol", $value) . $symbol);
+        return ($symbol . str_replace("$symbol", "$symbol$symbol", (string)$value) . $symbol);
     }
 
     /**
+     * Get quote identifier symbol
+     *
      * @return string
      */
     protected function getQuoteIdentifierSymbol()

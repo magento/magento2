@@ -31,7 +31,7 @@ class Shell implements ShellInterface
      */
     public function __construct(
         CommandRendererInterface $commandRenderer,
-        \Psr\Log\LoggerInterface $logger = null
+        ?\Psr\Log\LoggerInterface $logger = null
     ) {
         $this->logger = $logger;
         $this->commandRenderer = $commandRenderer;
@@ -55,6 +55,8 @@ class Shell implements ShellInterface
             throw new Exception\LocalizedException(new \Magento\Framework\Phrase('The exec function is disabled.'));
         }
 
+        // exec() have to be called here
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec($command, $output, $exitCode);
         $output = implode(PHP_EOL, $output);
         $this->log($output);

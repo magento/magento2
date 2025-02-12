@@ -18,4 +18,7 @@
         <data key="videoTitle">The New Vimeo Player (You Know, For Videos)</data>
         <data key="videoShortTitle">The New Vimeo Player</data>
     </entity>
+    <entity name="VimeoPrivateVideo" type="product_video">
+        <data key="videoUrl">https://vimeo.com/313826626</data>
+    </entity>
 </entities>

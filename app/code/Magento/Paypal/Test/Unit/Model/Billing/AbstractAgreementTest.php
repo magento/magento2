@@ -44,7 +44,7 @@ class AbstractAgreementTest extends TestCase
     {
         $paymentMethodInstance = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStore'])
+            ->onlyMethods(['setStore'])
             ->getMockForAbstractClass();
 
         $paymentMethodInstance->expects($this->once())

@@ -54,13 +54,13 @@
                                  data-option-tooltip-value="">
                             </div>
                             <?php
-                            $element = 'swatchImageOption' .$escaper->escapeJs($option);
-                            $script = 'var ' .$element
-                                .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
-                                .'"]\');' .PHP_EOL;
-                            $script .= $element .'.style.background = "url(\''
-                                .$escapedUrl .'\') no-repeat center";' .PHP_EOL;
-                            $script .= $element .'.style.backgroundSize = "initial";';
+                            $element = 'swatchImageOption' . $escaper->escapeJs($option);
+                            $script = 'var ' . $element
+                                . ' = document.querySelector(\'div[data-option-id="' . $escaper->escapeJs($option)
+                                . '"]\');' . PHP_EOL;
+                            $script .= $element . '.style.background = "url(\''
+                                . $escapedUrl . '\') no-repeat center";' . PHP_EOL;
+                            $script .= $element . '.style.backgroundSize = "initial";';
                             ?>
                             <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
                             <?php break;
@@ -77,16 +77,16 @@
                                  ) ?>">
                             </div>
                             <?php
-                            $element = 'swatchImageOption' .$escaper->escapeJs($option);
-                            $backgroundValue = $escaper->escapeJs(
+                            $element = 'swatchImageOption' . $escaper->escapeJs($option);
+                            $backgroundValue = isset($swatchData['swatches'][$option]['value']) ? $escaper->escapeJs(
                                 str_replace('\'', '\\\'', $swatchData['swatches'][$option]['value'])
-                            );
-                            $script = 'var ' .$element
-                                .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
-                                .'"]\');' .PHP_EOL;
-                            $script .= $element .'.style.background = "' .$backgroundValue
-                                .' no-repeat center";' .PHP_EOL;
-                            $script .= $element .'.style.backgroundSize = "initial";';
+                            ) : '';
+                            $script = 'var ' . $element
+                                . ' = document.querySelector(\'div[data-option-id="' . $escaper->escapeJs($option)
+                                . '"]\');' . PHP_EOL;
+                            $script .= $element . '.style.background = "' . $backgroundValue
+                                . ' no-repeat center";' . PHP_EOL;
+                            $script .= $element . '.style.backgroundSize = "initial";';
                             ?>
                             <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
                             <?php break;

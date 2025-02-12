@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -42,18 +43,20 @@ class AttributeFilterTest extends TestCase
      * @param array $useDefaults
      * @param array $expectedProductData
      * @param array $initialProductData
+     * @param mixed $attributeList
      * @dataProvider setupInputDataProvider
      */
     public function testPrepareProductAttributes(
-        $requestProductData,
-        $useDefaults,
-        $expectedProductData,
-        $initialProductData
-    ) {
+        array $requestProductData,
+        array $useDefaults,
+        array $expectedProductData,
+        array $initialProductData,
+        mixed $attributeList
+    ): void {
         /** @var MockObject | Product $productMockMap */
         $productMockMap = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData', 'getAttributes'])
+            ->onlyMethods(['getData', 'getAttributes'])
             ->getMock();
 
         if (!empty($initialProductData)) {
@@ -67,6 +70,11 @@ class AttributeFilterTest extends TestCase
                 ->willReturn(
                     $this->getProductAttributesMock($useDefaults)
                 );
+        } elseif ($attributeList) {
+            $productMockMap
+                ->expects($this->once())
+                ->method('getAttributes')
+                ->willReturn($attributeList);
         }
 
         $actualProductData = $this->model->prepareProductAttributes($productMockMap, $requestProductData, $useDefaults);
@@ -77,11 +85,11 @@ class AttributeFilterTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setupInputDataProvider()
+    public static function setupInputDataProvider(): array
     {
         return [
-            'create_new_product' => [
-                'productData' => [
+            'test case for create new product without custom attribute' => [
+                'requestProductData' => [
                     'name' => 'testName',
                     'sku' => 'testSku',
                     'price' => '100',
@@ -94,9 +102,36 @@ class AttributeFilterTest extends TestCase
                     'price' => '100',
                 ],
                 'initialProductData' => [],
+                'attributeList' => null
             ],
-            'update_product_without_use_defaults' => [
-                'productData' => [
+            'test case for create new product with custom attribute' => [
+                'requestProductData' => [
+                    'name' => 'testName',
+                    'sku' => 'testSku',
+                    'price' => '100',
+                    'description' => 'testDescription',
+                    'custom_attr' => ''
+                ],
+                'useDefaults' => [],
+                'expectedProductData' => [
+                    'name' => 'testName',
+                    'sku' => 'testSku',
+                    'price' => '100',
+                    'description' => 'testDescription',
+                    'custom_attr' => ''
+                ],
+                'initialProductData' => [],
+                'attributeList' => [
+                    'custom_attr' => new DataObject(
+                        ['frontend_type' => 'frontend', 'backend_type' => 'backend',
+                            'is_user_defined' => '1', 'is_required' => '0',
+                            'additional_data' => 'swatch_input_type: visual'
+                        ]
+                    )
+                ]
+            ],
+            'test case for update product without use_defaults' => [
+                'requestProductData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
@@ -116,9 +151,41 @@ class AttributeFilterTest extends TestCase
                     ['price', '101'],
                     ['special_price', null],
                 ],
+                'attributeList' => null
             ],
-            'update_product_without_use_defaults_2' => [
-                'productData' => [
+            'test case for update product with custom attribute' => [
+                'requestProductData' => [
+                    'name' => 'testName2',
+                    'sku' => 'testSku2',
+                    'price' => '101',
+                    'description' => 'testDescription',
+                    'custom_attr' => '',
+                ],
+                'useDefaults' => [],
+                'expectedProductData' => [
+                    'name' => 'testName2',
+                    'sku' => 'testSku2',
+                    'price' => '101',
+                    'description' => 'testDescription',
+                    'custom_attr' => '',
+                ],
+                'initialProductData' => [
+                    ['name', 'testName2'],
+                    ['sku', 'testSku2'],
+                    ['price', '101'],
+                    ['custom_attr', ''],
+                ],
+                'attributeList' => [
+                    'custom_attr' => new DataObject(
+                        ['frontend_type' => 'frontend', 'backend_type' => 'backend',
+                            'is_user_defined' => '1', 'is_required' => '0',
+                            'additional_data' => 'swatch_input_type: visual'
+                        ]
+                    )
+                ]
+            ],
+            'test case for update product without use_defaults_2' => [
+                'requestProductData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
@@ -139,9 +206,10 @@ class AttributeFilterTest extends TestCase
                     ['price', '101'],
                     ['special_price', null],
                 ],
+                'attributeList' => null
             ],
-            'update_product_with_use_defaults' => [
-                'productData' => [
+            'test case for update product with use_defaults' => [
+                'requestProductData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
@@ -165,8 +233,9 @@ class AttributeFilterTest extends TestCase
                     ['special_price', null],
                     ['description', 'descr text'],
                 ],
+                'attributeList' => null
             ],
-            'update_product_with_use_defaults_2' => [
+            'test case for update product with use_defaults_2' => [
                 'requestProductData' => [
                     'name' => 'testName3',
                     'sku' => 'testSku3',
@@ -190,8 +259,9 @@ class AttributeFilterTest extends TestCase
                     ['price', null, '101'],
                     ['description', null, 'descr text'],
                 ],
+                'attributeList' => null
             ],
-            'update_product_with_use_defaults_3' => [
+            'test case for update product with use_defaults_3' => [
                 'requestProductData' => [
                     'name' => 'testName3',
                     'sku' => 'testSku3',
@@ -215,8 +285,9 @@ class AttributeFilterTest extends TestCase
                     ['price', null, '101'],
                     ['description', null, 'descr text'],
                 ],
+                'attributeList' => null
             ],
-            'update_product_with_empty_string_attribute' => [
+            'test case for update product with empty string attribute' => [
                 'requestProductData' => [
                     'name' => 'testName3',
                     'sku' => 'testSku3',
@@ -238,6 +309,31 @@ class AttributeFilterTest extends TestCase
                     ['price', null, '101'],
                     ['custom_attribute', null, '0'],
                 ],
+                'attributeList' => null
+            ],
+            'update_product_with_multi_select_attribute' => [
+                'requestProductData' => [
+                    'name' => 'testName3',
+                    'sku' => 'testSku3',
+                    'price' => '103',
+                    'special_price' => '100',
+                    'multi_select_attribute' => 'test',
+                ],
+                'useDefaults' => ['multi_select_attribute' => '1'],
+                'expectedProductData' => [
+                    'name' => 'testName3',
+                    'sku' => 'testSku3',
+                    'price' => '103',
+                    'special_price' => '100',
+                    'multi_select_attribute' => false,
+                ],
+                'initialProductData' => [
+                    ['name', null, 'testName2'],
+                    ['sku', null, 'testSku2'],
+                    ['price', null, '101'],
+                    ['multi_select_attribute', null, 'test'],
+                ],
+                'attributeList' => null
             ],
         ];
     }

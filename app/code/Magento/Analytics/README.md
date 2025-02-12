@@ -1,6 +1,6 @@
 # Magento_Analytics module
 
-The Magento_Analytics module integrates your Magento instance with the [Magento Business Intelligence (MBI)](https://magento.com/products/business-intelligence) to use [Advanced Reporting](https://devdocs.magento.com/guides/v2.4/advanced-reporting/modules.html) functionality.
+The Magento_Analytics module integrates your Magento instance with the [Magento Business Intelligence (MBI)](https://business.adobe.com/products/magento/business-intelligence.html) to use [Advanced Reporting](https://developer.adobe.com/commerce/php/development/advanced-reporting/modules/) functionality.
 
 The module implements the following functionality:
 
@@ -26,8 +26,8 @@ Before disabling or uninstalling this module, note that the following modules de
 
 ## Structure
 
-Beyond the [usual module file structure](https://devdocs.magento.com/guides/v2.4/architecture/archi_perspectives/components/modules/mod_intro.html) the module contains a directory `ReportXml`.
-[Report XML](https://devdocs.magento.com/guides/v2.4/advanced-reporting/report-xml.html) is a markup language used to build reports for Advanced Reporting.
+Beyond the [usual module file structure](https://developer.adobe.com/commerce/php/architecture/modules/overview/) the module contains a directory `ReportXml`.
+[Report XML](https://developer.adobe.com/commerce/php/development/advanced-reporting/report-xml/) is a markup language used to build reports for Advanced Reporting.
 The language declares SQL queries using XML declaration.
 
 ## Subscription Process

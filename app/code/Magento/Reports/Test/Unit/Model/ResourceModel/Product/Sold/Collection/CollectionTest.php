@@ -44,11 +44,7 @@ class CollectionTest extends TestCase
         $this->selectMock = $this->createMock(Select::class);
         $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->collection = $this->getMockBuilder(Collection::class)
-            ->setMethods([
-                'getSelect',
-                'getConnection',
-                'getTable'
-            ])
+            ->onlyMethods(['getSelect', 'getConnection', 'getTable'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -69,15 +65,20 @@ class CollectionTest extends TestCase
         $this->selectMock->expects($this->exactly(2))
             ->method('columns')
             ->willReturnSelf();
-        $this->selectMock->expects($this->at(6))
+        $this->selectMock
             ->method('columns')
-            ->with('COUNT(DISTINCT main_table.entity_id)');
-        $this->selectMock->expects($this->at(7))
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'COUNT(DISTINCT main_table.entity_id)' || $arg1 == 'COUNT(DISTINCT order_items.item_id)') {
+                    return null;
+                }
+            });
+        $this->selectMock
             ->method('reset')
-            ->with(Select::COLUMNS);
-        $this->selectMock->expects($this->at(8))
-            ->method('columns')
-            ->with('COUNT(DISTINCT order_items.item_id)');
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == Select::COLUMNS || is_null($arg1)) {
+                    return null;
+                }
+            });
 
         $this->assertEquals($this->selectMock, $this->collection->getSelectCountSql());
     }
@@ -105,13 +106,11 @@ class CollectionTest extends TestCase
             ->willReturn($this->selectMock);
         $this->collection->expects($this->exactly(2))
             ->method('getTable')
-            ->withConsecutive(
-                ['sales_order_item'],
-                ['sales_order']
-            )->willReturnOnConsecutiveCalls(
-                'sales_order_item',
-                'sales_order'
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['sales_order_item'] => 'sales_order_item',
+                ['sales_order'] => 'sales_order'
+            });
+
         $this->selectMock->expects($this->atLeastOnce())
             ->method('reset')
             ->willReturnSelf();

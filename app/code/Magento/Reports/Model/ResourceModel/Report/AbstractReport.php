@@ -9,6 +9,7 @@ namespace Magento\Reports\Model\ResourceModel\Report;
 /**
  * Abstract report aggregate resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -36,8 +37,6 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
     protected $_localeDate;
 
     /**
-     * Reports flag factory
-     *
      * @var \Magento\Reports\Model\FlagFactory
      */
     protected $_reportsFlagFactory;
@@ -48,6 +47,11 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
     protected $dateTime;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\Timezone\Validator
+     */
+    private $timezoneValidator;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -56,7 +60,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param null $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -448,7 +452,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\ResourceModel\Db\
 
             $to = $to instanceof \DateTimeInterface
                 ? $to
-                : new \DateTime($to);
+                : new \DateTime($to ?? 'now');
             $nextPeriod = $this->getConnection()->formatDate(
                 $to->format('Y-m-d H:i:s')
             );

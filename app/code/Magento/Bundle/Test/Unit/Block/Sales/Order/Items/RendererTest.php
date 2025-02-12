@@ -69,7 +69,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getChildrenEmptyItemsDataProvider()
+    public static function getChildrenEmptyItemsDataProvider()
     {
         return [
             [
@@ -121,7 +121,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getChildrenDataProvider()
+    public static function getChildrenDataProvider()
     {
         return [
             [true],
@@ -143,7 +143,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isShipmentSeparatelyWithoutItemDataProvider()
+    public static function isShipmentSeparatelyWithoutItemDataProvider()
     {
         return [
             [['shipment_type' => 1], true],
@@ -175,7 +175,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isShipmentSeparatelyWithItemDataProvider()
+    public static function isShipmentSeparatelyWithItemDataProvider()
     {
         return [
             [['shipment_type' => 1], false, false],
@@ -199,7 +199,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isChildCalculatedWithoutItemDataProvider()
+    public static function isChildCalculatedWithoutItemDataProvider()
     {
         return [
             [['product_calculations' => 0], true],
@@ -231,7 +231,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isChildCalculatedWithItemDataProvider()
+    public static function isChildCalculatedWithItemDataProvider()
     {
         return [
             [['product_calculations' => 0], false, false],
@@ -278,12 +278,49 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function canShowPriceInfoDataProvider()
+    public static function canShowPriceInfoDataProvider()
     {
         return [
             [true, ['product_calculations' => 0], true],
             [false, [], true],
             [false, ['product_calculations' => 0], false],
+        ];
+    }
+
+    /**
+     * @dataProvider getValueHtmlWithAttributesDataProvider
+     */
+    public function testGetValueHtmlWithAttributes($qty)
+    {
+        $price = 100;
+        $orderModel = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['formatPrice'])
+            ->getMock();
+        $orderModel->expects($this->any())->method('formatPrice')->willReturn($price);
+
+        $model = $this->getMockBuilder(Renderer::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getOrder', 'getSelectionAttributes', 'escapeHtml'])
+            ->getMock();
+        $model->expects($this->any())->method('escapeHtml')->willReturn('Test');
+        $model->expects($this->any())->method('getOrder')->willReturn($orderModel);
+        $model->expects($this->any())->method('getSelectionAttributes')
+            ->willReturn([
+                'qty' => $qty ,
+                'price' => $price,
+            ]);
+        $this->assertSame($qty . ' x Test ' . $price, $model->getValueHtml($this->orderItem));
+    }
+
+    /**
+     * @return array
+     */
+    public static function getValueHtmlWithAttributesDataProvider()
+    {
+        return [
+            [1],
+            [1.5],
         ];
     }
 }

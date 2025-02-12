@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Save media files data
+ * @api
  */
 interface ImportFilesInterface
 {

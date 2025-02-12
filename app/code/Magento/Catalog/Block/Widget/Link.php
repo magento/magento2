@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Widget;
@@ -51,7 +51,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         UrlFinderInterface $urlFinder,
-        \Magento\Catalog\Model\ResourceModel\AbstractResource $entityResource = null,
+        ?\Magento\Catalog\Model\ResourceModel\AbstractResource $entityResource = null,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -145,7 +145,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
             if ($this->getData('anchor_text')) {
                 $this->_anchorText = $this->getData('anchor_text');
             } elseif ($this->_entityResource) {
-                $idPath = explode('/', $this->_getData('id_path'));
+                $idPath = $this->_getData('id_path') !== null ? explode('/', $this->_getData('id_path')) : [];
                 if (isset($idPath[1])) {
                     $id = $idPath[1];
                     if ($id) {

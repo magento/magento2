@@ -17,6 +17,10 @@
             <description value="User switches between Views and checks if the folder is changed"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <group value="pr_exclude"/>
+            <skip>
+                <issueId value="AC-5916">Skipped</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
@@ -25,7 +29,7 @@
         <after>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminEnhancedMediaGalleryDeleteGridViewActionGroup" stepKey="deleteView">
-                <argument name="viewToDelete" value="New View"/>
+                <argument name="viewToDelete" value="{{NewGridView.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderForDelete"/>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
@@ -34,27 +38,35 @@
         </after>
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
-        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder"/>
-        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForFolderContents"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForFolderContents"/>
         <actionGroup ref="AdminEnhancedMediaGallerySaveCustomViewActionGroup" stepKey="saveCustomView">
-            <argument name="viewName" value="New View"/>
+            <argument name="viewName" value="{{NewGridView.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters2"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView">
-            <argument name="selectView" value="Default View"/>
+            <argument name="selectView" value="{{DefaultGridView.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertFolderIsChangedActionGroup" stepKey="assertFolderIsChanged">
             <argument name="newSelectedFolder" value="category" />
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="switchBackToNewView">
-            <argument name="selectView" value="New View"/>
+            <argument name="selectView" value="{{NewGridView.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryAssertActiveFiltersActionGroup" stepKey="assertFilterApplied">
             <argument name="resultValue" value="{{AdminMediaGalleryFolderData.name}}"/>

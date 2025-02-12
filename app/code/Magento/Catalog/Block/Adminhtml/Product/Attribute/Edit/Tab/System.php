@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product attribute add/edit form system tab
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 
+/**
+ * Product attribute add/edit form system tab
+ */
 class System extends Generic
 {
     /**
+     * Prepare the form
+     *
      * @return $this
      */
     protected function _prepareForm()

@@ -18,6 +18,7 @@
             <testCaseId value="MC-18312" />
             <group value="shoppingCart" />
             <group value="mtf_migrated" />
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

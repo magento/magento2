@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyShipToShipMethodContainsSameDataTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Guest checkout"/>
+            <title value="Ship To and Shipping Method blocks on Checkout contain actual information according to input data"/>
+            <description value="Ship To and Shipping Method blocks on Checkout contain actual information according to input data"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4628"/>
+        </annotations>
+        <before>
+            <!-- Enable free shipping -->
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="enableFreeShippingConfig"/>
+            <!-- create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- create simple product -->
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <!-- delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <!-- Go to Storefront as Guest and add product to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="guestOpenProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadToGetTheStorePageOpen"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSimpleProductToCartFromStorefront">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+        <!-- Proceed to Checkout -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="guestProceedsToCheckout"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearPostClickingOnCheckout"/>
+        <!-- verify shipping screen is opened -->
+        <waitForElement selector="{{CheckoutShippingSection.isShippingStep}}" stepKey="shippingStepIsOpened"/>
+        <!--Filling shipping information and click next-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+        <!--Review & Payments step of checkout is opened where Correct Billing address is verified-->
+        <actionGroup ref="CheckShipToInformationInCheckoutActionGroup" stepKey="verifyShipToInformation">
+            <argument name="customerVar" value="CustomerEntityOne" />
+            <argument name="customerAddressVar" value="CustomerAddressSimple" />
+        </actionGroup>
+        <!-- Assert Shipping Method = "Flat Rate" -->
+        <waitForText userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
+        <!-- Reload Page and wait for page to get reload -->
+        <reloadPage stepKey="refreshPageToVerifyAllInformationIsPresent"/>
+        <waitForPageLoad stepKey="waitForPageToLoadProperlyToAssertShipToInformationDetails"/>
+        <!-- Check that "Ship To" block contains correct information -->
+        <actionGroup ref="GuestVerifiesTheShipToDetailsOnStorefrontCheckoutPaymentActionGroup" stepKey="assertingShipToInformationOnPaymentPage"/>
+        <!-- Assert Shipping Method = "Flat Rate" -->
+        <waitForText userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethodAgain"/>
+        <!-- click on Edit button next to "Ship To" Text -->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.editShipToAddress}}" stepKey="waitForEditButtonToBeVisible"/>
+        <click selector="{{CheckoutPaymentSection.editShipToAddress}}" stepKey="clickOnEditButton"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSectionAgain">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <!-- Check that "Ship To" block contains correct information -->
+        <actionGroup ref="GuestVerifiesTheShipToDetailsOnStorefrontCheckoutPaymentActionGroup" stepKey="againAssertingShipToInformationOnPaymentPage"/>
+        <!-- Assert Shipping Method = "Free Shipping" -->
+        <waitForText userInput="Free Shipping - Free" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertFreeShippingMethod"/>
+        <!-- click on Edit button next to "Shipping Method" Text -->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.editShippingMethod}}" stepKey="waitForEditButtonToVisible"/>
+        <click selector="{{CheckoutPaymentSection.editShippingMethod}}" stepKey="clickOnEditShippingMethodButton"/>
+        <!-- Assert that it has scrolled to Shipping Method text -->
+        <scrollTo selector="{{CheckoutPaymentSection.shippingMethodTitle}}" stepKey="scrollToShippingMethodTitle"/>
+        <waitForText selector="{{CheckoutPaymentSection.shippingMethodTitle}}" userInput="Shipping Methods" stepKey="assertShippingMethodTitle"/>
+    </test>
+</tests>

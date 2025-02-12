@@ -98,7 +98,7 @@ class FindByUrlRewriteTest extends TestCase
      *
      * @return array
      */
-    public function visibilityWithExpectedResultDataProvider(): array
+    public static function visibilityWithExpectedResultDataProvider(): array
     {
         return [
             'visibility_for_both_product_only_catalog' => [
@@ -263,5 +263,20 @@ class FindByUrlRewriteTest extends TestCase
         $skus = array_column($productsData, 'sku');
 
         return $this->productResource->getProductsIdsBySkus($skus);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

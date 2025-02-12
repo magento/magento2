@@ -7,7 +7,6 @@
 /**
  * Review status
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  */
 namespace Magento\Review\Model\Review;
@@ -24,8 +23,8 @@ class Status extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

@@ -9,13 +9,14 @@ namespace Magento\Webapi\Model\Authorization;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Oauth\Helper\Request as OauthRequestHelper;
 use Magento\Framework\Oauth\OauthInterface as OauthService;
-use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Webapi\Request;
+use Magento\Integration\Api\IntegrationServiceInterface;
 
 /**
  * A user context determined by OAuth headers in a HTTP request.
  */
-class OauthUserContext implements UserContextInterface
+class OauthUserContext implements UserContextInterface, ResetAfterRequestInterface
 {
     /**
      * @var Request
@@ -38,7 +39,7 @@ class OauthUserContext implements UserContextInterface
     protected $oauthHelper;
 
     /**
-     * @var int
+     * @var int|null
      */
     protected $integrationId;
 
@@ -63,7 +64,7 @@ class OauthUserContext implements UserContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUserId()
     {
@@ -85,10 +86,18 @@ class OauthUserContext implements UserContextInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUserType()
     {
         return UserContextInterface::USER_TYPE_INTEGRATION;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->integrationId = null;
     }
 }

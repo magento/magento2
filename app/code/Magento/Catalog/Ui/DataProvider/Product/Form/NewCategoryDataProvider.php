@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Ui\DataProvider\Product\Form;
 
+use Magento\Framework\Phrase;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\UrlInterface;
@@ -47,7 +50,9 @@ class NewCategoryDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * Get data
+     *
+     * @return array
      * @since 101.0.0
      */
     public function getData()
@@ -60,7 +65,10 @@ class NewCategoryDataProvider extends AbstractDataProvider
                         'is_active' => 1,
                         'include_in_menu' => 1,
                         'return_session_messages_only' => 1,
-                        'use_config' => ['available_sort_by', 'default_sort_by']
+                        'use_config' => [
+                            'available_sort_by' => true,
+                            'default_sort_by' => true
+                        ]
                     ]
                 ]
             ]
@@ -70,7 +78,9 @@ class NewCategoryDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * Get meta
+     *
+     * @return array
      * @since 101.0.0
      */
     public function getMeta()
@@ -91,7 +101,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
     /**
      * Get notice message
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      * @since 101.0.0
      */
     protected function getNotice()

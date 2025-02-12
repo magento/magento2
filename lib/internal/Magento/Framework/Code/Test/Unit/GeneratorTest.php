@@ -20,7 +20,6 @@ use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
-use Magento\GeneratedClass\Factory as GeneratedClassFactory;
 use RuntimeException;
 
 /**
@@ -126,9 +125,16 @@ class GeneratorTest extends TestCase
         $this->expectException('RuntimeException');
         $fullClassName = $className . $entityType;
 
-        $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityGeneratorMock = $this->getMockForAbstractClass(
+            EntityAbstract::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['getSourceClassName']
+        );
+        $entityGeneratorMock->method('getSourceClassName')->willReturn('');
         $this->objectManagerMock
             ->expects($this->once())
             ->method('create')
@@ -156,7 +162,7 @@ class GeneratorTest extends TestCase
         $this->objectManagerConfigMock
             ->expects($this->once())
             ->method('getVirtualTypes')
-            ->willReturn([GeneratedClassFactory::class => GeneratedClassFactory::class]);
+            ->willReturn(['Magento\GeneratedClass\Factory' => 'Magento\GeneratedClass\Factory']);
         $this->objectManagerMock
             ->expects($this->once())
             ->method('get')
@@ -166,7 +172,7 @@ class GeneratorTest extends TestCase
 
         $this->assertSame(
             Generator::GENERATION_SKIP,
-            $this->model->generateClass(GeneratedClassFactory::class)
+            $this->model->generateClass('Magento\GeneratedClass\Factory')
         );
     }
 
@@ -184,9 +190,16 @@ class GeneratorTest extends TestCase
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
 
-        $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityGeneratorMock = $this->getMockForAbstractClass(
+            EntityAbstract::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['getSourceClassName']
+        );
+        $entityGeneratorMock->method('getSourceClassName')->willReturn('');
         $this->objectManagerMock
             ->expects($this->once())
             ->method('create')
@@ -311,14 +324,14 @@ class GeneratorTest extends TestCase
 
         $this->assertSame(
             Generator::GENERATION_SKIP,
-            $this->model->generateClass(GeneratedClassFactory::class)
+            $this->model->generateClass('Magento\GeneratedClass\Factory')
         );
     }
 
     /**
      * @return array
      */
-    public function trueFalseDataProvider(): array
+    public static function trueFalseDataProvider(): array
     {
         return [[true], [false]];
     }
@@ -328,14 +341,19 @@ class GeneratorTest extends TestCase
      *
      * @return array
      */
-    public function generateValidClassDataProvider(): array
+    public static function generateValidClassDataProvider(): array
     {
+        $expectedEntities = [
+            'factory' => Factory::ENTITY_TYPE,
+            'proxy' => Proxy::ENTITY_TYPE,
+            'interceptor' => Interceptor::ENTITY_TYPE,
+        ];
         $data = [];
-        foreach ($this->expectedEntities as $generatedEntity) {
+        foreach ($expectedEntities as $generatedEntity) {
             $generatedEntity = ucfirst($generatedEntity);
             $data['test class for ' . $generatedEntity] = [
-                'class name' => self::SOURCE_CLASS,
-                'entity type' => $generatedEntity,
+                'className' => self::SOURCE_CLASS,
+                'entityType' => $generatedEntity,
             ];
         }
         return $data;

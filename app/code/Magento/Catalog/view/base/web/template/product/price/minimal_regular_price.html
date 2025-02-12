@@ -10,13 +10,13 @@
           css="getAdjustmentCssClasses($row())">
         <span if="label"
               class="price-label"
-              text="label"/>
+              text="label"></span>
 
         <span class="price-wrapper"
               css="priceWrapperCssClasses"
               attr="priceWrapperAttr"
               data-price-amount=""
               data-price-type=""
-              html="getMinRegularPrice($row())"/>
+              html="getMinRegularPriceUnsanitizedHtml($row())"></span>
     </span>
 </span>

@@ -6,14 +6,12 @@
 namespace Magento\Config\Model\Config\Structure\Element\Dependency;
 
 /**
- * @api
- * @since 100.0.2
- */
-
-/**
  * Class Field
  *
  * Fields are used to describe possible values for a type/interface.
+ *
+ * @api
+ * @since 100.0.2
  */
 class Field
 {
@@ -45,7 +43,7 @@ class Field
     public function __construct(array $fieldData = [], $fieldPrefix = "")
     {
         if (isset($fieldData['separator'])) {
-            $this->_values = explode($fieldData['separator'], $fieldData['value']);
+            $this->_values = isset($fieldData['value']) ? explode($fieldData['separator'], $fieldData['value']) : [''];
         } else {
             $this->_values = [isset($fieldData['value']) ? $fieldData['value'] : ''];
         }

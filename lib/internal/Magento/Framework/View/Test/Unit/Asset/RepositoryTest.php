@@ -118,15 +118,15 @@ class RepositoryTest extends TestCase
         $this->fallbackFactoryMock = $this->getMockBuilder(
             FallbackContextFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextFactoryMock = $this->getMockBuilder(ContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->remoteFactoryMock = $this->getMockBuilder(RemoteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -190,6 +190,9 @@ class RepositoryTest extends TestCase
      */
     public function testUpdateDesignParams($params, $result)
     {
+        if (is_callable($result['themeModel'])) {
+            $result['themeModel'] = $result['themeModel']($this);
+        }
         $this->themeProvider
             ->expects($this->any())
             ->method('getThemeByFullPath')
@@ -246,15 +249,27 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function updateDesignParamsDataProvider()
+    public static function updateDesignParamsDataProvider()
     {
         return [
             [
                 ['area' => 'AREA'],
-                ['area' => 'AREA', 'themeModel' => $this->getThemeMock(), 'module' => false, 'locale' => 'locale']],
+                [
+                    'area' => 'AREA',
+                    'themeModel' => static fn(self $testCase) => $testCase->getThemeMock(),
+                    'module' => false,
+                    'locale' => 'locale'
+                ]
+            ],
             [
                 ['themeId' => 'ThemeID'],
-                ['area' => 'area', 'themeId' => 'ThemeID', 'themeModel' => 'ThemeID', 'module' => false, 'locale' => 'locale']
+                [
+                    'area' => 'area',
+                    'themeId' => 'ThemeID',
+                    'themeModel' => 'ThemeID',
+                    'module' => false,
+                    'locale' => 'locale'
+                ]
             ]
         ];
     }
@@ -270,7 +285,7 @@ class RepositoryTest extends TestCase
             ->method('getThemeByFullPath')
             ->willReturnArgument(0);
 
-        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
+        $fallbackContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContex')
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -335,7 +350,7 @@ class RepositoryTest extends TestCase
             ->method('isSecure')
             ->willReturn(false);
 
-        $fallbackContextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContex::class)
+        $fallbackContextMock = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContex')
             ->disableOriginalConstructor()
             ->getMock();
         $this->fallbackFactoryMock
@@ -372,12 +387,10 @@ class RepositoryTest extends TestCase
 
         $originalAssetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getModule', 'getContext'])
+            ->onlyMethods(['getModule', 'getContext', 'getFilePath'])
             ->getMock();
-        $originalAssetMock
-            ->expects($this->any())
-            ->method('getContext')
-            ->willReturn($originalContextMock);
+        $originalAssetMock->method('getContext')->willReturn($originalContextMock);
+        $originalAssetMock->method('getFilePath')->willReturn('');
 
         $assetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
@@ -406,7 +419,7 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function createRelatedDataProvider()
+    public static function createRelatedDataProvider()
     {
         return [
             ['test/file.js', '/test/file.js', ''],

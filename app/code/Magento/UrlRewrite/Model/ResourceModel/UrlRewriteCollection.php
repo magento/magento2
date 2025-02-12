@@ -1,12 +1,13 @@
 <?php
 /**
- * URL rewrite collection
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
+/**
+ * @api
+ */
 class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -31,8 +32,8 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Col
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->storeManager = $storeManager;
@@ -57,7 +58,6 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Col
      * @param mixed $store
      * @param bool $withAdmin
      * @return $this
-     * @api
      */
     public function addStoreFilter($store, $withAdmin = true)
     {

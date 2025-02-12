@@ -9,16 +9,16 @@
     <system>
         <section id="admin">
             <group id="security">
-                <field id="admin_account_sharing" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="admin_account_sharing" translate="label comment" type="select" sortOrder="5" showInDefault="1" canRestore="1">
                     <label>Admin Account Sharing</label>
                     <comment>If set to Yes, you can log in from multiple computers into same account. Default setting No improves security.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="password_reset_protection_type" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="password_reset_protection_type" translate="label" type="select" sortOrder="6" showInDefault="1" canRestore="1">
                     <label>Password Reset Protection Type</label>
                     <source_model>Magento\Security\Model\Config\Source\ResetMethod</source_model>
                 </field>
-                <field id="max_number_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="max_number_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" canRestore="1">
                     <label>Max Number of Password Reset Requests</label>
                     <comment>Limit the number of password reset request per hour. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater validate-digits</validate>
@@ -26,13 +26,36 @@
                         <field id="password_reset_protection_type" separator="," negative="1">0</field>
                     </depends>
                 </field>
-                <field id="min_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="min_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="8" showInDefault="1" canRestore="1">
                     <label>Min Time Between Password Reset Requests</label>
                     <comment>Delay in minutes between password reset requests. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater validate-digits</validate>
                     <depends>
                         <field id="password_reset_protection_type" separator="," negative="1">0</field>
                     </depends>
+                </field>
+            </group>
+        </section>
+        <section id="system">
+            <group id="security" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1">
+                <label>Security</label>
+                <field id="max_session_size_admin" translate="label" type="text" sortOrder="1" showInDefault="1" canRestore="1">
+                    <label>Max Session Size in Admin</label>
+                    <attribute type="modal_title_text">Are You Sure About Your Max Session Size in Admin Settings?</attribute>
+                    <attribute type="modal_content_body_path">Magento_Security::system/config/session_size_admin/modal_content_body.phtml</attribute>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                    <frontend_model>Magento\Security\Block\Config\Backend\Session\SessionSize</frontend_model>
+                    <backend_model>Magento\Security\Model\Config\Backend\Session\SessionSize</backend_model>
+                    <comment>Limit the maximum session size in bytes. Use 0 to disable.</comment>
+                </field>
+                <field id="max_session_size_storefront" translate="label" type="text" sortOrder="2" showInDefault="1" canRestore="1">
+                    <label>Max Session Size in Storefront</label>
+                    <attribute type="modal_title_text">Are You Sure About Your Max Session Size in Storefront Settings?</attribute>
+                    <attribute type="modal_content_body_path">Magento_Security::system/config/session_size_storefront/modal_content_body.phtml</attribute>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                    <frontend_model>Magento\Security\Block\Config\Backend\Session\SessionSize</frontend_model>
+                    <backend_model>Magento\Security\Model\Config\Backend\Session\SessionSize</backend_model>
+                    <comment>Limit the maximum session size in bytes. Use 0 to disable.</comment>
                 </field>
             </group>
         </section>

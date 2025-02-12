@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerConfigAddressTemplateSection">
+        <element name="addressTemplatesTab" type="button" selector=".entry-edit-head  #customer_address_templates-head" timeout="30"/>
+        <element name="addressTemplatesTabIsOpen" type="button" selector="//*[@class='entry-edit-head admin__collapsible-block']/a[@id='customer_address_templates-head' and @class='open']" timeout="30"/>
+        <element name="addressTemplateTypeDefaultCheckbox" type="checkbox" selector="#row_customer_address_templates_{{type_of_template}} #customer_address_templates_{{type_of_template}}_inherit" timeout="30" parameterized="true"/>
+        <element name="addressTemplateTypeValueInput" type="input" selector="#row_customer_address_templates_{{type_of_template}} #customer_address_templates_{{type_of_template}}" parameterized="true"/>
+    </section>
+</sections>

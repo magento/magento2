@@ -10,7 +10,7 @@ namespace Magento\Framework\Mail;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 
 /**
- * Class AddressConverter
+ * Convert and filter email addresses
  */
 class AddressConverter
 {
@@ -40,12 +40,37 @@ class AddressConverter
      */
     public function convert(string $email, ?string $name = null): Address
     {
+        $email = $this->convertEmailUserToAscii($email);
         return $this->addressFactory->create(
             [
                 'name' => $name,
                 'email' => $email
             ]
         );
+    }
+
+    /**
+     * Convert email user to ascii
+     *
+     * @param string $email
+     * @return string
+     */
+    private function convertEmailUserToAscii(string $email): string
+    {
+        if (preg_match('/^(.+)@([^@]+)$/', $email, $matches)) {
+            $user = $matches[1];
+            $hostname = $matches[2];
+            $userEncoded = idn_to_ascii($user, IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46, $idnaInfo);
+            if ($userEncoded == $user) {
+                return $email;
+            }
+
+            if ($userEncoded === false && array_key_exists('result', $idnaInfo)) {
+                $userEncoded = $idnaInfo['result'];
+            }
+            $email = sprintf('%s@%s', $userEncoded, $hostname);
+        }
+        return $email;
     }
 
     /**

@@ -94,7 +94,7 @@ class EmailSender extends Sender implements SenderInterface
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
         $invoice->setSendEmail($this->identityContainer->isEnabled());
@@ -104,7 +104,9 @@ class EmailSender extends Sender implements SenderInterface
 
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'invoice' => $invoice,
+                'invoice_id' => $invoice->getId(),
                 'comment' => $comment ? $comment->getComment() : '',
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),

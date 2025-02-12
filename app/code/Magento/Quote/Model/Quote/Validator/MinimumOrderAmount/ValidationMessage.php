@@ -20,6 +20,7 @@ class ValidationMessage
     /**
      * @var \Magento\Framework\Locale\CurrencyInterface
      * @deprecated 101.0.3 since 101.0.0
+     * @see no alternatives
      */
     private $currency;
 
@@ -38,7 +39,7 @@ class ValidationMessage
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\CurrencyInterface $currency,
-        \Magento\Framework\Pricing\Helper\Data $priceHelper = null
+        ?\Magento\Framework\Pricing\Helper\Data $priceHelper = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
@@ -51,7 +52,6 @@ class ValidationMessage
      * Get validation message.
      *
      * @return \Magento\Framework\Phrase
-     * @throws \Zend_Currency_Exception
      */
     public function getMessage()
     {

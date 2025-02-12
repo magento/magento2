@@ -15,7 +15,12 @@ use Laminas\Stdlib\Exception\RuntimeException as LaminasRuntimeException;
 class Glob extends LaminasGlob
 {
     /**
-     * Find pathnames matching a pattern.
+     * @var array
+     */
+    private static $cache = [];
+
+    /**
+     * Find path names matching a pattern.
      *
      * @param string $pattern
      * @param int $flags
@@ -24,11 +29,16 @@ class Glob extends LaminasGlob
      */
     public static function glob($pattern, $flags = 0, $forceFallback = false)
     {
+        $key = $pattern . '|' . $flags . '|' . ($forceFallback ? 1 : 0);
+        if (isset(self::$cache[$key])) {
+            return self::$cache[$key];
+        }
         try {
             $result = LaminasGlob::glob($pattern, $flags, $forceFallback);
         } catch (LaminasRuntimeException $e) {
             $result = [];
         }
+        self::$cache[$key] = $result;
         return $result;
     }
 }

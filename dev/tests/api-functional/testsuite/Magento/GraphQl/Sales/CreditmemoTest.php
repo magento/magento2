@@ -89,8 +89,7 @@ class CreditmemoTest extends GraphQlAbstract
         $expectedCreditMemoData = [
             [
                 'comments' => [
-                    ['message' => 'some_comment'],
-                    ['message' => 'some_other_comment']
+                    ['message' => 'some_comment']
                 ],
                 'items' => [
                     [
@@ -478,7 +477,7 @@ class CreditmemoTest extends GraphQlAbstract
      * @param string $orderNumber
      * @param int|null $qty
      */
-    private function prepareInvoice(string $orderNumber, int $qty = null)
+    private function prepareInvoice(string $orderNumber, ?int $qty = null)
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = Bootstrap::getObjectManager()

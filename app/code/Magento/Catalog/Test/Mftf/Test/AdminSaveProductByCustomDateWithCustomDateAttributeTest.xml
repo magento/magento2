@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSaveProductByCustomDateWithCustomDateAttributeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Adding Custom Date Attribute To Products"/>
+            <title value="Issue while saving the date type product attribute"/>
+            <description value="When we add the 01/01/1970 to the product attribute of the custom date type, it is throwing an error."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8290"/>
+            <useCaseId value="ACP2E-1749"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
+                <argument name="ProductAttribute" value="dateProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Generate date for use as default value, needs to be MM/d/YYYY and mm/d/yy -->
+        <generateDate date="now" format="m/j/Y" stepKey="generateDefaultDate"/>
+
+        <!-- Navigate to Stores > Attributes > Product. -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+
+        <!-- Create new Product Attribute as Date, with code and default value. -->
+        <actionGroup ref="CreateProductAttributeWithDateFieldActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="dateProductAttribute"/>
+            <argument name="date" value="{$generateDefaultDate}"/>
+        </actionGroup>
+
+        <!-- Go to default attribute set edit page -->
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <!-- Assert created attribute in unassigned section -->
+        <see userInput="{{dateProductAttribute.attribute_code}}" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
+        <!-- Assign attribute to product group -->
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{dateProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <!-- Assert attribute in a group -->
+        <see userInput="{{dateProductAttribute.attribute_code}}" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
+        <!-- Save attribute set -->
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
+
+        <!-- Open Product Edit Page and set custom attribute value 01/01/1970 and save the product-->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.newAddedAttributeInput(dateProductAttribute.attribute_code)}}" userInput="01/01/1970" stepKey="fillCustomDateValue"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Open Product Index Page and filter the product by date 01/01/1970 -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex2"/>
+        <actionGroup ref="FilterProductGridByCustomDateRangeActionGroup" stepKey="filterProductGridByCustomDateRange">
+            <argument name="code" value="{{dateProductAttribute.attribute_code}}"/>
+            <argument name="date" value="1/01/1970"/>
+        </actionGroup>
+        <!-- Check products filtering and see the product custom date 01/01/1970 successfully appeared -->
+        <see selector="{{AdminProductGridSection.productGridNameProduct($createProduct.name$)}}" userInput="$createProduct.name$" stepKey="seeProductName"/>
+    </test>
+</tests>

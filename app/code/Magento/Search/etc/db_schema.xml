@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -35,20 +35,31 @@
             <column name="query_text"/>
             <column name="store_id"/>
         </constraint>
-        <index referenceId="SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY" indexType="btree">
+        <index referenceId="SEARCH_QUERY_QUERY_TEXT_STORE_ID_POPULARITY" indexType="btree" disabled="true">
             <column name="query_text"/>
             <column name="store_id"/>
             <column name="popularity"/>
         </index>
-        <index referenceId="SEARCH_QUERY_STORE_ID" indexType="btree">
-            <column name="store_id"/>
-        </index>
         <index referenceId="SEARCH_QUERY_IS_PROCESSED" indexType="btree">
             <column name="is_processed"/>
         </index>
-        <index referenceId="SEARCH_QUERY_STORE_ID_POPULARITY" indexType="btree">
+        <index referenceId="SEARCH_QUERY_STORE_ID_NUM_RESULTS_POPULARITY" indexType="btree">
+            <column name="store_id"/>
+            <column name="num_results"/>
+            <column name="popularity"/>
+        </index>
+        <index referenceId="SEARCH_QUERY_QUERY_TEXT_STORE_ID_NUM_RESULTS_POPULARITY" indexType="btree">
+            <column name="query_text"/>
+            <column name="store_id"/>
+            <column name="num_results"/>
+            <column name="popularity"/>
+        </index>
+        <index referenceId="SEARCH_QUERY_STORE_ID_POPULARITY" indexType="btree" disabled="true">
             <column name="store_id"/>
             <column name="popularity"/>
+        </index>
+        <index referenceId="SEARCH_QUERY_STORE_ID" indexType="btree" disabled="true">
+            <column name="store_id"/>
         </index>
     </table>
     <table name="search_synonyms" resource="default" engine="innodb" comment="table storing various synonyms groups">

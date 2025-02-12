@@ -15,5 +15,6 @@
 
         <conditionalClick selector="{{AdminProductGridTableHeaderSection.id('ascend')}}" dependentSelector="{{AdminProductGridTableHeaderSection.id('descend')}}" visible="false" stepKey="sortById"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <wait time="5" stepKey="simpleWait" />
     </actionGroup>
 </actionGroups>

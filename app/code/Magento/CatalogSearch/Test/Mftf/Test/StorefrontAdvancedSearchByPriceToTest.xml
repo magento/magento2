@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ABC_123_SimpleProduct" stepKey="createProduct2" after="createProduct"/>

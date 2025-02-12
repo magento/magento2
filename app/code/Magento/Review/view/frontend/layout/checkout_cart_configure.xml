@@ -11,6 +11,7 @@
         <referenceBlock name="reviews.tab">
             <block class="Magento\Review\Block\Form\Configure" name="product.review.form" as="review_form" ifconfig="catalog/review/active">
                 <arguments>
+                    <argument name="button_lock_manager" xsi:type="object">Magento\Framework\View\Element\ButtonLockManager</argument>
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
                             <item name="review-form" xsi:type="array">

@@ -27,7 +27,7 @@ class Publisher implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function convert($source)
     {
@@ -40,10 +40,12 @@ class Publisher implements \Magento\Framework\Config\ConverterInterface
                 if (isset($configuration['connections'])) {
                     $publisherData = [];
                     foreach ($configuration['connections'] as $connectionName => $config) {
-                        if (isset($this->connectionToExchangeMap[$connectionName])) {
-                            $publisherName = $connectionName . '-' . $this->connectionToExchangeMap[$connectionName];
+                        $exchange = $config['exchange'] ?? $this->connectionToExchangeMap[$connectionName] ?? null;
+                        if ($exchange) {
+                            $publisherName = $connectionName . '-' . $exchange;
                             $config['connection'] = $config['name'];
                             $config['name'] = $publisherName;
+                            $config['exchange'] = $exchange;
                             $publisherData[$publisherName] = $config;
                             $connections = array_replace_recursive($connections, $publisherData);
                         }

@@ -3,52 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Client;
 
-use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
-use Magento\AdvancedSearch\Model\Client\ClientResolver;
-
 /**
- * Proxy for client factories
+ * @deprecated Handle the Backward Compatibility issue with ES7 and ES8
+ * @see AC-10652
+ * phpcs:disable Generic.Files.LineLength.TooLong
  */
-class ClientFactoryProxy implements ClientFactoryInterface
+class ClientFactoryProxy extends \Magento\Elasticsearch\ElasticAdapter\Model\Client\ClientFactoryProxy
 {
-    /**
-     * @var ClientResolver
-     */
-    private $clientResolver;
-
-    /**
-     * @var ClientFactoryInterface[]
-     */
-    private $clientFactories;
-
-    /**
-     * CategoryFieldsProviderProxy constructor.
-     * @param ClientResolver $clientResolver
-     * @param ClientFactoryInterface[] $clientFactories
-     */
-    public function __construct(
-        ClientResolver $clientResolver,
-        array $clientFactories
-    ) {
-        $this->clientResolver = $clientResolver;
-        $this->clientFactories = $clientFactories;
-    }
-
-    /**
-     * @return ClientFactoryInterface
-     */
-    private function getClientFactory()
-    {
-        return $this->clientFactories[$this->clientResolver->getCurrentEngine()];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function create(array $options = [])
-    {
-        return $this->getClientFactory()->create($options);
-    }
 }

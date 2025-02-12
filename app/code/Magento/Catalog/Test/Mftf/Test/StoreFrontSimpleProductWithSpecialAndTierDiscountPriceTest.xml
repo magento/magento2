@@ -15,6 +15,7 @@
             <description value="Apply discount tier price and custom price values for simple product"/>
             <severity value="MAJOR"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

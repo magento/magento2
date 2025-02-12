@@ -1,13 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
+use Magento\Bundle\Test\Fixture\AddProductToCart as AddBundleProductToCartFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -19,12 +28,19 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +51,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteTest extends TestCase
 {
@@ -81,6 +98,16 @@ class QuoteTest extends TestCase
     private $extensibleDataObjectConverter;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -101,6 +128,8 @@ class QuoteTest extends TestCase
         $this->customerResourceModel = $this->objectManager->get(CustomerResourceModel::class);
         $this->groupFactory = $this->objectManager->get(GroupFactory::class);
         $this->extensibleDataObjectConverter = $this->objectManager->get(ExtensibleDataObjectConverter::class);
+        $this->cartRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -116,8 +145,8 @@ class QuoteTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @return void
      */
     public function testCollectTotalsWithVirtual(): void
@@ -472,24 +501,24 @@ class QuoteTest extends TestCase
      *
      * @return array
      */
-    public function giftMessageDataProvider(): array
+    public static function giftMessageDataProvider(): array
     {
         return [
             [
-                'guestItemId' => null,
-                'customerItemId' => 1,
-                'guestOrderId' => null,
-                'customerOrderId' => 11,
-                'expectedItemId' => 1,
-                'expectedOrderId' => 11,
+                'guestItemGiftMessageId' => null,
+                'customerItemGiftMessageId' => 1,
+                'guestOrderGiftMessageId' => null,
+                'customerOrderGiftMessageId' => 11,
+                'expectedItemGiftMessageId' => 1,
+                'expectedOrderGiftMessageId' => 11,
             ],
             [
-                'guestItemId' => 1,
-                'customerItemId' => 2,
-                'guestOrderId' => 11,
-                'customerOrderId' => 22,
-                'expectedItemId' => 1,
-                'expectedOrderId' => 11,
+                'guestItemGiftMessageId' => 1,
+                'customerItemGiftMessageId' => 2,
+                'guestOrderGiftMessageId' => 11,
+                'customerOrderGiftMessageId' => 22,
+                'expectedItemGiftMessageId' => 1,
+                'expectedOrderGiftMessageId' => 11,
             ],
         ];
     }
@@ -551,7 +580,7 @@ class QuoteTest extends TestCase
     {
         $quote = $this->quoteFactory->create();
         $product = $this->productRepository->get('simple-1');
-        $this->expectExceptionObject(new LocalizedException(__('The requested qty is not available')));
+        $this->expectExceptionObject(new LocalizedException(__('Not enough items for sale')));
         $quote->addProduct($product, 1500);
     }
 
@@ -760,5 +789,145 @@ class QuoteTest extends TestCase
         $this->assertEquals(9.3, $quote->getShippingAddress()->getBaseSubtotal());
         $this->assertEquals(5, $quote->getShippingAddress()->getBaseGrandTotal());
         $this->assertTrue($quote->validateMinimumAmount());
+    }
+
+    /**
+     * @magentoConfigFixture current_store multishipping/options/checkout_multiple 1
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
+     * @return void
+     */
+    public function testIsMultiShippingModeEnabledAfterQuoteItemRemoved(): void
+    {
+        $quote = $this->getQuoteByReservedOrderId->execute('multishipping_quote_id');
+        /** @var CheckoutSession $session */
+        $session = $this->objectManager->get(CheckoutSession::class);
+        $session->replaceQuote($quote);
+        $items = $quote->getAllItems();
+        $idToDelete = null;
+        foreach ($items as $item) {
+            if (!$item->getProduct()->isVirtual() && $item->getQty() == 1) {
+                $idToDelete = $item->getId();
+            }
+        }
+
+        if (!is_null($idToDelete)) {
+            $quoteShippingAddresses = $quote->getAllShippingAddresses();
+            foreach ($quoteShippingAddresses as $shippingAddress) {
+                if ($shippingAddress->getItemById($idToDelete)) {
+                    $shippingAddress->removeItem($idToDelete);
+                    $shippingAddress->setCollectShippingRates(true);
+
+                    if (count($shippingAddress->getAllItems()) == 0) {
+                        $shippingAddress->isDeleted(true);
+                    }
+                }
+            }
+            $quote->removeItem($idToDelete);
+            $this->assertEquals(
+                1,
+                $quote->getIsMultiShipping(),
+                "Multi-shipping mode is disabled after quote item removal"
+            );
+        } else {
+            $this->assertTrue(
+                !is_null($idToDelete),
+                "No Simple Product item with qty 1 to delete exists"
+            );
+        }
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 922903400.00], as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]
+        ),
+    ]
+    public function testQuoteItemWithPriceGreaterThan100Millions()
+    {
+        $product = $this->fixtures->get('product');
+        $cart = $this->fixtures->get('cart');
+        $item = $cart->getItemsCollection(false)->fetchItem();
+        $this->assertEquals(
+            round((float)$product->getPrice(), 2),
+            round((float)$item->getPrice(), 2)
+        );
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10], as: 'p', count: 2),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attr$'], '_links' => ['$p1$', '$p2$']],
+            'cp1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$cp1.id$', 'child_product_id' => '$p1.id$', 'qty' => 2],
+        ),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$cp1.id$', 'child_product_id' => '$p2.id$', 'qty' => 2],
+        ),
+        DataFixture('deleteProduct')
+    ]
+    public function testCollectTotalsWhenConfigurableChildIsDeleted(): void
+    {
+        $cart = $this->fixtures->get('cart');
+        $cart = $this->cartRepository->get($cart->getId());
+        $cart->setTotalsCollectedFlag(false)->collectTotals();
+        $items = $cart->getAllItems();
+        $this->assertCount(3, $items);
+        $this->assertCount(0, $items[0]->getChildren());
+        $this->assertTrue($items[0]->getHasError());
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10], as: 'p', count: 2),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p2$']], 'opt2'),
+        DataFixture(BundleProductFixture::class, ['_options' => ['$opt1$', '$opt2$']], 'bp1'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddBundleProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$bp1.id$',
+                'selections' => [['$p1.id$'], ['$p2.id$']],
+                'qty' => 1
+            ],
+        ),
+        DataFixture('deleteProduct')
+    ]
+    public function testCollectTotalsWhenBundleChildIsDeleted(): void
+    {
+        $cart = $this->fixtures->get('cart');
+        $cart = $this->cartRepository->get($cart->getId());
+        $cart->setTotalsCollectedFlag(false)->collectTotals();
+        $items = $cart->getAllItems();
+        $this->assertCount(2, $items);
+        $this->assertCount(1, $items[0]->getChildren());
+        $this->assertTrue($items[0]->getHasError());
+    }
+
+    public static function deleteProduct(): void
+    {
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        $isSecureArea = $registry->registry('isSecureArea');
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+        try {
+            ObjectManager::getInstance()->get(ProductRepositoryInterface::class)->deleteById(
+                DataFixtureStorageManager::getStorage()->get('p1')->getSku()
+            );
+        } finally {
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', $isSecureArea);
+        }
     }
 }

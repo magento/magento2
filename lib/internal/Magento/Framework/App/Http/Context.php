@@ -3,20 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Http;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Context data for requests
+ *
+ * @api
  */
-class Context
+class Context implements ResetAfterRequestInterface
 {
     /**
      * Currency cache context
      */
-    const CONTEXT_CURRENCY = 'current_currency';
+    public const CONTEXT_CURRENCY = 'current_currency';
 
     /**
      * Data storage
@@ -36,11 +43,16 @@ class Context
     private $serializer;
 
     /**
+     * @var DeploymentConfig|null
+     */
+    private ?DeploymentConfig $deploymentConfig = null;
+
+    /**
      * @param array $data
      * @param array $default
      * @param Json|null $serializer
      */
-    public function __construct(array $data = [], array $default = [], Json $serializer = null)
+    public function __construct(array $data = [], array $default = [], ?Json $serializer = null)
     {
         $this->data = $data;
         $this->default = $default;
@@ -112,8 +124,11 @@ class Context
     {
         $data = $this->getData();
         if (!empty($data)) {
+            $salt = (string)$this->getDeploymentConfig()->get(
+                ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY
+            );
             ksort($data);
-            return sha1($this->serializer->serialize($data));
+            return hash('sha256', $this->serializer->serialize($data) . '|' . $salt);
         }
         return null;
     }
@@ -129,5 +144,28 @@ class Context
             'data' => $this->data,
             'default' => $this->default
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
+        $this->default = [];
+    }
+
+    /**
+     * Get DeploymentConfig
+     *
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig() : DeploymentConfig
+    {
+        if ($this->deploymentConfig === null) {
+            $this->deploymentConfig = ObjectManager::getInstance()
+                ->get(DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
     }
 }

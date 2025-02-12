@@ -11,5 +11,6 @@
     <section name="StorefrontCustomerMessagesSection">
         <element name="successMessage" type="text" selector=".message-success"/>
         <element name="errorMessage" type="text" selector=".message-error"/>
+        <element name="assertErrorMessage" type="text" selector="#region-error"/>
     </section>
 </sections>

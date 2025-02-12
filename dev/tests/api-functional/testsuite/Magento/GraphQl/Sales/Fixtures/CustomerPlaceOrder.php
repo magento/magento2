@@ -64,15 +64,19 @@ class CustomerPlaceOrder
      *
      * @param array $customerLogin
      * @param array $productData
+     * @param array|null $addressData
      * @return array
      */
-    public function placeOrderWithBundleProduct(array $customerLogin, array $productData): array
-    {
+    public function placeOrderWithBundleProduct(
+        array $customerLogin,
+        array $productData,
+        ?array $addressData = null
+    ): array {
         $this->customerLogin = $customerLogin;
         $this->createCustomerCart();
         $this->addBundleProduct($productData);
-        $this->setBillingAddress();
-        $shippingMethod = $this->setShippingAddress();
+        $this->setBillingAddress($addressData);
+        $shippingMethod = $this->setShippingAddress($addressData);
         $paymentMethod = $this->setShippingMethod($shippingMethod);
         $this->setPaymentMethod($paymentMethod);
         return $this->doPlaceOrder();
@@ -198,11 +202,13 @@ QUERY;
     /**
      * Set the billing address on the cart
      *
+     * @param array $addressData
      * @return array
      */
-    private function setBillingAddress(): array
+    private function setBillingAddress(?array $addressData = null): array
     {
-        $setBillingAddress = <<<QUERY
+        $telephone = $addressData['telephone'] ?? '5123456677';
+            $setBillingAddress = <<<QUERY
 mutation {
   setBillingAddressOnCart(
     input: {
@@ -215,7 +221,7 @@ mutation {
           street: ["test street 1", "test street 2"]
           city: "Texas City"
           postcode: "78717"
-          telephone: "5123456677"
+          telephone: "{$telephone}"
           region: "TX"
           country_code: "US"
          }
@@ -236,10 +242,12 @@ QUERY;
     /**
      * Set the shipping address on the cart and return an available shipping method
      *
+     * @param array|null $addressData
      * @return array
      */
-    private function setShippingAddress(): array
+    private function setShippingAddress(?array $addressData): array
     {
+        $telephone = $addressData['telephone'] ?? '5123456677';
         $setShippingAddress = <<<QUERY
 mutation {
   setShippingAddressesOnCart(
@@ -256,7 +264,7 @@ mutation {
             region: "AL"
             postcode: "36013"
             country_code: "US"
-            telephone: "3347665522"
+            telephone: "{$telephone}"
           }
         }
       ]
@@ -283,10 +291,10 @@ QUERY;
     /**
      * Set the shipping method on the cart and return an available payment method
      *
-     * @param array $shippingMethod
+     * @param array|null $shippingMethod
      * @return array
      */
-    private function setShippingMethod(array $shippingMethod): array
+    private function setShippingMethod(?array $shippingMethod): array
     {
         $setShippingMethod = <<<QUERY
 mutation {

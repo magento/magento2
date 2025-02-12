@@ -52,8 +52,8 @@ class InvoiceItems implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!(($value['model'] ?? null) instanceof InvoiceInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -144,9 +144,9 @@ class InvoiceItems implements ResolverInterface
             $discounts = [];
         } else {
             $discounts[] = [
-                'label' => $associatedOrder->getDiscountDescription() ?? _('Discount'),
+                'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => abs($invoiceItem->getDiscountAmount()) ?? 0,
+                    'value' => abs((float) $invoiceItem->getDiscountAmount()),
                     'currency' => $associatedOrder->getOrderCurrencyCode()
                 ]
             ];

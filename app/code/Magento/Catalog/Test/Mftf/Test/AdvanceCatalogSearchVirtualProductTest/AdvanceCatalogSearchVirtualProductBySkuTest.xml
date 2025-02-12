@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-162"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiVirtualProductWithDescriptionAndUnderscoredSku" stepKey="product"/>

@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="NavigateToNewOrderPageExistingCustomerAndStoreActionGroup" extends="NavigateToNewOrderPageExistingCustomerActionGroup">
+    <actionGroup name="NavigateToNewOrderPageExistingCustomerAndStoreActionGroup" extends="NavigateToNewOrderPageExistingCustomerActionGroup" deprecated="This Action Group is deprecated. Please use AdminNavigateToNewOrderPageExistingCustomerActionGroup + AdminSelectStoreDuringOrderCreationActionGroup.">
         <annotations>
             <description>EXTENDS: NavigateToNewOrderPageExistingCustomerActionGroup. Clicks on the provided Store View.</description>
         </annotations>
@@ -16,7 +16,7 @@
             <argument name="storeView" defaultValue="_defaultStore"/>
         </arguments>
 
-        <click selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" stepKey="selectStoreView" after="waitForCreateOrderPageLoad"/>
+        <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeTree}}" userInput="{{storeView.name}}" stepKey="selectStoreView" after="waitForCreateOrderPageLoad"/>
         <waitForPageLoad stepKey="waitForLoad" after="selectStoreView"/>
     </actionGroup>
 </actionGroups>

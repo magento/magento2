@@ -14,5 +14,6 @@
         </arguments>
         <fillField selector="{{AdminMediaGalleryFolderSection.folderNameField}}" userInput="{{name}}" stepKey="setFolderName" />
         <click selector="{{AdminMediaGalleryFolderSection.folderConfirmCreateButton}}" stepKey="clickCreateButton"/>
+        <waitForPageLoad stepKey="waitForFolderCreation"/>
     </actionGroup>
 </actionGroups>

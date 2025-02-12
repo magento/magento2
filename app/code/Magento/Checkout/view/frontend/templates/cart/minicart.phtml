@@ -15,10 +15,14 @@
         <span class="counter qty empty"
               data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() },
                blockLoader: isLoading">
-            <span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
+            <span class="counter-number">
+                <!-- ko if: getCartParam('summary_count') -->
+                <!-- ko text: getCartParam('summary_count').toLocaleString(window.LOCALE) --><!-- /ko -->
+                <!-- /ko -->
+            </span>
             <span class="counter-label">
             <!-- ko if: getCartParam('summary_count') -->
-                <!-- ko text: getCartParam('summary_count') --><!-- /ko -->
+                <!-- ko text: getCartParam('summary_count').toLocaleString(window.LOCALE) --><!-- /ko -->
                 <!-- ko i18n: 'items' --><!-- /ko -->
             <!-- /ko -->
             </span>
@@ -44,7 +48,7 @@
     <?php else: ?>
         <?php $scriptString = <<<script
             require(['jquery'], function ($) {
-                $('a.action.showcart').click(function() {
+                $('a.action.showcart').on('click', function() {
                     $(document.body).trigger('processStart');
                 });
             });

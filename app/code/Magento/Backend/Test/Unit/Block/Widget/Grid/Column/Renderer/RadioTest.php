@@ -74,7 +74,7 @@ class RadioTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             'checked' => [

@@ -19,6 +19,7 @@
             <useCaseId value="MC-15523"/>
             <severity value="MAJOR"/>
             <group value="swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->

@@ -87,15 +87,14 @@ class FetchMediaStorageFileBatches
         $batch = [];
         $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
 
-        /** @var \SplFileInfo $file */
-        foreach ($this->getAssetsIterator->execute($mediaDirectory->getAbsolutePath()) as $file) {
-            $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
-                ->getRelativePath($file->getPathName());
-            if (!$this->isApplicable($relativePath)) {
+        foreach ($mediaDirectory->readRecursively($mediaDirectory->getAbsolutePath()) as $file) {
+
+            if (!$this->isApplicable($file)) {
                 continue;
             }
 
-            $batch[] = $relativePath;
+            $batch[] = $file;
+            
             if (++$i == $this->batchSize) {
                 yield $batch;
                 $i = 0;

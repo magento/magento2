@@ -50,8 +50,8 @@ class Links implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -64,7 +64,7 @@ class Links implements ResolverInterface
         $product = $quoteItem->getProduct();
 
         $selectedLinksIds = $product->getLinksPurchasedSeparately()
-            ? explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue()) : [];
+            ? explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue() ?? '') : [];
         $links = $this->getDownloadableProductLinks->execute($product, $selectedLinksIds);
 
         $data = $this->convertLinksToArray->execute($links);

@@ -12,6 +12,8 @@ use Magento\Store\Model\StoreSwitcher\CannotSwitchStoreException;
 
 /**
  * Handles store switching procedure and detects url for final redirect after store switching.
+ *
+ * @api
  */
 interface StoreSwitcherInterface
 {

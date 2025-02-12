@@ -17,7 +17,7 @@ class Pool implements \Iterator
     /**
      * Frontend identifier associated with the default settings
      */
-    const DEFAULT_FRONTEND_ID = 'default';
+    public const DEFAULT_FRONTEND_ID = 'default';
 
     /**
      * @var DeploymentConfig
@@ -86,7 +86,7 @@ class Pool implements \Iterator
          * default cache_dir setting from di.xml when a cache id_prefix is configured in app/etc/env.php.
          */
         $cacheInfo = $this->deploymentConfig->getConfigData(FrontendPool::KEY_CACHE);
-        if (null !== $cacheInfo) {
+        if (null !== $cacheInfo && array_key_exists(FrontendPool::KEY_FRONTEND_CACHE, $cacheInfo)) {
             return array_replace_recursive($this->_frontendSettings, $cacheInfo[FrontendPool::KEY_FRONTEND_CACHE]);
         }
         return $this->_frontendSettings;
@@ -97,6 +97,7 @@ class Pool implements \Iterator
      *
      * @return \Magento\Framework\Cache\FrontendInterface
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $this->_initialize();
@@ -106,6 +107,7 @@ class Pool implements \Iterator
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         $this->_initialize();
@@ -115,6 +117,7 @@ class Pool implements \Iterator
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->_initialize();
@@ -124,6 +127,7 @@ class Pool implements \Iterator
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_initialize();
@@ -133,6 +137,7 @@ class Pool implements \Iterator
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         $this->_initialize();

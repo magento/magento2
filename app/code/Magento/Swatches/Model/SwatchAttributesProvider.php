@@ -45,7 +45,7 @@ class SwatchAttributesProvider
     public function __construct(
         Configurable $typeConfigurable,
         SwatchAttributeCodes $swatchAttributeCodes,
-        SwatchAttributeType $swatchTypeChecker = null
+        ?SwatchAttributeType $swatchTypeChecker = null
     ) {
         $this->typeConfigurable = $typeConfigurable;
         $this->swatchAttributeCodes = $swatchAttributeCodes;

@@ -32,34 +32,54 @@ class ShippingTest extends TestCase
      */
     protected $shippingModel;
 
-    /** @var Quote|MockObject */
+    /**
+     * @var Quote|MockObject
+     */
     protected $quote;
 
-    /** @var Total|MockObject  */
+    /**
+     * @var Total|MockObject
+     */
     protected $total;
 
-    /** @var ShippingAssignmentInterface|MockObject  */
+    /**
+     * @var ShippingAssignmentInterface|MockObject
+     */
     protected $shippingAssignment;
 
-    /** @var Address|MockObject  */
+    /**
+     * @var Address|MockObject
+     */
     protected $address;
 
-    /** @var ShippingInterface|MockObject  */
+    /**
+     * @var ShippingInterface|MockObject
+     */
     protected $shipping;
 
-    /** @var FreeShippingInterface|MockObject */
+    /**
+     * @var FreeShippingInterface|MockObject
+     */
     protected $freeShipping;
 
-    /** @var CartItemInterface|MockObject */
+    /**
+     * @var CartItemInterface|MockObject
+     */
     protected $cartItem;
 
-    /** @var Rate|MockObject */
+    /**
+     * @var Rate|MockObject
+     */
     protected $rate;
 
-    /** @var Store|MockObject */
+    /**
+     * @var Store|MockObject
+     */
     protected $store;
 
-    /** @var PriceCurrencyInterface|MockObject */
+    /**
+     * @var PriceCurrencyInterface|MockObject
+     */
     protected $priceCurrency;
 
     /**
@@ -84,7 +104,7 @@ class ShippingTest extends TestCase
             Shipping::class,
             [
                 'freeShipping' => $this->freeShipping,
-                'priceCurrency' => $this->priceCurrency,
+                'priceCurrency' => $this->priceCurrency
             ]
         );
 
@@ -138,7 +158,7 @@ class ShippingTest extends TestCase
                 'isVirtual',
                 'getWeight',
                 'getQty',
-                'setRowWeight',
+                'setRowWeight'
             ]
         );
         $this->rate = $this->getMockBuilder(Rate::class)
@@ -189,11 +209,16 @@ class ShippingTest extends TestCase
         $this->shippingAssignment->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturn([$this->cartItem]);
-        $this->freeShipping->method('isFreeShipping')
+        $isFreeShipping = true;
+        $this->freeShipping
+            ->expects($this->once())
+            ->method('isFreeShipping')
             ->with($this->quote, [$this->cartItem])
-            ->willReturn(true);
-        $this->address->method('setFreeShipping')
-            ->with(true);
+            ->willReturn($isFreeShipping);
+        $this->address
+            ->expects($this->once())
+            ->method('setFreeShipping')
+            ->with((int)$isFreeShipping);
         $this->total->expects($this->atLeastOnce())
             ->method('setTotalAmount');
         $this->total->expects($this->atLeastOnce())
@@ -270,12 +295,9 @@ class ShippingTest extends TestCase
      */
     protected function freeShippingAssertions(): void
     {
-        $this->address->expects($this->at(0))
+        $this->address
             ->method('getFreeShipping')
-            ->willReturn(false);
-        $this->address->expects($this->at(1))
-            ->method('getFreeShipping')
-            ->willReturn(true);
+            ->willReturnOnConsecutiveCalls(false, true);
         $this->cartItem->expects($this->atLeastOnce())
             ->method('getFreeShipping')
             ->willReturn(true);

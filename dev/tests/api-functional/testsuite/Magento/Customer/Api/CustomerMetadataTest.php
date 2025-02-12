@@ -70,7 +70,7 @@ class CustomerMetadataTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getAttributeMetadataDataProvider()
+    public static function getAttributeMetadataDataProvider()
     {
         return [
             Customer::FIRSTNAME => [
@@ -184,12 +184,12 @@ class CustomerMetadataTest extends WebapiAbstract
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
 
-        $firstName = $this->getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
+        $firstName = self::getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($firstName, $attributeMetadata);
         list($firstName, $attributeMetadata) = $validationResult;
         $this->assertContainsEquals($firstName, $attributeMetadata);
 
-        $websiteId = $this->getAttributeMetadataDataProvider()[Customer::WEBSITE_ID][1];
+        $websiteId = self::getAttributeMetadataDataProvider()[Customer::WEBSITE_ID][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($websiteId, $attributeMetadata);
         list($websiteId, $attributeMetadata) = $validationResult;
         $this->assertContainsEquals($websiteId, $attributeMetadata);
@@ -259,9 +259,9 @@ class CustomerMetadataTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getAttributesDataProvider()
+    public static function getAttributesDataProvider()
     {
-        $attributeMetadata = $this->getAttributeMetadataDataProvider();
+        $attributeMetadata = self::getAttributeMetadataDataProvider();
         return [
             [
                 'adminhtml_customer',

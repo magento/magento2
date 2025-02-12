@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Category;
 
@@ -13,6 +12,7 @@ use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Design;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Session;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\App\Action\Action;
@@ -22,7 +22,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -40,22 +40,16 @@ use Psr\Log\LoggerInterface;
 class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Catalog session
-     *
      * @var Session
      */
     protected $_catalogSession;
 
     /**
-     * Catalog design
-     *
      * @var Design
      */
     protected $_catalogDesign;
@@ -142,10 +136,10 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         ForwardFactory $resultForwardFactory,
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
-        ToolbarMemorizer $toolbarMemorizer = null,
+        ?ToolbarMemorizer $toolbarMemorizer = null,
         ?LayoutUpdateManager $layoutUpdateManager = null,
-        CategoryHelper $categoryHelper = null,
-        LoggerInterface $logger = null
+        ?CategoryHelper $categoryHelper = null,
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
@@ -212,8 +206,10 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $result = null;
 
         if ($this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)) {
+            //phpcs:ignore Magento2.Legacy.ObsoleteResponse
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl());
         }
+
         $category = $this->_initCategory();
         if ($category) {
             $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
@@ -240,7 +236,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 $page->addPageLayoutHandles(['type' => $parentPageType], null, false);
             }
             $page->addPageLayoutHandles(['type' => $pageType], null, false);
-            $page->addPageLayoutHandles(['displaymode' => strtolower($category->getDisplayMode())], null, false);
+            $categoryDisplayMode = is_string($category->getDisplayMode()) ?
+                strtolower($category->getDisplayMode()) : '';
+            $page->addPageLayoutHandles(['displaymode' => $categoryDisplayMode], null, false);
             $page->addPageLayoutHandles(['id' => $category->getId()]);
 
             // apply custom layout update once layout is loaded
@@ -250,6 +248,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 ->addBodyClass('categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($category))
                 ->addBodyClass('category-' . $category->getUrlKey());
 
+            if ($this->shouldRedirectOnToolbarAction()) {
+                $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            }
             return $page;
         } elseif (!$this->getResponse()->isRedirect()) {
             $result = $this->resultForwardFactory->create()->forward('noroute');
@@ -296,5 +297,22 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         if ($settings->getPageLayoutHandles()) {
             $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
+    }
+
+    /**
+     * Checks for toolbar actions
+     *
+     * @return bool
+     */
+    private function shouldRedirectOnToolbarAction(): bool
+    {
+        $params = $this->getRequest()->getParams();
+
+        return $this->toolbarMemorizer->isMemorizingAllowed() && empty(array_intersect([
+                Toolbar::ORDER_PARAM_NAME,
+                Toolbar::DIRECTION_PARAM_NAME,
+                Toolbar::MODE_PARAM_NAME,
+                Toolbar::LIMIT_PARAM_NAME
+            ], array_keys($params))) === false;
     }
 }

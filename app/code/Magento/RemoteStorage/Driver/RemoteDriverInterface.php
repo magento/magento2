@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\ExtendedDriverInterface;
 
 /**
  * Remote storage driver.
+ * @api
  */
 interface RemoteDriverInterface extends ExtendedDriverInterface
 {

@@ -44,7 +44,7 @@ class BooleanUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function toBooleanDataProvider()
+    public static function toBooleanDataProvider()
     {
         return [
             'boolean "true"' => [true, true],
@@ -73,7 +73,7 @@ class BooleanUtilsTest extends TestCase
     /**
      * @return array
      */
-    public function toBooleanExceptionDataProvider()
+    public static function toBooleanExceptionDataProvider()
     {
         return [
             'boolean string "on"' => ['on'],

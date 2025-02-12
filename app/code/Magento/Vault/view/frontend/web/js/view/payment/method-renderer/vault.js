@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 /*browser:true*/
-/*global define*/
+
 define(
     [
         'Magento_Checkout/js/view/payment/default',

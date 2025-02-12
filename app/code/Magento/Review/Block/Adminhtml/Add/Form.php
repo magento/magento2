@@ -10,14 +10,10 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Adminhtml add product review form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
-     * Review data
-     *
      * @var \Magento\Review\Helper\Data
      */
     protected $_reviewData = null;

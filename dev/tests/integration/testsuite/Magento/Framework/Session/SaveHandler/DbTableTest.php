@@ -6,6 +6,7 @@
 namespace Magento\Framework\Session\SaveHandler;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 class DbTableTest extends \PHPUnit\Framework\TestCase
 {
@@ -39,7 +40,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_sourceData = [
+    protected static $_sourceData = [
         self::SESSION_NEW => ['new key' => 'new value'],
         self::SESSION_EXISTS => ['existing key' => 'existing value'],
     ];
@@ -78,6 +79,11 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     protected $_sessionTable;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $_encryptor;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -89,10 +95,11 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         $resource = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class);
         $this->_connection = $resource->getConnection();
         $this->_sessionTable = $resource->getTableName('session');
+        $this->_encryptor = $this->_objectManager->get(EncryptorInterface::class);
 
         // session stores serialized objects with protected properties
         // we need to test this case to ensure that DB adapter successfully processes "\0" symbols in serialized data
-        foreach ($this->_sourceData as $key => $data) {
+        foreach (self::$_sourceData as $key => $data) {
             $this->_sessionData[$key] = new \Magento\Framework\DataObject($data);
         }
     }
@@ -121,10 +128,14 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     public function testWriteReadDestroy()
     {
+        // We have to use serialize here.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $data = serialize($this->_sessionData[self::SESSION_NEW]);
         $this->_model->write(self::SESSION_ID, $data);
         $this->assertEquals($data, $this->_model->read(self::SESSION_ID));
 
+        // We have to use serialize here.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $data = serialize($this->_sessionData[self::SESSION_EXISTS]);
         $this->_model->write(self::SESSION_ID, $data);
         $this->assertEquals($data, $this->_model->read(self::SESSION_ID));
@@ -151,6 +162,8 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     public function testWriteEncoded()
     {
+        // We have to use serialize here.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $data = serialize($this->_sessionData[self::SESSION_NEW]);
         $this->_model->write(self::SESSION_ID, $data);
 
@@ -159,10 +172,10 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
         )->where(
             self::COLUMN_SESSION_ID . ' = :' . self::COLUMN_SESSION_ID
         );
-        $bind = [self::COLUMN_SESSION_ID => self::SESSION_ID];
+        $bind = [self::COLUMN_SESSION_ID => $this->_encryptor->hash(self::SESSION_ID)];
         $session = $this->_connection->fetchRow($select, $bind);
 
-        $this->assertEquals(self::SESSION_ID, $session[self::COLUMN_SESSION_ID]);
+        $this->assertEquals($this->_encryptor->hash(self::SESSION_ID), $session[self::COLUMN_SESSION_ID]);
         $this->assertTrue(
             ctype_digit((string)$session[self::COLUMN_SESSION_EXPIRES]),
             'Value of session expire field must have integer type'
@@ -175,14 +188,15 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function readEncodedDataProvider()
+    public static function readEncodedDataProvider()
     {
         // we can't use object data as a fixture because not encoded serialized object
         // might cause DB adapter fatal error, so we have to use array as a fixture
-        $sessionData = serialize($this->_sourceData[self::SESSION_NEW]);
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        $sessionData = serialize(self::$_sourceData[self::SESSION_NEW]);
         return [
-            'session_encoded' => ['$sessionData' => base64_encode($sessionData)],
-            'session_not_encoded' => ['$sessionData' => $sessionData]
+            'session_encoded' => ['sessionData' => base64_encode($sessionData)],
+            'session_not_encoded' => ['sessionData' => $sessionData]
         ];
     }
 
@@ -197,10 +211,12 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     public function testReadEncoded($sessionData)
     {
-        $sessionRecord = [self::COLUMN_SESSION_ID => self::SESSION_ID, self::COLUMN_SESSION_DATA => $sessionData];
+        $sessionRecord = [self::COLUMN_SESSION_ID => $this->_encryptor->hash(self::SESSION_ID), self::COLUMN_SESSION_DATA => $sessionData];
         $this->_connection->insertOnDuplicate($this->_sessionTable, $sessionRecord, [self::COLUMN_SESSION_DATA]);
 
         $sessionData = $this->_model->read(self::SESSION_ID);
-        $this->assertEquals($this->_sourceData[self::SESSION_NEW], unserialize($sessionData));
+        // We have to use unserialize here.
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        $this->assertEquals(self::$_sourceData[self::SESSION_NEW], unserialize($sessionData));
     }
 }

@@ -5,6 +5,7 @@
  */
 namespace Magento\Developer\Test\Unit\Model\Logger\Handler;
 
+use Magento\Config\Setup\ConfigOptionsList;
 use Magento\Developer\Model\Logger\Handler\Debug;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
@@ -12,7 +13,9 @@ use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Monolog\Formatter\FormatterInterface;
+use Monolog\Level;
 use Monolog\Logger;
+use Monolog\LogRecord;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -52,6 +55,11 @@ class DebugTest extends TestCase
     private $deploymentConfigMock;
 
     /**
+     * @var LogRecord
+     */
+    private $logRecord;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -81,6 +89,13 @@ class DebugTest extends TestCase
             'deploymentConfig' => $this->deploymentConfigMock
         ]);
         $this->model->setFormatter($this->formatterMock);
+
+        $this->logRecord = new LogRecord(
+            new \DateTimeImmutable(),
+            'testChannel',
+            Level::Debug,
+            'testMessage'
+        );
     }
 
     /**
@@ -99,7 +114,7 @@ class DebugTest extends TestCase
             ->expects($this->never())
             ->method('getValue');
 
-        $this->assertTrue($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
+        $this->assertTrue($this->model->isHandling($this->logRecord));
     }
 
     /**
@@ -118,7 +133,7 @@ class DebugTest extends TestCase
             ->expects($this->never())
             ->method('getValue');
 
-        $this->assertTrue($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
+        $this->assertTrue($this->model->isHandling($this->logRecord));
     }
 
     /**
@@ -137,7 +152,7 @@ class DebugTest extends TestCase
             ->expects($this->never())
             ->method('getValue');
 
-        $this->assertFalse($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
+        $this->assertFalse($this->model->isHandling($this->logRecord));
     }
 
     /**
@@ -148,15 +163,19 @@ class DebugTest extends TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('isAvailable')
             ->willReturn(true);
-        $this->stateMock
-            ->expects($this->never())
-            ->method('getMode')
-            ->willReturn(State::MODE_DEVELOPER);
-        $this->scopeConfigMock
-            ->expects($this->never())
-            ->method('getValue');
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(ConfigOptionsList::CONFIG_PATH_DEBUG_LOGGING)
+            ->willReturn(false);
 
-        $this->assertFalse($this->model->isHandling(['formatted' => false, 'level' => Logger::API]));
+        $this->assertFalse($this->model->isHandling(
+            new LogRecord(
+                new \DateTimeImmutable(),
+                'testChannel',
+                Level::Error,
+                'testMessage'
+            )
+        ));
     }
 
     /**
@@ -174,6 +193,6 @@ class DebugTest extends TestCase
             ->expects($this->never())
             ->method('getValue');
 
-        $this->assertTrue($this->model->isHandling(['formatted' => false, 'level' => Logger::DEBUG]));
+        $this->assertTrue($this->model->isHandling($this->logRecord));
     }
 }

@@ -7,6 +7,8 @@ namespace Magento\Framework\Url;
 
 /**
  * URL modifier interface.
+ *
+ * @api
  */
 interface ModifierInterface
 {

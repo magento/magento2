@@ -93,17 +93,20 @@ define([
          * @private
          */
         _resolveDataByIds: function () {
+            if (!window.checkout || !window.checkout.baseUrl) {
+                // We need data that the minicart provdes to determine storeId/websiteId
+                return;
+            }
+
+            // Filter initial ids to remove "out of scope" and "outdated" data
+            this.ids(
+                this.filterIds(this.ids())
+            );
             this.initIdsListener();
             this.idsMerger(
                 this.idsStorage.get(),
                 this.prepareDataFromCustomerData(customerData.get(this.identifiersConfig.namespace)())
             );
-
-            if (!_.isEmpty(this.productStorage.data())) {
-                this.dataCollectionHandler(this.productStorage.data());
-            } else {
-                this.productStorage.setIds(this.data.currency, this.data.store, this.ids());
-            }
         },
 
         /**
@@ -171,7 +174,7 @@ define([
 
             if (!_.isEmpty(data)) {
                 this.ids(
-                    this.filterIds(_.extend(this.ids(), data))
+                    this.filterIds(_.extend(utils.copy(this.ids()), data))
                 );
             }
         },

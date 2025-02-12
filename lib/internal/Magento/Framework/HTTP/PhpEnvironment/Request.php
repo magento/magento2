@@ -5,14 +5,14 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
-use Magento\Framework\Stdlib\StringUtils;
 use Laminas\Http\Header\HeaderInterface;
 use Laminas\Stdlib\Parameters;
 use Laminas\Stdlib\ParametersInterface;
 use Laminas\Uri\UriFactory;
 use Laminas\Uri\UriInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * HTTP Request for current PHP environment.
@@ -25,12 +25,12 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     /**#@+
      * Protocols
      */
-    const SCHEME_HTTP  = 'http';
-    const SCHEME_HTTPS = 'https';
+    public const SCHEME_HTTP  = 'http';
+    public const SCHEME_HTTPS = 'https';
     /**#@-*/
 
     // Configuration path for SSL Offload http header
-    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
+    public const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
 
     /**
      * @var string
@@ -48,8 +48,6 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     protected $action;
 
     /**
-     * PATH_INFO
-     *
      * @var string
      */
     protected $pathInfo = '';
@@ -227,7 +225,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     public function setPathInfo($pathInfo = null)
     {
         if ($pathInfo === null) {
-            $requestUri = $this->getRequestUri();
+            $requestUri = $this->getRequestUri() ?? '';
             if ('/' == $requestUri) {
                 return $this;
             }
@@ -453,6 +451,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      *
      * @return \Magento\Framework\App\Config
      * @deprecated 100.1.0
+     * @see Nothing
      */
     private function getAppConfig()
     {
@@ -821,5 +820,21 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     {
         $this->forwarded = $forwarded;
         return $this;
+    }
+
+    /**
+     * Retrieve debug info
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [
+            'pathInfo' => $this->pathInfo,
+            'requestString' => $this->requestString,
+            'module' => $this->module,
+            'controller' => $this->controller,
+            'action' => $this->action,
+        ];
     }
 }

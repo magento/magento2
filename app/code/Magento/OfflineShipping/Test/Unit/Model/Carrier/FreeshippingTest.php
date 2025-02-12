@@ -65,13 +65,13 @@ class FreeshippingTest extends TestCase
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->methodFactoryMock = $this
             ->getMockBuilder(MethodFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->helper = new ObjectManager($this);
@@ -80,7 +80,7 @@ class FreeshippingTest extends TestCase
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 '_rateResultFactory' => $this->resultFactoryMock,
-                '_rateMethodFactory' => $this->methodFactoryMock,
+                '_rateMethodFactory' => $this->methodFactoryMock
             ]
         );
     }
@@ -107,45 +107,56 @@ class FreeshippingTest extends TestCase
         /** @var RateRequest|MockObject $request */
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'getAllItems',
                     'getPackageQty',
                     'getFreeShipping',
                     'getBaseSubtotalWithDiscountInclTax',
-                    'getPackageValueWithDiscount',
+                    'getPackageValueWithDiscount'
                 ]
             )
             ->getMock();
         $item = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock->expects($this->at(0))
+        $this->scopeConfigMock
             ->method('isSetFlag')
-            ->willReturn(true);
-        $this->scopeConfigMock->expects($this->at(1))
-            ->method('isSetFlag')
-            ->with(
-                'carriers/freeshipping/tax_including',
-                ScopeInterface::SCOPE_STORE,
-                null
-            )
-            ->willReturn($subtotalInclTax);
-        $this->scopeConfigMock->expects($this->at(2))
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($subtotalInclTax) {
+                if ($arg1 == 'carriers/freeshipping/tax_including' &&
+                    $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == null) {
+                    return $subtotalInclTax;
+                } else {
+                    return true;
+                }
+            });
+
+        $this->scopeConfigMock
             ->method('getValue')
-            ->with(
-                'carriers/freeshipping/free_shipping_subtotal',
-                ScopeInterface::SCOPE_STORE,
-                null
-            )
-            ->willReturn($minOrderAmount);
+            ->willReturnCallback(
+                function ($arg1,$arg2,$arg3) use ($minOrderAmount) {
+                    if ($arg1 == 'carriers/freeshipping/free_shipping_subtotal' &&
+                        $arg2 == ScopeInterface::SCOPE_STORE && $arg3 == null) {
+                        return $minOrderAmount;
+                    }
+                }
+            );
         $method = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setMethod', 'setMethodTitle', 'setPrice', 'setCost'])
+            ->addMethods(
+                [
+                    'setCarrier',
+                    'setCarrierTitle',
+                    'setMethod',
+                    'setMethodTitle',
+                    'setCost'
+                ]
+            )
+            ->onlyMethods([ 'setPrice'])
             ->getMock();
         $resultModel = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
-            ->setMethods(['append'])
+            ->onlyMethods(['append'])
             ->getMock();
         $this->resultFactoryMock->method('create')
             ->willReturn($resultModel);
@@ -169,7 +180,7 @@ class FreeshippingTest extends TestCase
     /**
      * @return array
      */
-    public function freeShippingWithSubtotalTaxDataProvider(): array
+    public static function freeShippingWithSubtotalTaxDataProvider(): array
     {
         return [
             [
@@ -177,7 +188,7 @@ class FreeshippingTest extends TestCase
                 'minOrderAmount' => 10,
                 'packageValueWithDiscount' => 8,
                 'baseSubtotalWithDiscountInclTax' => 15,
-                'expectedCallAppend' => $this->once(),
+                'expectedCallAppend' => self::once()
 
             ],
             [
@@ -185,7 +196,7 @@ class FreeshippingTest extends TestCase
                 'minOrderAmount' => 20,
                 'packageValueWithDiscount' => 8,
                 'baseSubtotalWithDiscountInclTax' => 15,
-                'expectedCallAppend' => $this->never(),
+                'expectedCallAppend' => self::never()
 
             ],
             [
@@ -193,9 +204,9 @@ class FreeshippingTest extends TestCase
                 'minOrderAmount' => 10,
                 'packageValueWithDiscount' => 8,
                 'baseSubtotalWithDiscountInclTax' => 15,
-                'expectedCallAppend' => $this->never(),
+                'expectedCallAppend' => self::never()
 
-            ],
+            ]
         ];
     }
 }

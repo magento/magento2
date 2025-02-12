@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,7 +17,7 @@ abstract class AbstractAction
     /**
      * Config path for enable EAV indexer
      */
-    const ENABLE_EAV_INDEXER = 'catalog/search/enable_eav_indexer';
+    public const ENABLE_EAV_INDEXER = 'catalog/search/enable_eav_indexer';
 
     /**
      * EAV Indexers by type
@@ -50,7 +50,7 @@ abstract class AbstractAction
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory $eavDecimalFactory,
         \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory $eavSourceFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
+        ?\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_eavDecimalFactory = $eavDecimalFactory;
         $this->_eavSourceFactory = $eavSourceFactory;
@@ -142,7 +142,7 @@ abstract class AbstractAction
         $connection->beginTransaction();
         try {
             // remove old index
-            $where = $connection->quoteInto('entity_id IN(?)', $ids);
+            $where = $connection->quoteInto('entity_id IN (?)', $ids, 'INT');
             $connection->delete($destinationTable, $where);
             // insert new index
             $indexer->insertFromTable($indexer->getIdxTable(), $destinationTable);

@@ -10,5 +10,6 @@
     <section name="AdminAddRelatedProductsModalSection">
         <element name="AddSelectedProductsButton" type="button" selector="//aside[contains(@class, 'related_modal')]//button[contains(@class, 'action-primary')]" timeout="30"/>
         <element name="AddUpSellProductsButton" type="button" selector="//aside[contains(@class, 'upsell_modal')]//button[contains(@class, 'action-primary')]" timeout="30"/>
+        <element name="AddCrossSellProductsButton" type="button" selector="//aside[contains(@class, 'crosssell_modal')]//button[contains(@class, 'action-primary')]" timeout="30"/>
     </section>
 </sections>

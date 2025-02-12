@@ -86,7 +86,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     public function __construct(
         ExcludeList $excludeList,
         array $sources = [],
-        TypePool $typePool = null,
+        ?TypePool $typePool = null,
         array $rules = []
     ) {
         $this->sources = $sources;
@@ -209,7 +209,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private function sortSources()
     {
         uasort($this->sources, function ($firstItem, $secondItem) {
-            return $firstItem['sortOrder'] > $secondItem['sortOrder'];
+            return ($firstItem['sortOrder'] <=> $secondItem['sortOrder']);
         });
     }
 

@@ -10,36 +10,40 @@
      attr="'data-index': index">
     <div class="admin__field-label" visible="$data.labelVisible">
         <label if="$data.label"  attr="for: uid">
-            <span translate="label" attr="'data-config-scope': $data.scopeLabel" />
+            <span translate="label" attr="'data-config-scope': $data.scopeLabel"></span>
         </label>
     </div>
     <div class="admin__field-control"
          css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
-        <render args="elementTmpl" ifnot="hasAddons()"/>
+        <render args="elementTmpl" ifnot="hasAddons()"></render>
 
         <div class="admin__control-addon" if="hasAddons()">
-            <render args="elementTmpl"/>
+            <render args="elementTmpl"></render>
 
             <label class="admin__addon-prefix" if="$data.addbefore" attr="for: uid">
-                <span text="addbefore"/>
+                <span text="addbefore"></span>
             </label>
             <label class="admin__addon-suffix" if="$data.addafter" attr="for: uid">
-                <span text="addafter"/>
+                <span text="addafter"></span>
             </label>
         </div>
 
-        <render args="tooltipTpl" if="$data.tooltip"/>
+        <render args="tooltipTpl" if="$data.tooltip"></render>
 
-        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
 
-        <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+        <label class="admin__field-error" if="error" attr="for: uid" text="error"></label>
 
         <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
-            <span translate="notice"/>
+            <span translate="notice"></span>
         </div>
 
-        <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfo"></div>
+        <!-- ko if: $data.additionalInfo -->
+            <!-- ko with: {additionalInfoUnsanitizedHtml: $data.additionalInfo} -->
+                <div class="admin__additional-info" html="additionalInfoUnsanitizedHtml"></div>
+            <!-- /ko -->
+        <!-- /ko -->
 
-        <render args="$data.service.template" if="$data.hasService()"/>
+        <render args="$data.service.template" if="$data.hasService()"></render>
     </div>
 </div>

@@ -8,31 +8,28 @@ namespace Magento\Catalog\Model\ResourceModel\Attribute;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Query\Generator;
+use Magento\Framework\DB\Query\BatchRangeIteratorFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\FlagManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\Store;
 
-/**
- * Class WebsiteAttributesSynchronizer
- * @package Magento\Catalog\Cron
- */
-class WebsiteAttributesSynchronizer
+class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
 {
-    const FLAG_SYNCHRONIZED = 0;
-    const FLAG_SYNCHRONIZATION_IN_PROGRESS = 1;
-    const FLAG_REQUIRES_SYNCHRONIZATION = 2;
-    const FLAG_NAME = 'catalog_website_attribute_is_sync_required';
-
-    const ATTRIBUTE_WEBSITE = 2;
-    const GLOBAL_STORE_VIEW_ID = 0;
-
-    const MASK_ATTRIBUTE_VALUE = '%d_%d_%d';
+    public const FLAG_SYNCHRONIZED = 0;
+    public const FLAG_SYNCHRONIZATION_IN_PROGRESS = 1;
+    public const FLAG_REQUIRES_SYNCHRONIZATION = 2;
+    public const FLAG_NAME = 'catalog_website_attribute_is_sync_required';
 
     /**
      * Map table names to metadata classes where link field might be found
+     *
+     * @var string[]
      */
     private $tableMetaDataClass = [
         'catalog_category_entity_datetime' => CategoryInterface::class,
@@ -47,25 +44,6 @@ class WebsiteAttributesSynchronizer
         'catalog_product_entity_text' => ProductInterface::class,
         'catalog_product_entity_varchar' => ProductInterface::class,
     ];
-
-    /**
-     * Internal format :
-     *  [
-     *    website_id => [
-     *      store_view_id_1,
-     *      store_view_id_2,
-     *      ...
-     *    ]
-     *  ]
-     *
-     * @var array
-     */
-    private $groupedStoreViews = [];
-
-    /**
-     * @var array
-     */
-    private $processedAttributeValues = [];
 
     /**
      * @var ResourceConnection
@@ -83,14 +61,24 @@ class WebsiteAttributesSynchronizer
     private $flagManager;
 
     /**
-     * @var Generator
-     */
-    private $batchQueryGenerator;
-
-    /**
      * @var MetadataPool
      */
     private $metaDataPool;
+
+    /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
+    /**
+     * @var BatchRangeIteratorFactory
+     */
+    private $rangeIteratorFactory;
+
+    /**
+     * @var int
+     */
+    private $batchSize;
 
     /**
      * @var array
@@ -98,59 +86,84 @@ class WebsiteAttributesSynchronizer
     private $linkFields = [];
 
     /**
-     * WebsiteAttributesSynchronizer constructor.
      * @param ResourceConnection $resourceConnection
      * @param FlagManager $flagManager
-     * @param Generator $batchQueryGenerator,
      * @param MetadataPool $metadataPool
+     * @param StoreRepositoryInterface $storeRepository
+     * @param BatchRangeIteratorFactory $rangeIteratorFactory
+     * @param int $batchSize
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         FlagManager $flagManager,
-        Generator $batchQueryGenerator,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        StoreRepositoryInterface $storeRepository,
+        BatchRangeIteratorFactory $rangeIteratorFactory,
+        int $batchSize = 1000
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->connection = $this->resourceConnection->getConnection();
         $this->flagManager = $flagManager;
-        $this->batchQueryGenerator = $batchQueryGenerator;
         $this->metaDataPool = $metadataPool;
+        $this->storeRepository = $storeRepository;
+        $this->rangeIteratorFactory = $rangeIteratorFactory;
+        $this->batchSize = $batchSize;
     }
 
     /**
      * Synchronizes attribute values between different store views on website level
+     *
      * @return void
      * @throws \Exception
+     * @deprecated Synchronization should be done for the affected store only.
+     * @see synchronizeStoreValues
      */
     public function synchronize()
     {
         $this->markSynchronizationInProgress();
-        $this->connection->beginTransaction();
         try {
-            foreach (array_keys($this->tableMetaDataClass) as $tableName) {
-                $this->synchronizeTable($tableName);
+            foreach ($this->storeRepository->getList() as $store) {
+                $this->synchronizeStoreValues((int) $store->getId());
             }
-
             $this->markSynchronized();
-            $this->connection->commit();
         } catch (\Exception $exception) {
-            $this->connection->rollBack();
             $this->scheduleSynchronization();
             throw $exception;
         }
     }
 
     /**
-     * @return bool
+     * Synchronizes website specific attribute values for provided store.
+     *
+     * @param int $storeId
+     * @return void
+     * @throws \Exception
      */
-    public function isSynchronizationRequired()
+    public function synchronizeStoreValues(int $storeId): void
+    {
+        foreach (array_keys($this->tableMetaDataClass) as $tableName) {
+            $this->synchronizeTable($tableName, $storeId);
+        }
+    }
+
+    /**
+     * Check if synchronization required
+     *
+     * @return bool
+     * @deprecated Isn't used anymore.
+     * @see \Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\Scheduler
+     */
+    public function isSynchronizationRequired(): bool
     {
         return self::FLAG_REQUIRES_SYNCHRONIZATION === $this->flagManager->getFlagData(self::FLAG_NAME);
     }
 
     /**
      * Puts a flag that synchronization is required
+     *
      * @return void
+     * @deprecated Isn't used anymore.
+     * @see \Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\Scheduler
      */
     public function scheduleSynchronization()
     {
@@ -159,7 +172,10 @@ class WebsiteAttributesSynchronizer
 
     /**
      * Marks flag as in progress in case if several crons enabled, so sync. won't be duplicated
+     *
      * @return void
+     * @deprecated Isn't used anymore.
+     * @see \Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\Scheduler
      */
     private function markSynchronizationInProgress()
     {
@@ -168,7 +184,10 @@ class WebsiteAttributesSynchronizer
 
     /**
      * Turn off synchronization flag
+     *
      * @return void
+     * @deprecated Isn't used anymore.
+     * @see \Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\Scheduler
      */
     private function markSynchronized()
     {
@@ -176,79 +195,85 @@ class WebsiteAttributesSynchronizer
     }
 
     /**
+     * Perform table synchronization
+     *
      * @param string $tableName
+     * @param int $storeId
      * @return void
      */
-    private function synchronizeTable($tableName)
+    private function synchronizeTable(string $tableName, int $storeId): void
     {
-        foreach ($this->fetchAttributeValues($tableName) as $attributeValueItems) {
-            $this->processAttributeValues($attributeValueItems, $tableName);
+        foreach ($this->fetchAttributeValues($tableName, $storeId) as $attributeValueItems) {
+            if (empty($attributeValueItems)) {
+                continue;
+            }
+
+            $this->processAttributeValues($attributeValueItems, $tableName, $storeId);
         }
     }
 
     /**
      * Aligns website attribute values
+     *
      * @param array $attributeValueItems
      * @param string $tableName
+     * @param int $storeId
      * @return void
      */
-    private function processAttributeValues(array $attributeValueItems, $tableName)
+    private function processAttributeValues(array $attributeValueItems, string $tableName, int $storeId): void
     {
-        $this->resetProcessedAttributeValues();
-
-        foreach ($attributeValueItems as $attributeValueItem) {
-            if ($this->isAttributeValueProcessed($attributeValueItem, $tableName)) {
-                continue;
-            }
-
-            $insertions = $this->generateAttributeValueInsertions($attributeValueItem, $tableName);
-            if (!empty($insertions)) {
-                $this->executeInsertions($insertions, $tableName);
-            }
-
-            $this->markAttributeValueProcessed($attributeValueItem, $tableName);
-        }
+        $attributeValueItems = array_map(fn ($item) => $item + ['store_id' => $storeId], $attributeValueItems);
+        $this->connection->insertOnDuplicate(
+            $this->resourceConnection->getTableName($tableName),
+            $attributeValueItems,
+            ['value']
+        );
     }
 
     /**
      * Yields batch of AttributeValues
      *
      * @param string $tableName
+     * @param int $storeId
      * @yield array
-     * @return void
+     * @return \Generator
      */
-    private function fetchAttributeValues($tableName)
+    private function fetchAttributeValues(string $tableName, int $storeId): \Generator
     {
-        $batchSelectIterator = $this->batchQueryGenerator->generate(
-            'value_id',
-            $this->connection
-                ->select()
-                ->from(
-                    ['cpei' => $this->resourceConnection->getTableName($tableName)],
-                    '*'
-                )
-                ->join(
-                    [
-                        'cea' => $this->resourceConnection->getTableName('catalog_eav_attribute'),
-                    ],
-                    'cpei.attribute_id = cea.attribute_id',
-                    ''
-                )
-                ->join(
-                    [
-                        'st' => $this->resourceConnection->getTableName('store'),
-                    ],
-                    'st.store_id = cpei.store_id',
-                    'st.website_id'
-                )
-                ->where(
-                    'cea.is_global = ?',
-                    self::ATTRIBUTE_WEBSITE
-                )
-                ->where(
-                    'cpei.store_id <> ?',
-                    self::GLOBAL_STORE_VIEW_ID
-                )
+        $store = $this->storeRepository->getById($storeId);
+        $linkField = $this->getTableLinkField($tableName);
+        $select = $this->connection->select()
+            ->from(
+                ['cpev' => $this->resourceConnection->getTableName($tableName)],
+                ['cpev.' . $linkField, 'cpev.attribute_id', 'cpev.value']
+            )->joinInner(
+                ['cea' => $this->resourceConnection->getTableName('catalog_eav_attribute')],
+                'cea.attribute_id = cpev.attribute_id',
+                []
+            )->joinInner(
+                ['s' => $this->resourceConnection->getTableName('store')],
+                's.store_id = cpev.store_id',
+                []
+            )->where(
+                'cea.is_global = ?',
+                ScopedAttributeInterface::SCOPE_WEBSITE
+            )
+            ->where(
+                'cpev.store_id NOT IN (?)',
+                [Store::DEFAULT_STORE_ID, $storeId]
+            )->where(
+                's.website_id = ?',
+                (int) $store->getWebsiteId()
+            )->group(
+                ['cpev.' . $linkField, 'cpev.attribute_id']
+            );
+        $batchSelectIterator = $this->rangeIteratorFactory->create(
+            [
+                'select' => $select,
+                'batchSize' => $this->batchSize,
+                'correlationName' => 'cpev',
+                'rangeField' => [$linkField, 'attribute_id'],
+            ]
         );
 
         foreach ($batchSelectIterator as $select) {
@@ -257,175 +282,8 @@ class WebsiteAttributesSynchronizer
     }
 
     /**
-     * @return array
-     */
-    private function getGroupedStoreViews()
-    {
-        if (!empty($this->groupedStoreViews)) {
-            return $this->groupedStoreViews;
-        }
-
-        $query = $this->connection
-            ->select()
-            ->from(
-                $this->resourceConnection->getTableName('store'),
-                '*'
-            );
-
-        $storeViews = $this->connection->fetchAll($query);
-
-        $this->groupedStoreViews = [];
-
-        foreach ($storeViews as $storeView) {
-            if ($storeView['store_id'] != 0) {
-                $this->groupedStoreViews[$storeView['website_id']][] = $storeView['store_id'];
-            }
-        }
-
-        return $this->groupedStoreViews;
-    }
-
-    /**
-     * @param array $attributeValue
-     * @param string $tableName
-     * @return bool
-     */
-    private function isAttributeValueProcessed(array $attributeValue, $tableName)
-    {
-        return in_array(
-            $this->getAttributeValueKey(
-                $attributeValue[$this->getTableLinkField($tableName)],
-                $attributeValue['attribute_id'],
-                $attributeValue['website_id']
-            ),
-            $this->processedAttributeValues
-        );
-    }
-
-    /**
-     * Resets processed attribute values
-     * @return void
-     */
-    private function resetProcessedAttributeValues()
-    {
-        $this->processedAttributeValues = [];
-    }
-
-    /**
-     * @param array $attributeValue
-     * @param string $tableName
-     * @return void
-     */
-    private function markAttributeValueProcessed(array $attributeValue, $tableName)
-    {
-        $this->processedAttributeValues[] = $this->getAttributeValueKey(
-            $attributeValue[$this->getTableLinkField($tableName)],
-            $attributeValue['attribute_id'],
-            $attributeValue['website_id']
-        );
-    }
-
-    /**
-     * @param int $entityId
-     * @param int $attributeId
-     * @param int $websiteId
-     * @return string
-     */
-    private function getAttributeValueKey($entityId, $attributeId, $websiteId)
-    {
-        return sprintf(
-            self::MASK_ATTRIBUTE_VALUE,
-            $entityId,
-            $attributeId,
-            $websiteId
-        );
-    }
-
-    /**
-     * @param array $attributeValue
-     * @param string $tableName
-     * @return array|null
-     */
-    private function generateAttributeValueInsertions(array $attributeValue, $tableName)
-    {
-        $groupedStoreViews = $this->getGroupedStoreViews();
-        if (empty($groupedStoreViews[$attributeValue['website_id']])) {
-            return null;
-        }
-
-        $currentStoreViewIds = $groupedStoreViews[$attributeValue['website_id']];
-        $insertions = [];
-
-        foreach ($currentStoreViewIds as $index => $storeViewId) {
-            $insertions[] = [
-                ':attribute_id' . $index => $attributeValue['attribute_id'],
-                ':store_id' . $index => $storeViewId,
-                ':entity_id' . $index => $attributeValue[$this->getTableLinkField($tableName)],
-                ':value' . $index => $attributeValue['value'],
-            ];
-        }
-
-        return $insertions;
-    }
-
-    /**
-     * @param array $insertions
-     * @param string $tableName
-     * @return void
-     */
-    private function executeInsertions(array $insertions, $tableName)
-    {
-        $rawQuery = sprintf(
-            'INSERT INTO 
-            %s(attribute_id, store_id, %s, `value`)
-            VALUES 
-            %s
-            ON duplicate KEY UPDATE `value` = VALUES(`value`)',
-            $this->resourceConnection->getTableName($tableName),
-            $this->getTableLinkField($tableName),
-            $this->prepareInsertValuesStatement($insertions)
-        );
-
-        $this->connection->query($rawQuery, $this->getPlaceholderValues($insertions));
-    }
-
-    /**
-     * Maps $insertions hierarchy to single-level $placeholder => $value array
+     * Retrieve table link field
      *
-     * @param array $insertions
-     * @return array
-     */
-    private function getPlaceholderValues(array $insertions)
-    {
-        $placeholderValues = [];
-        foreach ($insertions as $insertion) {
-            $placeholderValues = array_merge(
-                $placeholderValues,
-                $insertion
-            );
-        }
-
-        return $placeholderValues;
-    }
-
-    /**
-     * Extracts from $insertions values placeholders and turns it into query statement view
-     *
-     * @param array $insertions
-     * @return string
-     */
-    private function prepareInsertValuesStatement(array $insertions)
-    {
-        $statement = '';
-
-        foreach ($insertions as $insertion) {
-            $statement .= sprintf('(%s),', implode(',', array_keys($insertion)));
-        }
-
-        return rtrim($statement, ',');
-    }
-
-    /**
      * @param string $tableName
      * @return string
      * @throws LocalizedException
@@ -448,5 +306,13 @@ class WebsiteAttributesSynchronizer
         }
 
         return $this->linkFields[$tableName];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->linkFields = [];
     }
 }

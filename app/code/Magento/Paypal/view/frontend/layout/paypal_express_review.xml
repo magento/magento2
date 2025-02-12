@@ -20,6 +20,9 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Paypal\Block\Express\Review" name="paypal.express.review" template="Magento_Paypal::express/review.phtml">
+                <arguments>
+                    <argument name="PaypalFundingSourceDataProvider" xsi:type="object">Magento\Paypal\ViewModel\PaypalFundingSourceDataProvider</argument>
+                </arguments>
                 <block class="Magento\Paypal\Block\Express\Review" name="express.review.shipping.method" as="shipping_method" template="Magento_Paypal::express/review/shipping/method.phtml"/>
                 <block class="Magento\Framework\View\Element\Text\ListText" name="paypal.additional.actions">
                     <block class="Magento\Checkout\Block\Cart\Coupon" name="paypal.cart.coupon" as="coupon" template="Magento_Checkout::cart/coupon.phtml"/>

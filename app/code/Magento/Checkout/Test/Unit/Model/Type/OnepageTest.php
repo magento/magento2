@@ -193,7 +193,7 @@ class OnepageTest extends TestCase
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
             ExtensibleDataObjectConverter::class
-        )->setMethods(['toFlatArray'])->disableOriginalConstructor()
+        )->onlyMethods(['toFlatArray'])->disableOriginalConstructor()
             ->getMock();
 
         $this->extensibleDataObjectConverterMock
@@ -308,7 +308,7 @@ class OnepageTest extends TestCase
     /**
      * @return array
      */
-    public function initCheckoutDataProvider()
+    public static function initCheckoutDataProvider()
     {
         return [
             [['login' => ''], false, false],
@@ -343,7 +343,7 @@ class OnepageTest extends TestCase
     /**
      * @return array
      */
-    public function getCheckoutMethodDataProvider()
+    public static function getCheckoutMethodDataProvider()
     {
         return [
             // isLoggedIn(), getQuote()->getCheckoutMethod(), isAllowedGuestCheckout(), expected

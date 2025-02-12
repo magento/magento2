@@ -49,18 +49,18 @@ class BaseStockStatusSelectProcessor implements BaseSelectProcessorInterface
     {
         // Does not make sense to extend query if out of stock products won't appear in tables for indexing
         if ($this->stockConfig->isShowOutOfStock()) {
-            $select->join(
-                ['si' => $this->resource->getTableName('cataloginventory_stock_item')],
-                'si.product_id = l.product_id',
+            $stockIndexTableName = $this->resource->getTableName('cataloginventory_stock_status');
+            $select->joinInner(
+                ['child_stock_default' => $stockIndexTableName],
+                'child_stock_default.product_id = l.product_id',
                 []
-            );
-            $select->join(
-                ['si_parent' => $this->resource->getTableName('cataloginventory_stock_item')],
-                'si_parent.product_id = l.parent_id',
+            )->joinInner(
+                ['parent_stock_default' => $stockIndexTableName],
+                'parent_stock_default.product_id = le.entity_id',
                 []
+            )->where(
+                'child_stock_default.stock_status = 1 OR parent_stock_default.stock_status = 0'
             );
-            $select->where('si.is_in_stock = ?', Stock::STOCK_IN_STOCK);
-            $select->orWhere('si_parent.is_in_stock = ?', Stock::STOCK_OUT_OF_STOCK);
         }
 
         return $select;

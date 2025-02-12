@@ -7,6 +7,8 @@ namespace Magento\Quote\Model\Quote\Address;
 
 /**
  * Factory class for \Magento\Quote\Model\Quote\Address\RateCollectorInterface
+ *
+ * @api
  */
 class RateCollectorInterfaceFactory
 {

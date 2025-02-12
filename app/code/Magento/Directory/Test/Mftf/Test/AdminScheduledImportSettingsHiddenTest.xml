@@ -14,6 +14,7 @@
             <stories value="Fields visibility according to 'Enable' value"/>
             <description value="Scheduled Import Settings should hide fields when 'Enabled' is 'No'"/>
             <severity value="MINOR"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

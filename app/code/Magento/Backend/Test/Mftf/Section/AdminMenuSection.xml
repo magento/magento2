@@ -22,6 +22,7 @@
         <element name="marketing" type="button" selector="#menu-magento-backend-marketing"/>
         <element name="system" type="button" selector="#menu-magento-backend-system"/>
         <element name="findPartners" type="button" selector="#menu-magento-marketplace-partners"/>
+        <element name="contentMenuClose" type="button" selector="#menu-magento-backend-content a.action-close" timeout="30"/>
 
         <!-- Navigate menu selectors -->
         <element name="menuItem" type="button" selector="li[data-ui-id='menu-{{dataUiId}}']" parameterized="true" timeout="30"/>

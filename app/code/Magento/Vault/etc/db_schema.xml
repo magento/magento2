@@ -12,6 +12,7 @@
                 comment="Entity ID"/>
         <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
+        <column xsi:type="int" name="website_id" unsigned="true" nullable="true" identity="false" comment="Website ID"/>
         <column xsi:type="varchar" name="public_hash" nullable="false" length="128"
                 comment="Hash code for using on frontend"/>
         <column xsi:type="varchar" name="payment_method_code" nullable="false" length="128"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -30,5 +30,13 @@
         <element name="purchaseOrderNumber" type="input" selector="#po_number"/>
         <element name="freePaymentLabel" type="text" selector="#order-billing_method_form label[for='p_method_free']"/>
         <element name="paymentLabelWithRadioButton" type="text" selector="#order-billing_method_form .admin__field-option input[title='{{paymentMethodName}}'] + label" parameterized="true"/>
+        <element name="checkoutPaymentMethod" type="radio" selector="//div[@class='payment-method _active']/div/input[@id= '{{methodName}}']" parameterized="true"/>
+        <element name="storedCard" type="radio" selector="#p_method_payflowpro_cc_vault" timeout="30"/>
+        <element name="selectPaymentMethod" type="radio" selector="//div[@id='order-billing_method_form']//input[@title='Check / Money order']"/>
+        <element name="checkMoneyOrderText" type="text" selector="//div[@id='order-billing_method_form']//dl//dt//label[contains(text(),'Check / Money order')]"/>
+        <element name="upsOption" type="radio" selector="//label[contains(text(),'UPS Worldwide Expedited -')]//ancestor::label[@class='admin__field-label']"/>
+        <element name="DHLShipping" type="text" selector="//dd[@class='admin__order-shipment-methods-options' and contains(text(),'{{paymentMethodName}}')]" parameterized="true"/>
+        <element name="shippingMethodName" type="text" selector="//*[contains(text(), '{{paymentMethodName}}')]" parameterized="true"/>
+        <element name="verifyCheckMoneyPayment" type="text" selector="//label[@for='p_method_checkmo']"/>
     </section>
 </sections>

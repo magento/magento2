@@ -19,6 +19,7 @@
             <group value="production_mode_only"/>
             <group value="pagecache"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->
@@ -30,6 +31,7 @@
         <waitForPageLoad stepKey="waitForPageCacheManagementLoad"/>
 
         <!-- Check 'Flush Static Files Cache' not visible in production mode. -->
-        <dontSee selector="{{AdminCacheManagementSection.additionalCacheButton('Flush Static Files Cache')}}" stepKey="dontSeeFlushStaticFilesButton" />
+        <scrollTo selector="{{AdminCacheManagementSection.additionalCacheButton('Flush Catalog Images Cache')}}" stepKey="scrollToAdditionalCacheButtons"/>
+        <dontSeeElement selector="{{AdminCacheManagementSection.additionalCacheButton('Flush Static Files Cache')}}" stepKey="dontSeeFlushStaticFilesButton"/>
     </test>
 </tests>

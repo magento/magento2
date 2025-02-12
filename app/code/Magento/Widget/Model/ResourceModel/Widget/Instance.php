@@ -89,6 +89,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             if (in_array($pageGroup['page_id'], $pageIds)) {
                 $connection->update($pageTable, $data, ['page_id = ?' => (int)$pageId]);
             } else {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $connection->insert($pageTable, array_merge(['instance_id' => $object->getId()], $data));
                 $pageId = $connection->lastInsertId($pageTable);
             }
@@ -124,7 +125,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $pageGroupData['template']
             );
             $insert = ['handle' => $handle, 'xml' => $xml];
-            if (strlen($widgetInstance->getSortOrder())) {
+            if ($widgetInstance->getSortOrder() !== null && strlen($widgetInstance->getSortOrder())) {
                 $insert['sort_order'] = $widgetInstance->getSortOrder();
             }
 
@@ -147,6 +148,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Prepare store ids.
+     *
      * If one of store id is default (0) return all store ids
      *
      * @param array $storeIds
@@ -162,6 +164,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Perform actions before object delete.
+     *
      * Collect page ids and layout update ids and set to object for further delete
      *
      * @param \Magento\Framework\Model\AbstractModel $object
@@ -188,6 +191,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Perform actions after object delete.
+     *
      * Delete layout updates by layout update ids collected in _beforeSave
      *
      * @param \Magento\Widget\Model\Widget\Instance $object

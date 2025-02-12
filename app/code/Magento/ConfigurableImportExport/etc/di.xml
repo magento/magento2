@@ -13,4 +13,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogImportExport\Model\StockItemImporterInterface">
+        <plugin name="update_configurable_products_stock_item_status"
+                type="Magento\ConfigurableImportExport\Plugin\Import\Product\UpdateConfigurableProductsStockItemStatusPlugin"
+                sortOrder="100"/>
+    </type>
 </config>

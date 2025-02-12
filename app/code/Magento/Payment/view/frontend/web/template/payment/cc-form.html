@@ -45,6 +45,9 @@
         </label>
         <div class="control">
             <input type="number" name="payment[cc_number]" class="input-text" value=""
+                   oncopy="return false;"
+                   oncut="return false;"
+                   onpaste="return false;"
                    data-bind="attr: {
                                     autocomplete: off,
                                     id: getCode() + '_cc_number',
@@ -104,6 +107,9 @@
                    class="input-text cvv"
                    name="payment[cc_cid]"
                    value=""
+                   oncopy="return false;"
+                   oncut="return false;"
+                   onpaste="return false;"
                    data-bind="attr: {id: getCode() + '_cc_cid',
                         title: $t('Card Verification Number'),
                         'data-container': getCode() + '-cc-cvv',
@@ -119,7 +125,7 @@
                 </span>
                 <div class="field-tooltip-content"
                      data-target="dropdown"
-                     data-bind="html: getCvvImageHtml()"></div>
+                     data-bind="html: getCvvImageUnsanitizedHtml()"></div>
             </div>
         </div>
     </div>

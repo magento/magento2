@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Filter\Template;
 
-class Simple extends \Magento\Framework\DataObject implements \Zend_Filter_Interface
+use Laminas\Filter\FilterInterface;
+
+class Simple extends \Magento\Framework\DataObject implements FilterInterface
 {
     /**
      * @var string
@@ -32,7 +34,7 @@ class Simple extends \Magento\Framework\DataObject implements \Zend_Filter_Inter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param string $value
      * @return string

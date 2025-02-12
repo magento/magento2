@@ -3,8 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* global $break $ $$ */
-
 /**
  *  @api
  */
@@ -101,6 +99,15 @@ define([
                 },
 
                 /**
+                 * Reset Is Default option
+                 *
+                 */
+                reset: function () {
+                    jQuery('input[name="defaulttext[]"]').prop('checked',false);
+                    jQuery('input[name="reset_is-default_option"]').val(1);
+                },
+
+                /**
                  * Update items count field
                  */
                 updateItemsCountField: function () {
@@ -181,6 +188,14 @@ define([
                 swatchTextOption.add.bind(swatchTextOption, true)
             );
         }
+
+        if ($('reset_reset_default_swatch_text_option_button')) {
+            Event.observe(
+                'reset_reset_default_swatch_text_option_button',
+                'click',
+                swatchTextOption.reset.bind(swatchTextOption, true)
+            );
+        }
         jQuery('#swatch-text-options-panel').on('render', function () {
             swatchTextOption.ignoreValidate();
 
@@ -214,7 +229,7 @@ define([
             });
         }
 
-        jQuery(document).ready(function () {
+        jQuery(function () {
             if (jQuery('#frontend_input').val() !== 'swatch_text') {
                 jQuery('.swatch-text-field-0').removeClass('required-option');
             }

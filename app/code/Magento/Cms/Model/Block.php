@@ -29,17 +29,17 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     /**
      * CMS block cache tag
      */
-    const CACHE_TAG = 'cms_b';
+    public const CACHE_TAG = 'cms_b';
 
     /**#@+
      * Block's statuses
      */
-    const STATUS_ENABLED = 1;
-    const STATUS_DISABLED = 0;
+    public const STATUS_ENABLED = 1;
+    public const STATUS_DISABLED = 0;
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var string
+     */
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
@@ -71,11 +71,11 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     public function __construct(
         Context $context,
         Registry $registry,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
         ?WYSIWYGValidatorInterface $wysiwygValidator = null,
-        CompositeUrlKey $compositeUrlValidator = null
+        ?CompositeUrlKey $compositeUrlValidator = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->wysiwygValidator = $wysiwygValidator
@@ -107,7 +107,8 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
         }
 
         $needle = 'block_id="' . $this->getId() . '"';
-        if (strstr($this->getContent(), (string) $needle) !== false) {
+        $content = ($this->getContent() !== null) ? $this->getContent() : '';
+        if (strpos($content, $needle) !== false) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Make sure that static block content does not reference the block itself.')
             );
@@ -121,9 +122,9 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
         parent::beforeSave();
 
         //Validating HTML content.
-        if ($this->getContent() && $this->getContent() !== $this->getOrigData(self::CONTENT)) {
+        if ($content && $content !== $this->getOrigData(self::CONTENT)) {
             try {
-                $this->wysiwygValidator->validate($this->getContent());
+                $this->wysiwygValidator->validate($content);
             } catch (ValidationException $exception) {
                 throw new ValidationException(
                     __('Content field contains restricted HTML elements. %1', $exception->getMessage()),

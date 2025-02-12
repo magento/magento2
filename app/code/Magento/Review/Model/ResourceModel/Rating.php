@@ -12,18 +12,14 @@ use Magento\Framework\App\ObjectManager;
  * Rating resource model
  *
  * @api
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    const RATING_STATUS_APPROVED = 'Approved';
+    public const RATING_STATUS_APPROVED = 'Approved';
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -44,6 +40,11 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $scopeConfig;
 
     /**
+     * @var Review\Summary
+     */
+    private $_reviewSummary;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\Manager $moduleManager
@@ -59,7 +60,7 @@ class Rating extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\ResourceModel\Review\Summary $reviewSummary,
         $connectionName = null,
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_storeManager = $storeManager;

@@ -270,7 +270,12 @@ class CreatePostTest extends AbstractController
             $rawMessage
         );
         $this->assertStringContainsString(
-            sprintf('customer/account/confirm/?id=%s&amp;key=%s', $customer->getId(), $confirmation),
+            sprintf(
+                'customer/account/confirm/?email=%s&amp;id=%s&amp;key=%s',
+                urlencode($customer->getEmail()),
+                $customer->getId(),
+                $confirmation
+            ),
             $rawMessage
         );
         $this->resetRequest();

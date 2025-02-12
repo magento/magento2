@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue;
 
 /**
  * Class Lock to handle message lock transactions.
+ * @api
  */
 interface LockInterface
 {

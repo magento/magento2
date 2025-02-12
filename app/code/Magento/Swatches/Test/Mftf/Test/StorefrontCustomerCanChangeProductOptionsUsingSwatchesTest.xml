@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -24,6 +24,7 @@
         <after>
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" before="goToProductAttributes" stepKey="deleteCustomer"/>
             <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
         </after>
@@ -49,7 +50,7 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
         <actionGroup ref="StorefrontUpdateCartConfigurableProductWithSwatchesActionGroup" stepKey="updateConfigurableProductInTheCart">
             <argument name="product" value="_defaultProduct"/>
-            <argument name="productOption" value="e74d3c"/>
+            <argument name="productOption" value="e74c3c"/>
         </actionGroup>
     </test>
 </tests>

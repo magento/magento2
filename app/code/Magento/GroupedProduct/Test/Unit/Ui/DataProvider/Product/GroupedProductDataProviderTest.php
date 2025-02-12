@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupedProductDataProviderTest extends TestCase
 {
-    const ALLOWED_TYPE = 'simple';
+    private const ALLOWED_TYPE = 'simple';
 
     /**
      * @var ObjectManager
@@ -56,7 +56,7 @@ class GroupedProductDataProviderTest extends TestCase
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'toArray',
                     'isLoaded',
@@ -69,13 +69,13 @@ class GroupedProductDataProviderTest extends TestCase
             )->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->collectionMock);
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->setMethods(['getComposableTypes'])
+            ->onlyMethods(['getComposableTypes'])
             ->getMockForAbstractClass();
     }
 
@@ -112,9 +112,15 @@ class GroupedProductDataProviderTest extends TestCase
         $this->collectionMock->expects($this->once())
             ->method('isLoaded')
             ->willReturn(false);
-        $this->collectionMock->expects($this->once())
+        $this->collectionMock->expects($this->any())
             ->method('addAttributeToFilter')
-            ->with('type_id', [self::ALLOWED_TYPE]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'type_id' && $arg2 == [self::ALLOWED_TYPE]) {
+                    return null;
+                } elseif ($arg1 == 'required_options' && $arg2 == '0') {
+                    return null;
+                }
+            });
         $this->collectionMock->expects($this->once())
             ->method('toArray')
             ->willReturn($items);

@@ -81,6 +81,14 @@
                 <label translate="true">Description of Operation</label>
             </settings>
         </column>
+        <column name="user_type" component="Magento_Ui/js/grid/columns/select" sortOrder="55">
+            <settings>
+                <filter>select</filter>
+                <options class="\Magento\AsynchronousOperations\Model\BulkUserType\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">User Type</label>
+            </settings>
+        </column>
         <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="60">
             <settings>
                 <filter>select</filter>

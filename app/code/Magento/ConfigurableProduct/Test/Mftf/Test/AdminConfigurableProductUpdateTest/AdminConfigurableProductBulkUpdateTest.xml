@@ -61,7 +61,9 @@
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="MFTF automation!" stepKey="fillDescription"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="clickSave"/>
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" time="60" stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAttributeUpdateSuccessMsg">
+            <argument name="message" value="Message is added to queue"/>
+        </actionGroup>
 
         <!-- Apply changes -->
         <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
@@ -70,14 +72,26 @@
         </actionGroup>
 
         <!-- Check storefront for description -->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct1.custom_attributes[url_key]$$)}}" stepKey="goToFirstProductPageOnStorefront"/>
-        <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeFirstDescription"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct2.custom_attributes[url_key]$$)}}" stepKey="goToSecondProductPageOnStorefront"/>
-        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeSecondDescription"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct3.custom_attributes[url_key]$$)}}" stepKey="goToThirdProductPageOnStorefront"/>
-        <waitForPageLoad stepKey="waitForThirdProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="MFTF automation!" stepKey="seeThirdDescription"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToFirstProductPageOnStorefront">
+            <argument name="product" value="$createProduct1$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForFirstProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeFirstDescription">
+            <argument name="productDescription" value="MFTF automation!"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToSecondProductPageOnStorefront">
+            <argument name="product" value="$createProduct2$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSecondProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeSecondDescription">
+            <argument name="productDescription" value="MFTF automation!"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToThirdProductPageOnStorefront">
+            <argument name="product" value="$createProduct3$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForThirdProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductDescriptionActionGroup" stepKey="seeThirdDescription">
+            <argument name="productDescription" value="MFTF automation!"/>
+        </actionGroup>
     </test>
 </tests>

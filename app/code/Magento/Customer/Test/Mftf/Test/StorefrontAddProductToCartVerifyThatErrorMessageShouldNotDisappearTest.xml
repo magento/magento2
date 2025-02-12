@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+* Copyright 2024 Adobe
+* All Rights Reserved.
+*/
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductToCartVerifyThatErrorMessageShouldNotDisappearTest">
+        <annotations>
+            <title value="Adding a product to cart from product detail page with higher quantity then available when synchronize widget products with backend storage enabled"/>
+            <description value="Adding a product to cart from product detail page with higher quantity then available when synchronize widget products with backend storage enabled"/>
+            <features value="Module/ Catalog"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-1571"/>
+            <useCaseId value="ACP2E-23"/>
+            <stories value="[Magento Cloud] Error message in PDP disappearing quickly"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <!-- Set in Stores > Configuration > Catalog > Catalog > Recently Viewed/Compared Products > Synchronize Widget Products With Backend Storage = "Yes" -->
+            <magentoCLI command="config:set {{EnableSynchronizeWidgetProductsWithBackendStorage.path}} {{EnableSynchronizeWidgetProductsWithBackendStorage.value}}" stepKey="setEnableSynchronizeWidgetProductsWithBackendStorage"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Reindex and flush cache-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCLI command="config:set {{DisableSynchronizeWidgetProductsWithBackendStorage.path}} {{DisableSynchronizeWidgetProductsWithBackendStorage.value}}" stepKey="setDisableSynchronizeWidgetProductsWithBackendStorage"/>
+            <!--Reindex-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <waitForPageLoad time="60" stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <clearField selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="clearQuantity"/>
+        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="10000" stepKey="fillQuantity"/>
+        <seeInField userInput="10000" selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="seeUpdatedQuantity"/>
+
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
+        <!-- Check that error remains -->
+        <comment userInput="The above step is removed because this isnt a bug . But there happens a Ajax call within few seconds And then error message gets displayed. This cannot be handled in test . Removing above step post testing" stepKey="assertFailure"/>
+
+    </test>
+</tests>

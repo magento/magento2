@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertProductQtyInMinicartActionGroup">
+        <annotations>
+            <description>Open the mini cart, locate the provided product and assert the quantity of it that was added to the cart</description>
+        </annotations>
+        <arguments>
+            <argument name="product" type="entity"/>
+            <argument name="qty" type="string" defaultValue="1"/>
+        </arguments>
+
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniShoppingCart"/>
+        <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantityBySku(product.sku)}}" stepKey="grabMiniCartQty"/>
+        <assertStringContainsString stepKey="assertMiniCartQty">
+            <actualResult type="variable">$grabMiniCartQty</actualResult>
+            <expectedResult type="string">{{qty}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

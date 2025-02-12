@@ -47,7 +47,6 @@ class CVV2MatchTest extends TestCase
             ->getMockForAbstractClass();
         $this->payflowproFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->validator = new CVV2Match();
@@ -84,7 +83,7 @@ class CVV2MatchTest extends TestCase
     /**
      * @return array
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             [
@@ -94,7 +93,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'Y',
                     ]
                 ),
-                'configValue' => '0',
+                'avsSecurityCodeFlag' => '0',
             ],
             [
                 'expectedResult' => true,
@@ -103,7 +102,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'Y',
                     ]
                 ),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => true,
@@ -112,7 +111,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'X',
                     ]
                 ),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => false,
@@ -121,7 +120,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'N',
                     ]
                 ),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => true,
@@ -130,12 +129,21 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => null,
                     ]
                 ),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => true,
                 'response' => new DataObject(),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
+            ],
+            [
+                'expectedResult' => true,
+                'response' => new DataObject(
+                    [
+                        'cvv2match' => 'N',
+                    ]
+                ),
+                'avsSecurityCodeFlag' => '0',
             ],
         ];
     }

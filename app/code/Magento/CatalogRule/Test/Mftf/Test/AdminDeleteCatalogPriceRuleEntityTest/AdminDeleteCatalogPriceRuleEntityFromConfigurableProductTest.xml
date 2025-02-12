@@ -92,6 +92,7 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
             <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
@@ -100,7 +101,9 @@
             <deleteData createDataKey="createConfigProductAttribute1" stepKey="deleteConfigProductAttribute1"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Delete the simple product and catalog price rule -->
@@ -116,7 +119,7 @@
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Assert that the rule isn't present on the Category page -->
-        <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>
+        <amOnPage url="$$createCategory1.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeRegularPriceText1"/>
 

@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue\Consumer;
 
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler\Iterator as HandlerIterator;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Test of queue consumer configuration reading and parsing.
@@ -19,9 +20,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
     }
 
     public function testGetConsumers()
@@ -59,7 +66,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('consumer5', $consumer->getName());
         $this->assertEquals('queue5', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals($this->defaultValueProvider->getConnection(), $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
         $this->assertNull($consumer->getMaxMessages());
         $handlers = $consumer->getHandlers();

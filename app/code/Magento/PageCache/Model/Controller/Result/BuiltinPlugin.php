@@ -69,7 +69,7 @@ class BuiltinPlugin
     {
         $usePlugin = $this->registry->registry('use_page_cache_plugin');
 
-        if (!$usePlugin || !$this->config->isEnabled() || $this->config->getType() != Config::BUILT_IN) {
+        if (!$usePlugin || !$this->config->isEnabled() || $this->config->getType() !== Config::BUILT_IN) {
             return $result;
         }
 

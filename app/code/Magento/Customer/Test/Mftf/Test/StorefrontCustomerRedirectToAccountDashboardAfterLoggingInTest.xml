@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerRedirectToAccountDashboardAfterLoggingInTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer logs in and redirected to account dashboard"/>
+            <title value="Redirect to account dashboard"/>
+            <description value="Customer should be automatically redirected to account dashboard after login"/>
+            <severity value="MINOR"/>
+            <group value="customer"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{EnableCustomerRedirectToDashboardConfigData.path}} {{EnableCustomerRedirectToDashboardConfigData.value}}" stepKey="enableRedirectAfterLogin"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{DisableCustomerRedirectToDashboardConfigData.path}} {{DisableCustomerRedirectToDashboardConfigData.value}}" stepKey="disableRedirectAfterLogin"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCustomerAccountPageTitleActionGroup" stepKey="assertAccountPageTitle">
+            <argument name="pageTitle" value="My Account"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomerAccountLinkInUrlActionGroup" stepKey="assertAccountLinkInUrl"/>
+    </test>
+</tests>

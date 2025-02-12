@@ -98,6 +98,7 @@ $attributeModel2->setData(
         'is_visible_on_front' => 1,
         'used_in_product_listing' => 1,
         'used_for_sort_by' => 1,
+        'position' => 1,
         'frontend_label' => ['Second Test Configurable'],
         'backend_type' => 'int',
         'option' => [

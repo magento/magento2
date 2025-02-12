@@ -28,7 +28,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface
@@ -92,8 +92,8 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Psr\Log\LoggerInterface $logger,
-        AddressRegistry $addressRegistry = null,
-        \Magento\Framework\Escaper $escaper = null
+        ?AddressRegistry $addressRegistry = null,
+        ?\Magento\Framework\Escaper $escaper = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;
@@ -179,7 +179,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         $addressKeys = preg_grep(
             '/^(' . AttributeRepository::BILLING_ADDRESS_PREFIX . '\w+)/',
             array_keys($data),
-            $isCustomerData
+            (int) $isCustomerData
         );
         $result = array_intersect_key($data, array_flip($addressKeys));
         if ($isCustomerData === null) {

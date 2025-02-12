@@ -79,7 +79,7 @@ class NewWidgetTest extends TestCase
         $this->cacheState = $this->createPartialMock(State::class, ['isEnabled']);
         $this->localDate = $this->createMock(Timezone::class);
         $this->catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
-            ->setMethods(['getProductAttributes'])
+            ->onlyMethods(['getProductAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->layout = $this->createMock(Layout::class);
@@ -88,7 +88,7 @@ class NewWidgetTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->context = $this->getMockBuilder(ProductBlockContext::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getEventManager', 'getScopeConfig', 'getLayout',
                     'getRequest', 'getCacheState', 'getCatalogConfig',
@@ -179,7 +179,7 @@ class NewWidgetTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentPageDataProvider()
+    public static function getCurrentPageDataProvider()
     {
         return [
             [1, 1],
@@ -218,7 +218,7 @@ class NewWidgetTest extends TestCase
         $this->context->expects($this->once())->method('getLocaleDate')->willReturn($this->localDate);
 
         $this->productCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setVisibility', 'addMinimalPrice', 'addFinalPrice',
                     'addTaxPercents', 'addAttributeToSelect', 'addUrlRewrite',
@@ -300,11 +300,13 @@ class NewWidgetTest extends TestCase
         $this->generalGetProductCollection();
 
         $this->productCollection->expects($this->exactly(2))->method('setPageSize')
-            ->withConsecutive(
-                [$productsCount],
-                [$expectedPageSize]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1) use ($productsCount, $expectedPageSize) {
+                    if ($arg1 == $productsCount || $arg1 == $expectedPageSize) {
+                        return $this->productCollection;
+                    }
+                }
+            );
 
         $this->startTestGetProductCollection(
             NewWidget::DISPLAY_TYPE_NEW_PRODUCTS,
@@ -342,7 +344,7 @@ class NewWidgetTest extends TestCase
     /**
      * @return array
      */
-    public function getProductCollectionDataProvider()
+    public static function getProductCollectionDataProvider()
     {
         return [
             [true, 1, null, 5],

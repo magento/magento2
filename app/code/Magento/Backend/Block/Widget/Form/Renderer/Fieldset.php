@@ -14,7 +14,6 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
- * @api
  * @since 100.0.2
  */
 class Fieldset extends \Magento\Backend\Block\Template implements RendererInterface
@@ -30,6 +29,8 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     protected $_template = 'Magento_Backend::widget/form/renderer/fieldset.phtml';
 
     /**
+     * Get element
+     *
      * @return AbstractElement
      */
     public function getElement()
@@ -38,6 +39,8 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     }
 
     /**
+     * Render the element
+     *
      * @param AbstractElement $element
      * @return string
      */

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateSimpleProductWithCustomOptionsPerPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="[Magento Cloud] Customizable options Drag and drop issue"/>
+            <title value="Admin to validate simple product with the custom option dynamic rows per page"/>
+            <description value="Admin to validate simple product with the custom option dynamic rows per page"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2682"/>
+            <useCaseId value="ACP2E-104"/>
+            <group value="SimpleProduct"/>
+        </annotations>
+        <after>
+            <!--Delete custom added per page-->
+            <actionGroup ref="AdminDataGridDeleteCustomPerPageActionGroup" stepKey="deleteCustomAddedPerPage">
+                <argument name="perPage" value="ProductPerPage.productCount"/>
+            </actionGroup>
+            <!--Logout to Admin Area-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Login to Admin Area-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+
+        <!-- Create product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!-- Open custom option panel -->
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+
+        <!-- Create a first custom option with 2 values -->
+        <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createFirstCustomOption">
+            <argument name="customOptionName" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="firstOption" value="ProductOptionValueDropdown1"/>
+            <argument name="secondOption" value="ProductOptionValueDropdown2"/>
+        </actionGroup>
+
+        <!-- Validate custom options dynamic rows per page -->
+        <actionGroup ref="AdminOpenAndApplyCustomOptionsPerPageActionGroup" stepKey="openAndApplyPerPageDropdown">
+            <argument name="perPageInputValue" value="1"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.customOptionTableRows}}" stepKey="waitForRowsToBeVisible"/>
+        <seeNumberOfElements selector="{{AdminProductCustomizableOptionsSection.customOptionTableRows}}" userInput="1" stepKey="see4RowsOfOptions"/>
+    </test>
+</tests>

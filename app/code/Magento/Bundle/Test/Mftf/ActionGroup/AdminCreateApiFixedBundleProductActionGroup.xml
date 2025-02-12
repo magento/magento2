@@ -61,6 +61,6 @@
             <requiredEntity createDataKey="createBundleOption1_2"/>
             <requiredEntity createDataKey="simpleProduct4"/>
         </createData>
-        <magentoCron stepKey="runCronIndex" groups="index"/>
+        <magentoCLI command="indexer:reindex" stepKey="runCronIndex"/>
     </actionGroup>
 </actionGroups>

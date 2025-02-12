@@ -19,13 +19,13 @@ class SelectionMediaGallery implements ResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
-        if (!isset($value['product']) || !$value['product']) {
+        if (!isset($value['model']) || !$value['model']) {
             return null;
         }
 
-        $product = $value['product'];
+        $product = $value['model'];
         $availableSelectionProducts = $value['availableSelectionProducts'];
         $mediaGalleryEntries = [];
         $usedProducts = $product->getTypeInstance()->getUsedProducts($product, null);

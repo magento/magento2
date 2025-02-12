@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDashboardTotalsBlockTest" extends="AdminCheckDashboardWithChartsTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Order Totals on Magento dashboard"/>
+            <title value="Dashboard First Shows Wrong Information about Revenue"/>
+            <description value="Revenue on Magento dashboard page is displaying properly"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="ACP2E-1294"/>
+            <useCaseId value="ACSD-46523"/>
+            <group value="backend"/>
+        </annotations>
+        <remove keyForRemoval="checkQuantityWasChanged"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardTotals('Revenue')}}" stepKey="waitForRevenueAfter"/>
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Revenue')}}" stepKey="grabRevenueAfter"/>
+        <selectOption userInput="1m" selector="select#dashboard_chart_period" stepKey="selectOneMonthPeriod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <selectOption userInput="today" selector="select#dashboard_chart_period" stepKey="selectTodayPeriod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearAfterSelectTodayPeriod"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardTotals('Revenue')}}" stepKey="waitForRevenueAfterSelectTodayPeriod"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="waitForQuantityAfterSelectTodayPeriod"/>
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Revenue')}}" stepKey="grabRevenueAfterSelectTodayPeriod"/>
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabQuantityAfterSelectTodayPeriod"/>
+        <assertEquals stepKey="checkTodayRevenue">
+            <actualResult type="const">$grabRevenueAfter</actualResult>
+            <expectedResult type="const">$grabRevenueAfterSelectTodayPeriod</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="checkTodayQuantity">
+            <actualResult type="const">$grabQuantityAfter</actualResult>
+            <expectedResult type="const">$grabQuantityAfterSelectTodayPeriod</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

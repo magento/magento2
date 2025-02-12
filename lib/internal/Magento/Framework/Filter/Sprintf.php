@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Filter;
 
-class Sprintf implements \Zend_Filter_Interface
+use Laminas\Filter\FilterInterface;
+
+class Sprintf implements FilterInterface
 {
     /**
      * @var string
@@ -29,7 +31,7 @@ class Sprintf implements \Zend_Filter_Interface
 
     /**
      * @param string $format
-     * @param null|int $decimals
+     * @param int|null $decimals
      * @param string $decPoint
      * @param string $thousandsSep
      */
@@ -42,6 +44,8 @@ class Sprintf implements \Zend_Filter_Interface
     }
 
     /**
+     * Returns the result of filtering $value.
+     *
      * @param string $value
      * @return string
      */
@@ -50,7 +54,6 @@ class Sprintf implements \Zend_Filter_Interface
         if (null !== $this->decimals) {
             $value = number_format($value, $this->decimals, $this->decPoint, $this->thousandsSep);
         }
-        $value = sprintf($this->format, $value);
-        return $value;
+        return sprintf($this->format, $value);
     }
 }

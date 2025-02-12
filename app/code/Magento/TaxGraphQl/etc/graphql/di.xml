@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="shopping_cart_display_price" xsi:type="string">tax/cart_display/price</item>
+                <item name="shopping_cart_display_shipping" xsi:type="string">tax/cart_display/shipping</item>
+                <item name="shopping_cart_display_subtotal" xsi:type="string">tax/cart_display/subtotal</item>
+                <item name="shopping_cart_display_grand_total" xsi:type="string">tax/cart_display/grandtotal</item>
+                <item name="shopping_cart_display_full_summary" xsi:type="string">tax/cart_display/full_summary</item>
+                <item name="shopping_cart_display_zero_tax" xsi:type="string">tax/cart_display/zero_tax</item>
+                <item name="shopping_cart_display_tax_gift_wrapping" xsi:type="string">tax/cart_display/gift_wrapping</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="TaxWrappingEnum" xsi:type="array">
+                    <item name="display_excluding_tax" xsi:type="string">1</item>
+                    <item name="display_including_tax" xsi:type="string">2</item>
+                    <item name="display_type_both" xsi:type="string">3</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
+
+

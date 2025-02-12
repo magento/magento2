@@ -9,13 +9,14 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\Websites;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\ResourceModel\Website\Collection as WebsiteCollection;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteCollectionFactory;
 
 /**
  * Collection to fetch websites data at resolution time.
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * @var WebsiteCollection
@@ -132,5 +133,14 @@ class Collection
             ];
         }
         return $this->websites;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->productIds = [];
+        $this->websites = [];
     }
 }

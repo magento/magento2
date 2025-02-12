@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DisplayingCustomAttributesInProductGridTest">
+        <annotations>
+            <stories value="Create custom attribute and check custom attribute is displaying in product grid"/>
+            <title value="Displaying custom attributes in product grid"/>
+            <description value="Create custom attribute and check custom attribute is displaying in product grid"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4341"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="new_custom_attribute" />
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to Stores > Attributes > Products > Product Attribute-->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <!-- create a custom attribute -->
+        <!-- Click on Add new Attribute button -->
+        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="clickAddNewAttributeButton"/>
+        <!-- Add details to Attribute Properties -->
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="new_custom_attribute" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Field" stepKey="selectDropdown"/>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" userInput="No" stepKey="selectRequiredAsNo"/>
+        <!-- Add details to Advanced Attribute Properties -->
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="clickAdvancedAttributeProperties"/>
+        <!-- Provide the Storefront Properties -->
+        <selectOption selector="{{AdvancedAttributePropertiesSection.AddToColumnOptions}}" userInput="Yes" stepKey="selectYesForColumnOptions"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInFilterOptions}}" userInput="Yes" stepKey="selectYesForFilterOptions"/>
+        <!-- Save the Attribute -->
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="saveTheAttribute"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+
+        <!-- Navigate to Stores > Attributes > Attribute Set -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!-- Search and open Attribute Set from preconditions -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">
+            <argument name="name" value="Default"/>
+        </actionGroup>
+        <!-- Move created product attribute from unassigned to assigned -->
+        <dragAndDrop  selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute('new_custom_attribute')}}" selector2="{{AdminProductAttributeSetEditSection.assignedAttribute('sku')}}" stepKey="dragAndDrop"/>
+        <waitForPageLoad stepKey="waitForDragAndDrop"/>
+        <!-- Click 'Save' -->
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
+        <!-- Navigate to Catalog > Products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductPage"/>
+        <!-- verify created attribute in grid column -->
+        <seeElement selector="{{AdminProductGridTableHeaderSection.column('new_custom_attribute')}}" stepKey="seeCreatedAttributeInProductGrid"/>
+        <!-- expand filters -->
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <waitForPageLoad stepKey="waitForFilterOptionsOpen"/>
+        <!-- verify created attribute is present in filters section-->
+        <seeElement selector="{{AdminProductGridFilterSection.customAttribute('new_custom_attribute')}}" stepKey="seeCreatedAttributeInFiltersSection"/>
+        <!-- expand columns option to uncheck created attribute-->
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdown"/>
+        <uncheckOption selector="{{AdminProductGridFilterSection.viewColumnOption('new_custom_attribute')}}" stepKey="unCheckColumn"/>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdown"/>
+        <!-- verify created custom attribute is not there-->
+        <dontSeeElement selector="{{AdminProductGridTableHeaderSection.column('new_custom_attribute')}}" stepKey="dontSeeCreatedAttributeInProductGrid"/>
+        <!--  expand columns option to uncheck created attribute-->
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownAgain"/>
+        <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkCreatedAttributeOption">
+            <argument name="optionName" value="new_custom_attribute"/>
+        </actionGroup>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeAgainColumnsDropdownSpecialPrice"/>
+        <!-- verify created attribute is present in grid -->
+        <seeElement selector="{{AdminProductGridFilterSection.customAttribute('new_custom_attribute')}}" stepKey="checkAttributeInProductGrid"/>
+    </test>
+</tests>

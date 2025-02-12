@@ -6,9 +6,21 @@
 
 namespace Magento\Framework\Search\Request;
 
+use Exception;
+use InvalidArgumentException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Search\Request\Query\Filter;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Search\Request\Aggregation\DynamicBucket;
+use Magento\Framework\Search\Request\Aggregation\Metric;
+use Magento\Framework\Search\Request\Aggregation\RangeBucket;
+use Magento\Framework\Search\Request\Aggregation\TermBucket;
+use Magento\Framework\Search\Request\Filter\Range;
+use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\Request\Filter\Wildcard;
+use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Framework\Search\Request\Query\Filter;
+use Magento\Framework\Search\Request\Query\MatchQuery;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,7 +60,7 @@ class Mapper
     private $aggregations;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -58,17 +70,17 @@ class Mapper
     private $rootQueryName;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param array $queries
      * @param string $rootQueryName
      * @param array $aggregations
      * @param array $filters
-     * @throws \Exception
-     * @throws \InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
      * @throws StateException
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        ObjectManagerInterface $objectManager,
         array $queries,
         $rootQueryName,
         array $aggregations = [],
@@ -85,8 +97,8 @@ class Mapper
      * Get Query Interface by name
      *
      * @return QueryInterface
-     * @throws \Exception
-     * @throws \InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
      * @throws StateException
      */
     public function getRootQuery()
@@ -105,30 +117,32 @@ class Mapper
      *
      * @param string $queryName
      * @return QueryInterface
-     * @throws \Exception
-     * @throws \InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
      * @throws StateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function mapQuery($queryName)
     {
         if (!isset($this->queries[$queryName])) {
-            throw new \Exception('Query ' . $queryName . ' does not exist');
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
-            throw new StateException(
-                new Phrase('A cycle was found. The "%1" query is already used in the request hierarchy.', [$queryName])
-            );
+            throw new StateException(new Phrase(
+                'A cycle was found. The "%1" query is already used in the request hierarchy.',
+                [$queryName]
+            ));
         }
         $this->mappedQueries[] = $queryName;
         $query = $this->queries[$queryName];
         switch ($query['type']) {
             case QueryInterface::TYPE_MATCH:
                 $query = $this->objectManager->create(
-                    \Magento\Framework\Search\Request\Query\Match::class,
+                    MatchQuery::class,
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
-                        'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                        'boost' => $query['boost'] ?? 1,
                         'matches' => $query['match']
                     ]
                 );
@@ -141,13 +155,14 @@ class Mapper
                     $reference = $this->mapFilter($query['filterReference'][0]['ref']);
                     $referenceType = Filter::REFERENCE_FILTER;
                 } else {
-                    throw new \Exception('Reference is not provided');
+                    // phpcs:ignore Magento2.Exceptions.DirectThrow
+                    throw new Exception('Reference is not provided');
                 }
                 $query = $this->objectManager->create(
-                    \Magento\Framework\Search\Request\Query\Filter::class,
+                    Filter::class,
                     [
                         'name' => $query['name'],
-                        'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                        'boost' => $query['boost'] ?? 1,
                         'reference' => $reference,
                         'referenceType' => $referenceType
                     ]
@@ -156,15 +171,15 @@ class Mapper
             case QueryInterface::TYPE_BOOL:
                 $aggregatedByType = $this->aggregateQueriesByType($query['queryReference']);
                 $query = $this->objectManager->create(
-                    \Magento\Framework\Search\Request\Query\BoolExpression::class,
+                    BoolExpression::class,
                     array_merge(
-                        ['name' => $query['name'], 'boost' => isset($query['boost']) ? $query['boost'] : 1],
+                        ['name' => $query['name'], 'boost' => $query['boost'] ?? 1],
                         $aggregatedByType
                     )
                 );
                 break;
             default:
-                throw new \InvalidArgumentException('Invalid query type');
+                throw new InvalidArgumentException('Invalid query type');
         }
         return $query;
     }
@@ -173,16 +188,17 @@ class Mapper
      * Convert array to Filter instance
      *
      * @param string $filterName
-     * @throws \Exception
+     * @throws Exception
      * @return FilterInterface
-     * @throws \Exception
-     * @throws \InvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
      * @throws StateException
      */
     private function mapFilter($filterName)
     {
         if (!isset($this->filters[$filterName])) {
-            throw new \Exception('Filter ' . $filterName . ' does not exist');
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
             throw new StateException(
                 new Phrase(
@@ -196,7 +212,7 @@ class Mapper
         switch ($filter['type']) {
             case FilterInterface::TYPE_TERM:
                 $filter = $this->objectManager->create(
-                    \Magento\Framework\Search\Request\Filter\Term::class,
+                    Term::class,
                     [
                         'name' => $filter['name'],
                         'field' => $filter['field'],
@@ -206,18 +222,18 @@ class Mapper
                 break;
             case FilterInterface::TYPE_RANGE:
                 $filter = $this->objectManager->create(
-                    \Magento\Framework\Search\Request\Filter\Range::class,
+                    Range::class,
                     [
                         'name' => $filter['name'],
                         'field' => $filter['field'],
-                        'from' => isset($filter['from']) ? $filter['from'] : null,
-                        'to' => isset($filter['to']) ? $filter['to'] : null
+                        'from' => $filter['from'] ?? null,
+                        'to' => $filter['to'] ?? null
                     ]
                 );
                 break;
             case FilterInterface::TYPE_WILDCARD:
                 $filter = $this->objectManager->create(
-                    \Magento\Framework\Search\Request\Filter\Wildcard::class,
+                    Wildcard::class,
                     [
                         'name' => $filter['name'],
                         'field' => $filter['field'],
@@ -236,7 +252,7 @@ class Mapper
                 );
                 break;
             default:
-                throw new \InvalidArgumentException('Invalid filter type');
+                throw new InvalidArgumentException('Invalid filter type');
         }
         return $filter;
     }
@@ -246,6 +262,7 @@ class Mapper
      *
      * @param array $data
      * @return array
+     * @throws StateException
      */
     private function aggregateFiltersByType($data)
     {
@@ -261,6 +278,7 @@ class Mapper
      *
      * @param array $data
      * @return array
+     * @throws StateException
      */
     private function aggregateQueriesByType($data)
     {
@@ -272,6 +290,8 @@ class Mapper
     }
 
     /**
+     * Validate queries and filters.
+     *
      * @return void
      * @throws StateException
      */
@@ -282,20 +302,28 @@ class Mapper
     }
 
     /**
+     * Check if queries are not used.
+     *
      * @return void
      * @throws StateException
      */
     private function validateQueries()
     {
-        $this->validateNotUsed($this->queries, $this->mappedQueries, 'Query %1 is not used in request hierarchy');
+        $this->validateNotUsed(
+            $this->queries,
+            $this->mappedQueries,
+            'Query %1 is not used in request hierarchy'
+        );
     }
 
     /**
+     * Validate elements that are not used.
+     *
      * @param array $elements
      * @param string[] $mappedElements
      * @param string $errorMessage
      * @return void
-     * @throws \Magento\Framework\Exception\StateException
+     * @throws StateException
      */
     private function validateNotUsed($elements, $mappedElements, $errorMessage)
     {
@@ -307,12 +335,18 @@ class Mapper
     }
 
     /**
+     * Check if filters are not used.
+     *
      * @return void
      * @throws StateException
      */
     private function validateFilters()
     {
-        $this->validateNotUsed($this->filters, $this->mappedFilters, 'Filter %1 is not used in request hierarchy');
+        $this->validateNotUsed(
+            $this->filters,
+            $this->mappedFilters,
+            'Filter %1 is not used in request hierarchy'
+        );
     }
 
     /**
@@ -332,32 +366,19 @@ class Mapper
             ];
             switch ($bucketData['type']) {
                 case BucketInterface::TYPE_TERM:
-                    $bucket = $this->objectManager->create(
-                        \Magento\Framework\Search\Request\Aggregation\TermBucket::class,
-                        $arguments
-                    );
+                    $arguments['parameters'] = array_column($bucketData['parameter'] ?? [], 'value', 'name');
+                    $bucket = $this->objectManager->create(TermBucket::class, $arguments);
                     break;
                 case BucketInterface::TYPE_RANGE:
-                    $bucket = $this->objectManager->create(
-                        \Magento\Framework\Search\Request\Aggregation\RangeBucket::class,
-                        array_merge(
-                            $arguments,
-                            ['ranges' => $this->mapRanges($bucketData)]
-                        )
-                    );
+                    $arguments['ranges'] = $this->mapRanges($bucketData);
+                    $bucket = $this->objectManager->create(RangeBucket::class, $arguments);
                     break;
                 case BucketInterface::TYPE_DYNAMIC:
-                    $bucket = $this->objectManager->create(
-                        \Magento\Framework\Search\Request\Aggregation\DynamicBucket::class,
-                        array_merge(
-                            $arguments,
-                            ['method' => $bucketData['method']]
-                        )
-                    );
+                    $arguments['method'] = $bucketData['method'];
+                    $bucket = $this->objectManager->create(DynamicBucket::class, $arguments);
                     break;
                 default:
                     throw new StateException(new Phrase('The bucket type is invalid. Verify and try again.'));
-                    break;
             }
             $buckets[] = $bucket;
         }
@@ -377,7 +398,7 @@ class Mapper
             $metrics = $bucketData['metric'];
             foreach ($metrics as $metric) {
                 $metricObjects[] = $this->objectManager->create(
-                    \Magento\Framework\Search\Request\Aggregation\Metric::class,
+                    Metric::class,
                     [
                         'type' => $metric['type']
                     ]
@@ -400,7 +421,7 @@ class Mapper
             $ranges = $bucketData['range'];
             foreach ($ranges as $range) {
                 $rangeObjects[] = $this->objectManager->create(
-                    \Magento\Framework\Search\Request\Aggregation\Range::class,
+                    Aggregation\Range::class,
                     [
                         'from' => $range['from'],
                         'to' => $range['to']

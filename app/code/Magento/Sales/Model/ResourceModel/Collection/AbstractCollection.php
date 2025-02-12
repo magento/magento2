@@ -175,7 +175,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
         $this->searchCriteria = $searchCriteria;
         return $this;
@@ -209,7 +209,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         if (!$items) {
             return $this;

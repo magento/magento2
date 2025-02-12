@@ -11,6 +11,7 @@ use Magento\Framework\Controller\Result\Redirect;
 
 /**
  * Delegate related to orders customers operations to Customer module.
+ * @api
  */
 interface OrderCustomerDelegateInterface
 {

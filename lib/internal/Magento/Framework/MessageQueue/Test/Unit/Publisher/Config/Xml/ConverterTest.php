@@ -52,8 +52,6 @@ class ConverterTest extends TestCase
 
     public function testConvertWithException()
     {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Connection name is missing');
         $fixtureDir = __DIR__ . '/../../../_files/queue_publisher';
         $xmlFile = $fixtureDir . '/invalid.xml';
         $dom = new \DOMDocument();

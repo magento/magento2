@@ -12,25 +12,27 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     /**#@+
      * Test class with type error
      */
-    const TEST_CLASS_WITH_TYPE_ERROR = \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
+    public const TEST_CLASS_WITH_TYPE_ERROR =
+        \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
 
     /**#@+
      * Test classes for basic instantiation
      */
-    const TEST_CLASS = \Magento\Framework\ObjectManager\TestAsset\Basic::class;
+    public const TEST_CLASS = \Magento\Framework\ObjectManager\TestAsset\Basic::class;
 
-    const TEST_CLASS_INJECTION = \Magento\Framework\ObjectManager\TestAsset\BasicInjection::class;
+    public const TEST_CLASS_INJECTION = \Magento\Framework\ObjectManager\TestAsset\BasicInjection::class;
 
     /**#@-*/
 
     /**#@+
      * Test classes and interface to test preferences
      */
-    const TEST_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\TestAssetInterface::class;
+    public const TEST_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\TestAssetInterface::class;
 
-    const TEST_INTERFACE_IMPLEMENTATION = \Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation::class;
+    public const TEST_INTERFACE_IMPLEMENTATION =
+        \Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation::class;
 
-    const TEST_CLASS_WITH_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\InterfaceInjection::class;
+    public const TEST_CLASS_WITH_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\InterfaceInjection::class;
 
     /**#@-*/
 
@@ -44,7 +46,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_numerableClasses = [
+    protected static $_numerableClasses = [
         0 => \Magento\Framework\ObjectManager\TestAsset\ConstructorNoArguments::class,
         1 => \Magento\Framework\ObjectManager\TestAsset\ConstructorOneArgument::class,
         2 => \Magento\Framework\ObjectManager\TestAsset\ConstructorTwoArguments::class,
@@ -63,7 +65,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_numerableProperties = [
+    protected static $_numerableProperties = [
         1 => '_one',
         2 => '_two',
         3 => '_three',
@@ -98,26 +100,26 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function newInstanceDataProvider()
+    public static function newInstanceDataProvider()
     {
         $data = [
             'basic model' => [
-                '$actualClassName' => self::TEST_CLASS_INJECTION,
-                '$properties' => ['_object' => self::TEST_CLASS],
+                'actualClassName' => self::TEST_CLASS_INJECTION,
+                'properties' => ['_object' => self::TEST_CLASS],
             ],
             'model with interface' => [
-                '$actualClassName' => self::TEST_CLASS_WITH_INTERFACE,
-                '$properties' => ['_object' => self::TEST_INTERFACE_IMPLEMENTATION],
+                'actualClassName' => self::TEST_CLASS_WITH_INTERFACE,
+                'properties' => ['_object' => self::TEST_INTERFACE_IMPLEMENTATION],
             ],
         ];
 
-        foreach ($this->_numerableClasses as $number => $className) {
+        foreach (self::$_numerableClasses as $number => $className) {
             $properties = [];
             for ($i = 1; $i <= $number; $i++) {
-                $propertyName = $this->_numerableProperties[$i];
+                $propertyName = self::$_numerableProperties[$i];
                 $properties[$propertyName] = self::TEST_CLASS;
             }
-            $data[$number . ' arguments'] = ['$actualClassName' => $className, '$properties' => $properties];
+            $data[$number . ' arguments'] = ['actualClassName' => $className, 'properties' => $properties];
         }
 
         return $data;
@@ -141,7 +143,8 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         $object = new ReflectionClass($actualClassName);
         if ($properties) {
             foreach ($properties as $propertyName => $propertyClass) {
-                $this->assertClassHasAttribute($propertyName, $actualClassName);
+                $this->assertIsObject($testObject);
+                $this->assertTrue(property_exists($testObject, $propertyName));
                 $attribute = $object->getProperty($propertyName);
                 $attribute->setAccessible(true);
                 $propertyObject = $attribute->getValue($testObject);

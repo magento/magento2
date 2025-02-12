@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\SuperProductsSku;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
@@ -29,13 +30,19 @@ class SuperProductsSkuTest extends TestCase
      */
     private $model;
 
+    /**
+     * @var SkuStorage|Mock
+     */
+    private SkuStorage $skuStorageMock;
+
     protected function setUp(): void
     {
         $this->skuProcessorMock = $this->getMockBuilder(SkuProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->skuStorageMock = $this->createMock(SkuStorage::class);
 
-        $this->model = new SuperProductsSku($this->skuProcessorMock);
+        $this->model = new SuperProductsSku($this->skuProcessorMock, $this->skuStorageMock);
     }
 
     /**
@@ -47,9 +54,16 @@ class SuperProductsSkuTest extends TestCase
      */
     public function testIsValid(array $value, array $oldSkus, $hasNewSku = false, $expectedResult = true)
     {
-        $this->skuProcessorMock->expects($this->once())
+        $this->skuProcessorMock->expects($this->never())
             ->method('getOldSkus')
             ->willReturn($oldSkus);
+
+        $this->skuStorageMock
+            ->expects(!empty($value['_super_products_sku']) ? $this->once() : $this->never())
+            ->method('has')
+            ->willReturnCallback(function ($sku) use ($oldSkus) {
+                return isset($oldSkus[strtolower($sku)]);
+            });
 
         if ($hasNewSku) {
             $this->skuProcessorMock->expects($this->once())
@@ -63,7 +77,7 @@ class SuperProductsSkuTest extends TestCase
     /**
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             [

@@ -33,7 +33,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
@@ -42,6 +42,8 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     *  Returns serialize jsLayout
+     *
      * @return string
      */
     public function getJsLayout()
@@ -60,7 +62,8 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
             'autocomplete' => $this->escapeHtml($this->isAutocompleteEnabled()),
             'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrlUrl()),
             'customerForgotPasswordUrl' => $this->escapeUrl($this->getCustomerForgotPasswordUrl()),
-            'baseUrl' => $this->escapeUrl($this->getBaseUrl())
+            'baseUrl' => $this->escapeUrl($this->getBaseUrl()),
+            'customerLoginUrl' => $this->getUrl('customer/ajax/login'),
         ];
     }
 

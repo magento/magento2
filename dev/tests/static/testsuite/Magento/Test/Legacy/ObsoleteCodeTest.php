@@ -210,7 +210,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
         foreach (self::$_classes as $row) {
             list($class, , $replacement) = $row;
             $this->_assertNotRegExp(
-                '/[^a-z\d_]' . preg_quote($class, '/') . '[^a-z\d_\\\\]/iS',
+                '/[^a-z\d_\$]' . preg_quote($class, '/') . '[^a-z\d_\\\\]/iS',
                 $content,
                 $this->_suggestReplacement(sprintf("Class '%s' is obsolete.", $class), $replacement)
             );

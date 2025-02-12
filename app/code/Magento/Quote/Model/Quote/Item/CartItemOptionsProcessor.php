@@ -3,10 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote\Item;
 
+use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\CartItemInterface;
 
+/**
+ * Cart item options processor
+ *
+ * @api
+ */
 class CartItemOptionsProcessor
 {
     /**
@@ -25,7 +33,7 @@ class CartItemOptionsProcessor
     /**
      * @param string $productType
      * @param CartItemInterface $cartItem
-     * @return \Magento\Framework\DataObject|float
+     * @return DataObject|float
      */
     public function getBuyRequest($productType, CartItemInterface $cartItem)
     {
@@ -41,8 +49,8 @@ class CartItemOptionsProcessor
      * Add custom options to buy request.
      *
      * @param CartItemInterface $cartItem
-     * @param \Magento\Framework\DataObject|float $params
-     * @return \Magento\Framework\DataObject|float
+     * @param DataObject|float $params
+     * @return DataObject|float
      */
     private function addCustomOptionsToBuyRequest(CartItemInterface $cartItem, $params)
     {
@@ -51,7 +59,7 @@ class CartItemOptionsProcessor
             if (!$buyRequestUpdate) {
                 return $params;
             }
-            if ($params instanceof \Magento\Framework\DataObject) {
+            if ($params instanceof DataObject) {
                 $buyRequestUpdate->addData($params->getData());
             } elseif (is_numeric($params)) {
                 $buyRequestUpdate->setData('qty', $params);

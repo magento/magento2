@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="MC-37236"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Set price scope global-->
@@ -60,7 +61,9 @@
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" after="LoginToPayPal" stepKey="submitPayment"/>
 
         <waitForElement after="submitPayment" selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="USD / EUR rate" stepKey="seeEURandUSDRate"/>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeEURandUSDRate">
+            <argument name="rate" value="USD / EUR rate"/>
+        </actionGroup>
         <assertEquals stepKey="assertSelectedCategories">
             <actualResult type="variable">grabRate</actualResult>
             <expectedResult type="array">[USD / EUR rate:]</expectedResult>

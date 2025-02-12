@@ -5,10 +5,14 @@
  */
 namespace Magento\Framework\Url;
 
-class QueryParamsResolver extends \Magento\Framework\DataObject implements QueryParamsResolverInterface
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class QueryParamsResolver extends \Magento\Framework\DataObject implements
+    QueryParamsResolverInterface,
+    ResetAfterRequestInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQuery($escape = false)
     {
@@ -25,7 +29,7 @@ class QueryParamsResolver extends \Magento\Framework\DataObject implements Query
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQuery($data)
     {
@@ -37,7 +41,7 @@ class QueryParamsResolver extends \Magento\Framework\DataObject implements Query
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQueryParam($key, $data)
     {
@@ -52,7 +56,7 @@ class QueryParamsResolver extends \Magento\Framework\DataObject implements Query
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQueryParams()
     {
@@ -70,7 +74,7 @@ class QueryParamsResolver extends \Magento\Framework\DataObject implements Query
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQueryParams(array $data)
     {
@@ -78,7 +82,7 @@ class QueryParamsResolver extends \Magento\Framework\DataObject implements Query
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addQueryParams(array $data)
     {
@@ -98,5 +102,13 @@ class QueryParamsResolver extends \Magento\Framework\DataObject implements Query
         $this->setData('query_params', $params);
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
     }
 }

@@ -26,17 +26,21 @@ class Instructions extends \Magento\Payment\Block\Info
     protected $_template = 'Magento_Payment::info/instructions.phtml';
 
     /**
-     * Get instructions text from order payment
-     * (or from config, if instructions are missed in payment)
+     * Get instructions text from order payment (or from config, if instructions are missed in payment).
      *
      * @return string
      */
     public function getInstructions()
     {
         if ($this->_instructions === null) {
-            $this->_instructions = $this->getInfo()->getAdditionalInformation(
-                'instructions'
-            ) ?: trim($this->getMethod()->getConfigData('instructions'));
+            $additionalInstructions = $this->getInfo()->getAdditionalInformation('instructions');
+            if ($additionalInstructions) {
+                $this->_instructions = $additionalInstructions;
+                return $this->_instructions;
+            }
+
+            $instructions = $this->getMethod()->getConfigData('instructions');
+            $this->_instructions = $instructions !== null ? trim($instructions) : '';
         }
         return $this->_instructions;
     }

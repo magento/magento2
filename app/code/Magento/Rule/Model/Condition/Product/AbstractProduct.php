@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Rule\Model\Condition\Product;
@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -111,7 +112,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         array $data = [],
-        ProductCategoryList $categoryList = null
+        ?ProductCategoryList $categoryList = null
     ) {
         $this->_backendData = $backendData;
         $this->_config = $config;
@@ -242,7 +243,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 } else {
                     $addEmptyOption = true;
                 }
-                $selectOptions = $attributeObject->getSource()->getAllOptions($addEmptyOption);
+                $selectOptions = $attributeObject->getSource()->getAllOptions($addEmptyOption, true);
             }
         }
 
@@ -515,7 +516,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             ) ? $this->_localeFormat->getNumber(
                 $arr['is_value_parsed']
             ) : false;
-        } elseif (!empty($arr['operator']) && $arr['operator'] == '()') {
+        } elseif (!empty($arr['operator']) && in_array($arr['operator'], ['()', '!()', true])) {
             if (isset($arr['value'])) {
                 $arr['value'] = preg_replace('/\s*,\s*/', ',', $arr['value']);
             }
@@ -546,14 +547,14 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $attr = $model->getResource()->getAttribute($attrCode);
 
             if ($attr && $attr->getBackendType() == 'datetime' && !is_int($this->getValue())) {
-                $this->setValue(strtotime($this->getValue()));
+                $this->setValue(strtotime((string) $this->getValue()));
                 $value = strtotime($model->getData($attrCode));
                 return $this->validateAttribute($value);
             }
 
             if ($attr && $attr->getFrontendInput() == 'multiselect') {
                 $value = $model->getData($attrCode);
-                $value = strlen($value) ? explode(',', $value) : [];
+                $value = ($value && strlen($value)) ? explode(',', $value) : [];
                 return $this->validateAttribute($value);
             }
 
@@ -569,7 +570,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 if ($attr && $attr->getBackendType() == 'datetime') {
                     $value = strtotime($value);
                 } elseif ($attr && $attr->getFrontendInput() == 'multiselect') {
-                    $value = strlen($value) ? explode(',', $value) : [];
+                    $value = ($value && strlen($value)) ? explode(',', $value) : [];
                 }
 
                 $model->setData($attrCode, $value);

@@ -34,7 +34,7 @@ class QuoteItemProductOption
         }
 
         foreach ($quoteItem->getOptions() as $itemOption) {
-            $code = explode('_', $itemOption->getCode());
+            $code = $itemOption->getCode() === null ? [] : explode('_', $itemOption->getCode());
 
             if (!isset($code[1]) || !is_numeric($code[1])) {
                 continue;

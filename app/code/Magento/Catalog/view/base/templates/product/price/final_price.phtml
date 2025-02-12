@@ -6,6 +6,7 @@
 ?>
 
 <?php
+// @codingStandardsIgnoreFile
 /** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
 
 /** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
@@ -34,7 +35,7 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
             'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
             'price_type'        => 'oldPrice',
             'include_container' => true,
-            'skip_adjustments'  => true
+            'skip_adjustments'  => false
         ]); ?>
     </span>
 <?php else :?>

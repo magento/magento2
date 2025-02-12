@@ -14,7 +14,7 @@
                         <xs:element type="argumentsType" name="arguments" minOccurs="0" maxOccurs="unbounded"/>
                     </xs:sequence>
                     <xs:attribute type="xs:string" name="id" use="required"/>
-                    <xs:attribute type="destinationType" name="destinationType" use="required"/>
+                    <xs:attribute type="destinationType" name="destinationType" use="optional"/>
                     <xs:attribute type="xs:string" name="destination" use="required"/>
                     <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
                     <xs:attribute type="xs:string" name="topic" use="optional"/>
@@ -32,8 +32,8 @@
                         <xs:element type="bindingType" name="binding" maxOccurs="unbounded" minOccurs="0"/>
                     </xs:choice>
                     <xs:attribute type="xs:string" name="name" use="required"/>
-                    <xs:attribute type="exchangeType" name="type" use="required"/>
-                    <xs:attribute name="connection" type="xs:string" use="required" />
+                    <xs:attribute type="exchangeType" name="type" use="optional"/>
+                    <xs:attribute name="connection" type="xs:string" use="optional" />
                     <xs:attribute type="xs:boolean" name="durable" use="optional"/>
                     <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
                     <xs:attribute type="xs:boolean" name="internal" use="optional"/>

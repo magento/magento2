@@ -8,15 +8,20 @@ namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
 use Magento\Rule\Model\Action\AbstractAction;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
 {
     /**
+     * Execute new action html.
+     *
      * @return void
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type', '')));
         $type = $typeArr[0];
 
         $model = $this->_objectManager->create($type)

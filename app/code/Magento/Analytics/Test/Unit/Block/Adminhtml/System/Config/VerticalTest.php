@@ -41,7 +41,8 @@ class VerticalTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getLabel', 'getHint', 'getElementHtml'])
+            ->addMethods(['getComment', 'getLabel', 'getHint'])
+            ->onlyMethods(['getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 

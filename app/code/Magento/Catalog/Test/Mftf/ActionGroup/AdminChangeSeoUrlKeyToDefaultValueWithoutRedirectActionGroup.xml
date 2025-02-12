@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeSeoUrlKeyToDefaultValueWithoutRedirectActionGroup">
+        <annotations>
+            <description>Requires navigation to category creation/edit page. Selects 'Use Default Value' checkbox for the 'URL Key' with 'Create Permanent Redirect for old URL' unchecked.</description>
+        </annotations>
+
+        <conditionalClick selector="{{AdminCategorySEOSection.SectionHeader}}" dependentSelector="{{AdminCategorySEOSection.UrlKeyInput}}" visible="false" stepKey="clickOnSEOTab"/>
+        <waitForElementVisible selector="{{AdminCategorySEOSection.UrlKeyInput}}"  stepKey="waitForSEOTabOpened"/>
+        <clearField selector="{{AdminCategorySEOSection.UrlKeyInput}}" stepKey="clearUrlKeyField"/>
+        <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}" stepKey="uncheckRedirectCheckbox"/>
+        <checkOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}" stepKey="checkUseDefaultValueCheckbox"/>
+    </actionGroup>
+</actionGroups>

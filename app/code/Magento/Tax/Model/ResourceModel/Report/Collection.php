@@ -6,8 +6,6 @@
 
 /**
  * Tax report collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\ResourceModel\Report;
 
@@ -44,13 +42,15 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\ResourceModel\Report $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $resource->init($this->_aggregationTable);
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
     }
 
     /**
+     * Return an array of columns which are selected
+     *
      * @return array
      */
     protected function _getSelectedColumns()

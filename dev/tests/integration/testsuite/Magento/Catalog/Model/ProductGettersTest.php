@@ -141,7 +141,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($value, $this->_model->{$method}());
     }
 
-    public function getObsoleteGettersDataProvider()
+    public static function getObsoleteGettersDataProvider()
     {
         return [
             ['calculated_final_price', 'getCalculatedFinalPrice'],
@@ -222,6 +222,25 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             $expected,
             $product->getAttributeText('multiselect_attribute')
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     */
+    public function testMultipleMultiselectTextValues()
+    {
+        $expectedArray = [];
+
+        for ($i = 1; $i < 200; $i++) {
+            $expectedArray[] = sprintf('Multiselect option %d', $i);
+        }
+
+        $product = $this->productRepository->get('simple_ms_3');
+
+        self::assertEquals(
+            $expectedArray,
+            $product->getAttributeText('multiselect_attribute_text')
         );
     }
 

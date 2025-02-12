@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminInvoiceTotalTaxActionGroup">
+        <annotations>
+            <description>Admin assert invoice total tax</description>
+        </annotations>
+        <arguments>
+            <argument name="expectedTotalTax" type="string" defaultValue="$8.25"/>
+        </arguments>
+        <grabTextFrom selector="{{AdminInvoiceTotalSection.totalTax}}" stepKey="getTotalTax"/>
+        <assertEquals stepKey="assertTotalTaxValue">
+			<actualResult type="variable">getTotalTax</actualResult>
+			<expectedResult type="string">{{expectedTotalTax}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Export;
 
-use Magento\Framework\Registry;
+use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Customer\Model\Attribute;
 use Magento\ImportExport\Model\Export;
 use Magento\ImportExport\Model\Import;
@@ -15,14 +15,15 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\ImportExport\Model\Export\Adapter\Csv;
 use Magento\Customer\Model\Customer as CustomerModel;
-use Magento\CustomerImportExport\Model\Export\Customer;
 use Magento\Customer\Model\ResourceModel\Attribute\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Tests for customer export model.
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
@@ -52,6 +53,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     private $attributeCollection;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -59,6 +65,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->_model = $this->objectManager->create(Customer::class);
         $this->attributeCollection = $this->objectManager->create(Collection::class);
+        $this->localeDate = $this->objectManager->create(TimezoneInterface::class);
     }
 
     /**
@@ -154,6 +161,15 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customers = $this->objectManager->create(CustomerCollection::class);
         foreach ($customers as $customer) {
             $data = $this->processCustomerData($customer, $expectedAttributes);
+
+            $data['created_at'] = $this->localeDate
+                ->scopeDate(null, $data['created_at'], true)
+                ->format('Y-m-d H:i:s');
+
+            $data['updated_at'] = $this->localeDate
+                ->scopeDate(null, $data['updated_at'], true)
+                ->format('Y-m-d H:i:s');
+
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
 
@@ -330,36 +346,21 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * Test for method filterEntityCollection()
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers.php
+     * @dataProvider filterDataProvider
+     * @param string $locale
+     * @param int $count
+     * @param array $filter
      */
-    public function testFilterEntityCollection()
+    public function testFilterEntityCollection(string $locale, int $count, array $filter)
     {
-        $createdAtDate = '2038-01-01';
-        /**
-         * Change created_at date of first customer for future filter test.
-         */
-        $customers = $this->objectManager->get(Registry::class)
-            ->registry('_fixture/Magento_ImportExport_Customer_Collection');
-        $customers[0]->setCreatedAt($createdAtDate);
-        $customers[0]->save();
-        /**
-         * Change type of created_at attribute. In this case we have possibility to test date rage filter
-         */
-        $attributeCollection = $this->objectManager->create(Collection::class);
-        $attributeCollection->addFieldToFilter('attribute_code', 'created_at');
-        /** @var $createdAtAttribute Attribute */
-        $createdAtAttribute = $attributeCollection->getFirstItem();
-        $createdAtAttribute->setBackendType('datetime');
-        $createdAtAttribute->save();
-        /**
-         * Prepare filter.asd
-         */
-        $parameters = [
-            Export::FILTER_ELEMENT_GROUP => [
-                'email' => 'example.com',
-                'created_at' => [$createdAtDate, ''],
-                'store_id' => $this->objectManager->get(StoreManagerInterface::class)->getStore()->getId()
-            ]
+        $localeResolver = $this->objectManager->get(LocaleResolver::class);
+        $localeResolver->setLocale($locale);
+
+        $filter += [
+            'email' => 'example.com',
+            'store_id' => $this->objectManager->get(StoreManagerInterface::class)->getStore()->getId(),
         ];
+        $parameters = [Export::FILTER_ELEMENT_GROUP => $filter];
         $this->_model->setParameters($parameters);
         /** @var $customers Collection */
         $collection = $this->_model->filterEntityCollection(
@@ -369,8 +370,28 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         );
         $collection->load();
 
-        $this->assertCount(1, $collection);
-        $this->assertEquals($customers[0]->getId(), $collection->getFirstItem()->getId());
+        $this->assertCount($count, $collection);
+    }
+
+    /**
+     * @return array
+     */
+    public static function filterDataProvider(): array
+    {
+        return [
+            ['en_US', 1, ['created_at' => ['01/02/1999', '01/03/1999']]],
+            ['en_US', 0, ['created_at' => ['02/01/1999', '02/02/1999']]],
+            ['en_US', 2, ['created_at' => ['03/04/1999', null]]],
+            ['en_US', 3, ['created_at' => [null, '05/07/1999']]],
+            ['en_AU', 1, ['created_at' => ['02/01/1999', '02/02/1999']]],
+            ['en_AU', 0, ['created_at' => ['01/02/1999', '01/03/1999']]],
+            ['en_AU', 2, ['created_at' => ['04/03/1999', null]]],
+            ['en_AU', 3, ['created_at' => [null, '07/05/1999']]],
+            ['de_DE', 1, ['created_at' => ['02.01.1999', '03.01.1999']]],
+            ['de_DE', 0, ['created_at' => ['01.02.1999', '01.03.1999']]],
+            ['de_DE', 2, ['created_at' => ['04.03.1999', null]]],
+            ['en_AU', 3, ['created_at' => [null, '07.05.1999']]],
+        ];
     }
 
     /**
@@ -384,12 +405,12 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['header' => [], 'data' => []];
 
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n", '"', '\\');
         foreach ($lines as $index => $line) {
             if ($index == 0) {
-                $data['header'] = str_getcsv($line);
+                $data['header'] = str_getcsv($line, ',', '"', '\\');
             } else {
-                $row = array_combine($data['header'], str_getcsv($line));
+                $row = array_combine($data['header'], str_getcsv($line, ',', '"', '\\'));
                 if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {

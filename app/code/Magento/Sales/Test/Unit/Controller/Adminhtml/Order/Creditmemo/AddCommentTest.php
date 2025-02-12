@@ -106,9 +106,6 @@ class AddCommentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -117,7 +114,7 @@ class AddCommentTest extends TestCase
             ->getMock();
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getResponse', 'getObjectManager', 'getTitle'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getObjectManager'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -129,9 +126,6 @@ class AddCommentTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
-        $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($titleMock);
         $this->loaderMock = $this->getMockBuilder(CreditmemoLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -140,15 +134,15 @@ class AddCommentTest extends TestCase
             ->getMock();
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()

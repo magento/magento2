@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\CommentFactory;
 use Magento\Sales\Model\Order\Creditmemo\Config;
 use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -61,7 +62,7 @@ class CreditmemoTest extends TestCase
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $arguments = [
@@ -200,5 +201,41 @@ class CreditmemoTest extends TestCase
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
         $this->assertEquals($items, $itemsCollection);
+    }
+
+    public function testIsLastForLastCreditMemo(): void
+    {
+        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->getMock();
+        $orderItem = $this->getMockBuilder(OrderItem::class)->disableOriginalConstructor()->getMock();
+        $orderItem
+            ->expects($this->once())
+            ->method('isDummy')
+            ->willReturn(true);
+        $item->expects($this->once())
+            ->method('getOrderItem')
+            ->willReturn($orderItem);
+        $this->creditmemo->setItems([$item]);
+        $this->assertTrue($this->creditmemo->isLast());
+    }
+
+    public function testIsLastForNonLastCreditMemo(): void
+    {
+        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->getMock();
+        $orderItem = $this->getMockBuilder(OrderItem::class)->disableOriginalConstructor()->getMock();
+        $orderItem
+            ->expects($this->once())
+            ->method('isDummy')
+            ->willReturn(false);
+        $item->expects($this->once())
+            ->method('getOrderItem')
+            ->willReturn($orderItem);
+        $item->expects($this->once())
+            ->method('getOrderItem')
+            ->willReturn($orderItem);
+        $item->expects($this->once())
+            ->method('isLast')
+            ->willReturn(false);
+        $this->creditmemo->setItems([$item]);
+        $this->assertFalse($this->creditmemo->isLast());
     }
 }

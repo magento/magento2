@@ -49,15 +49,30 @@ class ChangeOutputArray
         OrderItemInterface $dataObject,
         array $result
     ): array {
-        $result[OrderItemInterface::ROW_TOTAL] = $this->priceRenderer->getTotalAmount($dataObject);
-        $result[OrderItemInterface::BASE_ROW_TOTAL] = $this->priceRenderer->getBaseTotalAmount($dataObject);
-        $result[OrderItemInterface::ROW_TOTAL_INCL_TAX] = $this->defaultRenderer->getTotalAmount($dataObject);
-        $result[OrderItemInterface::BASE_ROW_TOTAL_INCL_TAX] = $dataObject->getBaseRowTotal()
+        $result[OrderItemInterface::ROW_TOTAL] = $this->round($this->priceRenderer->getTotalAmount($dataObject));
+        $result[OrderItemInterface::BASE_ROW_TOTAL] = $this->round(
+            $this->priceRenderer->getBaseTotalAmount($dataObject)
+        );
+        $result[OrderItemInterface::ROW_TOTAL_INCL_TAX] = $this->round(
+            $this->defaultRenderer->getTotalAmount($dataObject)
+        );
+        $result[OrderItemInterface::BASE_ROW_TOTAL_INCL_TAX] = $this->round($dataObject->getBaseRowTotal()
             + $dataObject->getBaseTaxAmount()
             + $dataObject->getBaseDiscountTaxCompensationAmount()
             + $dataObject->getBaseWeeeTaxAppliedAmount()
-            - $dataObject->getBaseDiscountAmount();
+            - $dataObject->getBaseDiscountAmount());
 
         return $result;
+    }
+
+    /**
+     * Remove negative values from row totals
+     *
+     * @param float $value
+     * @return float
+     */
+    private function round(float $value): float
+    {
+        return (float) max($value, 0);
     }
 }

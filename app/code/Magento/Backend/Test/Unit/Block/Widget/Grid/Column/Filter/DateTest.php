@@ -10,18 +10,21 @@ namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Column\Filter\Date;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Escaper;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class DateTest to test Magento\Backend\Block\Widget\Grid\Column\Filter\Date
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DateTest extends TestCase
 {
@@ -49,32 +52,40 @@ class DateTest extends TestCase
     /** @var Context|MockObject */
     private $contextMock;
 
+    /**
+     * @var Http|MockObject
+     */
+    private $request;
+
+    /**
+     * @var Repository|MockObject
+     */
+    private $repositoryMock;
+
     protected function setUp(): void
     {
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUniqueHash'])
+            ->onlyMethods(['getUniqueHash'])
             ->getMock();
 
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->dateTimeFormatterMock = $this
             ->getMockBuilder(DateTimeFormatterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTimezone', 'getHtmlId', 'getId'])
+            ->addMethods(['getTimezone'])
+            ->onlyMethods(['getHtmlId', 'getId'])
             ->getMock();
 
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
@@ -87,6 +98,23 @@ class DateTest extends TestCase
 
         $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
         $this->contextMock->expects($this->once())->method('getLocaleDate')->willReturn($this->localeDateMock);
+
+        $this->request = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->contextMock->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->request);
+
+        $this->repositoryMock = $this->getMockBuilder(Repository::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getUrlWithParams'])
+            ->getMock();
+
+        $this->contextMock->expects($this->once())
+            ->method('getAssetRepository')
+            ->willReturn($this->repositoryMock);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
@@ -116,6 +144,14 @@ class DateTest extends TestCase
             'from' => $yesterday->getTimestamp(),
             'to' => $tomorrow->getTimestamp()
         ];
+        $params = ['_secure' => false];
+        $fileId = 'Magento_Theme::calendar.png';
+        $fileUrl = 'file url';
+
+        $this->repositoryMock->expects($this->once())
+            ->method('getUrlWithParams')
+            ->with($fileId, $params)
+            ->willReturn($fileUrl);
 
         $this->mathRandomMock->expects($this->any())->method('getUniqueHash')->willReturn($uniqueHash);
         $this->columnMock->expects($this->once())->method('getHtmlId')->willReturn($id);

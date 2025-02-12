@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="tax"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -40,6 +41,7 @@
             <deleteData stepKey="deleteCustomerTaxClass" createDataKey="createCustomerTaxClass"/>
             <deleteData stepKey="deleteProductTaxClass" createDataKey="createProductTaxClass"/>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct" />
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="customer" />
         </after>
 

@@ -61,7 +61,8 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws \LogicException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -79,6 +80,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         // we're always using JSON
         $authHeader = [];
         $restServiceInfo = $serviceInfo['rest'];
+        $additionalHeaders = $restServiceInfo['headers'] ?? [];
         if (array_key_exists('token', $restServiceInfo)) {
             $authHeader = $oAuthClient->buildBearerTokenAuthorizationHeader($restServiceInfo['token']);
         } else {
@@ -90,7 +92,12 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
                 $httpMethod
             );
         }
-        $authHeader = array_merge($authHeader, ['Accept: application/json', 'Content-Type: application/json']);
+        $authHeader = array_merge(
+            $authHeader,
+            ['Accept: application/json', 'Content-Type: application/json'],
+            $additionalHeaders
+        );
+
         switch ($httpMethod) {
             case Request::HTTP_METHOD_GET:
                 $response = $this->restClient->get($resourcePath, [], $authHeader);

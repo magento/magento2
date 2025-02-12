@@ -33,13 +33,19 @@ use PHPUnit\Framework\TestCase;
  */
 class CartTest extends TestCase
 {
-    /** @var Cart */
+    /**
+     * @var Cart
+     */
     protected $cart;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var Session|MockObject */
+    /**
+     * @var Session|MockObject
+     */
     protected $checkoutSessionMock;
 
     /**
@@ -47,7 +53,9 @@ class CartTest extends TestCase
      */
     protected $customerSessionMock;
 
-    /** @var StockItemInterface|MockObject */
+    /**
+     * @var StockItemInterface|MockObject
+     */
     protected $stockItemMock;
 
     /**
@@ -95,6 +103,9 @@ class CartTest extends TestCase
      */
     private $requestInfoFilterMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->checkoutSessionMock = $this->createMock(Session::class);
@@ -106,7 +117,7 @@ class CartTest extends TestCase
         $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMock();
         $this->stockItemMock = $this->createPartialMock(
             Item::class,
@@ -154,7 +165,10 @@ class CartTest extends TestCase
             ->setBackwardCompatibleProperty($this->cart, 'requestInfoFilter', $this->requestInfoFilterMock);
     }
 
-    public function testSuggestItemsQty()
+    /**
+     * @return void
+     */
+    public function testSuggestItemsQty(): void
     {
         $data = [[] , ['qty' => -2], ['qty' => 3], ['qty' => 3.5], ['qty' => 5], ['qty' => 4]];
         $this->quoteMock->expects($this->any())
@@ -163,15 +177,12 @@ class CartTest extends TestCase
                 [2, $this->prepareQuoteItemMock(2)],
                 [3, $this->prepareQuoteItemMock(3)],
                 [4, $this->prepareQuoteItemMock(4)],
-                [5, $this->prepareQuoteItemMock(5)],
+                [5, $this->prepareQuoteItemMock(5)]
             ]);
 
-        $this->stockState->expects($this->at(0))
+        $this->stockState
             ->method('suggestQty')
-            ->willReturn(3.0);
-        $this->stockState->expects($this->at(1))
-            ->method('suggestQty')
-            ->willReturn(3.5);
+            ->willReturnOnConsecutiveCalls(3.0, 3.5);
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
@@ -184,13 +195,16 @@ class CartTest extends TestCase
                 ['qty' => 3., 'before_suggest_qty' => 3.],
                 ['qty' => 3.5, 'before_suggest_qty' => 3.5],
                 ['qty' => 5],
-                ['qty' => 4],
+                ['qty' => 4]
             ],
             $this->cart->suggestItemsQty($data)
         );
     }
 
-    public function testUpdateItems()
+    /**
+     * @return void
+     */
+    public function testUpdateItems(): void
     {
         $data = [['qty' => 5.5, 'before_suggest_qty' => 5.5]];
         $infoDataObject = $this->objectManagerHelper->getObject(
@@ -201,14 +215,19 @@ class CartTest extends TestCase
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($this->quoteMock);
-        $this->eventManagerMock->expects($this->at(0))->method('dispatch')->with(
-            'checkout_cart_update_items_before',
-            ['cart' => $this->cart, 'info' => $infoDataObject]
-        );
-        $this->eventManagerMock->expects($this->at(1))->method('dispatch')->with(
-            'checkout_cart_update_items_after',
-            ['cart' => $this->cart, 'info' => $infoDataObject]
-        );
+        $this->eventManagerMock
+            ->method('dispatch')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($infoDataObject) {
+                    if ($arg1 == 'checkout_cart_update_items_before' &&
+                        $arg2 == ['cart' => $this->cart, 'info' => $infoDataObject]) {
+                        return null;
+                    } elseif ($arg1 == 'checkout_cart_update_items_after' &&
+                        $arg2 == ['cart' => $this->cart, 'info' => $infoDataObject]) {
+                        return null;
+                    }
+                }
+            );
 
         $result = $this->cart->updateItems($data);
         $this->assertSame($this->cart, $result);
@@ -216,7 +235,8 @@ class CartTest extends TestCase
 
     /**
      * @param int|bool $itemId
-     * @return MockObject
+     *
+     * @return MockObject|bool
      */
     public function prepareQuoteItemMock($itemId)
     {
@@ -272,9 +292,11 @@ class CartTest extends TestCase
 
     /**
      * @param boolean $useQty
+     *
+     * @return void
      * @dataProvider useQtyDataProvider
      */
-    public function testGetSummaryQty($useQty)
+    public function testGetSummaryQty(bool $useQty): void
     {
         $quoteId = 1;
         $itemsCount = 1;
@@ -284,7 +306,9 @@ class CartTest extends TestCase
         );
 
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
-        $this->checkoutSessionMock->expects($this->at(2))->method('getQuoteId')->willReturn($quoteId);
+        $this->checkoutSessionMock
+            ->method('getQuoteId')
+            ->willReturn($quoteId);
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn(true);
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')
@@ -300,7 +324,7 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function useQtyDataProvider()
+    public static function useQtyDataProvider(): array
     {
         return [
             ['useQty' => true],
@@ -309,14 +333,19 @@ class CartTest extends TestCase
     }
 
     /**
-     * Test successful scenarios for AddProduct
+     * Test successful scenarios for AddProduct.
      *
-     * @param int|Product $productInfo
-     * @param DataObject|int|array $requestInfo
+     * @param int|Product|null $productInfo
+     * @param DataObject|int|array|\Closure $requestInfo
+     *
+     * @return void
      * @dataProvider addProductDataProvider
      */
-    public function testAddProduct($productInfo, $requestInfo)
+    public function testAddProduct(int|Product|null $productInfo, DataObject|int|array|\Closure $requestInfo): void
     {
+        if (is_callable($requestInfo)) {
+            $requestInfo = $requestInfo($this);
+        }
         $product = $this->createPartialMock(
             Product::class,
             ['getStore', 'getWebsiteIds', 'getProductUrl', 'getId']
@@ -337,11 +366,6 @@ class CartTest extends TestCase
             ->method('getById')
             ->willReturn($product);
 
-        $this->eventManagerMock->expects($this->at(0))->method('dispatch')->with(
-            'checkout_cart_product_add_before',
-            ['info' => $requestInfo, 'product' => $product]
-        );
-
         $this->quoteMock->expects($this->once())
             ->method('addProduct')
             ->willReturn(1);
@@ -349,10 +373,19 @@ class CartTest extends TestCase
             ->method('getQuote')
             ->willReturn($this->quoteMock);
 
-        $this->eventManagerMock->expects($this->at(1))->method('dispatch')->with(
-            'checkout_cart_product_add_after',
-            ['quote_item' => 1, 'product' => $product]
-        );
+        $this->eventManagerMock
+            ->method('dispatch')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($requestInfo, $product) {
+                    if ($arg1 == 'checkout_cart_product_add_before' &&
+                        $arg2 == ['info' => $requestInfo, 'product' => $product]) {
+                        return $this->eventManagerMock;
+                    } elseif ($arg1 == 'checkout_cart_product_add_after' &&
+                        $arg2 == ['quote_item' => 1, 'product' => $product]) {
+                        return $this->eventManagerMock;
+                    }
+                }
+            );
 
         if (!$productInfo) {
             $productInfo = $product;
@@ -362,11 +395,11 @@ class CartTest extends TestCase
     }
 
     /**
-     * Test exception on adding product for AddProduct
+     * Test exception on adding product for AddProduct.
      *
-     * @throws LocalizedException
+     * @return void
      */
-    public function testAddProductException()
+    public function testAddProductException(): void
     {
         $product = $this->createPartialMock(
             Product::class,
@@ -405,11 +438,11 @@ class CartTest extends TestCase
     }
 
     /**
-     * Test bad parameters on adding product for AddProduct
+     * Test bad parameters on adding product for AddProduct.
      *
-     * @throws LocalizedException
+     * @return void
      */
-    public function testAddProductExceptionBadParams()
+    public function testAddProductExceptionBadParams(): void
     {
         $product = $this->createPartialMock(
             Product::class,
@@ -438,34 +471,36 @@ class CartTest extends TestCase
         $this->cart->addProduct(4, 'bad');
     }
 
+    protected function getObjectForDataObject($data)
+    {
+        $obj = new ObjectManagerHelper($this);
+        return $obj->getObject(
+            DataObject::class,
+            ['data' => $data]
+        );
+    }
+
     /**
-     * Data provider for testAddProduct
+     * Data provider for testAddProduct.
      *
      * @return array
      */
-    public function addProductDataProvider()
+    public static function addProductDataProvider(): array
     {
-        $obj = new ObjectManagerHelper($this);
         $data = ['qty' => 5.5, 'sku' => 'prod'];
-
+        $object = static fn (self $testCase) => $testCase->getObjectForDataObject($data);
         return [
             'prod_int_info_int' => [4, 4],
             'prod_int_info_array' => [ 4, $data],
             'prod_int_info_object' => [
                 4,
-                $obj->getObject(
-                    DataObject::class,
-                    ['data' => $data]
-                )
+                $object
             ],
             'prod_obj_info_int' => [null, 4],
             'prod_obj_info_array' => [ null, $data],
             'prod_obj_info_object' => [
                 null,
-                $obj->getObject(
-                    DataObject::class,
-                    ['data' => $data]
-                )
+                $object
             ]
         ];
     }

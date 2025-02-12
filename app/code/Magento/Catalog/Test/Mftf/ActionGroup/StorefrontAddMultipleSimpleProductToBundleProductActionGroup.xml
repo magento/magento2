@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddMultipleSimpleProductToBundleProductActionGroup">
+        <annotations>
+        <description>"Adding multiple simple product under bundle products" </description>
+    </annotations>
+
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <click selector="{{StorefrontBundleProductActionSection.dropdownSelectOption}}" stepKey="clickOnSelectOption"/>
+        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$product1.name$$ +$$$product1.price$$')}}" stepKey="seeOption1Product1Details"/>
+        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$product2.name$$ +$$$product2.price$$')}}" stepKey="seeOption1Product2Details"/>
+        <seeElement selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$product3.name$$ +$$$product3.price$$')}}" stepKey="seeOption1Product3Details"/>
+        <click selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$product1.name$$)}}" stepKey="selecteProduct1"/>
+        <click selector="{{StorefrontBundleProductActionSection.addToCartButton($$product1.name$$)}}" stepKey="addProduct1InCart"/>
+        <click selector="{{StorefrontBundleProductActionSection.dropdownSelectOption}}" stepKey="clickOnSelectOption2"/>
+        <click selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$product2.name$$)}}" stepKey="selecteProduct2"/>
+        <click selector="{{StorefrontBundleProductActionSection.addToCartButton($$product2.name$$)}}" stepKey="addProduct2InCart"/>
+        <click selector="{{StorefrontBundleProductActionSection.dropdownSelectOption}}" stepKey="clickOnSelectOption3"/>
+        <click selector="{{StorefrontBundleProductActionSection.dropdownProductSelection('$$product3.name$$)}}" stepKey="selecteProduct3"/>
+        <click selector="{{StorefrontBundleProductActionSection.addToCartButton($$product3.name$$)}}" stepKey="addProduct3InCart"/>
+    </actionGroup>
+</actionGroups>

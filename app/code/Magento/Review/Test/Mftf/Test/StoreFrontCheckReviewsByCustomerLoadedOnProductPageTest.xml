@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontCheckReviewsByCustomerLoadedOnProductPageTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Review By Customers"/>
+            <title value="StoreFront Review Rating By Customers"/>
+            <description value="Check if product reviews is loaded on Product Page with page load and on click of Review tab"/>
+            <severity value="AVERAGE"/>
+            <useCaseId value="ACP2E-89"/>
+            <testCaseId value="AC-1180"/>
+        </annotations>
+        <before>
+            <!-- Enable singe store view to view ratings-->
+            <magentoCLI command="config:set general/single_store_mode/enabled 1" stepKey="enabledSingleStoreMode"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!--Login-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!--Create product and Category-->
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="createProduct1" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete reviews -->
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="CustomerEntityOne.email"/>
+            </actionGroup>
+            <!--delete Category and Products -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Disable single store view back-->
+            <magentoCLI command="config:set general/single_store_mode/enabled 0" stepKey="enabledSingleStoreMode"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+        <!-- Go to frontend and make a user account and login with it -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <!-- Go to the product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Click on reviews and add reviews with current user -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab"/>
+        <!-- set product rating stars -->
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars">
+            <argument name="ratingName" value="Quality"/>
+            <argument name="stars" value="3"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setValueStars">
+            <argument name="ratingName" value="Value"/>
+            <argument name="stars" value="4"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setPriceStars">
+            <argument name="ratingName" value="Price"/>
+            <argument name="stars" value="5"/>
+        </actionGroup>
+        <!-- Click on reviews and add  reviews with current user -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview"/>
+        <!-- Go to Pending reviews page and clear filters -->
+        <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+        <!-- Moderate first product reviews: change review status from pending to approved, save -->
+        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
+        <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeFirstReviewStatus"/>
+        <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
+        <!-- Navigate to PLP and check product rating for list and table views -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreViewHomePage"/>
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchBySku">
+            <argument name="query" value="$$createProduct1.sku$$"/>
+        </actionGroup>
+        <!-- Go to the product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPageForReviewCheck">
+            <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <!--check if the div#customer-reviews element -->
+        <dontSeeElementInDOM selector="div#product-review-container > div#customer-review" stepKey="customerReviewDivIsNotLoaded"/>
+        <!-- Click on reviews and add reviews with current user -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab2"/>
+        <!-- Verify products reviews div#product-review-container > div#customer-reviews is loaded after click-->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeCustomerReviewsDivIsLoaded">
+            <argument name="selector" value="div#product-review-container > div#customer-reviews"/>
+        </actionGroup>
+
+        <!-- Navigate to PLP and check product rating for list and table views -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreViewHomePage2"/>
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchBySku2">
+            <argument name="query" value="$$createProduct1.sku$$"/>
+        </actionGroup>
+        <!-- Click on the review button for product -->
+        <click selector=".action.view" stepKey="clickOnProductReviewsLink"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <!-- Verify products reviews div#product-review-container > div#customer-reviews is loaded if reviews are open directly-->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeCustomerReviewsDivIsLoaded2">
+            <argument name="selector" value="div#product-review-container > div#customer-reviews"/>
+        </actionGroup>
+    </test>
+</tests>

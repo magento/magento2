@@ -43,6 +43,12 @@
         <data key="filename">jpg</data>
         <data key="file_extension">jpg</data>
     </entity>
+    <entity name="GifImageWithUnusedTransparencyIndex" type="image">
+        <data key="title" unique="suffix">GifImageWithUnusedTransparencyIndex</data>
+        <data key="file">transparency_index.gif</data>
+        <data key="filename">transparency_index</data>
+        <data key="file_extension">gif</data>
+    </entity>
     <entity name="LargeImage" type="image">
         <data key="title" unique="suffix">largeimage</data>
         <data key="file">large.jpg</data>
@@ -72,5 +78,15 @@
         <data key="file">png.png</data>
         <data key="filename">png</data>
         <data key="file_extension">png</data>
+    </entity>
+    <entity name="placeholderDummyBaseImage" type="imageFile">
+        <data key="file">Dummy(3).jpg</data>
+        <data key="name">Dummy(3)</data>
+        <data key="extension">jpg</data>
+    </entity>
+    <entity name="PageBuilderBackgroundImage_LargerThan2MB" type="imageFile">
+        <data key="file">LargerThan2MB.jpg</data>
+        <data key="name">LargerThan2MB</data>
+        <data key="extension">jpg</data>
     </entity>
 </entities>

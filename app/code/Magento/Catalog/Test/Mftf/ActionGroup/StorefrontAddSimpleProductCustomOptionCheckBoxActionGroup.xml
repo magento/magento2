@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddSimpleProductCustomOptionCheckBoxActionGroup">
+        <annotations>
+            <description>Adding simple product to cart with custom options checkbox.</description>
+        </annotations>
+        <arguments>
+            <argument name="checkBoxValue" type="string" defaultValue="Value1"/>
+        </arguments>
+
+        <waitForElementClickable selector="{{StorefrontProductInfoMainSection.customOptionCheckBox(checkBoxValue)}}" stepKey="waitForOptionCheckbox"/>
+        <checkOption selector="{{StorefrontProductInfoMainSection.customOptionCheckBox(checkBoxValue)}}" stepKey="checkCustomCheckBox"/>
+    </actionGroup>
+</actionGroups>

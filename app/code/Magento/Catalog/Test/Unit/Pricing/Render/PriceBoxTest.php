@@ -97,7 +97,7 @@ class PriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function getCanDisplayQtyDataProvider()
+    public static function getCanDisplayQtyDataProvider()
     {
         return [
             'product is not of type grouped' => ['configurable', true],

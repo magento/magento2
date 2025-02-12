@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
-use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
@@ -24,11 +23,6 @@ class GetEntityContent implements GetEntityContentsInterface
     private $config;
 
     /**
-     * @var Product
-     */
-    private $productResource;
-
-    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
@@ -36,15 +30,12 @@ class GetEntityContent implements GetEntityContentsInterface
     /**
      * @param Config $config
      * @param ResourceConnection $resourceConnection
-     * @param Product $productResource
      */
     public function __construct(
         Config $config,
-        ResourceConnection $resourceConnection,
-        Product $productResource
+        ResourceConnection $resourceConnection
     ) {
         $this->config = $config;
-        $this->productResource = $productResource;
         $this->resourceConnection = $resourceConnection;
     }
 

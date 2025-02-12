@@ -18,6 +18,7 @@
             <testCaseId value="MC-6406"/>
             <useCaseId value="MAGETWO-59265"/>
             <group value="importExport"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -29,6 +30,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createChineseStoreView">
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
                 <argument name="customStore" value="storeViewChinese"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
         </before>
         <after>
@@ -45,6 +49,9 @@
             </actionGroup>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteChineseStoreView">
                 <argument name="customStore" value="storeViewChinese"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

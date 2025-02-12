@@ -36,5 +36,10 @@
                 <action method="setListCollection"/>
             </block>
         </referenceContainer>
+        <referenceBlock name="search_result_list">
+            <arguments>
+                <argument name="viewModel" xsi:type="object">Magento\Catalog\ViewModel\Product\OptionsData</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

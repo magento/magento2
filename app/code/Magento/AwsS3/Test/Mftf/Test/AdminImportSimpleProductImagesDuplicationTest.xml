@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportSimpleProductImagesDuplicationTest">
+
+        <before>
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/test_image_duplication</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyProductBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderBaseImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderBaseImage.file}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyProductSmallImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderSmallImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderSmallImage.file}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyProductThumbImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderThumbnailImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderThumbnailImage.file}}</argument>
+            </helper>
+        </before>
+
+        <after>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/test_image_duplication</argument>
+            </helper>
+        </after>
+
+    </test>
+</tests>

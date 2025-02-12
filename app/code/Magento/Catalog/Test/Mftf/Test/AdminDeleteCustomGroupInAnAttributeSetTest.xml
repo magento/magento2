@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCustomGroupInAnAttributeSetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Delete Custom Group In An attribute set "/>
+            <title value="Delete Custom Group from attribute set"/>
+            <description value="Delete Custom Group from attribute set"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26728"/>
+            <group value="catalog"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+
+            <!-- Login to Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- Create attribute set with custom group -->
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <actionGroup ref="AdminCreateCustomGroupInAnAttributeSetActionGroup" stepKey="createGroupInAttributeSet">
+                <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+                <argument name="customGroupName" value="Custom Group"/>
+            </actionGroup>
+            <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="OpenAttributeSet">
+                <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForDragAndDropAttributes"/>
+            <!-- Drag and drop system product attributes in to custom group -->
+            <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('price')}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="dragAndDrop"/>
+            <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('sku')}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="dragAndDrop1"/>
+            <!-- Click Save Attribute -->
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
+
+        </before>
+
+        <after>
+
+            <!-- Delete attribute set -->
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <!-- Logout from Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+        </after>
+        <!-- Open attribute set and delete custom group -->
+        <actionGroup ref="AdminDeleteCustomGroupDragAndDropAttributesInAnAttributeSetActionGroup" stepKey="deleteGroupInAttributeSet">
+            <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+            <argument name="customGroupName" value="Custom Group"/>
+        </actionGroup>
+
+        <!-- Again open attribute set and search for custom group -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute1">
+            <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <!-- Custom Group is absent in attribute set -->
+        <dontSeeElement selector="{{AdminProductAttributeSetEditSection.attributeGroup('Custom Group')}}"  stepKey="assertCustomGroupIsNotPresent"/>
+        <!-- Navigate to Catalog > Products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductPage"/>
+        <!-- Start to create a new simple product with the custom attribute set from the preconditions -->
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
+        <waitForPageLoad stepKey="waitForSelectAttribute"/>
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttribute">
+            <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <!-- Custom Group is absent in attribute set -->
+        <dontSeeElement selector="{{AdminProductAttributeSection.attributeGroupByName('Custom Group')}}"  stepKey="dontSeeCustomGroup"/>
+
+    </test>
+</tests>
+

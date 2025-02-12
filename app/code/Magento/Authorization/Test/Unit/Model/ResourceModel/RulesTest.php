@@ -35,7 +35,7 @@ class RulesTest extends TestCase
     /**
      * Test constants
      */
-    const TEST_ROLE_ID = 13;
+    private const TEST_ROLE_ID = 13;
 
     /**
      * @var Rules
@@ -89,12 +89,12 @@ class RulesTest extends TestCase
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResources'])
+            ->onlyMethods(['getResources'])
             ->getMock();
 
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getTableName'])
+            ->onlyMethods(['getConnection', 'getTableName'])
             ->getMock();
 
         $this->contextMock->expects($this->once())
@@ -103,7 +103,6 @@ class RulesTest extends TestCase
 
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->resourceConnectionMock->expects($this->once())
@@ -117,22 +116,19 @@ class RulesTest extends TestCase
 
         $this->aclBuilderMock = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConfigCache'])
+            ->addMethods(['getConfigCache'])
             ->getMock();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->aclBuilderMock->method('getConfigCache')
@@ -140,7 +136,7 @@ class RulesTest extends TestCase
 
         $this->rulesModelMock = $this->getMockBuilder(RulesModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRoleId'])
+            ->addMethods(['getRoleId'])
             ->getMock();
 
         $this->rulesModelMock->method('getRoleId')
@@ -189,7 +185,7 @@ class RulesTest extends TestCase
 
         $exceptionPhrase = $this->getMockBuilder(Phrase::class)
             ->disableOriginalConstructor()
-            ->setMethods(['render'])
+            ->onlyMethods(['render'])
             ->getMock();
 
         $exceptionPhrase->method('render')->willReturn('TestException');

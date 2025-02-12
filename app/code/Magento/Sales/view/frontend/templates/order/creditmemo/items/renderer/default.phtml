@@ -4,7 +4,12 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var  $block \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */ ?>
+<?php
+/**
+ * @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block
+ * @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter
+ */
+?>
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
 <tr id="order-item-row-<?= (int) $_item->getId() ?>">
@@ -59,7 +64,9 @@
     <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
         <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= (float) $_item->getQty() ?></td>
+    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
+        <?= /* @noEscape */ $localeFormatter->formatNumber((float) $_item->getQty()) ?>
+    </td>
     <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>
     </td>

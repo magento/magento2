@@ -42,7 +42,7 @@ class LegacyDirective implements DirectiveProcessorInterface
             return (string)$method->invokeArgs($filter, [$construction]);
         } catch (\ReflectionException $e) {
             // The legacy parser may be the only parser loaded so make sure the simple directives still process
-            preg_match($this->simpleDirective->getRegularExpression(), $construction[0], $simpleConstruction);
+            preg_match($this->simpleDirective->getRegularExpression(), $construction[0] ?? '', $simpleConstruction);
 
             return $this->simpleDirective->process($simpleConstruction, $filter, $templateVariables);
         }

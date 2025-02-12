@@ -17,4 +17,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Webapi\Model\Rest\Config" >
+        <plugin name="overrideInputArraySizeLimit" type="Magento\WebapiAsync\Plugin\Rest\Config" />
+    </type>
 </config>

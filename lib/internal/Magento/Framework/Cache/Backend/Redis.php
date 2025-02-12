@@ -51,7 +51,10 @@ class Redis extends \Cm_Cache_Backend_Redis
                 $redis->hGet(self::PREFIX_KEY . $key, self::FIELD_DATA);
             }
 
-            $this->preloadedData = array_filter(array_combine($this->preloadKeys, $redis->exec()));
+            $redisResponse = $redis->exec();
+            $this->preloadedData = is_array($redisResponse) ?
+                array_filter(array_combine($this->preloadKeys, $redisResponse)) :
+                [];
         }
 
         if (isset($this->preloadedData[$id])) {
@@ -70,8 +73,9 @@ class Redis extends \Cm_Cache_Backend_Redis
      * @param bool $specificLifetime
      * @return bool
      */
-    public function save($data, $id, $tags = [], $specificLifetime = false)
+    public function save($data, $id, $tags = [], $specificLifetime = 86_400_000)
     {
+        // @todo add special handling of MAGE tag, save clenup
         try {
             $result = parent::save($data, $id, $tags, $specificLifetime);
         } catch (\Throwable $exception) {
@@ -93,5 +97,16 @@ class Redis extends \Cm_Cache_Backend_Redis
         }
 
         return $result;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

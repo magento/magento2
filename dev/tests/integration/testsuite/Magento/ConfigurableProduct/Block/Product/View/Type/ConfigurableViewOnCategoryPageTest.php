@@ -102,6 +102,7 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/reindex_catalog_inventory_stock.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_category.php
      *
      * @return void
@@ -120,12 +121,25 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
     {
         $this->executeInStoreContext->execute(
             'fixture_second_store',
-            [$this, 'assertProductPrice'],
+            [$this, 'assertProductPriceContains'],
             'configurable',
             __('As low as') . ' $10.00'
         );
         $this->resetPageLayout();
-        $this->assertProductPrice('configurable', __('As low as') . ' $150.00');
+        $this->assertProductPrice('configurable', '$150.00');
+    }
+
+    /**
+     * @param string $sku
+     * @param string $priceString
+     * @return void
+     */
+    public function assertProductPriceContains(string $sku, string $priceString): void
+    {
+        $this->preparePageLayout();
+        $this->assertCollectionSize(1, $this->getListingBlock()->getLoadedProductCollection());
+        $priceHtml = $this->getListingBlock()->getProductPrice($this->getProduct($sku));
+        $this->assertStringContainsString($priceString, $this->clearPriceHtml($priceHtml));
     }
 
     /**

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckRefundGrandTotalActionGroup">
+        <annotations>
+            <description>Checks if Refund Grand Total is equal to the provided value.</description>
+        </annotations>
+        <arguments>
+            <argument name="grandTotal" type="string"/>
+        </arguments>
+
+        <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="{{grandTotal}}" stepKey="seeGrandTotal"/>
+    </actionGroup>
+</actionGroups>

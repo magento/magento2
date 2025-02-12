@@ -55,7 +55,7 @@ class GroupTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMockForAbstractClass();
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
@@ -97,7 +97,7 @@ class GroupTest extends TestCase
 
         $groupTest = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
         $groupTest->expects($this->any())->method('getCode')->willReturn(__('NOT LOGGED IN'));
         $groupTest->expects($this->any())->method('getId')->willReturn('0');

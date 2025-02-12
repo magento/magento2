@@ -151,7 +151,7 @@ class ProcessLayoutRenderElementTest extends TestCase
                     ->method('isScopePrivate')
                     ->willReturn($scopeIsPrivate);
             }
-            $this->_configMock->expects($this->any())->method('getType')->willReturn($varnishIsEnabled);
+            $this->_configMock->expects($this->any())->method('getType')->willReturn(Config::VARNISH);
         }
         $this->_model->execute($this->_observerMock);
 
@@ -210,7 +210,7 @@ class ProcessLayoutRenderElementTest extends TestCase
             ->method('getNameInLayout')
             ->willReturn('testBlockName');
 
-        $this->_configMock->expects($this->any())->method('getType')->willReturn(true);
+        $this->_configMock->expects($this->any())->method('getType')->willReturn(Config::VARNISH);
 
         $this->_model->execute($this->_observerMock);
 
@@ -222,7 +222,7 @@ class ProcessLayoutRenderElementTest extends TestCase
      *
      * @return array
      */
-    public function processLayoutRenderDataProvider()
+    public static function processLayoutRenderDataProvider()
     {
         return [
             'full_page type and Varnish enabled, public scope, ttl is set' => [

@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Model;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Integration\Api\UserTokenReaderInterface;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -16,6 +18,7 @@ use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory;
 use Magento\Integration\Model\Oauth\Token\RequestLog\Config as TokenThrottlerConfig;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Customer\Model\CustomerFactory;
 
 /**
  * api-functional test for \Magento\Integration\Model\CustomerTokenService.
@@ -24,9 +27,9 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
  */
 class CustomerTokenServiceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = "integrationCustomerTokenServiceV1";
-    const SERVICE_VERSION = "V1";
-    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
+    private const SERVICE_NAME = "integrationCustomerTokenServiceV1";
+    private const SERVICE_VERSION = "V1";
+    private const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
     /**
      * @var CustomerTokenServiceInterface
@@ -54,6 +57,16 @@ class CustomerTokenServiceTest extends WebapiAbstract
     private $attemptsCountToLockAccount;
 
     /**
+     * @var UserTokenReaderInterface
+     */
+    private $tokenReader;
+
+    /**
+     * @var CustomerFactory
+     */
+    private $customerFactory;
+
+    /**
      * Setup CustomerTokenService
      */
     protected function setUp(): void
@@ -73,6 +86,8 @@ class CustomerTokenServiceTest extends WebapiAbstract
         /** @var TokenThrottlerConfig $tokenThrottlerConfig */
         $tokenThrottlerConfig = Bootstrap::getObjectManager()->get(TokenThrottlerConfig::class);
         $this->attemptsCountToLockAccount = $tokenThrottlerConfig->getMaxFailuresCount();
+        $this->tokenReader = Bootstrap::getObjectManager()->get(UserTokenReaderInterface::class);
+        $this->customerFactory = Bootstrap::getObjectManager()->get(CustomerFactory::class);
     }
 
     /**
@@ -95,9 +110,26 @@ class CustomerTokenServiceTest extends WebapiAbstract
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
         ];
+
+        $invalidCredentials = [
+            'username' => $userName,
+            'password' => 'invalid',
+        ];
+        try {
+            $this->_webApiCall($serviceInfo, $invalidCredentials);
+        } catch (\Exception $e) {
+        }
+        $customerData = $this->customerAccountManagement->authenticate($userName, $password);
+        $customer = $this->customerFactory->create()->setWebsiteId($customerData->getWebsiteId())
+            ->loadByEmail($customerData->getEmail());
+        $this->assertEquals(1, $customer->getFailuresNum());
+        $this->assertNotNull($customer->getFirstFailure());
         $requestData = ['username' => $userName, 'password' => $password];
         $accessToken = $this->_webApiCall($serviceInfo, $requestData, null, $store);
-
+        $customer = $this->customerFactory->create()->setWebsiteId($customerData->getWebsiteId())
+            ->loadByEmail($customerData->getEmail());
+        $this->assertEquals(0, $customer->getFailuresNum());
+        $this->assertNull($customer->getFirstFailure());
         $this->assertToken($accessToken, $userName, $password);
     }
 
@@ -106,7 +138,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function storesDataProvider(): array
+    public static function storesDataProvider(): array
     {
         return [
             'default store' => [null],
@@ -166,7 +198,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             'Check for empty credentials' => ['', ''],
@@ -321,15 +353,8 @@ class CustomerTokenServiceTest extends WebapiAbstract
     private function assertToken($accessToken, $userName, $password)
     {
         $customerData = $this->customerAccountManagement->authenticate($userName, $password);
-        /** @var $this ->tokenCollection \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection */
-        $this->tokenCollection->addFilterByCustomerId($customerData->getId());
-        $isTokenCorrect = false;
-        foreach ($this->tokenCollection->getItems() as $item) {
-            /** @var $item TokenModel */
-            if ($item->getToken() == $accessToken) {
-                $isTokenCorrect = true;
-            }
-        }
-        $this->assertTrue($isTokenCorrect);
+        $tokenData = $this->tokenReader->read($accessToken);
+        $this->assertEquals((int) $customerData->getId(), $tokenData->getUserContext()->getUserId());
+        $this->assertEquals(UserContextInterface::USER_TYPE_CUSTOMER, $tokenData->getUserContext()->getUserType());
     }
 }

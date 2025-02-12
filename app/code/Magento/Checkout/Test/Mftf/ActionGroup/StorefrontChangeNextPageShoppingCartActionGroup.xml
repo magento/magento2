@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontChangeNextPageShoppingCartActionGroup">
+        <annotations>
+            <description>Clicks next page after changing the item quantity.</description>
+        </annotations>
+
+        <click selector="{{StorefrontCartToolbarSection.toolbarNextPage}}" stepKey="clickNextPage"/>
+        <waitForElementVisible selector="{{CheckoutCartProductSection.modalMessage}}" stepKey="waitForModalMessage"/>
+        <waitForText selector="{{CheckoutCartProductSection.modalMessage}}" userInput="Changes you made to the cart will not be saved." stepKey="waitForTextModalMessage"/>
+        <waitForElementVisible selector="{{CheckoutCartProductSection.modalConfirmButton}}" stepKey="waitForModalConfirmButton"/>
+        <click selector="{{CheckoutCartProductSection.modalConfirmButton}}" stepKey="clickModalConfirmButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeCurrentUrlEquals url="{{_ENV.MAGENTO_BASE_URL}}checkout/cart/index/?p=2" stepKey="seeCurrentUrlEqualsCartPage"/>
+
+    </actionGroup>
+</actionGroups>

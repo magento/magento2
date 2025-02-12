@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Shipment;
 
 /**
  * Interface for notification sender for Shipment.
+ * @api
  */
 interface SenderInterface
 {
@@ -23,7 +24,7 @@ interface SenderInterface
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\ShipmentInterface $shipment,
-        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
         $forceSyncMode = false
     );
 }

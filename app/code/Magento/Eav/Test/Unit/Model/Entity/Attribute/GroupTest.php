@@ -73,7 +73,7 @@ class GroupTest extends TestCase
     /**
      * @return array
      */
-    public function attributeGroupCodeDataProvider()
+    public static function attributeGroupCodeDataProvider()
     {
         return [
             ['General Group', 'general-group'],

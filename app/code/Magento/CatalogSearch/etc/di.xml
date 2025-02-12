@@ -14,6 +14,7 @@
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolver"/>
     <preference for="Magento\CatalogSearch\Model\Search\ItemCollectionProviderInterface" type="Magento\CatalogSearch\Model\Search\ItemCollectionProvider"/>
     <preference for="Magento\Framework\Indexer\IndexStructureInterface" type="Magento\CatalogSearch\Model\Indexer\IndexStructure" />
+    <preference for="Magento\CatalogSearch\Model\Search\Request\ModifierInterface" type="Magento\CatalogSearch\Model\Search\Request\ModifierComposite" />
     <type name="Magento\Catalog\Model\Indexer\Product\Full">
         <arguments>
             <argument name="indexerList" xsi:type="array">
@@ -36,9 +37,6 @@
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="catalogsearchFulltextMassAction" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action"/>
-    </type>
-    <type name="Magento\Catalog\Model\Indexer\Product\Category\Action\Rows">
-        <plugin name="catalogsearchFulltextCategoryAssignment" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Category\Action\Rows"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="catalogsearchFulltextIndexerStoreView" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View" />
@@ -163,13 +161,6 @@
             <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\Context</argument>
         </arguments>
     </type>
-    <type name="Magento\Search\Model\Autocomplete">
-        <arguments>
-            <argument name="dataProviders" xsi:type="array">
-                <item name="10" xsi:type="object">Magento\CatalogSearch\Model\Autocomplete\DataProvider</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver">
         <arguments>
             <argument name="resolvers" xsi:type="array">
@@ -246,6 +237,29 @@
             <argument name="searchEngine" xsi:type="null" />
             <!-- @deprecated parameter temporaryStorageFactory has been deprecated and not in use now -->
             <argument name="temporaryStorageFactory" xsi:type="null" />
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\Request\ModifierComposite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="search" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\SearchModifier</item>
+                <item name="partial_search" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\PartialSearchModifier</item>
+                <item name="match_queries" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\MatchQueriesModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\Request\MatchQueriesModifier">
+        <arguments>
+            <argument name="queries" xsi:type="array">
+                <item name="partial_search" xsi:type="array">
+                    <item name="name" xsi:type="array">
+                        <item name="analyzer" xsi:type="string">prefix_search</item>
+                    </item>
+                    <item name="sku" xsi:type="array">
+                        <item name="analyzer" xsi:type="string">sku_prefix_search</item>
+                    </item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

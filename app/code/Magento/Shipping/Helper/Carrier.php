@@ -5,6 +5,10 @@
  */
 namespace Magento\Shipping\Helper;
 
+use Magento\Framework\Measure\Exception\MeasureException;
+use Magento\Framework\Measure\Length;
+use Magento\Framework\Measure\Weight;
+
 /**
  * Carrier helper
  */
@@ -13,12 +17,12 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Carriers root xml path
      */
-    const XML_PATH_CARRIERS_ROOT = 'carriers';
+    public const XML_PATH_CARRIERS_ROOT = 'carriers';
 
     /**
      * Config path to UE country list
      */
-    const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
+    public const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
      * Locale interface
@@ -65,7 +69,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $carrierCode
      * @param string $configPath
-     * @param null $store
+     * @param null|int|string $store
      * @return string
      */
     public function getCarrierConfigValue($carrierCode, $configPath, $store = null)
@@ -83,13 +87,14 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int|float $value
      * @param string $sourceWeightMeasure
      * @param string $toWeightMeasure
-     * @return int|null|string
+     * @return float|string|null
+     * @throws MeasureException
      */
     public function convertMeasureWeight($value, $sourceWeightMeasure, $toWeightMeasure)
     {
         if ($value) {
             $locale = $this->localeResolver->getLocale();
-            $unitWeight = new \Zend_Measure_Weight($value, $sourceWeightMeasure, $locale);
+            $unitWeight = new Weight($value, $sourceWeightMeasure, $locale);
             $unitWeight->setType($toWeightMeasure);
             return $unitWeight->getValue();
         }
@@ -108,7 +113,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if ($value) {
             $locale = $this->localeResolver->getLocale();
-            $unitDimension = new \Zend_Measure_Length($value, $sourceDimensionMeasure, $locale);
+            $unitDimension = new Length($value, $sourceDimensionMeasure, $locale);
             $unitDimension->setType($toDimensionMeasure);
             return $unitDimension->getValue();
         }
@@ -123,7 +128,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMeasureWeightName($key)
     {
-        $weight = new \Zend_Measure_Weight(0);
+        $weight = new Weight(0);
         $conversionList = $weight->getConversionList();
         if (!empty($conversionList[$key]) && !empty($conversionList[$key][1])) {
             return $conversionList[$key][1];
@@ -139,7 +144,7 @@ class Carrier extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMeasureDimensionName($key)
     {
-        $weight = new \Zend_Measure_Length(0);
+        $weight = new Length(0);
         $conversionList = $weight->getConversionList();
         if (!empty($conversionList[$key]) && !empty($conversionList[$key][1])) {
             return $conversionList[$key][1];

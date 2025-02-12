@@ -56,11 +56,11 @@ class PaymentVaultInformationManagement
         PaymentInformationManagementInterface $subject,
         string $cartId,
         PaymentInterface $paymentMethod,
-        AddressInterface $billingAddress = null
+        ?AddressInterface $billingAddress = null
     ): void {
         $availableMethods = $this->vaultPaymentMethodList->getActiveList($this->storeManager->getStore()->getId());
         foreach ($availableMethods as $availableMethod) {
-            if (strpos($paymentMethod->getMethod(), $availableMethod->getCode()) !== false) {
+            if (strpos($paymentMethod->getMethod() ?? '', $availableMethod->getCode()) !== false) {
                 $paymentMethod->setMethod($availableMethod->getCode());
             }
         }

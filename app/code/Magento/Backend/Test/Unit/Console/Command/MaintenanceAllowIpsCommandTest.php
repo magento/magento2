@@ -100,7 +100,7 @@ class MaintenanceAllowIpsCommandTest extends TestCase
     /**
      * return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [
@@ -134,7 +134,7 @@ class MaintenanceAllowIpsCommandTest extends TestCase
     /**
      * return array
      */
-    public function executeWithAddDataProvider()
+    public static function executeWithAddDataProvider()
     {
         return [
             [

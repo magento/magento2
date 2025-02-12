@@ -14,7 +14,8 @@
                     window.scrollTo(0, 0);
                     $data.trigger('open');
                  },
-                 attr: {disabled: !hasVisible()}">
+                 attr: {disabled: !hasVisible()}"
+                 aria-label="product-filters">
             <span data-bind="i18n: 'Filters'"></span>
         </button>
         <span class="filters-active" data-bind="text: countActive() || ''"></span> <!-- Added the amount of selected filters -->

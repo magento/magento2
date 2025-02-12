@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGetExportFilenameOnServerActionGroup">
+        <annotations>
+            <description>Return the export filename on server at provided index.</description>
+        </annotations>
+        <arguments>
+            <argument name="rowIndex" defaultValue="0" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}" stepKey="waitForTheRow"/>
+        <grabAttributeFrom selector="{{AdminExportAttributeSection.download(rowIndex)}}" userInput="href" stepKey="grabDownloadUrl"/>
+        <executeJS function="var href = '{$grabDownloadUrl}';  return href.toQueryParams().filename;" stepKey="grabFilename"/>
+        <return value="{$grabFilename}" stepKey="returnFilename"/>
+    </actionGroup>
+</actionGroups>

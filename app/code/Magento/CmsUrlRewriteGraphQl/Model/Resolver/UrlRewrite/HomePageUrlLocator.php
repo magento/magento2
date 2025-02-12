@@ -7,26 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\CmsUrlRewriteGraphQl\Model\Resolver\UrlRewrite;
 
-use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Cms\Helper\Page;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
 
-/**
- * Home page URL locator.
- */
 class HomePageUrlLocator implements CustomUrlLocatorInterface
 {
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
+    public const HOME_PAGE_URL_DELIMITER = '|';
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @var ScopeConfigInterface
      */
-    public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
+    private ScopeConfigInterface $scopeConfig;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(ScopeConfigInterface $scopeConfig)
+    {
         $this->scopeConfig = $scopeConfig;
     }
 
@@ -40,8 +39,10 @@ class HomePageUrlLocator implements CustomUrlLocatorInterface
                 Page::XML_PATH_HOME_PAGE,
                 ScopeInterface::SCOPE_STORE
             );
-            return $homePageUrl;
+
+            return strtok($homePageUrl, self::HOME_PAGE_URL_DELIMITER);
         }
+
         return null;
     }
 }

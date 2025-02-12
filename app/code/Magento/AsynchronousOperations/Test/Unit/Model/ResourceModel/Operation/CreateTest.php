@@ -88,7 +88,7 @@ class CreateTest extends TestCase
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $operation = $this->getMockBuilder(OperationInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $operationList->expects($this->once())->method('getItems')->willReturn([$operation]);
@@ -123,7 +123,7 @@ class CreateTest extends TestCase
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $operation = $this->getMockBuilder(OperationInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $operationList->expects($this->once())->method('getItems')->willReturn([$operation]);

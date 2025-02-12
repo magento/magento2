@@ -9,14 +9,14 @@ namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
- * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
  */
-class VariationHandler
+class VariationHandler implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
@@ -45,13 +45,14 @@ class VariationHandler
     protected $productFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]|null
      */
     private $attributes;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      * @deprecated 100.1.0
+     * @see MSI
      */
     protected $stockConfiguration;
 
@@ -120,6 +121,7 @@ class VariationHandler
      * Prepare attribute set comprising all selected configurable attributes
      *
      * @deprecated 100.1.0
+     * @see prepareAttributeSet()
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */
@@ -198,7 +200,10 @@ class VariationHandler
                 continue;
             }
 
-            $product->setData($attribute->getAttributeCode(), $parentProduct->getData($attribute->getAttributeCode()));
+            $product->setData(
+                $attribute->getAttributeCode(),
+                $parentProduct->getData($attribute->getAttributeCode()) ?? $attribute->getDefaultValue()
+            );
         }
 
         $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
@@ -297,5 +302,13 @@ class VariationHandler
             $productData['media_gallery']['images'] = $gallery;
         }
         return $productData;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = null;
     }
 }

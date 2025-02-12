@@ -393,16 +393,16 @@ string',
     /**
      * @return array
      */
-    public function underscoreDataProvider()
+    public static function underscoreDataProvider()
     {
         return [
-            'Test 1' => ['Stone1Color', 'stone_1_color'],
-            'Test 2' => ['StoneColor', 'stone_color'],
-            'Test 3' => ['StoneToXml', 'stone_to_xml'],
-            'Test 4' => ['1StoneColor', '1_stone_color'],
-            'Test 5' => ['getCcLast4', 'get_cc_last_4'],
-            'Test 6' => ['99Bottles', '99_bottles'],
-            'Test 7' => ['XApiLogin', 'x_api_login']
+            'Test 1' => ['GetStone1Color', 'stone_1_color'],
+            'Test 2' => ['SetStoneColor', 'stone_color'],
+            'Test 3' => ['GetStoneToXml', 'stone_to_xml'],
+            'Test 4' => ['Set1StoneColor', '1_stone_color'],
+            'Test 5' => ['GetgetCcLast4', 'get_cc_last_4'],
+            'Test 6' => ['Set99Bottles', '99_bottles'],
+            'Test 7' => ['GetXApiLogin', 'x_api_login']
         ];
     }
 }

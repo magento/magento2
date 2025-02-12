@@ -3,26 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Backend\Block\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <div class="page-actions">
     <div class="page-actions-inner">
         <div class="page-actions-buttons">
             <?= $block->getChildHtml() ?>
 
+            <?php if ($block->getAuthorization()->isAllowed('Magento_Reports::statistics')): ?>
             <form class="action-element"
-                  action="<?= $block->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>"
+                  action="<?= $escaper->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>"
                   method="post">
                 <input
                     name="form_key"
                     type="hidden"
-                    value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
+                    value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>"/>
                 <button
                     class="action-primary"
                     type="submit"
-                    title="<?= $block->escapeHtmlAttr(__('Reload Data')) ?>">
-                    <?= $block->escapeHtml(__('Reload Data')) ?>
+                    title="<?= $escaper->escapeHtmlAttr(__('Reload Data')) ?>">
+                    <?= $escaper->escapeHtml(__('Reload Data')) ?>
                 </button>
             </form>
+            <?php endif; ?>
         </div>
     </div>
 </div>

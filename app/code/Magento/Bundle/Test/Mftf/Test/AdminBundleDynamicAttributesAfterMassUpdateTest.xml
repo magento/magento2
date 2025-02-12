@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBundleDynamicAttributesAfterMassUpdateTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create/Edit bundle product in Admin"/>
+            <title value="Verify dynamic attributes of bundle product after mass update"/>
+            <description value="Verifies that dynamic attributes of bundle product are correctly updated using mass update"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2884"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteFixedBundleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductByName">
+            <argument name="product" value="ApiFixedBundleProduct"/>
+        </actionGroup>
+
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="selectFirstProductFromGrid"/>
+        <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="goToUpdateProductAttributesPage"/>
+
+        <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributeDynamicPriceToggle}}" stepKey="toggleToChangeDynamicPrice"/>
+        <selectOption selector="{{AdminEditProductAttributesSection.AttributeDynamicPrice}}" userInput="No" stepKey="disableDynamicPrice"/>
+        <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributeDynamicSKUToggle}}" stepKey="toggleToChangeDynamicSKU"/>
+        <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributeDynamicWeightToggle}}" stepKey="toggleToChangeDynamicWeight"/>
+        <selectOption selector="{{AdminEditProductAttributesSection.AttributeDynamicSKU}}" userInput="No" stepKey="disableDynamicSKU"/>
+        <selectOption selector="{{AdminEditProductAttributesSection.AttributeDynamicWeight}}" userInput="No" stepKey="disableDynamicWeight"/>
+        <actionGroup ref="AdminSaveProductsMassAttributesUpdateActionGroup" stepKey="saveMassAttributeUpdate"/>
+
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueConsumer">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <magentoCron groups="default" stepKey="runCron"/>
+
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProductForEdit"/>
+
+        <actionGroup ref="AdminAssertBundleDynamicAttributesOnProductEditPageActionGroup" stepKey="assertBundleProductDynamicAttributesOnEditPage">
+            <argument name="dynamicSku" value="false"/>
+            <argument name="dynamicPrice" value="false"/>
+            <argument name="dynamicWeight" value="false"/>
+        </actionGroup>
+    </test>
+</tests>

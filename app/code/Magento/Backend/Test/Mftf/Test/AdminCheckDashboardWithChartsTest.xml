@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckDashboardWithChartsTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Google Charts on Magento dashboard"/>
+            <title value="Admin should see Google chart on Magento dashboard"/>
+            <description value="Google chart on Magento dashboard page is displaying properly"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-98934"/>
+            <useCaseId value="MAGETWO-98584"/>
+            <group value="backend"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set admin/dashboard/enable_charts 1" stepKey="setEnableCharts"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">150</field>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="firstname">John1</field>
+                <field key="lastname">Doe1</field>
+            </createData>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set admin/dashboard/enable_charts 0" stepKey="setDisableChartsAsDefault"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="waitForQuantityBefore"/>
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabQuantityBefore"/>
+
+        <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </updateData>
+        <createData entity="Invoice" stepKey="invoiceOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <createData entity="Shipment" stepKey="shipOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <actionGroup ref="AssertAdminDashboardDisplayedWithNoErrorsActionGroup" stepKey="assertAdminDashboardNotBroken"/>
+        <waitForElementVisible selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="waitForQuantityAfter"/>
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabQuantityAfter"/>
+        <assertGreaterThan stepKey="checkQuantityWasChanged">
+            <actualResult type="const">$grabQuantityAfter</actualResult>
+            <expectedResult type="const">$grabQuantityBefore</expectedResult>
+        </assertGreaterThan>
+    </test>
+</tests>

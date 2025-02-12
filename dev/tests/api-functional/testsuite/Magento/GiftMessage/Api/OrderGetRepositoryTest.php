@@ -11,12 +11,12 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class OrderGetRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'salesOrderRepositoryV1';
-    const RESOURCE_PATH = '/V1/orders/';
+    private const SERVICE_VERSION = 'V1';
+    private const SERVICE_NAME = 'salesOrderRepositoryV1';
+    private const RESOURCE_PATH = '/V1/orders/';
 
     /**
-     * @magentoDataFixture Magento/GiftMessage/_files/order_with_message.php
+     * @magentoApiDataFixture Magento/GiftMessage/_files/order_with_message.php
      * @magentoConfigFixture default_store sales/gift_options/allow_order 1
      * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled

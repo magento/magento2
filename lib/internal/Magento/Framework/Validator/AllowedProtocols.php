@@ -45,7 +45,7 @@ class AllowedProtocols extends AbstractValidator
     {
         $uri = new Uri($value);
         $isValid = in_array(
-            strtolower($uri->getScheme()),
+            strtolower($uri->getScheme() ?? ''),
             $this->listOfProtocols
         );
         if (!$isValid) {

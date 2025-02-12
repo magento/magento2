@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Attribute\Backend;
 
 /**
  * Order shipping address backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {

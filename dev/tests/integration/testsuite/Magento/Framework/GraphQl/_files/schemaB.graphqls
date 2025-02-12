@@ -1,3 +1,6 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
 type Query {
     products(
     search: String,
@@ -85,9 +88,7 @@ type ProductTierPrices {
     website_id: Float
 }
 
-interface ProductInterface
-@typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite")
-@doc(description: "comment for ProductInterface")
+interface ProductInterface @typeResolver(class:"Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "comment for ProductInterface")
  {
     id: Int @doc(description: "comment for [ProductInterface].")
     name: String
@@ -210,8 +211,11 @@ type CustomizableRadioValue {
 type VirtualProduct implements ProductInterface, CustomizableProductInterface {
 }
 
-type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface
-@doc(description: "Comment for empty SimpleProduct type")
+type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "Comment for empty SimpleProduct type")
+{
+}
+
+type SimpleProduct implements ProductInterface & PhysicalProductInterface & CustomizableProductInterface @doc(description: "Comment for empty SimpleProduct type")
 {
 }
 
@@ -315,8 +319,7 @@ input ProductSortInput @doc(description:"Input ProductSortInput") {
     gift_message_available: SortEnum
 }
 
-type MediaGalleryEntry
-@doc(description: "Comment for MediaGalleryEntry type")
+type MediaGalleryEntry @doc(description: "Comment for MediaGalleryEntry type")
 {
     id: Int @doc(description: "id for MediaGalleryEntry")
     media_type: String

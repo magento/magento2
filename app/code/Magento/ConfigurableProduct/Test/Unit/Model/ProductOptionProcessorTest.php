@@ -52,14 +52,13 @@ class ProductOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->dataObject = $this->getMockBuilder(DataObject::class)
-            ->setMethods([
-                'getSuperAttribute', 'addData'
-            ])
+            ->onlyMethods(['addData'])
+            ->addMethods(['getSuperAttribute'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->dataObjectFactory = $this->getMockBuilder(\Magento\Framework\DataObject\Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactory->expects($this->any())
@@ -74,7 +73,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->itemOptionValueFactory = $this->getMockBuilder(
             ConfigurableItemOptionValueFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->itemOptionValueFactory->expects($this->any())
@@ -96,13 +95,16 @@ class ProductOptionProcessorTest extends TestCase
         $options,
         $requestData
     ) {
+        if (!empty($options[0]) && is_callable($options[0])) {
+            $options[0] = $options[0]($this);
+        }
         $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
         $productOptionExtensionMock = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
         )
-            ->setMethods([
+            ->addMethods([
                 'getConfigurableItemOptions',
             ])
             ->getMockForAbstractClass();
@@ -123,10 +125,7 @@ class ProductOptionProcessorTest extends TestCase
         $this->assertEquals($this->dataObject, $this->processor->convertToBuyRequest($productOptionMock));
     }
 
-    /**
-     * @return array
-     */
-    public function dataProviderConvertToBuyRequest()
+    protected function getMockForOptionClass()
     {
         $objectManager = new ObjectManager($this);
 
@@ -136,6 +135,16 @@ class ProductOptionProcessorTest extends TestCase
         );
         $option->setOptionId(1);
         $option->setOptionValue('test');
+
+        return $option;
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderConvertToBuyRequest()
+    {
+        $option = static fn (self $testCase) => $testCase->getMockForOptionClass();
 
         return [
             [
@@ -187,7 +196,7 @@ class ProductOptionProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderConvertToProductOption()
+    public static function dataProviderConvertToProductOption()
     {
         return [
             [

@@ -14,5 +14,6 @@
         <element name="sortByDropdown" type="select" selector=".//*[@class='toolbar toolbar-products'][1]//*[@id='sorter']" timeout="30"/>
         <element name="sortDirectionAsc" type="button" selector=".//*[@class='toolbar toolbar-products'][1]//a[contains(@class, 'sort-asc')]" timeout="30"/>
         <element name="sortDirectionDesc" type="button" selector=".//*[@class='toolbar toolbar-products'][1]//a[contains(@class, 'sort-desc')]" timeout="30"/>
+        <element name="showDropdown" type="select" selector="//*[@id='limiter']" timeout="30"/>
     </section>
 </sections>

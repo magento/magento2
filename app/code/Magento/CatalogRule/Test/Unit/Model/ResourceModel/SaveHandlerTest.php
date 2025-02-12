@@ -32,6 +32,9 @@ class SaveHandlerTest extends TestCase
      */
     protected $metadataMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(Rule::class);
@@ -42,7 +45,10 @@ class SaveHandlerTest extends TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $linkedField = 'entity_id';
         $entityId = 100;
@@ -66,15 +72,17 @@ class SaveHandlerTest extends TestCase
             ->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn($linkedField);
 
-        $this->resourceMock->expects($this->at(0))
+        $this->resourceMock
             ->method('bindRuleToEntity')
-            ->with($entityId, explode(',', (string)$websiteIds), 'website')
-            ->willReturnSelf();
-
-        $this->resourceMock->expects($this->at(1))
-            ->method('bindRuleToEntity')
-            ->with($entityId, explode(',', (string)$customerGroupIds), 'customer_group')
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($entityId, $websiteIds, $customerGroupIds) {
+                $websiteIds = explode(',', (string) $websiteIds);
+                $customerGroupIds = explode(',', (string)$customerGroupIds);
+                if ($arg1== $entityId && $arg2== $websiteIds && $arg3 == 'website') {
+                    return $this->resourceMock;
+                } elseif ($arg1== $entityId && $arg2== $customerGroupIds && $arg3 == 'customer_group') {
+                    return $this->resourceMock;
+                }
+            });
 
         $this->assertEquals($entityData, $this->subject->execute($entityType, $entityData));
     }

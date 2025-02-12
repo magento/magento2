@@ -23,7 +23,7 @@ class Collection
      */
     public function afterGetCurPage(DataCollection $subject, int $result): int
     {
-        if ($result > $subject->getLastPageNumber()) {
+        if ($result > 1 && $result > $subject->getLastPageNumber()) {
             $result = 1;
         }
 

@@ -14,7 +14,7 @@
         <amOnPage url="{{AdminRolesPage.url}}" stepKey="amOnAdminUsersPage"/>
         <waitForPageLoad stepKey="waitForUserRolePageLoad"/>
         <click stepKey="clickToAddNewRole" selector="{{AdminDeleteRoleSection.role(role.name)}}"/>
-        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteRoleSection.current_pass}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteRoleSection.current_pass}}" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
         <click stepKey="clickToDeleteRole" selector="{{AdminDeleteRoleSection.delete}}"/>
         <waitForElementVisible stepKey="wait" selector="{{AdminDeleteRoleSection.confirm}}" time="30"/>
         <click stepKey="clickToConfirm" selector="{{AdminDeleteRoleSection.confirm}}"/>

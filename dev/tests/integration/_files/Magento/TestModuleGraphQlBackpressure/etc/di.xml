@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\TestModuleGraphQlBackpressure\Api\TestReadServiceInterface"
+                type="Magento\TestModuleGraphQlBackpressure\Model\TestReadService" />
+    <type name="Magento\GraphQl\Model\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="graphqltestbackpressure" xsi:type="object">
+                    Magento\TestModuleGraphQlBackpressure\Model\TypeExtractor
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="testgraphqlbackpressure" xsi:type="object">
+                    Magento\TestModuleGraphQlBackpressure\Model\LimitConfigManager
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

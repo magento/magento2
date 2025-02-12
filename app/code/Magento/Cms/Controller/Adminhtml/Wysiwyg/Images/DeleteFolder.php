@@ -43,7 +43,7 @@ class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images impl
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\App\Filesystem\DirectoryResolver $directoryResolver = null
+        ?\Magento\Framework\App\Filesystem\DirectoryResolver $directoryResolver = null
     ) {
         parent::__construct($context, $coreRegistry);
         $this->resultRawFactory = $resultRawFactory;
@@ -60,17 +60,16 @@ class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images impl
      */
     public function execute()
     {
+        $result = [];
         try {
             $path = $this->getStorage()->getCmsWysiwygImages()->getCurrentPath();
             $this->getStorage()->deleteDirectory($path);
-
-            return $this->resultRawFactory->create();
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-            $resultJson = $this->resultJsonFactory->create();
-
-            return $resultJson->setData($result);
         }
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+
+        return $resultJson->setData($result);
     }
 }

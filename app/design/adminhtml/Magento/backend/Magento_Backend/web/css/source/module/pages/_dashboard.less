@@ -21,8 +21,8 @@
 @dashboard-secondary-table-col-name__width-px: 135px;
 @dashboard-secondary-table-col-value__width-px: 50px;
 
-@dashboard-secondary-table-col-name__width-pct: @dashboard-secondary-table-col-name__width-px * 100% / @dashboard-secondary-table__width-px; // 57.44680851%
-@dashboard-secondary-table-col-value__width-pct: @dashboard-secondary-table-col-value__width-px * 100% / @dashboard-secondary-table__width-px; // 21.27659574%
+@dashboard-secondary-table-col-name__width-pct: (@dashboard-secondary-table-col-name__width-px * 100% / @dashboard-secondary-table__width-px); // 57.44680851%
+@dashboard-secondary-table-col-value__width-pct: (@dashboard-secondary-table-col-value__width-px * 100% / @dashboard-secondary-table__width-px); // 21.27659574%
 
 //
 //  Tables
@@ -60,9 +60,9 @@
         @dashboard-table-col-name__width-px: 308px;
         @dashboard-table-col-value__width-px: 84px;
 
-        @dashboard-table-col-product__width-pct: @dashboard-table-col-product__width-px * 100% / @dashboard-table__width-px; // 70%
-        @dashboard-table-col-name__width-pct: @dashboard-table-col-name__width-px * 100% / @dashboard-table__width-px; // 55%
-        @dashboard-table-col-value__width-pct: @dashboard-table-col-value__width-px * 100% / @dashboard-table__width-px; // 15%
+        @dashboard-table-col-product__width-pct: (@dashboard-table-col-product__width-px * 100% / @dashboard-table__width-px); // 70%
+        @dashboard-table-col-name__width-pct: (@dashboard-table-col-name__width-px * 100% / @dashboard-table__width-px); // 55%
+        @dashboard-table-col-value__width-pct: (@dashboard-table-col-value__width-px * 100% / @dashboard-table__width-px); // 15%
 
         th,
         td {

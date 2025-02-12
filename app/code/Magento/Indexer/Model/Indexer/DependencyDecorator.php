@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Model\Indexer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\Config\DependencyInfoProviderInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
@@ -36,18 +37,26 @@ class DependencyDecorator implements IndexerInterface
     private $indexerRegistry;
 
     /**
+     * @var DeferredCacheCleaner
+     */
+    private $cacheCleaner;
+
+    /**
      * @param IndexerInterface $indexer
      * @param DependencyInfoProviderInterface $dependencyInfoProvider
      * @param IndexerRegistry $indexerRegistry
+     * @param DeferredCacheCleaner|null $cacheCleaner
      */
     public function __construct(
         IndexerInterface $indexer,
         DependencyInfoProviderInterface $dependencyInfoProvider,
-        IndexerRegistry $indexerRegistry
+        IndexerRegistry $indexerRegistry,
+        ?DeferredCacheCleaner $cacheCleaner = null
     ) {
         $this->indexer = $indexer;
         $this->dependencyInfoProvider = $dependencyInfoProvider;
         $this->indexerRegistry = $indexerRegistry;
+        $this->cacheCleaner = $cacheCleaner ?? ObjectManager::getInstance()->get(DeferredCacheCleaner::class);
     }
 
     /**
@@ -56,7 +65,7 @@ class DependencyDecorator implements IndexerInterface
     public function __call(string $method, array $args)
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return call_user_func_array([$this->indexer, $method], $args);
+        return call_user_func_array([$this->indexer, $method], array_values($args));
     }
 
     /**
@@ -223,10 +232,9 @@ class DependencyDecorator implements IndexerInterface
     {
         $this->indexer->invalidate();
         $currentIndexerId = $this->indexer->getId();
-        $idsToRunBefore = $this->dependencyInfoProvider->getIndexerIdsToRunBefore($currentIndexerId);
         $idsToRunAfter = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($currentIndexerId);
 
-        $indexersToInvalidate = array_unique(array_merge($idsToRunBefore, $idsToRunAfter));
+        $indexersToInvalidate = array_unique($idsToRunAfter);
         foreach ($indexersToInvalidate as $indexerId) {
             $indexer = $this->indexerRegistry->get($indexerId);
             if (!$indexer->isInvalid()) {
@@ -264,6 +272,7 @@ class DependencyDecorator implements IndexerInterface
      */
     public function reindexRow($id)
     {
+        $this->cacheCleaner->start();
         $this->indexer->reindexRow($id);
         $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
         foreach ($dependentIndexerIds as $indexerId) {
@@ -272,6 +281,7 @@ class DependencyDecorator implements IndexerInterface
                 $dependentIndexer->reindexRow($id);
             }
         }
+        $this->cacheCleaner->flush();
     }
 
     /**
@@ -279,6 +289,7 @@ class DependencyDecorator implements IndexerInterface
      */
     public function reindexList($ids)
     {
+        $this->cacheCleaner->start();
         $this->indexer->reindexList($ids);
         $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
         foreach ($dependentIndexerIds as $indexerId) {
@@ -287,5 +298,6 @@ class DependencyDecorator implements IndexerInterface
                 $dependentIndexer->reindexList($ids);
             }
         }
+        $this->cacheCleaner->flush();
     }
 }

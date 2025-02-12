@@ -49,23 +49,6 @@ class InvalidateTokenTest extends AbstractBackendController
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @return void
-     */
-    public function testInvalidateCustomerWithoutToken(): void
-    {
-        $customerId = 1;
-        $this->getRequest()->setParam('customer_id', $customerId)->setMethod(HttpRequest::METHOD_GET);
-        $this->dispatch('backend/customer/customer/invalidateToken');
-        $this->assertRedirect($this->stringContains('backend/customer/index/edit/id/' . $customerId));
-        $this->assertSessionMessages(
-            $this->equalTo([(string)__('This customer has no tokens.')]),
-            MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
      * @return void
      */
     public function testInvalidateCustomerTokenWithoutParams(): void

@@ -152,7 +152,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    protected $scopeConfig;
 
     /**
      * @param Context $context
@@ -198,7 +198,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         DataObjectHelper $dataObjectHelper,
         AccountRedirect $accountRedirect,
         CustomerRepository $customerRepository,
-        Validator $formKeyValidator = null
+        ?Validator $formKeyValidator = null
     ) {
         $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;

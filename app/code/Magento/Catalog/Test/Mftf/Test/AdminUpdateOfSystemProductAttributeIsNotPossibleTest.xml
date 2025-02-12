@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateOfSystemProductAttributeIsNotPossibleTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="impossible to update system attributes"/>
+            <title value="Admin should be able to Verify that it's impossible to update system attributes"/>
+            <description value="Verify that it's impossible to update system attributes"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27207"/>
+            <group value="Catalog"/>
+            <group value="Product Attributes"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Navigate to Stores > Attributes > Product.-->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <selectOption selector="{{AttributePropertiesSection.System}}" userInput="Yes" stepKey="clickOnYes"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickOnSearchButton"/>
+        <click selector="{{AdminProductFormSection.country_Of_Manufacture}}" stepKey="clickCountry_Of_Manufacture"/>
+        <wait stepKey="waitForCountryOfManufacture" time="100"/>
+        <seeElement selector="{{AdminCreateNewProductAttributeSection.usedIsDefaultAdminDisabled}}" stepKey="assertCreatedInDefaultAdmin"/>
+        <seeElement selector="{{AdminCreateNewProductAttributeSection.usedIsDefaultStoreViewDisabled}}" stepKey="assertCreatedInDefaultStore"/>
+        <!-- Set advanced attribute properties -->
+        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="clickAdvancedAttributePropertiesSection"/>
+        <wait stepKey="waitForAdvancedAttributeProperties" time="10"/>
+        <seeElement selector="{{AdminCreateNewProductAttributeSection.usedIsAttributeCodeDisabled}}" stepKey="assertCreatedInAttributeCode"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPages"/>
+        <click selector="{{AttributePropertiesSection.storefrontProperties}}" stepKey="clickOnStorefrontProperties"/>
+        <waitForPageLoad stepKey="waitForStoreFrontToPageLoad"  time="10"/>
+    </test>
+</tests>
+

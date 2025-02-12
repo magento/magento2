@@ -17,11 +17,13 @@
             <testCaseId value="MAGETWO-97364"/>
             <group value="customer"/>
             <group value="create"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
         </after>
 

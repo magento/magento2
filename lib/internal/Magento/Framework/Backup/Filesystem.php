@@ -249,6 +249,7 @@ class Filesystem extends AbstractBackup
      */
     public function setBackupsDir($backupsDir)
     {
+        $backupsDir = rtrim($backupsDir, '/');
         parent::setBackupsDir($backupsDir);
         $this->addIgnorePaths($backupsDir);
         return $this;

@@ -57,12 +57,12 @@ class OauthUserContextTest extends TestCase
 
         $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConsumerId'])
+            ->addMethods(['getConsumerId'])
             ->getMock();
 
         $this->integrationService = $this->getMockBuilder(IntegrationServiceInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'findByName',
                     'update',
@@ -78,12 +78,12 @@ class OauthUserContextTest extends TestCase
 
         $this->oauthRequestHelper = $this->getMockBuilder(\Magento\Framework\Oauth\Helper\Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest', 'getRequestUrl'])
+            ->onlyMethods(['prepareRequest', 'getRequestUrl'])
             ->getMock();
 
         $this->oauthService = $this->getMockBuilder(Oauth::class)
             ->disableOriginalConstructor()
-            ->setMethods(['validateAccessTokenRequest'])
+            ->onlyMethods(['validateAccessTokenRequest'])
             ->getMock();
 
         $this->oauthUserContext = $this->objectManager->getObject(
@@ -138,7 +138,7 @@ class OauthUserContextTest extends TestCase
     {
         $integration = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
 
         $this->integrationService->expects($this->any())

@@ -32,7 +32,7 @@ class BatchInsert
     private $batchSize;
 
     /**
-     * @var array
+     * @var \SplFixedArray
      */
     private $dataStorage;
 
@@ -58,8 +58,7 @@ class BatchInsert
     }
 
     /**
-     * Save data to $dataStorage and automatically flush it to DB
-     * when storage size becomes equal to $batchSize
+     * Save data to $dataStorage and automatically flush it to DB when storage size becomes equal to $batchSize
      *
      * @param array $dataToInsert
      * @return void
@@ -86,10 +85,19 @@ class BatchInsert
                 $this->dataStorage->setSize($this->currentStorageIndex);
             }
 
+            if (method_exists($this->dataStorage, 'getIterator')) {
+                // PHP > 8.0
+                $this->dataStorage->getIterator()->rewind();
+                $columnsToInsert = array_keys($this->dataStorage->getIterator()->current());
+            } else {
+                // PHP 7.4. compatibility
+                $this->dataStorage->rewind();
+                $columnsToInsert = array_keys($this->dataStorage->current());
+            }
             $this->getDbConnection()
                 ->insertArray(
                     $this->insertIntoTable,
-                    array_keys(reset($this->dataStorage)),
+                    $columnsToInsert,
                     $this->dataStorage->toArray()
                 );
 

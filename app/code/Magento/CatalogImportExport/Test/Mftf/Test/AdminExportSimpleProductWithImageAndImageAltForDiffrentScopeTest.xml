@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportSimpleProductWithImageAndImageAltForDiffrentScopeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Admin product export with different Alt Text for multiple stores"/>
+            <title value="Admin product export with different Alt Text for multiple stores"/>
+            <description value="Admin product export with different Alt Text for multiple stores"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-561"/>
+            <group value="catalog_import_export"/>
+        </annotations>
+        <before>
+            <!-- Login Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create Store View English -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Create Store View France -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <!-- Create Category and Simple Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+            <!-- Upload Image All Store View -->
+            <createData entity="ApiProductAttributeMediaGalleryEntryTestImage" stepKey="createProductImage">
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete Store View English -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Delete Store View France -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <!-- Clear Filter Store -->
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetFiltersOnStorePage"/>
+            <!-- Delete Category and Simple Product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Clear Filter Product -->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <!-- Logout Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <!-- Search Product and Open Edit -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignImageRole">
+            <argument name="image" value="$$createProductImage$$"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!-- Switch to the English store view -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewEnglishProduct">
+            <argument name="storeView" value="customStoreEN.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductChangeImageAltTextActionGroup" stepKey="changeEnglishImageAltTextOnProduct">
+            <argument name="image" value="$$createProductImage$$"/>
+            <argument name="altText" value="english image alt text 1"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
+
+        <!-- Switch to the French store view -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchStoreViewFrenchProduct">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductChangeImageAltTextActionGroup" stepKey="changeFrenchImageAltTextOnProduct">
+            <argument name="image" value="$$createProductImage$$"/>
+            <argument name="altText" value="french image alt text 1"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
+
+        <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="goToExportIndexPage"/>
+        <actionGroup ref="ExportProductsFilterByAttributeActionGroup" stepKey="exportProductBySku">
+            <argument name="attribute" value="sku"/>
+            <argument name="attributeData" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForReload"/>
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
+        <!-- Validate Export File on File System: Configurable Product -->
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsConfigurableProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$createProductImage.entry[content][name]$,"english image alt text 1"</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsConfigurableProduct1">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$createProductImage.entry[content][name]$,"french image alt text 1"</argument>
+        </helper>
+    </test>
+</tests>

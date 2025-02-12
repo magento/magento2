@@ -31,6 +31,9 @@ class BatchSizeManagementTest extends TestCase
      */
     private $loggerMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->rowSizeEstimatorMock = $this->createMock(
@@ -40,7 +43,10 @@ class BatchSizeManagementTest extends TestCase
         $this->model = new BatchSizeManagement($this->rowSizeEstimatorMock, $this->loggerMock);
     }
 
-    public function testEnsureBatchSize()
+    /**
+     * @return void
+     */
+    public function testEnsureBatchSize(): void
     {
         $batchSize = 200;
         $maxHeapTableSize = 16384;
@@ -50,18 +56,6 @@ class BatchSizeManagementTest extends TestCase
 
         $this->rowSizeEstimatorMock->expects($this->once())->method('estimateRowSize')->willReturn(100);
         $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $adapterMock->expects($this->at(0))
-            ->method('fetchOne')
-            ->with('SELECT @@max_heap_table_size;', [])
-            ->willReturn($maxHeapTableSize);
-        $adapterMock->expects($this->at(1))
-            ->method('fetchOne')
-            ->with('SELECT @@tmp_table_size;', [])
-            ->willReturn($tmpTableSize);
-        $adapterMock->expects($this->at(2))
-            ->method('fetchOne')
-            ->with('SELECT @@innodb_buffer_pool_size;', [])
-            ->willReturn($innodbPollSize);
 
         $this->loggerMock->expects($this->once())
             ->method('warning')
@@ -73,13 +67,31 @@ class BatchSizeManagementTest extends TestCase
                 [$batchSize, $size, $innodbPollSize]
             ));
 
-        $adapterMock->expects($this->at(3))
-            ->method('query')
-            ->with('SET SESSION tmp_table_size = ' . $size . ';', []);
+        $adapterMock
+            ->method('fetchOne')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($maxHeapTableSize, $tmpTableSize, $innodbPollSize) {
+                    if ($arg1 == 'SELECT @@max_heap_table_size;' && empty($arg2)) {
+                        return $maxHeapTableSize;
+                    } elseif ($arg1 == 'SELECT @@tmp_table_size;' && empty($arg2)) {
+                        return $tmpTableSize;
+                    } elseif ($arg1 == 'SELECT @@innodb_buffer_pool_size;' && empty($arg2)) {
+                        return $innodbPollSize;
+                    }
+                }
+            );
 
-        $adapterMock->expects($this->at(4))
+        $adapterMock
             ->method('query')
-            ->with('SET SESSION max_heap_table_size = ' . $size . ';', []);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($size) {
+                    if ($arg1 == 'SET SESSION tmp_table_size = ' . $size . ';' && empty($arg2)) {
+                        return null;
+                    } elseif ($arg1 == 'SET SESSION max_heap_table_size = ' . $size . ';' && empty($arg2)) {
+                        return null;
+                    }
+                }
+            );
 
         $this->model->ensureBatchSize($adapterMock, $batchSize);
     }

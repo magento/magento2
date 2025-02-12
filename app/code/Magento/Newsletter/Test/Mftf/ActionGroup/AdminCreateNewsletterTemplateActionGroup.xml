@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateNewsletterTemplateActionGroup" extends="AdminMarketingCreateNewsletterTemplateActionGroup">
+        <annotations>
+            <description>
+                Extends AdminMarketingCreateNewsletterTemplateActionGroup.
+                Clicks the Show/Hide button for the Template Content field before text is sent to this field.
+            </description>
+        </annotations>
+
+        <waitForElementVisible selector="{{BasicFieldNewsletterSection.showHide}}" stepKey="waitForButton" before="showWYSIWYG"/>
+        <conditionalClick selector="{{BasicFieldNewsletterSection.showHide}}" dependentSelector="{{TinyMCESection.ContentEditor}}" visible="false" stepKey="showWYSIWYG" before="waitForTemplateContentField"/>
+    </actionGroup>
+</actionGroups>

@@ -26,37 +26,37 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Parameter name of node
      */
-    const PARAM_NODE = 'node';
+    public const PARAM_NODE = 'node';
 
     /**
      * Parameter name of content type
      */
-    const PARAM_CONTENT_TYPE = 'content_type';
+    public const PARAM_CONTENT_TYPE = 'content_type';
 
     /**
      * Parameter name of theme identification number
      */
-    const PARAM_THEME_ID = 'theme_id';
+    public const PARAM_THEME_ID = 'theme_id';
 
     /**
      * Parameter name of filename
      */
-    const PARAM_FILENAME = 'filename';
+    public const PARAM_FILENAME = 'filename';
 
     /**
      * Root node value identification number
      */
-    const NODE_ROOT = 'root';
+    public const NODE_ROOT = 'root';
 
     /**
      * Display name for images storage type
      */
-    const IMAGES = 'Images';
+    public const IMAGES = 'Images';
 
     /**
      * Display name for fonts storage type
      */
-    const FONTS = 'Fonts';
+    public const FONTS = 'Fonts';
 
     /**
      * Current directory path
@@ -119,8 +119,8 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
         \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\Framework\Filesystem\Io\File $file = null,
-        DriverInterface $filesystemDriver = null
+        ?\Magento\Framework\Filesystem\Io\File $file = null,
+        ?DriverInterface $filesystemDriver = null
     ) {
         parent::__construct($context);
         $this->filesystem = $filesystem;
@@ -232,7 +232,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function getRelativeUrl()
     {
         $pathPieces = ['..', $this->getStorageType()];
-        $node = $this->_getRequest()->getParam(self::PARAM_NODE);
+        $node = $this->_getRequest()->getParam(self::PARAM_NODE, '');
         if ($node !== self::NODE_ROOT) {
             $node = $this->urlDecoder->decode($node);
             $nodes = explode('/', trim($node, '/'));

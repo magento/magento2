@@ -54,8 +54,10 @@ class StoresData
      * @param string|null $scopeCode
      * @return array
      */
-    public function getStoresData(string $runMode, string $scopeCode = null) : array
+    public function getStoresData(string $runMode, ?string $scopeCode = null) : array
     {
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $cacheKey = 'resolved_stores_' . md5($runMode . $scopeCode);
         $cacheData = $this->cache->load($cacheKey);
         if ($cacheData) {

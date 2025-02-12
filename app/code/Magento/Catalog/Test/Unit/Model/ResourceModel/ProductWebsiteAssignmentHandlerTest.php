@@ -58,7 +58,7 @@ class ProductWebsiteAssignmentHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function productWebsitesDataProvider(): array
+    public static function productWebsitesDataProvider(): array
     {
         return [
             [

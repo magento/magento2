@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -113,8 +113,43 @@ class PriceTiersTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query);
         $itemTiers = $response['products']['items'][0]['price_tiers'];
         $this->assertCount(2, $itemTiers);
-        $this->assertEquals(round(8.25, 2), $this->getValueForQuantity(7, $itemTiers));
-        $this->assertEquals(round(7.25, 2), $this->getValueForQuantity(8, $itemTiers));
+        $this->assertEquals(8.25, $this->getValueForQuantity(7, $itemTiers));
+        $this->assertEquals(7.25, $this->getValueForQuantity(8, $itemTiers));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/three_simple_products_with_tier_price.php
+     */
+    public function testProductTierPricesAreCorrectlyReturned()
+    {
+        $productSku = 'simple';
+        $query =  <<<QUERY
+{
+  products(search: "{$productSku}") {
+   items {
+        sku
+        name
+          price_tiers {
+              quantity
+              final_price {
+                  value
+              }
+          }
+      }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $productsWithTierPrices = ['simple_1','simple_2','simple_3'];
+
+        foreach ($response['products']['items'] as $key => $item) {
+            if (in_array($item['sku'], $productsWithTierPrices)) {
+                $this->assertCount(1, $response['products']['items'][$key]['price_tiers']);
+            } else {
+                $this->assertCount(0, $response['products']['items'][$key]['price_tiers']);
+            }
+        }
     }
 
     /**

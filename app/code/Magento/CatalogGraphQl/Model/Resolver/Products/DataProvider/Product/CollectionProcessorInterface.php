@@ -13,6 +13,8 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Add additional joins, attributes, and clauses to a product collection.
+ *
+ * @api
  */
 interface CollectionProcessorInterface
 {
@@ -29,6 +31,6 @@ interface CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection;
 }

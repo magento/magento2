@@ -18,6 +18,7 @@
             <testCaseId value="MC-14700"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Set the default number of items on cart which is 20-->

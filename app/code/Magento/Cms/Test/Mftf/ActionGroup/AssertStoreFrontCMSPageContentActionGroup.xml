@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStoreFrontCMSPageContentActionGroup">
+        <annotations>
+            <description>Validates that the provided CMS Page Title, Content and Heading are present and correct on a Storefront CMS Page.</description>
+        </annotations>
+        <arguments>
+            <argument name="cmsContent" type="string"/>
+        </arguments>
+
+        <see selector="{{StorefrontCMSPageSection.mainContent}}" userInput="{{cmsContent}}" stepKey="seeContent"/>
+    </actionGroup>
+</actionGroups>

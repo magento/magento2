@@ -56,8 +56,8 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = [],
-        ConfigInterface $config = null,
-        UrlBuilder $urlBuilder = null
+        ?ConfigInterface $config = null,
+        ?UrlBuilder $urlBuilder = null
     ) {
         $this->httpContext = $httpContext;
         parent::__construct(
@@ -224,7 +224,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function hasDescription($item)
     {
-        return trim($item->getDescription()) != '';
+        return is_string($item->getDescription()) && trim($item->getDescription()) !== '';
     }
 
     /**

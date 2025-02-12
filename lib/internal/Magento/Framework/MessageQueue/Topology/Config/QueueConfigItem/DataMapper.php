@@ -145,7 +145,9 @@ class DataMapper
             $topic = $this->communicationConfig->getTopic($topicName);
             return (bool)$topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
         } catch (LocalizedException $exception) {
-            throw new LocalizedException(new Phrase('Error while checking if topic is synchronous'));
+            throw new LocalizedException(
+                new Phrase('Error while checking if topic "%topic" is synchronous', ['topic' => $topicName])
+            );
         }
     }
 

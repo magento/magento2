@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFPTTaxDiscountInShoppingCartTest">
+        <annotations>
+            <stories value="Discount (Cart price rules) ignore Weee tax amount included in subtotal cart"/>
+            <title value="Discount (Cart price rules) ignore Weee tax amount included in subtotal cart"/>
+            <description value="Discount (Cart price rules) ignore Weee tax amount included in subtotal including tax cart"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="ACP2E-1076"/>
+            <testCaseId value="AC-6663"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <!--  Step 1: Simple product is created -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct"/>
+            <!-- Step 2: Create a cart price rule for $10 Fixed amount discount -->
+            <createData entity="ActiveSalesRuleCoupon50" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--  Step 3: Store>Configuration; Sales>Tax FPT Enable -->
+            <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+            <!--  update display price and display subtotal with 'Including and Excluding Tax' -->
+            <magentoCLI command="config:set tax/cart_display/price 3"  stepKey="setPrice"/>
+            <magentoCLI command="config:set tax/cart_display/subtotal 3"  stepKey="setSubtotal"/>
+            <!--  Step 4: Fixed Product Tax attribute is created and added to default attribute set -->
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+                <argument name="productId" value="$$createSimpleProduct.id$$"/>
+            </actionGroup>
+            <!-- Step 5: FPT United States/California/100 -->
+            <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
+                <argument name="FPTAttributeCode" value="$createProductFPTAttribute.attribute_code$"/>
+                <argument name="stateForFPT" value="California"/>
+                <argument name="valueForFPT" value="100"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set tax/cart_display/price 1"  stepKey="setPrice"/>
+            <magentoCLI command="config:set tax/cart_display/subtotal 1"  stepKey="setSubtotal"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Search and update cart price rule page -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="goToCartPriceRulePage"/>
+        <actionGroup ref="AdminFilterCartPriceRuleActionGroup" stepKey="filterCartPriceRule">
+            <argument name="ruleName" value="$$createCartPriceRule.name$$"/>
+        </actionGroup>
+        <click selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="expandConditions"/>
+        <!-- Scroll down -->
+        <scrollTo selector="{{PriceRuleConditionsSection.conditionsTab}}" stepKey="scrollToConditionsTab"/>
+        <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="clickNewRule"/>
+        <selectOption selector="{{PriceRuleConditionsSection.rulesDropdown}}" userInput="Subtotal (Incl. Tax)" stepKey="selectProductAttributes"/>
+        <waitForPageLoad stepKey="waitForConditions"/>
+        <click selector="{{PriceRuleConditionsSection.ruleParamLink('1', '1', '1')}}" stepKey="startEditOperator"/>
+        <selectOption selector="{{PriceRuleConditionsSection.operatorByIndex('1', '1')}}" userInput="equals or less than" stepKey="fillOperator"/>
+        <click selector="{{PriceRuleConditionsSection.ruleParamLink('1', '1', '2')}}" stepKey="startEditValue"/>
+        <fillField selector="{{PriceRuleConditionsSection.valueByIndex('1', '1')}}" userInput="2000" stepKey="fillValue"/>
+        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+        <!-- Step 6: Add the product to the cart -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="amOnSimpleProductPage1"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="8" stepKey="fillQuantity"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
+        <!--  Step 7: Go to Shopping Cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart1"/>
+        <!--  Step 8: Open Estimate Shipping and Tax section -->
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="setEstimateShippingAndTaxInitialAddressToUnitedStates">
+            <argument name="country" value="United States"/>
+            <argument name="state" value="California"/>
+            <argument name="postcode" value="*"/>
+        </actionGroup>
+        <!-- Step 9: Add the same product to the cart again ($2230.00 subtotal incl tax) -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="amOnSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="fillQuantity2"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2"/>
+        <!--  Step 10: Go to Shopping Cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <!-- Step 11: Should not see the discount because we have exceeded $2000 -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
+        <see selector="{{StorefrontCheckoutCartItemWeeeSection.subtotalIncludingTaxPrice}}" userInput="$2,230.00" stepKey="seeNewPriceSide"/>
+        <dontSeeElement selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="dontSeeDiscount"/>
+    </test>
+</tests>

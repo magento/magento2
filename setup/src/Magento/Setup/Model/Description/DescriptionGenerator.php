@@ -63,6 +63,8 @@ class DescriptionGenerator
      */
     private function generateRawDescription()
     {
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $paragraphsCount = mt_rand(
             $this->descriptionConfig['paragraphs']['count-min'],
             $this->descriptionConfig['paragraphs']['count-max']

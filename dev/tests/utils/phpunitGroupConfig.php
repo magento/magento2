@@ -89,7 +89,7 @@ try {
         $generateConfig = false;
     } else {
         assertUsage(
-            (empty($options['get-group']) || !ctype_digit($options['get-group']))
+            (empty($options['get-group']) || !(is_string($options['get-group']) && ctype_digit($options['get-group'])))
             && strtolower($options['get-group']) != 'all',
             "Option --get-group: must be a positive integer or 'all'\n"
         );
@@ -121,7 +121,9 @@ try {
     );
 
     if (!$generateConfig) {
+        //phpcs:ignore Magento2.Security.LanguageConstruct
         print $totalGroups;
+        //phpcs:ignore Magento2.Security.LanguageConstruct
         exit(0);
     }
 
@@ -150,10 +152,13 @@ try {
         createGroupConfig($configFile, $groupConfigFile, $groupTests, $index);
         $successMsg .= "{$groupConfigFile}, group: {$index}, test suite: group_{$index}\n";
     }
+    //phpcs:ignore Magento2.Security.LanguageConstruct
     print $successMsg;
 
 } catch (Exception $e) {
+    //phpcs:ignore Magento2.Security.LanguageConstruct
     print $e->getMessage();
+    //phpcs:ignore Magento2.Security.LanguageConstruct
     exit(1);
 }
 
@@ -164,8 +169,10 @@ try {
  * @param string  $out
  * @param array   $group
  * @param integer $index
+ *
  * @return void
  * @throws Exception
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 function createGroupConfig($in, $out, $group, $index)
 {
@@ -230,7 +237,12 @@ function getFormattedGroup($group, $index)
  *
  * @param string $configFile
  * @param string $suiteName
+ *
  * @return array
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @phpcs:disable Generic.Metrics.NestingLevel
+ * @phpcs:disable Generic.Metrics.CyclomaticComplexity
  */
 function getTestList($configFile, $suiteName)
 {

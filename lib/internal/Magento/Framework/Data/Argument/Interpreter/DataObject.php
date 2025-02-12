@@ -28,13 +28,16 @@ class DataObject implements InterpreterInterface
      * Compute and return effective value of an argument
      *
      * @param array $data
-     * @return mixed
+     * @return array
      * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      */
-    public function evaluate(array $data)
+    public function evaluate(array $data): array
     {
         $result = ['instance' => $data['value']];
+        if (array_key_exists('sortOrder', $data)) {
+            $result['sortOrder'] = $data['sortOrder'];
+        }
         if (isset($data['shared'])) {
             $result['shared'] = $this->booleanUtils->toBoolean($data['shared']);
         }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertInvoiceSingleTaxActionGroup">
+        <annotations>
+            <description>Admin assert invoice single tax in detailed taxes</description>
+        </annotations>
+        <arguments>
+            <argument name="expectedSingleTax" type="string" defaultValue="$12.30"/>
+        </arguments>
+        <grabTextFrom selector="{{AdminInvoiceTaxSection.singleTaxFirst}}" stepKey="getSingleTax"/>
+        <assertEquals stepKey="assertSingleTaxValue">
+			<actualResult type="variable">getSingleTax</actualResult>
+			<expectedResult type="string">{{expectedSingleTax}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue\Publisher;
 
+use Magento\Framework\MessageQueue\DefaultValueProvider;
+
 /**
  * Test of queue publisher configuration reading and parsing.
  *
@@ -17,9 +19,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
+    /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
     }
 
     public function testGetPublishersWithOneEnabledConnection()
@@ -70,7 +78,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface $connection */
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName(), 'Incorrect default connection name');
+        $this->assertEquals(
+            $this->defaultValueProvider->getConnection(),
+            $connection->getName(),
+            'Incorrect default connection name'
+        );
         $this->assertEquals('magento', $connection->getExchange(), 'Incorrect default exchange name');
         $this->assertFalse($connection->isDisabled(), 'Incorrect connection status');
     }

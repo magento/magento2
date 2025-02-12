@@ -8,6 +8,9 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 use Magento\Search\Model\Synonym\MergeConflictException;
 
+/**
+ * @SuppressWarnings(PHPMD.AllPurposeAction)
+ */
 class Save extends \Magento\Backend\App\Action
 {
     /**
@@ -15,7 +18,7 @@ class Save extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Search::synonyms';
+    public const ADMIN_RESOURCE = 'Magento_Search::synonyms';
 
     /**
      * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
@@ -66,12 +69,12 @@ class Save extends \Magento\Backend\App\Action
             // Pre-process data and save it to model
             // Extract website_id and store_id out of scope_id
             // scope_id = website_id:store_id
-            $tokens = explode(':', $data['scope_id']);
+            $tokens = explode(':', $data['scope_id'] ?? '');
             $data['website_id'] = $tokens[0];
             $data['store_id'] = $tokens[1];
 
             // Remove unnecessary white spaces and convert synonyms to lower case
-            $words = explode(',', $data['synonyms']);
+            $words = explode(',', $data['synonyms'] ?? '');
             $words = array_map('trim', $words);
             $data['synonyms'] = strtolower(implode(',', $words));
 

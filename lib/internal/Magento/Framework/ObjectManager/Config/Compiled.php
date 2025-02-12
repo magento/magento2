@@ -50,6 +50,7 @@ class Compiled implements ConfigInterface
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function setRelations(RelationsInterface $relations)
     {
@@ -67,6 +68,7 @@ class Compiled implements ConfigInterface
     public function setCache(ConfigCacheInterface $cache)
     {
     }
+    // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
     /**
      * Retrieve list of arguments per type
@@ -121,7 +123,7 @@ class Compiled implements ConfigInterface
      */
     public function getPreference($type)
     {
-        $type = ltrim($type, '\\');
+        $type = $type !== null ? ltrim($type, '\\') : '';
         if (isset($this->preferences[$type])) {
             return $this->preferences[$type];
         }

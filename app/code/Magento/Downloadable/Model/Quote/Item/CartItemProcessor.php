@@ -58,7 +58,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
@@ -88,7 +88,7 @@ class CartItemProcessor implements CartItemProcessorInterface
         $downloadableLinkIds = [];
         $option = $cartItem->getOptionByCode('downloadable_link_ids');
         if (!empty($option)) {
-            $downloadableLinkIds = explode(',', $option->getValue());
+            $downloadableLinkIds = explode(',', $option->getValue() ?? '');
         }
 
         $downloadableOption = $this->downloadableOptionFactory->create();

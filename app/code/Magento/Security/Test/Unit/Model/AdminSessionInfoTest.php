@@ -118,13 +118,33 @@ class AdminSessionInfoTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderSessionLifetime()
+    public static function dataProviderSessionLifetime()
     {
         return [
             ['expectedResult' => true, 'sessionLifetime' => '0'],
             ['expectedResult' => true, 'sessionLifetime' => '1'],
             ['expectedResult' => false, 'sessionLifetime' => '2']
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testSessionExpiredWhenUpdatedAtIsNull()
+    {
+        $timestamp = time();
+        $sessionLifetime = '1';
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getAdminSessionLifetime')
+            ->willReturn($sessionLifetime);
+
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn($timestamp);
+
+        $this->model->setUpdatedAt(null);
+        $this->assertTrue($this->model->isSessionExpired());
     }
 
     /**
@@ -160,7 +180,7 @@ class AdminSessionInfoTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsOtherSessionsTerminated()
+    public static function dataProviderIsOtherSessionsTerminated()
     {
         return [[true], [false]];
     }

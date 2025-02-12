@@ -78,12 +78,12 @@ class GrandTotalDetailsPluginTest extends TestCase
             GrandTotalDetailsInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->ratesFactoryMock = $this->getMockBuilder(GrandTotalRatesInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->taxConfigMock = $this->getMockBuilder(Config::class)
@@ -228,7 +228,7 @@ class GrandTotalDetailsPluginTest extends TestCase
 
         $extensionAttributeMock = $this->getMockBuilder(
             TotalSegmentExtensionInterface::class
-        )->setMethods(
+        )->addMethods(
             [
                 'setTaxGrandtotalDetails',
 

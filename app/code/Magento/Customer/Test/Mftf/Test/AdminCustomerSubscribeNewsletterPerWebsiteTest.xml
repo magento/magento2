@@ -17,6 +17,7 @@
             <testCaseId value="MC-22173"/>
             <severity value="MAJOR"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
@@ -26,11 +27,16 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
@@ -39,6 +45,9 @@
         <!-- Create a new Store View -->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="customStore" value="NewStoreViewData"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
         </actionGroup>
         <!-- Switch to the new Store View on storefront -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
@@ -74,6 +83,9 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
             <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
             <argument name="customStore" value="SecondStoreUnique"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+            <argument name="indices" value=""/>
         </actionGroup>
         <!-- Grab second website id into $grabFromCurrentUrlGetSecondWebsiteId -->
         <actionGroup ref="AdminGetWebsiteIdActionGroup" stepKey="getSecondWebsiteId">

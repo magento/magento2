@@ -20,7 +20,7 @@ use Magento\Vault\Model\Ui\VaultConfigProvider;
  */
 class AfterPaymentSaveObserver implements ObserverInterface
 {
-    const PAYMENT_OBJECT_DATA_KEY = 'payment';
+    public const PAYMENT_OBJECT_DATA_KEY = 'payment';
 
     /**
      * @var PaymentTokenManagementInterface
@@ -75,6 +75,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
         $paymentToken->setCustomerId($order->getCustomerId());
         $paymentToken->setIsActive(true);
         $paymentToken->setPaymentMethodCode($payment->getMethod());
+        $paymentToken->setWebsiteId($order->getStore()->getWebsiteId());
 
         $additionalInformation = $payment->getAdditionalInformation();
         $paymentToken->setIsVisible(
@@ -116,7 +117,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
      * @param OrderPaymentExtensionInterface|null $extensionAttributes
      * @return PaymentTokenInterface | null
      */
-    protected function getPaymentToken(OrderPaymentExtensionInterface $extensionAttributes = null)
+    protected function getPaymentToken(?OrderPaymentExtensionInterface $extensionAttributes = null)
     {
         if (null === $extensionAttributes) {
             return null;

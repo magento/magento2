@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-138"/>
             <group value="ConfigurableProduct"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
@@ -84,7 +85,9 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
     </test>
 </tests>

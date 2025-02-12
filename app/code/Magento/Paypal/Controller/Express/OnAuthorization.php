@@ -33,16 +33,19 @@ use Magento\Quote\Api\GuestCartRepositoryInterface;
 class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
 {
     /**
+     * @var PayPalConfig
      * @inheritdoc
      */
     protected $_configType = PayPalConfig::class;
 
     /**
+     * @var PayPalConfig
      * @inheritdoc
      */
     protected $_configMethod = PayPalConfig::METHOD_WPP_EXPRESS;
 
     /**
+     * @var PayPalCheckout
      * @inheritdoc
      */
     protected $_checkoutType = PayPalCheckout::class;
@@ -53,8 +56,6 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
     private $cartRepository;
 
     /**
-     * Url Builder
-     *
      * @var UrlInterface
      */
     private $urlBuilder;
@@ -114,17 +115,12 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
     public function execute(): ResultInterface
     {
         $controllerResult = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $quoteId = $this->getRequest()->getParam('quoteId');
         $payerId = $this->getRequest()->getParam('payerId');
         $tokenId = $this->getRequest()->getParam('paymentToken');
-        $customerId = $this->getRequest()->getParam('customerId') ?: $this->_customerSession->getId();
+        $fundingSource = $this->getRequest()->getParam('paypalFundingSource');
 
         try {
-            if ($quoteId) {
-                $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
-            } else {
-                $quote = $this->_getQuote();
-            }
+            $quote = $this->_getQuote();
 
             $responseContent = [
                 'success' => true,
@@ -133,6 +129,7 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
 
             /** Populate checkout object with new data */
             $this->_initCheckout($quote);
+            $quote->getPayment()->setAdditionalInformation(PayPalCheckout::PAYMENT_INFO_FUNDING_SOURCE, $fundingSource);
             /**  Populate quote  with information about billing and shipping addresses*/
             $this->_checkout->returnFromPaypal($tokenId, $payerId);
             if ($this->_checkout->canSkipOrderReviewStep()) {
@@ -144,6 +141,14 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
                 $this->_getCheckoutSession()->setLastOrderId($order->getId())
                     ->setLastRealOrderId($order->getIncrementId())
                     ->setLastOrderStatus($order->getStatus());
+
+                $this->_eventManager->dispatch(
+                    'checkout_submit_all_after',
+                    [
+                        'order' => $order,
+                        'quote' => $quote
+                    ]
+                );
 
                 $this->_eventManager->dispatch(
                     'paypal_express_place_order_success',

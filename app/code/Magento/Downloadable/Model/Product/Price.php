@@ -11,6 +11,9 @@
  */
 namespace Magento\Downloadable\Model\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
     /**
@@ -35,7 +38,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             if ($linksIds = $product->getCustomOption('downloadable_link_ids')) {
                 $linkPrice = 0;
                 $links = $product->getTypeInstance()->getLinks($product);
-                foreach (explode(',', $linksIds->getValue()) as $linkId) {
+                foreach (explode(',', $linksIds->getValue() ?? '') as $linkId) {
                     if (isset($links[$linkId])) {
                         $linkPrice += $links[$linkId]->getPrice();
                     }

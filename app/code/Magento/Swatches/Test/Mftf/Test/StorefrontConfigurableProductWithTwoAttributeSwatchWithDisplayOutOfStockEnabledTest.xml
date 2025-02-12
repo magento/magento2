@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductWithTwoAttributeSwatchWithDisplayOutOfStockEnabledTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with two swatch attributes and display out of stock enabled"/>
+            <title value="Configurable product with two swatch attributes and display out of stock enabled"/>
+            <description value="Storefront selection of out of stock child products of configurable products are
+            disabled when display out of stock options are enabled"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-7020"/>
+            <useCaseId value="ACP2E-1342"/>
+            <group value="Swatches"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Set Display out of stock Enabled-->
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 1" stepKey="setDisplayOutOfStockProduct"/>
+            <!--Create Category-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!--Create Configurable Product-->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Set Display out of stock Disabled-->
+            <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 0" stepKey="setDisplayOutOfStockProduct"/>
+            <!--Delete Category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Delete Configurable Product-->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProducts">
+                <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
+            </actionGroup>
+            <!--Clear Filters-->
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <!--Delete Color Attribute-->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
+                <argument name="ProductAttribute" value="ProductColorAttribute"/>
+            </actionGroup>
+            <!--Delete Size Attribute-->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSizeAttribute">
+                <argument name="ProductAttribute" value="ProductSizeAttribute"/>
+            </actionGroup>
+            <!--Logout from Admin Area-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!--Create Color Attribute-->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">
+            <argument name="attributeName" value="{{ProductColorAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            <argument name="option1" value="Black"/>
+            <argument name="option2" value="White"/>
+            <argument name="option3" value="Blue"/>
+        </actionGroup>
+        <!--Create Size swatch attribute with 3 options:  Small, Medium and Large-->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addSizeAttribute">
+            <argument name="attributeName" value="{{ProductSizeAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{ProductSizeAttribute.attribute_code}}"/>
+            <argument name="option1" value="Small"/>
+            <argument name="option2" value="Medium"/>
+            <argument name="option3" value="Large"/>
+        </actionGroup>
+        <!--Go to product page and Configure Size and Color-->
+        <amOnPage url="{{AdminProductEditPage.url($createConfigurableProduct.id$)}}" stepKey="goToConfigurableProduct"/>
+        <actionGroup ref="CreateConfigurationsForTwoAttributeActionGroup" stepKey="createConfigurations">
+            <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            <argument name="secondAttributeCode" value="{{ProductSizeAttribute.attribute_code}}"/>
+        </actionGroup>
+        <!--Make Simple product OOS-->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
+            <argument name="productSku" value="$$createConfigurableProduct.sku$$-Blue-Medium"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatus">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
+        <!--Perform Reindex-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <!--Go to Storefront Product Page-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Blue')}}"
+               stepKey="clickBlueAttribute"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Medium')}}"
+                           userInput="disabled" stepKey="grabMediumAttribute"/>
+        <assertEquals stepKey="assertMediumDisabled">
+            <actualResult type="const">$grabMediumAttribute</actualResult>
+            <expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel('Large')}}"
+               stepKey="clickLargeAttribute"/>
+        <see selector="{{StorefrontProductInfoMainSection.selectedSwatchValue('Large')}}" userInput="Large" stepKey="seeSwatchSizeLargeBecomeSelected"/>
+    </test>
+</tests>

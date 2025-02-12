@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Review\Block\Customer\ListCustomer $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 
@@ -15,54 +16,57 @@ $reviewHelper = $block->getData('reviewHelper');
 <?php if ($block->getReviews() && count($block->getReviews())): ?>
     <div class="table-wrapper reviews">
         <table class="data table table-reviews" id="my-reviews-table">
-            <caption class="table-caption"><?= $block->escapeHtml(__('Product Reviews')) ?></caption>
+            <caption class="table-caption"><?= $escaper->escapeHtml(__('Product Reviews')) ?></caption>
             <thead>
                 <tr>
-                    <th scope="col" class="col date"><?= $block->escapeHtml(__('Created')) ?></th>
-                    <th scope="col" class="col item"><?= $block->escapeHtml(__('Product Name')) ?></th>
-                    <th scope="col" class="col summary"><?= $block->escapeHtml(__('Rating')) ?></th>
-                    <th scope="col" class="col description"><?= $block->escapeHtml(__('Review')) ?></th>
+                    <th scope="col" class="col date"><?= $escaper->escapeHtml(__('Created')) ?></th>
+                    <th scope="col" class="col item"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                    <th scope="col" class="col summary"><?= $escaper->escapeHtml(__('Rating')) ?></th>
+                    <th scope="col" class="col description"><?= $escaper->escapeHtml(__('Review')) ?></th>
                     <th scope="col" class="col actions">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($block->getReviews() as $review): ?>
                 <tr>
-                    <td data-th="<?= $block->escapeHtml(__('Created')) ?>"
-                        class="col date"><?= $block->escapeHtml($block->dateFormat($review->getReviewCreatedAt())) ?>
+                    <td data-th="<?= $escaper->escapeHtml(__('Created')) ?>"
+                        class="col date"><?= $escaper->escapeHtml($block->dateFormat($review->getReviewCreatedAt())) ?>
                     </td>
-                    <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item">
+                    <td data-th="<?= $escaper->escapeHtml(__('Product Name')) ?>" class="col item">
                         <strong class="product-name">
-                            <a href="<?= $block->escapeUrl($block->getProductUrl($review)) ?>">
-                                <?= $block->escapeHtml($review->getName()) ?>
+                            <a href="<?= $escaper->escapeUrl($block->getProductUrl($review)) ?>">
+                                <?= $escaper->escapeHtml($review->getName()) ?>
                             </a>
                         </strong>
                     </td>
-                    <td data-th="<?= $block->escapeHtml(__('Rating')) ?>" class="col summary">
+                    <td data-th="<?= $escaper->escapeHtml(__('Rating')) ?>" class="col summary">
                     <?php if ($review->getSum()): ?>
                         <div class="rating-summary">
-                            <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
+                            <span class="label"><span><?= $escaper->escapeHtml(__('Rating')) ?>:</span></span>
                             <div class="rating-result"
+                                 id="rating-result_<?= /* @noEscape */ $block->escapeHtml($review->getId()) ?>"
                                  title="<?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%">
-                                <span>
+                                <span class="rating_<?= $escaper->escapeUrl($review->getReviewId())?>">
                                     <span>
                                         <?= /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) ?>%
                                     </span>
                                 </span>
                             </div>
                         </div>
-                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                        <?= /* @noEscape */
+                        $secureRenderer->renderStyleAsTag(
                             "width:" . /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) . "%;",
-                            'div.rating-summary div.rating-result>span:first-child'
+                            'div.rating-summary div.rating-result>span.rating_' .
+                                            $escaper->escapeUrl($review->getReviewId())
                         ) ?>
                     <?php endif; ?>
                     </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Review')) ?>" class="col description">
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Review')) ?>" class="col description">
                         <?= $reviewHelper->getDetailHtml($review->getDetail()) ?>
                     </td>
-                    <td data-th="<?= $block->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
-                        <a href="<?= $block->escapeUrl($block->getReviewUrl($review)) ?>" class="action more">
-                            <span><?= $block->escapeHtml(__('See Details')) ?></span>
+                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Actions')) ?>" class="col actions">
+                        <a href="<?= $escaper->escapeUrl($block->getReviewUrl($review)) ?>" class="action more">
+                            <span><?= $escaper->escapeHtml(__('See Details')) ?></span>
                         </a>
                     </td>
                 </tr>
@@ -76,12 +80,12 @@ $reviewHelper = $block->getData('reviewHelper');
         </div>
     <?php endif; ?>
 <?php else: ?>
-    <div class="message info empty"><span><?= $block->escapeHtml(__('You have submitted no reviews.')) ?></span></div>
+    <div class="message info empty"><span><?= $escaper->escapeHtml(__('You have submitted no reviews.')) ?></span></div>
 <?php endif; ?>
 <div class="actions-toolbar">
     <div class="secondary">
-        <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
-            <span><?= $block->escapeHtml(__('Back')) ?></span>
+        <a class="action back" href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>">
+            <span><?= $escaper->escapeHtml(__('Back')) ?></span>
         </a>
     </div>
 </div>

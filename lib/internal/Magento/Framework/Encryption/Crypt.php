@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Encryption;
 
+use Magento\Framework\Encryption\Adapter\Mcrypt;
+
 /**
  * Class encapsulates cryptographic algorithm
  *
@@ -35,7 +37,7 @@ class Crypt
     /**
      * Mcrypt adapter
      *
-     * @var \Magento\Framework\Encryption\Adapter\Mcrypt
+     * @var Mcrypt
      */
     private $mcrypt;
 
@@ -50,6 +52,7 @@ class Crypt
      *                                TRUE generates a random initial vector.
      *                                FALSE fills initial vector with zero bytes to not use it.
      * @throws \Exception
+     * phpcs:disable PHPCompatibility.Constants.RemovedConstants
      */
     public function __construct(
         $key,
@@ -58,10 +61,10 @@ class Crypt
         $initVector = false
     ) {
         if (true === $initVector) {
-            // @codingStandardsIgnoreStart
+            //phpcs:disable
             $handle = @mcrypt_module_open($cipher, '', $mode, '');
             $initVectorSize = @mcrypt_enc_get_iv_size($handle);
-            // @codingStandardsIgnoreEnd
+            //phpcs:enable
 
             /* Generate a random vector from human-readable characters */
             $allowedCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -69,13 +72,13 @@ class Crypt
             for ($i = 0; $i < $initVectorSize; $i++) {
                 $initVector .= $allowedCharacters[random_int(0, strlen($allowedCharacters) - 1)];
             }
-            // @codingStandardsIgnoreStart
+            //phpcs:disable
             @mcrypt_generic_deinit($handle);
             @mcrypt_module_close($handle);
-            // @codingStandardsIgnoreEnd
+            //phpcs:enable
         }
 
-        $this->mcrypt = new \Magento\Framework\Encryption\Adapter\Mcrypt(
+        $this->mcrypt = new Mcrypt(
             $key,
             $cipher,
             $mode,
@@ -121,7 +124,7 @@ class Crypt
      */
     public function encrypt($data)
     {
-        if (strlen($data) == 0) {
+        if (!$data || strlen($data) == 0) {
             return $data;
         }
         // @codingStandardsIgnoreLine

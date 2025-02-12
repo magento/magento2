@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Interface used to return Asset id by content field.
+ * @api
  */
 interface GetAssetIdsByContentFieldInterface
 {

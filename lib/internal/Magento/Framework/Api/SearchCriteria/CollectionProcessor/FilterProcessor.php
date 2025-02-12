@@ -85,6 +85,8 @@ class FilterProcessor implements CollectionProcessorInterface
             }
         }
 
+        $this->checkFromTo($fields, $conditions);
+
         if ($fields) {
             $collection->addFieldToFilter($fields, $conditions);
         }
@@ -124,5 +126,27 @@ class FilterProcessor implements CollectionProcessorInterface
     private function getFieldMapping($field)
     {
         return $this->fieldMapping[$field] ?? $field;
+    }
+
+    /**
+     * Check filtergoup for type from & to
+     *
+     * @param string[] $fields
+     * @param array<string[]> $conditions
+     * @return void
+     */
+    private function checkFromTo(&$fields, &$conditions)
+    {
+        $_fields = array_unique($fields);
+        $_conditions = [];
+        foreach ($conditions as $condition) {
+            $_conditions[array_key_first($condition)] = reset($condition);
+        }
+        if ((count($_fields) == 1) && (count($_conditions) == 2)
+            && isset($_conditions['from']) && isset($_conditions['to'])
+        ) {
+            $fields = $_fields;
+            $conditions = [$_conditions];
+        }
     }
 }

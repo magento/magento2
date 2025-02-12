@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionProcessor"/>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface" type="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CompositeCollectionProcessor"/>
     <type name="Magento\EavGraphQl\Model\Resolver\Query\Type">
         <arguments>
@@ -22,6 +23,14 @@
                 <item name="categoryDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader</item>
                 <item name="productSortDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\SortAttributeReader</item>
                 <item name="productFilterDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\FilterAttributeReader</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <!-- Note: Because of DynamicAttributeReaders, this cache needs to be cleaned when attributes change-->
+                <item name="EAV" xsi:type="string">EAV</item>
             </argument>
         </arguments>
     </virtualType>
@@ -54,6 +63,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor">
+        <arguments>
+            <argument name="collectionPostProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CompositeCollectionProcessor">
         <arguments>
             <argument name="collectionProcessors" xsi:type="array">
@@ -70,6 +86,7 @@
     <type name="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
+                <item name="category_url_path" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\CategoryUrlPathArgsProcessor</item>
                 <item name="category_uid" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\CategoryUidArgsProcessor</item>
                 <item name="category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryUidsArgsProcessor</item>
                 <item name="parent_category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\ParentCategoryUidsArgsProcessor</item>
@@ -84,12 +101,20 @@
             </argument>
         </arguments>
     </type>
-
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
     </type>
+    <type name="Magento\Framework\Search\Request\Config">
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <!-- Note: We have to add EAV to the cache tags because productAttributesDynamicFields uses EAV -->
+                <item name="EAV" xsi:type="string">EAV</item>
+            </argument>
+        </arguments>
+        <plugin name="localRequestDataPlugin"  type="Magento\CatalogGraphQl\Plugin\Search\RequestBuilderPlugin" />
+    </type>
 
-    <preference type="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
+    <preference type="Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
 
     <preference type="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search" for="Magento\CatalogGraphQl\Model\Resolver\Products\Query\ProductQueryInterface"/>
 
@@ -105,6 +130,24 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessor\CatalogProcessor">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\TagResolver">
+        <arguments>
+            <argument name="invalidatableObjectTypes" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">
+                    Magento\Catalog\Api\Data\ProductInterface
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\App\Cache\Tag\Strategy\Locator">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="object">
+                    Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\TagsStrategy
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

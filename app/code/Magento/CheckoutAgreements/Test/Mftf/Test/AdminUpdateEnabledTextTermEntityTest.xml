@@ -18,11 +18,10 @@
             <testCaseId value="MC-14666"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <after>
-            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
-            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
         </after>
 
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">

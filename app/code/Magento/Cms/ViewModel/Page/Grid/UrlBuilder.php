@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Cms\ViewModel\Page\Grid;
 
-use Magento\Framework\Url\EncoderInterface;
+use Magento\Cms\Model\Page\TargetUrlBuilderInterface;
 use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -17,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 class UrlBuilder
 {
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $frontendUrlBuilder;
 
@@ -32,18 +35,27 @@ class UrlBuilder
     private $storeManager;
 
     /**
-     * @param \Magento\Framework\UrlInterface $frontendUrlBuilder
+     * @var TargetUrlBuilderInterface
+     */
+    private $getTargetUrl;
+
+    /**
+     * @param UrlInterface $frontendUrlBuilder
      * @param EncoderInterface $urlEncoder
      * @param StoreManagerInterface $storeManager
+     * @param TargetUrlBuilderInterface|null $getTargetUrl
      */
     public function __construct(
-        \Magento\Framework\UrlInterface $frontendUrlBuilder,
+        UrlInterface $frontendUrlBuilder,
         EncoderInterface $urlEncoder,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ?TargetUrlBuilderInterface $getTargetUrl = null
     ) {
         $this->frontendUrlBuilder = $frontendUrlBuilder;
         $this->urlEncoder = $urlEncoder;
         $this->storeManager = $storeManager;
+        $this->getTargetUrl = $getTargetUrl ?:
+            ObjectManager::getInstance()->get(TargetUrlBuilderInterface::class);
     }
 
     /**
@@ -58,16 +70,7 @@ class UrlBuilder
     {
         if ($scope) {
             $this->frontendUrlBuilder->setScope($scope);
-            $targetUrl = $this->frontendUrlBuilder->getUrl(
-                $routePath,
-                [
-                    '_current' => false,
-                    '_nosid' => true,
-                    '_query' => [
-                        StoreManagerInterface::PARAM_NAME => $store
-                    ]
-                ]
-            );
+            $targetUrl = $this->getTargetUrl->process($routePath, $store);
             $href = $this->frontendUrlBuilder->getUrl(
                 'stores/store/switch',
                 [

@@ -92,7 +92,7 @@ class AddToCompareAvailabilityTest extends TestCase
      *
      * @return array
      */
-    public function isAvailableForCompareDataProvider(): array
+    public static function isAvailableForCompareDataProvider(): array
     {
         return [
             [Status::STATUS_ENABLED, true, ['is_in_stock' => true], false, true],

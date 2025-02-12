@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminApproveAllReviewsActionGroup">
+        <selectOption selector="{{AdminReviewGridSection.massActions}}" userInput="selectAll" stepKey="selectAll"/>
+        <selectOption selector="{{AdminReviewGridSection.massActionsSelect}}" userInput="Update Status" stepKey="clickUpdateStatusActionDropdown"/>
+        <waitForElementVisible selector="{{AdminReviewGridSection.massActionsStatus}}" stepKey="waitForVisibleStatusDropdown"/>
+        <selectOption selector="{{AdminReviewGridSection.massActionsStatus}}" userInput="1" stepKey="clickApprovedActionDropdown"/>
+        <click selector="{{AdminReviewGridSection.submit}}" stepKey="clickSubmit"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="record(s) have been updated." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

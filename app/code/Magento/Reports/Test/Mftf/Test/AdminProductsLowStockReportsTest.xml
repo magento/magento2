@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductsLowStockReportsTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Products low stock report"/>
+            <title value="Admin products low stock report test"/>
+            <description value="Admin products should be displayed correctly in Low Stock report"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-11747"/>
+        </annotations>
+        <before>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!--Create product with quantity as 1-->
+            <createData entity="SimpleProductWithQty1" stepKey="createProductWithQty1"/>
+        </before>
+        <after>
+            <!--Delete product-->
+            <deleteData createDataKey="createProductWithQty1" stepKey="deleteProduct"/>
+            <!--Logout as admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <!--Set Notify for Quantity Below is 2-->
+        <magentoCLI command="config:set cataloginventory/item_options/notify_stock_qty 2" stepKey="setNotifyForQuantityBelowTwo"/>
+        <!--Clear invalidated cache-->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!--Navigate to Report > Low Stock-->
+        <amOnPage url="{{LowStockReportPage.url}}" stepKey="navigateToLowStockReportPage"/>
+        <!--Filter product having quantity 1-->
+        <actionGroup ref="AdminSearchLowStockReportByProductSkuAndSourceCodeActionGroup" stepKey="filterProductHavingQty1">
+            <argument name="productSku" value="$$createProductWithQty1.sku$$"/>
+            <argument name="sourceCode" value="{{_defaultSource.source_code}}"/>
+        </actionGroup>
+        <!--Assert product, sku and quantity having quantity as 1-->
+        <actionGroup ref="AdminVerifyLowStockProductReportActionGroup" stepKey="verifyProductReport">
+            <argument name="product" value="$$createProductWithQty1$$"/>
+            <argument name="productQty" value="$$createProductWithQty1.quantity$$"/>
+        </actionGroup>
+    </test>
+</tests>

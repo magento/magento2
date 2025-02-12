@@ -43,12 +43,13 @@ class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInte
         $event = $observer->getEvent();
         $attrData = $event->getAttributesData();
         $productIds = $event->getProductIds();
+        $storeIdFromScope = $event->getStoreId();
         $visibility = $attrData[ProductInterface::VISIBILITY] ?? 0;
 
         if (!$visibility || !$productIds) {
             return;
         }
 
-        $this->adaptUrlRewritesToVisibility->execute($productIds, (int)$visibility);
+        $this->adaptUrlRewritesToVisibility->execute($productIds, (int)$visibility, (int)$storeIdFromScope);
     }
 }

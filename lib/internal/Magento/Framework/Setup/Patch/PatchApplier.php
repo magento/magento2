@@ -22,12 +22,12 @@ class PatchApplier
     /**
      * Flag means, that we need to read schema patches
      */
-    const SCHEMA_PATCH = 'schema';
+    public const SCHEMA_PATCH = 'schema';
 
     /**
      * Flag means, that we need to read data patches
      */
-    const DATA_PATCH = 'data';
+    public const DATA_PATCH = 'data';
 
     /**
      * @var PatchRegistryFactory
@@ -162,7 +162,9 @@ class PatchApplier
                     $dataPatch->apply();
                     $this->patchHistory->fixPatch(get_class($dataPatch));
                     foreach ($dataPatch->getAliases() as $patchAlias) {
-                        $this->patchHistory->fixPatch($patchAlias);
+                        if (!$this->patchHistory->isApplied($patchAlias)) {
+                            $this->patchHistory->fixPatch($patchAlias);
+                        }
                     }
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
@@ -241,14 +243,17 @@ class PatchApplier
                 $schemaPatch->apply();
                 $this->patchHistory->fixPatch(get_class($schemaPatch));
                 foreach ($schemaPatch->getAliases() as $patchAlias) {
-                    $this->patchHistory->fixPatch($patchAlias);
+                    if (!$this->patchHistory->isApplied($patchAlias)) {
+                        $this->patchHistory->fixPatch($patchAlias);
+                    }
                 }
             } catch (\Exception $e) {
+                $schemaPatchClass = is_object($schemaPatch) ? get_class($schemaPatch) : $schemaPatch;
                 throw new SetupException(
                     new Phrase(
                         'Unable to apply patch %1 for module %2. Original exception message: %3',
                         [
-                            get_class($schemaPatch),
+                            $schemaPatchClass,
                             $moduleName,
                             $e->getMessage()
                         ]

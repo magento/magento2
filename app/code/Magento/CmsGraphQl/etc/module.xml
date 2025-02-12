@@ -9,6 +9,7 @@
     <module name="Magento_CmsGraphQl">
         <sequence>
             <module name="Magento_GraphQl"/>
+            <module name="Magento_GraphQlResolverCache"/>
         </sequence>
     </module>
 </config>

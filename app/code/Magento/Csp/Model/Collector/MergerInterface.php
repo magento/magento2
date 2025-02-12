@@ -11,6 +11,8 @@ use Magento\Csp\Api\Data\PolicyInterface;
 
 /**
  * Merges policies with the same ID in order to have only 1 policy DTO-per-policy.
+ *
+ * @api
  */
 interface MergerInterface
 {

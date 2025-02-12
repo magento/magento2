@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Reports\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Framework\DataObject;
 
 /**
  * Products Report collection.
@@ -63,6 +64,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var \Magento\Quote\Model\ResourceModel\Quote\Collection
      */
     protected $quoteResource;
+
+    /**
+     * @var DataObject
+     */
+    private $_totals;
 
     /**
      * Collection constructor.
@@ -124,12 +130,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver $priceTableResolver = null,
-        \Magento\Framework\Indexer\DimensionFactory $dimensionFactory = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        ?\Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
+        ?\Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver $priceTableResolver = null,
+        ?\Magento\Framework\Indexer\DimensionFactory $dimensionFactory = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
         $this->setProductEntityTableName($product->getEntityTable());
@@ -335,6 +341,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * Getting event type id for catalog_product_view event
          */
         $eventTypes = $this->_eventTypeFactory->create()->getCollection();
+        $productViewEvent = null;
         foreach ($eventTypes as $eventType) {
             if ($eventType->getEventName() == 'catalog_product_view') {
                 $productViewEvent = (int)$eventType->getId();

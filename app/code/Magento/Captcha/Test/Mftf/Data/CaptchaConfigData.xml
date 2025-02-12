@@ -33,6 +33,12 @@
         <data key="label">Contact Us</data>
         <data key="value">contact_us</data>
     </entity>
+    <entity name="StorefrontCaptchaOnCheckoutConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Checkout/Placing Order</data>
+        <data key="value">payment_processing_request</data>
+    </entity>
     <entity name="StorefrontCaptchaOnCustomerLoginConfigData">
         <!-- Magento default value -->
         <data key="path">customer/captcha/forms</data>
@@ -45,6 +51,12 @@
         <data key="scope_id">0</data>
         <data key="label">Change password</data>
         <data key="value">user_edit</data>
+    </entity>
+    <entity name="StorefrontCaptchaOnOnepageCheckoutConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Checkout/Placing Order</data>
+        <data key="value">payment_processing_request</data>
     </entity>
     <entity name="StorefrontCaptchaOnCustomerForgotPasswordConfigData">
         <!-- Magento default value -->
@@ -109,6 +121,18 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="AdminCaptchaAdminLoginConfigData">
+        <data key="path">admin/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Admin Login</data>
+        <data key="value">backend_login</data>
+    </entity>
+    <entity name="AdminCaptchaAdminForgotPasswordConfigData">
+        <data key="path">admin/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Admin Forgot Password</data>
+        <data key="value">backend_forgotpassword</data>
+    </entity>
     <entity name="AdminCaptchaLength3ConfigData">
         <data key="path">admin/captcha/length</data>
         <data key="scope">admin</data>
@@ -138,5 +162,44 @@
         <data key="scope_id">1</data>
         <data key="label">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
         <data key="value">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
+    </entity>
+    <entity name="AdminCaptchaForgotPasswordFormConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/forms</data>
+        <data key="scope_id">1</data>
+        <data key="label">Admin Forgot Password</data>
+        <data key="value">backend_forgotpassword</data>
+    </entity>
+    <entity name="AdminCaptchaDisplayModeConfigData">
+        <data key="path">admin/captcha/mode</data>
+        <data key="scope_id">1</data>
+        <data key="label">Always</data>
+        <data key="value">always</data>
+    </entity>
+    <entity name="AdminCaptchaDefaultDisplayModeConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/mode</data>
+        <data key="scope_id">0</data>
+        <data key="label">After number of attempts to login</data>
+        <data key="value">after_fail</data>
+    </entity>
+    <entity name="AdminCaptchaAdminLoginFormConfigData">
+        <!-- Magento default value -->
+        <data key="path">admin/captcha/forms</data>
+        <data key="scope_id">1</data>
+        <data key="label">AdminLogin</data>
+        <data key="value">backend_login</data>
+    </entity>
+    <entity name="StorefrontCaptchaOnCheckoutConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Checkout/Placing Order</data>
+        <data key="value">payment_processing_request</data>
+    </entity>
+    <entity name="StorefrontCaptchaOnApplyingCouponCodeFormsConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Applying coupon code</data>
+        <data key="value">sales_rule_coupon_request</data>
     </entity>
 </entities>

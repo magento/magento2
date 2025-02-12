@@ -45,7 +45,7 @@ class RequestGenerator
      */
     public function __construct(
         CollectionFactory $productAttributeCollectionFactory,
-        GeneratorResolver $generatorResolver = null
+        ?GeneratorResolver $generatorResolver = null
     ) {
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
         $this->generatorResolver = $generatorResolver
@@ -186,6 +186,7 @@ class RequestGenerator
                                 [
                                     'field' => $attribute->getAttributeCode(),
                                     'boost' => $attribute->getSearchWeight() ?: 1,
+                                    'matchCondition' => 'match_phrase_prefix',
                                 ],
                             ],
                         ];

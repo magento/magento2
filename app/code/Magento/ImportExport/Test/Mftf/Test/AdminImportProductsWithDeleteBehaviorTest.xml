@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-30587"/>
             <group value="importExport"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create Simple product-->

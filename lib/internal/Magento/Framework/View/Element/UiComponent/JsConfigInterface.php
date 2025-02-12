@@ -9,6 +9,8 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface JsConfigInterface
+ *
+ * @api
  */
 interface JsConfigInterface extends UiComponentInterface
 {

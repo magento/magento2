@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model\ResourceModel;
 
@@ -59,7 +60,6 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         return [
             'customer_id' => $visitor->getCustomerId(),
-            'session_id' => $visitor->getSessionId(),
             'last_visit_at' => $visitor->getLastVisitAt()
         ];
     }
@@ -94,5 +94,46 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $this;
+    }
+
+    /**
+     * Gets created at value for the visitor id.
+     *
+     * @param int $visitorId
+     * @return int|null
+     */
+    public function fetchCreatedAt(int $visitorId): ?int
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
+            ['visitor_table' => $this->getTable('customer_visitor')],
+            ['created_at' => 'visitor_table.created_at']
+        )->where(
+            'visitor_table.visitor_id = ?',
+            (string) $visitorId
+        )->limit(
+            1
+        );
+        $lookup = $connection->fetchRow($select);
+        if (empty($lookup) || $lookup['created_at'] == null) {
+            return null;
+        }
+        return strtotime($lookup['created_at']);
+    }
+
+    /**
+     * Update visitor session created at column value
+     *
+     * @param int $visitorId
+     * @param int $timestamp
+     * @return void
+     */
+    public function updateCreatedAt(int $visitorId, int $timestamp): void
+    {
+        $this->getConnection()->update(
+            $this->getTable('customer_visitor'),
+            ['created_at' => $this->dateTime->formatDate($timestamp)],
+            $this->getConnection()->quoteInto('visitor_id = ?', $visitorId)
+        );
     }
 }

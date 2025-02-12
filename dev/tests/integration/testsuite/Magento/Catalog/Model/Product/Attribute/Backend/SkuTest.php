@@ -49,15 +49,14 @@ class SkuTest extends \PHPUnit\Framework\TestCase
         );
         $product = $repository->get('simple');
         $product->setSku('0123456789012345678901234567890123456789012345678901234567890123');
-
+        $product->save();
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Copier::class
         );
-        $copier->copy($product);
+        $duplicate = $copier->copy($product);
         $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
-        $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
-        $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $product->getSku());
+        $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $duplicate->getSku());
     }
 
     /**
@@ -65,9 +64,9 @@ class SkuTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function uniqueSkuDataProvider()
+    public static function uniqueSkuDataProvider()
     {
-        $product = $this->_getProduct();
+        $product = self::_getProduct();
         return [[$product]];
     }
 
@@ -76,7 +75,7 @@ class SkuTest extends \PHPUnit\Framework\TestCase
      *
      * @return \Magento\Catalog\Model\Product
      */
-    protected function _getProduct()
+    protected static function _getProduct()
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

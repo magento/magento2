@@ -9,6 +9,8 @@ namespace Magento\Store\Model\StoreSwitcher;
 
 /**
  * Store switcher redirect data interface
+ *
+ * @api
  */
 interface RedirectDataInterface
 {

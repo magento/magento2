@@ -78,9 +78,7 @@ class GetComparableItemsCollection
         $this->items->useProductItem()->setStoreId($context->getExtensionAttributes()->getStore()->getStoreId());
         $this->items->addAttributeToSelect(
             $this->catalogConfig->getProductAttributes()
-        )->loadComparableAttributes()->addMinimalPrice()->addTaxPercents()->setVisibility(
-            $this->catalogProductVisibility->getVisibleInSiteIds()
-        );
+        )->loadComparableAttributes()->addMinimalPrice()->addTaxPercents();
 
         return $this->items;
     }

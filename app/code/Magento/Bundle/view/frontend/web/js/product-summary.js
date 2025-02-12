@@ -77,7 +77,7 @@ define([
                     .closest(this.options.summaryContainer)
                     .find(this.options.templates.summaryBlock)
                     .html();
-                template = mageTemplate($.trim(template), {
+                template = mageTemplate(template.trim(), {
                     data: {
                         _label_: this.cache.currentElement.options[key].title
                     }
@@ -107,7 +107,7 @@ define([
                 .closest(this.options.summaryContainer)
                 .find(this.options.templates.optionBlock)
                 .html();
-            template = mageTemplate($.trim(template), {
+            template = mageTemplate(template.trim(), {
                 data: {
                     _quantity_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].qty,
                     _label_: this.cache.currentElement.options[this.cache.currentKey].selections[optionIndex].name

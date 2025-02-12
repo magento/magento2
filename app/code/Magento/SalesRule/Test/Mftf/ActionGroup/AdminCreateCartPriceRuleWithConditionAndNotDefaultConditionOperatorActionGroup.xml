@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleWithConditionAndNotDefaultConditionOperatorActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Sets the not default Condition value and Product Child Attribute for Actions on the Admin Cart Price Rule creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="childAttribute" type="string" defaultValue="SKU"/>
+            <argument name="conditionOperator" type="string" defaultValue="is"/>
+            <argument name="actionValue" type="string" defaultValue="{{ApiSimpleProduct.sku}}"/>
+        </arguments>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" after="fillDiscountAmount" stepKey="clickOnActionTab"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" after="clickOnActionTab" stepKey="clickConditionDropDownMenu"/>
+        <waitForPageLoad stepKey="waitForDropDownOpened"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="{{childAttribute}}" after="clickConditionDropDownMenu" stepKey="selectConditionAttribute"/>
+        <waitForPageLoad after="selectConditionAttribute" stepKey="waitForOperatorOpened"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('is')}}" after="waitForOperatorOpened" stepKey="clickToChooseCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.operator}}" userInput="{{conditionOperator}}" after="clickToChooseCondition" stepKey="selectOperator"/>
+        <waitForPageLoad after="selectOperator" stepKey="waitForOperatorOpened1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" after="waitForOperatorOpened1" stepKey="clickToChooserIcon"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.actionValue}}" userInput="{{actionValue}}" after="clickToChooserIcon" stepKey="choseNeededCategoryFromCategoryGrid"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyAction}}" after="choseNeededCategoryFromCategoryGrid" stepKey="applyAction"/>
+    </actionGroup>
+</actionGroups>

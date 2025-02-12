@@ -24,6 +24,8 @@ class ProductView
     }
 
     /**
+     * Adds quantities validator.
+     *
      * @param \Magento\Catalog\Block\Product\View $block
      * @param array $validators
      * @return array
@@ -38,7 +40,6 @@ class ProductView
         );
 
         $params = [];
-        $params['minAllowed']  = (float)$stockItem->getMinSaleQty();
         if ($stockItem->getMaxSaleQty()) {
             $params['maxAllowed'] = (float)$stockItem->getMaxSaleQty();
         }

@@ -91,6 +91,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
         $toDrop = [];
         /** @var string[] $temporaryTablesRenamed */
         $temporaryTablesRenamed = [];
+        $restoreTriggerQueries = [];
         //Renaming temporary tables to original tables' names, dropping old
         //tables.
         foreach ($originalTablesNames as $tableName) {
@@ -99,6 +100,7 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
                 $tableName . $this->generateRandomSuffix()
             );
             $temporaryTableName = $this->getWorkingTableName($tableName);
+            $restoreTriggerQueries[] = $this->getRestoreTriggerQueries($tableName);
             $toRename[] = [
                 'oldName' => $tableName,
                 'newName' => $temporaryOriginalName,
@@ -119,6 +121,51 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
         }
         //Removing old ones.
         foreach ($toDrop as $tableName) {
+            $this->resourceConnection->getConnection()->dropTable($tableName);
+        }
+
+        //Restoring triggers
+        $restoreTriggerQueries = array_merge([], ...$restoreTriggerQueries);
+        foreach ($restoreTriggerQueries as $restoreTriggerQuery) {
+            $this->resourceConnection->getConnection()->multiQuery($restoreTriggerQuery);
+        }
+    }
+
+    /**
+     * Get queries for table triggers restoring.
+     *
+     * @param string $tableName
+     * @return array
+     */
+    private function getRestoreTriggerQueries(string $tableName): array
+    {
+        $triggers = $this->resourceConnection->getConnection()
+            ->query('SHOW TRIGGERS LIKE \''. $tableName . '\'')
+            ->fetchAll();
+
+        if (!$triggers) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($triggers as $trigger) {
+            // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
+            $result[] = 'DROP TRIGGER IF EXISTS ' . $trigger['Trigger'];
+            $triggerData = $this->resourceConnection->getConnection()
+                ->query('SHOW CREATE TRIGGER '. $trigger['Trigger'])
+                ->fetch();
+            $result[]  = preg_replace('/DEFINER=[^\s]*/', '', $triggerData['SQL Original Statement']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Cleanup leftover temporary tables
+     */
+    public function __destruct()
+    {
+        foreach ($this->temporaryTables as $tableName) {
             $this->resourceConnection->getConnection()->dropTable($tableName);
         }
     }

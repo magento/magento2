@@ -91,7 +91,7 @@ class ImportTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             'non-modular notation, no extension' => [

@@ -87,7 +87,7 @@ class MysqlTest extends TestCase
         $this->pdoStatementMock->expects($this->once())
             ->method('execute')
             ->willThrowException(new \PDOException('test message'));
-
+        $this->setQueryStringForPdoStmtMock($query);
         $this->assertEquals($errorReporting, error_reporting(), 'Error report level was\'t restored');
 
         (new Mysql($this->adapterMock, $query))->_execute();
@@ -114,8 +114,8 @@ class MysqlTest extends TestCase
     {
         $param1 = $this->createMock(Parameter::class);
         $param1Value = 'SomeValue';
-        $param1DataType = 'dataType';
-        $param1Length = '9';
+        $param1DataType = \PDO::PARAM_STR;
+        $param1Length = 9;
         $param1DriverOptions = 'some driver options';
         $param1->expects($this->once())
             ->method('getIsBlob')
@@ -143,13 +143,56 @@ class MysqlTest extends TestCase
             ->willReturn($this->pdoStatementMock);
         $this->pdoStatementMock->expects($this->exactly(2))
             ->method('bindParam')
-            ->withConsecutive(
-                [':param1', $param1Value, $param1DataType, $param1Length, $param1DriverOptions],
-                [':param2', 'value2', \PDO::PARAM_STR, null, null]
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2,
+                    $arg3,
+                    $arg4,
+                    $arg5
+                ) use (
+                    $param1Value,
+                    $param1DataType,
+                    $param1Length,
+                    $param1DriverOptions
+                ) {
+                    if ($arg1 == ':param1' &&
+                        $arg2 == $param1Value &&
+                        $arg3 == $param1DataType &&
+                        $arg4 == $param1Length &&
+                        $arg5 == $param1DriverOptions) {
+                        return true;
+                    } elseif ($arg1 == ':param2' &&
+                        $arg2 == 'value2' &&
+                        $arg3 == \PDO::PARAM_STR &&
+                        $arg4 == 6 &&
+                        $arg5 == null) {
+                        return true;
+                    }
+                }
             );
         $this->pdoStatementMock->expects($this->once())
             ->method('execute');
 
         (new Mysql($this->adapterMock, $query))->_execute($params);
+    }
+
+    /**
+     * Initialize queryString property.
+     *
+     * @param string $query
+     *
+     * @return void
+     */
+    private function setQueryStringForPdoStmtMock(string $query): void
+    {
+        /*
+         * In PHP 8.1 $queryString is a Typed property, thus it should be initialized before the 1st call.
+         * But it's not automatically initialized in case of Mocking, so we do it here.
+         * Note: In PHP < 8.1 such assignment prohibited.
+         */
+        if (PHP_VERSION_ID >= 80100) {
+            $this->pdoStatementMock->queryString = $query;
+        }
     }
 }

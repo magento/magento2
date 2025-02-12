@@ -37,12 +37,15 @@ class FileIteratorTest extends TestCase
     protected $moduleDirResolverMock;
 
     /**
-     * Array of relative file paths
+     * Array of relative paths
      *
      * @var array
      */
     protected $filePaths;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->filePaths = ['directory/path/file1', 'directory/path/file2'];
@@ -57,6 +60,9 @@ class FileIteratorTest extends TestCase
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown(): void
     {
         $this->fileIterator = null;
@@ -64,7 +70,10 @@ class FileIteratorTest extends TestCase
         $this->moduleDirResolverMock = null;
     }
 
-    public function testIterator()
+    /**
+     * @return void
+     */
+    public function testIterator(): void
     {
         $moduleName = 'Filesystem';
         $contents = ['<template 123>', '<template 321>'];
@@ -73,34 +82,62 @@ class FileIteratorTest extends TestCase
             '<template module="' . $moduleName . '" 321>'
         ];
         $index = 0;
-        $dirIndex = 0;
+
+        $moduleDirResolverWithArgs = $moduleDirResolverWillReturnArgs = [];
+        $fileReadFactoryWithArgs = $fileReadFactoryWillReturnArgs = [];
+        $fileReadWillReturnArgs = [];
+
         foreach ($this->filePaths as $filePath) {
-            $this->moduleDirResolverMock->expects($this->at($index))
-                ->method('getModuleName')
-                ->with($filePath)
-                ->willReturn($moduleName);
-            $this->fileReadFactory->expects($this->at($dirIndex))
-                ->method('create')
-                ->with($filePath)
-                ->willReturn($this->fileRead);
-            $this->fileRead->expects($this->at($dirIndex++))
-                ->method('readAll')
-                ->willReturn($contents[$index++]);
+            $moduleDirResolverWithArgs[] = [$filePath];
+            $moduleDirResolverWillReturnArgs[] = $moduleName;
+
+            $fileReadFactoryWithArgs[] = [$filePath];
+            $fileReadFactoryWillReturnArgs[] = $this->fileRead;
+
+            $fileReadWillReturnArgs[] = $contents[$index++];
         }
+        $this->moduleDirResolverMock
+            ->method('getModuleName')
+            ->willReturnCallback(function (...$moduleDirResolverWithArgs) use ($moduleDirResolverWillReturnArgs) {
+                if (!empty($moduleDirResolverWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $moduleDirResolverWillReturnArgs[$callCount];
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
+
+        $this->fileReadFactory
+            ->method('create')
+            ->willReturnCallback(function (...$fileReadFactoryWithArgs) use ($fileReadFactoryWillReturnArgs) {
+                if (!empty($fileReadFactoryWithArgs)) {
+                    static $callCount = 0;
+                    $returnValue = $fileReadFactoryWillReturnArgs[$callCount];
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
+        $this->fileRead
+            ->method('readAll')
+            ->willReturnOnConsecutiveCalls(...$fileReadWillReturnArgs);
+
         $index = 0;
         foreach ($this->fileIterator as $fileContent) {
             $this->assertEquals($expectedResult[$index++], $fileContent);
         }
     }
 
-    public function testIteratorNegative()
+    /**
+     * @return void
+     */
+    public function testIteratorNegative(): void
     {
         $filePath = $this->filePaths[0];
 
         $this->expectException('UnexpectedValueException');
         $this->expectExceptionMessage(sprintf("Unable to determine a module, file '%s' belongs to.", $filePath));
 
-        $this->moduleDirResolverMock->expects($this->at(0))
+        $this->moduleDirResolverMock
             ->method('getModuleName')
             ->with($filePath)
             ->willReturn(false);

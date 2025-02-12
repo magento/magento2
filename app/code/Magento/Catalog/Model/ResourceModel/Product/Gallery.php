@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -21,11 +21,11 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**#@+
      * Constants defined for keys of  data array
      */
-    const GALLERY_TABLE = 'catalog_product_entity_media_gallery';
+    public const GALLERY_TABLE = 'catalog_product_entity_media_gallery';
 
-    const GALLERY_VALUE_TABLE = 'catalog_product_entity_media_gallery_value';
+    public const GALLERY_VALUE_TABLE = 'catalog_product_entity_media_gallery_value';
 
-    const GALLERY_VALUE_TO_ENTITY_TABLE = 'catalog_product_entity_media_gallery_value_to_entity';
+    public const GALLERY_VALUE_TO_ENTITY_TABLE = 'catalog_product_entity_media_gallery_value_to_entity';
     /**#@-*/
 
     /**
@@ -95,7 +95,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $tableNameAlias,
         array $ids,
         $storeId = null,
-        array $cols = null,
+        ?array $cols = null,
         array $leftJoinTables = [],
         $whereCondition = null
     ) {
@@ -452,6 +452,9 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         // Duplicate per store gallery values
         $select = $this->getConnection()->select()->from(
             $this->getTable(self::GALLERY_VALUE_TABLE)
+        )->where(
+            $linkField . ' = ?',
+            $originalProductId
         )->where(
             'value_id IN(?)',
             array_keys($valueIdMap)

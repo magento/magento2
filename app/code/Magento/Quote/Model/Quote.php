@@ -5,11 +5,14 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -17,7 +20,6 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Quote model
@@ -112,7 +114,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Checkout login method key
      */
-    const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
+    public const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
 
     /**
      * @var string
@@ -172,14 +174,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_preventSaving = false;
 
     /**
-     * Catalog product
+     * Product of the catalog
      *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct;
 
     /**
-     * Quote validator
+     * To perform validation on the quote
      *
      * @var \Magento\Quote\Model\QuoteValidator
      */
@@ -213,7 +215,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_customerFactory;
 
     /**
-     * Group repository
+     * Repository for group to perform CRUD operations
      *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
@@ -260,21 +262,21 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_objectCopyService;
 
     /**
-     * Address repository
+     * Repository for customer address to perform crud operations
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
     protected $addressRepository;
 
     /**
-     * Search criteria builder
+     * It is used for building search criteria
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * Filter builder
+     * This is used for holding  builder object for filter service
      *
      * @var \Magento\Framework\Api\FilterBuilder
      */
@@ -450,11 +452,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         Quote\TotalsReader $totalsReader,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null,
-        AllowedCountries $allowedCountriesReader = null
+        ?\Magento\Sales\Model\OrderIncrementIdChecker $orderIncrementIdChecker = null,
+        ?AllowedCountries $allowedCountriesReader = null
     ) {
         $this->quoteValidator = $quoteValidator;
         $this->_catalogProduct = $catalogProduct;
@@ -541,7 +543,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @inheritdoc
      */
-    public function setCurrency(\Magento\Quote\Api\Data\CurrencyInterface $currency = null)
+    public function setCurrency(?\Magento\Quote\Api\Data\CurrencyInterface $currency = null)
     {
         return $this->setData(self::KEY_CURRENCY, $currency);
     }
@@ -557,7 +559,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @inheritdoc
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this->setData(self::KEY_ITEMS, $items);
     }
@@ -874,7 +876,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 Deprecated to handle external usages of customer methods
+     * @see https://jira.corp.magento.com/browse/MAGETWO-19935
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -937,8 +940,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function assignCustomerWithAddressChange(
         \Magento\Customer\Api\Data\CustomerInterface $customer,
-        Address $billingAddress = null,
-        Address $shippingAddress = null
+        ?Address $billingAddress = null,
+        ?Address $shippingAddress = null
     ) {
         if ($customer->getId()) {
             $this->setCustomer($customer);
@@ -983,10 +986,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Define customer object
      *
+     * Important: This method also copies customer data to quote and removes quote addresses
+     *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
      */
-    public function setCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer = null)
+    public function setCustomer(?\Magento\Customer\Api\Data\CustomerInterface $customer = null)
     {
         /* @TODO: Remove the method after all external usages are refactored in MAGETWO-19930 */
         $this->_customer = $customer;
@@ -1352,11 +1357,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @return $this
      */
-    public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $address = null)
+    public function setBillingAddress(?\Magento\Quote\Api\Data\AddressInterface $address = null)
     {
         $old = $this->getAddressesCollection()->getItemById($address->getId())
             ?? $this->getBillingAddress();
-        if (!empty($old)) {
+        if ($old !== null) {
             $old->addData($address->getData());
         } else {
             $this->addAddress($address->setAddressType(Address::TYPE_BILLING));
@@ -1371,14 +1376,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Quote\Api\Data\AddressInterface $address
      * @return $this
      */
-    public function setShippingAddress(\Magento\Quote\Api\Data\AddressInterface $address = null)
+    public function setShippingAddress(?\Magento\Quote\Api\Data\AddressInterface $address = null)
     {
         if ($this->getIsMultiShipping()) {
             $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
         } else {
             $old = $this->getAddressesCollection()->getItemById($address->getId())
                 ?? $this->getShippingAddress();
-            if (!empty($old)) {
+            if ($old !== null) {
                 $old->addData($address->getData());
             } else {
                 $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
@@ -1427,12 +1432,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function getAllItems()
     {
         $items = [];
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\Quote\Item $item */
-            if (!$item->isDeleted()) {
+            $product = $item->getProduct();
+            if (!$item->isDeleted() && ($product && (int)$product->getStatus() !== ProductStatus::STATUS_DISABLED)) {
                 $items[] = $item;
             }
         }
+
         return $items;
     }
 
@@ -1557,10 +1564,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         if ($item) {
             $item->setQuote($this);
-            /**
-             * If we remove item from quote - we can't use multishipping mode
-             */
-            $this->setIsMultiShipping(false);
             $item->isDeleted(true);
             if ($item->getHasChildren()) {
                 foreach ($item->getChildren() as $child) {
@@ -1617,7 +1620,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Add product. Returns error message if product type instance can't prepare product.
      *
      * @param mixed $product
-     * @param null|float|\Magento\Framework\DataObject $request
+     * @param null|float|DataObject $request
      * @param null|string $processMode
      * @return \Magento\Quote\Model\Quote\Item|string
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1635,11 +1638,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if (is_numeric($request)) {
             $request = $this->objectFactory->create(['qty' => $request]);
         }
-        if (!$request instanceof \Magento\Framework\DataObject) {
+        if (!$request instanceof DataObject) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid request for adding product to quote.')
             );
         }
+        $invalidProductAddFlag = $this->checkForInvalidProductAdd($request);
 
         if (!$product->isSalable()) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -1697,7 +1701,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
-                $this->deleteItem($item);
+                if (!$invalidProductAddFlag) {
+                    $this->deleteItem($item);
+                }
                 foreach ($item->getMessage(false) as $message) {
                     if (!in_array($message, $errors)) {
                         // filter duplicate messages
@@ -1713,6 +1719,20 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
         return $parentItem;
+    }
+
+    /**
+     * Checks if invalid products should be added to quote
+     *
+     * @param DataObject $request
+     * @return bool
+     */
+    private function checkForInvalidProductAdd(DataObject $request): bool
+    {
+        $forceAdd = $request->getAddToCartInvalidProduct();
+        $request->unsetData('add_to_cart_invalid_product');
+
+        return (bool) $forceAdd;
     }
 
     /**
@@ -1770,8 +1790,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * For more options see \Magento\Catalog\Helper\Product->addParamsToBuyRequest()
      *
      * @param int $itemId
-     * @param \Magento\Framework\DataObject $buyRequest
-     * @param null|array|\Magento\Framework\DataObject $params
+     * @param DataObject $buyRequest
+     * @param null|array|DataObject $params
      * @return \Magento\Quote\Model\Quote\Item
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -1793,9 +1813,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $product = clone $this->productRepository->getById($productId, false, $this->getStore()->getId());
 
         if (!$params) {
-            $params = new \Magento\Framework\DataObject();
+            $params = new DataObject();
         } elseif (is_array($params)) {
-            $params = new \Magento\Framework\DataObject($params);
+            $params = new DataObject($params);
         }
         $params->setCurrentConfig($item->getBuyRequest());
         $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
@@ -1843,8 +1863,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getItemByProduct($product)
     {
-        foreach ($this->getAllItems() as $item) {
-            if ($item->representProduct($product)) {
+        /** @var \Magento\Quote\Model\Quote\Item[] $items */
+        $items = $this->getItemsCollection()->getItemsByColumnValue('product_id', $product->getId());
+        foreach ($items as $item) {
+            if (!$item->isDeleted()
+                && $item->getProduct()
+                && $item->getProduct()->getStatus() !== ProductStatus::STATUS_DISABLED
+                && $item->representProduct($product)
+            ) {
                 return $item;
             }
         }
@@ -2138,7 +2164,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param string|null $origin Usually a name of module, that embeds error
      * @param int|null $code Error code, unique for origin, that sets it
      * @param string|null $message Error message
-     * @param \Magento\Framework\DataObject|null $additionalData Any additional data, that caller would like to store
+     * @param DataObject|null $additionalData Any additional data, that caller would like to store
      * @return $this
      */
     public function addErrorInfo(
@@ -2527,6 +2553,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Get quote items assigned to different quote addresses populated per item qty.
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getShippingAddressesItems()
     {
@@ -2545,8 +2572,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     continue;
                 }
                 if ($item->getQty() > 1) {
+                    //DB table `quote_item` qty value can not be set to 1, if having more than 1 child references
+                    //in table `quote_address_item`.
+                    if ($item->getItemId() !== null
+                        && count($this->getQuoteShippingAddressItemsByQuoteItemId($item->getItemId())) > 1) {
+                        continue;
+                    }
                     for ($itemIndex = 0, $itemQty = $item->getQty(); $itemIndex < $itemQty; $itemIndex++) {
-                        if ($itemIndex == 0) {
+                        if ($itemIndex === 0) {
                             $addressItem = $item;
                         } else {
                             $addressItem = clone $item;
@@ -2661,5 +2694,31 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 ? $this->setBillingAddress($address)
                 : $this->setShippingAddress($address);
         }
+    }
+
+    /**
+     * Returns quote address items
+     *
+     * @param int $itemId
+     * @return array
+     */
+    private function getQuoteShippingAddressItemsByQuoteItemId(int $itemId): array
+    {
+        $addressItems = [];
+        if ($this->isMultipleShippingAddresses()) {
+            $addresses = $this->getAllShippingAddresses();
+            foreach ($addresses as $address) {
+                foreach ($address->getAllItems() as $item) {
+                    if ($item->getParentItemId() || $item->getProduct()->getIsVirtual()) {
+                        continue;
+                    }
+                    if ((int)$item->getQuoteItemId() === $itemId) {
+                        $addressItems[] = $item;
+                    }
+                }
+            }
+        }
+
+        return $addressItems;
     }
 }

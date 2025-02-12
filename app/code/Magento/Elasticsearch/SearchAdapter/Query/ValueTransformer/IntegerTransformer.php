@@ -11,6 +11,8 @@ use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
 
 /**
  * Value transformer for integer type fields.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class IntegerTransformer implements ValueTransformerInterface
 {
@@ -19,6 +21,18 @@ class IntegerTransformer implements ValueTransformerInterface
      */
     public function transform(string $value): ?int
     {
-        return \is_numeric($value) ? (int) $value : null;
+        return (\is_numeric($value) &&
+            $this->validateIntegerTypesWithInRange((int) $value)) ? (int) $value : null;
+    }
+
+    /**
+     * Validate integer value is within the range of 32 bytes as per elasticsearch.
+     *
+     * @param int $value
+     * @return bool
+     */
+    public function validateIntegerTypesWithInRange(int $value): bool
+    {
+        return (abs($value) & 0x7FFFFFFF) === abs($value);
     }
 }

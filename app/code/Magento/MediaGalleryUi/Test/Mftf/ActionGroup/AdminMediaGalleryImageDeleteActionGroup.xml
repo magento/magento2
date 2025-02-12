@@ -14,8 +14,8 @@
         </annotations>
         <waitForElementVisible selector="{{AdminMediaGalleryHeaderButtonsSection.deleteSelected}}" stepKey="waitForDeleteSelectedButton"/>
         <click selector="{{AdminMediaGalleryHeaderButtonsSection.deleteSelected}}" stepKey="ClickDeleteSelectedButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForDeleteModal"/>
+        <waitForPageLoad stepKey="waitForDeleteModal"/>
         <click selector="{{AdminEnhancedMediaGalleryDeleteModalSection.confirmDelete}}" stepKey="confirmDelete"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 </actionGroups>

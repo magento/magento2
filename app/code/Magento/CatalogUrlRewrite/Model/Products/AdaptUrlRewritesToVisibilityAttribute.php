@@ -65,11 +65,12 @@ class AdaptUrlRewritesToVisibilityAttribute
      *
      * @param array $productIds
      * @param int $visibility
+     * @param int $storeId
      * @throws UrlAlreadyExistsException
      */
-    public function execute(array $productIds, int $visibility): void
+    public function execute(array $productIds, int $visibility, int $storeId): void
     {
-        $products = $this->getProductsByIds($productIds);
+        $products = $this->getProductsByIds($productIds, $storeId);
 
         /** @var Product $product */
         foreach ($products as $product) {
@@ -78,6 +79,7 @@ class AdaptUrlRewritesToVisibilityAttribute
                     [
                         UrlRewrite::ENTITY_ID => $product->getId(),
                         UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                        UrlRewrite::STORE_ID => $storeId,
                     ]
                 );
             } elseif ($visibility !== Visibility::VISIBILITY_NOT_VISIBLE) {
@@ -110,11 +112,13 @@ class AdaptUrlRewritesToVisibilityAttribute
      * Get Product Models by Id's
      *
      * @param array $productIds
+     * @param int $storeId
      * @return array
      */
-    private function getProductsByIds(array $productIds): array
+    private function getProductsByIds(array $productIds, int $storeId): array
     {
         $productCollection = $this->productCollectionFactory->create();
+        $productCollection->setStoreId($storeId);
         $productCollection->addAttributeToSelect(ProductInterface::VISIBILITY);
         $productCollection->addAttributeToSelect('url_key');
         $productCollection->addFieldToFilter(

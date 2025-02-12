@@ -22,6 +22,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="block_id"/>
         </constraint>
+        <index referenceId="CMS_BLOCK_IDENTIFIER" indexType="btree">
+            <column name="identifier"/>
+        </index>
         <index referenceId="CMS_BLOCK_TITLE_IDENTIFIER_CONTENT" indexType="fulltext">
             <column name="title"/>
             <column name="identifier"/>

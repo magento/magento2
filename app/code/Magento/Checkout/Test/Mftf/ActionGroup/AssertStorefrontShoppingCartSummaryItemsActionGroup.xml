@@ -21,7 +21,7 @@
         <waitForElementVisible selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="waitForSubtotalVisible"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="{{subtotal}}" stepKey="assertSubtotal"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalVisible"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.totalAmount(total)}}" stepKey="waitForTotalAmountVisible"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.totalAmount(total)}}" time="20" stepKey="waitForTotalAmountVisible"/>
         <see selector="{{CheckoutCartSummarySection.total}}" userInput="{{total}}" stepKey="assertTotal"/>
         <seeElement  selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="seeProceedToCheckoutButton"/>
     </actionGroup>

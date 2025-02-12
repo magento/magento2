@@ -50,6 +50,14 @@ class AttributeTest extends TestCase
         $this->attribute = null;
         $this->objectManager = null;
         $this->localeResolver = null;
+
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 
     /**
@@ -81,7 +89,7 @@ class AttributeTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['21/07/18', 'datetime', 'date', 'en_AU', '2018-07-21 00:00:00'],
@@ -120,7 +128,7 @@ class AttributeTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveErrorDataDataProvider()
+    public static function beforeSaveErrorDataDataProvider()
     {
         return [
             'wrong date for Australia' => ['32/38', 'datetime', 'en_AU', 'Invalid default date'],

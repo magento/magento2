@@ -10,6 +10,7 @@
 @checkout-progress-bar__font-size: 18px;
 @checkout-progress-bar__font-weight: @font-weight__light;
 @checkout-progress-bar__margin: @indent__base;
+@checkout-progress-bar__margin__mobile: 30px;
 
 @checkout-progress-bar-item__background-color: @color-gray-middle1;
 @checkout-progress-bar-item__border-radius: 6px;
@@ -17,6 +18,8 @@
 @checkout-progress-bar-item__margin: @indent__s;
 @checkout-progress-bar-item__transition: background .3s;
 @checkout-progress-bar-item__width: 185px;
+@checkout-progress-bar-item__width__mobile: 165px;
+@checkout-progress-bar-item__width__mobile_small: 125px;
 
 @checkout-progress-bar-item__active__background-color: @active__color;
 @checkout-progress-bar-item__active__color: @primary__color;
@@ -51,13 +54,6 @@
         &:extend(.abs-reset-list all);
         display: none;
     }
-}
-
-//
-//  Desktop
-//  _____________________________________________
-
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
 
     .opc-progress-bar {
         .lib-css(margin, 0 0 @checkout-progress-bar__margin);
@@ -77,7 +73,7 @@
         &:before { // Horizontal line
             .lib-css(background, @checkout-progress-bar-item__background-color);
             .lib-css(border, 1px solid @checkout-progress-bar-item-element-inner__border-color);
-            .lib-css(top, @checkout-progress-bar-item-element__width/2);
+            .lib-css(top, (@checkout-progress-bar-item-element__width/2));
             .lib-css(transition, @checkout-progress-bar-item__transition);
             content: '';
             height: 7px;
@@ -105,12 +101,12 @@
             word-wrap: break-word;
 
             .lib-typography(
-            @_color: @checkout-progress-bar-item__color,
-            @_font-family: false,
-            @_font-size: @checkout-progress-bar__font-size,
-            @_font-style: false,
-            @_font-weight: @checkout-progress-bar__font-weight,
-            @_line-height: false
+                @_color: @checkout-progress-bar-item__color,
+                @_font-family: false,
+                @_font-size: @checkout-progress-bar__font-size,
+                @_font-style: false,
+                @_font-weight: @checkout-progress-bar__font-weight,
+                @_line-height: false
             );
 
             &:before, // Item element
@@ -137,12 +133,12 @@
                 content: counter(i);
                 counter-increment: i;
                 .lib-typography(
-                @_color: @checkout-progress-bar-item-element-inner__color,
-                @_font-family: false,
-                @_font-size: @checkout-progress-bar__font-size,
-                @_font-style: false,
-                @_font-weight: @font-weight__semibold,
-                @_line-height: false
+                    @_color: @checkout-progress-bar-item-element-inner__color,
+                    @_font-family: false,
+                    @_font-size: @checkout-progress-bar__font-size,
+                    @_font-style: false,
+                    @_font-weight: @font-weight__semibold,
+                    @_line-height: false
                 );
             }
         }
@@ -194,5 +190,28 @@
                 }
             }
         }
+    }
+}
+
+//
+// Mobile normal screen
+//
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .opc-progress-bar {
+        .lib-css(margin, 0 0 @checkout-progress-bar__margin__mobile);
+        counter-reset: i; display: block; font-size: 0;
+    }
+
+    .opc-progress-bar-item {
+        .lib-css(width, @checkout-progress-bar-item__width__mobile);
+    }
+}
+
+//
+// Mobile with extra small screen size
+//
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .opc-progress-bar-item {
+        .lib-css(width, @checkout-progress-bar-item__width__mobile_small);
     }
 }

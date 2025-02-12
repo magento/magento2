@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateGroupedProductTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Create product"/>
+            <title value="Admin Create Grouped Product"/>
+            <description value="Admin should be able to create a grouped product"/>
+            <testCaseId value="MC-26602"/>
+            <severity value="MAJOR"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- creating category, simple products -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductOne"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductTwo"/>
+        </before>
+        <after>
+              <!-- deleting category, simple products -->
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+          </after>
+
+        <!-- Create Grouped product via Admin  -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+
+        <!-- Entering Grouped Product name,SKU, category, url key -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{GroupedProduct.name}}" stepKey="fillProductName"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+        <!-- Admin adding the Associated Simple Product For GroupedProduct -->
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProducts">
+            <argument name="sku" value="$$createProductOne.sku$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="checkFilterResult1"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProductsSecond">
+            <argument name="sku" value="$$createProductTwo.sku$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="checkFilterResult2"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+
+       <!-- Filling the default quantity for simple products -->
+        <actionGroup ref="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup" stepKey="fillDefaultQtyForSimpleProduct">
+            <argument name="productName" value="$$createProductOne.name$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="FillDefaultQuantityForLinkedToGroupProductInGridActionGroup" stepKey="fillDefaultQtyForSimpleProduct2">
+            <argument name="productName" value="$$createProductTwo.name$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Saving the grouped product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!-- Asserting the success message -->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!-- Verify we see created grouped product(from the above step) on the product grid page -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
+        <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="clickSearch">
+            <argument name="product" value="GroupedProduct"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openCreatedGroupedProduct"/>
+
+        <!-- Admin: Verify Grouped Product Information and Associated Products on Edit Product Page -->
+        <seeNumberOfElements userInput="2" selector="{{AdminGroupedProductOptionGridSection.allRows}}" stepKey="see2RowsAdmin"/>
+        <actionGroup ref="AdminVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct1Admin">
+            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="attributeSet" value="$$createProductOne.attributeSetText$$"/>
+            <argument name="status" value="$$createProductOne.statusText$$"/>
+            <argument name="sku" value="$$createProductOne.sku$$"/>
+            <argument name="price" value="$$createProductOne.price$$"/>
+            <argument name="defaultQuantity" value="1"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct2Admin">
+            <argument name="name" value="$$createProductTwo.name$$"/>
+            <argument name="attributeSet" value="$$createProductTwo.attributeSetText$$"/>
+            <argument name="status" value="$$createProductTwo.statusText$$"/>
+            <argument name="sku" value="$$createProductTwo.sku$$"/>
+            <argument name="price" value="$$createProductTwo.price$$"/>
+            <argument name="defaultQuantity" value="1"/>
+            <argument name="position" value="1"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+
+        <!-- Check Grouped product is visible on the storefront-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openEnabledCategory">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="{{GroupedProduct.urlKey}}"/>
+        </actionGroup>
+
+        <!-- Storefront: Verify Associated Grouped Products -->
+        <seeNumberOfElements userInput="2" selector="{{StorefrontProductInfoMainSection.groupedProductsTableAllRows}}" stepKey="see2RowsStorefront"/>
+        <actionGroup ref="StorefrontVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct1Storefront">
+            <argument name="name" value="$$createProductOne.name$$"/>
+            <argument name="price" value="$$createProductOne.price$$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontVerifyAssociatedProductForGroupedProductActionGroup" stepKey="verifyAssociatedProduct2Storefront">
+            <argument name="name" value="$$createProductTwo.name$$"/>
+            <argument name="price" value="$$createProductTwo.price$$"/>
+            <argument name="quantity" value="1"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+
+    </test>
+</tests>

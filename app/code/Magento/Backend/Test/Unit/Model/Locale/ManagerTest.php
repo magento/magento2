@@ -66,7 +66,8 @@ class ManagerTest extends TestCase
         $this->_authSession->expects($this->any())->method('getUser')->willReturn($userMock);
 
         $this->_translator = $this->getMockBuilder(TranslateInterface::class)
-            ->setMethods(['init', 'setLocale'])
+            ->addMethods(['init'])
+            ->onlyMethods(['setLocale'])
             ->getMockForAbstractClass();
 
         $this->_translator->expects($this->any())->method('setLocale')->willReturn($this->_translator);
@@ -84,7 +85,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function switchBackendInterfaceLocaleDataProvider()
+    public static function switchBackendInterfaceLocaleDataProvider()
     {
         return ['case1' => ['locale' => 'de_DE'], 'case2' => ['locale' => 'en_US']];
     }

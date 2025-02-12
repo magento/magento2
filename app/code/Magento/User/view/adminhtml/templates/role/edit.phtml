@@ -49,7 +49,7 @@
                 $block->escapeHtmlAttr($block->getJsonSerializer()->serialize([
                     'rolesTree' => [
                         "treeInitData" => $block->getTree(),
-                        "treeInitSelectedData" => $block->getSelectedResources(),
+                        "editFormSelector" => '#role-edit-form'
                     ],
                 ])); ?>'>
             </div>

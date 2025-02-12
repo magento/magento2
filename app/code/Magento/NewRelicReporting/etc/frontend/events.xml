@@ -10,4 +10,7 @@
         <observer name="newrelicreporting_observer_report_concurrent_users" instance="Magento\NewRelicReporting\Model\Observer\ReportConcurrentUsers" />
         <observer name="newrelicreporting_newrelic_report_concurrent_users" instance="Magento\NewRelicReporting\Model\Observer\ReportConcurrentUsersToNewRelic" />
     </event>
+    <event name="controller_front_send_response_before">
+        <observer name="newrelicreporting_observer_controller_front_send_response_before" instance="Magento\NewRelicReporting\Observer\DisableBrowserMonitoringAutomaticInjection" />
+    </event>
 </config>

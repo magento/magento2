@@ -25,8 +25,8 @@ class OrderTotal implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!(($value['model'] ?? null) instanceof OrderInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -123,7 +123,7 @@ class OrderTotal implements ResolverInterface
             $orderDiscounts[] = [
                 'label' => $order->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => abs($order->getDiscountAmount()),
+                    'value' => abs((float) $order->getDiscountAmount()),
                     'currency' => $order->getOrderCurrencyCode()
                 ]
             ];
@@ -196,7 +196,7 @@ class OrderTotal implements ResolverInterface
                 [
                     'label' => $order->getDiscountDescription() ?? __('Discount'),
                     'amount' => [
-                        'value' => abs($order->getShippingDiscountAmount()),
+                        'value' => abs((float) $order->getShippingDiscountAmount()),
                         'currency' => $order->getOrderCurrencyCode()
                     ]
                 ];

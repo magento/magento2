@@ -16,6 +16,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RequestTest extends TestCase
@@ -30,6 +31,9 @@ class RequestTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @var Resolver|MockObject
+     */
     protected $localeResolverMock;
 
     /**
@@ -68,11 +72,11 @@ class RequestTest extends TestCase
     {
         $payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPayment', '__wakeup', 'getBillingAddress', 'getShippingAddress'])
+            ->onlyMethods(['getPayment', '__wakeup', 'getBillingAddress', 'getShippingAddress'])
             ->getMock();
         $order->expects(static::any())
             ->method('getPayment')
@@ -93,7 +97,7 @@ class RequestTest extends TestCase
     /**
      * @return array
      */
-    public function addressesDataProvider()
+    public static function addressesDataProvider()
     {
         $billing = new DataObject([
             'firstname' => 'Firstname',
@@ -155,7 +159,6 @@ class RequestTest extends TestCase
         ];
         $paymentMethodMock = $this->getMockBuilder(Hostedpro::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $paymentMethodMock->expects($this->once())
             ->method('getConfigData')->with('payment_action')->willReturn('Authorization');
@@ -216,7 +219,7 @@ class RequestTest extends TestCase
             'total' => $total,
             'tax' => $tax,
             'shipping' => $shipping,
-            'discount' => abs($discount)
+            'discount' => abs((float) $discount)
         ];
 
         static::assertFalse($this->taxData->priceIncludesTax());
@@ -273,7 +276,7 @@ class RequestTest extends TestCase
             'total' => $total,
             'tax' => $tax,
             'shipping' => $shipping,
-            'discount' => abs($discount)
+            'discount' => abs((float) $discount)
         ];
 
         static::assertFalse($this->taxData->priceIncludesTax());
@@ -372,7 +375,7 @@ class RequestTest extends TestCase
      * Get data for amount with tax tests
      * @return array
      */
-    public function amountWithoutTaxDataProvider()
+    public static function amountWithoutTaxDataProvider()
     {
         return [
             ['total' => 31.00, 'subtotal' => 10.00, 'tax' => 1.00, 'shipping' => 20.00, 'discount' => 0.00],
@@ -383,7 +386,7 @@ class RequestTest extends TestCase
     /**
      * @return array
      */
-    public function amountWithoutTaxZeroSubtotalDataProvider()
+    public static function amountWithoutTaxZeroSubtotalDataProvider()
     {
         return [
             ['total' => 10.00, 'subtotal' => 0.00, 'tax' => 0.00, 'shipping' => 20.00, 'discount' => 0.00],

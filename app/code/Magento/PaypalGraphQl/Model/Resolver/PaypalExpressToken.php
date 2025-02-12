@@ -78,12 +78,12 @@ class PaypalExpressToken implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $cartId = $args['input']['cart_id'] ?? '';
         $paymentCode = $args['input']['code'] ?? '';
-        $usePaypalCredit = isset($args['input']['paypal_credit']) ? $args['input']['paypal_credit'] : false;
+        $usePaypalCredit = isset($args['input']['use_paypal_credit']) ? $args['input']['use_paypal_credit'] : false;
         $usedExpressButton = isset($args['input']['express_button']) ? $args['input']['express_button'] : false;
         $customerId = $context->getUserId();
 

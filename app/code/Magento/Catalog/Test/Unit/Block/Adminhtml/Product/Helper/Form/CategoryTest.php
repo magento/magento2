@@ -9,7 +9,9 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
 
 class CategoryTest extends TestCase
@@ -30,6 +32,17 @@ class CategoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
     }
 
     /**
@@ -60,7 +73,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public static function isAllowedDataProvider()
     {
         return [
             [true],

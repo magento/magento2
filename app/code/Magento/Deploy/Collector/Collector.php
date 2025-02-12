@@ -72,7 +72,7 @@ class Collector implements CollectorInterface
         SourcePool $sourcePool,
         FileNameResolver $fileNameResolver,
         PackageFactory $packageFactory,
-        Manager $moduleManager = null
+        ?Manager $moduleManager = null
     ) {
         $this->sourcePool = $sourcePool;
         $this->fileNameResolver = $fileNameResolver;
@@ -91,6 +91,9 @@ class Collector implements CollectorInterface
             $files = $source->get();
             foreach ($files as $file) {
                 if ($file->getModule() && !$this->moduleManager->isEnabled($file->getModule())) {
+                    continue;
+                }
+                if (!$file->getFileName()) {
                     continue;
                 }
                 $file->setDeployedFileName($this->fileNameResolver->resolve($file->getFileName()));

@@ -8,19 +8,20 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUpdateUserTest">
+    <test name="AdminUpdateUserTest" deprecated="Use AdminUpdateUserRoleTest instead.">
         <annotations>
             <features value="User"/>
-            <title value="Update admin user entity by changing user role"/>
+            <title value="DEPRECATED. Update admin user entity by changing user role"/>
             <stories value="Update User"/>
             <testCaseId value="MC-14264"/>
             <severity value="MAJOR"/>
-            <description value="Change full access role for admin user to custom one with restricted permission (Sales)"/>
+            <description value="DEPRECATED. Change full access role for admin user to custom one with restricted permission (Sales)"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MQE-1964"/>
+                <issueId value="DEPRECATED">Use AdminUpdateUserRoleTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

@@ -33,7 +33,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $filter = $objectManager->get(\Magento\Newsletter\Model\Template\Filter::class);
 
         $transport = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
-            ->setMethods(['sendMessage'])
+            ->onlyMethods(['sendMessage'])
             ->getMockForAbstractClass();
         $transport->expects($this->exactly(2))->method('sendMessage')->willReturnSelf();
 
@@ -61,6 +61,8 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     public function testSendPerSubscriberProblem()
     {
+        // md5 used here only for random string generation for test purposes. No cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $errorMsg = md5(microtime());
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
@@ -69,7 +71,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $transport = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
-            ->setMethods(['sendMessage'])
+            ->onlyMethods(['sendMessage'])
             ->getMockForAbstractClass();
         $transport->expects($this->any())
             ->method('sendMessage')

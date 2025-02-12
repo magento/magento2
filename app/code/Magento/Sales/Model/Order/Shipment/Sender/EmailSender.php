@@ -106,7 +106,7 @@ class EmailSender extends Sender implements SenderInterface
     public function send(
         OrderInterface $order,
         ShipmentInterface $shipment,
-        ShipmentCommentCreationInterface $comment = null,
+        ?ShipmentCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
         $this->identityContainer->setStore($order->getStore());

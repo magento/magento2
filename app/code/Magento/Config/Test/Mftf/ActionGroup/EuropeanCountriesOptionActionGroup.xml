@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EuropeanCountriesOptionActionGroup">
+        <annotations>
+            <description>Validate european country option value</description>
+        </annotations>
+
+        <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToAdminStoreConfiguration"/>
+        <conditionalClick selector="{{CountriesFormSection.block}}" dependentSelector="{{CountriesFormSection.label}}" visible="false" stepKey="expand_panel"/>
+        <scrollTo selector="{{CountriesFormSection.label}}" stepKey="scrolltolabel" />
+        <wait time="2" stepKey="waitForLoad"/>
+        <uncheckOption selector="{{CountriesFormSection.useConfigSettings}}" stepKey="uncheckConfigSetting"/>
+        <wait time="2" stepKey="waitForLoad1"/>
+        <click selector="{{CountriesFormSection.saveConfig}}" stepKey="clickSave"/>
+    </actionGroup>
+</actionGroups>

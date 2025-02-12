@@ -84,7 +84,7 @@ class CustomLayoutManager implements CustomLayoutManagerInterface
      */
     private function sanitizeIdentifier(PageInterface $page): string
     {
-        return str_replace('/', '_', $page->getIdentifier());
+        return $page->getIdentifier() === null ? '' : str_replace('/', '_', $page->getIdentifier());
     }
 
     /**

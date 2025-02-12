@@ -12,6 +12,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory for Mysql adapter
+ *
+ * @api
  */
 class MysqlFactory
 {
@@ -44,8 +46,8 @@ class MysqlFactory
     public function create(
         $className,
         array $config,
-        LoggerInterface $logger = null,
-        SelectFactory $selectFactory = null
+        ?LoggerInterface $logger = null,
+        ?SelectFactory $selectFactory = null
     ) {
         if (!in_array(Mysql::class, class_parents($className, true) + [$className => $className])) {
             throw new \InvalidArgumentException('Invalid class, ' . $className . ' must extend ' . Mysql::class . '.');

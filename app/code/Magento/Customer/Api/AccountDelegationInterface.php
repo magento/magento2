@@ -12,6 +12,8 @@ use Magento\Framework\Controller\Result\Redirect;
 
 /**
  * Delegating account actions from outside of customer module.
+ *
+ * @api
  */
 interface AccountDelegationInterface
 {
@@ -26,6 +28,6 @@ interface AccountDelegationInterface
      */
     public function createRedirectForNew(
         CustomerInterface $customer,
-        array $mixedData = null
+        ?array $mixedData = null
     ): Redirect;
 }

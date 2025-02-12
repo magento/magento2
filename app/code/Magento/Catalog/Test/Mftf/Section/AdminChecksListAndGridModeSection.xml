@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminChecksListAndGridModeSection">
+
+        <element name="listView" type="text" selector='//*[@id="maincontent"]//*[@data-value="list"]'/>
+        <element name="gridMode" type="button" selector="//a[@class='modes-mode mode-grid']"/>
+        <element name="gridView" type="text" selector='//*[@id="maincontent"]//*[@data-value="grid"]'/>
+        <element name="listMode" type="button" selector='//*[@id="maincontent"]//*[@data-value="list]'/>
+        <element name="pageProduct" type="text" selector='(//ol[@class="products list items product-items"]/li)[1]'/>
+        <element name="sortByPrice" type="text" selector='.//*[@id="sorter"]//option[@value="price"]'/>
+        <element name="productsPerPage" type="button" selector='//*[@class="field limiter"]//*[@id="limiter"]'/>
+        <element name="allButton" type="button" selector='//*[@id="limiter"]/option[4]'/>
+        <element name="allProducts" type="text" selector='//ol[@class="products list items product-items"]'/>
+        <element name="pageOptions" type="text" selector='//*[@id="limiter"]/option[{{var1}}]' parameterized="true"/>
+        <element name="productCount" type="text" selector='//span[@class="product-image-wrapper"]'/>
+
+    </section>
+</sections>

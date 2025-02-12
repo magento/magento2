@@ -34,7 +34,7 @@ class CustomerTest extends TestCase
     /**
      * @return array
      */
-    public function customerLoggedInDataProvider()
+    public static function customerLoggedInDataProvider()
     {
         return [
             [1, true],

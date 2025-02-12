@@ -181,7 +181,7 @@ abstract class AbstractController extends TestCase
         foreach ($headers as $header) {
             if ($header->getFieldName() === $headerName) {
                 $headerFound = true;
-                $this->assertRegExp($valueRegex, $header->getFieldValue());
+                $this->assertMatchesRegularExpression($valueRegex, $header->getFieldValue());
             }
         }
         if (!$headerFound) {
@@ -200,7 +200,7 @@ abstract class AbstractController extends TestCase
      *
      * @param \PHPUnit\Framework\Constraint\Constraint|null $urlConstraint
      */
-    public function assertRedirect(\PHPUnit\Framework\Constraint\Constraint $urlConstraint = null)
+    public function assertRedirect(?\PHPUnit\Framework\Constraint\Constraint $urlConstraint = null)
     {
         $this->assertTrue($this->getResponse()->isRedirect(), 'Redirect was expected, but none was performed.');
         if ($urlConstraint) {

@@ -20,10 +20,18 @@ class File extends \SplFileObject
     protected $_currentStatement = '';
 
     /**
+     * Store current statement delimiter.
+     *
+     * @var string
+     */
+    private string $statementDelimiter = ';';
+
+    /**
      * Return current sql statement
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_currentStatement;
@@ -34,18 +42,39 @@ class File extends \SplFileObject
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->_currentStatement = '';
         while (!$this->eof()) {
             $line = $this->fgets();
-            if (strlen(trim($line))) {
-                $this->_currentStatement .= $line;
-                if ($this->_isLineLastInCommand($line)) {
+            $trimmedLine = trim($line);
+            if (!empty($trimmedLine) && !$this->isDelimiterChanged($trimmedLine)) {
+                $statementFinalLine = '/(?<statement>.*)' . preg_quote($this->statementDelimiter, '/') . '$/';
+                if (preg_match($statementFinalLine, $trimmedLine, $matches)) {
+                    $this->_currentStatement .= $matches['statement'];
                     break;
+                } else {
+                    $this->_currentStatement .= $line;
                 }
             }
         }
+    }
+
+    /**
+     * Check whether statement delimiter has been changed.
+     *
+     * @param string $line
+     * @return bool
+     */
+    private function isDelimiterChanged(string $line): bool
+    {
+        if (preg_match('/^delimiter\s+(?<delimiter>.+)$/i', $line, $matches)) {
+            $this->statementDelimiter = $matches['delimiter'];
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -53,6 +82,7 @@ class File extends \SplFileObject
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         parent::rewind();
@@ -67,28 +97,6 @@ class File extends \SplFileObject
      */
     protected function _isComment($line)
     {
-        return $line[0] == '#' || substr($line, 0, 2) == '--';
-    }
-
-    /**
-     * Check is line a last in sql command
-     *
-     * @param string $line
-     * @return bool
-     */
-    protected function _isLineLastInCommand($line)
-    {
-        $cleanLine = trim($line);
-        $lineLength = strlen($cleanLine);
-
-        $returnResult = false;
-        if ($lineLength > 0) {
-            $lastSymbolIndex = $lineLength - 1;
-            if ($cleanLine[$lastSymbolIndex] == ';') {
-                $returnResult = true;
-            }
-        }
-
-        return $returnResult;
+        return $line[0] == '#' || ($line && substr($line, 0, 2) == '--');
     }
 }

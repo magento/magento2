@@ -99,7 +99,7 @@ class StoreTest extends TestCase
         $this->configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
-            ->setMethods(['getCurrencyCode'])
+            ->addMethods(['getCurrencyCode'])
             ->getMockForAbstractClass();
         $this->store = $this->objectManagerHelper->getObject(
             Store::class,
@@ -141,7 +141,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return [
             [1, null],
@@ -171,7 +171,7 @@ class StoreTest extends TestCase
         $website = $this->getMockForAbstractClass(WebsiteInterface::class);
 
         $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->getMockForAbstractClass();
         $websiteRepository->expects($this->once())
             ->method('getById')
@@ -194,7 +194,7 @@ class StoreTest extends TestCase
     public function testGetWebsiteIfWebsiteIsNotExist()
     {
         $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->getMockForAbstractClass();
         $websiteRepository->expects($this->never())
             ->method('getById');
@@ -218,7 +218,7 @@ class StoreTest extends TestCase
         $group = $this->getMockForAbstractClass(GroupInterface::class);
 
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $groupRepository->expects($this->once())
             ->method('get')
@@ -241,7 +241,7 @@ class StoreTest extends TestCase
     public function testGetGroupIfGroupIsNotExist()
     {
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->addMethods(['getById'])
             ->getMockForAbstractClass();
         $groupRepository->expects($this->never())
             ->method('getById');
@@ -333,7 +333,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getBaseUrlDataProvider()
+    public static function getBaseUrlDataProvider()
     {
         return [
             [
@@ -502,7 +502,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentUrlDataProvider()
+    public static function getCurrentUrlDataProvider()
     {
         return [
             [
@@ -584,7 +584,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getBaseCurrencyDataProvider()
+    public static function getBaseCurrencyDataProvider()
     {
         return [
             [0, 'USD'],
@@ -680,7 +680,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function isCurrentlySecureDataProvider()
+    public static function isCurrentlySecureDataProvider()
     {
         return [
             'secure request, no server setting' => [true, [], true],
@@ -735,6 +735,11 @@ class StoreTest extends TestCase
         $this->assertEquals('Store View', $this->store->getScopeTypeName());
     }
 
+    public function testGetCacheTags()
+    {
+        $this->assertEquals([Store::CACHE_TAG], $this->store->getCacheTags());
+    }
+
     /**
      * @param array $availableCodes
      * @param string $currencyCode
@@ -763,7 +768,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function currencyCodeDataProvider(): array
+    public static function currencyCodeDataProvider(): array
     {
         return [
             [

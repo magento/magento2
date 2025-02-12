@@ -44,12 +44,12 @@ class UpdateItemsStockUponConfigChangeObserverTest extends TestCase
 
         $this->event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsite', 'getChangedPaths'])
+            ->addMethods(['getWebsite', 'getChangedPaths'])
             ->getMock();
 
         $this->eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
+            ->onlyMethods(['getEvent'])
             ->getMock();
 
         $this->eventObserver->expects($this->atLeastOnce())

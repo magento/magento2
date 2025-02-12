@@ -84,6 +84,9 @@ class EditTest extends TestCase
      */
     protected $resultPageFactoryMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -95,7 +98,7 @@ class EditTest extends TestCase
             ->getMock();
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
-            ->setMethods(['create', 'get'])
+            ->onlyMethods(['create', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock->expects($this->once())
@@ -142,7 +145,10 @@ class EditTest extends TestCase
         );
     }
 
-    public function testEditActionBlockNoExists()
+    /**
+     * @return void
+     */
+    public function testEditActionBlockNoExists(): void
     {
         $blockId = 1;
 
@@ -175,12 +181,14 @@ class EditTest extends TestCase
     }
 
     /**
-     * @param int $blockId
+     * @param int|null $blockId
      * @param string $label
      * @param string $title
+     *
+     * @return void
      * @dataProvider editActionData
      */
-    public function testEditAction($blockId, $label, $title)
+    public function testEditAction(?int $blockId, string $label, string $title): void
     {
         $this->requestMock->expects($this->once())
             ->method('getParam')
@@ -208,8 +216,13 @@ class EditTest extends TestCase
             ->willReturn($resultPageMock);
 
         $titleMock = $this->createMock(Title::class);
-        $titleMock->expects($this->at(0))->method('prepend')->with(__('Blocks'));
-        $titleMock->expects($this->at(1))->method('prepend')->with($this->getTitle());
+        $titleMock
+            ->method('prepend')
+            ->willReturnCallback(function ($arg) {
+                if ($arg == $this->getTitle() || $arg == [__('Blocks')]) {
+                    return null;
+                }
+            });
         $pageConfigMock = $this->createMock(Config::class);
         $pageConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);
 
@@ -219,10 +232,15 @@ class EditTest extends TestCase
         $resultPageMock->expects($this->any())
             ->method('addBreadcrumb')
             ->willReturnSelf();
-        $resultPageMock->expects($this->at(3))
+        $resultPageMock
             ->method('addBreadcrumb')
-            ->with(__($label), __($title))
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($label, $title, $resultPageMock) {
+                if ($arg1 == (__($label)) || $arg1 == (__($title))) {
+                    return $resultPageMock;
+                } elseif ($arg1 === null && $arg2 === null) {
+                    return null;
+                }
+            });
         $resultPageMock->expects($this->exactly(2))
             ->method('getConfig')
             ->willReturn($pageConfigMock);
@@ -241,7 +259,7 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function editActionData()
+    public static function editActionData(): array
     {
         return [
             [null, 'New Block', 'New Block'],

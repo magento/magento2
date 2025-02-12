@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -33,11 +33,6 @@ class General extends AbstractModifier
     protected $arrayManager;
 
     /**
-     * @var \Magento\Framework\Locale\CurrencyInterface
-     */
-    private $localeCurrency;
-
-    /**
      * @var AttributeRepositoryInterface
      */
     private $attributeRepository;
@@ -50,7 +45,7 @@ class General extends AbstractModifier
     public function __construct(
         LocatorInterface $locator,
         ArrayManager $arrayManager,
-        AttributeRepositoryInterface $attributeRepository = null
+        ?AttributeRepositoryInterface $attributeRepository = null
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
@@ -389,54 +384,48 @@ class General extends AbstractModifier
         );
 
         $namePath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_NAME, $meta, null, 'children');
-
-        return $this->arrayManager->merge(
+        $meta = $this->arrayManager->merge(
             $namePath . static::META_CONFIG_PATH,
             $meta,
             [
                 'valueUpdate' => 'keyup'
             ]
         );
-    }
 
-    /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Locale\CurrencyInterface::class);
+        $urlAttribute = $this->attributeRepository->get(
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY
+        );
+        $scopeLabel = '';
+        if ($urlAttribute->isScopeGlobal()) {
+            $scopeLabel = '[GLOBAL]';
+        } elseif ($urlAttribute->isScopeWebsite()) {
+            $scopeLabel = '[WEBSITE]';
+        } elseif ($urlAttribute->isScopeStore()) {
+            $scopeLabel = '[STORE VIEW]';
         }
-        return $this->localeCurrency;
+        $urlKeyConfig = [
+            'tooltip' => [
+                'link' => 'https://experienceleague.adobe.com/docs/commerce-admin/catalog/catalog/catalog-urls.html',
+                'description' => __(
+                    'The URL key should consist of lowercase characters with hyphens to separate words.'
+                ),
+            ],
+            'scopeLabel' => __($scopeLabel)
+        ];
+
+        $urkKeyPath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+            $meta,
+            null,
+            'children'
+        );
+
+        return $this->arrayManager->merge($urkKeyPath . static::META_CONFIG_PATH, $meta, $urlKeyConfig);
     }
 
     /**
-     * Format price according to the locale of the currency
-     *
-     * @param  mixed $value
-     * @return string
-     * @since  101.0.0
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        $store = $this->locator->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-
-        return $value;
-    }
-
-    /**
-     * Format number according to the locale of the currency and precision of input
+     * Format number according precision of input
      *
      * @param  mixed $value
      * @return string
@@ -449,16 +438,6 @@ class General extends AbstractModifier
         }
 
         $value = (float)$value;
-        $precision = strlen(substr(strrchr($value, "."), 1));
-        $store = $this->locator->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency(
-            $value,
-            [
-                'display' => \Magento\Framework\Currency::NO_SYMBOL,
-                'precision' => $precision
-            ]
-        );
 
         return $value;
     }

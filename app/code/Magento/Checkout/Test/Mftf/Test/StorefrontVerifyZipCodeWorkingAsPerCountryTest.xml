@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyZipCodeWorkingAsPerCountryTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Guest checkout"/>
+            <title value="Storefront Verify ZipCode Working As Per Country"/>
+            <description value="Storefront Verify ZipCode Working As Per Country"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4016"/>
+        </annotations>
+        <before>
+            <!-- create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- create simple product -->
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!--  Step 1: Go to Storefront as Guest -->
+        <!--  Step 2: Add simple product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="amOnSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+        <!-- Proceed to Checkout -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickToOpenCard"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickToProceedToCheckout"/>
+        <waitForPageLoad stepKey="waitForTheFormIsOpened"/>
+        <!-- verify shipping screen is opened -->
+        <seeElement selector="{{CheckoutShippingSection.isShippingStep}}" stepKey="shippingStepIsOpened"/>
+        <!-- Enter invalid zip code as "1" -->
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="1" stepKey="SetCustomerZipCode"/>
+        <!-- wait for JS error message to appear -->
+        <waitForElementVisible selector="{{CheckoutShippingSection.invalidPostcodeJSError}}" stepKey="waitForElementVisible"/>
+        <see selector="{{CheckoutShippingSection.invalidPostcodeJSError}}" userInput="Provided Zip/Postal Code seems to be invalid. Example: 12345-6789; 12345. If you believe it is the right one you can ignore this notice." stepKey="seeErrorMessage"/>
+
+        <!-- Enter valid zip code as "12345-6789" -->
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="12345-6789" stepKey="SetCustomerZipCode123456789"/>
+        <!-- wait for JS error message to disappear -->
+        <waitForElementNotVisible selector="{{CheckoutShippingSection.invalidPostcodeJSError}}" stepKey="waitForElementNotVisible"/>
+        <!-- Enter invalid zip code as "abc" -->
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="abc" stepKey="SetCustomerZipCodeabc"/>
+
+        <!-- wait for JS error message to appear -->
+        <waitForElementVisible selector="{{CheckoutShippingSection.invalidPostcodeJSError}}" stepKey="waitForJSElementMessageVisible"/>
+        <see selector="{{CheckoutShippingSection.invalidPostcodeJSError}}" userInput="Provided Zip/Postal Code seems to be invalid. Example: 12345-6789; 12345. If you believe it is the right one you can ignore this notice." stepKey="seeJSErrorMessage"/>
+        <!-- change country as United Kingdom" -->
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{updateCustomerUKAddress.country_id}}" stepKey="selectCountry"/>
+        <!-- Enter valid zip code as "A12 3BC" -->
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="A12 3BC" stepKey="SetCustomerZipCodeA123BC"/>
+        <!-- wait for JS error message to disappear -->
+        <waitForElementNotVisible selector="{{CheckoutShippingSection.invalidPostcodeJSError}}" stepKey="waitForJSErrorElementNotVisible"/>
+    </test>
+</tests>

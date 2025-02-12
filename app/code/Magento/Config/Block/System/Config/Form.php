@@ -24,11 +24,11 @@ use Magento\Framework\DataObject;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-    const SCOPE_DEFAULT = 'default';
+    public const SCOPE_DEFAULT = 'default';
 
-    const SCOPE_WEBSITES = 'websites';
+    public const SCOPE_WEBSITES = 'websites';
 
-    const SCOPE_STORES = 'stores';
+    public const SCOPE_STORES = 'stores';
 
     /**
      * Config data array
@@ -145,7 +145,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
         \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory,
         array $data = [],
-        SettingChecker $settingChecker = null
+        ?SettingChecker $settingChecker = null
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_configFactory = $configFactory;
@@ -520,7 +520,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _generateElementId($path)
     {
-        return str_replace('/', '_', $path);
+        return $path !== null ? str_replace('/', '_', $path) : '';
     }
 
     /**

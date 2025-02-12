@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Store;
 
+use Magento\Directory\Helper\Data;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -35,9 +38,16 @@ class StoreConfigResolverTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoApiDataFixture Magento/Store/_files/store.php
      * @throws NoSuchEntityException
      */
+    #[
+        Config(Data::XML_PATH_DEFAULT_COUNTRY, 'es', ScopeInterface::SCOPE_STORE, 'default'),
+        Config(Data::XML_PATH_STATES_REQUIRED, 'us', ScopeInterface::SCOPE_STORE, 'default'),
+        Config(Data::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH, 'fr', ScopeInterface::SCOPE_STORE, 'default'),
+        Config(Data::XML_PATH_DISPLAY_ALL_STATES, true, ScopeInterface::SCOPE_STORE, 'default'),
+    ]
     public function testGetStoreConfig(): void
     {
         /** @var  StoreConfigManagerInterface $storeConfigManager */
@@ -79,7 +89,10 @@ class StoreConfigResolverTest extends GraphQlAbstract
     secure_base_link_url,
     secure_base_static_url,
     secure_base_media_url,
-    store_name
+    default_country,
+    countries_with_required_region,
+    optional_zip_countries,
+    display_state_if_optional
   }
 }
 QUERY;
@@ -135,6 +148,9 @@ QUERY;
         $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $responseConfig['secure_base_link_url']);
         $this->assertEquals($storeConfig->getSecureBaseStaticUrl(), $responseConfig['secure_base_static_url']);
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $responseConfig['secure_base_media_url']);
-        $this->assertEquals($store->getName(), $responseConfig['store_name']);
+        $this->assertEquals('es', $responseConfig['default_country']);
+        $this->assertEquals('us', $responseConfig['countries_with_required_region']);
+        $this->assertEquals('fr', $responseConfig['optional_zip_countries']);
+        $this->assertEquals('true', $responseConfig['display_state_if_optional']);
     }
 }

@@ -47,10 +47,11 @@ class SenderTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider()
     {
         return [
             ['Mr. Real Name', 'Mr. Real Name'],
+            ['No colons:', false],
             [str_repeat('a', 256), false],
             [null, false],
             ['', false],

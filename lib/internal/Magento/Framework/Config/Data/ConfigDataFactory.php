@@ -11,6 +11,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory for ConfigData.
+ *
+ * @api
  */
 class ConfigDataFactory
 {

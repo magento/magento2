@@ -12,11 +12,12 @@
         <arguments>
             <argument name="productSKU" type="string"/>
         </arguments>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{productSKU}}" stepKey="fillSkuFilter"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearchConfigurable"/>
         <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
         <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <waitForPageLoad stepKey="waitForLoading"/>
     </actionGroup>
 </actionGroups>

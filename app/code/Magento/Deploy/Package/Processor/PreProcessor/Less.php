@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Package\Processor\PreProcessor;
 
 use Magento\Deploy\Console\DeployStaticOptions;
@@ -10,10 +11,10 @@ use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\Processor\ProcessorInterface;
 use Magento\Deploy\Service\DeployStaticFile;
-use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
-use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\Css\PreProcessor\Instruction\Import;
+use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\NotationResolver;
+use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 use Magento\Framework\View\Asset\Repository;
 
 /**
@@ -59,6 +60,11 @@ class Less implements ProcessorInterface
     private $map = [];
 
     /**
+     * @var array
+     */
+    private $pFileCache = [];
+
+    /**
      * Less constructor
      *
      * @param FileNameResolver $fileNameResolver
@@ -67,10 +73,10 @@ class Less implements ProcessorInterface
      * @param Minification $minification
      */
     public function __construct(
-        FileNameResolver $fileNameResolver,
+        FileNameResolver        $fileNameResolver,
         NotationResolver\Module $notationResolver,
-        DeployStaticFile $deployStaticFile,
-        Minification $minification
+        DeployStaticFile        $deployStaticFile,
+        Minification            $minification
     ) {
         $this->fileNameResolver = $fileNameResolver;
         $this->notationResolver = $notationResolver;
@@ -94,7 +100,7 @@ class Less implements ProcessorInterface
                 if ($packageFile && $packageFile->getOrigPackage() === $package) {
                     continue;
                 }
-                $deployFileName = $this->fileNameResolver->resolve($file->getFileName());
+                $deployFileName = $this->fileNameResolver->resolve($file->getFileName() ?? '');
                 if ($deployFileName !== $file->getFileName()) {
                     if ($this->hasOverrides($file, $package)) {
                         $file = clone $file;
@@ -131,6 +137,7 @@ class Less implements ProcessorInterface
         $currentPackageFiles = array_merge($package->getFilesByType('less'), $package->getFilesByType('css'));
 
         foreach ($currentPackageFiles as $file) {
+            $this->pFileCache = [];
             if ($this->inParentFiles($file->getDeployedFileName(), $parentFile->getFileName(), $map)) {
                 return true;
             }
@@ -139,8 +146,10 @@ class Less implements ProcessorInterface
     }
 
     /**
-     * @param string  $fileName
-     * @param string  $parentFile
+     * Checks if there is a LESS file in current package which used for generating given CSS from parent package
+     *
+     * @param string $fileName
+     * @param string $parentFile
      * @param array $map
      * @return bool
      */
@@ -151,7 +160,13 @@ class Less implements ProcessorInterface
                 return true;
             } else {
                 foreach ($map[$parentFile] as $pFile) {
-                    return $this->inParentFiles($fileName, $pFile, $map);
+                    if (in_array($pFile, $this->pFileCache)) {
+                        continue;
+                    }
+                    $this->pFileCache[] = $pFile;
+                    if ($this->inParentFiles($fileName, $pFile, $map)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -170,13 +185,15 @@ class Less implements ProcessorInterface
     {
         $content = $this->deployStaticFile->readTmpFile($filePath, $packagePath);
         $replaceCallback = function ($matchedContent) use ($filePath, $packagePath, $contentType) {
-            $matchedFileId = $matchedContent['path'];
+            $matchedFileId = $matchedContent['path'] ?? '';
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             if (!pathinfo($matchedContent['path'], PATHINFO_EXTENSION)) {
                 $matchedFileId .= '.' . $contentType;
             }
             if (strpos($matchedFileId, Repository::FILE_ID_SEPARATOR) !== false) {
                 $basePath = $packagePath;
             } else {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $basePath = pathinfo($filePath, PATHINFO_DIRNAME);
             }
             $resolvedPath = str_replace(Repository::FILE_ID_SEPARATOR, '/', $matchedFileId);
@@ -205,7 +222,7 @@ class Less implements ProcessorInterface
      */
     private function normalizePath($path)
     {
-        if (strpos($path, '/../') === false) {
+        if ($path === null || strpos($path, '/../') === false) {
             return $path;
         }
         $pathParts = explode('/', $path);

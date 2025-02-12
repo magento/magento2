@@ -314,7 +314,7 @@
         .lib-form-validation();
     }
 
-    div.mage-error[generated] {
+    div.mage-error {
         .lib-form-validation-note();
     }
 
@@ -979,7 +979,7 @@
 }
 
 .lib-form-field-column-number(@_column-number: @form-field-column__number) {
-    .lib-css(width, 100% / @_column-number);
+    .lib-css(width, (100% / @_column-number));
 }
 
 ._lib-revert-type-block-label-padding(

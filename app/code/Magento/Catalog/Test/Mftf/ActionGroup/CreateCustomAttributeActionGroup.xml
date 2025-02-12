@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateCustomAttributeActionGroup">
+        <annotations>
+            <description>Create a custom attribute to be added to any product from admin portal.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeLabel" type="string" defaultValue="Test Attribute"/>
+            <argument name="attributeCode" type="string" defaultValue="test_attribute"/>
+            <argument name="inputType" type="string" defaultValue="Dropdown"/>
+            <argument name="valueRequired" type="string" defaultValue="Yes"/>
+            <argument name="adminOption1" type="string" defaultValue="value 1 admin"/>
+            <argument name="adminOption1Value" type="string" defaultValue="value1"/>
+            <argument name="adminOption2" type="string" defaultValue="value 2 admin"/>
+            <argument name="adminOption2Value" type="string" defaultValue="value2"/>
+            <argument name="toBeUsedInSearch" type="string" defaultValue="Yes"/>
+            <argument name="isComparableOnStoreFront" type="string" defaultValue="Yes"/>
+            <argument name="usedInLayeredNavigation" type="string" defaultValue="Filterable (with results)"/>
+            <argument name="isVisibleOnCatalogPagesOnStorefront" type="string" defaultValue="Yes"/>
+        </arguments>
+
+        <!-- Navigate to Stores > Attributes > Products > Product Attribute-->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+
+        <!-- Click on Add new Attribute button -->
+        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="clickAddNewAttributeButton"/>
+
+        <!-- Add details to Attribute Properties -->
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{attributeLabel}}" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{inputType}}" stepKey="selectDropdown"/>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" userInput="{{valueRequired}}" stepKey="selectRequiredAsYes"/>
+
+        <click selector="{{AttributePropertiesSection.dropdownAddOptions}}" stepKey="addOptions"/>
+        <checkOption selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('1')}}" stepKey="selectIsDefaultForValue1"/>
+        <fillField selector="{{AttributePropertiesSection.dropdownNthOptionAdmin('1')}}" userInput="{{adminOption1}}" stepKey="fillAdmin1"/>
+        <fillField selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView('1')}}" userInput="{{adminOption1Value}}" stepKey="fillDefaultStoreView1"/>
+
+        <click selector="{{AttributePropertiesSection.dropdownAddOptions}}" stepKey="addOptionsAgain"/>
+        <fillField selector="{{AttributePropertiesSection.dropdownNthOptionAdmin('2')}}" userInput="{{adminOption2}}" stepKey="fillAdmin2"/>
+        <fillField selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView('2')}}" userInput="{{adminOption2Value}}" stepKey="fillDefaultStoreView2"/>
+
+        <!-- Add details to Advanced Attribute Properties -->
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="clickAdvancedAttributeProperties"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.AttributeCode}}" stepKey="waitForAttributeCodeToBeVisible"/>
+        <fillField selector="{{AttributePropertiesSection.AttributeCode}}" userInput="{{attributeCode}}" stepKey="fillAttributeCode"/>
+
+        <!-- Navigate to Storefront Properties -->
+        <scrollToTopOfPage stepKey="scrollToStoreFrontProperties"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStoreFrontProperties"/>
+
+        <!-- Provide the Storefront Properties -->
+        <selectOption selector="{{AdminNewAttributePanel.useInSearch}}" userInput="{{toBeUsedInSearch}}" stepKey="selectYesForUseInSearch"/>
+        <selectOption selector="{{AdminNewAttributePanel.comparableOnStorefront}}" userInput="{{isComparableOnStoreFront}}" stepKey="selectYesForComparableOnStorefront"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInLayeredNavigation}}" userInput="{{usedInLayeredNavigation}}" stepKey="selectLayeredNavigation"/>
+        <selectOption selector="{{AdminNewAttributePanel.visibleOnCatalogPagesOnStorefront}}" userInput="{{isVisibleOnCatalogPagesOnStorefront}}" stepKey="selectYesForVisibleOnCatalogPagesForStoreFront"/>
+
+        <!-- Save the Attribute -->
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="saveTheAttribute"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+    </actionGroup>
+</actionGroups>

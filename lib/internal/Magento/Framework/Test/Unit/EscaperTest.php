@@ -133,10 +133,12 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeJsDataProvider()
+    public static function escapeJsDataProvider()
     {
         return [
             'zero length string' => ['', ''],
+            'null as string' => [null, ''],
+            'Magento\Framework\Phrase as string' => [__('test'), 'test'],
             'only digits' => ['123', '123'],
             '<' => ['<', '\u003C'],
             '>' => ['>', '\\u003E'],
@@ -199,7 +201,6 @@ class EscaperTest extends TestCase
             $stateMock
         );
 
-
         $actual = $this->escaper->escapeHtmlAttr($input);
         $this->assertEquals($output, $actual);
     }
@@ -209,7 +210,7 @@ class EscaperTest extends TestCase
      *
      * @return array
      */
-    public function escapeHtmlAttributeWithInlineTranslateEnabledDataProvider(): array
+    public static function escapeHtmlAttributeWithInlineTranslateEnabledDataProvider(): array
     {
         return [
             [
@@ -242,7 +243,7 @@ class EscaperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeHtmlDataProvider()
+    public static function escapeHtmlDataProvider()
     {
         return [
             'array -> [text with no tags, text with no allowed tags]' => [
@@ -327,13 +328,18 @@ class EscaperTest extends TestCase
                 'expected' => ' some text',
                 'allowedTags' => ['span'],
             ],
+            'text with japanese lang' => [
+                'data' => '<span>だ だ だ some text in tags<br /></span>',
+                'expected' => '<span>だ だ だ some text in tags</span>',
+                'allowedTags' => ['span'],
+            ],
         ];
     }
 
     /**
      * @return array
      */
-    public function escapeHtmlInvalidDataProvider()
+    public static function escapeHtmlInvalidDataProvider()
     {
         return [
             'text with allowed script tag' => [
@@ -365,9 +371,79 @@ class EscaperTest extends TestCase
     }
 
     /**
+     * @covers \Magento\Framework\Escaper::escapeCss
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider escapeCssDataProvider
+     */
+    public function testEscapeCss($data, string $expected): void
+    {
+        $this->assertEquals($expected, $this->escaper->escapeCss($data));
+    }
+
+    /**
      * @return array
      */
-    public function escapeUrlDataProvider(): array
+    public static function escapeCssDataProvider(): array
+    {
+        return [
+            [
+                'data' => 1,
+                'expected' => '1',
+            ],
+            [
+                'data' => '*%string{foo}%::',
+                'expected' => '\2A \25 string\7B foo\7D \25 \3A \3A ',
+            ]
+        ];
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::encodeUrlParam
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider encodeUrlParamDataProvider
+     */
+    public function testEncodeUrlParam($data, string $expected): void
+    {
+        $this->assertEquals($expected, $this->escaper->encodeUrlParam($data));
+    }
+
+    /**
+     * @return array
+     */
+    public static function encodeUrlParamDataProvider(): array
+    {
+        return [
+            [
+                'data' => "a3==",
+                'expected' => "a3%3D%3D",
+            ],
+            [
+                'data' => "example string",
+                'expected' => "example%20string",
+            ],
+            [
+                'data' => 1,
+                'expected' => "1",
+            ],
+            [
+                'data' => null,
+                'expected' => "",
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function escapeUrlDataProvider(): array
     {
         return [
             [
@@ -425,7 +501,7 @@ class EscaperTest extends TestCase
      * Get escape variations
      * @return array
      */
-    public function escapeDataProvider()
+    public static function escapeDataProvider()
     {
         return [
             [

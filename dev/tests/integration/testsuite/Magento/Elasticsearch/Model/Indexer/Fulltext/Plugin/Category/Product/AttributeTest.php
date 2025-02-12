@@ -22,7 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Check Elasticsearch indexer mapping when working with attributes.
+ * Check Search engine indexer mapping when working with attributes.
  */
 class AttributeTest extends TestCase
 {
@@ -97,10 +97,9 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * Check Elasticsearch indexer mapping is updated after creating attribute.
+     * Check Search engine indexer mapping is updated after creating attribute.
      *
      * @return void
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      */
     public function testCheckElasticsearchMappingAfterUpdateAttributeToSearchable(): void
@@ -134,7 +133,7 @@ class AttributeTest extends TestCase
     }
 
     /**
-     * Retrieve Elasticsearch indexer mapping.
+     * Retrieve Search engine indexer mapping.
      *
      * @return array
      */

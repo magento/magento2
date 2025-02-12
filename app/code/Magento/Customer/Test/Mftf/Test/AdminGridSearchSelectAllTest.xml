@@ -15,6 +15,7 @@
             <testCaseId value="MC-37659"/>
             <severity value="CRITICAL"/>
             <group value="uI"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -35,6 +36,10 @@
         <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="$$secondCustomer.email$$" stepKey="fillKeywordSearchFieldWithSecondCustomerEmail"/>
         <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+         <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!-- Select all from dropdown -->
         <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomers"/>
         <!-- Clear searching By Keyword-->

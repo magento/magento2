@@ -30,7 +30,7 @@ class Save extends Agreement implements HttpPostActionInterface
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        AgreementFactory $agreementFactory = null
+        ?AgreementFactory $agreementFactory = null
     ) {
         $this->agreementFactory = $agreementFactory ?:
                 ObjectManager::getInstance()->get(AgreementFactory::class);

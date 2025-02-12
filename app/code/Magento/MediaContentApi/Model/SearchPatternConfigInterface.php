@@ -9,6 +9,7 @@ namespace Magento\MediaContentApi\Model;
 
 /**
  * Interface for Media content Config.
+ * @api
  */
 interface SearchPatternConfigInterface
 {

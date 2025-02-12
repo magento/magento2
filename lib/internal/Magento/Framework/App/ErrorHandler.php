@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App;
@@ -28,7 +28,6 @@ class ErrorHandler
         E_USER_ERROR => 'User Error',
         E_USER_WARNING => 'User Warning',
         E_USER_NOTICE => 'User Notice',
-        E_STRICT => 'Strict Notice',
         E_RECOVERABLE_ERROR => 'Recoverable Error',
         E_DEPRECATED => 'Deprecated Functionality',
         E_USER_DEPRECATED => 'User Deprecated Functionality',
@@ -46,7 +45,7 @@ class ErrorHandler
      */
     public function handler($errorNo, $errorStr, $errorFile, $errorLine)
     {
-        if (strpos($errorStr, 'DateTimeZone::__construct') !== false) {
+        if ($errorStr !== null && strpos($errorStr, 'DateTimeZone::__construct') !== false) {
             // there's no way to distinguish between caught system exceptions and warnings
             return false;
         }
@@ -58,6 +57,7 @@ class ErrorHandler
 
         $msg = isset($this->errorPhrases[$errorNo]) ? $this->errorPhrases[$errorNo] : "Unknown error ({$errorNo})";
         $msg .= ": {$errorStr} in {$errorFile} on line {$errorLine}";
+        // phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception($msg);
     }
 }

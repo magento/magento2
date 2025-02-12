@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateBundleProductCustomAttributeEntityTextAreaTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Bundle Product Custom Attributes"/>
+            <title value="Admin should be able to create a Bundle Product Custom attribute for text area"/>
+            <description value="Admin should be able to create a Bundle Product Custom attribute for text area"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4186"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+
+                <!--Create Bundle product-->
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="simpleCategory1"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+        </before>
+
+        <after>
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+                <argument name="ProductAttribute" value="test_custom_attribute"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickDelete"/>
+            <comment userInput="BIC workaround" stepKey="clickOk"/>
+            <comment userInput="BIC workaround" stepKey="waitForDeletion"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Navigate to Stores > Attributes > Products > Product Attribute-->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+
+        <!-- Create a custom attribute -->
+        <!-- Click on Add new Attribute button -->
+        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="clickAddNewAttributeButton"/>
+        <!-- Add details to Attribute Properties -->
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="test_custom_attribute" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Area" stepKey="selectDropdown"/>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" userInput="No" stepKey="selectRequiredAsNo"/>
+
+        <!-- Save the Attribute -->
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="saveTheAttribute"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+
+        <!-- Navigate to Stores > Attributes > Attribute Set -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Search and open Attribute Set from preconditions -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">
+            <argument name="name" value="Default"/>
+        </actionGroup>
+
+        <!-- Move created product attribute from unassigned to assigned -->
+        <dragAndDrop  selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute('test_custom_attribute')}}" selector2="{{AdminProductAttributeSetEditSection.assignedAttribute('sku')}}" stepKey="dragAndDrop"/>
+        <waitForPageLoad stepKey="waitForDragAndDrop"/>
+
+        <!-- Click 'Save' -->
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
+
+        <!-- open the a bundle product, fill test area and save the product' -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
+            <argument name="productId" value="$$createBundleProduct.id$$"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.textArea}}" userInput="One, Two, Three" stepKey="fillTextAreaAttribute"/>
+        <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
+        <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="selectSeparately"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!-- Open the product created from the product grid, and Verify that the attribute values are preserved' -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct1">
+            <argument name="productId" value="$$createBundleProduct.id$$"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductFormSection.textArea}}" stepKey="seeTextAreaAttribute"/>
+    </test>
+</tests>

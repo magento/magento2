@@ -76,25 +76,25 @@ class RelationTest extends TestCase
             Address::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['removeEmptyAddresses', 'process'])
+            ->onlyMethods(['removeEmptyAddresses', 'process'])
             ->getMock();
         $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMockForAbstractClass();
         $this->orderPaymentResourceMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMock();
         $this->statusHistoryResource = $this->getMockBuilder(
             History::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMock();
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getItems',
@@ -106,23 +106,24 @@ class RelationTest extends TestCase
             ->getMock();
         $this->orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setOrderId', 'setOrder'])
+            ->onlyMethods(['setOrderId', 'setOrder'])
             ->getMock();
         $this->orderPaymentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setParentId', 'setOrder'])
+            ->onlyMethods(['setParentId', 'setOrder'])
             ->getMock();
         $this->orderStatusHistoryMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setParentId', 'setOrder'])
+            ->addMethods(['setParentId'])
+            ->onlyMethods(['setOrder'])
             ->getMock();
         $this->orderStatusHistoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Status\History::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setParentId', 'setOrder'])
+            ->onlyMethods(['setParentId', 'setOrder'])
             ->getMock();
         $this->orderInvoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setOrder', 'save'])
+            ->onlyMethods(['setOrder', 'save'])
             ->getMock();
         $this->relationProcessor = new Relation(
             $this->addressHandlerMock,

@@ -59,15 +59,16 @@ class ReportConcurrentAdminsTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->backendAuthSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isLoggedIn', 'getUser'])
+            ->addMethods(['getUser'])
+            ->onlyMethods(['isLoggedIn'])
             ->getMock();
         $this->usersFactory = $this->getMockBuilder(UsersFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->usersModel = $this->getMockBuilder(Users::class)
             ->disableOriginalConstructor()

@@ -17,6 +17,7 @@
             <testCaseId value="MC-15290"/>
             <useCaseId value="MC-15289"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -26,7 +27,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="openNewOrder"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="openNewOrder"/>
         <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <grabValueFrom selector="{{AdminOrderFormAccountSection.group}}" stepKey="grabGroupValue"/>

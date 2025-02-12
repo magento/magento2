@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SampleData\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,7 +24,7 @@ use Composer\Console\ApplicationFactory;
  */
 class SampleDataRemoveCommand extends Command
 {
-    const OPTION_NO_UPDATE = 'no-update';
+    public const OPTION_NO_UPDATE = 'no-update';
 
     /**
      * @var Filesystem
@@ -39,7 +40,7 @@ class SampleDataRemoveCommand extends Command
      * @var ArrayInputFactory
      * @deprecated 100.1.0
      */
-    private $arrayInputFactory;
+    private $arrayInputFactory; // phpcs:ignore Magento2.Commenting.ClassPropertyPHPDocFormatting
 
     /**
      * @var ApplicationFactory
@@ -66,7 +67,7 @@ class SampleDataRemoveCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -82,7 +83,7 @@ class SampleDataRemoveCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -91,7 +92,7 @@ class SampleDataRemoveCommand extends Command
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
             $commonArgs = ['--working-dir' => $baseDir, '--no-interaction' => 1, '--no-progress' => 1];
             if ($input->getOption(self::OPTION_NO_UPDATE)) {
-                $commonArgs['--no-update'] = 1;
+                $commonArgs['--no-update'] = true;
             }
             $packages = array_keys($sampleDataPackages);
             $arguments = array_merge(['command' => 'remove', 'packages' => $packages], $commonArgs);
@@ -107,5 +108,7 @@ class SampleDataRemoveCommand extends Command
         } else {
             $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
         }
+
+        return Cli::RETURN_SUCCESS;
     }
 }

@@ -15,7 +15,10 @@ class FileClassScanner
     private const NAMESPACE_TOKENS = [
         T_WHITESPACE => true,
         T_STRING => true,
-        T_NS_SEPARATOR => true
+        T_NS_SEPARATOR => true,
+        // PHP 8 compatibility.
+        T_NAME_QUALIFIED => true,
+        T_NAME_FULLY_QUALIFIED => true,
     ];
 
     private const ALLOWED_OPEN_BRACES_TOKENS = [
@@ -34,7 +37,7 @@ class FileClassScanner
     /**
      * The class name found in the file.
      *
-     * @var bool
+     * @var string|bool
      */
     private $className = false;
 
@@ -76,7 +79,7 @@ class FileClassScanner
     }
 
     /**
-     * Retrieves the first class found in a class file.
+     * Retrieves the first class found in a file.
      *
      * @return string
      */
@@ -98,6 +101,7 @@ class FileClassScanner
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @return string
      */
     private function extract(): string
@@ -108,6 +112,7 @@ class FileClassScanner
         $triggerNamespace = false;
         $braceLevel = 0;
         $bracedNamespace = false;
+        $namespace = '';
 
         // phpcs:ignore
         $this->tokens = token_get_all($this->getFileContents());
@@ -132,6 +137,11 @@ class FileClassScanner
             // `class` token is not used with a valid class name
             } elseif ($triggerClass && !$tokenIsArray) {
                 $triggerClass = false;
+            // `class` token was used as a string; not to define class
+            // phpstan:ignore
+            } elseif ($triggerClass && empty($class) && $token[0] === T_DOUBLE_ARROW) {
+                $triggerClass = false;
+                continue;
             // The class keyword was found in the last loop
             } elseif ($triggerClass && $token[0] === T_STRING) {
                 $triggerClass = false;
@@ -145,9 +155,19 @@ class FileClassScanner
                     $namespaceParts = [];
                     $bracedNamespace = $this->isBracedNamespace($index);
                     break;
+
+                // PHP 8
+                case T_NAME_QUALIFIED:
+                case T_NAME_FULLY_QUALIFIED:
+                    if ($triggerNamespace) {
+                        $namespace = $token[1];
+                    }
+                    break;
+
+                case T_TRAIT:
                 case T_CLASS:
                     // Current loop contains the class keyword. Next loop will have the class name itself.
-                    if ($braceLevel == 0 || ($bracedNamespace && $braceLevel == 1)) {
+                    if ($braceLevel === 0 || ($bracedNamespace && $braceLevel === 1)) {
                         $triggerClass = true;
                     }
                     break;
@@ -155,7 +175,8 @@ class FileClassScanner
 
             // We have a class name, let's concatenate and return it!
             if ($class !== '') {
-                $fqClassName = trim(join('', $namespaceParts)) . trim($class);
+                $fqClassName = $namespace ? (trim($namespace) . '\\' . trim($class))
+                    : (trim(implode('', $namespaceParts)) . trim($class));
                 return $fqClassName;
             }
         }

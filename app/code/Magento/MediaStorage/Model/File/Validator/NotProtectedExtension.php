@@ -6,27 +6,29 @@
 
 namespace Magento\MediaStorage\Model\File\Validator;
 
+use Laminas\Validator\AbstractValidator;
+
 /**
  * Validator for check not protected file extensions
  */
-class NotProtectedExtension extends \Zend_Validate_Abstract
+class NotProtectedExtension extends AbstractValidator
 {
     /**
      * Protected extension message key
      */
-    const PROTECTED_EXTENSION = 'protectedExtension';
+    public const PROTECTED_EXTENSION = 'protectedExtension';
 
     /**
      * Protected files config path
      */
-    const XML_PATH_PROTECTED_FILE_EXTENSIONS = 'general/file/protected_extensions';
+    public const XML_PATH_PROTECTED_FILE_EXTENSIONS = 'general/file/protected_extensions';
 
     /**
      * The file extension
      *
      * @var string
      */
-    protected $_value;
+    protected $value;
 
     /**
      * Protected file types
@@ -41,6 +43,10 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
+    /**
+     * @var array
+     */
+    protected $messageTemplates;
 
     /**
      * Init validator
@@ -52,6 +58,7 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
         $this->_scopeConfig = $scopeConfig;
         $this->_initMessageTemplates();
         $this->_initProtectedFileExtensions();
+        parent::__construct();
     }
 
     /**
@@ -61,8 +68,8 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
      */
     protected function _initMessageTemplates()
     {
-        if (!$this->_messageTemplates) {
-            $this->_messageTemplates = [
+        if (!$this->messageTemplates) {
+            $this->messageTemplates = [
                 self::PROTECTED_EXTENSION => __('File with an extension "%value%" is protected and cannot be uploaded'),
             ];
         }
@@ -117,10 +124,10 @@ class NotProtectedExtension extends \Zend_Validate_Abstract
     public function isValid($value)
     {
         $value = strtolower(trim($value));
-        $this->_setValue($value);
+        $this->setValue($value);
 
-        if (in_array($this->_value, $this->_protectedFileExtensions)) {
-            $this->_error(self::PROTECTED_EXTENSION, $this->_value);
+        if (in_array($this->value, $this->_protectedFileExtensions)) {
+            $this->error(self::PROTECTED_EXTENSION, $this->value);
             return false;
         }
 

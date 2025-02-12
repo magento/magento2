@@ -61,8 +61,8 @@ class ReviewCount implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (false === $this->reviewsConfig->isEnabled()) {
             return 0;
@@ -75,6 +75,10 @@ class ReviewCount implements ResolverInterface
         /** @var Product $product */
         $product = $value['model'];
 
-        return (int) $this->review->getTotalReviews($product->getId(), true);
+        return (int) $this->review->getTotalReviews(
+            $product->getId(),
+            true,
+            (int) $context->getExtensionAttributes()->getStore()->getId()
+        );
     }
 }

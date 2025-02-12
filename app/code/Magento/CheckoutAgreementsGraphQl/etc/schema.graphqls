@@ -2,20 +2,20 @@
 # See COPYING.txt for license details.
 
 type Query {
-    checkoutAgreements: [CheckoutAgreement] @resolver(class: "Magento\\CheckoutAgreementsGraphQl\\Model\\Resolver\\CheckoutAgreements") @doc(description: "The Checkout Agreements information")
+    checkoutAgreements: [CheckoutAgreement] @resolver(class: "Magento\\CheckoutAgreementsGraphQl\\Model\\Resolver\\CheckoutAgreements") @doc(description: "Return Terms and Conditions configuration information.")
 }
 
-type CheckoutAgreement @doc(description: "Defines all Checkout Agreement information") {
-    agreement_id: Int! @doc(description: "Checkout Agreement identifier")
-    name: String! @doc(description: "Checkout Agreement name")
-    content: String! @doc(description: "Checkout Agreement content")
-    content_height: String @doc(description: "Checkout Agreement content height")
-    checkbox_text: String! @doc(description: "Checkout Agreement checkbox text")
-    is_html: Boolean! @doc(description: "Is Checkout Agreement content in HTML format")
-    mode: CheckoutAgreementMode!
+type CheckoutAgreement @doc(description: "Defines details about an individual checkout agreement.") {
+    agreement_id: Int! @doc(description: "The ID for a checkout agreement.")
+    name: String! @doc(description: "The name given to the condition.")
+    content: String! @doc(description: "Required. The text of the agreement.")
+    content_height: String @doc(description: "The height of the text box where the Terms and Conditions statement appears during checkout.")
+    checkbox_text: String! @doc(description: "The checkbox text for the checkout agreement.")
+    is_html: Boolean! @doc(description: "Indicates whether the `content` text is in HTML format.")
+    mode: CheckoutAgreementMode! @doc(description: "Indicates whether agreements are accepted automatically or manually.")
 }
 
-enum CheckoutAgreementMode {
-    AUTO
-    MANUAL
+enum CheckoutAgreementMode @doc(description: "Indicates how agreements are accepted.") {
+    AUTO @doc(description: "Conditions are automatically accepted upon checkout.")
+    MANUAL @doc(description: "Shoppers must manually accept the conditions to place an order.")
 }

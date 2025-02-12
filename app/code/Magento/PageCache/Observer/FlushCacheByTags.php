@@ -73,7 +73,7 @@ class FlushCacheByTags implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->_config->getType() == Config::BUILT_IN && $this->_config->isEnabled()) {
+        if ($this->_config->getType() === Config::BUILT_IN && $this->_config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
             if (!is_object($object)) {
                 return;

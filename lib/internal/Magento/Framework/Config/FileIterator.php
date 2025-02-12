@@ -10,29 +10,22 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
- * Class FileIterator
  * @api
  * @since 100.0.2
  */
 class FileIterator implements \Iterator, \Countable
 {
     /**
-     * Paths
-     *
      * @var array
      */
     protected $paths = [];
 
     /**
-     * Position
-     *
      * @var int
      */
     protected $position;
 
     /**
-     * File read factory
-     *
      * @var ReadFactory
      */
     protected $fileReadFactory;
@@ -55,6 +48,7 @@ class FileIterator implements \Iterator, \Countable
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->paths);
@@ -65,6 +59,7 @@ class FileIterator implements \Iterator, \Countable
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $fileRead = $this->fileReadFactory->create($this->key(), DriverPool::FILE);
@@ -76,6 +71,7 @@ class FileIterator implements \Iterator, \Countable
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return current($this->paths);
@@ -86,6 +82,7 @@ class FileIterator implements \Iterator, \Countable
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->paths);
@@ -96,6 +93,7 @@ class FileIterator implements \Iterator, \Countable
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return (bool) $this->key();
@@ -106,6 +104,7 @@ class FileIterator implements \Iterator, \Countable
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function toArray()
     {
         $result = [];
@@ -120,6 +119,7 @@ class FileIterator implements \Iterator, \Countable
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->paths);

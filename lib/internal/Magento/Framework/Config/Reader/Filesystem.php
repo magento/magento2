@@ -1,15 +1,14 @@
 <?php
 /**
- * Filesystem configuration loader. Loads configuration from XML files, split by scopes
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
- *
  */
 
 namespace Magento\Framework\Config\Reader;
 
 /**
+ * Filesystem configuration loader. Loads configuration from XML files, split by scopes
+ *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
  * @since 100.0.2
@@ -140,6 +139,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      * @param array $fileList
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _readFiles($fileList)
     {
@@ -161,9 +161,27 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
                 );
             }
         }
+
         if ($this->validationState->isValidationRequired()) {
             $errors = [];
             if ($configMerger && !$configMerger->validate($this->_schemaFile, $errors)) {
+                // The merged XML is invalid, but each XML document is individually valid.
+                // (If they had errors, we would have thrown an exception in the loop above.)
+                // Let's work out which document is causing us a problem.
+                $configMerger = null;
+                foreach ($fileList as $key => $content) {
+                    if (!$configMerger) {
+                        $configMerger = $this->_createConfigMerger($this->_domDocumentClass, $content);
+                    } else {
+                        $configMerger->merge($content);
+                    }
+
+                    if (!$configMerger->validate($this->_schemaFile)) {
+                        array_unshift($errors, "Error in merged XML after reading $key");
+                        break;
+                    }
+                }
+
                 $message = "Invalid Document \n";
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase($message . implode("\n", $errors))

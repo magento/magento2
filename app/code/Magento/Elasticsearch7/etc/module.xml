@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Magento_Elasticsearch7">
         <sequence>
+            <module name="Magento_AdvancedSearch"/>
             <module name="Magento_Elasticsearch"/>
-            <module name="Magento_Elasticsearch6"/>
         </sequence>
     </module>
 </config>

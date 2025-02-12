@@ -1,0 +1,28 @@
+{
+    "name": "magento/module-contact-graph-ql",
+    "description": "N/A",
+    "type": "magento2-module",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "magento/framework": "*",
+        "magento/module-contact": "*"
+    },
+    "suggest": {
+        "magento/module-graph-ql": "*"
+    },
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\ContactGraphQl\\": ""
+        }
+    }
+}

@@ -73,9 +73,9 @@ class CommentRepository implements CreditmemoCommentRepositoryInterface
         CreditmemoCommentInterfaceFactory $commentFactory,
         CreditmemoCommentSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        CreditmemoCommentSender $creditmemoCommentSender = null,
-        CreditmemoRepositoryInterface $creditmemoRepository = null,
-        LoggerInterface $logger = null
+        ?CreditmemoCommentSender $creditmemoCommentSender = null,
+        ?CreditmemoRepositoryInterface $creditmemoRepository = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;

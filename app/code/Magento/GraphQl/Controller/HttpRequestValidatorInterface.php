@@ -12,6 +12,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Use this interface to implement a validator for a Graphql HTTP requests
+ *
+ * @api
  */
 interface HttpRequestValidatorInterface
 {

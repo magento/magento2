@@ -38,8 +38,6 @@ class Link extends \Magento\Downloadable\Controller\Download
      */
     public function execute()
     {
-        $session = $this->_getCustomerSession();
-
         $id = $this->getRequest()->getParam('id', 0);
         /** @var PurchasedLink $linkPurchasedItem */
         $linkPurchasedItem = $this->_objectManager->create(
@@ -53,6 +51,7 @@ class Link extends \Magento\Downloadable\Controller\Download
             return $this->_redirect('*/customer/products');
         }
         if (!$this->_objectManager->get(\Magento\Downloadable\Helper\Data::class)->getIsShareable($linkPurchasedItem)) {
+            $session = $this->_getCustomerSession();
             $customerId = $session->getCustomerId();
             if (!$customerId) {
                 /** @var \Magento\Catalog\Model\Product $product */

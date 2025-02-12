@@ -30,8 +30,6 @@ class DataProvider implements DataProviderInterface
     protected $config;
 
     /**
-     * Files utility
-     *
      * @var \Magento\Framework\App\Utility\Files
      */
     protected $filesUtility;
@@ -68,7 +66,7 @@ class DataProvider implements DataProviderInterface
         \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
         \Magento\Framework\Component\DirSearch $dirSearch,
         \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
-        \Magento\Framework\App\Utility\Files $filesUtility = null
+        ?\Magento\Framework\App\Utility\Files $filesUtility = null
     ) {
         $this->appState = $appState;
         $this->config = $config;
@@ -142,7 +140,7 @@ class DataProvider implements DataProviderInterface
             if ($result) {
                 if (isset($matches[2])) {
                     foreach ($matches[2] as $match) {
-                        $phrases[] = str_replace(["\'", '\"'], ["'", '"'], $match);
+                        $phrases[] = $match !== null ? str_replace(["\'", '\"'], ["'", '"'], $match) : '';
                     }
                 }
             }

@@ -58,8 +58,8 @@ class CreditMemoTotal implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!(($value['model'] ?? null) instanceof CreditmemoInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -106,7 +106,7 @@ class CreditMemoTotal implements ResolverInterface
                 )
             ],
             'adjustment' => [
-                'value' =>  abs($creditMemo->getAdjustment()),
+                'value' =>  abs((float) $creditMemo->getAdjustment()),
                 'currency' => $currency
             ]
         ];
@@ -132,7 +132,7 @@ class CreditMemoTotal implements ResolverInterface
         if ($calculatedCreditmemoShippingDiscount != 0) {
             $shippingDiscounts[] = [
                 'amount' => [
-                    'value' => sprintf('%.2f', abs($calculatedCreditmemoShippingDiscount)),
+                    'value' => sprintf('%.2f', abs((float) $calculatedCreditmemoShippingDiscount)),
                     'currency' => $creditmemoModel->getOrderCurrencyCode()
                 ]
             ];
@@ -153,7 +153,7 @@ class CreditMemoTotal implements ResolverInterface
             $discounts[] = [
                 'label' => $creditmemo->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => abs($creditmemo->getDiscountAmount()),
+                    'value' => abs((float) $creditmemo->getDiscountAmount()),
                     'currency' => $creditmemo->getOrderCurrencyCode()
                 ]
             ];

@@ -33,7 +33,17 @@ class AllowspecificTest extends TestCase
     protected function setUp(): void
     {
         $testHelper = new ObjectManager($this);
-
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $testHelper->prepareObjectManager($objects);
         $randomMock = $this->createMock(Random::class);
         $randomMock->method('getRandomString')->willReturn('some-rando-string');
         $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
@@ -59,7 +69,7 @@ class AllowspecificTest extends TestCase
                 'secureRenderer' => $secureRendererMock
             ]
         );
-        $this->_object->setData('html_id', 'spec_element');
+        $this->_object->setId('spec_element');
         $this->_formMock = $this->getMockBuilder(Form::class)
             ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
             ->onlyMethods(['getElement'])
@@ -87,6 +97,7 @@ class AllowspecificTest extends TestCase
         $afterHtmlCode = 'after html';
         $this->_object->setData('after_element_html', $afterHtmlCode);
         $this->_object->setForm($this->_formMock);
+        $this->_object->setId('spec_element');
 
         $actual = $this->_object->getAfterElementHtml();
 
@@ -128,7 +139,7 @@ class AllowspecificTest extends TestCase
     /**
      * @return array
      */
-    public function getHtmlWhenValueIsEmptyDataProvider()
+    public static function getHtmlWhenValueIsEmptyDataProvider()
     {
         return [
             'zero' => ['1' => 0],

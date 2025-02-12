@@ -9,6 +9,8 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
  * Rule Interface
  *
  * Interface for search path resolution during fallback process
+ *
+ * @api
  */
 interface RuleInterface
 {

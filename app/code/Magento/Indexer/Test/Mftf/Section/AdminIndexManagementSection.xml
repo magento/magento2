@@ -19,5 +19,6 @@
         <element name="selectMassAction" type="select" selector="#gridIndexer_massaction-mass-select"/>
         <element name="columnScheduleStatus" type="text" selector="//th[contains(@class, 'col-indexer_schedule_status')]"/>
         <element name="indexerScheduleStatus" type="text" selector="//tr[contains(.,'{{var1}}')]//td[contains(@class,'col-indexer_schedule_status')]" parameterized="true"/>
+        <element name="massIndexSelectionCount" type="text" selector="#gridIndexer-total-count"/>
     </section>
 </sections>

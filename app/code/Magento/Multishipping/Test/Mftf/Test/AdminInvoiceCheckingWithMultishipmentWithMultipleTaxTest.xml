@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminInvoiceCheckingWithMultishipmentWithMultipleTaxTest">
+        <annotations>
+            <features value="Multishipment"/>
+            <stories value="Checking that multiple taxes in invoice after multishipping are shown preperly"/>
+            <title value="Checking multiple taxes in invoice after multishipping are shown preperly"/>
+            <description value="Multiple taxes are shown accurately on Invoice page after multishipping"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6692"/>
+            <useCaseId value="ACP2E-1080"/>
+            <group value="Multishipment"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create Tax Rates & Rules -->
+            <createData entity="USFullTaxRate" stepKey="initialTaxRate"/>
+            <createData entity="USFullTaxRate" stepKey="initialTaxRate2"/>
+
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule">
+                <argument name="taxRate" value="$$initialTaxRate$$"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createSecondTaxRule">
+                <argument name="taxRate" value="$$initialTaxRate2$$"/>
+                <argument name="taxRule" value="SimpleTaxRule2"/>
+            </actionGroup>
+
+            <!-- Create Category and Products -->
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="product1" entity="SimpleProduct"/>
+            <createData stepKey="product2" entity="SimpleProduct"/>
+
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="customer"/>
+
+            <!-- Enable Payment and Shipping Methods -->
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRateShipping"/>
+            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+
+            <!-- Enable Full Tax Summary for Orders, Invoices, Credit Memos -->
+            <magentoCLI command="config:set {{EnableDisplayFullTaxSummarySales.path}} {{EnableDisplayFullTaxSummarySales.value}}" stepKey="enableFullTaxSummary"/>
+        </before>
+
+        <after>
+            <!-- Delete created Tax Rate & Rule -->
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule2">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule2.code}}"/>
+            </actionGroup>
+            <deleteData createDataKey="initialTaxRate" stepKey="deleteInitialTaxRate"/>
+            <deleteData createDataKey="initialTaxRate2" stepKey="deleteInitialTaxRate2"/>
+
+            <!-- Delete created Category, Products, Customer -->
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
+            <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+
+            <!-- Disable extra Shipment and Payment Methods enabled -->
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+
+            <!-- Disable Full Tax Summary for Orders, Invoices, Credit Memos -->
+            <magentoCLI command="config:set {{DisableDisplayFullTaxSummarySales.path}} {{DisableDisplayFullTaxSummarySales.value}}" stepKey="disableFullTaxSummary"/>
+
+            <!-- Logout Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <!-- Creating Order using multishipping and get Order ID -->
+        <amOnPage url="$$product1.custom_attributes[url_key]$$.html" stepKey="goToProduct1"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct1">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <amOnPage url="$$product2.custom_attributes[url_key]$$.html" stepKey="goToProduct2"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct2">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <actionGroup ref="SelectMultiShippingInfoActionGroup" stepKey="checkoutWithMultipleShipping"/>
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod"/>
+        <actionGroup ref="ReviewOrderForMultiShipmentActionGroup" stepKey="reviewOrderForMultiShipment"/>
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+        <see selector="{{StorefrontMultipleShippingMethodSection.successMessage}}" userInput="Successfully ordered" stepKey="seeSuccessMessage"/>
+        <grabTextFrom selector="{{StorefrontMultipleShippingMethodSection.orderId('1')}}" stepKey="grabOrderNumber"/>
+
+        <!-- Creating Invoice -->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="GoToInvoiceIntoOrderActionGroup" stepKey="goToInvoiceIntoOrderPage"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+
+        <!-- Open Invoice -->
+        <actionGroup ref="AdminOpenInvoiceFromOrderPageActionGroup" stepKey="openInvoiceFromOrder"/>
+
+        <!-- Expand detailed Taxes description -->
+        <scrollTo selector="{{AdminInvoiceTaxSection.sectionHeader}}" stepKey="scrollToTaxSection"/>
+        <click selector="{{AdminInvoiceTaxSection.sectionHeader}}" stepKey="expandSection"/>
+
+        <!-- Check that Total Tax is shown correctly -->
+        <actionGroup ref="AssertAdminInvoiceTotalTaxActionGroup" stepKey="assertTotalTax">
+            <argument name="expectedTotalTax" value="$24.60"/>
+        </actionGroup>
+
+        <!-- Check that correct value is shown for detailed tax -->
+        <actionGroup ref="AdminAssertInvoiceSingleTaxActionGroup" stepKey="assertSingleTax"/>
+    </test>
+</tests>
