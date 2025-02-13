@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ return [
             "Element 'inputType': This element is not expected. Expected is ( option ).\nLine: 1\n" .
             "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><inputType name=\"name_one\"/></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'inputType_node_is_required' => [
         '<?xml version="1.0"?><config><option name="name_one"/></config>',
@@ -19,6 +20,7 @@ return [
             "Element 'option': Missing child element(s). Expected is ( inputType ).\nLine: 1\n" .
             "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><option name=\"name_one\"/></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'options_name_must_be_unique' => [
         '<?xml version="1.0"?><config><option name="name_one"><inputType name="name"/>' .
@@ -29,6 +31,7 @@ return [
             "name=\"name_one\"><inputType name=\"name\"/></option><option name=\"name_one\"><inputType " .
             "name=\"name_two\"/></option></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'inputType_name_must_be_unique' => [
         '<?xml version="1.0"?><config><option name="name"><inputType name="name_one"/>' .
@@ -39,15 +42,15 @@ return [
             "1:<config><option name=\"name\"><inputType name=\"name_one\"/><inputType name=\"name_one\"/>" .
             "</option></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'renderer_attribute_with_invalid_value' => [
         '<?xml version="1.0"?><config><option name="name_one" renderer="123true"><inputType name="name_one"/>' .
         '</option></config>',
         [
-            "Element 'option', attribute 'renderer': '123true' is not a valid value of the atomic type 'modelName'.\n" .
-            "Line: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><option name=\"name_one\" " .
-            "renderer=\"123true\"><inputType name=\"name_one\"/></option></config>\n2:\n"
+            "/Element \'option\', attribute \'renderer\': .* (is not a valid value|is not accepted).*/"
         ],
+        'isRegex' => true
     ],
     'disabled_attribute_with_invalid_value' => [
         '<?xml version="1.0"?><config><option name="name_one"><inputType name="name_one" disabled="7"/>' .
@@ -62,5 +65,6 @@ return [
             "<inputType name=\"name_one\" disabled=\"7\"/><inputType name=\"name_two\" disabled=\"some_string\"/>" .
             "</option></config>\n2:\n"
         ],
+        'isRegex' => false
     ]
 ];

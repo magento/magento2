@@ -80,7 +80,6 @@ class CouponUsageConsumer
             $data = $this->serializer->unserialize($serializedData);
             $updateInfo = $this->updateInfoFactory->create();
             $updateInfo->setData($data);
-            $this->processor->updateCouponUsages($updateInfo);
             $this->processor->updateRuleUsages($updateInfo);
         } catch (NotFoundException $e) {
             $this->logger->critical($e->getMessage());

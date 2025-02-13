@@ -88,7 +88,7 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
         array $changelogBatchSize = [],
-        ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null
+        ?ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -219,12 +219,9 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
     }
 
     /**
-     * Remove subscriptions
-     *
-     * @return ViewInterface
-     * @throws Exception
+     * @inheritDoc
      */
-    public function unsubscribe()
+    public function unsubscribe(bool $dropTable = true): ViewInterface
     {
         if ($this->getState()->getMode() != View\StateInterface::MODE_DISABLED) {
             // Remove subscriptions
@@ -232,8 +229,22 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
                 $this->initSubscriptionInstance($subscriptionConfig)->remove();
             }
 
+            if ($dropTable) {
+                try {
+                    $this->getChangelog()->drop();
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                } catch (ChangelogTableNotExistsException $e) {
+                    // We want the table to not exist, and it doesn't. All done.
+                }
+
+                $this->getState()->setVersionId(0);
+            }
+
             // Update view state
-            $this->getState()->setMode(View\StateInterface::MODE_DISABLED)->save();
+            $this->getState()
+                ->setMode(View\StateInterface::MODE_DISABLED)
+                ->setStatus(View\StateInterface::STATUS_IDLE)
+                ->save();
         }
 
         return $this;

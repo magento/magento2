@@ -78,7 +78,7 @@ class InvoiceTest extends TestCase
         $this->helperManager = new ObjectManager($this);
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getPayment', 'load', 'setHistoryEntityName', 'getStore', 'getBillingAddress',
                     'getShippingAddress', 'getConfig',
@@ -92,7 +92,7 @@ class InvoiceTest extends TestCase
         $this->paymentMock = $this->getMockBuilder(
             Payment::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['canVoid', 'canCapture', 'capture', 'pay', 'cancelInvoice']
             )->getMock();
 
@@ -152,7 +152,7 @@ class InvoiceTest extends TestCase
     /**
      * @return array
      */
-    public function canVoidDataProvider()
+    public static function canVoidDataProvider()
     {
         return [[true], [false]];
     }
@@ -249,7 +249,7 @@ class InvoiceTest extends TestCase
      *
      * @return array
      */
-    public function canCaptureDataProvider()
+    public static function canCaptureDataProvider()
     {
         return [
             [Invoice::STATE_OPEN, true, true],
@@ -277,7 +277,7 @@ class InvoiceTest extends TestCase
      *
      * @return array
      */
-    public function canCancelDataProvider()
+    public static function canCancelDataProvider()
     {
         return [
             [Invoice::STATE_OPEN, true],
@@ -306,7 +306,7 @@ class InvoiceTest extends TestCase
      *
      * @return array
      */
-    public function canRefundDataProvider()
+    public static function canRefundDataProvider()
     {
         return [
             [Invoice::STATE_OPEN, 0.00, 0.00, false],
@@ -396,7 +396,7 @@ class InvoiceTest extends TestCase
     /**
      * @return array
      */
-    public function payDataProvider()
+    public static function payDataProvider()
     {
         return [
             [10.99, 1.00, 10.99, 1.00, Invoice::STATE_PAID, ['item1']],
@@ -430,7 +430,7 @@ class InvoiceTest extends TestCase
     {
         $orderConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getStateDefaultStatus']
             )->getMock();
 
@@ -480,7 +480,7 @@ class InvoiceTest extends TestCase
     /**
      * @return array
      */
-    public function getNotOpenedInvoiceStatuses()
+    public static function getNotOpenedInvoiceStatuses()
     {
         return [
             [Invoice::STATE_PAID, Invoice::STATE_PAID],

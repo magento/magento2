@@ -93,7 +93,7 @@ class StoreGroupTest extends TestCase
     /**
      * @return array
      */
-    public function storeGroupWebsiteDataProvider(): array
+    public static function storeGroupWebsiteDataProvider(): array
     {
         return [['once', true], ['never', false]];
     }
@@ -101,7 +101,7 @@ class StoreGroupTest extends TestCase
     /**
      * @return array
      */
-    public function storeGroupDataProvider(): array
+    public static function storeGroupDataProvider(): array
     {
         return [['once', null], ['never', 1]];
     }

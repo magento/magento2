@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRegisteredUserPayPalExpressCheckoutMethodAndFlatRateTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Checkout User PayPalExpress Checkout With Payment Action Is Sale"/>
+            <title value="Checkout User PayPalExpress Checkout Method And Flat Rate"/>
+            <description value="Create Order User PayPalExpress Checkout With Payment Action Is Sale."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6147"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create Product -->
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <field key="price">10</field>
+            </createData>
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Admin Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Enabling PayPal Express Checkout -->
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+            <!-- Changing PayPal Express Checkout Basic Settings -->
+            <magentoCLI command="config:set {{StorefrontPaypalExpressSalePaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressSalePaymentActionOptionConfigData.value}}" stepKey="changePaymentAction"/>
+        </before>
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnProductPage">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <!-- Go to Checkout -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToCheckoutPage"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
+            <argument name="orderSummarySubTotal" value="$20.00"/>
+            <argument name="orderSummaryShippingTotal" value="$10.00"/>
+            <argument name="orderSummaryTotal" value="$30.00"/>
+        </actionGroup>
+        <!-- Select  Paypal paypal radio button-->
+        <actionGroup ref="AdminSelectPayPalExpressCheckoutPaymentActionGroup" stepKey="selectPayPalExpressCheckout"/>
+        <!-- Click on Paypal paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="LoginToPayPal"/>
+        <!--Verify Buyer shipping address -->
+        <waitForText selector="{{PayPalPaymentSection.shippingAddress}}" userInput="7700 West Parmer Lane, Austin, TX 78729" stepKey="assertShippingAddress"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <!-- See order successful Page instead of Order Review Page -->
+        <waitForElement selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForLoadSuccessPageTitle"/>
+        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="waitForLoadSuccessPage"/>
+        <!--Grab order number-->
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
+        <!--Go to admin sales page and open the order id-->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+                <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Assert the total-->
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$30.00" stepKey="checkGrandTotal"/>
+        <!--Grab the transaction id-->
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
+        <!--Open comment history tab and assert the comment-->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $30.00 online. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderStatus}}" userInput="Processing" stepKey="assertOrderStatusInCommentsHistorySection"/>
+        <!-- Open Invoice and check -->
+        <actionGroup ref="AdminOpenInvoiceFromOrderPageActionGroup" stepKey="openInvoiceFromOrder"/>
+        <after>
+            <!--Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--  Disable PayPal Express Checkout and Basic setting change -->
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="configPaypalExpressCheckoutDisable"/>
+            <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="paymentActionChangeToAuthorization"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <!--Delete customer -->
+            <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
+       </after>
+    </test>
+</tests>

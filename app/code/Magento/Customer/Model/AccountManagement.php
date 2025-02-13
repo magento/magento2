@@ -476,22 +476,22 @@ class AccountManagement implements AccountManagementInterface
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        CredentialsValidator $credentialsValidator = null,
-        DateTimeFactory $dateTimeFactory = null,
-        AccountConfirmation $accountConfirmation = null,
-        SessionManagerInterface $sessionManager = null,
-        SaveHandlerInterface $saveHandler = null,
-        CollectionFactory $visitorCollectionFactory = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        AddressRegistry $addressRegistry = null,
-        GetCustomerByToken $getByToken = null,
-        AllowedCountries $allowedCountriesReader = null,
-        SessionCleanerInterface $sessionCleaner = null,
-        AuthorizationInterface $authorization = null,
-        AuthenticationInterface $authentication = null,
-        Backend $eavValidator = null,
-        CustomerLogger $customerLogger = null,
-        Authenticate $authenticate = null
+        ?CredentialsValidator $credentialsValidator = null,
+        ?DateTimeFactory $dateTimeFactory = null,
+        ?AccountConfirmation $accountConfirmation = null,
+        ?SessionManagerInterface $sessionManager = null,
+        ?SaveHandlerInterface $saveHandler = null,
+        ?CollectionFactory $visitorCollectionFactory = null,
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?AddressRegistry $addressRegistry = null,
+        ?GetCustomerByToken $getByToken = null,
+        ?AllowedCountries $allowedCountriesReader = null,
+        ?SessionCleanerInterface $sessionCleaner = null,
+        ?AuthorizationInterface $authorization = null,
+        ?AuthenticationInterface $authentication = null,
+        ?Backend $eavValidator = null,
+        ?CustomerLogger $customerLogger = null,
+        ?Authenticate $authenticate = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -847,9 +847,14 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $customerEmail = $customer->getEmail();
+        if ($customerEmail === null) {
+            throw new LocalizedException(
+                __("The email address is required to create a customer account.")
+            );
+        }
         if ($password !== null) {
             $this->checkPasswordStrength($password);
-            $customerEmail = $customer->getEmail();
             try {
                 $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $password);
             } catch (InputException $e) {

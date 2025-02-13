@@ -58,9 +58,9 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
         RemoteServiceReader $communicationRemoteServiceReader,
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?\Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         $this->communicationConfig = $communicationConfig;
         $this->serviceMethodsMap = $serviceMethodsMap;

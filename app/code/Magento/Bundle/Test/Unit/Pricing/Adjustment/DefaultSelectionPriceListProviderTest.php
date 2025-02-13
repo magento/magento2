@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -189,7 +189,10 @@ class DefaultSelectionPriceListProviderTest extends TestCase
         $this->model->getPriceList($this->product, false, false);
     }
 
-    public function testGetPriceListForFixedPriceType(): void
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testGetPriceListForFixedPriceType($websiteId): void
     {
         $optionId = 1;
 
@@ -218,13 +221,19 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->willReturn($this->store);
         $this->store->expects($this->once())
             ->method('getWebsiteId')
-            ->willReturn(0);
-        $this->websiteRepository->expects($this->once())
-            ->method('getDefault')
-            ->willReturn($this->website);
-        $this->website->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+            ->willReturn($websiteId);
+
+        if ($websiteId) {
+            $this->websiteRepository->expects($this->never())
+                ->method('getDefault');
+        } else {
+            $this->websiteRepository->expects($this->once())
+                ->method('getDefault')
+                ->willReturn($this->website);
+            $this->website->expects($this->once())
+                ->method('getId')
+                ->willReturn(1);
+        }
         $this->selectionCollection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
@@ -270,5 +279,13 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->willReturn($this->optionsCollection);
 
         $this->model->getPriceList($this->product, true, false);
+    }
+
+    public static function dataProvider()
+    {
+        return [
+            'website provided' => [1],
+            'website not provided' => [0]
+        ];
     }
 }

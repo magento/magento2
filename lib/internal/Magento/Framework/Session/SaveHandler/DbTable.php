@@ -45,7 +45,7 @@ class DbTable extends \SessionHandler
      */
     public function __construct(
         ResourceConnection $resource,
-        EncryptorInterface $encryptor = null
+        ?EncryptorInterface $encryptor = null
     ) {
         $this->_sessionTable = $resource->getTableName('session');
         $this->connection = $resource->getConnection();

@@ -43,18 +43,18 @@ class AdminConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function annotationsProvider(): array
+    public static function annotationsProvider(): array
     {
         return [
             'simple_record' => [
-                'current_fixture' => 'section/group/field value',
+                'fixture' => 'section/group/field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
                 ],
             ],
             'simple_record_many_spaces' => [
-                'current_fixture' => '   section/group/field    value',
+                'fixture' => '   section/group/field    value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -78,11 +78,11 @@ class AdminConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function wrongRecordsProvider(): array
+    public static function wrongRecordsProvider(): array
     {
         return [
             'another_path_record' => [
-                'current_fixture' => 'section/group/another_field value',
+                'fixture' => 'section/group/another_field value',
                 'attributes' => [
                     'path' => 'section/group/field',
                     'value' => 'value',
@@ -109,7 +109,7 @@ class AdminConfigFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function initFixtureProvider(): array
+    public static function initFixtureProvider(): array
     {
         return [
             'with_value' => [
@@ -117,14 +117,14 @@ class AdminConfigFixtureTest extends TestCase
                     'path' => 'section/group/field',
                     'value' => 'value',
                 ],
-                'expected_value' => 'section/group/field value',
+                'expectedValue' => 'section/group/field value',
             ],
             'with_new_value' => [
                 'attributes' => [
                     'path' => 'section/group/field',
                     'newValue' => 'new_value',
                 ],
-                'expected_value' => 'section/group/field new_value',
+                'expectedValue' => 'section/group/field new_value',
             ],
         ];
     }

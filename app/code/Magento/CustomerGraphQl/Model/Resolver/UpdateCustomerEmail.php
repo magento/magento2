@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,8 +68,8 @@ class UpdateCustomerEmail implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
@@ -77,6 +77,7 @@ class UpdateCustomerEmail implements ResolverInterface
         }
 
         $customer = $this->getCustomer->execute($context);
+        $customer->setData('ignore_validation_flag', true);
         $this->updateCustomerAccount->execute(
             $customer,
             [
@@ -86,8 +87,6 @@ class UpdateCustomerEmail implements ResolverInterface
             $context->getExtensionAttributes()->getStore()
         );
 
-        $data = $this->extractCustomerData->execute($customer);
-
-        return ['customer' => $data];
+        return ['customer' => $this->extractCustomerData->execute($customer)];
     }
 }

@@ -166,7 +166,13 @@ class ViewTest extends TestCase
     {
         $this->_layoutProcessor
             ->method('addHandle')
-            ->withConsecutive(['default']);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'default') {
+                        return null;
+                    }
+                }
+            );
         $this->_requestMock->method('getFullActionName')->willReturn('action_name');
         // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->loadLayout();

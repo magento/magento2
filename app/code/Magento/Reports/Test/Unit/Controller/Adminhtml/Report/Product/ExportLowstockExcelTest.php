@@ -11,10 +11,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Controller\Adminhtml\Report\Product\ExportLowstockExcel;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ExportLowstockExcelTest extends AbstractControllerTest
+class ExportLowstockExcelTest extends AbstractControllerTestCase
 {
     /**
      * @var ExportLowstockExcel

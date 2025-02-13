@@ -83,7 +83,8 @@ class SearchTest extends TestCase
         $block = $this->getMockBuilder(
             \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search::class
         )->disableOriginalConstructor()
-            ->setMethods(['setIndex', 'setFirstShow', 'toHtml'])
+            ->addMethods(['setIndex', 'setFirstShow'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
 
         $this->response->expects($this->once())->method('setBody')->willReturnSelf();

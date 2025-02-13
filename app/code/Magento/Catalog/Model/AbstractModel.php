@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -9,6 +9,8 @@ use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Abstract model for catalog entities
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -34,15 +36,11 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     protected $_storeValuesFlags;
 
     /**
-     * Locked attributes
-     *
      * @var array
      */
     protected $_lockedAttributes = [];
 
     /**
-     * Is model deleteable
-     *
      * @var boolean
      */
     protected $_isDeleteable = true;
@@ -55,8 +53,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     protected $_isReadonly = false;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -82,8 +78,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -224,6 +220,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @return \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
      * @deprecated 102.0.0 because collections should be used directly via factory
+     * @see Updated deprecation doc annotations
      */
     public function getResourceCollection()
     {
@@ -287,6 +284,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return $this
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     public function setAttributeDefaultValue($attributeCode, $value)
     {
@@ -300,6 +298,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return \Magento\Catalog\Model\Attribute\ScopeOverriddenValue
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     private function getAttributeScopeOverriddenValue()
     {
@@ -313,10 +312,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Retrieve default value for attribute code
      *
-     * @param   string $attributeCode
-     * @return  array|boolean
-     *
+     * @param string $attributeCode
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
+     * @return array|bool
      */
     public function getAttributeDefaultValue($attributeCode)
     {
@@ -338,6 +337,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      * @return $this
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     public function setExistsStoreValueFlag($attributeCode)
     {
@@ -348,11 +348,11 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     /**
      * Check if object attribute has value in current store
      *
-     * @param   string $attributeCode
-     * @return  bool
+     * @param string $attributeCode
+     * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     public function getExistsStoreValueFlag($attributeCode)
     {

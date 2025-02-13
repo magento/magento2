@@ -15,7 +15,7 @@
     <text args="getCountryName(address().countryId)"></text><br>
     <a if="address().telephone" attr="'href': 'tel:' + address().telephone" text="address().telephone"></a><br>
     <if args="address().vatId">
-        VAT: <text args="address().vatId"></text><br>
+        <translate args="'VAT'"></translate>: <text args="address().vatId"></text><br>
     </if>
     <each args="data: address().customAttributes, as: 'element'">
         <text args="$parent.getCustomAttributeLabel(element)"></text>

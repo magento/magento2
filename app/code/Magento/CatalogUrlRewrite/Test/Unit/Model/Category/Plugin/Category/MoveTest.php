@@ -117,11 +117,11 @@ class MoveTest extends TestCase
         $storeIds = [0, 1];
 
         $this->storeManagerMock->expects($this->exactly(2))->method('hasSingleStore')->willReturn(false);
-        $this->categoryMock->expects($this->exactly(4))->method('getStoreId')
-            ->willReturnOnConsecutiveCalls(0, 0, 1, 0);
+        $this->categoryMock->expects($this->exactly(6))->method('getStoreId')
+            ->willReturnOnConsecutiveCalls(0, 0, 1, 0, 1, 0);
         $this->categoryMock->expects($this->once())->method('getStoreIds')->willReturn($storeIds);
-        $this->categoryMock->expects($this->exactly(4))->method('setStoreId')
-            ->willReturnOnConsecutiveCalls(0, 0, 1, 0);
+        $this->categoryMock->expects($this->exactly(5))->method('setStoreId')
+            ->willReturnOnConsecutiveCalls(0, 0, 1, 0, 1);
 
         $this->categoryMock->expects($this->exactly(2))->method('getData')
             ->willReturnOnConsecutiveCalls('1/3/5', '1/3/5');
@@ -146,9 +146,9 @@ class MoveTest extends TestCase
         $this->categoryMock->expects($this->exactly(2))->method('setUrlKey')->with('url-key')
             ->willReturnSelf();
 
-        $this->categoryUrlPathGeneratorMock->expects($this->exactly(3))->method('getUrlPath')
+        $this->categoryUrlPathGeneratorMock->expects($this->exactly(4))->method('getUrlPath')
             ->with($this->categoryMock)->willReturn($urlPath);
-        $this->categoryMock->expects($this->exactly(3))->method('setUrlPath')->with($urlPath);
+        $this->categoryMock->expects($this->exactly(4))->method('setUrlPath')->with($urlPath);
 
         $this->assertSame(
             $this->subjectMock,

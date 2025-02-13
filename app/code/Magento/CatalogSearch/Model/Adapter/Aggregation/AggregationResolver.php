@@ -64,8 +64,8 @@ class AggregationResolver implements AggregationResolverInterface
         ProductAttributeRepositoryInterface $productAttributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Config $config,
-        AttributeCollection $attributeCollection = null,
-        RequestCheckerInterface $aggregationChecker = null
+        ?AttributeCollection $attributeCollection = null,
+        ?RequestCheckerInterface $aggregationChecker = null
     ) {
         $this->attributeSetFinder = $attributeSetFinder;
         $this->productAttributeRepository = $productAttributeRepository;

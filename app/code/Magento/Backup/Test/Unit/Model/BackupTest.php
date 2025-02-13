@@ -114,7 +114,7 @@ class BackupTest extends TestCase
     /**
      * @return array
      */
-    public function outputDataProvider()
+    public static function outputDataProvider()
     {
         return [
             ['isFile' => true, 'result' => 'test_result'],

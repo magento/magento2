@@ -54,7 +54,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
         \Magento\Ui\Model\ResourceModel\Bookmark $bookmarkResourceModel,
         \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
 
         $this->bookmarkResourceModel = $bookmarkResourceModel;

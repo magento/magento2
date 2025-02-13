@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Captcha\Cron;
 
+use Magento\Captcha\Cron\Magento\Framework\Filesystem\Io\File;
+use Magento\Captcha\Helper\Data;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Store\Model\StoreManager;
 
 /**
  * Captcha cron actions
@@ -36,21 +40,29 @@ class DeleteExpiredImages
     protected $_storeManager;
 
     /**
-     * @param \Magento\Captcha\Helper\Data $helper
+     * @var \Magento\Framework\Filesystem\Io\File
+     */
+    protected $_fileInfo;
+
+    /**
+     * @param Data $helper
      * @param \Magento\Captcha\Helper\Adminhtml\Data $adminHelper
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Store\Model\StoreManager $storeManager
+     * @param Filesystem $filesystem
+     * @param StoreManager $storeManager
+     * @param File $fileInfo
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Captcha\Helper\Adminhtml\Data $adminHelper,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManager $storeManager
+        \Magento\Store\Model\StoreManager $storeManager,
+        \Magento\Framework\Filesystem\Io\File $fileInfo
     ) {
         $this->_helper = $helper;
         $this->_adminHelper = $adminHelper;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA, DriverPool::FILE);
         $this->_storeManager = $storeManager;
+        $this->_fileInfo = $fileInfo;
     }
 
     /**
@@ -78,14 +90,14 @@ class DeleteExpiredImages
      */
     protected function _deleteExpiredImagesForWebsite(
         \Magento\Captcha\Helper\Data $helper,
-        \Magento\Store\Model\Website $website = null,
-        \Magento\Store\Model\Store $store = null
+        ?\Magento\Store\Model\Website $website = null,
+        ?\Magento\Store\Model\Store $store = null
     ) {
         $expire = time() - $helper->getConfig('timeout', $store) * 60;
         $imageDirectory = $this->_mediaDirectory->getRelativePath($helper->getImgDir($website));
         foreach ($this->_mediaDirectory->read($imageDirectory) as $filePath) {
             if ($this->_mediaDirectory->isFile($filePath)
-                && pathinfo($filePath, PATHINFO_EXTENSION) == 'png'
+                && $this->_fileInfo->getPathInfo($filePath, PATHINFO_EXTENSION) == 'png'
                 && $this->_mediaDirectory->stat($filePath)['mtime'] < $expire
             ) {
                 $this->_mediaDirectory->delete($filePath);

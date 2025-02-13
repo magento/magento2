@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\AwsS3\Driver\AwsS3;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
@@ -54,6 +55,11 @@ class Product extends AbstractEntity
 {
     private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
+
+    /**
+     * Filter chain const
+     */
+    private const FILTER_CHAIN = "php://filter";
 
     /**
      * Size of bunch - part of products to save in one step.
@@ -174,6 +180,8 @@ class Product extends AbstractEntity
      * Url key attribute code
      */
     public const URL_KEY = 'url_key';
+
+    private const ERROR_DUPLICATE_URL_KEY_BY_CATEGORY = 'duplicatedUrlKeyByCategory';
 
     /**
      * @var array
@@ -310,6 +318,7 @@ class Product extends AbstractEntity
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image: %s) at row %s could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
+        self::ERROR_DUPLICATE_URL_KEY_BY_CATEGORY => 'Url key: \'%s\' was already generated for a %s with the ID: %s. You need to specify the unique URL key manually',
         ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
         'invalidNewToDateValue' => 'Make sure new_to_date is later than or the same as new_from_date',
         // Can't add new translated strings in patch release
@@ -775,6 +784,11 @@ class Product extends AbstractEntity
     private ?SkuStorage $skuStorage;
 
     /**
+     * @var File|null
+     */
+    private ?File $fileDriver;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -870,15 +884,15 @@ class Product extends AbstractEntity
         \Magento\Catalog\Model\Product\Url $productUrl,
         array $data = [],
         array $dateAttrCodes = [],
-        CatalogConfig $catalogConfig = null,
-        ImageTypeProcessor $imageTypeProcessor = null,
-        MediaGalleryProcessor $mediaProcessor = null,
-        StockItemImporterInterface $stockItemImporter = null,
-        DateTimeFactory $dateTimeFactory = null,
-        ProductRepositoryInterface $productRepository = null,
-        StatusProcessor $statusProcessor = null,
-        StockProcessor $stockProcessor = null,
-        LinkProcessor $linkProcessor = null,
+        ?CatalogConfig $catalogConfig = null,
+        ?ImageTypeProcessor $imageTypeProcessor = null,
+        ?MediaGalleryProcessor $mediaProcessor = null,
+        ?StockItemImporterInterface $stockItemImporter = null,
+        ?DateTimeFactory $dateTimeFactory = null,
+        ?ProductRepositoryInterface $productRepository = null,
+        ?StatusProcessor $statusProcessor = null,
+        ?StockProcessor $stockProcessor = null,
+        ?LinkProcessor $linkProcessor = null,
         ?File $fileDriver = null,
         ?StockItemProcessorInterface $stockItemProcessor = null,
         ?SkuStorage $skuStorage = null
@@ -922,7 +936,7 @@ class Product extends AbstractEntity
         $this->stockProcessor = $stockProcessor ?: ObjectManager::getInstance()
             ->get(StockProcessor::class);
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
-                ->get(LinkProcessor::class);
+            ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
         $this->hashAlgorithm = (version_compare(PHP_VERSION, '8.1.0') >= 0) ? 'xxh128' : 'crc32c';
         parent::__construct(
@@ -938,7 +952,7 @@ class Product extends AbstractEntity
         $this->_optionEntity = $data['option_entity'] ??
             $optionFactory->create(['data' => ['product_entity' => $this]]);
         $this->skuStorage = $skuStorage ?? ObjectManager::getInstance()
-                ->get(SkuStorage::class);
+            ->get(SkuStorage::class);
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
@@ -946,9 +960,11 @@ class Product extends AbstractEntity
         $this->validator->init($this);
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
-                ->get(ProductRepositoryInterface::class);
+            ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
-                ->get(StockItemProcessorInterface::class);
+            ->get(StockItemProcessorInterface::class);
+        $this->fileDriver = $fileDriver ?? ObjectManager::getInstance()
+            ->get(File::class);
     }
 
     /**
@@ -2054,18 +2070,26 @@ class Product extends AbstractEntity
             $backModel = $attribute->getBackendModel();
             $attrTable = $attribute->getBackend()->getTable();
             $storeIds = [0];
-            if ('datetime' == $attribute->getBackendType()
-                && (
-                    in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
-                    || $attribute->getIsUserDefined()
-                )
-            ) {
-                $attrValue = $this->dateTime->formatDate($attrValue, false);
-            } elseif ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                $attrValue = gmdate(
-                    'Y-m-d H:i:s',
-                    $this->_localeDate->date($attrValue)->getTimestamp()
-                );
+            if ('datetime' == $attribute->getBackendType()) {
+                $attrValue = trim((string) $attrValue);
+                if (!empty($attrValue)) {
+                    $timezone = new \DateTimeZone($this->_localeDate->getConfigTimezone());
+                    // Parse date from format Y-m-d[ H:i:s]
+                    $date = date_create_from_format(DateTime::DATETIME_PHP_FORMAT, $attrValue, $timezone)
+                        ?: date_create_from_format(DateTime::DATE_PHP_FORMAT, $attrValue, $timezone);
+                    // Perhaps, date is formatted according to user locale. For example, dates in exported csv file
+                    $date = $date ?: $this->_localeDate->date($attrValue);
+                    if ($attribute->getFrontendInput() === 'date'
+                        || in_array($attribute->getAttributeCode(), $this->dateAttrCodes)
+                    ) {
+                        $date->setTime(0, 0);
+                    } else {
+                        $date->setTimezone(new \DateTimeZone($this->_localeDate->getDefaultTimezone()));
+                    }
+                    $attrValue = $date->format(DateTime::DATETIME_PHP_FORMAT);
+                } else {
+                    $attrValue = null;
+                }
             } elseif ($backModel) {
                 $attribute->getBackend()->beforeSave($product);
                 $attrValue = $product->getData($attribute->getAttributeCode());
@@ -2117,7 +2141,10 @@ class Product extends AbstractEntity
     {
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $content = file_get_contents($filename);
+            if (stripos($filename, self::FILTER_CHAIN) !== false) {
+                return '';
+            }
+            $content = $this->fileDriver->fileGetContents($filename);
         } catch (\Exception $e) {
             $content = false;
         }
@@ -2308,6 +2335,14 @@ class Product extends AbstractEntity
             $fileUploader->init();
 
             $tmpPath = $this->getImportDir();
+
+            if (is_a($this->_mediaDirectory->getDriver(), AwsS3::class)) {
+                if (!$this->_mediaDirectory->create($tmpPath)) {
+                    throw new LocalizedException(
+                        __('Directory \'%1\' could not be created.', $tmpPath)
+                    );
+                }
+            }
 
             if (!$fileUploader->setTmpDir($tmpPath)) {
                 throw new LocalizedException(
@@ -3085,7 +3120,7 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Check that url_keys are not assigned to other products in DB
+     * Check that url_keys are not already assigned to others entities in DB
      *
      * @return void
      * @since 100.0.3
@@ -3097,7 +3132,11 @@ class Product extends AbstractEntity
             $urlKeyDuplicates = $this->_connection->fetchAssoc(
                 $this->_connection->select()->from(
                     ['url_rewrite' => $resource->getTable('url_rewrite')],
-                    ['request_path', 'store_id']
+                    [
+                        'request_path',
+                        'store_id',
+                        'entity_type'
+                    ]
                 )->joinLeft(
                     ['cpe' => $resource->getTable('catalog_product_entity')],
                     "cpe.entity_id = url_rewrite.entity_id"
@@ -3105,13 +3144,24 @@ class Product extends AbstractEntity
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
+
             foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
-                $message = sprintf(
-                    $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
-                    $entityData['request_path'],
-                    $entityData['sku']
-                );
+                if ($entityData['entity_type'] === 'category') {
+                    $message = sprintf(
+                        $this->retrieveMessageTemplate(self::ERROR_DUPLICATE_URL_KEY_BY_CATEGORY),
+                        $entityData['request_path'],
+                        $entityData['entity_type'],
+                        $entityData['entity_id'],
+                    );
+                } else {
+                    $message = sprintf(
+                        $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
+                        $entityData['request_path'],
+                        $entityData['sku']
+                    );
+                }
+
                 $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum, 'url_key', $message);
             }
         }

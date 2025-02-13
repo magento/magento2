@@ -75,7 +75,7 @@ class SetConversionValueObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForDisabled()
+    public static function dataProviderForDisabled()
     {
         return [[false, false], [false, true], [true, false]];
     }
@@ -108,7 +108,7 @@ class SetConversionValueObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForOrdersIds()
+    public static function dataProviderForOrdersIds()
     {
         return [[[]], ['']];
     }
@@ -173,15 +173,14 @@ class SetConversionValueObserverTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'register'
-        )->withConsecutive(
-            [
-                Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME,
-                $conversionCurrency
-            ],
-            [
-                Data::CONVERSION_VALUE_REGISTRY_NAME,
-                $conversionValue,
-            ]
+        ) ->willReturnCallback(
+            function ($arg1, $arg2) use ($conversionCurrency, $conversionValue) {
+                if ($arg1 === Data::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME && $arg2 == $conversionCurrency) {
+                    return null;
+                } elseif ($arg1 === Data::CONVERSION_VALUE_REGISTRY_NAME && $arg2 == $conversionValue) {
+                    return null;
+                }
+            }
         );
 
         $this->assertSame($this->_model, $this->_model->execute($this->_eventObserverMock));

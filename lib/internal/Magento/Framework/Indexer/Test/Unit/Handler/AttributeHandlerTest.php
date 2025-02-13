@@ -35,7 +35,7 @@ class AttributeHandlerTest extends TestCase
     {
         $this->source = $this->getMockBuilder(SourceProviderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['joinAttribute'])
+            ->addMethods(['joinAttribute'])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);

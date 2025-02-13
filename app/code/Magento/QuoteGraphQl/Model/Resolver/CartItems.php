@@ -13,7 +13,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\QuoteGraphQl\Model\CartItem\GetItemsData;
 
 /**
  * @inheritdoc
@@ -22,46 +24,26 @@ class CartItems implements ResolverInterface
 {
     /**
      * @param Uid $uidEncoder
+     * @param GetItemsData $getItemsData
      */
     public function __construct(
         private readonly Uid $uidEncoder,
+        private readonly GetItemsData $getItemsData
     ) {
     }
 
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
+        /** @var CartInterface $cart */
         $cart = $value['model'];
-
-        $itemsData = [];
         $cartItems = $cart->getAllVisibleItems();
 
-        /** @var QuoteItem $cartItem */
-        foreach ($cartItems as $cartItem) {
-            $product = $cartItem->getProduct();
-            if ($product === null) {
-                $itemsData[] = new GraphQlNoSuchEntityException(
-                    __("The product that was requested doesn't exist. Verify the product and try again.")
-                );
-                continue;
-            }
-            $productData = $product->getData();
-            $productData['model'] = $product;
-            $productData['uid'] = $this->uidEncoder->encode((string) $product->getId());
-
-            $itemsData[] = [
-                'id' => $cartItem->getItemId(),
-                'uid' => $this->uidEncoder->encode((string) $cartItem->getItemId()),
-                'quantity' => $cartItem->getQty(),
-                'product' => $productData,
-                'model' => $cartItem,
-            ];
-        }
-        return $itemsData;
+        return $this->getItemsData->execute($cartItems);
     }
 }

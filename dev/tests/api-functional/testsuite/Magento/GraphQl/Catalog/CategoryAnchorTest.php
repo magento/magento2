@@ -90,13 +90,13 @@ class CategoryAnchorTest extends GraphQlAbstract
      *
      * @return array[][]
      */
-    public function categoryAnchorDataProvider(): array
+    public static function categoryAnchorDataProvider(): array
     {
         return [
             [
-                'query' => $this->getQuery(22),
-                'store' => 'default',
-                'data' => [
+                'query' => self::getQuery(22),
+                'storeCode' => 'default',
+                'category' => [
                     'category' => [
                         'id' => 22,
                         'name' => 'Category_Anchor',
@@ -112,9 +112,9 @@ class CategoryAnchorTest extends GraphQlAbstract
                 ],
             ],
             [
-                'query' => $this->getQuery(11),
-                'store' => 'default',
-                'data' => [
+                'query' => self::getQuery(11),
+                'storeCode' => 'default',
+                'category' => [
                     'category' => [
                         'id' => 11,
                         'name' => 'Category_Default',
@@ -137,7 +137,7 @@ class CategoryAnchorTest extends GraphQlAbstract
      * @param int $categoryId
      * @return string
      */
-    private function getQuery(int $categoryId): string
+    private static function getQuery(int $categoryId): string
     {
         return <<<QUERY
 {

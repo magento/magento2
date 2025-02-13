@@ -51,8 +51,8 @@ class Provider implements ProviderInterface
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $configReader,
         TreeBuilder $resourceTreeBuilder,
-        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
-        Json $serializer = null,
+        ?\Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
+        ?Json $serializer = null,
         $cacheKey = self::ACL_RESOURCES_CACHE_KEY
     ) {
         $this->_configReader = $configReader;

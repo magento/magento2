@@ -276,7 +276,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
         \Magento\DownloadableImportExport\Helper\Data $downloadableHelper,
         DomainValidator $domainValidator,
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
         $this->parameters = $this->_entityModel->getParameters();

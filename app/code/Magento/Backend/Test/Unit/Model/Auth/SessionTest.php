@@ -11,6 +11,7 @@ use Magento\Backend\App\Config;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Acl;
 use Magento\Framework\Acl\Builder;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
@@ -96,6 +97,13 @@ class SessionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->session = $objectManager->getObject(
             Session::class,
             [
@@ -127,7 +135,8 @@ class SessionTest extends TestCase
             ->getMock();
         $this->aclBuilder->expects($this->any())->method('getAcl')->willReturn($aclMock);
         $userMock = $this->getMockBuilder(User::class)
-            ->setMethods(['getReloadAclFlag', 'setReloadAclFlag', 'unsetData', 'save'])
+            ->addMethods(['getReloadAclFlag', 'setReloadAclFlag'])
+            ->onlyMethods(['unsetData', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(true);
@@ -145,7 +154,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function refreshAclDataProvider()
+    public static function refreshAclDataProvider()
     {
         return [
             'User set via params' => [true],
@@ -269,7 +278,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public static function isAllowedDataProvider()
     {
         return [
             "Negative: User not defined" => [false, true, true, false],
@@ -292,7 +301,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function firstPageAfterLoginDataProvider()
+    public static function firstPageAfterLoginDataProvider()
     {
         return [
             'First page after login' => [true],

@@ -131,10 +131,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         AttributeValueFactory $attributeValueFactory,
         CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
         MethodsMap $methodsMap,
-        ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
-        ConfigInterface $config = null,
+        ?ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
+        ?ConfigInterface $config = null,
         array $customAttributePreprocessors = [],
-        ServiceInputValidatorInterface $serviceInputValidator = null,
+        ?ServiceInputValidatorInterface $serviceInputValidator = null,
         int $defaultPageSize = 20,
         ?DefaultPageSizeSetter $defaultPageSizeSetter = null
     ) {
@@ -278,6 +278,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         // convert to string directly to avoid situations when $className is object
         // which implements __toString method like \ReflectionObject
         $className = (string) $className;
+        if (is_subclass_of($className, \SimpleXMLElement::class)
+            || is_subclass_of($className, \DOMElement::class)) {
+            throw new SerializationException(
+                new Phrase('Invalid data type')
+            );
+        }
         $class = new ClassReflection($className);
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));

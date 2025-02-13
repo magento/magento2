@@ -100,17 +100,17 @@ class UploaderTest extends TestCase
 
         $this->readFactory = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->directoryMock = $this->getMockBuilder(Write::class)
-            ->setMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
+            ->onlyMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDirectoryWrite'])
+            ->onlyMethods(['getDirectoryWrite'])
             ->getMock();
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
@@ -118,12 +118,12 @@ class UploaderTest extends TestCase
 
         $this->random = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRandomString'])
+            ->onlyMethods(['getRandomString'])
             ->getMock();
 
         $this->targetDirectory = $this->getMockBuilder(TargetDirectory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDirectoryWrite', 'getDirectoryRead'])
+            ->onlyMethods(['getDirectoryWrite', 'getDirectoryRead'])
             ->getMock();
         $this->targetDirectory->method('getDirectoryWrite')->willReturn($this->directoryMock);
         $this->targetDirectory->method('getDirectoryRead')->willReturn($this->directoryMock);
@@ -142,7 +142,7 @@ class UploaderTest extends TestCase
                     $this->targetDirectory
                 ]
             )
-            ->setMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
+            ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
             ->getMock();
     }
 
@@ -176,7 +176,7 @@ class UploaderTest extends TestCase
         // Create adjusted reader which does not validate path.
         $readMock = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
-            ->setMethods(['readAll'])
+            ->onlyMethods(['readAll'])
             ->getMock();
 
         // Expected invocations to create reader and read contents from url
@@ -194,8 +194,11 @@ class UploaderTest extends TestCase
         // and move the temp file to the destination directory
         $this->directoryMock->expects($this->exactly(2))
             ->method('isWritable')
-            ->withConsecutive([$destDir], [$tmpDir])
-            ->willReturn(true);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$destDir] => true,
+                [$tmpDir] => true
+            });
+
         $this->directoryMock->expects($this->once())->method('getAbsolutePath')
             ->with($destDir)
             ->willReturn($destDir . '/' . $expectedFileName);
@@ -298,7 +301,7 @@ class UploaderTest extends TestCase
                     $driverPool,
                 ]
             )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $readFactory->method('create')
@@ -329,20 +332,20 @@ class UploaderTest extends TestCase
     /**
      * @return array
      */
-    public function moveFileUrlDriverPoolDataProvider()
+    public static function moveFileUrlDriverPoolDataProvider()
     {
         return [
             [
-                '$fileUrl'              => 'http://test_uploader_file',
-                '$expectedHost'         => 'test_uploader_file',
-                '$expectedDriverPool'   => Http::class,
-                '$expectedScheme'       => DriverPool::HTTP,
+                'fileUrl'              => 'http://test_uploader_file',
+                'expectedHost'         => 'test_uploader_file',
+                'expectedDriverPool'   => Http::class,
+                'expectedScheme'       => DriverPool::HTTP,
             ],
             [
-                '$fileUrl'              => 'https://!:^&`;file',
-                '$expectedHost'         => '!:^&`;file',
-                '$expectedDriverPool'   => Https::class,
-                '$expectedScheme'       => DriverPool::HTTPS,
+                'fileUrl'              => 'https://!:^&`;file',
+                'expectedHost'         => '!:^&`;file',
+                'expectedDriverPool'   => Https::class,
+                'expectedScheme'       => DriverPool::HTTPS,
             ],
         ];
     }
@@ -350,68 +353,68 @@ class UploaderTest extends TestCase
     /**
      * @return array
      */
-    public function moveFileUrlDataProvider()
+    public static function moveFileUrlDataProvider()
     {
         return [
             'https_no_file_ext' => [
-                '$fileUrl' => 'https://test_uploader_file',
-                '$expectedHost' => 'test_uploader_file',
-                '$expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
-                '$checkAllowedExtension' => 0
+                'fileUrl' => 'https://test_uploader_file',
+                'expectedHost' => 'test_uploader_file',
+                'expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
+                'checkAllowedExtension' => 0
             ],
             'https_invalid_chars' => [
-                '$fileUrl' => 'https://www.google.com/!:^&`;image.jpg',
-                '$expectedHost' => 'www.google.com/!:^&`;image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/!:^&`;image.jpg',
+                'expectedHost' => 'www.google.com/!:^&`;image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_invalid_chars_no_file_ext' => [
-                '$fileUrl' => 'https://!:^&`;image',
-                '$expectedHost' => '!:^&`;image',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj',
-                '$checkAllowedExtension' => 0
+                'fileUrl' => 'https://!:^&`;image',
+                'expectedHost' => '!:^&`;image',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj',
+                'checkAllowedExtension' => 0
             ],
             'http_jpg' => [
-                '$fileUrl' => 'http://www.google.com/image.jpg',
-                '$expectedHost' => 'www.google.com/image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'http://www.google.com/image.jpg',
+                'expectedHost' => 'www.google.com/image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_jpg' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg',
-                '$expectedHost' => 'www.google.com/image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg',
+                'expectedHost' => 'www.google.com/image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_jpeg' => [
-                '$fileUrl' => 'https://www.google.com/image.jpeg',
-                '$expectedHost' => 'www.google.com/image.jpeg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpeg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpeg',
+                'expectedHost' => 'www.google.com/image.jpeg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpeg',
+                'checkAllowedExtension' => 1
             ],
             'https_png' => [
-                '$fileUrl' => 'https://www.google.com/image.png',
-                '$expectedHost' => 'www.google.com/image.png',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.png',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.png',
+                'expectedHost' => 'www.google.com/image.png',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.png',
+                'checkAllowedExtension' => 1
             ],
             'https_gif' => [
-                '$fileUrl' => 'https://www.google.com/image.gif',
-                '$expectedHost' => 'www.google.com/image.gif',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.gif',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.gif',
+                'expectedHost' => 'www.google.com/image.gif',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.gif',
+                'checkAllowedExtension' => 1
             ],
             'https_one_query_param' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg?param=1',
-                '$expectedHost' => 'www.google.com/image.jpg?param=1',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg?param=1',
+                'expectedHost' => 'www.google.com/image.jpg?param=1',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_two_query_params' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
-                '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
+                'expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ]
         ];
     }

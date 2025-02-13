@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -124,7 +115,7 @@ class GetAssetsByPathsTest extends TestCase
         $this->getAssetsByPaths->execute([$asset['path']]);
     }
 
-    private function getAssets(): array
+    private static function getAssets(): array
     {
         return [
             [
@@ -185,11 +176,11 @@ class GetAssetsByPathsTest extends TestCase
             ]
         ];
     }
-    public function assetDeleteByPathDataProvider(): array
+    public static function assetDeleteByPathDataProvider(): array
     {
         return [
             [
-                'assets' => $this->getAssets(),
+                'assets' => self::getAssets(),
                 'assetIndex' => 0,
                 'resultsCount' => 1
             ],

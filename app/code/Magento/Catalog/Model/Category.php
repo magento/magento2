@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -252,8 +252,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         UrlFinderInterface $urlFinder,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -1484,7 +1484,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterface[] $childrenData
      * @return $this
      */
-    public function setChildrenData(array $childrenData = null)
+    public function setChildrenData(?array $childrenData = null)
     {
         return $this->setData(self::KEY_CHILDREN_DATA, $childrenData);
     }

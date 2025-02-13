@@ -176,17 +176,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $requestBuilder = null,
         $searchEngine = null,
         $temporaryStorageFactory = null,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        SearchResultFactory $searchResultFactory = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?SearchResultFactory $searchResultFactory = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?MetadataPool $metadataPool = null,
         $searchRequestName = 'advanced_search_container',
-        SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
-        SearchResultApplierFactory $searchResultApplierFactory = null,
-        TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
-        EngineResolverInterface $engineResolver = null,
-        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null,
-        Advanced $advancedSearchResource = null
+        ?SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
+        ?SearchResultApplierFactory $searchResultApplierFactory = null,
+        ?TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
+        ?EngineResolverInterface $engineResolver = null,
+        ?DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null,
+        ?Advanced $advancedSearchResource = null
     ) {
         $this->searchRequestName = $searchRequestName;
         $this->searchResultFactory = $searchResultFactory ?: ObjectManager::getInstance()

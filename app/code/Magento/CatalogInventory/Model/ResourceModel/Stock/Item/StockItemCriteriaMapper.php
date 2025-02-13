@@ -47,7 +47,7 @@ class StockItemCriteriaMapper extends GenericMapper
         ObjectFactory $objectFactory,
         MapperFactory $mapperFactory,
         StoreManagerInterface $storeManager,
-        Select $select = null
+        ?Select $select = null
     ) {
         $this->storeManager = $storeManager;
         parent::__construct($logger, $fetchStrategy, $objectFactory, $mapperFactory, $select);

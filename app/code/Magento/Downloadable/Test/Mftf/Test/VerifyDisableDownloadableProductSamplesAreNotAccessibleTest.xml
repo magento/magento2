@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -19,6 +19,8 @@
             <useCaseId value="MC-14824"/>
             <group value="downloadable"/>
             <group value="catalog"/>
+            <!-- Will be fixed in the scope of ACQE-7464 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Add downloadable domains -->

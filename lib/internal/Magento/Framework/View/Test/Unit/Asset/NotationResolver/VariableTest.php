@@ -68,7 +68,7 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function convertVariableNotationDataProvider()
+    public static function convertVariableNotationDataProvider()
     {
         return [
             ['{{base_url_path}}/file.ext', '{{base_url_path}}frontend/Magento/blank/{{locale}}/file.ext'],

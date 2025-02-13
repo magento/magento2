@@ -54,8 +54,8 @@ class PostDataProcessor
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Model\Layout\Update\ValidatorFactory $validatorFactory,
-        DomValidationState $validationState = null,
-        CustomLayoutValidator $customLayoutValidator = null
+        ?DomValidationState $validationState = null,
+        ?CustomLayoutValidator $customLayoutValidator = null
     ) {
         $this->dateFilter = $dateFilter;
         $this->messageManager = $messageManager;

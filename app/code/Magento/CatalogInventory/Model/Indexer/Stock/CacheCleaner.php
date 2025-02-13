@@ -64,7 +64,7 @@ class CacheCleaner
         StockConfigurationInterface $stockConfiguration,
         CacheContext $cacheContext,
         ManagerInterface $eventManager,
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         $this->resource = $resource;
         $this->stockConfiguration = $stockConfiguration;

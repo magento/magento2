@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 declare(strict_types=1);
 
@@ -44,9 +33,10 @@ class GuestOrderTest extends GraphQlAbstract
   guestOrder(input: {
       number: "%number",
       email: "%email",
-      postcode: "%postcode"
+      lastname: "%lastname"
   }) {
     number
+    email
     billing_address {
       firstname
       lastname
@@ -75,7 +65,7 @@ QUERY;
             [
                 '%number' => $order->getIncrementId(),
                 '%email' => $order->getBillingAddress()->getEmail(),
-                '%postcode' => $order->getBillingAddress()->getPostcode(),
+                '%lastname' => $order->getBillingAddress()->getLastname(),
             ]
         );
         $response = $this->graphQlQuery($query);
@@ -83,6 +73,7 @@ QUERY;
             [
                 'guestOrder' => [
                     'number' => $order->getIncrementId(),
+                    'email' => $order->getBillingAddress()->getEmail(),
                     'billing_address' => [
                         'firstname' => $order->getBillingAddress()->getFirstname(),
                         'lastname' => $order->getBillingAddress()->getLastname()
@@ -115,7 +106,7 @@ QUERY;
             [
                 '%number' => $order->getIncrementId(),
                 '%email' => $order->getBillingAddress()->getEmail(),
-                '%postcode' => $order->getBillingAddress()->getPostcode(),
+                '%lastname' => $order->getBillingAddress()->getLastname(),
             ]
         );
         $this->graphQlQuery($query);
@@ -142,7 +133,7 @@ QUERY;
             [
                 '%number' => $order->getIncrementId(),
                 '%email' => 'incorrect' . $order->getBillingAddress()->getEmail(),
-                '%postcode' => $order->getBillingAddress()->getPostcode(),
+                '%lastname' => $order->getBillingAddress()->getLastname(),
             ]
         );
         $this->graphQlQuery($query);

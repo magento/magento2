@@ -116,21 +116,23 @@ class DataProviderTest extends TestCase
     private function setUpMockObjects()
     {
         $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->range = $this->getMockBuilder(Range::class)
-            ->setMethods(['getPriceRange'])
+            ->onlyMethods(['getPriceRange'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->intervalFactory = $this->getMockBuilder(IntervalFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->clientConfig = $this->getMockBuilder(Config::class)
-            ->setMethods([
-                'getIndexName',
-                'getEntityType',
+            ->addMethods([
+                'getIndexName'
+            ])
+            ->onlyMethods([
+                'getEntityType'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -138,11 +140,11 @@ class DataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->customerSession = $this->getMockBuilder(Session::class)
-            ->setMethods(['getCustomerGroupId'])
+            ->onlyMethods(['getCustomerGroupId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->entityStorage = $this->getMockBuilder(EntityStorage::class)
-            ->setMethods(['getSource'])
+            ->onlyMethods(['getSource'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->entityStorage->expects($this->any())
@@ -170,7 +172,8 @@ class DataProviderTest extends TestCase
             ->method('getEntityType')
             ->willReturn('product');
         $this->clientMock = $this->getMockBuilder(ClientInterface::class)
-            ->setMethods(['query', 'testConnection'])
+            ->addMethods(['query'])
+            ->onlyMethods(['testConnection'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->connectionManager->expects($this->any())
@@ -202,7 +205,7 @@ class DataProviderTest extends TestCase
 
         $this->queryContainer = $this->getMockBuilder(QueryContainer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuery'])
+            ->onlyMethods(['getQuery'])
             ->getMock();
     }
 
@@ -307,7 +310,7 @@ class DataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $dimension = $this->getMockBuilder(Dimension::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $dimension->expects($this->once())
@@ -345,7 +348,7 @@ class DataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $dimension = $this->getMockBuilder(Dimension::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $dimension->expects($this->never())

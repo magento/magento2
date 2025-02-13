@@ -56,7 +56,7 @@ type AddConfigurableProductsToCartOutput @doc(description: "Contains details abo
 
 input ConfigurableProductCartItemInput {
     data: CartItemInput! @doc(description: "The quantity and SKU of the configurable product.")
-    variant_sku: String @doc(description: "Deprecated. Use `CartItemInput.sku` instead.")
+    variant_sku: String @deprecated(reason: "Use `CartItemInput.sku` instead.")
     parent_sku: String @doc(description: "The SKU of the parent configurable product.")
     customizable_options:[CustomizableOptionInput!] @doc(description: "The ID and value of the option.")
 }

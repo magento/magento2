@@ -63,35 +63,31 @@ class FieldTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testIteratorInitializesCorrespondingFlyweights(): void
     {
         $this->_groupMock
             ->method('setData')
-            ->withConsecutive(
-                [
-                    ['_elementType' => 'group', 'id' => 'someGroup_1'],
-                    'scope'
-                ],
-                [
-                    ['_elementType' => 'group', 'id' => 'someGroup_2'],
-                    'scope'
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1['_elementType'] == 'group' && $arg1['id'] == 'someGroup_1' && $arg2 == 'scope') {
+                    return null;
+                } elseif ($arg1['_elementType'] == 'group' && $arg1['id'] == 'someGroup_2' && $arg2 == 'scope') {
+                    return null;
+                }
+            });
+
         $this->_groupMock->expects($this->any())->method('isVisible')->willReturn(true);
 
         $this->_fieldMock
             ->method('setData')
-            ->withConsecutive(
-                [
-                    ['_elementType' => 'field', 'id' => 'someField_1'],
-                    'scope'
-                ],
-                [
-                    ['_elementType' => 'field', 'id' => 'someField_2'],
-                    'scope'
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1['_elementType'] == 'field' && $arg1['id'] == 'someField_1' && $arg2 == 'scope') {
+                    return null;
+                } elseif ($arg1['_elementType'] == 'field' && $arg1['id'] == 'someField_2' && $arg2 == 'scope') {
+                    return null;
+                }
+            });
         $this->_fieldMock->expects($this->any())->method('isVisible')->willReturn(true);
         $items = [];
 

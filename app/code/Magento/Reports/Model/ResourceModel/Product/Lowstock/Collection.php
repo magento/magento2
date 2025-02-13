@@ -110,7 +110,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $itemResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct(
             $entityFactory,

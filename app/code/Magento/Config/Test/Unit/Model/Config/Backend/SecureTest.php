@@ -38,7 +38,7 @@ class SecureTest extends TestCase
             ->getMockForAbstractClass();
 
         $model = $this->getMockBuilder(Secure::class)
-            ->setMethods(['getOldValue'])
+            ->onlyMethods(['getOldValue'])
             ->setConstructorArgs(
                 [
                     $context,

@@ -82,7 +82,7 @@ class Product
         array $attributes = [],
         bool $isSearch = false,
         bool $isChildSearch = false,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): SearchResultsInterface {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();

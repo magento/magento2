@@ -56,9 +56,9 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
         Registry $registry,
-        ReorderHelper $reorderHelper = null,
-        \Magento\Sales\Model\Reorder\Reorder $reorder = null,
-        CheckoutSession $checkoutSession = null
+        ?ReorderHelper $reorderHelper = null,
+        ?\Magento\Sales\Model\Reorder\Reorder $reorder = null,
+        ?CheckoutSession $checkoutSession = null
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
@@ -93,16 +93,6 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         // Set quote id for guest session: \Magento\Quote\Api\CartRepositoryInterface::save doesn't set quote id
         // to session for guest customer, as it does \Magento\Checkout\Model\Cart::save which is deprecated.
         $this->checkoutSession->setQuoteId($reorderOutput->getCart()->getId());
-
-        $errors = $reorderOutput->getErrors();
-        if (!empty($errors)) {
-            $useNotice = $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true);
-            foreach ($errors as $error) {
-                $useNotice
-                    ? $this->messageManager->addNoticeMessage($error->getMessage())
-                    : $this->messageManager->addErrorMessage($error->getMessage());
-            }
-        }
 
         return $resultRedirect->setPath('checkout/cart');
     }

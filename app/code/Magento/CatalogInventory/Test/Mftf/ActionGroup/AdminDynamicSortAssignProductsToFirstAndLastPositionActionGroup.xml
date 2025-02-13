@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDynamicSortAssignProductsToFirstAndLastPositionActionGroup">
+        <annotations>
+            <description>Admin reassigns the display order of the products (in category backend) for storefront for EE and B2B</description>
+        </annotations>
+        <arguments>
+            <argument name="product1" type="string"/>
+            <argument name="product3" type="string"/>
+        </arguments>
+        <!-- Admin Scroll to the Products In Category tab and expand the tab if closed -->
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.expandCollapseProductsInCategorySection('closed','Products in Category')}}" stepKey="adminScrollToProductsInCategorySectionForIndexing"/>
+        <conditionalClick selector="{{AdminCategoryBasicFieldSection.expandCollapseProductsInCategorySection('closed','Products in Category')}}" dependentSelector="{{AdminCategoryBasicFieldSection.expandCollapseProductsInCategorySection('closed','Products in Category')}}" visible="true" stepKey="adminExpandsProductsInCategorySectionForIndexing"/>
+        <!-- Admin resets the positions for the products -->
+        <waitForElementVisible selector="{{AdminCategoryBasicFieldSection.productPositionInCategory('product1')}}" stepKey="adminWaitsForPositionFieldToPopulate"/>
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.btnMoveProductToFirstPosition('product1')}}" stepKey="scrollToTheListedProduct"/>
+        <click selector="{{AdminCategoryBasicFieldSection.btnMoveProductToFirstPosition('product1')}}" stepKey="adminMovesProductToFirstIndex"/>
+        <click selector="{{AdminCategoryBasicFieldSection.btnMoveProductToLastPosition('product3')}}" stepKey="adminMovesProductToLastIndex"/>
+        <!-- Admin Saves the category and validate the success message -->
+        <click selector="{{AdminCategoryBasicFieldSection.saveCategory}}" stepKey="adminSavesTheCategory"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="adminVerifiesSuccessMessagePostSavingTheCategory"/>
+    </actionGroup>
+</actionGroups>

@@ -22,7 +22,7 @@ class PageLayoutFilterTest extends PageLayoutTest
     /**
      * {@inheritdoc}
      */
-    public function getOptionsDataProvider()
+    public static function getOptionsDataProvider()
     {
         return [
             [

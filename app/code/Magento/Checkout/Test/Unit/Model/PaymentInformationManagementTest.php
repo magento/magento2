@@ -11,6 +11,8 @@ use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Checkout\Model\PaymentInformationManagement;
+use Magento\Customer\Api\Data\AddressInterface as CustomerAddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -72,6 +74,11 @@ class PaymentInformationManagementTest extends TestCase
      */
     private $saveLimiterMock;
 
+    /**
+     * @var Address|MockObject
+     */
+    private $quoteShippingAddress;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -100,10 +107,33 @@ class PaymentInformationManagementTest extends TestCase
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
         $objectManager->setBackwardCompatibleProperty($this->model, 'cartRepository', $this->cartRepositoryMock);
+
+        $this->quoteShippingAddress = $this->getMockBuilder(Address::class)
+            ->addMethods(['setLimitCarrier'])
+            ->onlyMethods([
+                'getShippingMethod',
+                'getShippingRateByCode',
+                'getSameAsBilling',
+                'getSaveInAddressBook',
+                'setSaveInAddressBook',
+                'exportCustomerAddress'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testSavePaymentInformationAndPlaceOrder()
     {
+        $shippingAddressMock = $this->createMock(CustomerAddressInterface::class);
+        $this->quoteShippingAddress->expects($this->once())
+            ->method('getSaveInAddressBook')
+            ->willReturn(true);
+        $this->quoteShippingAddress->expects($this->once())
+            ->method('getSameAsBilling')
+            ->willReturn(true);
+        $this->quoteShippingAddress->expects($this->once())
+            ->method('exportCustomerAddress')
+            ->willReturn($shippingAddressMock);
+
         $orderId = 200;
         $this->assertEquals(
             $orderId,
@@ -239,25 +269,29 @@ class PaymentInformationManagementTest extends TestCase
     {
         $billingAddressId = 1;
         $quoteMock = $this->createMock(Quote::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $quoteBillingAddress = $this->createMock(Address::class);
         $shippingRate = $this->createPartialMock(Rate::class, []);
         $shippingRate->setCarrier('flatrate');
-        $quoteShippingAddress = $this->getMockBuilder(Address::class)
-            ->addMethods(['setLimitCarrier'])
-            ->onlyMethods(['getShippingMethod', 'getShippingRateByCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->cartRepositoryMock->expects($this->any())->method('getActive')->with($cartId)->willReturn($quoteMock);
         $quoteMock->method('getBillingAddress')->willReturn($quoteBillingAddress);
-        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($quoteShippingAddress);
+        $quoteMock->method('getCustomer')->willReturn($customerMock);
+        $quoteMock->expects($this->any())->method('getShippingAddress')->willReturn($this->quoteShippingAddress);
         $quoteBillingAddress->expects($this->any())->method('getId')->willReturn($billingAddressId);
         $quoteBillingAddress->expects($this->any())->method('getId')->willReturn($billingAddressId);
         $quoteMock->expects($this->any())->method('removeAddress')->with($billingAddressId);
         $quoteMock->expects($this->any())->method('setBillingAddress')->with($billingAddressMock);
         $quoteMock->expects($this->any())->method('setDataChanges')->willReturnSelf();
-        $quoteShippingAddress->expects($this->any())->method('getShippingRateByCode')->willReturn($shippingRate);
-        $quoteShippingAddress->expects($this->any())->method('getShippingMethod')->willReturn('flatrate_flatrate');
-        $quoteShippingAddress->expects($this->any())->method('setLimitCarrier')->with('flatrate')->willReturnSelf();
+        $this->quoteShippingAddress->expects($this->any())
+            ->method('getShippingRateByCode')
+            ->willReturn($shippingRate);
+        $this->quoteShippingAddress->expects($this->any())
+            ->method('getShippingMethod')
+            ->willReturn('flatrate_flatrate');
+        $this->quoteShippingAddress->expects($this->any())
+            ->method('setLimitCarrier')
+            ->with('flatrate')
+            ->willReturnSelf();
     }
 
     /**

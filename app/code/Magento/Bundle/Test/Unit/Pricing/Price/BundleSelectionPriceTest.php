@@ -106,12 +106,12 @@ class BundleSelectionPriceTest extends TestCase
         $this->productMock->expects($this->atLeastOnce())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
-        
+
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
         ->disableOriginalConstructor()
         ->addMethods(['roundPrice'])
         ->getMockForAbstractClass();
-        
+
         $this->quantity = 1;
 
         $this->setupSelectionPrice();
@@ -356,7 +356,7 @@ class BundleSelectionPriceTest extends TestCase
     /**
      * @return array
      */
-    public function useRegularPriceDataProvider()
+    public static function useRegularPriceDataProvider()
     {
         return [
             'useRegularPrice' => [

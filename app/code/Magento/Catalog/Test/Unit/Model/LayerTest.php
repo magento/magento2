@@ -118,34 +118,35 @@ class LayerTest extends TestCase
         $helper = new ObjectManager($this);
 
         $this->category = $this->getMockBuilder(Category::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->registry = $this->getMockBuilder(Registry::class)
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getRootCategoryId', 'getFilters'])
+            ->addMethods(['getFilters'])
+            ->onlyMethods(['getRootCategoryId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())->method('getStore')
             ->willReturn($this->store);
 
         $this->stateKeyGenerator = $this->getMockBuilder(StateKey::class)
-            ->setMethods(['toString'])
+            ->onlyMethods(['toString'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->collectionFilter = $this->getMockBuilder(CollectionFilter::class)
-            ->setMethods(['filter'])
+            ->onlyMethods(['filter'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -155,17 +156,17 @@ class LayerTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->filter = $this->getMockBuilder(Item::class)
-            ->setMethods(['getFilter', 'getValueString'])
+            ->onlyMethods(['getFilter', 'getValueString'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->abstractFilter = $this->getMockBuilder(AbstractFilter::class)
-            ->setMethods(['getRequestVar'])
+            ->onlyMethods(['getRequestVar'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->setMethods(['getStateKey', 'getCollectionFilter'])
+            ->onlyMethods(['getStateKey', 'getCollectionFilter'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->any())->method('getStateKey')
@@ -180,7 +181,7 @@ class LayerTest extends TestCase
             ->getMock();
 
         $this->stateFactory = $this->getMockBuilder(StateFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stateFactory->expects($this->any())->method('create')->willReturn($this->state);

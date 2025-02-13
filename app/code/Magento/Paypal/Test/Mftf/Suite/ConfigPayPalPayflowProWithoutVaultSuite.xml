@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="ConfigPayPalPayflowProWithoutVaultSuite">
+        <before>
+            <!-- Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Config PayPal PayFlow Pro-->
+            <actionGroup ref="AdminPayPalPayflowProActionGroup" stepKey="ConfigPayPalPayflowPro">
+                <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Cleanup Paypal PayflowPro configurations -->
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+        <include>
+            <group name="paypalPayflowProWithOutVault"/>
+        </include>
+    </suite>
+</suites>

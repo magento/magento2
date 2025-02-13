@@ -83,6 +83,7 @@ class SuperAttributeDataProviderTest extends TestCase
 
     /**
      * Check that website id is correctly retrieved
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testExecute(): void
     {
@@ -97,18 +98,33 @@ class SuperAttributeDataProviderTest extends TestCase
         ];
 
         $this->arrayManager->method('get')
-            ->withConsecutive(
-                ['parent_sku', $cartItemData],
-                ['data/sku', $cartItemData],
-                ['data/quantity', $cartItemData],
-                ['model', $cartItemData],
-            )
-            ->willReturnOnConsecutiveCalls(
-                'configurable',
-                'simple1',
-                2.0,
-                $quoteMock,
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($cartItemData, $quoteMock) {
+                static $callCount = 0;
+                $callCount++;
+
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == 'parent_sku' && $arg2 == $cartItemData) {
+                            return 'configurable';
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == 'data/sku' && $arg2 == $cartItemData) {
+                            return 'simple1';
+                        }
+                        break;
+                    case 3:
+                        if ($arg1 == 'data/quantity' && $arg2 == $cartItemData) {
+                            return 2.0;
+                        }
+                        break;
+                    case 4:
+                        if ($arg1 == 'model' && $arg2 == $cartItemData) {
+                            return $quoteMock;
+                        }
+                        break;
+                }
+            });
 
         $websiteId = 1;
         $storeMock = $this->createMock(Store::class);

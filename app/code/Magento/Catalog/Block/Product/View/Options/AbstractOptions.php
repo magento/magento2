@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -80,9 +80,9 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         \Magento\Catalog\Helper\Data $catalogData,
         array $data = [],
-        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null,
-        CalculatorInterface $calculator = null,
-        PriceCurrencyInterface $priceCurrency = null
+        ?CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null,
+        ?CalculatorInterface $calculator = null,
+        ?PriceCurrencyInterface $priceCurrency = null
     ) {
         $this->pricingHelper = $pricingHelper;
         $this->_catalogHelper = $catalogData;
@@ -101,7 +101,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Block\Product\View\Options\AbstractOptions
      */
-    public function setProduct(\Magento\Catalog\Model\Product $product = null)
+    public function setProduct(?\Magento\Catalog\Model\Product $product = null)
     {
         $this->_product = $product;
         return $this;

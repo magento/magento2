@@ -92,7 +92,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function providerGetElementHtmlDateFormat()
+    public static function providerGetElementHtmlDateFormat()
     {
         return [
             ['date_format'],

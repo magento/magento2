@@ -7,6 +7,12 @@
 use Magento\Customer\Helper\Address;
 
 /** @var \Magento\Customer\Block\Form\Register $block */
+if (!$block->getButtonLockManager()) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $block->setButtonLockManager(
+        $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
+    );
+}
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 

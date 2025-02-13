@@ -40,7 +40,7 @@ class WebsiteTest extends TestCase
     protected function setUp(): void
     {
         $this->webSiteModel = $this->getMockBuilder(Website::class)
-            ->setMethods(['getBaseCurrency'])
+            ->onlyMethods(['getBaseCurrency'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeResolver = $this->createPartialMock(
@@ -56,7 +56,7 @@ class WebsiteTest extends TestCase
         $this->website = $this->getMockBuilder(
             WebsiteValidator::class
         )
-            ->setMethods(['getAllWebsitesValue', '_clearMessages', '_addMessages'])
+            ->onlyMethods(['getAllWebsitesValue', '_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->storeResolver, $this->webSiteModel, $this->currencyResolver])
             ->getMock();
     }
@@ -121,7 +121,7 @@ class WebsiteTest extends TestCase
         $websiteString = $this->getMockBuilder(
             WebsiteValidator::class
         )
-            ->setMethods(['_clearMessages', '_addMessages'])
+            ->onlyMethods(['_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->storeResolver, $this->webSiteModel, $this->currencyResolver])
             ->getMock();
         $result = $websiteString->getAllWebsitesValue();
@@ -132,60 +132,60 @@ class WebsiteTest extends TestCase
     /**
      * @return array
      */
-    public function isValidReturnDataProvider()
+    public static function isValidReturnDataProvider()
     {
         return [
             // False cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_TIER_PRICE => 'value',
                 ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => false,
-                '$expectedResult' => false,
+                'allWebsites' => 'not tier|group price website value',
+                'colTierPriceWebsite' => false,
+                'expectedResult' => false,
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_TIER_PRICE => 'tier value',
                 ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => false,
-                '$expectedResult' => false,
+                'allWebsites' => 'not tier|group price website value',
+                'colTierPriceWebsite' => false,
+                'expectedResult' => false,
             ],
             // True cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                 ],
-                '$allWebsites' => 'tier value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => true,
+                'allWebsites' => 'tier value',
+                'colTierPriceWebsite' => 'value',
+                'expectedResult' => true,
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                 ],
-                '$allWebsites' => 'group value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => true,
+                'allWebsites' => 'group value',
+                'colTierPriceWebsite' => 'value',
+                'expectedResult' => true,
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
                 ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => true,
+                'allWebsites' => 'not tier|group price website value',
+                'colTierPriceWebsite' => 'value',
+                'expectedResult' => true,
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                 ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => true,
+                'allWebsites' => 'not tier|group price website value',
+                'colTierPriceWebsite' => 'value',
+                'expectedResult' => true,
             ],
         ];
     }

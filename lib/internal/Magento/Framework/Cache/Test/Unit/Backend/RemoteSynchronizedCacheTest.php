@@ -61,7 +61,7 @@ class RemoteSynchronizedCacheTest extends TestCase
     /**
      * @return array
      */
-    public function initializeWithExceptionDataProvider(): array
+    public static function initializeWithExceptionDataProvider(): array
     {
         return [
             'empty_backend_option' => [
@@ -95,19 +95,25 @@ class RemoteSynchronizedCacheTest extends TestCase
      */
     public function testInitializeWithOutException($options): void
     {
+        $options['remote_backend_options']['adapter'] = $options['remote_backend_options']['adapter']($this);
         $result = new RemoteSynchronizedCache($options);
         $this->assertInstanceOf(RemoteSynchronizedCache::class, $result);
+    }
+
+    protected function getMockForMysqlClass()
+    {
+        $connectionMock = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        return $connectionMock;
     }
 
     /**
      * @return array
      */
-    public function initializeWithOutExceptionDataProvider(): array
+    public static function initializeWithOutExceptionDataProvider(): array
     {
-        $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $connectionMock = static fn (self $testCase) => $testCase->getMockForMysqlClass();
         return [
             'not_empty_backend_option' => [
                 'options' => [
@@ -367,10 +373,19 @@ class RemoteSynchronizedCacheTest extends TestCase
         $this->remoteCacheMockExample
             ->expects($this->exactly(2))
             ->method('save')
-            ->withConsecutive(
-                [$dataToSave, $cacheKey, $tags],
-                [\hash('sha256', $dataToSave), $cacheKey . ':hash', $tags]
-            )->willReturn(true);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($dataToSave, $cacheKey, $tags) {
+                    if ($arg1 === $dataToSave &&
+                        $arg2 === $cacheKey &&
+                        $arg3 === $tags) {
+                        return true;
+                    } elseif ($arg1 === \hash('sha256', $dataToSave) &&
+                        $arg2 === $cacheKey . ':hash' && $arg3 === $tags) {
+                        return true;
+                    }
+                }
+            );
+
         $this->localCacheMockExample
             ->expects($this->once())
             ->method('save')
@@ -412,5 +427,17 @@ class RemoteSynchronizedCacheTest extends TestCase
         $this->localCacheMockExample->expects($this->once())->method('save');
 
         $this->remoteSyncCacheInstance->save(1, 1);
+    }
+
+    public function testTest(): void
+    {
+        $this->localCacheMockExample
+            ->method('test')
+            ->willReturn(true);
+        $this->remoteCacheMockExample
+            ->method('test')
+            ->willReturn(false);
+
+        $this->assertFalse($this->remoteSyncCacheInstance->test(1));
     }
 }

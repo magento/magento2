@@ -104,20 +104,20 @@ class ReportValidatorTest extends TestCase
      *
      * @return array
      */
-    public function errorDataProvider()
+    public static function errorDataProvider()
     {
         $reportName = 'test';
         $errorMessage = 'SQL Error 42';
         return [
             [
                 $reportName,
-                'expectedResult' => [],
-                'queryReturnStub' => $this->returnValue(null)
+                'result' => [],
+                'queryReturnStub' => self::returnValue(null)
             ],
             [
                 $reportName,
-                'expectedResult' => [$reportName, $errorMessage],
-                'queryReturnStub' => $this->throwException(new \Zend_Db_Statement_Exception($errorMessage))
+                'result' => [$reportName, $errorMessage],
+                'queryReturnStub' => self::throwException(new \Zend_Db_Statement_Exception($errorMessage))
             ]
         ];
     }

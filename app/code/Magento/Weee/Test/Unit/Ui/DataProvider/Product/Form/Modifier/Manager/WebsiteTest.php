@@ -60,7 +60,7 @@ class WebsiteTest extends TestCase
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['hasSingleStore'])
+            ->onlyMethods(['hasSingleStore'])
             ->getMockForAbstractClass();
         $this->directoryHelperMock = $this->getMockBuilder(DirectoryHelper::class)
             ->disableOriginalConstructor()

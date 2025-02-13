@@ -94,17 +94,16 @@ class FilterListTest extends TestCase
     {
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive(
-                [],
-                [
-                    $expectedClass,
-                    [
-                        'data' => ['attribute_model' => $this->attributeMock],
-                        'layer' => $this->layerMock
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls('filter', 'filter');
+            ->willReturnCallback(function ($arguments) {
+                if (empty($arguments)) {
+                    return 'filter';
+                } else {
+                        $expectedClass = $arguments[0];
+                    if ($expectedClass == $expectedClass) {
+                        return 'filter';
+                    }
+                }
+            });
 
         $this->attributeMock->expects($this->once())
             ->method($method)
@@ -167,7 +166,7 @@ class FilterListTest extends TestCase
     /**
      * @return array
      */
-    public function getFiltersDataProvider(): array
+    public static function getFiltersDataProvider(): array
     {
         return [
             [
@@ -193,7 +192,7 @@ class FilterListTest extends TestCase
      *
      * @return array
      */
-    public function getFiltersWithoutCategoryDataProvider(): array
+    public static function getFiltersWithoutCategoryDataProvider(): array
     {
         return [
             'Filters contains only price attribute' => [

@@ -15,6 +15,9 @@
             <description value="Place an order with discount coupon applied using paypal express checkout as payment method"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6152"/>
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Simple product is created -->
@@ -29,13 +32,8 @@
             <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
                 <requiredEntity createDataKey="createCartPriceRule"/>
             </createData>
-            <!-- Configure Paypal Express Checkout -->
-            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
-                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
-            </actionGroup>
         </before>
         <after>
-            <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!-- Delete Cart Price Rule -->

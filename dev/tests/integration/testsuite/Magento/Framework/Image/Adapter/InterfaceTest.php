@@ -19,7 +19,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_adapters = [
+    protected static $_adapters = [
         \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2,
         \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM,
     ];
@@ -43,10 +43,10 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @return array
      */
-    protected function _prepareData($data)
+    protected static function _prepareData($data)
     {
         $result = [];
-        foreach ($this->_adapters as $adapterType) {
+        foreach (self::$_adapters as $adapterType) {
             foreach ($data as $row) {
                 $row[] = $adapterType;
                 $result[] = $row;
@@ -94,7 +94,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param string $pattern
      * @return string|null
      */
-    protected function _getFixture($pattern)
+    protected static function _getFixture($pattern)
     {
         if (!$pattern) {
             return null;
@@ -153,7 +153,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->_getAdapter($adapterType);
     }
 
-    public function adaptersDataProvider()
+    public static function adaptersDataProvider()
     {
         return [
             [\Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2],
@@ -179,14 +179,14 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function openDataProvider()
+    public static function openDataProvider()
     {
-        return $this->_prepareData(
+        return self::_prepareData(
             [
                 [null],
-                [$this->_getFixture('image_adapters_test.png')],
-                [$this->_getFixture('image_adapters_test.tiff')],
-                [$this->_getFixture('image_adapters_test.bmp')],
+                [self::_getFixture('image_adapters_test.png')],
+                [self::_getFixture('image_adapters_test.tiff')],
+                [self::_getFixture('image_adapters_test.bmp')],
             ]
         );
     }
@@ -249,17 +249,17 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $rootDirectory->delete($tmpDir);
     }
 
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $rootDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
         $rootDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)
             ->getDirectoryWrite(DirectoryList::TMP);
         $dir = $rootDirectory->getAbsolutePath('image/');
-        return $this->_prepareData(
+        return self::_prepareData(
             [
-                [$this->_getFixture('image_adapters_test.png'), [$dir . uniqid('test_image_adapter')]],
-                [$this->_getFixture('image_adapters_test.png'), [$dir, uniqid('test_image_adapter')]],
+                [self::_getFixture('image_adapters_test.png'), [$dir . uniqid('test_image_adapter')]],
+                [self::_getFixture('image_adapters_test.png'), [$dir, uniqid('test_image_adapter')]],
             ]
         );
     }
@@ -287,15 +287,16 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function resizeDataProvider()
+    public static function resizeDataProvider()
     {
-        return $this->_prepareData(
+        return self::_prepareData(
             [
-                [$this->_getFixture('image_adapters_test.png'), [150, 70]],
-                [$this->_getFixture('image_adapters_test.png'), [null, 70]],
-                [$this->_getFixture('image_adapters_test.png'), [100, null]],
-                [$this->_getFixture('image_adapters_test.png'), [null, null]],
-                [$this->_getFixture('image_adapters_test.png'), [-100, -50]],
+                [self::_getFixture('image_adapters_test.png'), [150, 70]],
+                [self::_getFixture('image_adapters_test.png'), [null, 70]],
+                [self::_getFixture('image_adapters_test.png'), [100, null]],
+                [self::_getFixture('image_adapters_test.png'), [null, null]],
+                [self::_getFixture('image_adapters_test.png'), [-100, -50]],
+                [self::_getFixture('image_adapters_test.png'), [200, 0]]
             ]
         );
     }
@@ -353,14 +354,14 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function rotateDataProvider()
+    public static function rotateDataProvider()
     {
-        return $this->_prepareData(
+        return self::_prepareData(
             [
-                [$this->_getFixture('image_adapters_test.png'), 45, ['x' => 157, 'y' => 35]],
-                [$this->_getFixture('image_adapters_test.png'), 48, ['x' => 157, 'y' => 35]],
-                [$this->_getFixture('image_adapters_test.png'), 90, ['x' => 250, 'y' => 74]],
-                [$this->_getFixture('image_adapters_test.png'), 180, ['x' => 250, 'y' => 74]],
+                [self::_getFixture('image_adapters_test.png'), 45, ['x' => 157, 'y' => 35]],
+                [self::_getFixture('image_adapters_test.png'), 48, ['x' => 157, 'y' => 35]],
+                [self::_getFixture('image_adapters_test.png'), 90, ['x' => 250, 'y' => 74]],
+                [self::_getFixture('image_adapters_test.png'), 180, ['x' => 250, 'y' => 74]],
             ]
         );
     }
@@ -416,38 +417,38 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result, $message);
     }
 
-    public function imageWatermarkWithAlphaTransparencyDataProvider()
+    public static function imageWatermarkWithAlphaTransparencyDataProvider()
     {
-        return $this->_prepareData(
+        return self::_prepareData(
             [
                 // Watermark with alpha channel, 25%
                 [
-                    $this->_getFixture('watermark_alpha_base_image.jpg'),
-                    $this->_getFixture('watermark_alpha.png'),
+                    self::_getFixture('watermark_alpha_base_image.jpg'),
+                    self::_getFixture('watermark_alpha.png'),
                     25,
                     [ 23, 3 ],
                     [ 23, 30 ]
                 ],
                 // Watermark with alpha channel, 50%
                 [
-                    $this->_getFixture('watermark_alpha_base_image.jpg'),
-                    $this->_getFixture('watermark_alpha.png'),
+                    self::_getFixture('watermark_alpha_base_image.jpg'),
+                    self::_getFixture('watermark_alpha.png'),
                     50,
                     [ 23, 3 ],
                     [ 23, 30 ]
                 ],
                 // Watermark with no alpha channel, 50%
                 [
-                    $this->_getFixture('watermark_alpha_base_image.jpg'),
-                    $this->_getFixture('watermark.png'),
+                    self::_getFixture('watermark_alpha_base_image.jpg'),
+                    self::_getFixture('watermark.png'),
                     50,
                     [ 3, 3 ],
                     [ 23,3 ]
                 ],
                 // Watermark with no alpha channel, 100%
                 [
-                    $this->_getFixture('watermark_alpha_base_image.jpg'),
-                    $this->_getFixture('watermark.png'),
+                    self::_getFixture('watermark_alpha_base_image.jpg'),
+                    self::_getFixture('watermark.png'),
                     100,
                     [ 3, 3 ],
                     [ 3, 60 ]
@@ -506,13 +507,13 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($result, $message);
     }
 
-    public function imageWatermarkPositionDataProvider()
+    public static function imageWatermarkPositionDataProvider()
     {
-        return $this->_prepareData(
+        return self::_prepareData(
             [
                 [
-                    $this->_getFixture('image_adapters_test.png'),
-                    $this->_getFixture('watermark.png'),
+                    self::_getFixture('image_adapters_test.png'),
+                    self::_getFixture('watermark.png'),
                     50,
                     50,
                     100,
@@ -521,8 +522,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                     10,
                 ],
                 [
-                    $this->_getFixture('image_adapters_test.png'),
-                    $this->_getFixture('watermark.png'),
+                    self::_getFixture('image_adapters_test.png'),
+                    self::_getFixture('watermark.png'),
                     100,
                     70,
                     100,
@@ -531,8 +532,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                     10
                 ],
                 [
-                    $this->_getFixture('image_adapters_test.png'),
-                    $this->_getFixture('watermark.png'),
+                    self::_getFixture('image_adapters_test.png'),
+                    self::_getFixture('watermark.png'),
                     100,
                     70,
                     100,
@@ -541,8 +542,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                     10
                 ],
                 [
-                    $this->_getFixture('image_adapters_test.png'),
-                    $this->_getFixture('watermark.png'),
+                    self::_getFixture('image_adapters_test.png'),
+                    self::_getFixture('watermark.png'),
                     100,
                     100,
                     100,
@@ -551,8 +552,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                     10
                 ],
                 [
-                    $this->_getFixture('image_adapters_test.png'),
-                    $this->_getFixture('watermark.jpg'),
+                    self::_getFixture('image_adapters_test.png'),
+                    self::_getFixture('watermark.jpg'),
                     50,
                     50,
                     100,
@@ -561,8 +562,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                     10
                 ],
                 [
-                    $this->_getFixture('image_adapters_test.png'),
-                    $this->_getFixture('watermark.gif'),
+                    self::_getFixture('image_adapters_test.png'),
+                    self::_getFixture('watermark.gif'),
                     50,
                     50,
                     100,
@@ -642,13 +643,13 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedSize, $newSize);
     }
 
-    public function cropDataProvider()
+    public static function cropDataProvider()
     {
-        return $this->_prepareData(
+        return self::_prepareData(
             [
-                [$this->_getFixture('image_adapters_test.png'), 50, 50, 75, 75],
-                [$this->_getFixture('image_adapters_test.png'), 20, 50, 35, 35],
-                [$this->_getFixture('image_adapters_test.png'), 0, 0, 0, 0],
+                [self::_getFixture('image_adapters_test.png'), 50, 50, 75, 75],
+                [self::_getFixture('image_adapters_test.png'), 20, 50, 35, 35],
+                [self::_getFixture('image_adapters_test.png'), 0, 0, 0, 0],
             ]
         );
     }
@@ -687,7 +688,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @link http://php.net/manual/en/function.imageantialias.php
      * @return array
      */
-    public function createPngFromStringDataProvider()
+    public static function createPngFromStringDataProvider()
     {
         return [
             [
@@ -751,7 +752,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function testValidateUploadFileExceptionDataProvider()
+    public static function testValidateUploadFileExceptionDataProvider()
     {
         return [
             'image_notfound' => [

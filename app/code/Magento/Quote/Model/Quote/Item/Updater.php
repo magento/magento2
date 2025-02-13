@@ -48,7 +48,7 @@ class Updater
         ProductFactory $productFactory,
         FormatInterface $localeFormat,
         ObjectFactory $objectFactory,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productFactory = $productFactory;
         $this->localeFormat = $localeFormat;

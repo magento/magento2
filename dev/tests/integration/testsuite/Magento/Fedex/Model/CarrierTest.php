@@ -35,7 +35,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Data Provider for testGetCode
      * @return array
      */
-    public function getCodeDataProvider()
+    public static function getCodeDataProvider()
     {
         return [
             ['method', 21],
@@ -61,7 +61,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Data Provider for testGetCodeUnitOfMeasure
      * @return array
      */
-    public function getCodeUnitOfMeasureDataProvider()
+    public static function getCodeUnitOfMeasureDataProvider()
     {
         return [
             ['LB'],

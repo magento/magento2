@@ -71,7 +71,7 @@ class RevokeCustomerTokenTest extends TestCase
 
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getExtensionAttributes',
                     'getUserId',
@@ -81,7 +81,7 @@ class RevokeCustomerTokenTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->contextExtensionMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getIsCustomer',
                     'getStore',

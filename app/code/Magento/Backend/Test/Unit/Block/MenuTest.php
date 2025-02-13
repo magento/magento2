@@ -21,6 +21,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MenuTest extends TestCase
 {
     /**
@@ -73,6 +76,8 @@ class MenuTest extends TestCase
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->prepareObjectManager();
+
         $this->menu =  $objectManagerHelper->getObject(
             Menu::class,
             [

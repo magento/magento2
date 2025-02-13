@@ -48,7 +48,7 @@ class MinificationFilenameResolverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestResolve()
+    public static function dataProviderForTestResolve()
     {
         return [
             [

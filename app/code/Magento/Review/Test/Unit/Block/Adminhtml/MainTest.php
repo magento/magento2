@@ -73,8 +73,14 @@ class MainTest extends TestCase
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['customerId', false], ['productId', false])
-            ->willReturnOnConsecutiveCalls('customer id', false);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === 'customerId' && $arg2 == false) {
+                    return 'customer id';
+                }
+                if ($arg1 === 'productId' && $arg2 == false) {
+                    return false;
+                }
+            });
         $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

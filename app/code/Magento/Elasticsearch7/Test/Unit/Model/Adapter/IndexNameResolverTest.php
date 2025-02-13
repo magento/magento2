@@ -11,6 +11,7 @@ use Elasticsearch\Client;
 use Elasticsearch\Namespaces\IndicesNamespace;
 use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Elasticsearch7\Model\Adapter\DynamicTemplatesProvider;
 use Magento\Elasticsearch7\Model\Client\Elasticsearch;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Elasticsearch\Model\Config;
@@ -73,20 +74,26 @@ class IndexNameResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
-
+        $objects = [
+            [
+                DynamicTemplatesProvider::class,
+                $this->createMock(DynamicTemplatesProvider::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getConnection',
             ])
             ->getMock();
 
         $this->clientConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods(['getIndexSettings'])
+            ->onlyMethods([
                 'getIndexPrefix',
                 'getEntityType',
-                'getIndexSettings',
             ])
             ->getMock();
 
@@ -94,37 +101,10 @@ class IndexNameResolverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $elasticsearchClientMock = $this->getMockBuilder(Client::class)
-            ->setMethods([
-                'indices',
-                'ping',
-                'bulk',
-                'search',
-                'scroll',
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $indicesMock = $this->getMockBuilder(IndicesNamespace::class)
-            ->setMethods([
-                'exists',
-                'getSettings',
-                'create',
-                'putMapping',
-                'deleteMapping',
-                'existsAlias',
-                'updateAliases',
-                'stats'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $elasticsearchClientMock->expects($this->any())
-            ->method('indices')
-            ->willReturn($indicesMock);
         $this->client = $this->getMockBuilder(Elasticsearch::class)
             ->setConstructorArgs([
                 'options' => $this->getClientOptions(),
-                'elasticsearchClient' => $elasticsearchClientMock
+                'elasticsearchClient' => null
             ])
             ->getMock();
 
@@ -240,7 +220,7 @@ class IndexNameResolverTest extends TestCase
 
         $connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getConnection',
             ])
             ->getMock();

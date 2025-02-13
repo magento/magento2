@@ -139,7 +139,7 @@ class CurrencySymbolProviderTest extends TestCase
      *
      * @param int $catalogPriceScope
      * @param string $defaultStoreCurrencySymbol
-     * @param array $listOfWebsites
+     * @param \Closure $listOfWebsites
      * @param array $productWebsiteIds
      * @param array $currencySymbols
      * @param array $actualResult
@@ -148,11 +148,12 @@ class CurrencySymbolProviderTest extends TestCase
     public function testGetCurrenciesPerWebsite(
         int $catalogPriceScope,
         string $defaultStoreCurrencySymbol,
-        array $listOfWebsites,
+        \Closure $listOfWebsites,
         array $productWebsiteIds,
         array $currencySymbols,
         array $actualResult
     ): void {
+        $listOfWebsites = $listOfWebsites($this);
         $this->locatorMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->currentStoreMock);
@@ -194,13 +195,13 @@ class CurrencySymbolProviderTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getWebsiteCurrencySymbolDataProvider(): array
+    public static function getWebsiteCurrencySymbolDataProvider(): array
     {
         return [
             'verify website currency with default website and global price scope' => [
                 'catalogPriceScope' => 0,
                 'defaultStoreCurrencySymbol' => '$',
-                'listOfWebsites' => $this->getWebsitesMock(
+                'listOfWebsites' => static fn (self $testCase) => $testCase->getWebsitesMock(
                     [
                         [
                             'id' => '1',
@@ -218,7 +219,7 @@ class CurrencySymbolProviderTest extends TestCase
             'verify website currency with default website and website price scope' => [
                 'catalogPriceScope' => 1,
                 'defaultStoreCurrencySymbol' => '$',
-                'listOfWebsites' => $this->getWebsitesMock(
+                'listOfWebsites' => static fn (self $testCase) => $testCase->getWebsitesMock(
                     [
                         [
                             'id' => '1',
@@ -236,7 +237,7 @@ class CurrencySymbolProviderTest extends TestCase
             'verify website currency with two website and website price scope' => [
                 'catalogPriceScope' => 1,
                 'defaultStoreCurrencySymbol' => '$',
-                'listOfWebsites' => $this->getWebsitesMock(
+                'listOfWebsites' => static fn (self $testCase) => $testCase->getWebsitesMock(
                     [
                         [
                             'id' => '1',
@@ -267,7 +268,7 @@ class CurrencySymbolProviderTest extends TestCase
      * @param array $websites
      * @return array
      */
-    private function getWebsitesMock(array $websites): array
+    protected function getWebsitesMock(array $websites): array
     {
         $websitesMock = [];
         foreach ($websites as $key => $website) {

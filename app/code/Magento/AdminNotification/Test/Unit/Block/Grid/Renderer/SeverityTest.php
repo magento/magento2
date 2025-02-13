@@ -46,7 +46,7 @@ class SeverityTest extends TestCase
         /** @var Column|MockObject $columnMock */
         $columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndex'])
+            ->addMethods(['getIndex'])
             ->getMock();
         $columnMock->expects($this->exactly(5))->method('getIndex')->willReturn('index');
         $this->sut->setColumn($columnMock);

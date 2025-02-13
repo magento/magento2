@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMultishippingCheckoutWithOnlineShippingMethodTest">
+        <annotations>
+            <stories value="Creating Multi shipping checkout"/>
+            <title value="Multi shipping checkout flow with online shipping methods"/>
+            <description value="Creating Multi shipping checkout with multiple address and verify order in admin for multiple shipping methods"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4736"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="Simple_Customer_With_Multiple_Address" stepKey="customer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminEnableUSPSActionGroup" stepKey="enableUSPS"/>
+            <actionGroup ref="AdminUPSEnableActionGroup" stepKey="enableUPS"/>
+            <actionGroup ref="AdminEnableFedExConfigurationActionGroup" stepKey="enableFedEx"/>
+            <actionGroup ref="AdminEnableDHLWithoutSpecificCountryConfigurationActionGroup" stepKey="enableDHL"/>
+            <!--Set Shipping settings origin data-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
+                <argument name="country" value="United States"/>
+                <argument name="state" value="California"/>
+                <argument name="postcode" value="90230"/>
+            </actionGroup>
+        </before>
+            <!-- Login to storefront -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$customer$"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostChangingConfigurationSettings">
+                <argument name="indices" value="cataloginventory_stock catalog_product_price"/>
+            </actionGroup>
+            <!-- Open product page through category -->
+            <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="waitForSimpleProductPage">
+                <argument name="productUrl" value="$$product.custom_attributes[url_key]$$"/>
+            </actionGroup>
+            <!-- Add multiple quantity for one product -->
+            <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+                <argument name="productQty" value="4"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="navigateToCartPage"/>
+            <!-- Click 'Check Out with Multiple Addresses' -->
+            <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.checkoutWithMultipleAddresses}}" stepKey="waitForCheckoutWithMultipleAddressesLink"/>
+            <click selector="{{AdminShipmentAddressInformationSection.checkoutWithMultipleAddresses}}" stepKey="clickOnCheckoutWithMultipleAddressesLink"/>
+            <waitForPageLoad stepKey="waitForMultipleAddressPageLoad"/>
+            <actionGroup ref="AdminSelectAddressInShippingInformationActionGroup" stepKey="selectFirstAddress">
+                <argument name="addressSection" value="1"/>
+                <argument name="selectOption" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectAddressInShippingInformationActionGroup" stepKey="selectSecondAddress">
+                <argument name="addressSection" value="2"/>
+                <argument name="selectOption" value="2"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectAddressInShippingInformationActionGroup" stepKey="selectThirdAddress">
+                <argument name="addressSection" value="3"/>
+                <argument name="selectOption" value="3"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectAddressInShippingInformationActionGroup" stepKey="selectFourthAddress">
+                <argument name="addressSection" value="4"/>
+                <argument name="selectOption" value="4"/>
+            </actionGroup>
+            <!-- Updating the address for shipping section -->
+            <actionGroup ref="StorefrontUpdateShippingAddressActionGroup" stepKey="updateShippingAddressActionGroup"/>
+            <!-- Selecting shipping method based on the address -->
+            <actionGroup ref="StorefrontSelectShippingMethodBasedOnAddressActionGroup" stepKey="selectShippingMethodBasedOnAddressActionGroup"/>
+            <!-- Click on the billing information button to save selected data -->
+            <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.goToBillingInfo}}" stepKey="waitForGoToBillingInfoButton"/>
+            <click selector="{{AdminShipmentAddressInformationSection.goToBillingInfo}}" stepKey="goToBillingInformation"/>
+            <!-- Select check money payment method -->
+            <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+            <!-- Go to review order page -->
+            <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.goToReviewOrder}}" stepKey="waitForGoToReviewOrder"/>
+            <click selector="{{AdminShipmentAddressInformationSection.goToReviewOrder}}" stepKey="goToReviewOrder"/>
+            <!-- Verify the address/shipping data before place order -->
+            <actionGroup ref="StorefrontVerifyOrderInformationBeforePlacingOrderActionGroup" stepKey="verifyOrderInformationBeforePlacingOrderActionGroup"/>
+            <!-- Place order and verify success message -->
+            <click selector="{{AdminShipmentAddressInformationSection.placeOrder}}" stepKey="placeOrder"/>
+            <waitForText selector="{{AdminShipmentAddressInformationSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+            <!-- Grabbing order number and open order info page -->
+            <grabTextFrom selector="{{AdminShipmentAddressInformationSection.multiCheckoutOrderId('1')}}" stepKey="grabOrderIdForFirstOrder"/>
+            <executeJS function="var orderID = '{$grabOrderIdForFirstOrder}'.replace(/\D|^0+/g, ''); return (orderID);" stepKey="firstOrderID"/>
+            <grabTextFrom selector="{{AdminShipmentAddressInformationSection.multiCheckoutOrderId('2')}}" stepKey="grabOrderIdForSecondOrder"/>
+            <executeJS function="var orderID = '{$grabOrderIdForSecondOrder}'.replace(/\D|^0+/g, ''); return (orderID);" stepKey="secondOrderID"/>
+            <grabTextFrom selector="{{AdminShipmentAddressInformationSection.multiCheckoutOrderId('3')}}" stepKey="grabOrderIdForThirdOrder"/>
+            <executeJS function="var orderID = '{$grabOrderIdForThirdOrder}'.replace(/\D|^0+/g, ''); return (orderID);" stepKey="thirdOrderID"/>
+            <grabTextFrom selector="{{AdminShipmentAddressInformationSection.multiCheckoutOrderId('4')}}" stepKey="grabOrderIdForFourthOrder"/>
+            <executeJS function="var orderID = '{$grabOrderIdForFourthOrder}'.replace(/\D|^0+/g, ''); return (orderID);" stepKey="fourthOrderID"/>
+            <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="goToMyOrdersForFirstOrder"/>
+            <actionGroup ref="StorefrontOpenOrderLinkOnMyOrdersPageActionGroup" stepKey="openFirstOrder">
+                 <argument name="orderID" value="{$firstOrderID}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="againOpenFirstOrder">
+                <argument name="orderId" value="$firstOrderID"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderInformationAddress('Berlin')}}" stepKey="waitForOrderInformationForBerlin"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderShippingMethod('DHL - Express easy')}}" stepKey="waitForShippingMethodForDHL"/>
+            <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="goToMyOrdersForSecondOrder"/>
+            <actionGroup ref="StorefrontOpenOrderLinkOnMyOrdersPageActionGroup" stepKey="openSecondOrder">
+                <argument name="orderID" value="{$secondOrderID}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="againOpenSecondOrder">
+                <argument name="orderId" value="$secondOrderID"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderInformationAddress('London')}}" stepKey="waitForOrderInformationForLondon"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderShippingMethod('United Parcel Service - UPS Worldwide Expedited')}}" stepKey="waitForShippingMethodForUPS"/>
+            <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="goToMyOrdersForThirdOrder"/>
+            <actionGroup ref="StorefrontOpenOrderLinkOnMyOrdersPageActionGroup" stepKey="openThirdOrder">
+                <argument name="orderID" value="{$thirdOrderID}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="againOpenThirdOrder">
+                <argument name="orderId" value="$thirdOrderID"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderInformationAddress('New York')}}" stepKey="waitForOrderInformationForNY"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderShippingMethod('United States Postal Service - Library Mail Parcel')}}" stepKey="waitForShippingMethodForUSPS"/>
+            <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="goToMyOrdersForFourthOrder"/>
+            <actionGroup ref="StorefrontOpenOrderLinkOnMyOrdersPageActionGroup" stepKey="openFourthOrder">
+                <argument name="orderID" value="{$fourthOrderID}"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenOrderViewPageActionGroup" stepKey="againOpenFourthOrder">
+                <argument name="orderId" value="$fourthOrderID"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderInformationAddress('Culver City')}}" stepKey="waitForOrderInformationForCulverCity"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.orderShippingMethod('Federal Express - Ground')}}" stepKey="waitForShippingMethodForFedex"/>
+            <!-- Go to Admin and check order information -->
+            <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterFirstOrderGrid">
+                <argument name="orderId" value="{$grabOrderIdForFirstOrder}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickFirstOrderRow"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.adminOrderShippingAddress('Berlin')}}" stepKey="waitForAdminOrderInformationForBerlin"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.adminShippingMethod('DHL - Express easy')}}" stepKey="waitForAdminShippingMethodForDHL"/>
+            <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterSecondOrderGrid">
+                <argument name="orderId" value="{$grabOrderIdForSecondOrder}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickSecondOrderRow"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.adminOrderShippingAddress('London')}}" stepKey="waitForAdminOrderInformationForLondon"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.adminShippingMethod('United Parcel Service - UPS Worldwide Expedited')}}" stepKey="waitForAdminShippingMethodForUPS"/>
+            <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterThirdOrderGrid">
+                <argument name="orderId" value="{$grabOrderIdForThirdOrder}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickThirdOrderRow"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.adminOrderShippingAddress('New York')}}" stepKey="waitForAdminOrderInformationForNY"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.adminShippingMethod('United States Postal Service - Library Mail Parcel')}}" stepKey="waitForAdminShippingMethodForUSPS"/>
+            <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterFourthOrderGrid">
+                <argument name="orderId" value="{$grabOrderIdForFourthOrder}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickFourthOrderRow"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.adminOrderShippingAddress('Culver City')}}" stepKey="waitForAdminOrderInformationForCulver"/>
+            <waitForElementVisible selector="{{AdminShipmentAddressInformationSection.adminShippingMethod('Federal Express - Ground')}}" stepKey="waitForAdminShippingMethodForFedex"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+        <after>
+            <actionGroup ref="AdminDisableUSPSActionGroup" stepKey="disableUSPS"/>
+            <actionGroup ref="AdminUPSDisableActionGroup" stepKey="disableUPS"/>
+            <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} 0" stepKey="disableCheckout"/>
+            <actionGroup ref="AdminDisableDHLConfigurationActionGroup" stepKey="resetDhlConfig"/>
+            <!-- Reset shipping origin -->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+            <deleteData stepKey="deleteProduct1" createDataKey="product"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+        </after>
+    </test>
+</tests>

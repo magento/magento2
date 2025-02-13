@@ -142,7 +142,7 @@ class MinifierTest extends TestCase
         $request->setParam('resource', $requestedUri);
 
         $response = $this->getMockBuilder(FileInterface::class)
-            ->setMethods(['setFilePath'])
+            ->onlyMethods(['setFilePath'])
             ->getMockForAbstractClass();
         $response
             ->expects($this->any())

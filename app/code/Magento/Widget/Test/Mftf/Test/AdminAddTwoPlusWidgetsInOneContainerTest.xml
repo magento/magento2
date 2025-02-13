@@ -1,0 +1,80 @@
+<!--
+/**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddTwoPlusWidgetsInOneContainerTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="content widgets"/>
+            <title value="Add multiple widgets in one container"/>
+            <description value="Test for adding multiple widgets in a single container and verifying the functionality on the storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4400"/>
+        </annotations>
+        <before>
+            <!-- 1. Create multiple products and assign to a category. -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">9</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">1</field>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createThirdSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateCatalogProductsListWidgetWithTwoConditionsActionGroup" stepKey="createProductListWidget">
+                <argument name="widget" value="CatalogProductsListWidget"/>
+                <argument name="title" value="Some Title"/>
+                <argument name="displayPageControl" value="1"/>
+                <argument name="numberOfProductsToDisplay" value="10"/>
+                <argument name="condition" value="SKU"/>
+                <argument name="conditionsOperator" value="is one of"/>
+                <argument name="conditionParameter" value="$createFirstSimpleProduct.sku$,$createSecondSimpleProduct.sku$"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveAndContinueWidgetActionGroup" stepKey="saveWidgetAndContinue"/>
+            <actionGroup ref="AdminCreateCMSPageLinkWidgetActionGroup" stepKey="createCMSPageWidget">
+                <argument name="widget" value="CmsPageLinkWidget"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveAndContinueWidgetActionGroup" stepKey="saveCMSWidget"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete widget catalog product list-->
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidgetCatalogProductList">
+                <argument name="widget" value="CatalogProductsListWidget"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidgetCMSPageLink">
+                <argument name="widget" value="CmsPageLinkWidget"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Delete first simple product-->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <!--Delete second simple product-->
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <!--Delete third simple product-->
+            <deleteData createDataKey="createThirdSimpleProduct" stepKey="deleteThirdSimpleProduct"/>
+            <!--Logout from Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createFirstSimpleProduct.name$$)}}" stepKey="assertFirstSimpleProduct"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createSecondSimpleProduct.name$$)}}" stepKey="assertSecondSimpleProduct"/>
+        <waitForElementNotVisible selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createThirdSimpleProduct.name$$)}}" stepKey="assertSecondSimpleProductIsNotAvaiable"/>
+        <waitForElement selector="{{StorefrontCategoryMainSection.enableCookies}}" stepKey="assertCookiesLinkIsAvailable"/>
+    </test>
+</tests>

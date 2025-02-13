@@ -79,7 +79,7 @@ class ShowUpdateResultTest extends TestCase
             ->willReturn($productActionMock);
 
         $eventManager = $this->getMockBuilder(Manager::class)
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

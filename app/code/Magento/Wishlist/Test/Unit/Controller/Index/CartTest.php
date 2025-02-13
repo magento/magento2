@@ -523,8 +523,13 @@ class CartTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item', null], ['qty', null])
-            ->willReturnOnConsecutiveCalls($itemId, $qty);
+            ->willReturnCallback(function ($arg1, $arg2) use ($itemId, $qty) {
+                if ($arg1 == 'item') {
+                    return $itemId;
+                } elseif ($arg1 == 'qty') {
+                    return $qty;
+                }
+            });
 
         $this->quantityProcessorMock->expects($this->once())
             ->method('process')
@@ -542,11 +547,13 @@ class CartTest extends TestCase
 
         $this->urlMock
             ->method('getUrl')
-            ->withConsecutive(
-                ['*/*', null],
-                ['*/*/configure/', ['id' => $itemId, 'product_id' => $productId]]
-            )
-            ->willReturnOnConsecutiveCalls($indexUrl, $configureUrl);
+            ->willReturnCallback(function ($arg1, $arg2) use ($indexUrl, $configureUrl, $itemId, $productId) {
+                if ($arg1 == '*/*' && is_null($arg2)) {
+                    return $indexUrl;
+                } elseif ($arg1 == '*/*/configure/' && $arg2['id'] == $itemId && $arg2['product_id'] == $productId) {
+                    return $configureUrl;
+                }
+            });
 
         $optionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
@@ -727,8 +734,13 @@ class CartTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item', null], ['qty', null])
-            ->willReturnOnConsecutiveCalls($itemId, $qty);
+            ->willReturnCallback(function ($arg1, $arg2) use ($itemId, $qty) {
+                if ($arg1 == 'item') {
+                    return $itemId;
+                } elseif ($arg1 == 'qty') {
+                    return $qty;
+                }
+            });
 
         $this->quantityProcessorMock->expects($this->once())
             ->method('process')
@@ -746,11 +758,13 @@ class CartTest extends TestCase
 
         $this->urlMock
             ->method('getUrl')
-            ->withConsecutive(
-                ['*/*', null],
-                ['*/*/configure/', ['id' => $itemId, 'product_id' => $productId]]
-            )
-            ->willReturnOnConsecutiveCalls($indexUrl, $configureUrl);
+            ->willReturnCallback(function ($arg1, $arg2) use ($indexUrl, $configureUrl, $itemId, $productId) {
+                if ($arg1 == '*/*' && is_null($arg2)) {
+                    return $indexUrl;
+                } elseif ($arg1 == '*/*/configure/' && $arg2['id'] == $itemId && $arg2['product_id'] == $productId) {
+                    return $configureUrl;
+                }
+            });
 
         $optionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
@@ -888,8 +902,13 @@ class CartTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item', null], ['qty', null])
-            ->willReturnOnConsecutiveCalls($itemId, $qty);
+            ->willReturnCallback(function ($arg1, $arg2) use ($itemId, $qty) {
+                if ($arg1 == 'item') {
+                    return $itemId;
+                } elseif ($arg1 == 'qty') {
+                    return $qty;
+                }
+            });
 
         $this->quantityProcessorMock->expects($this->once())
             ->method('process')
@@ -907,11 +926,13 @@ class CartTest extends TestCase
 
         $this->urlMock
             ->method('getUrl')
-            ->withConsecutive(
-                ['*/*', null],
-                ['*/*/configure/', ['id' => $itemId, 'product_id' => $productId]]
-            )
-            ->willReturnOnConsecutiveCalls($indexUrl, $configureUrl);
+            ->willReturnCallback(function ($arg1, $arg2) use ($indexUrl, $configureUrl, $itemId, $productId) {
+                if ($arg1 == '*/*' && is_null($arg2)) {
+                    return $indexUrl;
+                } elseif ($arg1 == '*/*/configure/' && $arg2['id'] == $itemId && $arg2['product_id'] == $productId) {
+                    return $configureUrl;
+                }
+            });
 
         $optionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
@@ -1050,8 +1071,13 @@ class CartTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item', null], ['qty', null])
-            ->willReturnOnConsecutiveCalls($itemId, $qty);
+            ->willReturnCallback(function ($arg1, $arg2) use ($itemId, $qty) {
+                if ($arg1 == 'item') {
+                    return $itemId;
+                } elseif ($arg1 == 'qty') {
+                    return $qty;
+                }
+            });
 
         $this->requestMock->expects($this->once())
             ->method('getPostValue')
@@ -1074,11 +1100,13 @@ class CartTest extends TestCase
 
         $this->urlMock
             ->method('getUrl')
-            ->withConsecutive(
-                ['*/*', null],
-                ['*/*/configure/', ['id' => $itemId, 'product_id' => $productId]]
-            )
-            ->willReturnOnConsecutiveCalls($indexUrl, $configureUrl);
+            ->willReturnCallback(function ($arg1, $arg2) use ($indexUrl, $configureUrl, $itemId, $productId) {
+                if ($arg1 == '*/*' && is_null($arg2)) {
+                    return $indexUrl;
+                } elseif ($arg1 == '*/*/configure/' && $arg2['id'] == $itemId && $arg2['product_id'] == $productId) {
+                    return $configureUrl;
+                }
+            });
 
         $optionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()

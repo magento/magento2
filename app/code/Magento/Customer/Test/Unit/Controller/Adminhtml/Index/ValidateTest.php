@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\ValidationResultsInterface;
 use Magento\Customer\Controller\Adminhtml\Index\Validate;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Customer\Model\SetCustomerStore;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\RequestInterface;
@@ -143,6 +144,9 @@ class ValidateTest extends TestCase
         );
         $this->resultJsonFactory->expects($this->once())->method('create')->willReturn($this->resultJson);
 
+        $customerStoreMock = $this->createMock(SetCustomerStore::class);
+        $customerStoreMock->expects($this->once())->method('setStore');
+
         $objectHelper = new ObjectManager($this);
         $this->controller = $objectHelper->getObject(
             Validate::class,
@@ -155,6 +159,7 @@ class ValidateTest extends TestCase
                 'customerAccountManagement' => $this->customerAccountManagement,
                 'resultJsonFactory' => $this->resultJsonFactory,
                 'dataObjectHelper' => $this->dataObjectHelper,
+                'customerStore' => $customerStoreMock
             ]
         );
     }
@@ -162,11 +167,12 @@ class ValidateTest extends TestCase
     public function testExecute()
     {
         $customerEntityId = 2;
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->with('customer')
             ->willReturn([
-                'entity_id' => $customerEntityId
+                'entity_id' => $customerEntityId,
+                'website_id' => 1
             ]);
 
         $this->customer->expects($this->once())
@@ -268,7 +274,7 @@ class ValidateTest extends TestCase
 
     public function testExecuteWithNewCustomerAndNoEntityId()
     {
-        $this->request->expects($this->once())
+        $this->request->expects($this->exactly(2))
             ->method('getParam')
             ->with('customer')
             ->willReturn([]);

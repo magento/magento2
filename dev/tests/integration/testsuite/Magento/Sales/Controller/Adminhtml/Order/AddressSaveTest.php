@@ -80,7 +80,7 @@ class AddressSaveTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function addressTypeProvider(): array
+    public static function addressTypeProvider(): array
     {
         return [
             'billing_address' => [
@@ -108,7 +108,7 @@ class AddressSaveTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function wrongRequestDataProvider(): array
+    public static function wrongRequestDataProvider(): array
     {
         return [
             'empty_post' => [

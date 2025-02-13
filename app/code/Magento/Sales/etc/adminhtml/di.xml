@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -49,12 +49,44 @@
         </arguments>
         <plugin name="orderGridExportFilterColumnPlugin" type="Magento\Sales\Plugin\Model\Export\OrderGridExportFilterColumn"/>
     </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <type name="Magento\Sales\Model\ResourceModel\Order\Grid\Collection">
         <plugin name="orderGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
     </type>
     <type name="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\DataProvider\ProductCollection">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\AdminOrder\Create">
+        <arguments>
+            <!-- Default specifications according to Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method\Form::_canUseMethod -->
+            <argument name="paymentMethodSpecifications" xsi:type="array">
+                <item name="internal" xsi:type="array">
+                    <item name="type" xsi:type="const">Magento\Payment\Model\MethodInterface::CHECK_USE_INTERNAL</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                </item>
+                <item name="country" xsi:type="array">
+                    <item name="type" xsi:type="const">Magento\Payment\Model\MethodInterface::CHECK_USE_FOR_COUNTRY</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                </item>
+                <item name="currency" xsi:type="array">
+                    <item name="type" xsi:type="const">Magento\Payment\Model\MethodInterface::CHECK_USE_FOR_CURRENCY</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                </item>
+                <item name="total" xsi:type="array">
+                    <item name="type" xsi:type="const">Magento\Payment\Model\MethodInterface::CHECK_ORDER_TOTAL_MIN_MAX</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                </item>
+                <item name="zero_total" xsi:type="array">
+                    <item name="type" xsi:type="const">Magento\Payment\Model\MethodInterface::CHECK_ZERO_TOTAL</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
  *
  * @api
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
@@ -26,22 +25,16 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_helper;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Currency factory
-     *
      * @var \Magento\Directory\Model\CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * Core config model
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
@@ -70,7 +63,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
@@ -83,6 +76,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Set Attribute instance
+     *
      * Rewrite for redefine attribute scope
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
@@ -146,6 +140,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
     /**
      * Check whether product uses default attribute's value in selected scope
+     *
      * @param \Magento\Catalog\Model\Product $object
      * @return bool
      */

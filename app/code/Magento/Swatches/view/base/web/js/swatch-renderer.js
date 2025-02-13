@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -1334,7 +1334,13 @@ define([
          * @private
          */
         _addFotoramaVideoEvents: function (isInitial) {
-            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)
+                || !$(this.options.mediaGallerySelector).AddFotoramaVideoEvents('instance')
+            ) {
+                $(this.options.mediaGallerySelector).on('addfotoramavideoeventscreate', function () {
+                    this._addFotoramaVideoEvents(isInitial);
+                }.bind(this));
+
                 return;
             }
 

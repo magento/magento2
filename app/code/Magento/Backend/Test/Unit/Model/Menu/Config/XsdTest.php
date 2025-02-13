@@ -59,7 +59,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to menu.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidMenuXmlArray.php';
     }

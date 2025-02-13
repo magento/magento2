@@ -45,7 +45,7 @@ class AccessListTest extends TestCase
     /**
      * @return array
      */
-    public function getValidValues(): array
+    public static function getValidValues(): array
     {
         return [
             ['localhost', 'localhost'],
@@ -70,7 +70,7 @@ class AccessListTest extends TestCase
     /**
      * @return array
      */
-    public function getInvalidValues(): array
+    public static function getInvalidValues(): array
     {
         return [
             ['\\bull val\\'],

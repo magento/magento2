@@ -59,7 +59,7 @@ class PriceTest extends TestCase
 
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', '__wakeup', 'getCustomerTaxClassId'])
+            ->onlyMethods(['getStore', '__wakeup', 'getCustomerTaxClassId'])
             ->getMock();
 
         $this->quote->expects($this->any())
@@ -68,7 +68,8 @@ class PriceTest extends TestCase
 
         $checkoutSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
 
         $checkoutSession->expects($this->any())
@@ -77,7 +78,7 @@ class PriceTest extends TestCase
 
         $this->taxHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getShippingPrice', 'displayShippingPriceIncludingTax', 'displayShippingBothPrices',
             ])
             ->getMock();
@@ -100,7 +101,8 @@ class PriceTest extends TestCase
     {
         $shippingRateMock = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', '__wakeup'])
+            ->addMethods(['getPrice'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')

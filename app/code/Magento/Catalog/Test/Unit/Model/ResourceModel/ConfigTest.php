@@ -81,11 +81,12 @@ class ConfigTest extends TestCase
             ->willReturn($expression);
         $connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
 
-        $this->resource->expects($this->exactly(3))->method('getTableName')->withConsecutive(
-            ['eav_attribute'],
-            ['catalog_eav_attribute'],
-            ['eav_attribute_label']
-        )->willReturnOnConsecutiveCalls('eav_attribute', 'catalog_eav_attribute', 'eav_attribute_label');
+        $this->resource->expects($this->exactly(3))->method('getTableName')
+        ->willReturnCallback(fn($param) => match ([$param]) {
+            ['eav_attribute'] => 'eav_attribute',
+            ['catalog_eav_attribute'] => 'catalog_eav_attribute',
+            ['eav_attribute_label'] => 'eav_attribute_label'
+        });
 
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getId')->willReturn($storeId);
@@ -105,10 +106,14 @@ class ConfigTest extends TestCase
                 'al.attribute_id = main_table.attribute_id AND al.store_id = ' . $storeId,
                 ['store_label' => $expression]
             )->willReturn($selectMock);
-        $selectMock->expects($this->exactly(2))->method('where')->withConsecutive(
-            ['main_table.entity_type_id = ?', $entityTypeId],
-            ['additional_table.used_for_sort_by = ?', 1]
-        )->willReturn($selectMock);
+        $selectMock->expects($this->exactly(2))->method('where')
+        ->willReturnCallback(function ($arg1, $arg2) use ($entityTypeId, $selectMock) {
+            if ($arg1 == 'main_table.entity_type_id = ?' && $arg2 == $entityTypeId) {
+                return $selectMock;
+            } elseif ($arg1 == 'additional_table.used_for_sort_by = ?' && $arg2 == 1) {
+                return $selectMock;
+            }
+        });
 
         $connectionMock->expects($this->once())->method('fetchAll')->with($selectMock);
 

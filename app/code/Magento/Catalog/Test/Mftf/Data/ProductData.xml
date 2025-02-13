@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -325,6 +325,19 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleOne1" type="product2">
+        <data key="name" unique="suffix">Api Simple Product</data>
+        <data key="sku" unique="suffix">api-simple-product</data>
+        <data key="urlKey" unique="suffix">api-simple-product</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">1</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
     <entity name="ApiSimpleProductWithCategory" type="product2" extends="ApiSimpleOne">
         <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
     </entity>
@@ -354,6 +367,19 @@
         <data key="price">234.00</data>
         <data key="status">1</data>
         <data key="quantity">100</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleTwo1" type="product2">
+        <data key="name" unique="suffix">Api Simple Product Two</data>
+        <data key="sku" unique="suffix">api-simple-product-two</data>
+        <data key="urlKey" unique="suffix">api-simple-product-two</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="price">1</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
@@ -934,6 +960,10 @@
         <data key="name" unique="suffix">Product With Long Name And Sku - But not too long</data>
         <data key="sku" unique="suffix">Product With Long Name And Sku - But not too long</data>
     </entity>
+    <entity name="ProductWithSpecialCharNameSku" extends="ApiSimpleProduct">
+        <data key="name" unique="suffix">Test "Config"</data>
+        <data key="sku" unique="suffix">Test "Config"</data>
+    </entity>
     <entity name="PaginationProduct" type="product">
         <data key="name" unique="suffix">pagi</data>
         <data key="sku" unique="suffix">pagisku</data>
@@ -1487,5 +1517,91 @@
     <entity name="ProductWithSpecialCharsInSKU" extends="SimpleProduct" type="product">
         <data key="name">Simple Product with special characters in SKU</data>
         <data key="sku">s000&amp;01</data>
+    </entity>
+    <entity name="simpleProductwithTaxNone" type="product">
+        <data key="name" unique="suffix">Product1</data>
+        <data key="sku" unique="suffix">product-1</data>
+        <data key="urlKey" unique="suffix">product1</data>
+        <data key="price">200.00</data>
+        <data key="quantity">100</data>
+        <data key="status">1</data>
+        <data key="cost">150.00</data>
+        <data key="productTaxClass">None</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="simpleProductwithTaxGoods" type="product">
+        <data key="urlKey" unique="suffix">product2</data>
+        <data key="name" unique="suffix">Product2</data>
+        <data key="sku" unique="suffix">product-2</data>
+        <data key="price">300.00</data>
+        <data key="quantity">300</data>
+        <data key="status">1</data>
+        <data key="storefrontStatus">IN STOCK</data>
+        <data key="cost">250.00</data>
+        <data key="productTaxClass">Taxable Goods</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleProductWithPrice1" type="product2" extends="ApiSimpleOne">
+        <data key="price">1</data>
+        <data key="weight">1</data>
+    </entity>
+    <entity name="SimpleProductWithWeight" extends="SimpleProduct50" type="product">
+        <data key="weight">1</data>
+        <data key="price">10</data>
+    </entity>
+    <entity name="productWithMultiCustomOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDropDownFor2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionNewField</requiredEntity>
+    </entity>
+    <entity name="SimpleProductWithQty1" type="product" extends="_defaultProduct">
+        <data key="name" unique="suffix">Simple Product 3</data>
+        <data key="price">1.00</data>
+        <data key="urlKey" unique="suffix">Simple Product 3</data>
+        <data key="status">1</data>
+        <data key="quantity">1</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock1</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="productWithTwoCustomOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <data key="file">magento.jpg</data>
+        <requiredEntity type="product_option">ProductOptionDropDownFor2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
+    </entity>
+    <entity name="ProductWithTwentyOneTextFieldOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionField</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField2</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField3</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField4</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField5</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField6</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField7</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField8</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField9</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField10</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField11</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField12</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField13</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField14</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField15</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField16</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField17</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField18</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField19</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField20</requiredEntity>
+        <requiredEntity type="product_option">ProductOptionField21</requiredEntity>
     </entity>
 </entities>

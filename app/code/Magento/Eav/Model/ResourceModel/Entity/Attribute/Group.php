@@ -27,7 +27,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         $connectionName = null,
-        Attribute $attributeResource = null
+        ?Attribute $attributeResource = null
     ) {
         parent::__construct($context, $connectionName);
         $this->attributeResource = $attributeResource ?: ObjectManager::getInstance()->get(Attribute::class);

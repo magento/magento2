@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -45,6 +45,7 @@
     <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="Magento\Quote\Model\Quote\ProductOption" />
     <preference for="Magento\Quote\Model\ValidationRules\QuoteValidationRuleInterface" type="Magento\Quote\Model\ValidationRules\QuoteValidationComposite\Proxy"/>
     <preference for="Magento\Quote\Model\QuoteMutexInterface" type="Magento\Quote\Model\QuoteMutex"/>
+    <preference for="Magento\Quote\Model\CartMutexInterface" type="Magento\Quote\Model\CartMutex"/>
     <preference for="Magento\Quote\Model\Quote\Item\Option\ComparatorInterface" type="Magento\Quote\Model\Quote\Item\Option\Comparator"/>
     <preference for="Magento\Quote\Model\Cart\ProductReaderInterface" type="Magento\Quote\Model\Cart\ProductReader"/>
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
@@ -157,6 +158,28 @@
         <arguments>
             <argument name="extractors" xsi:type="array">
                 <item name="quote" xsi:type="object">Magento\Quote\Model\Backpressure\WebapiRequestTypeExtractor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="quoteMutex" xsi:type="object">Magento\Quote\Model\QuoteIdMutex</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Quote\Api\ErrorInterface" type="Magento\Quote\Model\Cart\Data\Error" />
+    <type name="Magento\Quote\Model\Cart\AddProductsToCartError">
+        <arguments>
+            <argument name="errorMessageCodesMapper" xsi:type="array">
+                <item name="Could not find a product with SKU" xsi:type="string">PRODUCT_NOT_FOUND</item>
+                <item name="The required options you selected are not available" xsi:type="string">NOT_SALABLE</item>
+                <item name="Product that you are trying to add is not available." xsi:type="string">NOT_SALABLE</item>
+                <item name="This product is out of stock" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="There are no source items" xsi:type="string">NOT_SALABLE</item>
+                <item name="The fewest you may purchase is" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="The most you may purchase is" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="The requested qty is not available" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="Not enough items for sale" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="Only %s of %s available" xsi:type="string">INSUFFICIENT_STOCK</item>
             </argument>
         </arguments>
     </type>

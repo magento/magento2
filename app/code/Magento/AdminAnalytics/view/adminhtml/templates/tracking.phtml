@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 
@@ -22,18 +23,25 @@
 <?php
 /** @var \Magento\AdminAnalytics\ViewModel\Metadata $metadata */
 $metadata = $block->getMetadata();
+$nonce = $escaper->escapeJs($metadata->getNonce());
 $scriptString = '
     var adminAnalyticsMetadata = {
-        "secure_base_url": "' . $block->escapeJs($metadata->getSecureBaseUrlForScope()) . '",
-        "version": "' . $block->escapeJs($metadata->getMagentoVersion()) . '",
-        "product_edition": "' . $block->escapeJs($metadata->getProductEdition()) . '",
-        "user": "' . $block->escapeJs($metadata->getCurrentUser()) . '",
-        "mode": "' . $block->escapeJs($metadata->getMode()) . '",
-        "store_name_default": "' . $block->escapeJs($metadata->getStoreNameForScope()) . '",
-        "admin_user_created": "' . $block->escapeJs($metadata->getCurrentUserCreatedDate()) . '",
-        "admin_user_logdate": "' . $block->escapeJs($metadata->getCurrentUserLogDate()) . '",
-        "admin_user_role_name": "' . $block->escapeJs($metadata->getCurrentUserRoleName()) . '"
+        "secure_base_url": "' . $escaper->escapeJs($metadata->getSecureBaseUrlForScope()) . '",
+        "version": "' . $escaper->escapeJs($metadata->getMagentoVersion()) . '",
+        "product_edition": "' . $escaper->escapeJs($metadata->getProductEdition()) . '",
+        "user": "' . $escaper->escapeJs($metadata->getCurrentUser()) . '",
+        "mode": "' . $escaper->escapeJs($metadata->getMode()) . '",
+        "store_name_default": "' . $escaper->escapeJs($metadata->getStoreNameForScope()) . '",
+        "admin_user_created": "' . $escaper->escapeJs($metadata->getCurrentUserCreatedDate()) . '",
+        "admin_user_logdate": "' . $escaper->escapeJs($metadata->getCurrentUserLogDate()) . '",
+        "admin_user_role_name": "' . $escaper->escapeJs($metadata->getCurrentUserRoleName()) . '"
     };
+
+    var digitalData = {
+        "nonce": "' . $nonce . '"
+    };
+
+    var cspNonce = "' . $nonce . '";
 ';
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
