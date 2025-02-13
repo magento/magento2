@@ -139,14 +139,14 @@ class Full extends AbstractAction
     }
 
     /**
-     * Truncates the replica tables
+     * Deletes the data from the replica tables
      *
      * @return void
      */
     private function clearReplicaTables(): void
     {
         foreach ($this->storeManager->getStores() as $store) {
-            $this->connection->truncateTable($this->tableMaintainer->getMainReplicaTable((int)$store->getId()));
+            $this->connection->delete($this->tableMaintainer->getMainReplicaTable((int)$store->getId()));
         }
     }
 
