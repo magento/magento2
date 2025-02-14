@@ -182,9 +182,12 @@ define([
             $('#' + fileId).closest('.file-uploader-area').find('.file-uploader-button:first').on('click', function () {
                 $('#' + fileId).closest('.file-uploader-area').find('.uppy-Dashboard-browse').trigger('click');
             });
-            $('#' + fileId).closest('.pagebuilder-image-uploader-container').find('.pagebuilder-options .file-uploader-button:first').on('click', function () {
-                $('#' + fileId).closest('.file-uploader-area').find('.uppy-Dashboard-browse').trigger('click');
-            });   
+            $('#' + fileId).closest('.pagebuilder-image-uploader-container')
+                .find('.pagebuilder-options .file-uploader-button:first')
+                .on('click', function () {
+                    $('#' + fileId).closest('.file-uploader-area').find('.uppy-Dashboard-browse').trigger('click');
+                }
+            );
         },
 
         /**
