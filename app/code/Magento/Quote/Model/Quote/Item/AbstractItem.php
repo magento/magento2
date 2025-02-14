@@ -410,7 +410,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         // Round unit price before multiplying to prevent losing 1 cent on subtotal
         $total = $this->priceCurrency->round($this->getCalculationPriceOriginal()) * $qty;
         $baseTotal = $this->priceCurrency->round($this->getBaseCalculationPriceOriginal()) * $qty;
-
         $this->setRowTotal($this->priceCurrency->round($total));
         $this->setBaseRowTotal($this->priceCurrency->round($baseTotal));
         return $this;
@@ -583,6 +582,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      */
     public function getConvertedPrice()
     {
+
         $price = $this->_getData('converted_price');
         if ($price === null) {
             $price = $this->priceCurrency->convert($this->getPrice(), $this->getStore());
