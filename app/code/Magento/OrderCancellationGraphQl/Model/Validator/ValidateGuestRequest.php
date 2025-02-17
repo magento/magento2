@@ -59,17 +59,17 @@ class ValidateGuestRequest
      * Ensure the order matches the provided criteria
      *
      * @param OrderInterface $order
-     * @param string $postcode
+     * @param string $lastname
      * @param string $email
      * @return void
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    public function validateOrderDetails(OrderInterface $order, string $postcode, string $email): void
+    public function validateOrderDetails(OrderInterface $order, string $lastname, string $email): void
     {
         $billingAddress = $order->getBillingAddress();
 
-        if ($billingAddress->getPostcode() !== $postcode || $billingAddress->getEmail() !== $email) {
+        if ($billingAddress->getLastname() !== $lastname || $billingAddress->getEmail() !== $email) {
             $this->cannotLocateOrder();
         }
 

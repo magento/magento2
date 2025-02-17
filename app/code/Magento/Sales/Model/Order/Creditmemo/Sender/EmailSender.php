@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Sender;
 
@@ -104,7 +104,9 @@ class EmailSender extends Sender implements SenderInterface
 
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'creditmemo' => $creditmemo,
+                'creditmemo_id' => $creditmemo->getId(),
                 'comment' => $comment ? $comment->getComment() : '',
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),

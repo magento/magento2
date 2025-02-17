@@ -62,6 +62,7 @@
             <argument name="shippingMethodName" value="Free Shipping"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectDefaultPaymentMethod"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <!-- I see order successful Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>

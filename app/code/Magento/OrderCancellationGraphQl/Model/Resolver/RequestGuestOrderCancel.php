@@ -56,10 +56,10 @@ class RequestGuestOrderCancel implements ResolverInterface
         ?array $args = null
     ) {
         $this->validateRequest->validateInput($args['input'] ?? []);
-        list($number, $email, $postcode) = $this->getNumberEmailPostcode($args['input']['token']);
+        list($number, $email, $lastname) = $this->getNumberEmailLastname($args['input']['token']);
 
         $order = $this->getOrder($number);
-        $this->validateRequest->validateOrderDetails($order, $postcode, $email);
+        $this->validateRequest->validateOrderDetails($order, $lastname, $email);
 
         $errors = $this->validateOrder->execute($order);
         if ($errors) {
@@ -93,13 +93,13 @@ class RequestGuestOrderCancel implements ResolverInterface
     }
 
     /**
-     * Retrieve number, email and postcode from token
+     * Retrieve number, email and lastname from token
      *
      * @param string $token
      * @return array
      * @throws GraphQlNoSuchEntityException
      */
-    private function getNumberEmailPostcode(string $token): array
+    private function getNumberEmailLastname(string $token): array
     {
         $data = $this->token->decrypt($token);
         if (count($data) !== 3) {
