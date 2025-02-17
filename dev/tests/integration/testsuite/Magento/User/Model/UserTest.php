@@ -4,6 +4,8 @@
  * All Rights Reserved.
  */
 
+declare(strict_types=1);
+
 namespace Magento\User\Model;
 
 use Magento\Authorization\Model\Role;
@@ -624,7 +626,7 @@ class UserTest extends TestCase
         $sentMessage = $transportBuilderMock->getSentMessage();
         $this->assertSame(
             'New User Notification Custom Text ' . $userModel->getFirstname() . ', ' . $userModel->getLastname(),
-            $sentMessage->getBodyText()
+            quoted_printable_decode($sentMessage->getBody()->bodyToString())
         );
     }
 
@@ -714,7 +716,7 @@ class UserTest extends TestCase
         $sentMessage = $transportBuilderMock->getSentMessage();
         $this->assertStringContainsString(
             'id='.$userModel->getId(),
-            quoted_printable_decode($sentMessage->getBodyText())
+            quoted_printable_decode($sentMessage->getBody()->bodyToString())
         );
     }
 }
