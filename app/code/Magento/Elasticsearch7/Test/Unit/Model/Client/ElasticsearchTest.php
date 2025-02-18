@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Elasticsearch7\Test\Unit\Model\Client;
@@ -265,10 +264,15 @@ class ElasticsearchTest extends TestCase
      */
     public function testBulkQuery()
     {
+        $result = [
+            'errors' => false,
+            'items' => [],
+        ];
         $this->elasticsearchClientMock->expects($this->once())
             ->method('bulk')
-            ->with([]);
-        $this->model->bulkQuery([]);
+            ->with([])
+            ->willReturn($result);
+        $this->assertEquals($result, $this->model->bulkQuery([]));
     }
 
     /**

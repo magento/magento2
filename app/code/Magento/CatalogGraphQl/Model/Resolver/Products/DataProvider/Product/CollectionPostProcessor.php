@@ -23,7 +23,7 @@ class CollectionPostProcessor implements CollectionPostProcessorInterface
      * @param ContextInterface|null $context
      * @return Collection
      */
-    public function process(Collection $collection, array $attributeNames, ContextInterface $context = null): Collection
+    public function process(Collection $collection, array $attributeNames, ?ContextInterface $context = null): Collection
     {
         if (!$collection->isLoaded()) {
             $collection->load();

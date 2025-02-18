@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,6 +33,7 @@ class Cache implements ConfigOptionsListInterface
     public const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB = 'cache-backend-redis-compression-lib';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY = 'cache-backend-redis-lua-key';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA = 'cache-backend-redis-use-lua';
+    public const INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA_ON_GC = 'cache-backend-redis-use-lua-on-gc';
     public const INPUT_KEY_CACHE_ID_PREFIX = 'cache-id-prefix';
     public const INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION = 'allow-parallel-generation';
 
@@ -45,6 +46,7 @@ class Cache implements ConfigOptionsListInterface
     public const CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB = 'cache/frontend/default/backend_options/compression_lib';
     public const CONFIG_PATH_CACHE_BACKEND_LUA_KEY = 'cache/frontend/default/backend_options/_useLua';
     public const CONFIG_PATH_CACHE_BACKEND_USE_LUA = 'cache/frontend/default/backend_options/use_lua';
+    public const CONFIG_PATH_CACHE_BACKEND_USE_LUA_ON_GC = 'cache/frontend/default/backend_options/use_lua_on_gc';
     public const CONFIG_PATH_CACHE_ID_PREFIX = 'cache/frontend/default/id_prefix';
     public const CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION = 'cache/allow_parallel_generation';
 
@@ -59,8 +61,8 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => '1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => '',
         self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => 'false',
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY => true,
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA => false
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA => '0',
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA_ON_GC => '1'
     ];
 
     /**
@@ -81,8 +83,8 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => self::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB,
         self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
-        self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY => self::CONFIG_PATH_CACHE_BACKEND_LUA_KEY,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA => self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
+        self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA_ON_GC=> self::CONFIG_PATH_CACHE_BACKEND_USE_LUA_ON_GC,
     ];
 
     /**
@@ -154,6 +156,12 @@ class Cache implements ConfigOptionsListInterface
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
                 'Set to 1 to enable lua (default is 0, disabled)'
+            ),
+            new TextConfigOption(
+                self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA_ON_GC,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_CACHE_BACKEND_USE_LUA_ON_GC,
+                'Set to 0 to disable lua on garbage collection (default is 1, enabled)'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_CACHE_ID_PREFIX,
@@ -264,20 +272,6 @@ class Cache implements ConfigOptionsListInterface
             : $deploymentConfig->get(
                 self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
                 $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD)
-            );
-
-        $config['_useLua'] = isset($options[self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY])
-            ? $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_LUA_KEY]
-            : $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_LUA_KEY,
-                $this->getDefaultConfigValue(self::CONFIG_PATH_CACHE_BACKEND_LUA_KEY)
-            );
-
-        $config['use_lua'] = isset($options[self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA])
-            ? $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_USE_LUA]
-            : $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_USE_LUA,
-                $this->getDefaultConfigValue(self::CONFIG_PATH_CACHE_BACKEND_USE_LUA)
             );
 
         return $this->redisValidator->isValidConnection($config);

@@ -44,9 +44,9 @@ class Boolean extends Column implements
         string $type,
         Table $table,
         bool $nullable = true,
-        bool $default = null,
-        string $comment = null,
-        string $onCreate = null
+        ?bool $default = null,
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->nullable = $nullable;

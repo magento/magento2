@@ -73,8 +73,8 @@ class AdvancedInventory extends AbstractModifier
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager,
         StockConfigurationInterface $stockConfiguration,
-        Json $serializer = null,
-        JsonValidator $jsonValidator = null
+        ?Json $serializer = null,
+        ?JsonValidator $jsonValidator = null
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;

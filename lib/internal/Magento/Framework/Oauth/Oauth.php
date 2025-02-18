@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Oauth;
@@ -189,7 +189,7 @@ class Oauth implements OauthInterface
         }
 
         $calculatedSign = $this->httpUtility->sign(
-            $params,
+            $this->processNonRequiredParams($params),
             $params['oauth_signature_method'],
             $consumerSecret,
             $tokenSecret,
@@ -200,6 +200,30 @@ class Oauth implements OauthInterface
         if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
             throw new AuthException(new Phrase('The signature is invalid. Verify and try again.'));
         }
+    }
+
+    /**
+     * Avoid double encoding for query param values
+     *
+     * @param array $params
+     * @return array
+     */
+    private function processNonRequiredParams(array $params): array
+    {
+        $requiredParams = [
+            "oauth_consumer_key",
+            "oauth_consumer_secret",
+            "oauth_token",
+            "oauth_token_secret",
+            "oauth_signature"
+        ];
+        foreach ($params as $key => $value) {
+            if (!in_array($key, $requiredParams)) {
+                $params[$key] = urldecode($value);
+            }
+        }
+
+        return $params;
     }
 
     /**

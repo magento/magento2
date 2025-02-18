@@ -302,7 +302,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         EntityFactoryInterface $entityFactory,
         Logger $logger,
         FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct($entityFactory);
         $this->_fetchStrategy = $fetchStrategy;

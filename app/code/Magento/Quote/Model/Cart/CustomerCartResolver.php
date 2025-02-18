@@ -67,7 +67,7 @@ class CustomerCartResolver
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function resolve(int $customerId, string $predefinedMaskedQuoteId = null): Quote
+    public function resolve(int $customerId, ?string $predefinedMaskedQuoteId = null): Quote
     {
         try {
             /** @var Quote $cart */
@@ -94,7 +94,7 @@ class CustomerCartResolver
      * @return void
      * @throws AlreadyExistsException
      */
-    private function ensureQuoteMaskIdExist(int $quoteId, string $predefinedMaskedQuoteId = null): void
+    private function ensureQuoteMaskIdExist(int $quoteId, ?string $predefinedMaskedQuoteId = null): void
     {
         try {
             $maskedId = $this->quoteIdToMaskedQuoteId->execute($quoteId);

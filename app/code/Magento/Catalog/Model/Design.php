@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model;
@@ -25,15 +25,15 @@ use Magento\Framework\View\DesignInterface;
  *
  * @api
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Design extends \Magento\Framework\Model\AbstractModel
 {
-    const APPLY_FOR_PRODUCT = 1;
+    public const APPLY_FOR_PRODUCT = 1;
 
-    const APPLY_FOR_CATEGORY = 2;
+    public const APPLY_FOR_CATEGORY = 2;
 
     /**
      * Design package instance
@@ -92,10 +92,10 @@ class Design extends \Magento\Framework\Model\AbstractModel
         Registry $registry,
         TimezoneInterface $localeDate,
         DesignInterface $design,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        TranslateInterface $translator = null,
+        ?TranslateInterface $translator = null,
         ?CategoryLayoutManager $categoryLayoutManager = null,
         ?ProductLayoutManager $productLayoutManager = null,
         ?Session $catalogSession = null,

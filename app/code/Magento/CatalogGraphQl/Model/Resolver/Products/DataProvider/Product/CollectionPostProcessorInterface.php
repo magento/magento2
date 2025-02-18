@@ -26,6 +26,6 @@ interface CollectionPostProcessorInterface
     public function process(
         Collection $collection,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection;
 }

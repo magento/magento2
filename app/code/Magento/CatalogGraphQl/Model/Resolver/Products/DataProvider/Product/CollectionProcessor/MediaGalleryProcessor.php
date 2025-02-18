@@ -49,7 +49,7 @@ class MediaGalleryProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
         if (in_array('media_gallery_entries', $attributeNames)) {
             $mediaAttributes = $this->mediaConfig->getMediaAttributeCodes();

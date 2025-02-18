@@ -129,8 +129,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver,
         $indexerId,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        QueryContainer $queryContainer = null,
-        LoggerInterface $logger = null,
+        ?QueryContainer $queryContainer = null,
+        ?LoggerInterface $logger = null,
         ?string $aggregationFieldName = null
     ) {
         $this->connectionManager = $connectionManager;

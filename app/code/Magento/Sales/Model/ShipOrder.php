@@ -144,10 +144,10 @@ class ShipOrder implements ShipOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
         array $tracks = [],
         array $packages = [],
-        \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
     ) {
         return $this->orderMutex->execute(
             (int)$orderId,
@@ -189,10 +189,10 @@ class ShipOrder implements ShipOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
         array $tracks = [],
         array $packages = [],
-        \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
     ) {
         $order = $this->orderRepository->get($orderId);
         $shipment = $this->shipmentDocumentFactory->create(

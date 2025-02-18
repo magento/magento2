@@ -60,12 +60,12 @@ class WishlistItem
      */
     public function __construct(
         float $quantity,
-        string $sku = null,
-        string $parentSku = null,
-        int $id = null,
-        string $description = null,
-        array $selectedOptions = null,
-        array $enteredOptions = null
+        ?string $sku = null,
+        ?string $parentSku = null,
+        ?int $id = null,
+        ?string $description = null,
+        ?array $selectedOptions = null,
+        ?array $enteredOptions = null
     ) {
         $this->quantity = $quantity;
         $this->sku = $sku;

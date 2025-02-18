@@ -119,7 +119,7 @@ class OauthHelper
      * @throws LocalizedException
      * @throws Exception
      */
-    public static function getApiAccessCredentials($resources = null, Integration $integrationModel = null)
+    public static function getApiAccessCredentials($resources = null, ?Integration $integrationModel = null)
     {
         if (!self::$_apiCredentials) {
             $integration = $integrationModel === null ? self::_createIntegration($resources) : $integrationModel;

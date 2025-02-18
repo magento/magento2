@@ -45,11 +45,11 @@ class OauthClient extends AbstractService
      */
     public function __construct(
         Credentials $credentials,
-        ClientInterface $httpClient = null,
-        TokenStorageInterface $storage = null,
-        SignatureInterface $signature = null,
-        UriInterface $baseApiUri = null,
-        Utility $helper = null
+        ?ClientInterface $httpClient = null,
+        ?TokenStorageInterface $storage = null,
+        ?SignatureInterface $signature = null,
+        ?UriInterface $baseApiUri = null,
+        ?Utility $helper = null
     ) {
         if (!isset($httpClient)) {
             $httpClient = new \Magento\TestFramework\Authentication\Rest\CurlClient();

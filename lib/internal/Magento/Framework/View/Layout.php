@@ -213,7 +213,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         AppState $appState,
         Logger $logger,
         $cacheable = true,
-        SerializerInterface $serializer = null,
+        ?SerializerInterface $serializer = null,
         ?int $cacheLifetime = null
     ) {
         $this->_elementClass = \Magento\Framework\View\Layout\Element::class;

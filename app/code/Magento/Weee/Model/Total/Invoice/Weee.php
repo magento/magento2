@@ -38,7 +38,7 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
     public function __construct(
         WeeeHelper $weeeData,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_weeeData = $weeeData;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

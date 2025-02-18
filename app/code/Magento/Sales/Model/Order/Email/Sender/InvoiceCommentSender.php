@@ -52,7 +52,7 @@ class InvoiceCommentSender extends NotifySender
         \Psr\Log\LoggerInterface $logger,
         Renderer $addressRenderer,
         ManagerInterface $eventManager,
-        Emulation $appEmulation = null
+        ?Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->addressRenderer = $addressRenderer;

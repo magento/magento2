@@ -58,7 +58,7 @@ class CliProxy implements \Magento\Framework\ObjectManager\NoninterceptableInter
      * @return int
      * @throws \Exception
      */
-    public function run(InputInterface $input = null, OutputInterface $output = null)
+    public function run(?InputInterface $input = null, ?OutputInterface $output = null)
     {
         return $this->getSubject()->run($input, $output);
     }

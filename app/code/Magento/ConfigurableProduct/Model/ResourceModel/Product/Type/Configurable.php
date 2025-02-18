@@ -58,9 +58,9 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         DbContext $context,
         ProductRelation $catalogProductRelation,
         $connectionName = null,
-        ScopeResolverInterface $scopeResolver = null,
-        AttributeOptionProviderInterface $attributeOptionProvider = null,
-        OptionProvider $optionProvider = null
+        ?ScopeResolverInterface $scopeResolver = null,
+        ?AttributeOptionProviderInterface $attributeOptionProvider = null,
+        ?OptionProvider $optionProvider = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
         $this->scopeResolver = $scopeResolver;

@@ -825,6 +825,14 @@
                         <item name="cache_dir" xsi:type="string">page_cache</item>
                     </item>
                 </item>
+                <item name="default" xsi:type="array">
+                    <item name="backend_options" xsi:type="array">
+                        <!-- Disable lua by default -->
+                        <item name="use_lua" xsi:type="boolean">false</item>
+                        <!-- Enable lua in the garbage collector to prevent race conditions -->
+                        <item name="use_lua_on_gc" xsi:type="boolean">true</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -2014,4 +2022,11 @@
     <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
     <preference for="Magento\Framework\App\State\ReloadProcessorInterface" type="Magento\Framework\App\State\ReloadProcessorComposite" />
     <preference for="Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface" type="Magento\Framework\Indexer\Config\Converter\SortingAdjustment" />
+
+    <!-- @api -->
+    <virtualType name="shellBackground" type="Magento\Framework\Shell">
+        <arguments>
+            <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
+        </arguments>
+    </virtualType>
 </config>

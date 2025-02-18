@@ -1,8 +1,7 @@
 <?php
 /**
- * @author      Magento Core Team <core@magentocommerce.com>
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
@@ -11,7 +10,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 class Group extends \Magento\Eav\Model\Entity\Attribute\Group
 {
     /**
-     * Attribute collection factory
+     * Attribute collection factory for Product
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
@@ -36,8 +35,8 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
         AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Filter\Translit $translitFilter,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
