@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -433,8 +433,6 @@ class AccountManagementApiTest extends TestCase
     ): void {
         if ($willThrowException) {
             $this->expectException(AuthorizationException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
         }
         $this->authorizationMock
             ->expects($this->once())
