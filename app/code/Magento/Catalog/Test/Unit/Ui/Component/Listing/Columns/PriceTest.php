@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,15 +11,15 @@ use Magento\Catalog\Ui\Component\Listing\Columns\Price;
 use Magento\Directory\Model\Currency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Locale\CurrencyInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
 class PriceTest extends TestCase
 {
