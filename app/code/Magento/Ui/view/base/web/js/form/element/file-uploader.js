@@ -186,8 +186,7 @@ define([
                 .find('.pagebuilder-options .file-uploader-button:first')
                 .on('click', function () {
                     $('#' + fileId).closest('.file-uploader-area').find('.uppy-Dashboard-browse').trigger('click');
-                }
-            );
+                });
         },
 
         /**
