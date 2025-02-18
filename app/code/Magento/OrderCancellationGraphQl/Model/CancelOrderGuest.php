@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\OrderCancellationGraphQl\Model;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\OrderCancellation\Model\Email\ConfirmationKeySender;
 use Magento\OrderCancellation\Model\GetConfirmationKey;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -23,12 +24,14 @@ class CancelOrderGuest
      * @param OrderRepositoryInterface $orderRepository
      * @param ConfirmationKeySender $confirmationKeySender
      * @param GetConfirmationKey $confirmationKey
+     * @param Uid $idEncoder
      */
     public function __construct(
         private readonly OrderFormatter           $orderFormatter,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly ConfirmationKeySender    $confirmationKeySender,
         private readonly GetConfirmationKey       $confirmationKey,
+        private readonly Uid                      $idEncoder
     ) {
     }
 
@@ -65,7 +68,13 @@ class CancelOrderGuest
      */
     private function sendConfirmationKeyEmail(Order $order, string $reason): void
     {
-        $this->confirmationKeySender->execute($order, $this->confirmationKey->execute($order, $reason));
+        $this->confirmationKeySender->execute(
+            $order,
+            [
+                'order_id' => $this->idEncoder->encode((string)$order->getEntityId()),
+                'confirmation_key' => $this->confirmationKey->execute($order, $reason)
+            ]
+        );
 
         // add comment in order about confirmation key send
         $order->addCommentToStatusHistory(
