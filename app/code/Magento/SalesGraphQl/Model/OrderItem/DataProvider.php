@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -147,6 +147,8 @@ class DataProvider
                 'product_sku' => $orderItem->getSku(),
                 'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
                 'product_type' => $orderItem->getProductType(),
+                'parent_sku' => ($orderItem->getChildrenItems() && $associatedProduct) ?
+                    $associatedProduct->getSku() : null,
                 'status' => $orderItem->getStatus(),
                 'discounts' => $this->getDiscountDetails($associatedOrder, $orderItem),
                 'product_sale_price' => [

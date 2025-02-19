@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Directory:etc/zip_codes.xsd">
     <zip countryCode="AD">
@@ -569,6 +569,7 @@
     <zip countryCode="NL">
         <codes>
             <code id="pattern_1" active="true" example="1234 AB/1234AB">^[1-9][0-9]{3}\s?[a-zA-Z]{2}$</code>
+            <code id="pattern_2" active="true" example="1234">^[1-9][0-9]{3}$</code>
         </codes>
     </zip>
     <zip countryCode="NO">

@@ -99,7 +99,7 @@ class CartItemPriceTest extends GraphQlAbstract
                         0 => [
                             'prices' => [
                                 'original_item_price' => [
-                                    'value' => 8.5,
+                                    'value' => 10,
                                     'currency' => 'USD'
                                 ],
                                 'original_row_total' => [

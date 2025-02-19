@@ -31,19 +31,21 @@ class PhpCookieManager implements CookieManagerInterface
      * RFC 2109 - Page 15
      * http://www.ietf.org/rfc/rfc6265.txt
      */
-    const MAX_NUM_COOKIES = 50;
-    const MAX_COOKIE_SIZE = 4096;
-    const EXPIRE_NOW_TIME = 1;
-    const EXPIRE_AT_END_OF_SESSION_TIME = 0;
+    private const MAX_NUM_COOKIES = 50;
+    public const MAX_COOKIE_SIZE = 4096;
+    private const EXPIRE_NOW_TIME = 1;
+    private const EXPIRE_AT_END_OF_SESSION_TIME = 0;
     /**#@-*/
 
     /**#@+
      * Constant for metadata array key
      */
-    const KEY_EXPIRE_TIME = 'expiry';
+    private const KEY_EXPIRE_TIME = 'expiry';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var CookieScopeInterface
+     */
     private $scope;
 
     /**
@@ -209,17 +211,17 @@ class PhpCookieManager implements CookieManagerInterface
 
         $sizeOfCookie = $this->sizeOfCookie($name, $value);
 
-        if ($numCookies > static::MAX_NUM_COOKIES) {
+        if ($numCookies > self::MAX_NUM_COOKIES) {
             $this->logger->warning(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                 [
-                    'cookies' => $_COOKIE,
+                    'cookies' => array_keys($_COOKIE),
                     'user-agent' => $this->httpHeader->getHttpUserAgent()
                 ]
             );
         }
 
-        if ($sizeOfCookie > static::MAX_COOKIE_SIZE) {
+        if ($sizeOfCookie > self::MAX_COOKIE_SIZE) {
             throw new CookieSizeLimitReachedException(
                 new Phrase(
                     'Unable to send the cookie. Size of \'%name\' is %size bytes.',

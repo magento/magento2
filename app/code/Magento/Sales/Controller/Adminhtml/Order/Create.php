@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -191,12 +191,13 @@ abstract class Create extends \Magento\Backend\App\Action
          */
         $this->_getOrderCreateModel()->getBillingAddress();
 
+        $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()?->getShippingMethod();
+
         /**
          * Flag for using billing address for shipping
          */
         if (!$this->_getOrderCreateModel()->getQuote()->isVirtual()) {
             $syncFlag = $this->getRequest()->getPost('shipping_as_billing');
-            $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()->getShippingMethod();
             if ($syncFlag === null
             && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
             ) {
@@ -289,6 +290,7 @@ abstract class Create extends \Magento\Backend\App\Action
         $eventData = [
             'order_create_model' => $this->_getOrderCreateModel(),
             'request' => $this->getRequest()->getPostValue(),
+            'shipping_method' => $shippingMethod
         ];
 
         $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data', $eventData);

@@ -333,6 +333,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
                             )
                         );
                     }
+                    if (is_string($setterValue) && $this->validateParamsValue($setterValue)) {
+                        throw new InputException(
+                            new Phrase(
+                                '"%field_name" does not contains valid value.',
+                                ['field_name' => $propertyName]
+                            )
+                        );
+                    }
                     $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
                     $object->{$setterName}($setterValue);
                 }
@@ -346,6 +354,17 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
         }
 
         return $object;
+    }
+
+    /**
+     * Validate input param value
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function validateParamsValue(string $value)
+    {
+        return preg_match('/<script\b[^>]*>(.*?)<\/script>/is', $value);
     }
 
     /**

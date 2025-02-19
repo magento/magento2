@@ -161,7 +161,7 @@ QUERY;
         $subject = __($subject, $this->storeRepository->getById($customer->getStoreId())->getFrontendName())->render();
         $message = __($message)->render();
         $this->assertEquals($subject, $sentMessage->getSubject());
-        $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
+        $messageRaw = quoted_printable_decode($sentMessage->getBody()->bodyToString());
         $this->assertStringContainsString($message, $messageRaw);
     }
 
