@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -110,7 +110,8 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     private function validateConfigured(\DOMXPath $xpath): void
     {
         //Validating tags
-        $this->allowedTags = array_merge($this->allowedTags, ["body", "html"]);
+        $this->allowedTags['body'] = 'body';
+        $this->allowedTags['html'] = 'html';
         $found = $xpath->query(
             '//*['
             . implode(

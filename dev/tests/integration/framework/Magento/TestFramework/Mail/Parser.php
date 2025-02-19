@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,10 @@ use Magento\Framework\Mail\AddressFactory;
 use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\MimeMessageInterfaceFactory;
 use Magento\Framework\Mail\MimePartInterfaceFactory;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\AbstractPart;
+use Symfony\Component\Mime\Message as SymfonyMessage;
+use Symfony\Component\Mime\Address as SymfonyAddress;
 
 class Parser
 {
@@ -61,69 +65,93 @@ class Parser
      */
     public function fromString(string $content): \Magento\Framework\Mail\EmailMessageInterface
     {
-        $laminasMessage = \Laminas\Mail\Message::fromString($content)->setEncoding('utf-8');
-        $laminasMimeMessage = is_string($laminasMessage->getBody())
-            ? \Laminas\Mime\Message::createFromMessage($content)
-            : $laminasMessage->getBody();
-
-        $mimeParts = [];
-
-        foreach ($laminasMimeMessage->getParts() as $laminasMimePart) {
-            /** @var \Magento\Framework\Mail\MimePartInterface $mimePart */
-            $mimeParts[] = $this->mimePartInterfaceFactory->create(
-                [
-                    'content' => $laminasMimePart->getRawContent(),
-                    'type' => $laminasMimePart->getType(),
-                    'fileName' => $laminasMimePart->getFileName(),
-                    'disposition' => $laminasMimePart->getDisposition(),
-                    'encoding' => $laminasMimePart->getEncoding(),
-                    'description' => $laminasMimePart->getDescription(),
-                    'filters' => $laminasMimePart->getFilters(),
-                    'charset' => $laminasMimePart->getCharset(),
-                    'boundary' => $laminasMimePart->getBoundary(),
-                    'location' => $laminasMimePart->getLocation(),
-                    'language' => $laminasMimePart->getLocation(),
-                    'isStream' => $laminasMimePart->isStream()
-                ]
-            );
+        $part = new DataPart($content);
+        $part->setDisposition('inline');
+        $symfonyMimeMessage = new SymfonyMessage(null, $part);
+        if ($symfonyMimeMessage->getBody() instanceof AbstractPart &&
+            method_exists($symfonyMimeMessage->getBody(), 'getFilename')) {
+            $filename = $symfonyMimeMessage->getBody()->getFilename();
+        } else {
+            $filename = '';
         }
 
+        $mimePart = [];
+
+            /** @var \Magento\Framework\Mail\MimePartInterface $mimePart */
+        $mimePart = $this->mimePartInterfaceFactory->create(
+            [
+                'content' => $symfonyMimeMessage->getBody()->toString(),
+                'type' => 'text/' . $symfonyMimeMessage->getBody()->getMediaSubtype(),
+                'fileName' => $filename,
+                'disposition' => $symfonyMimeMessage->getBody()->getDisposition(),
+                'encoding' => $symfonyMimeMessage->getHeaders()->getHeaderBody('Content-Transfer-Encoding'),
+                'description' => $symfonyMimeMessage->getHeaders()->getHeaderBody('Content-Description'),
+                'filters' => [],
+                'charset' => $symfonyMimeMessage->getHeaders()->get('Content-Type')?->getCharset(),
+                'boundary' => $symfonyMimeMessage->getHeaders()->getHeaderParameter('Content-Type', 'boundary'),
+                'location' => $symfonyMimeMessage->getHeaders()->getHeaderBody('Content-Location'),
+                'language' => $symfonyMimeMessage->getHeaders()->getHeaderBody('Content-Language'),
+                'isStream' => is_resource($symfonyMimeMessage->getBody())
+            ]
+        );
+
         $body = $this->mimeMessageInterfaceFactory->create([
-            'parts' => $mimeParts
+            'parts' => [$mimePart]
         ]);
 
-        $sender = $laminasMessage->getSender() ? $this->addressFactory->create([
-            'email' => $laminasMessage->getSender()->getEmail(),
-            'name' => $laminasMessage->getSender()->getName()
-        ]): null;
+        $sender = $symfonyMimeMessage->getHeaders()->get('Sender') ? $this->addressFactory->create([
+            'email' => $symfonyMimeMessage->getHeaders()->get('Sender')->getAddress(),
+            'name' => $symfonyMimeMessage->getHeaders()->get('Sender')->getName()
+        ]): $this->addressFactory->create([
+            'email' => 'sender@example.com',
+            'name' => 'Sender'
+        ]);
+
+        $address = [
+            'email' => 'john@example.com',
+            'name' => 'John'
+        ];
 
         return $this->emailMessageInterfaceFactory->create([
             'body' => $body,
-            'subject' => $laminasMessage->getSubject(),
+            'subject' => $symfonyMimeMessage->getHeaders()->getHeaderBody('Subject'),
             'sender' => $sender,
-            'to' => $this->convertAddresses($laminasMessage->getTo()),
-            'from' => $this->convertAddresses($laminasMessage->getFrom()),
-            'cc' => $this->convertAddresses($laminasMessage->getCc()),
-            'bcc' => $this->convertAddresses($laminasMessage->getBcc()),
-            'replyTo' => $this->convertAddresses($laminasMessage->getReplyTo()),
+            'to' => $this->convertAddresses(
+                $symfonyMimeMessage->getHeaders()->get('To')?->getAddresses()
+                    ?? $address
+            ),
+            'from' => $this->convertAddresses(
+                $symfonyMimeMessage->getHeaders()->get('From')?->getAddresses()
+                    ?? $address
+            ),
+            'cc' => $this->convertAddresses(
+                $symfonyMimeMessage->getHeaders()->get('Cc')?->getAddresses()
+                    ?? $address
+            ),
+            'bcc' => $this->convertAddresses(
+                $symfonyMimeMessage->getHeaders()->get('Bcc')?->getAddresses()
+                    ?? $address
+            ),
+            'replyTo' => $this->convertAddresses(
+                $symfonyMimeMessage->getHeaders()->get('Reply-To')?->getAddresses()
+                    ?? $address
+            ),
         ]);
     }
 
     /**
-     * Convert laminas addresses to internal mail addresses
+     * Convert addresses to internal mail addresses
      *
-     * @param \Laminas\Mail\AddressList $addressList
+     * @param array $address
      * @return array
      */
-    private function convertAddresses(\Laminas\Mail\AddressList $addressList): array
+    private function convertAddresses(array $address): array
     {
-        $addresses = [];
-        foreach ($addressList as $address) {
-            $addresses[] = $this->addressFactory->create([
-                'email' => $address->getEmail(),
-                'name' => $address->getName()
-            ]);
-        }
-        return $addresses;
+        return [
+            $this->addressFactory->create([
+            'email' => $address['email'],
+            'name' => $address['name']
+            ])
+        ];
     }
 }

@@ -9,7 +9,6 @@ namespace Magento\Sales\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\OrderRepository;
 
 /**
  * Sales order status change history resource model.
@@ -28,11 +27,9 @@ class SalesOrderStatusChangeHistory
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param OrderRepository $orderRepository
      */
     public function __construct(
         private readonly ResourceConnection $resourceConnection,
-        private readonly OrderRepository $orderRepository,
     ) {
     }
 
@@ -47,7 +44,7 @@ class SalesOrderStatusChangeHistory
         $connection = $this->resourceConnection->getConnection();
         return $connection->fetchRow(
             $connection->select()->from(
-                $connection->getTableName(self::TABLE_NAME),
+                $this->resourceConnection->getTableName(self::TABLE_NAME),
                 ['status', 'created_at']
             )->where(
                 'order_id = ?',
@@ -70,7 +67,7 @@ class SalesOrderStatusChangeHistory
 
         $connection = $this->resourceConnection->getConnection();
         $connection->insert(
-            $connection->getTableName(self::TABLE_NAME),
+            $this->resourceConnection->getTableName(self::TABLE_NAME),
             [
                 'order_id' => (int)$order->getId(),
                 'status' => $order->getStatus()
@@ -89,7 +86,7 @@ class SalesOrderStatusChangeHistory
         $connection = $this->resourceConnection->getConnection();
         $entityId = $connection->fetchOne(
             $connection->select()->from(
-                $connection->getTableName(self::ORDER_TABLE_NAME),
+                $this->resourceConnection->getTableName(self::ORDER_TABLE_NAME),
                 ['entity_id']
             )->where(
                 'entity_id = ?',
