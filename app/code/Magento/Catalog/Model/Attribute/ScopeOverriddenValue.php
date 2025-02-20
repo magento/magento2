@@ -157,6 +157,10 @@ class ScopeOverriddenValue
                 $selects[] = $select;
             }
 
+            if (empty($selects)) {
+                return;
+            }
+
             $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
                 $selects,
                 \Magento\Framework\DB\Select::SQL_UNION_ALL
