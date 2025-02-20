@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Ui\Component;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -12,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
+use Magento\Ui\Component\Container;
 
 /**
  * DataProvider for cms ui.
@@ -27,6 +29,17 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @var AddFilterInterface[]
      */
     private $additionalFilterPool;
+
+    /**
+     * @var array
+     */
+    private array $pageLayoutColumns = [
+        PageInterface::PAGE_LAYOUT,
+        PageInterface::CUSTOM_THEME,
+        PageInterface::CUSTOM_THEME_FROM,
+        PageInterface::CUSTOM_THEME_TO,
+        PageInterface::CUSTOM_ROOT_TEMPLATE
+    ];
 
     /**
      * @param string $name
@@ -73,6 +86,8 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * Get authorization info.
      *
      * @deprecated 101.0.7
+     * @see nothing
+     *
      * @return AuthorizationInterface|mixed
      */
     private function getAuthorizationInstance()
@@ -101,7 +116,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
                                 'editorConfig' => [
                                     'enabled' => false
                                 ],
-                                'componentType' => \Magento\Ui\Component\Container::NAME
+                                'componentType' => Container::NAME
                             ]
                         ]
                     ]
@@ -109,13 +124,34 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             ];
         }
 
+        if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save_design')) {
+
+            foreach ($this->pageLayoutColumns as $column) {
+                $metadata['cms_page_columns']['children'][$column] = [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'editor' => [
+                                    'editorType' => false
+                                ],
+                                'componentType' => Container::NAME
+                            ]
+                        ]
+                    ]
+                ];
+            }
+        }
+
         return $metadata;
     }
 
     /**
-     * @inheritdoc
+     * Add Filter
+     *
+     * @param Filter $filter
+     * @return void
      */
-    public function addFilter(Filter $filter)
+    public function addFilter(Filter $filter): void
     {
         if (!empty($this->additionalFilterPool[$filter->getField()])) {
             $this->additionalFilterPool[$filter->getField()]->addFilter($this->searchCriteriaBuilder, $filter);
