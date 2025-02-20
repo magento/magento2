@@ -282,7 +282,7 @@ class File extends \Magento\Framework\App\Config\Value
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             || !$this->_mediaDirectory->isFile($this->_getUploadDir() . DIRECTORY_SEPARATOR . basename($value))
         ) {
-            throw new LocalizedException(__('Invalid file name'));
+            throw new LocalizedException(__('Invalid file name: ' . basename($value)));
         }
 
         $this->setValue($value);
