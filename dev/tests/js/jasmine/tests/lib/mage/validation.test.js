@@ -413,7 +413,7 @@ define([
             expect($.validator.methods['validate-admin-password']
                 .call($.validator.prototype, '   ')).toEqual(true);
             expect($.validator.methods['validate-admin-password']
-                .call($.validator.prototype, '123@123.com')).toEqual(true);
+                .call($.validator.prototype, '1234@123.com')).toEqual(true);
             expect($.validator.methods['validate-admin-password']
                 .call($.validator.prototype, 'abc')).toEqual(false);
             expect($.validator.methods['validate-admin-password']
