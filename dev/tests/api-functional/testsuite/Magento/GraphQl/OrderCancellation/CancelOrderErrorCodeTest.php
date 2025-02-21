@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\OrderCancellation;
 
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderRepository;
@@ -18,7 +17,6 @@ use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
 use Magento\Store\Test\Fixture\Store;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
@@ -70,6 +68,25 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 class CancelOrderErrorCodeTest extends GraphQlAbstract
 {
     /**
+     * @var Uid
+     */
+    private $idEncoder;
+
+    /**
+     * @var DataFixtureStorageManager
+     */
+    private $fixtures;
+
+    /**
+     * @inheritdoc
+     */
+    public function setUp(): void
+    {
+        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $this->idEncoder = Bootstrap::getObjectManager()->get(Uid::class);
+    }
+
+    /**
      * @return void
      * @throws AuthenticationException
      * @throws LocalizedException
@@ -79,19 +96,6 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
     ]
     public function testCancelNonExistingOrder()
     {
-        /**
-         * @var CustomerInterface $customer
-         */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer');
-        $nonExistingOrderId = '99999';
-        $query = $this->getQuery($nonExistingOrderId);
-        $customerToken = $this->getHeaders($customer->getEmail());
-        $response = $this->graphQlMutation(
-            $query,
-            [],
-            '',
-            $customerToken
-        );
         $this->assertEquals(
             [
                 'cancelOrder' =>
@@ -103,7 +107,12 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
                         ]
                     ]
             ],
-            $response
+            $this->graphQlMutation(
+                $this->getQuery('MTAwMDA='),
+                [],
+                '',
+                $this->getHeaders($this->fixtures->get('customer')->getEmail())
+            )
         );
     }
 
@@ -117,23 +126,6 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
     ]
     public function testCancelOrderUnauthorizedCustomer()
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        /**
-         * @var CustomerInterface $customer
-         */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer_b');
-        $query = $this->getQuery($order->getEntityId());
-        $customerToken = $this->getHeaders($customer->getEmail());
-        $response = $this->graphQlMutation(
-            $query,
-            [],
-            '',
-            $customerToken
-        );
-
         $this->assertEquals(
             [
                 'cancelOrder' =>
@@ -145,7 +137,12 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
                         ]
                     ]
             ],
-            $response
+            $this->graphQlMutation(
+                $this->getQuery($this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())),
+                [],
+                '',
+                $this->getHeaders($this->fixtures->get('customer_b')->getEmail())
+            )
         );
     }
 
@@ -159,14 +156,7 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
         string $status,
         string $expectedStatus
     ) {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        /**
-         * @var CustomerInterface $customer
-         */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $order = $this->fixtures->get('order');
         $order->setStatus($status);
         $order->setState($status);
 
@@ -174,15 +164,6 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
         $orderRepo = Bootstrap::getObjectManager()->get(OrderRepository::class);
         $orderRepo->save($order);
 
-        $query = $this->getQuery($order->getEntityId());
-        $customerToken = $this->getHeaders($customer->getEmail());
-
-        $response = $this->graphQlMutation(
-            $query,
-            [],
-            '',
-            $customerToken
-        );
         $this->assertEquals(
             [
                 'cancelOrder' =>
@@ -196,7 +177,12 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
                         ]
                     ]
             ],
-            $response
+            $this->graphQlMutation(
+                $this->getQuery($this->idEncoder->encode((string)$order->getEntityId())),
+                [],
+                '',
+                $this->getHeaders($this->fixtures->get('customer')->getEmail())
+            )
         );
     }
 
@@ -242,25 +228,6 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
     ]
     public function testAttemptToCancelOrderWithOfflinePaymentFullyInvoicedPartiallyShipped()
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-
-        /**
-         * @var CustomerInterface $customer
-         */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer');
-
-        $query = $this->getQuery($order->getEntityId());
-        $customerToken = $this->getHeaders($customer->getEmail());
-
-        $response = $this->graphQlMutation(
-            $query,
-            [],
-            '',
-            $customerToken
-        );
         $this->assertEquals(
             [
                 'cancelOrder' =>
@@ -274,7 +241,12 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
                         ]
                     ]
             ],
-            $response
+            $this->graphQlMutation(
+                $this->getQuery($this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())),
+                [],
+                '',
+                $this->getHeaders($this->fixtures->get('customer')->getEmail())
+            )
         );
     }
 
@@ -312,26 +284,6 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
     ]
     public function testCancelOrderWithDisabledCancellation()
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-
-        /**
-         * @var CustomerInterface $customer
-         */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer');
-
-        $query = $this->getQuery($order->getEntityId());
-        $customerToken = $this->getHeaders($customer->getEmail());
-
-        $response = $this->graphQlMutation(
-            $query,
-            [],
-            '',
-            $customerToken
-        );
-
         $this->assertEquals(
             [
                 'cancelOrder' =>
@@ -343,18 +295,23 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
                         ]
                     ]
             ],
-            $response
+            $this->graphQlMutation(
+                $this->getQuery($this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())),
+                [],
+                '',
+                $this->getHeaders($this->fixtures->get('customer')->getEmail())
+            )
         );
     }
 
     /**
      * @param string $email
      * @return array
+     * @throws AuthenticationException
      */
     private function getHeaders(string $email): array
     {
-        return Bootstrap::getObjectManager()->get(GetCustomerAuthenticationHeader::class)
-            ->execute($email);
+        return Bootstrap::getObjectManager()->get(GetCustomerAuthenticationHeader::class)->execute($email);
     }
 
     /**

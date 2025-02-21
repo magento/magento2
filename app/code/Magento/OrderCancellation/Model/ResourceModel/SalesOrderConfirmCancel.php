@@ -40,7 +40,7 @@ class SalesOrderConfirmCancel
         $connection = $this->resourceConnection->getConnection();
         return $connection->fetchRow(
             $connection->select()->from(
-                self::TABLE_NAME
+                $this->resourceConnection->getTableName(self::TABLE_NAME)
             )->where(
                 'order_id = ?',
                 $orderId
@@ -60,7 +60,7 @@ class SalesOrderConfirmCancel
     {
         $connection = $this->resourceConnection->getConnection();
         $connection->insertOnDuplicate(
-            self::TABLE_NAME,
+            $this->resourceConnection->getTableName(self::TABLE_NAME),
             [
                 'order_id' => $orderId,
                 'confirmation_key' => $confirmationKey,

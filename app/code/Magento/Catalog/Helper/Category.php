@@ -1,16 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as ModelCategory;
+use Magento\Catalog\Model\CategoryFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\Data\Tree\Node\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 
 /**
  * Catalog category helper
@@ -33,21 +40,21 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
     /**
      * Store manager instance
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Category factory instance
      *
-     * @var \Magento\Catalog\Model\CategoryFactory
+     * @var CategoryFactory
      */
     protected $_categoryFactory;
 
     /**
      * Lib data collection factory
      *
-     * @var \Magento\Framework\Data\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_dataCollectionFactory;
 
@@ -57,17 +64,17 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
     protected $categoryRepository;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
+     * @param Context $context
+     * @param CategoryFactory $categoryFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CollectionFactory $dataCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
+        Context $context,
+        CategoryFactory $categoryFactory,
+        StoreManagerInterface $storeManager,
+        CollectionFactory $dataCollectionFactory,
         CategoryRepositoryInterface $categoryRepository
     ) {
         $this->_categoryFactory = $categoryFactory;
@@ -83,8 +90,8 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
      * @param bool|string $sorted
      * @param bool $asCollection
      * @param bool $toLoad
-     * @return \Magento\Framework\Data\Tree\Node\Collection or
-     * \Magento\Catalog\Model\ResourceModel\Category\Collection or array
+     * @return Collection|CategoryCollection|array
+     * @throws NoSuchEntityException
      */
     public function getStoreCategories($sorted = false, $asCollection = false, $toLoad = true)
     {
@@ -98,7 +105,6 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
          * Check if parent node of the store still exists
          */
         $category = $this->_categoryFactory->create();
-        /* @var $category ModelCategory */
         if (!$category->checkId($parent)) {
             if ($asCollection) {
                 return $this->_dataCollectionFactory->create();
@@ -110,7 +116,7 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
             0,
             (int)$this->scopeConfig->getValue(
                 'catalog/navigation/max_depth',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             )
         );
         $storeCategories = $category->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
@@ -173,7 +179,7 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_USE_CATEGORY_CANONICAL_TAG,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -184,5 +190,20 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->_storeCategories = [];
+    }
+
+    /**
+     * Retrieve canonical url for the category page
+     *
+     * @param string $categoryUrl
+     * @return string
+     */
+    public function getCanonicalUrl(string $categoryUrl): string
+    {
+        $params = $this->_request->getParams();
+        if ($params && isset($params['p'])) {
+            $categoryUrl = $categoryUrl . '?p=' . $params['p'];
+        }
+        return $categoryUrl;
     }
 }

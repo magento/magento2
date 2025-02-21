@@ -272,6 +272,7 @@ return [
     ],
     '*-fromConstructed' => [
         // phpcs:disable Generic.Files.LineLength.TooLong
+        Magento\Catalog\Model\Product\Attribute\Backend\Url\Interceptor::class => null,
         Magento\Customer\Model\Cache\GroupExcludedWebsiteCache::class => null,
         Magento\Sales\Model\ResourceModel\Grid::class => null,
         Magento\Sales\Model\ResourceModel\GridPool::class => null,

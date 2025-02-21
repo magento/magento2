@@ -28,6 +28,7 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\CartMutexInterface;
 use Magento\Quote\Model\CustomerManagement;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
@@ -203,8 +204,12 @@ class QuoteManagementTest extends TestCase
     private $lockManagerMock;
 
     /**
-     * @inheritDoc
-     *
+     * @var CartMutexInterface
+     */
+    private $cartMutexMock;
+
+    /**
+     * @inheriDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -255,6 +260,12 @@ class QuoteManagementTest extends TestCase
                     'setCustomerId',
                     'setRemoteIp',
                     'setXForwardedFor',
+                    'getCustomerFirstname',
+                    'getCustomerLastname',
+                    'getCustomerMiddlename',
+                    'setCustomerFirstname',
+                    'setCustomerLastname',
+                    'setCustomerMiddlename'
                 ]
             )
             ->onlyMethods(
@@ -299,6 +310,9 @@ class QuoteManagementTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->cartMutexMock = $this->getMockBuilder(CartMutexInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = $objectManager->getObject(
@@ -838,6 +852,7 @@ class QuoteManagementTest extends TestCase
     /**
      * @dataProvider guestPlaceOrderDataProvider
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPlaceOrderIfCustomerIsGuest(?string $settledEmail, int $countSetAddress): void
     {
@@ -846,6 +861,9 @@ class QuoteManagementTest extends TestCase
         $orderIncrementId = 100003332;
         $orderStatus = 'status1';
         $email = 'email@mail.com';
+        $firstName = 'TestFirst';
+        $middleName = 'TestMiddle';
+        $lastName = 'TestLast';
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -870,12 +888,44 @@ class QuoteManagementTest extends TestCase
             ->with($email)
             ->willReturnSelf();
 
-        $addressMock = $this->createPartialMock(Address::class, ['getEmail']);
+        $addressMock = $this->createPartialMock(
+            Address::class,
+            [
+                'getEmail',
+                'getFirstname',
+                'getLastname',
+                'getMiddlename'
+            ]
+        );
         $addressMock->expects($this->exactly($countSetAddress))->method('getEmail')->willReturn($email);
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->with()->willReturn($addressMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getCustomerId')->willReturn(null);
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomerFirstname')
+            ->willReturn(null);
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomerLastname')
+            ->willReturn(null);
+        $addressMock->expects($this->once())
+            ->method('getFirstname')
+            ->willReturn($firstName);
+        $addressMock->expects($this->once())
+            ->method('getLastname')
+            ->willReturn($lastName);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerFirstname')
+            ->willReturn($firstName);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerLastname')
+            ->willReturn($lastName);
+        $addressMock->expects($this->exactly(2))
+            ->method('getMiddlename')
+            ->willReturn($middleName);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomerLastname')
+            ->willReturn($middleName);
         $this->quoteMock->expects($this->once())
             ->method('setCustomerGroupId')
             ->with(GroupInterface::NOT_LOGGED_IN_ID);
@@ -908,7 +958,8 @@ class QuoteManagementTest extends TestCase
                     'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
-                    'remoteAddress' => $this->remoteAddressMock
+                    'remoteAddress' => $this->remoteAddressMock,
+                    'cartMutex' => $this->cartMutexMock
                 ]
             )
             ->getMock();
@@ -990,7 +1041,8 @@ class QuoteManagementTest extends TestCase
                     'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
-                    'remoteAddress' => $this->remoteAddressMock
+                    'remoteAddress' => $this->remoteAddressMock,
+                    'cartMutex' => $this->cartMutexMock
                 ]
             )
             ->getMock();

@@ -825,6 +825,14 @@
                         <item name="cache_dir" xsi:type="string">page_cache</item>
                     </item>
                 </item>
+                <item name="default" xsi:type="array">
+                    <item name="backend_options" xsi:type="array">
+                        <!-- Disable lua by default -->
+                        <item name="use_lua" xsi:type="boolean">false</item>
+                        <!-- Enable lua in the garbage collector to prevent race conditions -->
+                        <item name="use_lua_on_gc" xsi:type="boolean">true</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
