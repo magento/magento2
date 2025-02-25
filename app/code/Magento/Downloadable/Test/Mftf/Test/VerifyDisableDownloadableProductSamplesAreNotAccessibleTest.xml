@@ -19,8 +19,6 @@
             <useCaseId value="MC-14824"/>
             <group value="downloadable"/>
             <group value="catalog"/>
-            <!-- Will be fixed in the scope of ACQE-7464 -->
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Add downloadable domains -->
@@ -35,12 +33,12 @@
             </createData>
 
             <!-- Add downloadable link -->
-            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+            <createData entity="downloadableLink3" stepKey="addDownloadableLink">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
 
             <!-- Add downloadable sample -->
-            <createData entity="DownloadableSample" stepKey="addDownloadableSample">
+            <createData entity="DownloadableSampleWithStaticDomain" stepKey="addDownloadableSample">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
         </before>
@@ -65,9 +63,9 @@
 
         <!-- Sample url is accessible -->
         <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeDownloadableSample">
-            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSample.title)}}"/>
+            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSampleWithStaticDomain.title)}}"/>
         </actionGroup>
-        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSample.title)}}" stepKey="clickDownloadableSample"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(DownloadableSampleWithStaticDomain.title)}}" stepKey="clickDownloadableSample"/>
 
         <!-- Grab Sample id -->
         <switchToNextTab stepKey="switchToSampleTab"/>
@@ -76,9 +74,9 @@
 
         <!-- Link Sample url is accessible -->
         <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeDownloadableLink">
-            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLink1.title)}}"/>
+            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLink3.title)}}"/>
         </actionGroup>
-        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle(downloadableLink1.title)}}" stepKey="clickDownloadableLinkSample"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle(downloadableLink3.title)}}" stepKey="clickDownloadableLinkSample"/>
 
         <!-- Grab Link Sample id -->
         <switchToNextTab stepKey="switchToLinkSampleTab"/>
