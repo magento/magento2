@@ -9,6 +9,8 @@ namespace Magento\SalesGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface;
+use Magento\Tax\Api\OrderTaxManagementInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\SalesGraphQl\Model\Resolver\OrderTotal;
@@ -16,6 +18,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Tax\Api\Data\OrderTaxDetailsInterface;
 
 class OrderTotalTest extends TestCase
 {
@@ -49,6 +52,21 @@ class OrderTotalTest extends TestCase
      */
     private $extensionAttributesMock;
 
+    /**
+     * @var OrderTaxManagementInterface|MockObject
+     */
+    private $orderTaxManagementMock;
+
+    /**
+     * @var OrderTaxDetailsInterface
+     */
+    private $orderTaxDetailsMock;
+
+    /**
+     * @var OrderTaxDetailsAppliedTaxInterface
+     */
+    private $orderTaxDetailsAppliedTaxMock;
+
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(ContextInterface::class);
@@ -65,7 +83,11 @@ class OrderTotalTest extends TestCase
         $this->orderMock->method('getShippingInclTax')->willReturn(7.00);
         $this->orderMock->method('getDiscountAmount')->willReturn(7.00);
         $this->orderMock->method('getDiscountDescription')->willReturn('TEST123');
-        $this->orderTotal = new OrderTotal();
+        $this->orderMock->method('getEntityId')->willReturn(123);
+        $this->orderTaxManagementMock = $this->createMock(OrderTaxManagementInterface::class);
+        $this->orderTaxDetailsMock = $this->createMock(OrderTaxDetailsInterface::class);
+        $this->orderTaxDetailsAppliedTaxMock = $this->createMock(OrderTaxDetailsAppliedTaxInterface::class);
+        $this->orderTotal = new OrderTotal($this->orderTaxManagementMock);
     }
 
     public function testResolve(): void
@@ -74,12 +96,21 @@ class OrderTotalTest extends TestCase
         $resolveInfoMock = $this->createMock(ResolveInfo::class);
         $value = ['model' => $this->orderMock];
         $args = [];
+        $this->orderTaxDetailsAppliedTaxMock->expects($this->atMost(1))->method('setTitle')->willReturn('TestTitle');
+        $this->orderTaxDetailsAppliedTaxMock->expects($this->atMost(1))->method('setAmount')->willReturn(100.00);
+        $this->orderTaxDetailsAppliedTaxMock->expects($this->atMost(1))->method('setPercent')->willReturn(10);
+        $this->orderTaxDetailsMock->expects($this->any())->method('getAppliedTaxes')->willReturn([
+            $this->orderTaxDetailsAppliedTaxMock
+        ]);
+        $this->orderTaxManagementMock->expects($this->any())->method('getOrderTaxDetails')->willReturn(
+            $this->orderTaxDetailsMock
+        );
         $this->extensionAttributesMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->addMethods(['getAppliedTaxes', 'getItemAppliedTaxes'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extensionAttributesMock->expects($this->once())->method('getAppliedTaxes')->willReturn([]);
-        $this->extensionAttributesMock->expects($this->once())->method('getItemAppliedTaxes')->willReturn([]);
+        $this->extensionAttributesMock->expects($this->atMost(1))->method('getAppliedTaxes')->willReturn([]);
+        $this->extensionAttributesMock->expects($this->atMost(1))->method('getItemAppliedTaxes')->willReturn([]);
         $this->orderMock->method('getExtensionAttributes')->willReturn($this->extensionAttributesMock);
         $result = $this->orderTotal->resolve($fieldMock, $this->contextMock, $resolveInfoMock, $value, $args);
         $this->assertArrayHasKey('base_grand_total', $result);
