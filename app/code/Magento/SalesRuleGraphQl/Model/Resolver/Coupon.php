@@ -33,6 +33,9 @@ class Coupon implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
+        if (isset($value['order_model'])) {
+            return ['code' => $value['order_model']->getCouponCode()];
+        }
         if (!isset($value['discount_model'])) {
             throw new LocalizedException(__('"discount_model" value should be specified'));
         }
