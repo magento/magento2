@@ -14,6 +14,7 @@ use Magento\OrderCancellation\Model\GetConfirmationKey;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
+use Magento\SalesGraphQl\Model\Order\Token;
 
 class CancelOrderGuest
 {
@@ -25,13 +26,15 @@ class CancelOrderGuest
      * @param ConfirmationKeySender $confirmationKeySender
      * @param GetConfirmationKey $confirmationKey
      * @param Uid $idEncoder
+     * @param Token $token
      */
     public function __construct(
         private readonly OrderFormatter           $orderFormatter,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly ConfirmationKeySender    $confirmationKeySender,
         private readonly GetConfirmationKey       $confirmationKey,
-        private readonly Uid                      $idEncoder
+        private readonly Uid                      $idEncoder,
+        private readonly Token                    $token
     ) {
     }
 
@@ -72,7 +75,13 @@ class CancelOrderGuest
             $order,
             [
                 'order_id' => $this->idEncoder->encode((string)$order->getEntityId()),
-                'confirmation_key' => $this->confirmationKey->execute($order, $reason)
+                'confirmation_key' => $this->confirmationKey->execute($order, $reason),
+                'orderRef' => $this->token->encrypt(
+                    $order->getIncrementId(),
+                    $order->getBillingAddress()->getEmail(),
+                    $order->getBillingAddress()->getLastname()
+                ),
+                'action' => 'cancel'
             ]
         );
 
