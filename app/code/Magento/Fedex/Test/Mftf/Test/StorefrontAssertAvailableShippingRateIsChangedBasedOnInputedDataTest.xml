@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright 2024 Adobe
+  * Copyright 2025 Adobe
   * All Rights Reserved.
   */
 -->
@@ -68,14 +68,6 @@
         </actionGroup>
         <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="againWaitForFreeShippingLabelNotVisible"/>
         <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyFlatRateShippingMethodAfterCountryChangeToUS"/>
-        <actionGroup ref="StorefrontVerifyFedexShippingMethodPricesActionGroup" stepKey="verifyFedexShippingMethodPrices">
-            <argument name="smartPostPrice" value="$15.93"/>
-            <argument name="groundPrice" value="$13.72"/>
-            <argument name="expressSaverPrice" value="$35.87"/>
-            <argument name="twoDayPrice" value="$42.01"/>
-            <argument name="twoDayAMPrice" value="$48.81"/>
-            <argument name="standardOvernightPrice" value="$88.21"/>
-            <argument name="priorityOvernightPrice" value="$98.27"/>
-        </actionGroup>
+        <actionGroup ref="StorefrontVerifyFedexShippingMethodPricesActionGroup" stepKey="verifyFedexShippingMethodPrices"/>
     </test>
 </tests>
