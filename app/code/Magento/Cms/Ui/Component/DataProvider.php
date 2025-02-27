@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 use Magento\Ui\Component\Container;
 
 /**
- * DataProvider for cms ui.
+ * DataProvider for cms blocks and pages listing ui components.
  */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
@@ -107,38 +107,41 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     {
         $metadata = [];
 
-        if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save')) {
-            $metadata = [
-                'cms_page_columns' => [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'editorConfig' => [
-                                    'enabled' => false
-                                ],
-                                'componentType' => Container::NAME
-                            ]
-                        ]
-                    ]
-                ]
-            ];
-        }
+        if ($this->name === 'cms_page_listing_data_source') {
 
-        if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save_design')) {
-
-            foreach ($this->pageLayoutColumns as $column) {
-                $metadata['cms_page_columns']['children'][$column] = [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'editor' => [
-                                    'editorType' => false
-                                ],
-                                'componentType' => Container::NAME
+            if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save')) {
+                $metadata = [
+                    'cms_page_columns' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'editorConfig' => [
+                                        'enabled' => false
+                                    ],
+                                    'componentType' => Container::NAME
+                                ]
                             ]
                         ]
                     ]
                 ];
+            }
+
+            if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save_design')) {
+
+                foreach ($this->pageLayoutColumns as $column) {
+                    $metadata['cms_page_columns']['children'][$column] = [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'editor' => [
+                                        'editorType' => false
+                                    ],
+                                    'componentType' => Container::NAME
+                                ]
+                            ]
+                        ]
+                    ];
+                }
             }
         }
 
