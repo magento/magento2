@@ -19,7 +19,7 @@
                id="telephone"
                value="<?= $block->escapeHtmlAttr($block->getTelephone()) ?>"
                title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-               class="input-text <?= $block->escapeHtmlAttr(
+               class="input-text validate-phoneLax <?= $block->escapeHtmlAttr(
                    $block->getAttributeValidationClass('telephone')
                ) ?>"
         >
