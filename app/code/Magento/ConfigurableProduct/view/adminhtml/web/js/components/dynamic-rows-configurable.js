@@ -208,7 +208,7 @@ define([
 
             this.isEmpty(data.length === 0);
             this.isShowAddProductButton(
-                (!attributeCodes || data.length > 0 ? data.length : attributeCodes.length) > 0
+                (!attributeCodes || (data.length > 0 ? data.length : attributeCodes.length) >= 0)
             );
 
             tmpData = data.slice(this.pageSize * (this.currentPage() - 1),
