@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
 class ByPercent extends AbstractDiscount
@@ -68,7 +69,9 @@ class ByPercent extends AbstractDiscount
         );
 
         if (!$rule->getDiscountQty() || $rule->getDiscountQty() >= $qty) {
-            $discountPercent = min(100, $item->getDiscountPercent() + $rulePercent);
+            $previousDiscountPercent = $item->getDiscountPercent() ?: 0.0;
+            $totalDiscountPercent = ($rulePercent + $previousDiscountPercent) - (($rulePercent * $previousDiscountPercent)/100);
+            $discountPercent = min(100, $totalDiscountPercent);
             $item->setDiscountPercent($discountPercent);
         }
 
