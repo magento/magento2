@@ -209,7 +209,18 @@ class Cli extends Console\Application
                 new File()
             );
 
-            $compilerPreparation->handleCompilerEnvironment();
+            $i = 0;
+            while (true) {
+                try {
+                    $compilerPreparation->handleCompilerEnvironment();
+                    break;
+                } catch (\Magento\Framework\Exception\FileSystemException $e) {
+                    usleep(1_000_000);
+                    if (++$i >= 5) {
+                        throw $e;
+                    }
+                }
+            }
         }
     }
 
