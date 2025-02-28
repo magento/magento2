@@ -75,6 +75,7 @@
     <preference for="Magento\Framework\App\Route\ConfigInterface" type="Magento\Framework\App\Route\Config" />
     <preference for="Magento\Framework\App\ResourceConnection\ConfigInterface" type="Magento\Framework\App\ResourceConnection\Config\Proxy" />
     <preference for="Magento\Framework\Oauth\OauthInterface" type="Magento\Framework\Oauth\Oauth"/>
+    <preference for="Magento\Framework\Oauth\Helper\Signature\HmacInterface" type="Magento\Framework\Oauth\Helper\Signature\Hmac" />
     <preference for="Magento\Framework\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Theme\Model\Theme\Domain\Physical" />
     <preference for="Magento\Framework\View\Design\Theme\Domain\VirtualInterface" type="Magento\Theme\Model\Theme\Domain\Virtual" />
     <preference for="Magento\Framework\View\Design\Theme\Domain\StagingInterface" type="Magento\Theme\Model\Theme\Domain\Staging" />
@@ -823,6 +824,14 @@
                 <item name="page_cache" xsi:type="array">
                     <item name="backend_options" xsi:type="array">
                         <item name="cache_dir" xsi:type="string">page_cache</item>
+                    </item>
+                </item>
+                <item name="default" xsi:type="array">
+                    <item name="backend_options" xsi:type="array">
+                        <!-- Disable lua by default -->
+                        <item name="use_lua" xsi:type="boolean">false</item>
+                        <!-- Enable lua in the garbage collector to prevent race conditions -->
+                        <item name="use_lua_on_gc" xsi:type="boolean">true</item>
                     </item>
                 </item>
             </argument>

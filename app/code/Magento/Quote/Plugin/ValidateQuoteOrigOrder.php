@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -25,17 +25,10 @@ class ValidateQuoteOrigOrder
     private $orderRepository;
 
     /**
-     * @var RestRequest $request
-     */
-    private $request;
-
-    /**
-     * @param RestRequest $request
      * @param OrderRepositoryInterface $orderRepository
      */
-    public function __construct(RestRequest $request, OrderRepositoryInterface $orderRepository)
+    public function __construct(OrderRepositoryInterface $orderRepository)
     {
-        $this->request = $request;
         $this->orderRepository = $orderRepository;
     }
 
@@ -52,9 +45,7 @@ class ValidateQuoteOrigOrder
         CartRepositoryInterface $cartRepository,
         CartInterface $quote
     ): void {
-        $params = $this->request->getBodyParams();
-        if (!empty($params) && isset($params['quote']['orig_order_id'])) {
-            $orderId = $params['quote']['orig_order_id'];
+        if ($orderId = $quote->getOrigOrderId()) {
             $order = $this->orderRepository->get($orderId);
             $orderCustomer = (int)$order->getCustomerId();
             if ($quote->getCustomerId() !== $orderCustomer) {

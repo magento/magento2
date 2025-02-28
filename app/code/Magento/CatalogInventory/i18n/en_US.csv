@@ -77,3 +77,4 @@ Stock,Stock
 "Only %s of %s available","Only %s of %s available"
 "Not enough items for sale","Not enough items for sale"
 "The requested qty. is not available","The requested qty. is not available"
+"Product %name is out of stock.","Product %name is out of stock."
