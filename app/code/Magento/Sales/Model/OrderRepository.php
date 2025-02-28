@@ -254,9 +254,16 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function save(\Magento\Sales\Api\Data\OrderInterface $entity)
     {
+        if (!$entity->getBillingAddress()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please provide billing address for the order.')
+            );
+        }
+
         /** @var  \Magento\Sales\Api\Data\OrderExtensionInterface $extensionAttributes */
         $extensionAttributes = $entity->getExtensionAttributes();
         if ($entity->getIsNotVirtual() && $extensionAttributes) {
