@@ -276,7 +276,6 @@ define([
             _.extend(selectionsData, this.params || {}, selections.params);
 
             if (selections[itemsType] && selections[itemsType].length) {
-                selectionsData.filters = {};
                 selectionsData['filters_modifier'] = {};
                 selectionsData['filters_modifier'][this.indexField] = {
                     'condition_type': filterType,
