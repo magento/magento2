@@ -178,7 +178,7 @@
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="label" type="xs:string" />
-                    <xs:element ref="comment" />
+                    <xs:element name="comment" type="xs:string" />
                     <xs:element name="tooltip" type="xs:string" />
                     <xs:element name="hint" type="xs:string" />
                     <xs:element name="frontend_class" type="xs:string" />
