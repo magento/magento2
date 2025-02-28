@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
@@ -314,7 +314,7 @@ class File extends AbstractData
         // Remove outdated file (in the case of file uploader UI component)
         if (!empty($this->_value)
             && (!empty($value['delete'])
-                || ($this->_entityTypeCode == 'customer' && empty($value)))
+                || ($this->_entityTypeCode === 'customer' && empty($value)))
         ) {
             $this->fileProcessor->removeUploadedFile($this->_value);
             return $value;

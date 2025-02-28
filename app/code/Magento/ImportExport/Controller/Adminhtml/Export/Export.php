@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -104,6 +104,9 @@ class Export extends ExportController implements HttpPostActionInterface
                 );
 
                 $this->messagePublisher->publish('import_export.export', $dataObject);
+                $this->_eventManager->dispatch('log_admin_export', [
+                    'exportObject' => $dataObject
+                ]);
                 $this->messageManager->addSuccessMessage(
                     __(
                         'Message is added to queue, wait to get your file soon.'

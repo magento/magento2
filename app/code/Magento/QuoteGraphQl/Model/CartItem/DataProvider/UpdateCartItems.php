@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,7 +12,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Api\Data\MessageInterfaceFactory;
 use Magento\GiftMessage\Api\ItemRepositoryInterface;
-use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\GiftMessageGraphQl\Model\Config\Messages;
 use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\UpdateCartItem;
@@ -23,49 +23,21 @@ use Magento\QuoteGraphQl\Model\Cart\UpdateCartItem;
 class UpdateCartItems
 {
     /**
-     * @var CartItemRepositoryInterface
-     */
-    private $cartItemRepository;
-
-    /**
-     * @var UpdateCartItem
-     */
-    private $updateCartItem;
-
-    /**
-     * @var ItemRepositoryInterface
-     */
-    private $itemRepository;
-
-    /**
-     * @var GiftMessageHelper
-     */
-    private $giftMessageHelper;
-
-    /**
-     * @var MessageInterfaceFactory
-     */
-    private $giftMessageFactory;
-
-    /**
+     * UpdateCartItems Constructor
+     *
      * @param CartItemRepositoryInterface $cartItemRepository
-     * @param UpdateCartItem              $updateCartItem
-     * @param ItemRepositoryInterface     $itemRepository
-     * @param GiftMessageHelper           $giftMessageHelper
-     * @param MessageInterfaceFactory     $giftMessageFactory
+     * @param UpdateCartItem $updateCartItem
+     * @param ItemRepositoryInterface $itemRepository
+     * @param Messages $messagesConfig
+     * @param MessageInterfaceFactory $giftMessageFactory
      */
     public function __construct(
-        CartItemRepositoryInterface $cartItemRepository,
-        UpdateCartItem $updateCartItem,
-        ItemRepositoryInterface $itemRepository,
-        GiftMessageHelper $giftMessageHelper,
-        MessageInterfaceFactory $giftMessageFactory
+        private readonly CartItemRepositoryInterface $cartItemRepository,
+        private readonly UpdateCartItem $updateCartItem,
+        private readonly ItemRepositoryInterface $itemRepository,
+        private readonly Messages $messagesConfig,
+        private readonly MessageInterfaceFactory $giftMessageFactory
     ) {
-        $this->cartItemRepository = $cartItemRepository;
-        $this->updateCartItem = $updateCartItem;
-        $this->itemRepository = $itemRepository;
-        $this->giftMessageHelper = $giftMessageHelper;
-        $this->giftMessageFactory = $giftMessageFactory;
     }
 
     /**
@@ -108,17 +80,17 @@ class UpdateCartItems
 
             if (!empty($item['gift_message'])) {
                 try {
-                    if (!$this->giftMessageHelper->isMessagesAllowed('items', $cartItem)) {
+                    if (!$this->messagesConfig->isMessagesAllowed('items', $cartItem)) {
                         continue;
                     }
-                    if (!$this->giftMessageHelper->isMessagesAllowed('item', $cartItem)) {
+                    if (!$this->messagesConfig->isMessagesAllowed('item', $cartItem)) {
                         continue;
                     }
 
                     /** @var  MessageInterface $giftItemMessage */
                     $giftItemMessage = $this->itemRepository->get($cart->getEntityId(), $itemId);
 
-                    if (empty($giftItemMessage)) {
+                    if (!$giftItemMessage) {
                         /** @var  MessageInterface $giftMessage */
                         $giftMessage = $this->giftMessageFactory->create();
                         $this->updateGiftMessageForItem($cart, $giftMessage, $item, $itemId);
