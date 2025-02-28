@@ -47,8 +47,32 @@ class General implements ValidatorInterface
     {
         $errors = array_merge(
             $this->checkRequiredFields($address),
-            $this->checkOptionalFields($address)
+            $this->checkOptionalFields($address),
+            $this->checkTemplateVars($address)
         );
+
+        return $errors;
+    }
+
+    /**
+     * Checking for the use of template variables
+     *
+     * @param AbstractAddress $address
+     * @return array
+     */
+    private function checkTemplateVars(AbstractAddress $address)
+    {
+        $errors = [];
+        $pattern = '/\{\{\s*([^{}]+)\s*\}\}/';
+        foreach ($address->getData() as $key => $value) {
+            preg_match_all($pattern, (string)$value, $matches);
+            if (!empty($matches[0])) {
+                $errors[] = __(
+                    'Invalid template variable detected in the "%fieldName" field. Utilization of {{ ... }} templates is prohibited',
+                    ['fieldName' => $key]
+                );
+            }
+        }
 
         return $errors;
     }
