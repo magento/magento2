@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  *  All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateEAVTypesAndAttributesConfigurationTest">
+        <annotations>
+            <features value="Cache"/>
+            <stories value="Cache Management"/>
+            <title value="Validate EAVTypes And Attributes Cache Type"/>
+            <description value="Validate EAVTypes And Attributes  Cache Type After Cache Management"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3833"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPage"/>
+            <!--Verify Cache Type EAV Types And Attributes Is ENABLED -->
+            <waitForText selector="{{AdminMessagesSection.assertCacheManagementStatusEnabled('EAV')}}" userInput="ENABLED" stepKey="verifyCacheTypeEAVTypesAndAttributesIsENABLED"/>
+        </before>
+        <after>
+            <!--Delete created entity -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteFirstProduct"/>
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+                <argument name="ProductAttribute" value="{{multiselectProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Create Simple Product -->
+        <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+        <!--Navigate to Stores > Attributes > Product.-->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <!--Create new Product Attribute as TextField, with code and default value.-->
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="multiselectProductAttribute"/>
+        </actionGroup>
+        <!--Navigate to Product Attribute, add Product Options and Save - 1-->
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage1">
+            <argument name="ProductAttribute" value="{{multiselectProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption1">
+            <argument name="adminName" value="{{multiselectProductAttribute.option1_admin}}"/>
+            <argument name="frontName" value="{{multiselectProductAttribute.option1_frontend}}"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetProductAttributeUseInLayeredNavigationOptionActionGroup" stepKey="setDropdownUseInLayeredNavigationNoResults">
+            <argument name="useInLayeredNavigationValue" value="Filterable (with results)"/>
+        </actionGroup>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="selectIsSearchAble"/>
+        <selectOption selector="{{AttributePropertiesSection.useInSearchResultsLayeredNavigation}}" userInput="Yes" stepKey="selectUseInLayeredNavigationOption"/>
+        <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
+        <!-- Open created product for edit -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
+        <waitForPageLoad stepKey="waitForAttributeAdded"/>
+        <!-- Filter By Attribute Label on Add Attribute Page -->
+        <click selector="{{AdminProductFiltersSection.filter}}" stepKey="clickOnFilter"/>
+        <fillField selector="{{AdminProductAddAttributeModalSection.attributeCodeFilter}}" userInput="{{multiselectProductAttribute.attribute_code}}" stepKey="fillAttrCodeField" />
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearchBtn" />
+        <click stepKey="clickonFirstRow" selector="{{AdminProductAddAttributeModalSection.firstRowCheckBox}}"/>
+        <click stepKey="clickOnAddSelected" selector="{{AdminProductAttributeGridSection.addSelected}}"/>
+        <waitForPageLoad stepKey="waitForAttributeAdded2"/>
+        <!-- Expand 'Attributes' tab -->
+        <actionGroup ref="AdminExpandProductAttributesTabActionGroup" stepKey="expandAttributesTab"/>
+        <!-- Check created attribute presents in the 'Attributes' tab -->
+        <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" stepKey="assertAttributeIsPresentInTab"/>
+        <!-- Select attribute options -->
+        <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(multiselectProductAttribute.attribute_code)}}" userInput="{{multiselectProductAttribute.option1_admin}}" stepKey="selectProduct1AttributeOption"/>
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!--Verify Cache Type Page Cache Is INVALIDATED -->
+        <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPageAgain"/>
+        <waitForText selector="{{AdminMessagesSection.assertCacheManagementStatusInvalidated('FPC')}}" userInput="INVALIDATED" stepKey="verifyCacheTypePageCacheIsInvalidated"/>
+        <!--Flush Cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
+        <!--Verify Cache Type Page Cache s Is Enabled -->
+        <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPageAgain1"/>
+        <waitForText selector="{{AdminMessagesSection.assertCacheManagementStatusEnabled('FPC')}}" userInput="ENABLED" stepKey="verifyCacheTypePageCacheIsENABLED"/>
+        <!-- Go to Storefront and search for product-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <!-- Assert custom Attribute in Layered Navigation-->
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(multiselectProductAttribute.attribute_code)}}" stepKey="waitForAttributeVisible"/>
+        <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(multiselectProductAttribute.attribute_code)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandAttribute"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" stepKey="waitForAttributeOptionsVisible"/>
+    </test>
+</tests>

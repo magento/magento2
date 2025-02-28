@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GiftMessage\Api\OrderItemRepositoryInterface;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\GiftMessageGraphQl\Model\Config\Messages;
 
 /**
  * Class provides ability to get GiftMessage for order item
@@ -23,25 +24,15 @@ use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 class GiftMessage implements ResolverInterface
 {
     /**
-     * @var OrderItemRepositoryInterface
-     */
-    private $orderItemRepository;
-
-    /**
-     * @var GiftMessageHelper
-     */
-    private $giftMessageHelper;
-
-    /**
-     * @param OrderItemRepositoryInterface $itemRepository
-     * @param GiftMessageHelper $giftMessageHelper
+     * GiftMessage Constructor
+     *
+     * @param OrderItemRepositoryInterface $orderItemRepository
+     * @param Messages $messagesConfig
      */
     public function __construct(
-        OrderItemRepositoryInterface $itemRepository,
-        GiftMessageHelper $giftMessageHelper
+        private readonly OrderItemRepositoryInterface $orderItemRepository,
+        private readonly Messages $messagesConfig
     ) {
-        $this->orderItemRepository = $itemRepository;
-        $this->giftMessageHelper = $giftMessageHelper;
     }
 
     /**
@@ -70,11 +61,11 @@ class GiftMessage implements ResolverInterface
 
         $orderItem = $value['model'];
 
-        if (!$this->giftMessageHelper->isMessagesAllowed('items', $orderItem)) {
+        if (!$this->messagesConfig->isMessagesAllowed('items', $orderItem)) {
             return null;
         }
 
-        if (!$this->giftMessageHelper->isMessagesAllowed('item', $orderItem)) {
+        if (!$this->messagesConfig->isMessagesAllowed('item', $orderItem)) {
             return null;
         }
 
