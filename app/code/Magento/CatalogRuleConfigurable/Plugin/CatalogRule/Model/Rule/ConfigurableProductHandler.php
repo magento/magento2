@@ -77,7 +77,10 @@ class ConfigurableProductHandler
                     $childValidationResult = isset($productIds[$subProductId])
                         ? array_filter($productIds[$subProductId])
                         : [];
-                    $productIds[$subProductId] = $parentValidationResult + $childValidationResult;
+
+                    if ($childValidationResult) {
+                        $productIds[$subProductId] = $parentValidationResult + $childValidationResult;
+                    }
                 }
 
             }
