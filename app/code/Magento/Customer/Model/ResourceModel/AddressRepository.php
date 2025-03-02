@@ -126,6 +126,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             $addressModel->setStoreId($customerModel->getStoreId());
         }
 
+        $addressModel = $addressModel->sanitize();
         $errors = $addressModel->validate();
         if ($errors !== true) {
             $inputException = new InputException();

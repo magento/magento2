@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model\Address;
@@ -141,6 +141,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     /** @var CompositeValidator */
     private $compositeValidator;
 
+    /** @var CompositeSanitizer */
+    private $compositeSanitizer;
+
     /**
      * @var array
      */
@@ -166,6 +169,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * @param CompositeValidator $compositeValidator
      * @param CountryModelsCache|null $countryModelsCache
      * @param RegionModelsCache|null $regionModelsCache
+     * @param CompositeSanitizer|null $compositeSanitizer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -189,6 +193,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         ?CompositeValidator $compositeValidator = null,
         ?CountryModelsCache $countryModelsCache = null,
         ?RegionModelsCache $regionModelsCache = null,
+        ?CompositeSanitizer $compositeSanitizer = null
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeArrayField($data);
@@ -206,6 +211,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             ->get(CountryModelsCache::class);
         $this->regionModelsCache = $regionModelsCache ?: ObjectManager::getInstance()
             ->get(RegionModelsCache::class);
+        $this->compositeSanitizer = $compositeSanitizer ?: ObjectManager::getInstance()
+            ->get(CompositeSanitizer::class);
         parent::__construct(
             $context,
             $registry,
@@ -678,6 +685,17 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         }
 
         return $errors;
+    }
+
+    /**
+     * Sanitize address attribute values.
+     *
+     * @return $this
+     */
+    public function sanitize(): static
+    {
+        $this->compositeSanitizer->sanitize($this);
+        return $this;
     }
 
     /**
