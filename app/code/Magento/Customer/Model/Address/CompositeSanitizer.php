@@ -22,8 +22,7 @@ class CompositeSanitizer implements SanitizerInterface
      */
     public function __construct(
         array $sanitizers = []
-    )
-    {
+    ) {
         $this->sanitizers = $sanitizers;
     }
 

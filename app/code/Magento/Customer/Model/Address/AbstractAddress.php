@@ -692,7 +692,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      *
      * @return $this
      */
-    public function sanitize(): static
+    public function sanitize(): self
     {
         $this->compositeSanitizer->sanitize($this);
         return $this;

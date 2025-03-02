@@ -40,7 +40,6 @@ class TemplateVars implements SanitizerInterface
         'vat_id'
     ];
 
-
     /**
      * Sanitize string for template vars in address attributes.
      *
@@ -74,5 +73,4 @@ class TemplateVars implements SanitizerInterface
         }
         return $value;
     }
-
 }
