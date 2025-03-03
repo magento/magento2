@@ -85,7 +85,7 @@ class Product
     public function __construct(
         Configurable $configurable,
         ActionInterface $productIndexer,
-        ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        ?ProductAttributeRepositoryInterface $productAttributeRepository = null,
         ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ?FilterBuilder $filterBuilder = null,
         ?CacheContext $cacheContext = null,

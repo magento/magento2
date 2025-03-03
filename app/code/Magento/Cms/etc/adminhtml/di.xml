@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+  * Copyright 2014 Adobe
+  * All Rights Reserved.
+  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Cms\Model\Wysiwyg\Config"/>
@@ -38,7 +38,7 @@
             <argument name="adapterOptions" xsi:type="array">
                 <item name="tinymce" xsi:type="array">
                     <item name="value" xsi:type="string">mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter</item>
-                    <item name="label" xsi:type="string" translatable="true">TinyMCE 7</item>
+                    <item name="label" xsi:type="string" translatable="true">TinyMCE 6</item>
                 </item>
             </argument>
         </arguments>

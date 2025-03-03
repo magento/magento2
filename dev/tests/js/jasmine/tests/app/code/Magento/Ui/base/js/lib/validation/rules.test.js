@@ -94,6 +94,31 @@ define([
                 expect(rules['validate-number'].handler(value)).toBe(false);
             });
         });
+        describe('"validate-nonempty-number-greater-than-zero" method', function () {
+            it('Check on empty value', function () {
+                var value = '';
+
+                expect(rules['validate-nonempty-number-greater-than-zero'].handler(value)).toBe(false);
+            });
+
+            it('Check on integer', function () {
+                var value = '125';
+
+                expect(rules['validate-nonempty-number-greater-than-zero'].handler(value)).toBe(true);
+            });
+
+            it('Check on zero', function () {
+                var value = '0';
+
+                expect(rules['validate-nonempty-number-greater-than-zero'].handler(value)).toBe(false);
+            });
+
+            it('Check on not a number', function () {
+                var value = 'string';
+
+                expect(rules['validate-nonempty-number-greater-than-zero'].handler(value)).toBe(false);
+            });
+        });
     });
 
     describe('validate-color', function () {

@@ -76,8 +76,8 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         \Magento\Tax\Model\ClassModel $taxClass,
         \Magento\Tax\Model\Calculation $calculation,
         \Magento\Tax\Model\Calculation\Rule\Validator $validator,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_calculation = $calculation;
@@ -327,7 +327,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param int[] $customerTaxClassIds
      * @return $this
      */
-    public function setCustomerTaxClassIds(array $customerTaxClassIds = null)
+    public function setCustomerTaxClassIds(?array $customerTaxClassIds = null)
     {
         return $this->setData(self::KEY_CUSTOMER_TAX_CLASS_IDS, $customerTaxClassIds);
     }
@@ -338,7 +338,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param int[] $productTaxClassIds
      * @return $this
      */
-    public function setProductTaxClassIds(array $productTaxClassIds = null)
+    public function setProductTaxClassIds(?array $productTaxClassIds = null)
     {
         return $this->setData(self::KEY_PRODUCT_TAX_CLASS_IDS, $productTaxClassIds);
     }
@@ -349,7 +349,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param int[] $taxRateIds
      * @return $this
      */
-    public function setTaxRateIds(array $taxRateIds = null)
+    public function setTaxRateIds(?array $taxRateIds = null)
     {
         return $this->setData(self::KEY_TAX_RATE_IDS, $taxRateIds);
     }

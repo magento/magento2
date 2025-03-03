@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget\Grid;
@@ -18,6 +18,7 @@ use Magento\Framework\Json\EncoderInterface;
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
  * @since 100.0.2
+ * @see MAGETWO-67718
  */
 class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractMassaction
 {
@@ -50,7 +51,7 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractM
         Context $context,
         EncoderInterface $jsonEncoder,
         array $data = [],
-        AuthorizationInterface $authorization = null
+        ?AuthorizationInterface $authorization = null
     ) {
         $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
 
@@ -58,7 +59,7 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Massaction\AbstractM
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param string $itemId
      * @param array|DataObject $item

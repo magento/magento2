@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -141,7 +141,7 @@ class SearchConfigTest extends TestCase
                     'base-url-secure' => null,
                     'use-secure-admin' => null,
                     'admin-use-security-key' => null,
-                    'search-engine' => 'elasticsearch7',
+                    'search-engine' => 'elasticsearch8',
                     'elasticsearch-host' => 'localhost',
                     'elasticsearch-port' => '9200',
                     'elasticsearch-enable-auth' => false,
@@ -150,7 +150,7 @@ class SearchConfigTest extends TestCase
                     'no-interaction' => false,
                 ],
                 'searchInput' => [
-                    'search-engine' => 'elasticsearch7',
+                    'search-engine' => 'elasticsearch8',
                     'elasticsearch-host' => 'localhost',
                     'elasticsearch-port' => '9200',
                     'elasticsearch-enable-auth' => false,

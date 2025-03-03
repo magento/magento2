@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -237,17 +237,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $customer = $this->getCustomerDataObject($this->session->getCustomerId());
             $customerCandidate = $this->populateNewCustomerDataObject($this->_request, $customer);
 
-            $attributeToDelete = (string)$this->_request->getParam('delete_attribute_value');
-            if ($attributeToDelete !== "") {
-                $attributesToDelete = $this->prepareAttributesToDelete($attributeToDelete);
-                foreach ($attributesToDelete as $attribute) {
-                    $uploadedValue = $this->_request->getParam($attribute . File::UPLOADED_FILE_SUFFIX);
-                    if ((string)$uploadedValue === "") {
-                        $this->deleteCustomerFileAttribute($customerCandidate, $attribute);
-                    }
-                }
-            }
-
             try {
                 // whether a customer enabled change email option
                 $isEmailChanged = $this->processChangeEmailRequest($customer);
@@ -308,26 +297,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $resultRedirect->setPath('*/*/edit');
 
         return $resultRedirect;
-    }
-
-    /**
-     * Convert comma-separated list of attributes to delete into array
-     *
-     * @param string $attribute
-     * @return array
-     */
-    private function prepareAttributesToDelete(string $attribute) : array
-    {
-        $result = [];
-        if ($attribute !== "") {
-            if (str_contains($attribute, ',')) {
-                $result = explode(',', $attribute);
-            } else {
-                $result[] = $attribute;
-            }
-            $result = array_unique($result);
-        }
-        return $result;
     }
 
     /**
@@ -482,40 +451,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         foreach ($customer->getAddresses() as $address) {
             $addressModel = $this->addressRegistry->retrieve($address->getId());
             $addressModel->setShouldIgnoreValidation(true);
-        }
-    }
-
-    /**
-     * Removes file attribute from customer entity and file from filesystem
-     *
-     * @param CustomerInterface $customerCandidateDataObject
-     * @param string $attributeToDelete
-     * @return void
-     * @throws FileSystemException
-     */
-    private function deleteCustomerFileAttribute(
-        CustomerInterface $customerCandidateDataObject,
-        string $attributeToDelete
-    ) : void {
-        if ($attributeToDelete !== '') {
-            $attributes = $this->prepareAttributesToDelete($attributeToDelete);
-            foreach ($attributes as $attr) {
-                $attributeValue = $customerCandidateDataObject->getCustomAttribute($attr);
-                if ($attributeValue!== null) {
-                    if ($attributeValue->getValue() !== '') {
-                        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-                        $fileName = $attributeValue->getValue();
-                        $path = $mediaDirectory->getAbsolutePath('customer' . $fileName);
-                        if ($fileName && $mediaDirectory->isFile($path)) {
-                            $mediaDirectory->delete($path);
-                        }
-                        $customerCandidateDataObject->setCustomAttribute(
-                            $attr,
-                            ''
-                        );
-                    }
-                }
-            }
         }
     }
 }

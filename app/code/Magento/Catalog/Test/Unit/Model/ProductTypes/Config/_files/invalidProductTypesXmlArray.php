@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ return [
             "Line: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type name=\"some_name\"/><type " .
             "name=\"some_name\"/></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'type_without_required_name_attribute' => [
         '<?xml version="1.0"?><config><type /></config>',
@@ -20,6 +21,7 @@ return [
             "Element 'type': The attribute 'name' is required but missing.\n" .
             "Line: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type/></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'type_with_notallowed_attribute' => [
         '<?xml version="1.0"?><config><type name="some_name"  notallowed="text"/></config>',
@@ -28,14 +30,14 @@ return [
             "Line: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type name=\"some_name\" " .
             "notallowed=\"text\"/></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'type_modelinstance_invalid_value' => [
         '<?xml version="1.0"?><config><type name="some_name" modelInstance="123" /></config>',
         [
-            "Element 'type', attribute 'modelInstance': '123' is not a valid value of the atomic type 'modelName'.\n" .
-            "Line: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type name=\"some_name\" " .
-            "modelInstance=\"123\"/></config>\n2:\n"
+            "/Element \'type\', attribute \'modelInstance\': .* (is not a valid value|is not accepted).*/"
         ],
+        'isRegex' => true
     ],
     'type_indexpriority_invalid_value' => [
         '<?xml version="1.0"?><config><type name="some_name" indexPriority="-1" /></config>',
@@ -44,6 +46,7 @@ return [
             "'xs:nonNegativeInteger'.\nLine: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n" .
             "1:<config><type name=\"some_name\" indexPriority=\"-1\"/></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'type_canuseqtydecimals_invalid_value' => [
         '<?xml version="1.0"?><config><type name="some_name" canUseQtyDecimals="string" /></config>',
@@ -52,6 +55,7 @@ return [
             "'xs:boolean'.\nLine: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n" .
             "1:<config><type name=\"some_name\" canUseQtyDecimals=\"string\"/></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'type_isqty_invalid_value' => [
         '<?xml version="1.0"?><config><type name="some_name" isQty="string" /></config>',
@@ -60,6 +64,7 @@ return [
             "\nLine: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type name=\"some_name\" " .
             "isQty=\"string\"/></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'type_pricemodel_without_required_instance_attribute' => [
         '<?xml version="1.0"?><config><type name="some_name"><priceModel /></type></config>',
@@ -67,22 +72,21 @@ return [
             "Element 'priceModel': The attribute 'instance' is required but missing.\nLine: 1\nThe xml was: \n" .
             "0:<?xml version=\"1.0\"?>\n1:<config><type name=\"some_name\"><priceModel/></type></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'type_pricemodel_instance_invalid_value' => [
         '<?xml version="1.0"?><config><type name="some_name"><priceModel instance="123123" /></type></config>',
         [
-            "Element 'priceModel', attribute 'instance': '123123' is not a valid value of the atomic " .
-            "type 'modelName'.\nLine: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type " .
-            "name=\"some_name\"><priceModel instance=\"123123\"/></type></config>\n2:\n"
+            "/Element \'priceModel\', attribute \'instance\': .* (is not a valid value|is not accepted).*/"
         ],
+        'isRegex' => true
     ],
     'type_indexermodel_instance_invalid_value' => [
         '<?xml version="1.0"?><config><type name="some_name"><indexerModel instance="123" /></type></config>',
         [
-            "Element 'indexerModel', attribute 'instance': '123' is not a valid value of the atomic type " .
-            "'modelName'.\nLine: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type " .
-            "name=\"some_name\"><indexerModel instance=\"123\"/></type></config>\n2:\n"
+            "/Element \'indexerModel\', attribute \'instance\': .* (is not a valid value|is not accepted).*/"
         ],
+        'isRegex' => true
     ],
     'type_indexermodel_without_required_instance_attribute' => [
         '<?xml version="1.0"?><config><type name="some_name"><indexerModel /></type></config>',
@@ -90,6 +94,7 @@ return [
             "Element 'indexerModel': The attribute 'instance' is required but missing.\nLine: 1\nThe xml was: \n" .
             "0:<?xml version=\"1.0\"?>\n1:<config><type name=\"some_name\"><indexerModel/></type></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'stockindexermodel_without_required_instance_attribute' => [
         '<?xml version="1.0"?><config><type name="some_name"><stockIndexerModel /></type></config>',
@@ -98,14 +103,14 @@ return [
             "Line: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n" .
             "1:<config><type name=\"some_name\"><stockIndexerModel/></type></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'stockindexermodel_instance_invalid_value' => [
         '<?xml version="1.0"?><config><type name="some_name"><stockIndexerModel instance="1234"/></type></config>',
         [
-            "Element 'stockIndexerModel', attribute 'instance': '1234' is not a valid value of the atomic type " .
-            "'modelName'.\nLine: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type " .
-            "name=\"some_name\"><stockIndexerModel instance=\"1234\"/></type></config>\n2:\n"
+            "/Element \'stockIndexerModel\', attribute \'instance\': .* (is not a valid value|is not accepted).*/"
         ],
+        'isRegex' => true
     ],
     'allowedselectiontypes_without_required_type_handle' => [
         '<?xml version="1.0"?><config><type name="some_name"><allowedSelectionTypes /></type></config>',
@@ -114,6 +119,7 @@ return [
             "Line: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><type name=\"some_name\">" .
             "<allowedSelectionTypes/></type></config>\n2:\n"
         ],
+        'isRegex' => false
     ],
     'allowedselectiontypes_type_without_required_name' => [
         '<?xml version="1.0"?><config><type name="some_name"><allowedSelectionTypes><type/></allowedSelectionTypes>"
@@ -127,5 +133,6 @@ return [
             "1:<config><type name=\"some_name\"><allowedSelectionTypes><type/>" .
             "</allowedSelectionTypes>\"\n2:        . \"</type></config>\n3:\n"
         ],
+        'isRegex' => false
     ]
 ];

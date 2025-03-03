@@ -61,7 +61,7 @@ class ConfigTest extends TestCase
      *
      * @param array|null $files
      */
-    protected function _initConfig(array $files = null)
+    protected function _initConfig(?array $files = null)
     {
         if (null === $files) {
             $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml', GLOB_NOSORT);

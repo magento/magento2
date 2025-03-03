@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -70,6 +70,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateUserValue($values)
     {
@@ -92,6 +93,8 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             if (!$this->_isSingleSelection()) {
                 if (is_string($value)) {
                     $value = explode(',', $value);
+                } elseif (!is_array($value)) {
+                    $value = [$value];
                 }
                 $valuesCollection = $option->getOptionValuesByOptionId($value, $this->getProduct()->getStoreId());
                 $valueCount = is_array($value) ? count($value) : 0;

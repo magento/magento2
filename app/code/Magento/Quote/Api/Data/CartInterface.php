@@ -158,7 +158,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Quote\Api\Data\CartItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 
     /**
      * Returns the number of different items or products in the cart.
@@ -203,7 +203,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
      */
-    public function setCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer = null);
+    public function setCustomer(?\Magento\Customer\Api\Data\CustomerInterface $customer = null);
 
     /**
      * Returns the cart billing address.
@@ -218,7 +218,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
      * @return $this
      */
-    public function setBillingAddress(\Magento\Quote\Api\Data\AddressInterface $billingAddress = null);
+    public function setBillingAddress(?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null);
 
     /**
      * Returns the reserved order ID for the cart.
@@ -263,7 +263,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Quote\Api\Data\CurrencyInterface $currency
      * @return $this
      */
-    public function setCurrency(\Magento\Quote\Api\Data\CurrencyInterface $currency = null);
+    public function setCurrency(?\Magento\Quote\Api\Data\CurrencyInterface $currency = null);
 
     /**
      * True for guest customers, false for logged in customers

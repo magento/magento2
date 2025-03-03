@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -68,6 +68,8 @@
         <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpressAfterAssertingInStoreFront"/>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPageAfterDisablingPayPalExpressCheckout"/>
         <waitForPageLoad stepKey="waitForPaymentMethodPageToLoad"/>
+        <!-- Because of in-product messaging in Payment Services extension, Paypal config is within the Additional Payment Solutions we need to uncollapse -->
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandedTab('us')}}" stepKey="clickPayPalTabConfigure" dependentSelector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" visible="false"/>
         <waitForElementClickable selector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" stepKey="waitForClickPayPalConfigureBtnToAssertStatus"/>
         <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn('us')}}" stepKey="clickPayPalConfigureBtnToAssertStatus"/>
         <waitForElementVisible selector="{{PayPalExpressCheckoutConfigSection.merchantID('us')}}" stepKey="assertMerchantIDFieldIsDisappeared"/>

@@ -117,7 +117,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
      * @param OrderPaymentExtensionInterface|null $extensionAttributes
      * @return PaymentTokenInterface | null
      */
-    protected function getPaymentToken(OrderPaymentExtensionInterface $extensionAttributes = null)
+    protected function getPaymentToken(?OrderPaymentExtensionInterface $extensionAttributes = null)
     {
         if (null === $extensionAttributes) {
             return null;

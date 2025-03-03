@@ -28,7 +28,7 @@ interface TRepositoryInterface
      * @param int|null $typeId
      * @return TInterface
      */
-    public function get(string $attribute, int $typeId = null)
+    public function get(string $attribute, ?int $typeId = null)
         : \Magento\Framework\MessageQueue\Code\Generator\TInterface;
 
     /**

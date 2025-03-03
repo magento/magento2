@@ -161,7 +161,7 @@ class DataProvider
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
         int $antiGapMultiplier = 5,
-        GetSearchableProductsSelect $getSearchableProductsSelect = null
+        ?GetSearchableProductsSelect $getSearchableProductsSelect = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();

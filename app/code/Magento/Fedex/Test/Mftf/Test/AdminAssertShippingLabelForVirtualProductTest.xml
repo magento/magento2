@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAssertShippingLabelForVirtualProductTest" extends="AdminCreatingShippingLabelTest">
+        <annotations>
+            <stories value="Shipping label test for virtual product"/>
+            <title value="Create Shipping Label for Virtual Product along with Simple and Configurable Product"/>
+            <description value="Admin Should able to Create Shipping Label For Simple and Configurable Product but not for Virtual Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-9286"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <createData entity="defaultVirtualProduct" after="createProduct" stepKey="initialVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Configurable Product -->
+            <createData entity="ApiConfigurableProduct" after="initialVirtualProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleProductWithPrice1" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="initialVirtualProduct" after="deleteProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createConfigChildProduct" after="deleteVirtualProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+        </after>
+        <amOnPage url="{{StorefrontProductPage.url($$initialVirtualProduct.custom_attributes[url_key]$$)}}" after="addProductToCart" stepKey="navigateToVirtualProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" after="navigateToVirtualProductPage" stepKey="addVirtualProductToCart">
+            <argument name="product" value="$$initialVirtualProduct$$"/>
+        </actionGroup>
+        <!-- Add configurable product to the cart  -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" after="addVirtualProductToCart" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <remove keyForRemoval="createPackage"/>
+        <actionGroup ref="AdminAssertProductsIntoPackageActionGroup" after="clickSubmitShipment" stepKey="assetShipmentPackageForSimpleConfigurableAndVirtualProduct">
+            <argument name="simpleProductName" value="$$createProduct.name$$"/>
+            <argument name="configurableProductName" value="$$createConfigProduct.name$$"/>
+            <argument name="virtualProductName" value="$$initialVirtualProduct.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

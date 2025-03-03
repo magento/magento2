@@ -86,9 +86,9 @@ class ConsumersRunner
         DeploymentConfig $deploymentConfig,
         ShellInterface $shellBackground,
         LockManagerInterface $lockManager,
-        ConnectionTypeResolver $mqConnectionTypeResolver = null,
-        LoggerInterface $logger = null,
-        CheckIsAvailableMessagesInQueue $checkIsAvailableMessages = null
+        ?ConnectionTypeResolver $mqConnectionTypeResolver = null,
+        ?LoggerInterface $logger = null,
+        ?CheckIsAvailableMessagesInQueue $checkIsAvailableMessages = null
     ) {
         $this->phpExecutableFinder = $phpExecutableFinder;
         $this->consumerConfig = $consumerConfig;

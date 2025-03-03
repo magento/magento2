@@ -65,7 +65,7 @@ class DependencyChecker
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function checkDependenciesWhenEnableModules(array $toBeEnabledModules, array $currentlyEnabledModules = null)
+    public function checkDependenciesWhenEnableModules(array $toBeEnabledModules, ?array $currentlyEnabledModules = null)
     {
         $masterList = $currentlyEnabledModules ?? $this->list->getNames();
         // assume enable succeeds: union of currently enabled modules and to-be-enabled modules

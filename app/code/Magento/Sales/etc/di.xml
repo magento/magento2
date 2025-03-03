@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -1041,5 +1041,27 @@
     <type name="Magento\Sales\Model\Order\Email\Container\IdentityInterface">
         <plugin name="applyStoreEmailConfigToSalesEmail"
                 type="Magento\Sales\Plugin\ApplyStoreEmailConfigToSalesEmail"/>
+    </type>
+    <virtualType name="Magento\Sales\Model\Data\ReEncryptorList\SalesOrderPaymentReEncryptor\Handler" type="Magento\EncryptionKey\Model\Data\ReEncryptorList\ReEncryptor\SimpleHandler">
+        <arguments>
+            <argument name="tableName" xsi:type="string">sales_order_payment</argument>
+            <argument name="identifierField" xsi:type="string">entity_id</argument>
+            <argument name="fieldsToReEncrypt" xsi:type="array">
+                <item name="cc_number_enc" xsi:type="string">cc_number_enc</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Data\ReEncryptorList\SalesOrderPaymentReEncryptor" type="Magento\EncryptionKey\Model\Data\ReEncryptorList\ReEncryptor">
+        <arguments>
+            <argument name="description" xsi:type="string">Re-encrypts 'cc_number_enc' column in the 'sales_order_payment' DB table.</argument>
+            <argument name="handler" xsi:type="object">Magento\Sales\Model\Data\ReEncryptorList\SalesOrderPaymentReEncryptor\Handler</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\EncryptionKey\Model\Data\ReEncryptorList">
+        <arguments>
+            <argument name="reEncryptors" xsi:type="array">
+                <item name="sales_order_payment" xsi:type="object">Magento\Sales\Model\Data\ReEncryptorList\SalesOrderPaymentReEncryptor</item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GiftMessage\Api\ItemRepositoryInterface;
-use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\GiftMessageGraphQl\Model\Config\Messages;
 
 /**
  * Class provides ability to get GiftMessage for cart item
@@ -23,25 +23,15 @@ use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 class GiftMessage implements ResolverInterface
 {
     /**
-     * @var ItemRepositoryInterface
-     */
-    private $itemRepository;
-
-    /**
-     * @var GiftMessageHelper
-     */
-    private $giftMessageHelper;
-
-    /**
+     * GiftMessage Constructor
+     *
      * @param ItemRepositoryInterface $itemRepository
-     * @param GiftMessageHelper       $giftMessageHelper
+     * @param Messages $messagesConfig
      */
     public function __construct(
-        ItemRepositoryInterface $itemRepository,
-        GiftMessageHelper $giftMessageHelper
+        private readonly ItemRepositoryInterface $itemRepository,
+        private readonly Messages $messagesConfig
     ) {
-        $this->itemRepository = $itemRepository;
-        $this->giftMessageHelper = $giftMessageHelper;
     }
 
     /**
@@ -61,8 +51,8 @@ class GiftMessage implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('"model" value must be specified'));
@@ -70,11 +60,11 @@ class GiftMessage implements ResolverInterface
 
         $quoteItem = $value['model'];
 
-        if (!$this->giftMessageHelper->isMessagesAllowed('items', $quoteItem)) {
+        if (!$this->messagesConfig->isMessagesAllowed('items', $quoteItem)) {
             return null;
         }
 
-        if (!$this->giftMessageHelper->isMessagesAllowed('item', $quoteItem)) {
+        if (!$this->messagesConfig->isMessagesAllowed('item', $quoteItem)) {
             return null;
         }
 
@@ -84,7 +74,7 @@ class GiftMessage implements ResolverInterface
             throw new GraphQlInputException(__('Can\'t load cart item'));
         }
 
-        if (!isset($giftItemMessage)) {
+        if (!$giftItemMessage) {
             return null;
         }
 

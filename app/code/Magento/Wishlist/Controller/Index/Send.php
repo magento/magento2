@@ -126,7 +126,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         StoreManagerInterface $storeManager,
         ?CaptchaHelper $captchaHelper = null,
         ?CaptchaStringResolver $captchaStringResolver = null,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;

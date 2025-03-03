@@ -1779,7 +1779,7 @@ class PaymentTest extends TestCase
         string $state,
         $status = null,
         $message = null,
-        bool $isCustomerNotified = null
+        ?bool $isCustomerNotified = null
     ): void {
         $this->order->expects($this->any())
             ->method('setState')

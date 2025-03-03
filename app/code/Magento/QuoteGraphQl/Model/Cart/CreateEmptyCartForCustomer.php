@@ -47,7 +47,7 @@ class CreateEmptyCartForCustomer
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function execute(int $customerId, string $predefinedMaskedQuoteId = null): string
+    public function execute(int $customerId, ?string $predefinedMaskedQuoteId = null): string
     {
         $cart = $this->cartResolver->resolve($customerId, $predefinedMaskedQuoteId);
         $quoteId = (int) $cart->getId();
