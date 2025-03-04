@@ -16,7 +16,6 @@ use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixtur
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\CustomerCart as CustomerCartFixture;
@@ -42,7 +41,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
     DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$quote.id$']),
     DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
     DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
-    DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order'),
+    DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order')
 ]
 class OrderAvailableActionTest extends GraphQlAbstract
 {
@@ -57,11 +56,6 @@ class OrderAvailableActionTest extends GraphQlAbstract
     private $fixtures;
 
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
@@ -72,23 +66,20 @@ class OrderAvailableActionTest extends GraphQlAbstract
      */
     protected function setUp(): void
     {
-        parent::setUp();
-        $this->objectManager = Bootstrap::getObjectManager();
-
-        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
-        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
-        $this->orderRepository = $this->objectManager->get(OrderRepository::class);
+        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepository::class);
     }
 
     #[
-        Config('sales/cancellation/enabled', 1)
+        Config('sales/cancellation/enabled', 1),
+        Config('sales/reorder/allow', 1)
     ]
     /**
      * @dataProvider orderStatusProvider
      */
     public function testCustomerOrderAvailableActions($status, $expectedResult): void
     {
-        $customerEmail = $this->fixtures->get('customer')->getEmail();
         /**
          * @var $order OrderInterface
          */
@@ -104,8 +95,9 @@ class OrderAvailableActionTest extends GraphQlAbstract
             $this->getCustomerOrdersQuery(),
             [],
             '',
-            $this->getCustomerAuthHeaders($customerEmail)
+            $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail())
         );
+
         $result = $response['customerOrders']['items'][0]['available_actions'];
 
         foreach ($expectedResult as $action) {
@@ -114,21 +106,51 @@ class OrderAvailableActionTest extends GraphQlAbstract
     }
 
     #[
-        Config('sales/cancellation/enabled', 0)
+        Config('sales/cancellation/enabled', 0),
+        Config('sales/reorder/allow', 1)
     ]
     public function testCustomerOrderActionWithDisabledOrderCancellation(): void
     {
-        $customerEmail = $this->fixtures->get('customer')->getEmail();
-
         $response = $this->graphQlQuery(
             $this->getCustomerOrdersQuery(),
             [],
             '',
-            $this->getCustomerAuthHeaders($customerEmail)
+            $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail())
         );
-        $result = $response['customerOrders']['items'][0]['available_actions'];
 
-        $this->assertEquals(['REORDER'], $result);
+        $this->assertEquals(['REORDER'], $response['customerOrders']['items'][0]['available_actions']);
+    }
+
+    #[
+        Config('sales/cancellation/enabled', 1),
+        Config('sales/reorder/allow', 0)
+    ]
+    public function testCustomerOrderActionWithDisabledReOrder(): void
+    {
+        $response = $this->graphQlQuery(
+            $this->getCustomerOrdersQuery(),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail())
+        );
+
+        $this->assertEquals(['CANCEL'], $response['customerOrders']['items'][0]['available_actions']);
+    }
+
+    #[
+        Config('sales/cancellation/enabled', 0),
+        Config('sales/reorder/allow', 0)
+    ]
+    public function testCustomerOrderActionWithoutAnyActions(): void
+    {
+        $response = $this->graphQlQuery(
+            $this->getCustomerOrdersQuery(),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail())
+        );
+
+        $this->assertEquals([], $response['customerOrders']['items'][0]['available_actions']);
     }
 
     /**
@@ -136,6 +158,7 @@ class OrderAvailableActionTest extends GraphQlAbstract
      */
     #[
         Config('sales/cancellation/enabled', 1),
+        Config('sales/reorder/allow', 1),
         DataFixture(ProductFixture::class, as: 'product1'),
         DataFixture(ProductFixture::class, as: 'product2'),
         DataFixture(CustomerFixture::class, as: 'customer'),

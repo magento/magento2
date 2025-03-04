@@ -77,7 +77,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     private DtoFactoriesTable $columnConfig;
 
-    private const COLUMN_TYPE = ['varchar', 'char', 'text', 'mediumtext', 'longtext'];
+    private const TEXTUAL_COLUMN_TYPES = ['varchar', 'char', 'text', 'mediumtext', 'longtext'];
 
     /**
      * @param ResourceConnection $resourceConnection
@@ -110,7 +110,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     {
         if (count($definition)) {
             foreach ($definition as $index => $value) {
-                if ($this->isColumnExists($value, self::COLUMN_TYPE)) {
+                if ($this->isColumnTypes($value, self::TEXTUAL_COLUMN_TYPES)) {
                     if (str_contains($index, 'column')) {
                         $definition[$index] = $this->setDefaultCharsetAndCollation($value);
                     }
@@ -192,6 +192,11 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     public function addElement($elementName, $resource, $tableName, $elementDefinition, $elementType)
     {
         $addElementSyntax = $elementType === Column::TYPE ? 'ADD COLUMN %s' : 'ADD %s';
+        if ($elementType === Column::TYPE) {
+            if ($this->isColumnTypes($elementDefinition, self::TEXTUAL_COLUMN_TYPES)) {
+                $elementDefinition = $this->setDefaultCharsetAndCollation($elementDefinition);
+            }
+        }
         $sql = sprintf(
             $addElementSyntax,
             $elementDefinition
@@ -237,7 +242,7 @@ class DbSchemaWriter implements DbSchemaWriterInterface
      */
     public function modifyColumn($columnName, $resource, $tableName, $columnDefinition)
     {
-        if ($this->isColumnExists($columnDefinition, self::COLUMN_TYPE)) {
+        if ($this->isColumnTypes($columnDefinition, self::TEXTUAL_COLUMN_TYPES)) {
             $columnDefinition = $this->setDefaultCharsetAndCollation($columnDefinition);
         }
 
@@ -499,16 +504,16 @@ class DbSchemaWriter implements DbSchemaWriterInterface
     }
 
     /**
-     * Checks if any column of type varchar,char or text (mediumtext/longtext)
+     * Checks if any column is of the types passed in $columnTypes
      *
      * @param string $definition
-     * @param array $columntypes
+     * @param array $columnTypes
      * @return bool
      */
-    private function isColumnExists(string $definition, array $columntypes): bool
+    private function isColumnTypes(string $definition, array $columnTypes): bool
     {
         $type = explode(' ', $definition);
-        $pattern = '/\b(' . implode('|', array_map('preg_quote', $columntypes)) . ')\b/i';
+        $pattern = '/\b(' . implode('|', array_map('preg_quote', $columnTypes)) . ')\b/i';
         return preg_match($pattern, $type[1]) === 1;
     }
 }

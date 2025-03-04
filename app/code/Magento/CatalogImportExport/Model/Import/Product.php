@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogImportExport\Model\Import;
@@ -181,6 +181,8 @@ class Product extends AbstractEntity
      */
     public const URL_KEY = 'url_key';
 
+    private const ERROR_DUPLICATE_URL_KEY_BY_CATEGORY = 'duplicatedUrlKeyByCategory';
+
     /**
      * @var array
      */
@@ -316,6 +318,7 @@ class Product extends AbstractEntity
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image: %s) at row %s could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
+        self::ERROR_DUPLICATE_URL_KEY_BY_CATEGORY => 'Url key: \'%s\' was already generated for a %s with the ID: %s. You need to specify the unique URL key manually',
         ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
         'invalidNewToDateValue' => 'Make sure new_to_date is later than or the same as new_from_date',
         // Can't add new translated strings in patch release
@@ -933,7 +936,7 @@ class Product extends AbstractEntity
         $this->stockProcessor = $stockProcessor ?: ObjectManager::getInstance()
             ->get(StockProcessor::class);
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
-                ->get(LinkProcessor::class);
+            ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
         $this->hashAlgorithm = (version_compare(PHP_VERSION, '8.1.0') >= 0) ? 'xxh128' : 'crc32c';
         parent::__construct(
@@ -949,7 +952,7 @@ class Product extends AbstractEntity
         $this->_optionEntity = $data['option_entity'] ??
             $optionFactory->create(['data' => ['product_entity' => $this]]);
         $this->skuStorage = $skuStorage ?? ObjectManager::getInstance()
-                ->get(SkuStorage::class);
+            ->get(SkuStorage::class);
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
@@ -957,9 +960,9 @@ class Product extends AbstractEntity
         $this->validator->init($this);
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
-                ->get(ProductRepositoryInterface::class);
+            ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
-                ->get(StockItemProcessorInterface::class);
+            ->get(StockItemProcessorInterface::class);
         $this->fileDriver = $fileDriver ?? ObjectManager::getInstance()
             ->get(File::class);
     }
@@ -3117,7 +3120,7 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Check that url_keys are not assigned to other products in DB
+     * Check that url_keys are not already assigned to others entities in DB
      *
      * @return void
      * @since 100.0.3
@@ -3129,7 +3132,11 @@ class Product extends AbstractEntity
             $urlKeyDuplicates = $this->_connection->fetchAssoc(
                 $this->_connection->select()->from(
                     ['url_rewrite' => $resource->getTable('url_rewrite')],
-                    ['request_path', 'store_id']
+                    [
+                        'request_path',
+                        'store_id',
+                        'entity_type'
+                    ]
                 )->joinLeft(
                     ['cpe' => $resource->getTable('catalog_product_entity')],
                     "cpe.entity_id = url_rewrite.entity_id"
@@ -3137,13 +3144,24 @@ class Product extends AbstractEntity
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
+
             foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
-                $message = sprintf(
-                    $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
-                    $entityData['request_path'],
-                    $entityData['sku']
-                );
+                if ($entityData['entity_type'] === 'category') {
+                    $message = sprintf(
+                        $this->retrieveMessageTemplate(self::ERROR_DUPLICATE_URL_KEY_BY_CATEGORY),
+                        $entityData['request_path'],
+                        $entityData['entity_type'],
+                        $entityData['entity_id'],
+                    );
+                } else {
+                    $message = sprintf(
+                        $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
+                        $entityData['request_path'],
+                        $entityData['sku']
+                    );
+                }
+
                 $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum, 'url_key', $message);
             }
         }

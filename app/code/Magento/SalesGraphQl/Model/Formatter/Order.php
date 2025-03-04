@@ -59,6 +59,27 @@ class Order
             'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
             'applied_coupons' => $orderModel->getCouponCode() ? ['code' => $orderModel->getCouponCode()] : [],
             'model' => $orderModel,
+            'comments' => $this->getOrderComments($orderModel)
         ];
+    }
+
+    /**
+     * Get order comments
+     *
+     * @param OrderInterface $order
+     * @return array
+     */
+    public function getOrderComments(OrderInterface $order):array
+    {
+        $comments = [];
+        foreach ($order->getStatusHistories() as $comment) {
+            if ($comment->getIsVisibleOnFront()) {
+                $comments[] = [
+                    'message' => $comment->getComment(),
+                    'timestamp' => $comment->getCreatedAt()
+                ];
+            }
+        }
+        return $comments;
     }
 }

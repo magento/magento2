@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Authentication\Rest\OauthClient;
@@ -42,13 +42,8 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
             []
         );
 
-        $signatureData = [];
-        foreach (array_merge($queryStringData, $params) as $key => $value) {
-            $signatureData[rawurldecode($key)] = rawurlencode($value);
-        }
-
         return $this->helper->sign(
-            $signatureData,
+            array_merge($queryStringData, $params),
             $this->algorithm,
             $this->credentials->getConsumerSecret(),
             $this->tokenSecret,

@@ -121,6 +121,10 @@ class FrontNameResolver implements FrontNameResolverInterface
      */
     public function isHostBackend()
     {
+        if (!$this->request->getServer('HTTP_HOST')) {
+            return false;
+        }
+
         if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
             $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
         } else {
@@ -132,28 +136,21 @@ class FrontNameResolver implements FrontNameResolverInterface
                 );
             }
         }
-        $host = (string) $this->request->getServer('HTTP_HOST', '');
-        $hostWithPort = $this->getHostWithPort($backendUrl);
-
-        return !($hostWithPort === null || $host === '') && stripos($hostWithPort, $host) !== false;
-    }
-
-    /**
-     * Get host with port
-     *
-     * @param string $url
-     * @return mixed|string
-     */
-    private function getHostWithPort($url)
-    {
-        $this->uri->parse($url);
-        $scheme = $this->uri->getScheme();
-        $host = $this->uri->getHost();
-        $port = $this->uri->getPort();
-
-        if (!$port) {
-            $port = $this->standardPorts[$scheme] ?? null;
+        $this->uri->parse($backendUrl);
+        $configuredHost = $this->uri->getHost();
+        if (!$configuredHost) {
+            return false;
         }
-        return $port !== null ? $host . ':' . $port : $host;
+
+        $configuredPort = $this->uri->getPort() ?: ($this->standardPorts[$this->uri->getScheme()] ?? null);
+        $uri = ($this->request->isSecure() ? 'https' : 'http') . '://' . $this->request->getServer('HTTP_HOST');
+        $this->uri->parse($uri);
+        $host = $this->uri->getHost();
+        if ($configuredPort) {
+            $configuredHost .= ':' . $configuredPort;
+            $host .= ':' . ($this->uri->getPort() ?: $this->standardPorts[$this->uri->getScheme()]);
+        }
+
+        return strcasecmp($configuredHost, $host) === 0;
     }
 }
