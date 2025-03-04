@@ -69,18 +69,21 @@ class DbStatusCommandTest extends TestCase
                 ->getMock(),
             'old_validator' => $this->getMockBuilder(UpToDateValidatorInterface::class)
                 ->getMock(),
+            'up_to_date_queue' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
         ];
 
         $objectManagerProvider->expects($this->any())
             ->method('get')
             ->willReturn($objectManager);
-        $objectManager->expects(self::exactly(4))
+        $objectManager->expects(self::exactly(5))
             ->method('get')
             ->willReturnOnConsecutiveCalls(
                 $this->validators['declarative_schema'],
                 $this->validators['up_to_date_schema'],
                 $this->validators['up_to_date_data'],
-                $this->validators['old_validator']
+                $this->validators['old_validator'],
+                $this->validators['up_to_date_queue']
             );
         $this->command = new DbStatusCommand($objectManagerProvider, $this->deploymentConfig);
     }
@@ -97,6 +100,9 @@ class DbStatusCommandTest extends TestCase
             ->method('isUpToDate')
             ->willReturn(true);
         $this->validators['declarative_schema']->expects(self::once())
+            ->method('isUpToDate')
+            ->willReturn(true);
+        $this->validators['up_to_date_queue']->expects(self::once())
             ->method('isUpToDate')
             ->willReturn(true);
         $this->deploymentConfig->expects($this->once())

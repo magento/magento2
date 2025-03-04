@@ -11,6 +11,7 @@ use Magento\Framework\Setup\Declaration\Schema\UpToDateDeclarativeSchema;
 use Magento\Framework\Setup\OldDbValidator;
 use Magento\Framework\Setup\Patch\UpToDateData;
 use Magento\Framework\Setup\Patch\UpToDateSchema;
+use Magento\Framework\Setup\Queue\UpToDateQueue;
 use Magento\Framework\Setup\UpToDateValidatorInterface;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,6 +64,7 @@ class DbStatusCommand extends AbstractSetupCommand
             $this->objectManagerProvider->get()->get(UpToDateSchema::class),
             $this->objectManagerProvider->get()->get(UpToDateData::class),
             $this->objectManagerProvider->get()->get(OldDbValidator::class),
+            $this->objectManagerProvider->get()->get(UpToDateQueue::class),
         ];
         parent::__construct();
     }
