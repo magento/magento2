@@ -131,6 +131,10 @@ abstract class AbstractEntityUrl implements ResolverInterface
      */
     private function findFinalUrl(UrlRewrite $urlRewrite): UrlRewrite
     {
+        if ($urlRewrite->getTargetPath() === $urlRewrite->getRequestPath()) {
+            return $urlRewrite;
+        }
+
         do {
             $nextUrlRewrite = $this->findUrlFromRequestPath(
                 $urlRewrite->getTargetPath(),
