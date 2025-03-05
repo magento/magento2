@@ -167,4 +167,24 @@ class DataProviderTest extends TestCase
             $this->dataProvider->prepareMetadata()
         );
     }
+
+    /**
+     * @covers \Magento\Cms\Ui\Component\DataProvider::prepareMetadata
+     */
+    public function testPrepareMetadataForCmsBlockListing(): void
+    {
+        $name = 'cms_block_listing_data_source';
+
+        $this->dataProvider = new DataProvider(
+            $name,
+            $this->primaryFieldName,
+            $this->requestFieldName,
+            $this->reportingMock,
+            $this->searchCriteriaBuilderMock,
+            $this->requestInterfaceMock,
+            $this->filterBuilderMock
+        );
+
+        $this->assertEquals([], $this->dataProvider->prepareMetadata());
+    }
 }
