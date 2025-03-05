@@ -20,6 +20,8 @@ use Magento\Ui\Component\Container;
  */
 class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider
 {
+    public const CMS_BLOCK_LISTING_DATA_SOURCE = 'cms_block_listing_data_source';
+
     /**
      * @var AuthorizationInterface
      */
@@ -77,8 +79,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
             $meta,
             $data
         );
-
-        $this->meta = array_replace_recursive($meta, $this->prepareMetadata());
+        $this->meta = array_replace_recursive($meta, $this->prepareMetadata($name));
         $this->additionalFilterPool = $additionalFilterPool;
     }
 
@@ -101,10 +102,14 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     /**
      * Prepares Meta
      *
+     * @param string $name
      * @return array
      */
-    public function prepareMetadata()
+    public function prepareMetadata(string $name): array
     {
+        if ($name === self::CMS_BLOCK_LISTING_DATA_SOURCE) {
+            return [];
+        }
         $metadata = [];
 
         if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save')) {
@@ -123,7 +128,6 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
                 ]
             ];
         }
-
         if (!$this->getAuthorizationInstance()->isAllowed('Magento_Cms::save_design')) {
 
             foreach ($this->pageLayoutColumns as $column) {

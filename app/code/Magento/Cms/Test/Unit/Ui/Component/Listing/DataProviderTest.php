@@ -175,7 +175,12 @@ class DataProviderTest extends TestCase
 
         $this->assertEquals(
             $metadata,
-            $this->dataProvider->prepareMetadata()
+            $this->dataProvider->prepareMetadata($this->name)
+        );
+
+        $this->assertEquals(
+            [],
+            $this->dataProvider->prepareMetadata(DataProvider::CMS_BLOCK_LISTING_DATA_SOURCE)
         );
     }
 }
