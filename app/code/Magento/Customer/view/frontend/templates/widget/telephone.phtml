@@ -1,27 +1,43 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright © 2025 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Customer\Block\Widget\Telephone $block */
+/**
+ * @var \Magento\Customer\Block\Widget\Telephone $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
 <div class="field telephone <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="telephone" class="label">
         <span>
-            <?= $block->escapeHtml(__('Phone Number')) ?>
+            <?= $escaper->escapeHtml(__('Phone Number')) ?>
         </span>
     </label>
     <div class="control">
         <input type="tel"
                name="telephone"
                id="telephone"
-               value="<?= $block->escapeHtmlAttr($block->getTelephone()) ?>"
-               title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-               class="input-text validate-phoneLax <?= $block->escapeHtmlAttr(
+               value="<?= $escaper->escapeHtmlAttr($block->getTelephone()) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
+               class="input-text validate-phone-number <?= $escaper->escapeHtmlAttr(
                    $block->getAttributeValidationClass('telephone')
                ) ?>"
+               data-validate='{"validate-phone-number":true}'
         >
     </div>
 </div>
+
+<script>
+    require(['jquery', 'mage/validation'], function ($) {
+        $.validator.addMethod(
+            'validate-phone-number',
+            function (value) {
+                return /^[0-9+\-()\s]+$/.test(value); // Allows numbers, +, -, (), and spaces
+            },
+            $.mage.__('Invalid phone number. Please use 0-9, +, -, (, ) and space.')
+        );
+    });
+</script>
