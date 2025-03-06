@@ -55,7 +55,7 @@ class StockProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
         $stockFlag = 'has_stock_status_filter';
         if (!$collection->hasFlag($stockFlag)) {

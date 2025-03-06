@@ -53,7 +53,7 @@ class CartPriceRulesFixture extends Fixture
      */
     public function __construct(
         FixtureModel $fixtureModel,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory = null
+        ?\Magento\SalesRule\Model\RuleFactory $ruleFactory = null
     ) {
         parent::__construct($fixtureModel);
         $this->ruleFactory = $ruleFactory ?: $this->fixtureModel->getObjectManager()

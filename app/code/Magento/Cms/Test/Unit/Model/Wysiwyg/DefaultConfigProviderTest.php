@@ -38,6 +38,6 @@ class DefaultConfigProviderTest extends TestCase
         $config = new DataObject();
         $configProvider = new DefaultConfigProvider($this->assetRepo);
         $result = $configProvider->getConfig($config);
-        $this->assertStringContainsString('fontfamily fontsize', $result->getTinymce()['toolbar']);
+        $this->assertStringContainsString('fontfamily fontsizeinput', $result->getTinymce()['toolbar']);
     }
 }

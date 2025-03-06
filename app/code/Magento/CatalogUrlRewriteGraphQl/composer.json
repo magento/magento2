@@ -3,7 +3,7 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/module-store": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-graph-ql": "*",

@@ -141,7 +141,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
         Filesystem $filesystem,
         array $windowSize = [],
         array $data = [],
-        \Magento\Cms\Model\Wysiwyg\CompositeConfigProvider $configProvider = null
+        ?\Magento\Cms\Model\Wysiwyg\CompositeConfigProvider $configProvider = null
     ) {
         $this->_backendUrl = $backendUrl;
         $this->_eventManager = $eventManager;

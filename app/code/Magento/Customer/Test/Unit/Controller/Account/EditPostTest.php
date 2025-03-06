@@ -240,7 +240,7 @@ class EditPostTest extends TestCase
             ->willReturn($customer);
 
         $attr = 'attr1';
-        $this->request->expects($this->exactly(5))
+        $this->request->expects($this->exactly(3))
             ->method('getParam')
             ->willReturnCallback(
                 function ($arg) use ($attr) {

@@ -31,7 +31,7 @@ class Shell implements ShellInterface
      */
     public function __construct(
         CommandRendererInterface $commandRenderer,
-        \Psr\Log\LoggerInterface $logger = null
+        ?\Psr\Log\LoggerInterface $logger = null
     ) {
         $this->logger = $logger;
         $this->commandRenderer = $commandRenderer;

@@ -160,7 +160,7 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\File\Csv $csvParser,
         \Magento\Framework\App\Language\Dictionary $packDictionary,
-        DriverInterface $fileDriver = null
+        ?DriverInterface $fileDriver = null
     ) {
         $this->_viewDesign = $viewDesign;
         $this->_cache = $cache;

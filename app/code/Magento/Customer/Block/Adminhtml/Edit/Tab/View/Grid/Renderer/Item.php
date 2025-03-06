@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
 
 use Magento\Catalog\Model\Product;
@@ -123,7 +125,8 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         $this->setItem($item);
         $product = $this->getProduct();
         $options = $this->getOptionList();
-        return $options ? $this->_renderItemOptions($product, $options) : $this->escapeHtml($product->getName());
+        return $options ? $this->_renderItemOptions($product, $options)
+            : $this->_escaper->escapeHtml($product->getName());
     }
 
     /**
@@ -135,13 +138,13 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
      */
     protected function _renderItemOptions(Product $product, array $options)
     {
-        $html = '<div class="product-title">' . $this->escapeHtml(
+        $html = '<div class="product-title">' . $this->_escaper->escapeHtml(
             $product->getName()
         ) . '</div>' . '<dl class="item-options">';
         foreach ($options as $option) {
             $formattedOption = $this->getFormattedOptionValue($option);
-            $html .= '<dt>' . $this->escapeHtml($option['label']) . '</dt>';
-            $html .= '<dd>' . $formattedOption['value'] . '</dd>';
+            $html .= '<dt>' . $this->_escaper->escapeHtml($option['label']) . '</dt>';
+            $html .= '<dd>' . $this->_escaper->escapeHtml($formattedOption['value']) . '</dd>';
         }
         $html .= '</dl>';
 

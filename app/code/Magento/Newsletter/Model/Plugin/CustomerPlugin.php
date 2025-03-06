@@ -88,7 +88,7 @@ class CustomerPlugin
         Share $shareConfig,
         StoreManagerInterface $storeManager,
         LoggerInterface $logger,
-        CustomerSubscriberCache $customerSubscriberCache = null
+        ?CustomerSubscriberCache $customerSubscriberCache = null
     ) {
         $this->subscriberFactory = $subscriberFactory;
         $this->extensionFactory = $extensionFactory;

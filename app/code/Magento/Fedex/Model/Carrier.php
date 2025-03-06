@@ -219,7 +219,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         CurlFactory $curlFactory,
         DecoderInterface $decoderInterface,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -1467,7 +1467,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getContainerTypes(\Magento\Framework\DataObject $params = null)
+    public function getContainerTypes(?\Magento\Framework\DataObject $params = null)
     {
         if ($params == null) {
             return $this->_getAllowedContainers($params);
@@ -1535,7 +1535,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
+    public function getDeliveryConfirmationTypes(?\Magento\Framework\DataObject $params = null)
     {
         return $this->getCode('delivery_confirmation_types');
     }

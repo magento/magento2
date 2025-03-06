@@ -207,7 +207,7 @@ class DeployPackage
      * @param Package $parentPackage
      * @return bool
      */
-    private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
+    private function checkIfCanCopy(PackageFile $file, Package $package, ?Package $parentPackage = null)
     {
         return $parentPackage
             && $file->getOrigPackage() !== $package
@@ -254,7 +254,7 @@ class DeployPackage
      * @param bool $skipLogging
      * @return void
      */
-    private function register(Package $package, PackageFile $file = null, $skipLogging = false)
+    private function register(Package $package, ?PackageFile $file = null, $skipLogging = false)
     {
         $info = [
             'count' => $this->count,

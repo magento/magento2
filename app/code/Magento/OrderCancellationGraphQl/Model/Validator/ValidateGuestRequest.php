@@ -2,15 +2,6 @@
 /**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
  */
 declare(strict_types=1);
 
@@ -68,17 +59,17 @@ class ValidateGuestRequest
      * Ensure the order matches the provided criteria
      *
      * @param OrderInterface $order
-     * @param string $postcode
+     * @param string $lastname
      * @param string $email
      * @return void
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    public function validateOrderDetails(OrderInterface $order, string $postcode, string $email): void
+    public function validateOrderDetails(OrderInterface $order, string $lastname, string $email): void
     {
         $billingAddress = $order->getBillingAddress();
 
-        if ($billingAddress->getPostcode() !== $postcode || $billingAddress->getEmail() !== $email) {
+        if ($billingAddress->getLastname() !== $lastname || $billingAddress->getEmail() !== $email) {
             $this->cannotLocateOrder();
         }
 

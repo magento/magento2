@@ -124,7 +124,7 @@ abstract class Action extends AbstractAction
      * @param array|null $params
      * @return void
      */
-    protected function _forward($action, $controller = null, $module = null, array $params = null)
+    protected function _forward($action, $controller = null, $module = null, ?array $params = null)
     {
         $request = $this->getRequest();
 

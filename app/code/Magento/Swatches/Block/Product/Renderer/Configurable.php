@@ -125,8 +125,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
         array $data = [],
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        UrlBuilder $imageUrlBuilder = null
+        ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        ?UrlBuilder $imageUrlBuilder = null
     ) {
         $this->swatchHelper = $swatchHelper;
         $this->swatchMediaHelper = $swatchMediaHelper;

@@ -30,7 +30,7 @@ class ArrayType implements InterpreterInterface
      * @param InterpreterInterface $itemInterpreter
      * @param SortItemsHelper|null $sortItemsHelper
      */
-    public function __construct(InterpreterInterface $itemInterpreter, SortItemsHelper $sortItemsHelper = null)
+    public function __construct(InterpreterInterface $itemInterpreter, ?SortItemsHelper $sortItemsHelper = null)
     {
         $this->itemInterpreter = $itemInterpreter;
         $this->sortItemsHelper = $sortItemsHelper ?: new \Magento\Framework\ObjectManager\Helper\SortItems();

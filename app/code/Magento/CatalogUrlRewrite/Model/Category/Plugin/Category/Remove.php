@@ -39,7 +39,7 @@ class Remove
         \Magento\UrlRewrite\Model\UrlPersistInterface $urlPersist,
         \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider $childrenCategoriesProvider,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;

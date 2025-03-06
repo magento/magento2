@@ -348,7 +348,7 @@ class Package
      * @param Package $parentPackage
      * @return bool true on success
      */
-    public function aggregate(Package $parentPackage = null)
+    public function aggregate(?Package $parentPackage = null)
     {
         $inheritedFiles = $this->getParentFiles();
         foreach ($inheritedFiles as $fileId => $file) {
@@ -538,7 +538,7 @@ class Package
         $theme,
         $locale,
         array &$result = [],
-        ThemeInterface $themeModel = null
+        ?ThemeInterface $themeModel = null
     ) {
         if (($package->getArea() != $area) || ($package->getTheme() != $theme) || ($package->getLocale() != $locale)) {
             $result[] = $area . '/' . $theme . '/' . $locale;

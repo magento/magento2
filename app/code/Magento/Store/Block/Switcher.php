@@ -49,7 +49,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         array $data = [],
-        UrlHelper $urlHelper = null
+        ?UrlHelper $urlHelper = null
     ) {
         $this->_postDataHelper = $postDataHelper;
         parent::__construct($context, $data);

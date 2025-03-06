@@ -62,7 +62,7 @@ class CreditmemoDocumentFactory
      */
     private function getCreditmemoCreationData(
         array $items = [],
-        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = ['qtys' => []];
         foreach ($items as $item) {
@@ -118,9 +118,9 @@ class CreditmemoDocumentFactory
     public function createFromOrder(
         \Magento\Sales\Api\Data\OrderInterface $order,
         array $items = [],
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         $appendComment = false,
-        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = $this->getCreditmemoCreationData($items, $arguments);
         $creditmemo = $this->creditmemoFactory->createByOrder($order, $data);
@@ -144,9 +144,9 @@ class CreditmemoDocumentFactory
     public function createFromInvoice(
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,
         array $items = [],
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         $appendComment = false,
-        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = $this->getCreditmemoCreationData($items, $arguments);
         /** @var $invoice \Magento\Sales\Model\Order\Invoice */
