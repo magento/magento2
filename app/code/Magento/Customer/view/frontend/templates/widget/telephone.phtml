@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © 2025 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -30,14 +30,11 @@
     </div>
 </div>
 
-<script>
-    require(['jquery', 'mage/validation'], function ($) {
-        $.validator.addMethod(
-            'validate-phone-number',
-            function (value) {
-                return /^[0-9+\-()\s]+$/.test(value); // Allows numbers, +, -, (), and spaces
-            },
-            $.mage.__('Invalid phone number. Please use 0-9, +, -, (, ) and space.')
-        );
-    });
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Customer/js/validate-phone-number": {}
+    }
+}
 </script>
+
