@@ -533,6 +533,7 @@ type StoreConfig {
     cart_expires_in_days: Int @doc(description: "checkout/cart/delete_quote_after: quote lifetime in days.")
     grouped_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/grouped_product_image: which image to use for grouped products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
     configurable_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/configurable_product_image: which image to use for configurable products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
+    is_checkout_agreements_enabled: Boolean! @doc(description: "Configuration data from checkout/options/enable_agreements")
 }
 
 enum ProductImageThumbnail {
