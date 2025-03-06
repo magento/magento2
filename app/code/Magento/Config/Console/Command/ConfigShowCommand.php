@@ -26,6 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @api
  * @since 101.0.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class ConfigShowCommand extends Command
 {
@@ -86,6 +87,9 @@ class ConfigShowCommand extends Command
 
     /**
      * @var PathValidatorFactory
+     * @deprecated The path is no longer pre-validated here; an invalid/partial path is now detected
+     * by checking the resolved configuration value instead. Kept only for backward compatibility of the
+     * constructor signature.
      */
     private $pathValidatorFactory;
 
@@ -104,7 +108,7 @@ class ConfigShowCommand extends Command
      * @param ConfigSourceInterface $configSource
      * @param ConfigPathResolver $pathResolver
      * @param ValueProcessor $valueProcessor
-     * @param PathValidatorFactory|null $pathValidatorFactory
+     * @param PathValidatorFactory|null $pathValidatorFactory @deprecated unused, kept for BC
      * @param EmulatedAdminhtmlAreaProcessor|null $emulatedAreaProcessor
      * @param LocaleEmulatorInterface|null $localeEmulator
      * @internal param ScopeConfigInterface $appConfig
