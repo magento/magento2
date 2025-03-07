@@ -1,0 +1,19 @@
+#  Copyright 2025 Adobe
+#  All Rights Reserved.
+
+type StoreConfig {
+    share_all_catalog_rules: Boolean! @doc(description: "Configuration data from catalog/rule/share_all_catalog_rules")
+    share_applied_catalog_rules: Boolean! @doc(description: "Configuration data from catalog/rule/share_applied_catalog_rules")
+}
+
+type Query {
+    allCatalogRules: [CatalogRule!] @doc(description: "Provides all active catalog rules in the store.") @resolver(class: "Magento\\CatalogRuleGraphQl\\Model\\Resolver\\AllCatalogRules")
+}
+
+interface ProductInterface {
+    rules: [CatalogRule!] @doc(description: "Provides applied catalog rules in the current active cart") @resolver(class: "Magento\\CatalogRuleGraphQl\\Model\\Resolver\\AppliedCatalogRules")
+}
+
+type CatalogRule {
+    name: String! @doc(description: "Name of the catalog rule")
+}

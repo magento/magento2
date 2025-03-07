@@ -75,6 +75,7 @@
     <preference for="Magento\Framework\App\Route\ConfigInterface" type="Magento\Framework\App\Route\Config" />
     <preference for="Magento\Framework\App\ResourceConnection\ConfigInterface" type="Magento\Framework\App\ResourceConnection\Config\Proxy" />
     <preference for="Magento\Framework\Oauth\OauthInterface" type="Magento\Framework\Oauth\Oauth"/>
+    <preference for="Magento\Framework\Oauth\Helper\Signature\HmacInterface" type="Magento\Framework\Oauth\Helper\Signature\Hmac" />
     <preference for="Magento\Framework\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Theme\Model\Theme\Domain\Physical" />
     <preference for="Magento\Framework\View\Design\Theme\Domain\VirtualInterface" type="Magento\Theme\Model\Theme\Domain\Virtual" />
     <preference for="Magento\Framework\View\Design\Theme\Domain\StagingInterface" type="Magento\Theme\Model\Theme\Domain\Staging" />
