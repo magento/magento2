@@ -240,6 +240,24 @@
                     <comment>Jpeg quality for resized images 1-100%.</comment>
                 </field>
             </group>
+        </section>        
+        <section id="dev" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Developer</label>
+            <tab>advanced</tab>
+            <resource>Magento_Developer::config</resource>
+            <group id="layout_settings" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Product Layout Handles</label>
+
+                <field id="enable_id_handle" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Layout Handle by Product ID</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="enable_attribute_set_handle" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Layout Handle by Attribute Set</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>
