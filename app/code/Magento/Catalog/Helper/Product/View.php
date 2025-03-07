@@ -9,6 +9,7 @@ namespace Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Result\Page as ResultPage;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Catalog category helper
@@ -174,24 +175,46 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
 
         $urlSafeSku = rawurlencode($product->getSku());
 
+        $enableIdHandle = $this->scopeConfig->isSetFlag(
+            'catalog/layout_settings/enable_id_handle', 
+            ScopeInterface::SCOPE_STORE
+        );
+        
+        $enableAttributeSetHandle = $this->scopeConfig->isSetFlag(
+            'catalog/layout_settings/enable_attribute_set_handle', 
+            ScopeInterface::SCOPE_STORE
+        );
+
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
-                $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], $handle, false);
-                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
+                if ($enableAttributeSetHandle) {
+                    $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], $handle, false);
+                }
+                if ($enableIdHandle) {
+                    $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
+                }
             }
         }
 
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
-        $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], null, false);
-        $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
+        if ($enableAttributeSetHandle) {
+            $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], null, false);
+        }
+        if ($enableIdHandle) {
+            $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
+        }
 
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
                 $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
-                $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], $handle, false);
-                $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
+                if ($enableAttributeSetHandle) {
+                    $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], $handle, false);
+                }
+                if ($enableIdHandle) {
+                    $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
+                }
             }
         }
 
