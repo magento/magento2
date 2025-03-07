@@ -97,6 +97,12 @@
                     <datetime>datetime</datetime>
                 </input_types>
             </validator_data>
-        </general>
+        </general>        
+        <dev>
+            <layout_settings>
+                <enable_id_handle>1</enable_id_handle>
+                <enable_attribute_set_handle>0</enable_attribute_set_handle>
+            </layout_settings>
+        </dev>
     </default>
 </config>
