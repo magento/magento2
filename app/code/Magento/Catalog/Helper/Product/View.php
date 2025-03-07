@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 
@@ -176,24 +176,37 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $urlSafeSku = rawurlencode($product->getSku());
 
         $enableIdHandle = $this->scopeConfig->isSetFlag(
-            'catalog/layout_settings/enable_id_handle', 
+            'catalog/layout_settings/enable_id_handle',
             ScopeInterface::SCOPE_STORE
         );
         
         $enableAttributeSetHandle = $this->scopeConfig->isSetFlag(
-            'catalog/layout_settings/enable_attribute_set_handle', 
+            'catalog/layout_settings/enable_attribute_set_handle',
             ScopeInterface::SCOPE_STORE
         );
 
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                $resultPage->addPageLayoutHandles(
+                    ['type' => $product->getTypeId()],
+                    $handle,
+                    false
+                );
+
                 if ($enableAttributeSetHandle) {
-                    $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], $handle, false);
+                    $resultPage->addPageLayoutHandles(
+                        ['attribute_set' => $product->getAttributeSetId()],
+                        $handle,
+                        false
+                    );
                 }
+
                 if ($enableIdHandle) {
-                    $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
+                    $resultPage->addPageLayoutHandles(
+                        ['id' => $product->getId(), 'sku' => $urlSafeSku],
+                        $handle
+                    );
                 }
             }
         }
