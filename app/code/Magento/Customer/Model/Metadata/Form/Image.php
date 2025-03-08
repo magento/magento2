@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -139,9 +139,15 @@ class Image extends File
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
 
+        if ($this->ioFileSystem->fileExists($value['tmp_name'])) {
+            $temporaryFile = $value['tmp_name'];
+        } else {
+            $temporaryFile = $this->mediaEntityTmpReadDirectory->getAbsolutePath($value['tmp_name']);
+        }
+
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $imageProp = getimagesize($value['tmp_name']);
+            $imageProp = getimagesize($temporaryFile);
         } catch (\Throwable $e) {
             $imageProp = false;
         }
