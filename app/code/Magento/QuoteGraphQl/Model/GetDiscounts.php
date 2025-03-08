@@ -22,6 +22,8 @@ class GetDiscounts
      */
     public function execute(Quote $quote, array $discounts): ?array
     {
+        $discounts = $discounts ?: $quote->getBillingAddress()->getExtensionAttributes()->getDiscounts() ?? [];
+
         if (empty($discounts)) {
             return null;
         }

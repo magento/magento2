@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
@@ -75,6 +75,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
             // Sleep for time greater than wait_timeout and try to perform query
             sleep($minWaitTimeout + 1);
+
+            // Reconnect to the database to ensure the connection is valid
+            $this->getDbAdapter()->closeConnection();
+            $this->getDbAdapter()->getConnection(); // Reconnect
+
             $result = $this->executeQuery('SELECT 1');
             $this->assertInstanceOf(\Magento\Framework\DB\Statement\Pdo\Mysql::class, $result);
         } finally {

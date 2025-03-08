@@ -7,6 +7,6 @@ declare(strict_types=1);
 
 return [
     'Magento\Captcha' => [
-        'magento/laminas-db' => 'magento/laminas-db',
+        'Magento\MagentoZfDb' => 'Magento\MagentoZfDb',
     ]
 ];

@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GiftMessageGraphQl\Model\Config;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
-use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
@@ -50,8 +51,8 @@ class Messages
         }
 
         return $this->isGiftMessageAllowedForProduct(
-            ($type === 'item' || $entity instanceof Item) ?
-                $entity->getProduct()->getGiftMessageAvailable() : null,
+            $entity instanceof QuoteItem ? $entity->getProduct()->getGiftMessageAvailable()
+                : ($entity instanceof OrderItem ? $entity->getGiftMessageAvailable() : null),
             $store
         );
     }
