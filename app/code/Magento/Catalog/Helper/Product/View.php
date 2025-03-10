@@ -175,11 +175,14 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
 
         $urlSafeSku = rawurlencode($product->getSku());
 
+        $enableTypeHandle = $this->scopeConfig->isSetFlag(
+            'catalog/layout_settings/enable_type_handle',
+            ScopeInterface::SCOPE_STORE
+        );        
         $enableIdHandle = $this->scopeConfig->isSetFlag(
             'catalog/layout_settings/enable_id_handle',
             ScopeInterface::SCOPE_STORE
-        );
-        
+        );        
         $enableAttributeSetHandle = $this->scopeConfig->isSetFlag(
             'catalog/layout_settings/enable_attribute_set_handle',
             ScopeInterface::SCOPE_STORE
@@ -188,12 +191,14 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(
-                    ['type' => $product->getTypeId()],
-                    $handle,
-                    false
-                );
 
+                if ($enableTypeHandle) {
+                    $resultPage->addPageLayoutHandles(
+                        ['type' => $product->getTypeId()],
+                        $handle,
+                        false
+                    );
+                }
                 if ($enableAttributeSetHandle) {
                     $resultPage->addPageLayoutHandles(
                         ['attribute_set' => $product->getAttributeSetId()],
@@ -201,7 +206,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                         false
                     );
                 }
-
                 if ($enableIdHandle) {
                     $resultPage->addPageLayoutHandles(
                         ['id' => $product->getId(), 'sku' => $urlSafeSku],
@@ -211,7 +215,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
 
-        $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
+        if ($enableTypeHandle) {
+            $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
+        }
         if ($enableAttributeSetHandle) {
             $resultPage->addPageLayoutHandles(['attribute_set' => $product->getAttributeSetId()], null, false);
         }
@@ -221,7 +227,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
 
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
-                $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                if ($enableTypeHandle) {
+                    $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], $handle, false);
+                }
                 if ($enableAttributeSetHandle) {
                     $resultPage->addPageLayoutHandles(
                         ['attribute_set' => $product->getAttributeSetId()],
