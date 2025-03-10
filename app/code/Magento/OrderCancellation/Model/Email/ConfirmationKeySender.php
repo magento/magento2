@@ -51,36 +51,28 @@ class ConfirmationKeySender
      * Send email to guest user with confirmation key.
      *
      * @param Order $order
-     * @param string $confirmationKey
+     * @param array $confirmationDetails
      * @return void
      * @throws LocalizedException
      */
     public function execute(
         Order $order,
-        string $confirmationKey,
+        array $confirmationDetails
     ):void {
         try {
             $storeId = (int)$order->getStoreId();
-            $guestOrderUrl = $this->url->getUrl(
-                self::ORDER_VIEW_PATH,
-                [
-                    '_query' => [
-                        'confirmation_key' => $confirmationKey,
-                        'order_id' => $order->getIncrementId()
-                    ]
-                ]
-            );
-            $templateParams = [
-                'customer_name' => $order->getCustomerName(),
-                'order_id' => $order->getIncrementId(),
-                'guest_order_url' => $guestOrderUrl,
-                'escaper' => $this->escaper,
-            ];
-
             $this->transportBuilder
                 ->setTemplateIdentifier(self::TEMPLATE_ID)
                 ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
-                ->setTemplateVars($templateParams)
+                ->setTemplateVars([
+                    'customer_name' => $order->getCustomerName(),
+                    'order_id' => $order->getIncrementId(),
+                    'guest_order_url' => $this->url->getUrl(
+                        self::ORDER_VIEW_PATH,
+                        ['_query' => $confirmationDetails]
+                    ),
+                    'escaper' => $this->escaper,
+                ])
                 ->setFromByScope($this->orderIdentity->getEmailIdentity(), $storeId)
                 ->addTo($order->getCustomerEmail(), $order->getCustomerName())
                 ->getTransport()

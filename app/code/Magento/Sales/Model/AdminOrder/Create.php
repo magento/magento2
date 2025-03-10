@@ -708,6 +708,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param int $qty
      * @return \Magento\Quote\Model\Quote\Item|string|$this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws LocalizedException
      */
     public function initFromOrderItem(\Magento\Sales\Model\Order\Item $orderItem, $qty = null)
     {
@@ -733,9 +734,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
             $this->formattedOptions($product, $buyRequest, $productOptions);
 
-            $item = $this->getQuote()->addProduct($product, $buyRequest);
-            if (is_string($item)) {
-                return $item;
+            try {
+                $item = $this->getQuote()->addProduct($product, $buyRequest);
+                if (is_string($item)) {
+                    return $item;
+                }
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage(__($e->getMessage()));
+                return $this;
             }
 
             if ($additionalOptions = $orderItem->getProductOptionByCode('additional_options')) {

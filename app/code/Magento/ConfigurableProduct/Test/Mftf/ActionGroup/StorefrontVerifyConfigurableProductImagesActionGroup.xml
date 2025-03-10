@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyConfigurableProductImagesActionGroup">
+        <annotations>
+            <description>Verify unique image visibility for configurable product option on storefront</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeOption1" type="string"/>
+            <argument name="attributeOption2" type="string"/>
+        </arguments>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(attributeOption1)}}" userInput="{{ConfigurableProduct1.color_option1}}" stepKey="fillColorDownAttributeOption1"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(attributeOption2)}}" userInput="{{ConfigurableProduct1.size_option1}}" stepKey="fillSizeAttributeOption1"/>
+        <waitForPageLoad time="30" stepKey="waitForPreviewLoadForOptionBlack"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive(TestImageNew.filename)}}" time="30" stepKey="waitImageToBeLoadedForColorOptionBlack"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(attributeOption1)}}" userInput="{{ConfigurableProduct1.color_option2}}" stepKey="fillColorDownAttributeOption2"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(attributeOption2)}}" userInput="{{ConfigurableProduct1.size_option2}}" stepKey="fillSizeAttributeOption2"/>
+        <waitForPageLoad time="30" stepKey="waitForPreviewLoadForOptionRed"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageActive(MagentoLogo.filename)}}" time="30" stepKey="waitImageToBeLoadedForColorOptionRed"/>
+    </actionGroup>
+</actionGroups>

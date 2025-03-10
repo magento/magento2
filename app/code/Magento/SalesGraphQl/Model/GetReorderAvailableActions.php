@@ -7,21 +7,30 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model;
 
+use Magento\Sales\Helper\Reorder;
+use Magento\Sales\Model\Order;
 use Magento\SalesGraphQl\Api\OrderAvailableActionProviderInterface;
 
 class GetReorderAvailableActions implements OrderAvailableActionProviderInterface
 {
     /**
+     * GetReorderAvailableActions constructor
+     *
+     * @param Reorder $reorderHelper
+     */
+    public function __construct(
+        private readonly Reorder $reorderHelper
+    ) {
+    }
+
+    /**
      * Get reorder available action
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param Order $order
      * @return array|string[]
      */
-    public function execute(\Magento\Sales\Model\Order $order): array
+    public function execute(Order $order): array
     {
-        if ($order->canReorder()) {
-            return ['REORDER'];
-        }
-        return [];
+        return $this->reorderHelper->canReorder($order->getId()) ? ['REORDER'] : [];
     }
 }
