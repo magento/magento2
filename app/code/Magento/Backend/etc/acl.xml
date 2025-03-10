@@ -41,7 +41,7 @@
                         <resource id="Magento_Backend::cache" title="Cache Management" translate="title"  sortOrder="10">
                             <resource id="Magento_Backend::main_actions" title="Clean Cache Actions" translate="title" sortOrder="10">
                                 <resource id="Magento_Backend::flush_cache_storage" title="Flush Cache Storage" translate="title" sortOrder="10" />
-                                <resource id="Magento_Backend::flush_magento_cache" title="Flush Magento Cache" translate="title" sortOrder="20" />
+                                <resource id="Magento_Backend::flush_magento_cache" title="Clean Magento Cache" translate="title" sortOrder="20" />
                             </resource>
                             <resource id="Magento_Backend::mass_actions" title="Cache Types Management" translate="title" sortOrder="20">
                                 <resource id="Magento_Backend::toggling_cache_type" title="Toggle Cache Type" translate="title" sortOrder="10" />
