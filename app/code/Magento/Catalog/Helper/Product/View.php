@@ -178,7 +178,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $enableIdHandle = $this->scopeConfig->isSetFlag(
             'catalog/layout_settings/enable_id_handle',
             ScopeInterface::SCOPE_STORE
-        );        
+        );
         $enableAttributeSetHandle = $this->scopeConfig->isSetFlag(
             'catalog/layout_settings/enable_attribute_set_handle',
             ScopeInterface::SCOPE_STORE
