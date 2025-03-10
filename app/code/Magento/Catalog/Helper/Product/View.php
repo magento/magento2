@@ -191,7 +191,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
-
                 if ($enableTypeHandle) {
                     $resultPage->addPageLayoutHandles(
                         ['type' => $product->getTypeId()],
