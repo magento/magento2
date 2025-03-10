@@ -139,10 +139,9 @@ class Image extends File
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
 
-        if ($this->ioFileSystem->fileExists($value['tmp_name'])) {
-            $temporaryFile = $value['tmp_name'];
-        } else {
-            $temporaryFile = $this->mediaEntityTmpReadDirectory->getAbsolutePath($value['tmp_name']);
+        $temporaryFile = $value['tmp_name'];
+        if (!$this->ioFileSystem->fileExists($temporaryFile)) {
+            $temporaryFile = $this->mediaEntityTmpReadDirectory->getAbsolutePath($temporaryFile);
         }
 
         try {
