@@ -7,7 +7,8 @@
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
-        "magento/module-sales-rule": "*"
+        "magento/module-sales-rule": "*",
+        "magento/module-quote": "*"
     },
     "type": "magento2-module",
     "license": [
