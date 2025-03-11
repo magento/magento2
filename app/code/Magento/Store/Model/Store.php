@@ -382,13 +382,13 @@ class Store extends AbstractExtensibleModel implements
         $currencyInstalled,
         \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
-        \Magento\Store\Model\Validation\StoreValidator $modelValidator = null,
-        ModifierInterface $urlModifier = null
+        ?\Magento\Framework\Event\ManagerInterface $eventManager = null,
+        ?\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
+        ?\Magento\Store\Model\Validation\StoreValidator $modelValidator = null,
+        ?ModifierInterface $urlModifier = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;

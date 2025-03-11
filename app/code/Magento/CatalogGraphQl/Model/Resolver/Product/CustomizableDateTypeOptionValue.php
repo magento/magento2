@@ -33,7 +33,7 @@ class CustomizableDateTypeOptionValue implements ResolverInterface
      *
      * @return string
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): string
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null): string
     {
         $dteType = $value[self::OPTION_CODE] ?? '';
 

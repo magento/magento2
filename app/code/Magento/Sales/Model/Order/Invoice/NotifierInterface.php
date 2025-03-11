@@ -28,7 +28,7 @@ interface NotifierInterface
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         $forceSyncMode = false
     );
 }

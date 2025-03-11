@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
+declare(strict_types=1);
 
 namespace Magento\User\Model;
 
@@ -21,9 +23,13 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\TestFramework\Bootstrap as TestFrameworkBootstrap;
 use Magento\TestFramework\Entity;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\User\Model\User as UserModel;
+use Magento\User\Test\Fixture\User as UserDataFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -63,6 +69,11 @@ class UserTest extends TestCase
     private $objectManager;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -72,6 +83,7 @@ class UserTest extends TestCase
         $this->_dateTime = $this->objectManager->get(DateTime::class);
         $this->encryptor = $this->objectManager->get(Encryptor::class);
         $this->cache = $this->objectManager->get(CacheInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -445,7 +457,7 @@ class UserTest extends TestCase
         $this->_model->save();
     }
 
-    public function beforeSavePasswordInsecureDataProvider()
+    public static function beforeSavePasswordInsecureDataProvider()
     {
         return ['alpha chars only' => ['aaaaaaaa'], 'digits only' => ['1234567']];
     }
@@ -614,8 +626,43 @@ class UserTest extends TestCase
         $sentMessage = $transportBuilderMock->getSentMessage();
         $this->assertSame(
             'New User Notification Custom Text ' . $userModel->getFirstname() . ', ' . $userModel->getLastname(),
-            $sentMessage->getBodyText()
+            quoted_printable_decode($sentMessage->getBody()->bodyToString())
         );
+    }
+
+    /**
+     * Test admin email notification after password change
+     *
+     * @throws LocalizedException
+     * @return void
+     */
+    #[
+        DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
+    ]
+    public function testAdminUserEmailNotificationAfterPasswordChange(): void
+    {
+        // Load admin user
+        $user = $this->fixtures->get('user');
+        $username = $user->getDataByKey('username');
+        $adminEmail = $user->getDataByKey('email');
+
+        // Login with old credentials
+        $this->_model->login($username, TestFrameworkBootstrap::ADMIN_PASSWORD);
+
+        // Change password
+        $this->_model->setPassword('newPassword123');
+        $this->_model->save();
+
+        $this->_model->sendNotificationEmailsIfRequired();
+
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
+        $message = $transportBuilderMock->getSentMessage();
+
+        // Verify an email was dispatched to the correct user with correct subject
+        $this->assertNotNull($transportBuilderMock->getSentMessage());
+        $this->assertEquals($adminEmail, $message->getTo()[0]->getEmail());
+        $this->assertEquals($message->getSubject(), 'New password for '.$username);
     }
 
     /**
@@ -669,7 +716,7 @@ class UserTest extends TestCase
         $sentMessage = $transportBuilderMock->getSentMessage();
         $this->assertStringContainsString(
             'id='.$userModel->getId(),
-            quoted_printable_decode($sentMessage->getBodyText())
+            quoted_printable_decode($sentMessage->getBody()->bodyToString())
         );
     }
 }

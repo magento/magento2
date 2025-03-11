@@ -114,12 +114,12 @@ QUERY;
      *
      * @return array[][]
      */
-    public function categoryFieldsDataProvider(): array
+    public static function categoryFieldsDataProvider(): array
     {
         return [
             [
-                'category_id' => 10,
-                'category_fields' => [
+                'categoryId' => 10,
+                'categoryFields' => [
                     'id' => 10,
                     'include_in_menu' => 0,
                     'name' => 'Category_en',

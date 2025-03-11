@@ -128,16 +128,16 @@ class LoadBlockTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function responseFlagsProvider(): array
+    public static function responseFlagsProvider(): array
     {
         return [
             'as_json' => [
-                'as_json' => true,
-                'as_js_varname' => false,
+                'asJson' => true,
+                'asJsVarname' => false,
             ],
             'as_plain' => [
-                'as_json' => false,
-                'as_js_varname' => true,
+                'asJson' => false,
+                'asJsVarname' => true,
             ],
         ];
     }

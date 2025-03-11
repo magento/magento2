@@ -26,7 +26,7 @@ class GraphTest extends TestCase
     /**
      * @return array
      */
-    public function constructorErrorDataProvider()
+    public static function constructorErrorDataProvider()
     {
         return [
             'duplicate nodes' => [[1, 2, 2], []],

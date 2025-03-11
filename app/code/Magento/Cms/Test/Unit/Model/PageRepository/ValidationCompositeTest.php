@@ -48,6 +48,9 @@ class ValidationCompositeTest extends TestCase
      */
     public function testConstructorValidation($validators)
     {
+        if (!empty($validators[0]) && is_callable($validators[0])) {
+            $validators[0] = $validators[0]($this);
+        }
         $this->expectException('InvalidArgumentException');
         new ValidationComposite($this->subject, $validators, $this->hydratorMock);
     }
@@ -117,6 +120,9 @@ class ValidationCompositeTest extends TestCase
      */
     public function testPassthroughMethods($method, $arg)
     {
+        if (is_callable($arg)) {
+            $arg = $arg($this);
+        }
         $this->subject
             ->method($method)
             ->with($arg)
@@ -128,24 +134,32 @@ class ValidationCompositeTest extends TestCase
         self::assertSame('foo', $result);
     }
 
-    public function constructorArgumentProvider()
+    public static function constructorArgumentProvider()
     {
         return [
             [[null], false],
             [[''], false],
             [['foo'], false],
             [[new \stdClass()], false],
-            [[$this->getMockForAbstractClass(ValidatorInterface::class), 'foo'], false],
+            [
+                [
+                    static fn (self $testCase) =>
+                    $testCase->getMockForAbstractClass(ValidatorInterface::class), 'foo'], false
+                ],
         ];
     }
 
-    public function passthroughMethodDataProvider()
+    public static function passthroughMethodDataProvider()
     {
         return [
-            ['save', $this->getMockForAbstractClass(PageInterface::class)],
+            ['save', static fn (self $testCase) => $testCase->getMockForAbstractClass(PageInterface::class)],
             ['getById', 1],
-            ['getList', $this->getMockForAbstractClass(SearchCriteriaInterface::class)],
-            ['delete', $this->getMockForAbstractClass(PageInterface::class)],
+            [
+                'getList',
+                static fn (self $testCase) =>
+                $testCase->getMockForAbstractClass(SearchCriteriaInterface::class)
+            ],
+            ['delete', static fn (self $testCase) => $testCase->getMockForAbstractClass(PageInterface::class)],
             ['deleteById', 1],
         ];
     }

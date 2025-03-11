@@ -22,7 +22,7 @@ class TotalTest extends TestCase
     protected function setUp(): void
     {
         $serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
+            ->onlyMethods(['unserialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $serializer->expects($this->any())
@@ -58,18 +58,18 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function setTotalAmountDataProvider()
+    public static function setTotalAmountDataProvider()
     {
         return [
             'Subtotal' => [
                 'code' => 'subtotal',
                 'amount' => 42.42,
-                'stored_code' => 'subtotal'
+                'storedCode' => 'subtotal'
             ],
             'Other total' => [
                 'code' => 'other',
                 'amount' => 42.17,
-                'stored_code' => 'other_amount'
+                'storedCode' => 'other_amount'
             ]
         ];
     }
@@ -92,18 +92,18 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function setBaseTotalAmountDataProvider()
+    public static function setBaseTotalAmountDataProvider()
     {
         return [
             'Subtotal' => [
                 'code' => 'subtotal',
                 'amount' => 17.42,
-                'stored_code' => 'base_subtotal'
+                'storedCode' => 'base_subtotal'
             ],
             'Other total' => [
                 'code' => 'other',
                 'amount' => 42.17,
-                'stored_code' => 'base_other_amount'
+                'storedCode' => 'base_other_amount'
             ]
         ];
     }
@@ -126,7 +126,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function addTotalAmountDataProvider()
+    public static function addTotalAmountDataProvider()
     {
         return [
             'Zero' => [
@@ -160,7 +160,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function addBaseTotalAmountDataProvider()
+    public static function addBaseTotalAmountDataProvider()
     {
         return [
             'Zero' => [
@@ -219,7 +219,7 @@ class TotalTest extends TestCase
     /**
      * @return array
      */
-    public function getFullInfoDataProvider()
+    public static function getFullInfoDataProvider()
     {
         $myArray = ['team' => 'kiwis'];
         $serializedInput = json_encode($myArray);

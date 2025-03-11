@@ -52,7 +52,7 @@ class ConfigTest extends TestCase
         $this->assertArrayNotHasKey('dev/debug/template_hints_blocks', $_configData);
     }
 
-    public function saveWithSingleStoreModeEnabledDataProvider()
+    public static function saveWithSingleStoreModeEnabledDataProvider()
     {
         return require __DIR__ . '/_files/config_groups.php';
     }
@@ -87,7 +87,7 @@ class ConfigTest extends TestCase
         }
     }
 
-    public function saveDataProvider()
+    public static function saveDataProvider()
     {
         return require __DIR__ . '/_files/config_section.php';
     }
@@ -137,7 +137,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function saveWebsiteScopeDataProvider(): array
+    public static function saveWebsiteScopeDataProvider(): array
     {
         return [
             [

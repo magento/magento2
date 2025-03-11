@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyTierPriceForBundleDynamicProductTest">
+        <annotations>
+            <features value="Bundle Product"/>
+            <stories value="Dynamic Bundle Product with Tier Price"/>
+            <title value="Apply Tier price for Bundle Dynamic Product"/>
+            <description value="Create bundled product with tier price and verify price and tier price % in customization frame in storefront."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4051"/>
+        </annotations>
+        <before>
+            <!--Create a category-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!-- simple product1-->
+            <createData entity="SimpleProduct" stepKey="SimpleProduct1">
+                <field key="price">110.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- simple product2 -->
+            <createData entity="SimpleProduct" stepKey="SimpleProduct2">
+                <field key="price">40.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiBundleProduct" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="dropDownBundleOption1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToFirstProduct1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="dropDownBundleOption1"/>
+                <requiredEntity createDataKey="SimpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToSecondProduct12">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="dropDownBundleOption1"/>
+                <requiredEntity createDataKey="SimpleProduct2"/>
+            </createData>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openGridForBundleProduct1"/>
+            <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProduct1">
+                <argument name="product" value="$$createBundleProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup"  stepKey="openFirstProductForEdit"/>
+            <actionGroup ref="AdminBundleProductSetAdvancedPricingActionGroup" stepKey="addProductTierPrice">
+                <argument name="quantity" value="2"/>
+                <argument name="price" value="Discount"/>
+                <argument name="amount" value="20"/>
+                <argument name="priceView" value="Price Range"/>
+            </actionGroup>
+            <actionGroup ref="SetCategoryByNameActionGroup" stepKey="addCategoryToBundledProduct">
+                <argument name="categoryName" value="$$createCategory.name$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="SimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="SimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <!--Delete category-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!--Delete Bundle Product-->
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open created category in storefront and assert the price-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="againOpenEnabledCategory">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <waitForText userInput="From $40.00" selector="{{StorefrontCategoryProductSection.priceFromByProductId($$createBundleProduct.id$$)}}" stepKey="seeFromPriceFromInCategoryBundle"/>
+        <waitForText userInput="To $110.00" selector="{{StorefrontCategoryProductSection.priceToByProductId($$createBundleProduct.id$$)}}" stepKey="seeToPriceFromInCategoryBundle"/>
+        <!--Open Bundled product-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToProduct2ProductDetailsPage">
+            <argument name="product" value="$createBundleProduct$"/>
+        </actionGroup>
+        <!--Click on Customize and Add to cart-->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonToCustomize"/>
+        <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct1">
+            <argument name="productName" value="$SimpleProduct1.name$"/>
+        </actionGroup>
+        <!-- Assert price and tier price %-->
+        <waitForText userInput="$110.00" selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="seeCustomizationPrice"/>
+        <waitForText userInput="Buy 2 with 20% discount each" selector="{{StorefrontProductInfoMainSection.tierPriceWithIndex('1')}}" stepKey="tierPriceText"/>
+        <!-- Change qty in customization frame nd add it to cart-->
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <!--Select 2nd product in from the bundled product and add qty 2 to cart-->
+        <actionGroup ref="StorefrontSelectBundleProductDropDownOptionActionGroup" stepKey="addSimpleProduct2">
+            <argument name="productName" value="$SimpleProduct2.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityForProduct2AndAddToTheCart">
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+        <!--Go to cart page and assert the discounted price-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
+        <see stepKey="seeNewPriceInCart" selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$240.00"/>
+    </test>
+</tests>

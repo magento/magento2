@@ -25,14 +25,14 @@
                             mageInit: {'mage/trim-input':{}}"
                        name="username"
                        data-validate="{required:true, 'validate-email':true}"
-                       id="customer-email" />
+                       id="customer-email"></input>
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
                 <span class="note" data-bind="fadeVisible: isPasswordVisible() == false"><!-- ko i18n: 'You can create an account after checkout.'--><!-- /ko --></span>
             </div>
         </div>
 
         <!--Hidden fields -->
-        <fieldset class="fieldset hidden-fields" data-bind="fadeVisible: isPasswordVisible">
+        <fieldset class="fieldset hidden-fields" data-bind="dimVisible: isPasswordVisible">
             <div class="field">
                 <label class="label" for="customer-password"><span data-bind="i18n: 'Password'"></span></label>
                 <div class="control">
@@ -44,7 +44,7 @@
                            type="password"
                            name="password"
                            id="customer-password"
-                           data-validate="{required:true}" autocomplete="off"/>
+                           data-validate="{required:true}" autocomplete="off"></input>
                     <span class="note" data-bind="i18n: 'You already have an account with us. Sign in or continue as guest.'"></span>
                 </div>
 
@@ -53,7 +53,7 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
             <div class="actions-toolbar">
-                <input name="context" type="hidden" value="checkout" />
+                <input name="context" type="hidden" value="checkout"></input>
                 <div class="primary">
                     <button type="submit" class="action login primary" data-action="checkout-method-login"><span data-bind="i18n: 'Login'"></span></button>
                 </div>

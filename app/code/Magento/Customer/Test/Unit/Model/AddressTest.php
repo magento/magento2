@@ -61,7 +61,7 @@ class AddressTest extends TestCase
 
         $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->customerFactory->expects($this->any())
             ->method('create')

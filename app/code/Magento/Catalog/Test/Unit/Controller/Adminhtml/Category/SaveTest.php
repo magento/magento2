@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -472,7 +473,7 @@ class SaveTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderExecute(): array
+    public static function dataProviderExecute(): array
     {
         return [
             [
@@ -491,7 +492,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function imagePreprocessingDataProvider(): array
+    public static function imagePreprocessingDataProvider(): array
     {
         $dataWithImage = [
             'image' => 'path.jpg',

@@ -1,18 +1,24 @@
-#  ADOBE CONFIDENTIAL
-#  ___________________
-#
 #  Copyright 2024 Adobe
 #  All Rights Reserved.
-#
-#  NOTICE: All information contained herein is, and remains
-#  the property of Adobe and its suppliers, if any. The intellectual
-#  and technical concepts contained herein are proprietary to Adobe
-#  and its suppliers and are protected by all applicable intellectual
-#  property laws, including trade secret and copyright laws.
-#  Dissemination of this information or reproduction of this material
-#  is strictly forbidden unless prior written permission is obtained
-#  from Adobe.
+
 
 type Discount {
     coupon: AppliedCoupon @resolver(class: "Magento\\SalesRuleGraphQl\\Model\\Resolver\\Coupon") @doc(description:"The coupon related to the discount.")
+}
+
+type StoreConfig {
+    share_all_sales_rule: Boolean! @doc(description: "Configuration data from promo/graphql/share_all_sales_rule")
+    share_applied_sales_rule: Boolean! @doc(description: "Configuration data from promo/graphql/share_applied_sales_rule")
+}
+
+type Query {
+    allCartRules: [CartRule!] @doc(description: "Provides all active cart rules in the store.") @resolver(class: "Magento\\SalesRuleGraphQl\\Model\\Resolver\\AllCartRules")
+}
+
+type Cart {
+    rules: [CartRule!] @doc(description: "Provides applied cart rules in the current active cart") @resolver(class: "Magento\\SalesRuleGraphQl\\Model\\Resolver\\AppliedCartRules")
+}
+
+type CartRule {
+    name: String! @doc(description: "Name of the cart price rule")
 }

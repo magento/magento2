@@ -77,7 +77,8 @@ class PackageResultTest extends TestCase
     {
         $rate1 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'getPrice', 'setPrice'])
+            ->addMethods(['getMethod', 'getPrice'])
+            ->onlyMethods(['setPrice'])
             ->getMock();
         $price1 = 3;
         $rate1->method('getMethod')->willReturn('method');
@@ -104,7 +105,8 @@ class PackageResultTest extends TestCase
 
         $rate2 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'getPrice', 'setPrice'])
+            ->addMethods(['getMethod', 'getPrice'])
+            ->onlyMethods(['setPrice'])
             ->getMock();
         $price2 = 4;
         $rate2->method('getMethod')->willReturn('method');
@@ -145,7 +147,8 @@ class PackageResultTest extends TestCase
         $this->expectExceptionMessage('Same object received from carrier.');
         $rate1 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethod', 'getPrice', 'setPrice'])
+            ->addMethods(['getMethod', 'getPrice'])
+            ->onlyMethods(['setPrice'])
             ->getMock();
         $price1 = 3;
         $rate1->method('getMethod')->willReturn('method');

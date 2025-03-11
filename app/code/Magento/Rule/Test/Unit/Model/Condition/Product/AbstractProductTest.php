@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -354,17 +354,18 @@ class AbstractProductTest extends TestCase
         }
 
         $attrObjectSourceMock = $this->getMockBuilder(AbstractSource::class)
-            ->setMethods(['getAllOptions'])
+            ->onlyMethods(['getAllOptions'])
             ->disableOriginalConstructor()
             ->getMock();
         $attrObjectSourceMock
             ->expects((null === $expectedAttrObjSourceAllOptionsParam) ? $this->never() : $this->once())
             ->method('getAllOptions')
-            ->with($expectedAttrObjSourceAllOptionsParam)
+            ->with($expectedAttrObjSourceAllOptionsParam, true)
             ->willReturn($attrObjectSourceAllOptionsValue);
 
         $attributeObjectMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['usesSource', 'getFrontendInput', 'getSource', 'getAllOptions'])
+            ->addMethods(['getAllOptions'])
+            ->onlyMethods(['usesSource', 'getFrontendInput', 'getSource'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeObjectMock->method('usesSource')->willReturn(true);
@@ -375,7 +376,7 @@ class AbstractProductTest extends TestCase
         $attributeObjectMock->method('getSource')->willReturn($attrObjectSourceMock);
 
         $entityTypeMock = $this->getMockBuilder(Type::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityTypeMock->method('getId')->willReturn('SomeEntityType');
@@ -396,7 +397,7 @@ class AbstractProductTest extends TestCase
 
         $attrSetCollectionValueMock = $this
             ->getMockBuilder(Collection::class)
-            ->setMethods(['setEntityTypeFilter', 'load', 'toOptionArray'])
+            ->onlyMethods(['setEntityTypeFilter', 'load', 'toOptionArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -431,7 +432,7 @@ class AbstractProductTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function prepareValueOptionsDataProvider()
+    public static function prepareValueOptionsDataProvider()
     {
         return [
             [

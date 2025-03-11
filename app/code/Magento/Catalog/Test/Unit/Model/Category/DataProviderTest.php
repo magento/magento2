@@ -130,7 +130,7 @@ class DataProviderTest extends TestCase
 
         $this->categoryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->categoryCollectionFactory->method('create')
             ->willReturn($this->collection);
@@ -178,7 +178,7 @@ class DataProviderTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
-            ->setMethods(['flatten'])
+            ->onlyMethods(['flatten'])
             ->disableOriginalConstructor()
             ->getMock();
 

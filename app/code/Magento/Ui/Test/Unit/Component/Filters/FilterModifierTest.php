@@ -116,7 +116,7 @@ class FilterModifierTest extends TestCase
     /**
      * @return array
      */
-    public function getApplyFilterModifierDataProvider()
+    public static function getApplyFilterModifierDataProvider()
     {
         return [
             [

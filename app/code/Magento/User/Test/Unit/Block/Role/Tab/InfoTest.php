@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\User\Test\Unit\Block\Role\Tab;
 
 use Magento\Backend\Block\Widget\Form\Element\ElementCreator;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Block\Role;
 use Magento\User\Block\Role\Tab\Info;
@@ -32,13 +34,23 @@ class InfoTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $roleMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $roleMock->expects($this->any())->method('getData')->willReturn(['test_data' => 1]);
@@ -79,22 +91,29 @@ class InfoTest extends TestCase
     {
         $formMock = $this->getMockBuilder(Form::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $fieldsetMock = $this->getMockBuilder(Fieldset::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->formFactoryMock->expects($this->any())->method('create')->willReturn($formMock);
         $formMock->expects($this->any())->method('addFieldSet')->willReturn($fieldsetMock);
         $fieldsetMock->expects($this->exactly(5))
             ->method('addField')
-            ->withConsecutive(
-                ['role_name'],
-                ['role_id'],
-                ['in_role_user'],
-                ['in_role_user_old'],
-                ['current_password']
+            ->willReturnCallback(
+                function ($arg) {
+                    static $callCount = 0;
+                    $expectedArgs = [
+                        'role_name',
+                        'role_id',
+                        'in_role_user',
+                        'in_role_user_old',
+                        'current_password'
+                    ];
+                    if ($arg == $expectedArgs[$callCount]) {
+                        $callCount++;
+                        return null;
+                    }
+                }
             );
         $this->assertInstanceOf(Info::class, $this->model->_beforeToHtml());
     }

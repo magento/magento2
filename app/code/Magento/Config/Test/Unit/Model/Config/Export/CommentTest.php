@@ -48,7 +48,7 @@ class CommentTest extends TestCase
             ->getMockForAbstractClass();
 
         $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -104,7 +104,7 @@ class CommentTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderForTestGet()
+    public static function dataProviderForTestGet()
     {
         return [
             [
@@ -113,13 +113,13 @@ class CommentTest extends TestCase
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => $this->never(),
+                            'expects' => self::never(),
                             'returnMap' => [],
                         ]
                     ],
                     'placeholderMock' => [
                         'generate' => [
-                            'expects' => $this->never(),
+                            'expects' => self::never(),
                             'returnMap' => [],
                         ],
                     ],
@@ -135,7 +135,7 @@ class CommentTest extends TestCase
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => $this->exactly(2),
+                            'expects' => self::exactly(2),
                             'returnMap' => [
                                 ['some/notSensitive/field1', TypePool::TYPE_SENSITIVE, false],
                                 ['some/notSensitive/field2', TypePool::TYPE_SENSITIVE, false],
@@ -144,7 +144,7 @@ class CommentTest extends TestCase
                     ],
                     'placeholderMock' => [
                         'generate' => [
-                            'expects' => $this->never(),
+                            'expects' => self::never(),
                             'returnMap' => [],
                         ],
                     ],
@@ -157,7 +157,7 @@ class CommentTest extends TestCase
                 'expectedMocks' => [
                     'typePoolMock' => [
                         'isPresent' => [
-                            'expects' => $this->exactly(5),
+                            'expects' => self::exactly(5),
                             'returnMap' => [
                                 ['some/sensitive/field1', TypePool::TYPE_SENSITIVE, true],
                                 ['some/sensitive/field2', TypePool::TYPE_SENSITIVE, true],
@@ -168,7 +168,7 @@ class CommentTest extends TestCase
                     ],
                     'placeholderMock' => [
                         'generate' => [
-                            'expects' => $this->exactly(3),
+                            'expects' => self::exactly(3),
                             'returnMap' => [
                                 [
                                     'some/sensitive/field1',

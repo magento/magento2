@@ -101,7 +101,7 @@ class BatchConsumerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->mergerFactory = $this->getMockBuilder(MergerFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource = $this->getMockBuilder(ResourceConnection::class)

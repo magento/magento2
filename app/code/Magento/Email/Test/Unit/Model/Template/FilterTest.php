@@ -254,7 +254,7 @@ class FilterTest extends TestCase
      * @param array|null $mockedMethods Methods to mock
      * @return Filter|MockObject
      */
-    protected function getModel($mockedMethods = null)
+    protected function getModel($mockedMethods = [])
     {
         $this->objectManager->prepareObjectManager([]);
 
@@ -282,7 +282,7 @@ class FilterTest extends TestCase
                     $this->storeInformation
                 ]
             )
-            ->onlyMethods($mockedMethods ?? [])
+            ->onlyMethods($mockedMethods)
             ->getMock();
     }
 

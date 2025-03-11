@@ -54,7 +54,7 @@ class AbstractSidebarTest extends TestCase
     /**
      * @return array
      */
-    public function getItemQtyDataProvider()
+    public static function getItemQtyDataProvider()
     {
         return ['whenQtyIsset' => [2, 10, 10], 'whenQtyNotIsset' => [1, false, 1]];
     }

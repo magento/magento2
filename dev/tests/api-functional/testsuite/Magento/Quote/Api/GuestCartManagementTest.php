@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2025 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -354,7 +355,7 @@ class GuestCartManagementTest extends WebapiAbstract
     public function testAssignCustomerByGuestUser()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('You don\'t have the correct permissions to assign the customer to the cart.');
+        $this->expectExceptionMessage('Enter and try again.');
 
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');

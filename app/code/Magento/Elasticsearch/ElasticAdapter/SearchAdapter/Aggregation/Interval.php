@@ -16,6 +16,8 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 /**
  * Aggregate price intervals for search query result.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Interval implements IntervalInterface
 {
@@ -99,6 +101,11 @@ class Interval implements IntervalInterface
             $to = ['lt' => $upper - self::DELTA];
         }
 
+        if ($lower === null && $upper === null) {
+            $from = ['gte' => 0];
+            $to = ['lt' => 0];
+        }
+
         $requestQuery = $this->prepareBaseRequestQuery($from, $to);
         $requestQuery = array_merge_recursive(
             $requestQuery,
@@ -126,6 +133,11 @@ class Interval implements IntervalInterface
         }
         if ($data) {
             $to = ['lt' => $data - self::DELTA];
+        }
+
+        if ($lower === null && $data === 0.0) {
+            $from = ['gte' => 0];
+            $to = ['lt' => 0];
         }
 
         $requestQuery = $this->prepareBaseRequestQuery($from, $to);

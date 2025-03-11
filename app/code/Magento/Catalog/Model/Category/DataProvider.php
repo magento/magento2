@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,6 +76,9 @@ class DataProvider extends ModifierPoolDataProvider
         'size' => 'multiline_count',
     ];
 
+    /**
+     * @var string[]
+     */
     private $boolMetaProperties = ['visible', 'required'];
 
     /**
@@ -90,8 +93,6 @@ class DataProvider extends ModifierPoolDataProvider
     ];
 
     /**
-     * Elements with use config setting
-     *
      * @var array
      * @since 101.0.0
      */
@@ -102,8 +103,6 @@ class DataProvider extends ModifierPoolDataProvider
     ];
 
     /**
-     * List of fields that should not be added into the form
-     *
      * @var array
      * @since 101.0.0
      */
@@ -113,8 +112,6 @@ class DataProvider extends ModifierPoolDataProvider
     ];
 
     /**
-     * Elements with currency symbol
-     *
      * @var array
      */
     private $elementsWithCurrencySymbol = [
@@ -225,12 +222,12 @@ class DataProvider extends ModifierPoolDataProvider
         CategoryFactory $categoryFactory,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null,
+        ?PoolInterface $pool = null,
         ?AuthorizationInterface $auth = null,
         ?ArrayUtils $arrayUtils = null,
-        ScopeOverriddenValue $scopeOverriddenValue = null,
-        ArrayManager $arrayManager = null,
-        FileInfo $fileInfo = null,
+        ?ScopeOverriddenValue $scopeOverriddenValue = null,
+        ?ArrayManager $arrayManager = null,
+        ?FileInfo $fileInfo = null,
         ?Image $categoryImage = null,
         ?DataInterfaceFactory $uiConfigFactory = null
     ) {
@@ -509,6 +506,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param array $categoryData
      * @return array
      * @deprecated 102.0.0
+     * @see Updated deprecation doc annotations
      * @since 101.0.0
      */
     protected function addUseDefaultSettings($category, $categoryData)

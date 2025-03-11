@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedSearch\Model\ResourceModel\Search\Grid;
 
@@ -12,8 +12,6 @@ namespace Magento\AdvancedSearch\Model\ResourceModel\Search\Grid;
 class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
 {
     /**
-     * Registry manager
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_registryManager;
@@ -37,7 +35,7 @@ class Collection extends \Magento\Search\Model\ResourceModel\Query\Collection
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $resource = null
     ) {
         $this->_registryManager = $registry;

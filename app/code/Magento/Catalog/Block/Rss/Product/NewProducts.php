@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Rss\Product;
 
-use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\App\Rss\DataProviderInterface as DProviderInterface;
+use Magento\Framework\DataObject\IdentityInterface as IdInterface;
 
-/**
- * Class NewProducts
- * @package Magento\Catalog\Block\Rss\Product
- */
-class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
+class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implements DProviderInterface, IdInterface
 {
+    public const CACHE_TAG = 'rss_p_new';
+
     /**
      * @var \Magento\Catalog\Helper\Image
      */
@@ -55,6 +55,8 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
+     * Configure class
+     *
      * @return void
      */
     protected function _construct()
@@ -64,7 +66,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAllowed()
     {
@@ -72,7 +74,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRssData()
     {
@@ -132,6 +134,8 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
+     * Get current store id
+     *
      * @return int
      */
     protected function getStoreId()
@@ -177,7 +181,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCacheLifetime()
     {
@@ -185,6 +189,8 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
+     * Generate rss feed
+     *
      * @return array
      */
     public function getFeeds()
@@ -199,10 +205,18 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {
         return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentities()
+    {
+        return [self::CACHE_TAG];
     }
 }

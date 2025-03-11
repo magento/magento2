@@ -22,6 +22,9 @@
         <before>
             <!--Log In-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
+            <!-- Delete All Non Default Tax Rates-->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!--Create product-->

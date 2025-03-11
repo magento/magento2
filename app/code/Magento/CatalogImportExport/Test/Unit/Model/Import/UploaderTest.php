@@ -336,16 +336,16 @@ class UploaderTest extends TestCase
     {
         return [
             [
-                '$fileUrl'              => 'http://test_uploader_file',
-                '$expectedHost'         => 'test_uploader_file',
-                '$expectedDriverPool'   => Http::class,
-                '$expectedScheme'       => DriverPool::HTTP,
+                'fileUrl'              => 'http://test_uploader_file',
+                'expectedHost'         => 'test_uploader_file',
+                'expectedDriverPool'   => Http::class,
+                'expectedScheme'       => DriverPool::HTTP,
             ],
             [
-                '$fileUrl'              => 'https://!:^&`;file',
-                '$expectedHost'         => '!:^&`;file',
-                '$expectedDriverPool'   => Https::class,
-                '$expectedScheme'       => DriverPool::HTTPS,
+                'fileUrl'              => 'https://!:^&`;file',
+                'expectedHost'         => '!:^&`;file',
+                'expectedDriverPool'   => Https::class,
+                'expectedScheme'       => DriverPool::HTTPS,
             ],
         ];
     }
@@ -357,64 +357,64 @@ class UploaderTest extends TestCase
     {
         return [
             'https_no_file_ext' => [
-                '$fileUrl' => 'https://test_uploader_file',
-                '$expectedHost' => 'test_uploader_file',
-                '$expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
-                '$checkAllowedExtension' => 0
+                'fileUrl' => 'https://test_uploader_file',
+                'expectedHost' => 'test_uploader_file',
+                'expectedFileName' => 'test_uploader_file_38GcEmPFKXXR8NMj',
+                'checkAllowedExtension' => 0
             ],
             'https_invalid_chars' => [
-                '$fileUrl' => 'https://www.google.com/!:^&`;image.jpg',
-                '$expectedHost' => 'www.google.com/!:^&`;image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/!:^&`;image.jpg',
+                'expectedHost' => 'www.google.com/!:^&`;image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_invalid_chars_no_file_ext' => [
-                '$fileUrl' => 'https://!:^&`;image',
-                '$expectedHost' => '!:^&`;image',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj',
-                '$checkAllowedExtension' => 0
+                'fileUrl' => 'https://!:^&`;image',
+                'expectedHost' => '!:^&`;image',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj',
+                'checkAllowedExtension' => 0
             ],
             'http_jpg' => [
-                '$fileUrl' => 'http://www.google.com/image.jpg',
-                '$expectedHost' => 'www.google.com/image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'http://www.google.com/image.jpg',
+                'expectedHost' => 'www.google.com/image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_jpg' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg',
-                '$expectedHost' => 'www.google.com/image.jpg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg',
+                'expectedHost' => 'www.google.com/image.jpg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_jpeg' => [
-                '$fileUrl' => 'https://www.google.com/image.jpeg',
-                '$expectedHost' => 'www.google.com/image.jpeg',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpeg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpeg',
+                'expectedHost' => 'www.google.com/image.jpeg',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpeg',
+                'checkAllowedExtension' => 1
             ],
             'https_png' => [
-                '$fileUrl' => 'https://www.google.com/image.png',
-                '$expectedHost' => 'www.google.com/image.png',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.png',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.png',
+                'expectedHost' => 'www.google.com/image.png',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.png',
+                'checkAllowedExtension' => 1
             ],
             'https_gif' => [
-                '$fileUrl' => 'https://www.google.com/image.gif',
-                '$expectedHost' => 'www.google.com/image.gif',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.gif',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.gif',
+                'expectedHost' => 'www.google.com/image.gif',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.gif',
+                'checkAllowedExtension' => 1
             ],
             'https_one_query_param' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg?param=1',
-                '$expectedHost' => 'www.google.com/image.jpg?param=1',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg?param=1',
+                'expectedHost' => 'www.google.com/image.jpg?param=1',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ],
             'https_two_query_params' => [
-                '$fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
-                '$expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
-                '$expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
-                '$checkAllowedExtension' => 1
+                'fileUrl' => 'https://www.google.com/image.jpg?param=1&param=2',
+                'expectedHost' => 'www.google.com/image.jpg?param=1&param=2',
+                'expectedFileName' => 'image_38GcEmPFKXXR8NMj.jpg',
+                'checkAllowedExtension' => 1
             ]
         ];
     }

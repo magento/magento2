@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillCatalogProductsListWidgetSkuActionGroup">
+        <annotations>
+            <description>Fill catalog products list widget sku.</description>
+        </annotations>
+
+        <arguments>
+            <argument name="sku" type="string" defaultValue=""/>
+        </arguments>
+
+        <waitForElementVisible selector="{{WidgetSection.AddParam}}" stepKey="waitForAddParamElement"/>
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickOnAddParamElement"/>
+        <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}"
+                               stepKey="waitForConditionsDropdownVisible"/>
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="SKU" stepKey="selectSkuAsCondition"/>
+        <waitForElementVisible selector="{{WidgetSection.RuleParam}}" stepKey="waitForRuleParamElementVisible"/>
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickToAddRuleParam"/>
+        <fillField selector=".rule-param-edit input" userInput="{{sku}}" stepKey="fillSkuField"/>
+        <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyButton"/>
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Export;
 
@@ -372,6 +372,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var array
      */
     private array $attributeFrontendTypes = [];
+
+    /**
+     * @var int
+     */
+    private int $currentMaxAllowedMemoryUsage = 0;
+
+    /**
+     * @var int
+     */
+    private int $currentMemoryUsage = 0;
 
     /**
      * Product constructor.
@@ -854,7 +864,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function getItemsPerPage()
     {
-        if ($this->_itemsPerPage === null) {
+        if ($this->_itemsPerPage === null ||
+            $this->currentMemoryUsage < memory_get_usage(true) ||
+            $this->currentMaxAllowedMemoryUsage < memory_get_usage(true)
+        ) {
             $memoryLimitConfigValue = trim(ini_get('memory_limit'));
             $lastMemoryLimitLetter = strtolower($memoryLimitConfigValue[strlen($memoryLimitConfigValue) - 1]);
             $memoryLimit = (int) $memoryLimitConfigValue;
@@ -884,9 +897,19 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             // Maximal Products limit
             $maxProductsLimit = 5000;
 
+            $this->currentMaxAllowedMemoryUsage = (int)($memoryLimit * $memoryUsagePercent);
+            $this->currentMemoryUsage = memory_get_usage(true);
+
             $this->_itemsPerPage = (int)(
-                ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct
+            ($this->currentMaxAllowedMemoryUsage - $this->currentMemoryUsage)  / $memoryPerProduct
             );
+
+            $this->_itemsPerPage = $this->adjustItemsPerPageByAttributeOptions(
+                $this->_itemsPerPage,
+                $this->currentMaxAllowedMemoryUsage,
+                $this->currentMemoryUsage
+            );
+
             if ($this->_itemsPerPage < $minProductsLimit) {
                 $this->_itemsPerPage = $minProductsLimit;
             }
@@ -895,6 +918,61 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         return $this->_itemsPerPage;
+    }
+
+    /**
+     * Adjust items per page by attribute options
+     *
+     * @param int $initialItemsPerPage
+     * @param int $memoryLimit
+     * @param int $currentMemoryUsage
+     * @return int
+     */
+    private function adjustItemsPerPageByAttributeOptions(
+        int $initialItemsPerPage,
+        int $memoryLimit,
+        int $currentMemoryUsage
+    ): int {
+        $maxAttributeOptions = $this->getMaxAttributeValues();
+        $minProductsLimit = 500;
+        $maxProductsLimit = 5000;
+        $memoryPerProduct = 500000;
+
+        if ($maxAttributeOptions > 5000) {
+            $adjustedItemsPerPage = max(1000, (int)($initialItemsPerPage * 0.25));
+        } elseif ($maxAttributeOptions > 2500) {
+            $adjustedItemsPerPage = max(2500, (int)($initialItemsPerPage * 0.5));
+        } elseif ($maxAttributeOptions > 1000) {
+            $adjustedItemsPerPage = max(3500, (int)($initialItemsPerPage * 0.75));
+        } else {
+            $adjustedItemsPerPage = $initialItemsPerPage;
+        }
+
+        $availableMemory = $memoryLimit - $currentMemoryUsage;
+        $maxItemsByMemory = (int)($availableMemory / $memoryPerProduct);
+
+        $adjustedItemsPerPage = min($adjustedItemsPerPage, $maxItemsByMemory);
+        $adjustedItemsPerPage = max($minProductsLimit, $adjustedItemsPerPage);
+        $adjustedItemsPerPage = min($maxProductsLimit, $adjustedItemsPerPage);
+
+        return $adjustedItemsPerPage;
+    }
+
+    /**
+     * Get max attribute values
+     *
+     * @return int
+     */
+
+    private function getMaxAttributeValues(): int
+    {
+        $maxCount = 0;
+
+        foreach ($this->_attributeValues as $attributeValues) {
+            $maxCount = max($maxCount, count($attributeValues));
+        }
+
+        return $maxCount;
     }
 
     /**

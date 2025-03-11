@@ -166,7 +166,7 @@ class CartItemPersisterTest extends TestCase
         $quoteItem = current($quote->getItems());
         $item = $this->itemFactory->create();
         $item->setQty(9999)->setSku($quoteItem->getSku())->setItemId($quoteItem->getItemId());
-        $this->expectExceptionObject(new LocalizedException(__('The requested qty is not available')));
+        $this->expectExceptionObject(new LocalizedException(__('Not enough items for sale')));
         $this->model->save($quote, $item);
     }
 }

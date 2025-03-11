@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontLoginNewActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Customer Sign In page. Logs in using the provided Customer.</description>
+        </annotations>
+        <arguments>
+            <argument name="Customer"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
+        <waitForPageLoad time="30" stepKey="waitPageFullyLoaded"/>
+        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="storefrontSignOut"/>
+        <waitForPageLoad stepKey="waitForSignOut"/>
+        <waitForElementClickable selector="{{StorefrontCustomerSignInFormSection.signInClick}}" stepKey="waitForSignInButton"/>
+        <click selector="{{StorefrontCustomerSignInFormSection.signInClick}}" stepKey="clickSignInButton"/>
+        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage1"/>
+        <waitForPageLoad time="30" stepKey="waitPageFullyLoaded1"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="waitFormAppears"/>
+        <fillField userInput="{{Customer.email}}" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
+        <fillField userInput="{{Customer.password}}" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
+        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
+        <waitForPageLoad stepKey="waitForCustomerLoggedIn"/>
+    </actionGroup>
+</actionGroups>

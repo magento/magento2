@@ -2,15 +2,6 @@
 /**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained from
- * Adobe.
  */
 declare(strict_types=1);
 
@@ -47,7 +38,7 @@ class CartItemsPaginated implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -58,7 +49,6 @@ class CartItemsPaginated implements ResolverInterface
 
         $pageSize = $args['pageSize'];
         $currentPage = $args['currentPage'];
-        $offset = ($currentPage - 1) * $pageSize;
         $order = CartItemsPaginated::SORT_ORDER;
         $orderBy = CartItemsPaginated::SORT_ORDER_BY;
 
@@ -68,7 +58,7 @@ class CartItemsPaginated implements ResolverInterface
         }
 
         $allVisibleItems = $cart->getAllVisibleItems();
-        $paginatedCartItems = $this->pagination->execute($cart, $pageSize, (int) $offset, $orderBy, $order);
+        $paginatedCartItems = $this->pagination->execute($cart, $pageSize, (int) $currentPage, $orderBy, $order);
 
         $cartItems = [];
         /** @var CartItemInterface $cartItem */

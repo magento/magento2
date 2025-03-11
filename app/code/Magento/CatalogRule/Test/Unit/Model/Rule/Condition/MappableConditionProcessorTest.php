@@ -42,13 +42,13 @@ class MappableConditionProcessorTest extends TestCase
     {
         $this->eavConfigMock = $this->getMockBuilder(EavConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttribute'])
+            ->onlyMethods(['getAttribute'])
             ->getMock();
 
         $this->customConditionProcessorBuilderMock = $this->getMockBuilder(
             CustomConditionProviderInterface::class
         )->disableOriginalConstructor()
-            ->setMethods(['hasProcessorForField'])
+            ->onlyMethods(['hasProcessorForField'])
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManager($this);
@@ -1000,7 +1000,7 @@ class MappableConditionProcessorTest extends TestCase
     {
         $mock = $this->getMockBuilder(CombinedCondition::class)
             ->disableOriginalConstructor()
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
 
         $mock->setConditions($subConditions);
@@ -1018,7 +1018,7 @@ class MappableConditionProcessorTest extends TestCase
     {
         $mock = $this->getMockBuilder(SimpleCondition::class)
             ->disableOriginalConstructor()
-            ->setMethods()
+            ->onlyMethods([])
             ->getMock();
 
         $mock->setAttribute($attribute);

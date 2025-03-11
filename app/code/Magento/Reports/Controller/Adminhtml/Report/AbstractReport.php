@@ -65,7 +65,7 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         TimezoneInterface $timezone,
-        BackendHelper $backendHelperData = null
+        ?BackendHelper $backendHelperData = null
     ) {
         parent::__construct($context);
         $this->_fileFactory = $fileFactory;

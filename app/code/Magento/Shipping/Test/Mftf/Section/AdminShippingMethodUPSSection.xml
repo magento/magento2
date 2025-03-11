@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingMethodUPSSection">
+        <element name="UPSTab" type="button" selector="//div[@class='section-config']//div[@class='entry-edit-head admin__collapsible-block']//a[@id='carriers_ups-head']"/>
+        <element name="enableCheckoutCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_active']//td//input[@id='carriers_ups_active_inherit']"/>
+        <element name="enableCheckoutSelect" type="select" selector="//tr[@id='row_carriers_ups_active']//td//select[@id='carriers_ups_active']"/>
+        <element name="liveAccountCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_is_account_live']//td//input[@id='carriers_ups_is_account_live_inherit']"/>
+        <element name="liveAccountSelect" type="select" selector="//tr[@id='row_carriers_ups_is_account_live']//td//select[@id='carriers_ups_is_account_live']"/>
+        <element name="accessLicenseNumber" type="input" selector="//input[@id='carriers_ups_access_license_number']"/>
+        <element name="originOfShipmentCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_origin_shipment']//td//input[@id='carriers_ups_origin_shipment_inherit']"/>
+        <element name="originOfShipmentSelect" type="select" selector="//tr[@id='row_carriers_ups_origin_shipment']//td//select[@id='carriers_ups_origin_shipment']"/>
+        <element name="password" type="input" selector="//input[@id='carriers_ups_password']"/>
+        <element name="username" type="input" selector="//input[@id='carriers_ups_username']"/>
+        <element name="modeSelect" type="select" selector="//tr[@id='row_carriers_ups_mode_xml']//td//select[@id='carriers_ups_mode_xml']"/>
+        <element name="modeCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_mode_xml']//td//input[@id='carriers_ups_mode_xml_inherit']"/>
+        <element name="gatewayURLCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_gateway_url']//td//input[@id='carriers_ups_gateway_url_inherit']"/>
+        <element name="gatewayURLInput" type="input" selector="//tr[@id='row_carriers_ups_gateway_url']//td//input[@id='carriers_ups_gateway_url']"/>
+        <element name="enableNegotiableRatesCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_negotiated_active']//td//input[@id='carriers_ups_negotiated_active_inherit']"/>
+        <element name="enableNegotiableRatesInput" type="input" selector="//tr[@id='row_carriers_ups_negotiated_active']//td//select[@id='carriers_ups_negotiated_active']"/>
+        <element name="shipperNumberInput" type="input" selector="//tr[@id='row_carriers_ups_shipper_number']//td//input[@id='carriers_ups_shipper_number']"/>
+        <element name="containerSelect" type="select" selector="//tr[@id='row_carriers_ups_container']//td//select[@id='carriers_ups_container']"/>
+        <element name="containerCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_container']//td//input[@id='carriers_ups_container_inherit']"/>
+        <element name="destinationTypeSelect" type="select" selector="//tr[@id='row_carriers_ups_dest_type']//td//select[@id='carriers_ups_dest_type']"/>
+        <element name="destinationTypeCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_dest_type']//td//input[@id='carriers_ups_dest_type_inherit']"/>
+        <element name="weightUnitSelect" type="select" selector="//tr[@id='row_carriers_ups_unit_of_measure']//td//select[@id='carriers_ups_unit_of_measure']"/>
+        <element name="weightUnitCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_unit_of_measure']//td//input[@id='carriers_ups_unit_of_measure_inherit']"/>
+        <element name="trackingURLCheckbox" type="checkbox" selector="//tr[@id='row_carriers_ups_tracking_url']//td//input[@id='carriers_ups_tracking_url_inherit']"/>
+        <element name="trackingURLInput" type="input" selector="//tr[@id='row_carriers_ups_tracking_url']//td//input[@id='carriers_ups_tracking_url']"/>
+        <element name="handlingFee" type="input" selector="//tr[@id='row_carriers_ups_handling_fee']//td//input[@id='carriers_ups_handling_fee']"/>
+        <element name="showMethodIfNotApplicableSelect" type="select" selector="//tr[@id='row_carriers_ups_showmethod']//td//select[@id='carriers_ups_showmethod']"/>
+        <element name="debugSelect" type="select" selector="//tr[@id='row_carriers_ups_debug']//td//select[@id='carriers_ups_debug']"/>
+    </section>
+</sections>

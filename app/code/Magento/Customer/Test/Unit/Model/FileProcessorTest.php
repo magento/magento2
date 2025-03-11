@@ -103,8 +103,8 @@ class FileProcessorTest extends TestCase
     private function getModel(
         $entityTypeCode,
         array $allowedExtensions = [],
-        string $customerFileUrlPath = null,
-        string $customerAddressFileUrlPath = null
+        ?string $customerFileUrlPath = null,
+        ?string $customerAddressFileUrlPath = null
     ): FileProcessor {
         $model = new FileProcessor(
             $this->filesystem,
@@ -477,7 +477,15 @@ class FileProcessorTest extends TestCase
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method('get')->willReturn($mockFileSystem);
         $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
-        $mockRead->method('isExist')->willReturnOnConsecutiveCalls(true, true, false);
+        $callCount = 0;
+        $mockRead->method('isExist')
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                if ($callCount === 1 || $callCount === 2) {
+                    return true;
+                }
+                return false;
+            });
         ObjectManager::setInstance($objectManagerMock);
 
         $this->mediaDirectory->expects($this->once())

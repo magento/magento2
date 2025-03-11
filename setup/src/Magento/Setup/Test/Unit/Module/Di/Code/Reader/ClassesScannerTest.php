@@ -31,7 +31,7 @@ class ClassesScannerTest extends TestCase
         $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
         $mock = $this->getMockBuilder(DirectoryList::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getPath']
             )->getMock();
         $mock->method('getPath')->willReturn($this->generation);

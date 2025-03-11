@@ -58,7 +58,7 @@ class IndexTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getTitle'])
+            ->onlyMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->titleMock = $this->getMockBuilder(Title::class)
@@ -86,9 +86,14 @@ class IndexTest extends TestCase
             ->willReturnSelf();
         $this->pageMock->expects($this->exactly(2))
             ->method('addBreadcrumb')
-            ->withConsecutive(
-                [__('Stores'), __('Stores')],
-                [__('All Stores'), __('All Stores')]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == __('Stores') && $arg2 == __('Stores')) {
+                        return null;
+                    } elseif ($arg1 == __('All Stores') && $arg2 == __('All Stores')) {
+                        return null;
+                    }
+                }
             );
         $this->pageMock->expects($this->once())
             ->method('getConfig')

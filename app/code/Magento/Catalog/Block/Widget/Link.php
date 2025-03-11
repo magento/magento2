@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Widget;
@@ -51,7 +51,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         UrlFinderInterface $urlFinder,
-        \Magento\Catalog\Model\ResourceModel\AbstractResource $entityResource = null,
+        ?\Magento\Catalog\Model\ResourceModel\AbstractResource $entityResource = null,
         array $data = []
     ) {
         parent::__construct($context, $data);

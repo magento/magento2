@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -87,7 +88,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'attribute with specified value' => [
@@ -138,7 +139,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function afterLoadDataProvider(): array
+    public static function afterLoadDataProvider(): array
     {
         return [
             'attribute with specified value' => [
@@ -183,7 +184,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider(): array
+    public static function validateDataProvider(): array
     {
         return [
             'is not required' => [
@@ -286,7 +287,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function validateDefaultSortDataProvider(): array
+    public static function validateDefaultSortDataProvider(): array
     {
         return [
             [
@@ -334,7 +335,7 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function validateDefaultSortException(): array
+    public static function validateDefaultSortException(): array
     {
         return [
             [

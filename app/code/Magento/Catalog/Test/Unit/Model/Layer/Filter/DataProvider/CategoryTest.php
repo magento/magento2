@@ -49,26 +49,26 @@ class CategoryTest extends TestCase
         /** @var Registry $var */
         $this->coreRegistry = $var = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['register'])
+            ->onlyMethods(['register'])
             ->getMock();
         $this->category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'setStoreId', 'load', 'getPathIds'])
+            ->onlyMethods(['getId', 'setStoreId', 'load', 'getPathIds'])
             ->getMock();
         $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->categoryFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->category);
         $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
         $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentStore', 'getCurrentCategory'])
+            ->onlyMethods(['getCurrentStore', 'getCurrentCategory'])
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getCurrentStore')

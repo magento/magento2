@@ -105,7 +105,7 @@ class Table extends GenericElement implements
         string $charset,
         string $collation,
         string $onCreate,
-        string $comment = null,
+        ?string $comment = null,
         array $columns = [],
         array $indexes = [],
         array $constraints = []

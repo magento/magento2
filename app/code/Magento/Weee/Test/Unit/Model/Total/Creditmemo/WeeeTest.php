@@ -59,7 +59,7 @@ class WeeeTest extends TestCase
     protected function setUp(): void
     {
         $this->weeeData = $this->getMockBuilder(Data::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRowWeeeTaxInclTax',
                     'getBaseRowWeeeTaxInclTax',
@@ -176,13 +176,13 @@ class WeeeTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         $result = [];
 
         // scenario 1: 3 item_1, $100 with $weee, 8.25 tax rate, 3 items invoiced, full creditmemo
         $result['complete_creditmemo'] = [
-            'creditmemo_data' => [
+            'creditmemoData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -232,7 +232,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 0,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'creditmemo_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -264,7 +264,7 @@ class WeeeTest extends TestCase
 
         // Scenario 2: 3 item_1, $100 with $weee, 8.25 tax rate, 3 items invoiced, 2 item creditmemo
         $result['partial_creditmemo'] = [
-            'creditmemo_data' => [
+            'creditmemoData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -314,7 +314,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 0,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'creditmemo_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -346,7 +346,7 @@ class WeeeTest extends TestCase
 
         // Scenario 3: 3 item_1, $100 with $weee, 8.25 tax rate, 3 items invoiced, 2 item returned
         $result['last_partial_creditmemo'] = [
-            'creditmemo_data' => [
+            'creditmemoData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -396,7 +396,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 0,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'creditmemo_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -428,7 +428,7 @@ class WeeeTest extends TestCase
 
         // scenario 4: 3 item_1, $100 with $weee, 8.25 tax rate.  Returning qty 0.
         $result['zero_return'] = [
-            'creditmemo_data' => [
+            'creditmemoData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -478,7 +478,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 0,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'creditmemo_items' => [
                     'item_1' => [
                         'applied_weee' => [

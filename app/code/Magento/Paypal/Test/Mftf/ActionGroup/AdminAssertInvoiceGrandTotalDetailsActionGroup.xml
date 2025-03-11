@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertInvoiceGrandTotalDetailsActionGroup">
+        <annotations>
+            <description>Clicks on the 'Invoice Section' Tab on Admin View Order page and Check Grand Total.</description>
+        </annotations>
+        <!--Go to Invoice Tab and Verify Invoice Grand Total-->
+        <click selector="{{StorefrontOrderInvoicesSection.invoiceTab1}}" stepKey="clickInvoiceTabOnStorefront"/>
+        <waitForElementClickable selector="{{StorefrontOrderInvoicesSection.clickView}}" stepKey="waitForViewButtonToBeClicked"/>
+        <click selector="{{StorefrontOrderInvoicesSection.clickView}}" stepKey="clickViewButton"/>
+        <waitForText selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$271.00" stepKey="seeInvoiceSubTotal1"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedAfterAsserting"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonAfterAsserting"/>
+    </actionGroup>
+</actionGroups>

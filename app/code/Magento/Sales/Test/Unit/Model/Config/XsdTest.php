@@ -42,7 +42,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function validXmlFileDataProvider()
+    public static function validXmlFileDataProvider()
     {
         return [['sales_valid.xml']];
     }
@@ -68,7 +68,7 @@ class XsdTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function invalidXmlFileDataProvider()
+    public static function invalidXmlFileDataProvider()
     {
         return [
             [

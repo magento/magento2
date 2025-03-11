@@ -87,7 +87,7 @@ class EavTest extends AbstractEavTest
     /**
      * @return array
      */
-    public function modifyMetaWithAttributeProvider(): array
+    public static function modifyMetaWithAttributeProvider(): array
     {
         $textAttributeMeta = [
             'dataType' => 'textarea',
@@ -118,28 +118,28 @@ class EavTest extends AbstractEavTest
 
         return [
             'new_attribute_in_existing_group' => [
-                'group_name' => 'Content',
-                'group_code' => 'content',
-                'attribute_code' => 'text_attribute',
-                'attribute_meta' => $textAttributeMeta,
+                'groupName' => 'Content',
+                'groupCode' => 'content',
+                'attributeCode' => 'text_attribute',
+                'attributeMeta' => $textAttributeMeta,
             ],
             'new_attribute_in_new_group' => [
-                'group_name' => 'Test',
-                'group_code' => 'test',
-                'attribute_code' => 'text_attribute',
-                'attribute_meta' => array_merge($textAttributeMeta, ['source' => 'test']),
+                'groupName' => 'Test',
+                'groupCode' => 'test',
+                'attributeCode' => 'text_attribute',
+                'attributeMeta' => array_merge($textAttributeMeta, ['source' => 'test']),
             ],
             'old_attribute_moved_to_existing_group' => [
-                'group_name' => 'Images',
-                'group_code' => 'image-management',
-                'attribute_code' => 'url_key',
-                'attribute_meta' => $urlKeyAttributeMeta,
+                'groupName' => 'Images',
+                'groupCode' => 'image-management',
+                'attributeCode' => 'url_key',
+                'attributeMeta' => $urlKeyAttributeMeta,
             ],
             'old_attribute_moved_to_new_group' => [
-                'group_name' => 'Test',
-                'group_code' => 'test',
-                'attribute_code' => 'url_key',
-                'attribute_meta' => array_merge($urlKeyAttributeMeta, ['source' => 'test']),
+                'groupName' => 'Test',
+                'groupCode' => 'test',
+                'attributeCode' => 'url_key',
+                'attributeMeta' => array_merge($urlKeyAttributeMeta, ['source' => 'test']),
             ],
         ];
     }
@@ -245,7 +245,7 @@ class EavTest extends AbstractEavTest
     /**
      * @return array
      */
-    public function testModifyMetaNewProductPageLayoutDefaultProvider(): array
+    public static function testModifyMetaNewProductPageLayoutDefaultProvider(): array
     {
         return [
             'attributes_meta' => [

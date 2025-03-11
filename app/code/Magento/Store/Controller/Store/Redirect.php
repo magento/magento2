@@ -80,7 +80,7 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         Generic $session,
         SidResolverInterface $sidResolver,
         HashGenerator $hashGenerator,
-        StoreManagerInterface $storeManager = null,
+        ?StoreManagerInterface $storeManager = null,
         ?RedirectDataGenerator $redirectDataGenerator = null,
         ?ContextInterfaceFactory $contextFactory = null
     ) {

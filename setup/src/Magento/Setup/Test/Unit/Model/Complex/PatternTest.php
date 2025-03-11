@@ -32,7 +32,7 @@ class PatternTest extends TestCase
      *
      * @return array
      */
-    public function patternDataProvider()
+    public static function patternDataProvider()
     {
         $result = [
             0 => [
@@ -51,7 +51,7 @@ class PatternTest extends TestCase
                         'name' => 'yyy %s'
                     ],
                 ],
-                'expectedCount'      => 3,
+                'expectedRowsCount'      => 3,
                 'expectedRowsResult' => [
                     ['id' => '1', 'name' => 'Static', 'calculated' => 10],
                     ['id' => '',  'name' => 'xxx 1',  'calculated' => ''],
@@ -66,7 +66,7 @@ class PatternTest extends TestCase
                         'calculated' => 'calc %s',
                     ],
                 ],
-                'expectedCount' => 1,
+                'expectedRowsCount' => 1,
                 'expectedRowsResult' => [
                     ['id' => '1', 'name' => 'Dynamic 1', 'calculated' => 'calc 1'],
                 ],

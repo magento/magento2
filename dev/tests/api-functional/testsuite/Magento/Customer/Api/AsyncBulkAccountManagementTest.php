@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Directory\Helper\Data as LocaleConfig;
 use Magento\Email\Test\Fixture\FileTransport as FileTransportFixture;
 use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
@@ -138,31 +139,34 @@ class AsyncBulkAccountManagementTest extends WebapiAbstract
             $this->fail("Customer was not created");
         }
 
-        $mailConfig = $fixtures->get('mail_transport_config')->getData();
         $filesystem = $this->objectManager->get(Filesystem::class);
-        $directory = $filesystem->getDirectoryRead($mailConfig['directory']);
+        $directory = $filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
 
         // wait until a mail is sent
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
-                function (\Magento\Framework\Filesystem\Directory\ReadInterface $directory, string $path) {
-                    return $directory->isExist($path) && count($directory->read($path)) > 0;
+                function (\Magento\Framework\Filesystem\Directory\ReadInterface $directory) {
+                    return count($directory->read('')) > 0;
                 },
-                [$directory, $mailConfig['path']]
+                [$directory]
             );
         } catch (PreconditionFailedException $e) {
             $this->fail("No mail was sent");
         }
 
-        $mailPaths = $directory->read($mailConfig['path']);
+        $mailPaths = $directory->read(DirectoryList::VAR_DIR);
         $sentMails = count($mailPaths);
         $this->assertCount(1, $mailPaths, "Only 1 mail was expected to be sent, actually $sentMails were sent.");
-        $mailContent = $directory->readFile($mailPaths[0]);
+        $mailContent = $directory->readFile('mail-transport-config.json');
         $parser = $this->objectManager->get(Parser::class);
-        $message = $parser->fromString($mailContent);
+        $message = $parser->fromString((string)$mailContent)->getSymfonyMessage()->getBody();
+        $decoded_data = base64_decode($message->bodyToString());
+        $parts = explode("\r\n", $decoded_data);
+        $count = count($parts);
+        $mergedString = base64_decode($parts[$count - 2] . $parts[$count - 1]);
         $this->assertStringContainsString(
             'Bienvenue sur Le Site de Paris.',
-            $message->getMessageBody()->getParts()[0]->getRawContent()
+            $mergedString
         );
     }
 

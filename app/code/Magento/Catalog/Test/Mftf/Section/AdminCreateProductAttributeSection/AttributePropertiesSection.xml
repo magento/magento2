@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -33,5 +33,7 @@
         <element name="dropdownNthOptionDelete" type="button" selector="tbody[data-role='options-container'] tr:nth-child({{var}}) button[title='Delete']" parameterized="true"/>
         <element name="attributeLabelValidationError" type="text" selector=".field-attribute_label .mage-error"/>
         <element name="AttributeCode" type="input" selector="#attribute_code"/>
+        <element name="defaultRadioButton" type="radio" selector="//*[@id='swatch_window_option_option_{{position}}']/parent::td/parent::tr/td[@class='col-default']" parameterized="true"/>
+        <element name="resetDefaultSwatchVisualOptionButton" type="button" selector="#reset_default_swatch_visual_option_button" />
     </section>
 </sections>

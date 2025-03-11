@@ -80,7 +80,7 @@ class Repository implements TransactionRepositoryInterface
         SortOrderBuilder $sortOrderBuilder,
         Metadata $metaData,
         EntityStorageFactory $entityStorageFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->filterBuilder = $filterBuilder;

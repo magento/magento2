@@ -43,7 +43,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
         $fieldsetConfigMock = $this->getMockBuilder(\Magento\Framework\DataObject\Copy\Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldSet'])
+            ->onlyMethods(['getFieldSet'])
             ->getMock();
 
         $service = $objectManager->create(
@@ -113,7 +113,7 @@ class CopyTest extends \PHPUnit\Framework\TestCase
 
         $fieldsetConfigMock = $this->getMockBuilder(\Magento\Framework\DataObject\Copy\Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldSet'])
+            ->onlyMethods(['getFieldSet'])
             ->getMock();
 
         $service = $objectManager->create(

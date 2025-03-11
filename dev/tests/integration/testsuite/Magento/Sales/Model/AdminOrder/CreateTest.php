@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\AdminOrder;
 
@@ -546,7 +546,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @case #2 Changed after failed first place order action.
      * @return array
      */
-    public function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
+    public static function createOrderNewCustomerWithFailedFirstPlaceOrderActionDataProvider()
     {
         return [
             1 => ['customer@email.com', 'customer@email.com'],
@@ -781,6 +781,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $session->setCustomerId(0);
         }
 
+        /** Save changes and reload the quote to make sure future changes to the quote trigger collectTotals */
+        $quoteRepository = $this->objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $quoteRepository->save($this->model->getQuote());
+        $quote = $quoteRepository->get($this->model->getQuote()->getId(), [$this->model->getQuote()->getStoreId()]);
+        $this->model->setQuote($quote);
+
         /** Emulate availability of shipping method (all are disabled by default) */
         /** @var $rate Quote\Address\Rate */
         $rate = $this->objectManager->create(Quote\Address\Rate::class);
@@ -988,7 +994,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getId',
                     'getGroupId',

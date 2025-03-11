@@ -42,7 +42,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function importExportElementsDataProvider()
+    public static function importExportElementsDataProvider()
     {
         return [
             [[]],
@@ -84,7 +84,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function importExceptionDataProvider()
+    public static function importExceptionDataProvider()
     {
         return [
             'numeric id' => [['element']],
@@ -155,7 +155,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function importExceptionElementNotFoundDataProvider()
+    public static function importExceptionElementNotFoundDataProvider()
     {
         return [
             'non-existing parent' => [
@@ -254,7 +254,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function setAttributeArgumentExceptionDataProvider()
+    public static function setAttributeArgumentExceptionDataProvider()
     {
         return [
             [Structure::CHILDREN],
@@ -348,7 +348,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function setAsChildOffsetDataProvider()
+    public static function setAsChildOffsetDataProvider()
     {
         return [
             [0, 0],
@@ -386,7 +386,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function setAsChildExceptionDataProvider()
+    public static function setAsChildExceptionDataProvider()
     {
         return [['one', 'three'], ['one', 'one']];
     }
@@ -426,7 +426,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function reorderChildDataProvider()
+    public static function reorderChildDataProvider()
     {
         return [
             // x* 1 2 3 4 5
@@ -491,7 +491,7 @@ class StructureTest extends TestCase
     /**
      * @return array
      */
-    public function reorderSiblingDataProvider()
+    public static function reorderSiblingDataProvider()
     {
         return [
             // x* 1 2 3 4 5

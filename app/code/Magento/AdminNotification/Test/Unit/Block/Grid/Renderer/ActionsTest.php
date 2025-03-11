@@ -15,6 +15,7 @@ namespace Magento\AdminNotification\Test\Unit\Block\Grid\Renderer;
 use Magento\AdminNotification\Block\Grid\Renderer\Actions;
 use Magento\Backend\Block\Context;
 use Magento\Framework\DataObject;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Url\Helper\Data;
 use Magento\Framework\UrlInterface;
@@ -35,7 +36,13 @@ class ActionsTest extends TestCase
 
         /** @var Escaper|MockObject $escaperMock */
         $escaperMock = $this->createMock(Escaper::class);
-        $escaperMock->expects($this->once())->method('escapeUrl')->willReturn('https://magento.com');
+        $escaperMock->expects($this->atLeastOnce())->method('escapeUrl')->willReturn('https://magento.com');
+
+        /** @var AuthorizationInterface|MockObject $authorizationMock */
+        $authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $authorizationMock->expects($this->atLeastOnce())
+            ->method('isAllowed')
+            ->willReturn(true);
 
         /** @var UrlInterface|MockObject $urlBuilder */
         $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
@@ -43,8 +50,9 @@ class ActionsTest extends TestCase
 
         /** @var Context|MockObject $contextMock */
         $contextMock = $this->createMock(Context::class);
-        $contextMock->expects($this->once())->method('getEscaper')->willReturn($escaperMock);
+        $contextMock->expects($this->atLeastOnce())->method('getEscaper')->willReturn($escaperMock);
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilder);
+        $contextMock->expects($this->once())->method('getAuthorization')->willReturn($authorizationMock);
 
         /** @var Data|MockObject $urlHelperMock */
         $urlHelperMock = $this->createMock(Data::class);
@@ -65,7 +73,7 @@ class ActionsTest extends TestCase
         // Ignoring Code Style at this point due to the long HEREDOC
         // phpcs:disable
         $expected = <<<HTML
-<a class="action-details" target="_blank" href="https://magento.com">Read Details</a><a class="action-delete" href="http://magento.com" onClick="deleteConfirm('Are you sure?', this.href); return false;">Remove</a>
+<a class="action-details" target="_blank" href="https://magento.com">Read Details</a><a class="action-delete" href="https://magento.com" onClick="deleteConfirm('Are you sure?', this.href); return false;">Remove</a>
 HTML;
         // phpcs:enable
 

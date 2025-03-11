@@ -85,7 +85,7 @@ class ItemTest extends TestCase
     /**
      * @var int
      */
-    protected $storeId = 111;
+    protected static $storeId = 111;
 
     /**
      * @var MockObject
@@ -96,7 +96,7 @@ class ItemTest extends TestCase
     {
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMockForAbstractClass();
 
         $this->context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
@@ -107,7 +107,7 @@ class ItemTest extends TestCase
         $this->customerSession = $this->createMock(Session::class);
 
         $store = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
-        $store->expects($this->any())->method('getId')->willReturn($this->storeId);
+        $store->expects($this->any())->method('getId')->willReturn(self::$storeId);
         $this->storeManager = $this->getMockForAbstractClass(
             StoreManagerInterface::class
         );
@@ -226,7 +226,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function getMaxSaleQtyDataProvider()
+    public static function getMaxSaleQtyDataProvider()
     {
         return [
             [
@@ -290,7 +290,7 @@ class ItemTest extends TestCase
         if ($useConfigMinSaleQty) {
             $this->stockConfiguration->expects($this->once())
                 ->method('getMinSaleQty')
-                ->with($this->storeId, $groupId)
+                ->with(self::$storeId, $groupId)
                 ->willReturn($minSaleQty);
         } else {
             $this->setDataArrayValue('min_sale_qty', $minSaleQty);
@@ -301,7 +301,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function getMinSaleQtyDataProvider()
+    public static function getMinSaleQtyDataProvider()
     {
         return [
             'config value' => [
@@ -353,7 +353,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function setMinQtyDataProvider()
+    public static function setMinQtyDataProvider()
     {
         return [
             [true, 3.3],
@@ -379,11 +379,11 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function getStoreIdDataProvider()
+    public static function getStoreIdDataProvider()
     {
         return [
-            [$this->storeId, $this->storeId],
-            [0, $this->storeId],
+            [self::$storeId, self::$storeId],
+            [0, self::$storeId],
         ];
     }
 
@@ -409,7 +409,7 @@ class ItemTest extends TestCase
         if ($config['use_config_qty_increments']) {
             $this->stockConfiguration->expects($this->once())
                 ->method('getQtyIncrements')
-                ->with($this->storeId)
+                ->with(self::$storeId)
                 ->willReturn($config['qty_increments']);
         } else {
             $this->setDataArrayValue('qty_increments', $config['qty_increments']);
@@ -420,7 +420,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function getQtyIncrementsDataProvider()
+    public static function getQtyIncrementsDataProvider()
     {
         return [
             [
@@ -505,7 +505,7 @@ class ItemTest extends TestCase
     /**
      * @return array
      */
-    public function eventsDataProvider()
+    public static function eventsDataProvider()
     {
         return [
             ['cataloginventory_stock_item_save_before', 'beforeSave', 'item'],

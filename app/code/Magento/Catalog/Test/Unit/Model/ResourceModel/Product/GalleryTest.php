@@ -137,26 +137,7 @@ class GalleryTest extends TestCase
         $whereCondition = null;
         $getTableReturnValue = 'table';
         $this->connection->expects($this->once())->method('select')->willReturn($this->select);
-        $this->select
-            ->method('from')
-            ->with(
-                [
-                    'main' => $getTableReturnValue,
-                ],
-                [
-                    'value_id' => 'value_id',
-                    'video_provider_default' => 'provider',
-                    'video_url_default' => 'url',
-                    'video_title_default' => 'title',
-                    'video_description_default' => 'description',
-                    'video_metadata_default' => 'metadata'
-                ]
-            )
-            ->willReturn($this->select);
-        $this->select
-            ->method('where')
-            ->withConsecutive(['main.value_id IN(?)', $ids], ['main.store_id = ?', $storeId])
-            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+        $this->select = $this->seletForTableByValueId($getTableReturnValue, $ids, $storeId);
         $resultRow = [
             [
                 'value_id' => '4',
@@ -203,6 +184,44 @@ class GalleryTest extends TestCase
     }
 
     /**
+     * @param $getTableReturnValue
+     * @param $ids
+     * @param $storeId
+     * @return Select
+     */
+    protected function seletForTableByValueId($getTableReturnValue, $ids, $storeId)
+    {
+        $this->select
+            ->method('from')
+            ->with(
+                [
+                    'main' => $getTableReturnValue,
+                ],
+                [
+                    'value_id' => 'value_id',
+                    'video_provider_default' => 'provider',
+                    'video_url_default' => 'url',
+                    'video_title_default' => 'title',
+                    'video_description_default' => 'description',
+                    'video_metadata_default' => 'metadata'
+                ]
+            )
+            ->willReturn($this->select);
+        $this->select
+            ->method('where')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($ids, $storeId) {
+                    if ($arg1 == 'main.value_id IN(?)' && $arg2 == $ids) {
+                        return $this->select;
+                    } elseif ($arg1 == 'main.store_id = ?' && $arg2 == $storeId) {
+                        return $this->select;
+                    }
+                }
+            );
+        return $this->select;
+    }
+
+    /**
      * @return void
      */
     public function testLoadDataFromTableByValueIdNoColsWithWhere(): void
@@ -242,8 +261,17 @@ class GalleryTest extends TestCase
             ->willReturn($this->select);
         $this->select
             ->method('where')
-            ->withConsecutive(['main.value_id IN(?)', $ids], ['main.store_id = ?', $storeId], [$whereCondition])
-            ->willReturnOnConsecutiveCalls($this->select, $this->select, $this->select);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($ids, $storeId, $whereCondition) {
+                    if ($arg1 == 'main.value_id IN(?)' && $arg2 == $ids) {
+                        return $this->select;
+                    } elseif ($arg1 == 'main.store_id = ?' && $arg2 == $storeId) {
+                        return $this->select;
+                    } elseif ($arg1 == $whereCondition) {
+                        return $this->select;
+                    }
+                }
+            );
 
         $resultRow = [
             [
@@ -304,6 +332,7 @@ class GalleryTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testLoadGallery(): void
@@ -346,13 +375,18 @@ class GalleryTest extends TestCase
         $this->product
             ->method('getStoreId')
             ->willReturn($storeId);
-        $this->connection->expects($this->exactly(2))->method('quoteInto')->withConsecutive(
-            ['value.store_id = ?'],
-            ['default_value.store_id = ?']
-        )->willReturnOnConsecutiveCalls(
-            'value.store_id = ' . $storeId,
-            'default_value.store_id = ' . 0
-        );
+
+        $this->connection->expects($this->exactly(2))->method('quoteInto')
+            ->willReturnCallback(
+                function ($arg) use ($storeId) {
+                    if ($arg == 'value.store_id = ?') {
+                        return 'value.store_id = ' . $storeId;
+                    } elseif ($arg == 'default_value.store_id = ?') {
+                        return 'default_value.store_id = ' . 0;
+                    }
+                }
+            );
+
         $this->connection->expects($this->any())->method('getIfNullSql')->willReturnMap(
             [
                 [
@@ -387,12 +421,17 @@ class GalleryTest extends TestCase
             ->willReturn($this->select);
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['main.attribute_id = ?', $attributeId],
-                ['main.disabled = 0'],
-                ['entity.entity_id = ?', $productId]
-            )
-            ->willReturnOnConsecutiveCalls($this->select, $this->select, $this->select);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($attributeId, $productId) {
+                    if ($arg1 == 'main.attribute_id = ?' && $arg2 == $attributeId) {
+                        return $this->select;
+                    } elseif ($arg1 == 'main.disabled = 0') {
+                        return $this->select;
+                    } elseif ($arg1 == 'entity.entity_id = ?' && $arg2 == $productId) {
+                        return $this->select;
+                    }
+                }
+            );
         $this->select
             ->method('columns')
             ->with(
@@ -408,11 +447,24 @@ class GalleryTest extends TestCase
             ->willReturn($this->select);
         $this->select
             ->method('joinLeft')
-            ->withConsecutive(
-                [['value' => $getTableReturnValue], $quoteInfoReturnValue, []],
-                [['default_value' => $getTableReturnValue], $quoteDefaultInfoReturnValue, []]
-            )
-            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2
+                ) use (
+                    $getTableReturnValue,
+                    $quoteInfoReturnValue,
+                    $quoteDefaultInfoReturnValue
+                ) {
+                    if ($arg1 === ['value' => $getTableReturnValue]
+                        && $arg2 === $quoteInfoReturnValue) {
+                        return $this->select;
+                    } elseif ($arg1 === ['default_value' => $getTableReturnValue] &&
+                        $arg2 === $quoteDefaultInfoReturnValue) {
+                        return $this->select;
+                    }
+                }
+            );
         $this->select
             ->method('joinInner')
             ->with(['entity' => $getTableReturnValue], 'main.value_id = entity.value_id', ['entity_id'])
@@ -465,15 +517,18 @@ class GalleryTest extends TestCase
         $entityId = 6;
         $storeId = 1;
 
-        $this->connection->expects($this->exactly(3))->method('quoteInto')->withConsecutive(
-            ['value_id = ?', (int)$valueId],
-            ['entity_id = ?', (int)$entityId],
-            ['store_id = ?', (int)$storeId]
-        )->willReturnOnConsecutiveCalls(
-            'value_id = ' . $valueId,
-            'entity_id = ' . $entityId,
-            'store_id = ' . $storeId
-        );
+        $this->connection->expects($this->exactly(3))->method('quoteInto')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($valueId, $entityId, $storeId) {
+                    if ($arg1 == 'value_id = ?' && $arg2 == (int)$valueId) {
+                        return 'value_id = ' . $valueId;
+                    } elseif ($arg1 == 'entity_id = ?' && $arg2 == (int)$entityId) {
+                        return 'entity_id = ' . $entityId;
+                    } elseif ($arg1 == 'store_id = ?' && $arg2 == (int)$storeId) {
+                        return 'store_id = ' . $storeId;
+                    }
+                }
+            );
 
         $this->connection->expects($this->once())->method('delete')->with(
             'table',

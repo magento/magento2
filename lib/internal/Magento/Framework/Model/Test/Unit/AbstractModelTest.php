@@ -214,7 +214,7 @@ class AbstractModelTest extends TestCase
      *
      * @return array
      */
-    public function getKeyValueDataPairs(): array
+    public static function getKeyValueDataPairs(): array
     {
         return [
             'when test data and compare data are string' => [['key' => 'value'], 'key', 'value', false],
@@ -233,6 +233,8 @@ class AbstractModelTest extends TestCase
             'when test data and compare data are float' => [['key' => 1.0], 'key', 1.0, false],
             'when test data is 0 and compare data is null' => [['key' => 0], 'key', null, false],
             'when test data is null and compare data is 0' => [['key' => null], 'key', 0, false],
+            'when test data is string array and compare data is int' => [['key' => '10'], 'key', 10, false],
+            'when test data is string array and compare data is float' => [['key' => '22.00'], 'key', 22.00, false]
         ];
     }
 }

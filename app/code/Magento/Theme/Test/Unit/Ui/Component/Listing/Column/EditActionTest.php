@@ -97,7 +97,7 @@ class EditActionTest extends TestCase
     /**
      * @return array
      */
-    public function getPrepareDataSourceDataProvider()
+    public static function getPrepareDataSourceDataProvider()
     {
         return [
             [['entity_id' => 1], ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],

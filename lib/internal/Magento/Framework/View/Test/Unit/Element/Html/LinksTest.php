@@ -69,8 +69,15 @@ class LinksTest extends TestCase
 
         $link
             ->method('__call')
-            ->withConsecutive(['getPath', []], ['setIsHighlighted', [true]])
-            ->willReturnOnConsecutiveCalls('test/path');
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'getPath' && empty($arg2)) {
+                        return 'test/path';
+                    } elseif ($arg1 == 'setIsHighlighted' && $arg2 == [true]) {
+                        return 'test/path';
+                    }
+                }
+            );
 
         $name = 'test_name';
         $this->context->getLayout()
