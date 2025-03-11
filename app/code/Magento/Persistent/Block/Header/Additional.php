@@ -63,8 +63,8 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
         \Magento\Persistent\Helper\Session $persistentSessionHelper,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         array $data = [],
-        Json $jsonSerializer = null,
-        Data $persistentHelper = null
+        ?Json $jsonSerializer = null,
+        ?Data $persistentHelper = null
     ) {
         $this->_isScopePrivate = true;
         $this->_customerViewHelper = $customerViewHelper;

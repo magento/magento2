@@ -254,8 +254,8 @@ class Full
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig,
         $indexIteratorFactory = null,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        DataProvider $dataProvider = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        ?DataProvider $dataProvider = null,
         $batchSize = 1000,
         ?DeploymentConfig $deploymentConfig = null
     ) {

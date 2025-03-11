@@ -36,7 +36,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper implements Custo
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         CustomerMetadataInterface $customerMetadataService,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_customerMetadataService = $customerMetadataService;
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);

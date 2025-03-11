@@ -37,7 +37,7 @@ class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\App\Filesystem\DirectoryResolver $directoryResolver = null
+        ?\Magento\Framework\App\Filesystem\DirectoryResolver $directoryResolver = null
     ) {
         parent::__construct($context, $coreRegistry);
         $this->resultJsonFactory = $resultJsonFactory;

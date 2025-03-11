@@ -39,8 +39,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * @param File|null $file
      */
     public function __construct(
-        Validator $validator = null,
-        File      $file = null
+        ?Validator $validator = null,
+        ?File      $file = null
     ) {
         $this->validator = $validator ?: ObjectManager::getInstance()->get(Validator::class);
         $this->file = $file ?: ObjectManager::getInstance()->get(File::class);

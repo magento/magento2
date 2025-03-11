@@ -177,8 +177,8 @@ abstract class AbstractType
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
-        MetadataPool $metadataPool = null,
-        AttributeOptionCollectionFactory $attributeOptionCollectionFactory = null
+        ?MetadataPool $metadataPool = null,
+        ?AttributeOptionCollectionFactory $attributeOptionCollectionFactory = null
     ) {
         $this->_attrSetColFac = $attrSetColFac;
         $this->_prodAttrColFac = $prodAttrColFac;

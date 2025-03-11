@@ -33,7 +33,7 @@ class Options implements ResolverInterface
     /**
      * Uid|null $uidEncoder
      */
-    public function __construct(Uid $uidEncoder = null)
+    public function __construct(?Uid $uidEncoder = null)
     {
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
             ->get(Uid::class);
@@ -56,8 +56,8 @@ class Options implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));

@@ -120,7 +120,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
      * @param \Magento\Eav\Api\Data\AttributeOptionLabelInterface[] $storeLabels
      * @return $this
      */
-    public function setStoreLabels(array $storeLabels = null)
+    public function setStoreLabels(?array $storeLabels = null)
     {
         return $this->setData(AttributeOptionInterface::STORE_LABELS, $storeLabels);
     }

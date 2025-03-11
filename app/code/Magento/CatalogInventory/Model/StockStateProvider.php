@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model;
@@ -159,7 +159,7 @@ class StockStateProvider implements StockStateProviderInterface
         if (!$stockItem->getIsInStock()) {
             $result->setHasError(true)
                 ->setErrorCode('out_stock')
-                ->setMessage(__('This product is out of stock.'))
+                ->setMessage(__('Product %name is out of stock.', ['name' => $stockItem->getProductName()]))
                 ->setQuoteMessage(__('Some of the products are out of stock.'))
                 ->setQuoteMessageIndex('stock');
             $result->setItemUseOldQty(true);

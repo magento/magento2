@@ -60,8 +60,8 @@ class Collection extends AbstractCollection
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
         Helper $resourceHelper,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ?AdapterInterface $connection = null,
+        ?AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;

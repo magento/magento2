@@ -26,5 +26,6 @@
         <element name="productSearch" type="button" selector="//button[@data-action='grid-filter-apply']" timeout="30"/>
         <element name="productTableColumnSku" type="input" selector="#catalog_category_products_filter_sku"/>
         <element name="categoryImageUseDefault" type="checkbox" selector="input[name='use_default[image]']"/>
+        <element name="categoryDescriptionUseDefault" type="checkbox" selector="input[name='use_default[description]']"/>
     </section>
 </sections>

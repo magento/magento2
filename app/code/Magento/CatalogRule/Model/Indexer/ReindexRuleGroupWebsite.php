@@ -50,7 +50,7 @@ class ReindexRuleGroupWebsite
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\App\ResourceConnection $resource,
         ActiveTableSwitcher $activeTableSwitcher,
-        TableSwapper $tableSwapper = null
+        ?TableSwapper $tableSwapper = null
     ) {
         $this->dateTime = $dateTime;
         $this->resource = $resource;

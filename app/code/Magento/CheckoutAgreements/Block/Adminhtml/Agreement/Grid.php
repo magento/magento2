@@ -34,7 +34,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory,
         array $data = [],
-        GridCollectionFactory $gridColFactory = null
+        ?GridCollectionFactory $gridColFactory = null
     ) {
 
         $this->_collectionFactory = $collectionFactory;

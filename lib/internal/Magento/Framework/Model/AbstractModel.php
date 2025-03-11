@@ -191,8 +191,8 @@ abstract class AbstractModel extends DataObject
     public function __construct(
         Context              $context,
         Registry             $registry,
-        AbstractResource     $resource = null,
-        AbstractDbCollection $resourceCollection = null,
+        ?AbstractResource     $resource = null,
+        ?AbstractDbCollection $resourceCollection = null,
         array                $data = []
     ) {
         $this->_registry = $registry;

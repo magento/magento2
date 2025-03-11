@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,6 +23,8 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="simpleCategory"/>
             </createData>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Config PayPal Standard-->
@@ -34,6 +36,7 @@
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminEnablePaypalStandardPaylaterActionGroup" stepKey="enablePaypalStandard"/>
@@ -46,7 +49,9 @@
             <argument name="tags" value="config full_page"/>
         </actionGroup>
         <!--Navigate to Storefront-->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="goToStoreFront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontPaypalPaylaterActionGroup" stepKey="verifyPaylaterInStorefrontCategoryPage"/>
         <!--Disable Paypal Standard-->
         <magentoCLI command="config:set {{DisablePaypalPayStandard.path}} {{DisablePaypalPayStandard.value}}" stepKey="disablePayPalStandard"/>

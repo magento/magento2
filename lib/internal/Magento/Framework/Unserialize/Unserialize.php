@@ -24,7 +24,7 @@ class Unserialize
     /**
      * @param Serialize|null $serializer Optional parameter for backward compatibility.
      */
-    public function __construct(Serialize $serializer = null)
+    public function __construct(?Serialize $serializer = null)
     {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Serialize::class);
     }

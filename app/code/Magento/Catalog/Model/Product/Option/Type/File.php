@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -118,9 +118,9 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder,
         \Magento\Framework\Escaper $escaper,
         array $data = [],
-        Filesystem $filesystem = null,
-        Json $serializer = null,
-        ProductHelper $productHelper = null
+        ?Filesystem $filesystem = null,
+        ?Json $serializer = null,
+        ?ProductHelper $productHelper = null
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_urlBuilder = $urlBuilder;
@@ -431,6 +431,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @return string
      *
      * @deprecated 102.0.0
+     * @see Updated deprecation doc annotations
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -455,6 +456,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @deprecated 102.0.0
+     * @see Updated deprecation doc annotations
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {

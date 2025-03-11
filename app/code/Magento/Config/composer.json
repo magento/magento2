@@ -5,7 +5,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-cron": "*",
@@ -13,7 +13,8 @@
         "magento/module-directory": "*",
         "magento/module-email": "*",
         "magento/module-media-storage": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-encryption-key": "*"
     },
     "type": "magento2-module",
     "license": [

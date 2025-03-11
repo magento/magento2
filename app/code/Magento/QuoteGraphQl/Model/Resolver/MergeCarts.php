@@ -80,11 +80,11 @@ class MergeCarts implements ResolverInterface
     public function __construct(
         GetCartForUser $getCartForUser,
         CartRepositoryInterface $cartRepository,
-        CustomerCartResolver $customerCartResolver = null,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId = null,
-        CartItemRepositoryInterface $cartItemRepository = null,
-        StockRegistryInterface $stockRegistry = null,
-        CartQuantityValidatorInterface $cartQuantityValidator = null
+        ?CustomerCartResolver $customerCartResolver = null,
+        ?QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId = null,
+        ?CartItemRepositoryInterface $cartItemRepository = null,
+        ?StockRegistryInterface $stockRegistry = null,
+        ?CartQuantityValidatorInterface $cartQuantityValidator = null
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartRepository = $cartRepository;
@@ -107,8 +107,8 @@ class MergeCarts implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (empty($args['source_cart_id'])) {
             throw new GraphQlInputException(__(

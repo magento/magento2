@@ -51,9 +51,9 @@ class Config
     public function __construct(
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Backend\Model\UrlInterface $url,
-        \Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory = null,
-        \Magento\Variable\Model\Source\Variables $storesVariables = null,
-        \Magento\Framework\Serialize\Serializer\Json $encoder = null
+        ?\Magento\Variable\Model\ResourceModel\Variable\CollectionFactory $collectionFactory = null,
+        ?\Magento\Variable\Model\Source\Variables $storesVariables = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $encoder = null
     ) {
         $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Variable\Model\ResourceModel\Variable\CollectionFactory::class);

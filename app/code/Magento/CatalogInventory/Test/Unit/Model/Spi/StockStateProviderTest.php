@@ -389,7 +389,7 @@ class StockStateProviderTest extends TestCase
      * @param array|null $options
      * @return array
      */
-    protected static function prepareDataForMethod($methodName, array $options = null)
+    protected static function prepareDataForMethod($methodName, ?array $options = null)
     {
         $variations = [];
         if ($options === null) {

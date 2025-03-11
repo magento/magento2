@@ -53,7 +53,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Escaper $escaper,
-        \DOMDocumentFactory $domDocumentFactory = null
+        ?\DOMDocumentFactory $domDocumentFactory = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;

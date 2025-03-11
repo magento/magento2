@@ -119,7 +119,7 @@ class PageRepository implements PageRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null,
+        ?CollectionProcessorInterface $collectionProcessor = null,
         ?IdentityMap $identityMap = null,
         ?HydratorInterface $hydrator = null,
         ?Config $routeConfig = null

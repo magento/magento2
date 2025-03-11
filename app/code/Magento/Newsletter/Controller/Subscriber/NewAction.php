@@ -84,9 +84,9 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         CustomerUrl $customerUrl,
         CustomerAccountManagement $customerAccountManagement,
         SubscriptionManagerInterface $subscriptionManager,
-        EmailValidator $emailValidator = null,
-        CustomerRepositoryInterface $customerRepository = null,
-        NewsletterConfig $newsletterConfig = null
+        ?EmailValidator $emailValidator = null,
+        ?CustomerRepositoryInterface $customerRepository = null,
+        ?NewsletterConfig $newsletterConfig = null
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
         $this->subscriptionManager = $subscriptionManager;

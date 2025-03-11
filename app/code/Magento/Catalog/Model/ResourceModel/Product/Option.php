@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -136,7 +136,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param int $storeId
      * @param float|null $newPrice
      */
-    private function savePriceByStore(AbstractModel $object, int $storeId, float $newPrice = null): void
+    private function savePriceByStore(AbstractModel $object, int $storeId, ?float $newPrice = null): void
     {
         $priceTable = $this->getTable('catalog_product_option_price');
         $connection = $this->getConnection();

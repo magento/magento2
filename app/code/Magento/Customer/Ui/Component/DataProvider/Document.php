@@ -94,7 +94,7 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
         GroupRepositoryInterface $groupRepository,
         CustomerMetadataInterface $customerMetadata,
         StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($attributeValueFactory);
         $this->customerMetadata = $customerMetadata;

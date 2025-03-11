@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -12,11 +12,11 @@
         <annotations>
             <description>Add visual image swatch property attribute.</description>
         </annotations>
-
         <!-- Begin creating a new product attribute of type "Image Swatch" -->
         <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
         <waitForPageLoad stepKey="waitForAttributePageLoad"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+        <grabValueFrom stepKey="grabAttributeName" selector="{{AttributePropertiesSection.DefaultLabel}}"/>
         <!-- Select visual swatch -->
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_visual" stepKey="selectInputType"/>
         <!-- This hack is because the same <input type="file"> is re-purposed used for all uploads. -->
@@ -39,6 +39,10 @@
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="visualSwatchOption2" stepKey="fillAdmin2"/>
         <fillField selector="{{AdminManageSwatchSection.visualSwatchDefaultStoreViewBox('1')}}" userInput="visualSwatchOption2" stepKey="fillSwatchDefaultStoreViewBox2"/>
         <click selector="{{AdminManageSwatchSection.swatchWindow('1')}}" stepKey="clicksWatchWindow2"/>
+        <!-- Mark second option as default -->
+        <scrollTo selector="{{AdminManageSwatchSection.manageSwatchSection}}" stepKey="scrollToManageSwatchSection"/>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.nthIsDefault('2')}}" stepKey="waitForSetSecondOptionAsDefault"/>
+        <click selector="{{AdminManageSwatchSection.nthIsDefault('1')}}" stepKey="setSecondOptionAsDefault"/>
         <!-- Set scope -->
         <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
         <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
@@ -55,5 +59,6 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveAndEdit"/>
         <wait stepKey="waitToLoad" time="3"/>
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
+        <return value="{$grabAttributeName}" stepKey="returnFillDefaultLabel" />
     </actionGroup>
 </actionGroups>
