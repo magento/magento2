@@ -13,7 +13,6 @@ use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
-use Magento\Indexer\Test\Fixture\Indexer;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart;
@@ -56,9 +55,8 @@ class CartItemWithGiftMessageTest extends GraphQlAbstract
     }
 
     #[
-        DataFixture(ProductFixture::class, ['type_id' => 'virtual'], as: 'product'),
-        DataFixture(Indexer::class, as: 'indexer'),
         DataFixture(GiftMessage::class, as: 'message'),
+        DataFixture(ProductFixture::class, ['type_id' => 'virtual'], as: 'product'),
         DataFixture(GuestCart::class, ['message_id' => '$message.id$'], as: 'quote'),
         DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$quote.id$']),
         DataFixture(
@@ -95,6 +93,7 @@ class CartItemWithGiftMessageTest extends GraphQlAbstract
     }
 
     #[
+        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(DownloadableProductFixture::class, [
             'price' => 100,
             'type_id' => 'downloadable',
@@ -112,8 +111,6 @@ class CartItemWithGiftMessageTest extends GraphQlAbstract
                 ]
             ]
         ], as: 'product'),
-        DataFixture(Indexer::class, as: 'indexer'),
-        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(GuestCart::class, ['message_id' => '$message.id$'], as: 'quote'),
         DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$quote.id$']),
         DataFixture(
@@ -150,13 +147,12 @@ class CartItemWithGiftMessageTest extends GraphQlAbstract
     }
 
     #[
+        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(
             ProductFixture::class,
             ['type_id' => 'simple', 'weight' => 10, 'gift_message_available' => 2],
             as: 'product'
         ),
-        DataFixture(Indexer::class, as: 'indexer'),
-        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(GuestCart::class, ['message_id' => '$message.id$'], as: 'quote'),
         DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$quote.id$']),
         DataFixture(
@@ -175,13 +171,12 @@ class CartItemWithGiftMessageTest extends GraphQlAbstract
     }
 
     #[
+        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(
             ProductFixture::class,
             ['type_id' => 'simple', 'weight' => 10, 'gift_message_available' => 2],
             as: 'product'
         ),
-        DataFixture(Indexer::class, as: 'indexer'),
-        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(GuestCart::class, ['message_id' => '$message.id$'], as: 'quote'),
         DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$quote.id$']),
         DataFixture(
@@ -200,13 +195,12 @@ class CartItemWithGiftMessageTest extends GraphQlAbstract
     }
 
     #[
+        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(
             ProductFixture::class,
             ['type_id' => 'simple', 'weight' => 10, 'gift_message_available' => 0],
             as: 'product'
         ),
-        DataFixture(Indexer::class, as: 'indexer'),
-        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(GuestCart::class, ['message_id' => '$message.id$'], as: 'quote'),
         DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$quote.id$']),
         DataFixture(
@@ -225,13 +219,12 @@ class CartItemWithGiftMessageTest extends GraphQlAbstract
     }
 
     #[
+        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(
             ProductFixture::class,
             ['type_id' => 'simple', 'weight' => 10, 'gift_message_available' => 1],
             as: 'product'
         ),
-        DataFixture(Indexer::class, as: 'indexer'),
-        DataFixture(GiftMessage::class, as: 'message'),
         DataFixture(GuestCart::class, ['message_id' => '$message.id$'], as: 'quote'),
         DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$quote.id$']),
         DataFixture(
@@ -349,9 +342,9 @@ class CartItemWithGiftMessageTest extends GraphQlAbstract
      *
      * @param int $cartId
      * @param int $productId
-     * @return int|null
+     * @return int
      */
-    private function getItemId(int $cartId, int $productId): ?int
+    private function getItemId(int $cartId, int $productId): int
     {
         $connection = $this->resourceConnection->getConnection();
         return (int)$connection->fetchOne(

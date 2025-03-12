@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertTermsAndConditionsIsPresentedOnStorefrontWithShowContentAsHtmlTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Verify that Terms and Conditions is presented on Storefront with Show Content as Html."/>
+            <title value="Verify Terms and Conditions with Show Content as Html"/>
+            <description value="The testcase intends to Verify that Terms and Conditions is presented on Storefront with Show Content as Html."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4605"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <actionGroup ref="AdminEnableTermsAndConditionsConfigurationActionGroup" stepKey="EnableTermsAndConditions"/>
+            <!-- Create Additional store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!--Delete custom store view -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <actionGroup ref="AdminDisableTermsAndConditionsConfigurationActionGroup" stepKey="DisableTermsAndConditions"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutOfAdmin"/>
+        </after>
+        <!-- Open New Terms And Conditions Page-->
+        <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+        <!-- Fill the Required Details-->
+        <actionGroup ref="AdminFillTermsAndConditionsCustomStoreViewActionGroup" stepKey="fillNewTerm">
+            <argument name="term" value="manualHtmlTerm"/>
+            <argument name="storeView" value="{{customStore.name}}"/>
+        </actionGroup>
+        <!-- Save Details-->
+        <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveFilledTerm"/>
+        <!-- Switch StoreView -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreFrontHomePage"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <!--Add product to cart.-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <!--Filling shipping information and click next-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+            <argument name="customerVar" value="Simple_US_Customer_NY"/>
+            <argument name="customerAddressVar" value="US_Address_NY"/>
+        </actionGroup>
+        <!--Check-box with text for Terms and Condition is present-->
+        <waitForElement selector="{{StorefrontCheckoutAgreementsSection.agreementMarkedText(manualHtmlTerm.checkboxText)}}" stepKey="seeTermTextInCheckoutIsPresent"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.agreementMarkedText}}" stepKey="ClickOnTermsAndConditionsLink"/>
+        <waitForElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementBoldContentMessage('bold text')}}" stepKey="verifyBoldTextMessage"/>
+        <waitForElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementItalicContentMessage('italic text')}}" stepKey="verifyItalicTextMessage"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.close}}" stepKey="waitForCloseToBeClickable"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.close}}" stepKey="ClickOnClose"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="StorefrontClickPlaceOrderButtonActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <waitForText selector="{{StorefrontCheckoutAgreementsSection.mageError}}" userInput="This is a required field." stepKey="verifyErrorMessage"/>
+        <checkOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckout"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="againClickPlacePurchaseOrder"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
+    </test>
+</tests>

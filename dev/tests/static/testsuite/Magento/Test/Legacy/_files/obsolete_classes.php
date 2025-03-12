@@ -4329,21 +4329,7 @@ return [
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder\MatchTest',
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder\MatchQueryTest'
     ],
-    [
-        'Magento\Elasticsearch6\Block\Adminhtml\System\Config\TestConnection',
-        'Magento\Elasticsearch7\Block\Adminhtml\System\Config\TestConnection'
-    ],
-    [
-        'Magento\Elasticsearch6\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver',
-        'Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver'
-    ],
-    [
-        'Magento\Elasticsearch6\Model\Client\Elasticsearch',
-        'Magento\Elasticsearch7\Model\Client\Elasticsearch'
-    ],
     ['Magento\Elasticsearch\Test\Unit\Model\DataProvider\Base\SuggestionsTest'],
-    ['Magento\Elasticsearch6\Test\Unit\Model\Client\ElasticsearchTest'],
-    ['Magento\Elasticsearch6\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolverTest'],
     ['Zend_Measure_Length', 'Magento\Framework\Measure\Length'],
     ['Zend_Measure_Weight', 'Magento\Framework\Measure\Weight'],
 ];
