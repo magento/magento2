@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\PageCache\Model\Controller\Result;
 
-use Magento\PageCache\Model\Config;
-use Magento\Framework\App\PageCache\Kernel;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\Registry;
-use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\App\Response\Http as ResponseHttp;
 use Laminas\Http\Header\HeaderInterface as HttpHeaderInterface;
+use Magento\Framework\App\PageCache\Kernel;
+use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
 use Magento\PageCache\Model\Cache\Type as CacheType;
+use Magento\PageCache\Model\Config;
 
 /**
  * Plugin for processing builtin cache
@@ -79,9 +79,8 @@ class BuiltinPlugin
             if ($cacheControlHeader instanceof HttpHeaderInterface) {
                 $response->setHeader('X-Magento-Cache-Control', $cacheControlHeader->getFieldValue());
             }
-
-            $response->setHeader('X-Magento-Cache-Debug', 'MISS', true);
         }
+        $response->setHeader('X-Magento-Cache-Debug', 'MISS', true);
 
         $tagsHeader = $response->getHeader('X-Magento-Tags');
         $tags = [];
