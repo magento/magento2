@@ -44,7 +44,7 @@ class CustomerTokenService implements CustomerTokenServiceInterface
         private readonly AccountManagementInterface $accountManagement,
         private readonly CredentialsValidator $validatorHelper,
         private readonly TokenManager $tokenManager,
-        ManagerInterface $eventManager = null
+        ?ManagerInterface $eventManager = null
     ) {
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(ManagerInterface::class);
     }

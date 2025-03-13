@@ -117,8 +117,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
         \Magento\Msrp\Helper\Data $msrpData,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        UploaderFactory $uploaderFactory = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?UploaderFactory $uploaderFactory = null
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;

@@ -112,8 +112,8 @@ class Save extends Attribute implements HttpPostActionInterface
         FilterManager $filterManager,
         Product $productHelper,
         LayoutFactory $layoutFactory,
-        Presentation $presentation = null,
-        FormData $formDataSerializer = null
+        ?Presentation $presentation = null,
+        ?FormData $formDataSerializer = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->buildFactory = $buildFactory;

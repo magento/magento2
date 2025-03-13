@@ -59,7 +59,7 @@ class Recent extends \Magento\Framework\View\Element\Template
         Session $customerSession,
         Config $orderConfig,
         array $data = [],
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_customerSession = $customerSession;

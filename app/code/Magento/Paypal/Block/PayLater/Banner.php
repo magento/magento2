@@ -57,7 +57,7 @@ class Banner extends Template
         PayLaterConfig $payLaterConfig,
         SdkUrl $sdkUrl,
         array $data = [],
-        PaypalConfig $paypalConfig = null
+        ?PaypalConfig $paypalConfig = null
     ) {
         parent::__construct($context, $data);
         $this->payLaterConfig = $payLaterConfig;

@@ -54,7 +54,7 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
         TaxRateRepositoryInterface $taxRateRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Converter $converter,
-        RateProvider $rateProvider = null
+        ?RateProvider $rateProvider = null
     ) {
         $this->taxRateRepository = $taxRateRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;

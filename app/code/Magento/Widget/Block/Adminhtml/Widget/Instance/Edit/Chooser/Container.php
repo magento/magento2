@@ -62,7 +62,7 @@ class Container extends Select
         ProcessorFactory $layoutProcessorFactory,
         CollectionFactory $themesFactory,
         array $data = [],
-        PageLayoutConfigBuilder $pageLayoutConfigBuilder = null
+        ?PageLayoutConfigBuilder $pageLayoutConfigBuilder = null
     ) {
         parent::__construct($context, $data);
         $this->_layoutProcessorFactory = $layoutProcessorFactory;

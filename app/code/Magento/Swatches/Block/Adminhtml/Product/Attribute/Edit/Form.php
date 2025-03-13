@@ -39,7 +39,7 @@ class Form extends \Magento\Framework\Data\Form
         ElementCollectionFactory $factoryCollection,
         FormKey $formKey,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         parent::__construct($factoryElement, $factoryCollection, $formKey, $data);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

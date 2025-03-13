@@ -61,9 +61,9 @@ class ProductPriceIndexFilter implements PriceModifierInterface
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         Item $stockItem,
-        ResourceConnection $resourceConnection = null,
+        ?ResourceConnection $resourceConnection = null,
         $connectionName = 'indexer',
-        Generator $batchQueryGenerator = null,
+        ?Generator $batchQueryGenerator = null,
         $batchSize = 100
     ) {
         $this->stockConfiguration = $stockConfiguration;

@@ -53,7 +53,7 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
         Collection $resourceCollection,
         DecoderInterface $jsonDecoder,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->jsonDecoder = $jsonDecoder;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()

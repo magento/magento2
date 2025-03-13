@@ -38,7 +38,7 @@ class ResponseContainsErrorsException extends \Exception
     public function __construct(
         string $message,
         array $responseData,
-        \Exception $cause = null,
+        ?\Exception $cause = null,
         int $code = 0,
         array $responseHeaders = [],
         array $responseCookies = []

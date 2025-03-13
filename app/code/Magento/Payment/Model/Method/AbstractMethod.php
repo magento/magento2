@@ -190,10 +190,10 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        DirectoryHelper $directory = null
+        ?DirectoryHelper $directory = null
     ) {
         parent::__construct(
             $context,
@@ -774,7 +774,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return bool
      * @deprecated 100.2.0
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if (!$this->isActive($quote ? $quote->getStoreId() : null)) {
             return false;

@@ -220,11 +220,11 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        PoisonPillPutInterface $pillPut = null,
-        TypeListInterface $typeList = null
+        ?PoisonPillPutInterface $pillPut = null,
+        ?TypeListInterface $typeList = null
     ) {
         parent::__construct(
             $context,

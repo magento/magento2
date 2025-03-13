@@ -33,7 +33,7 @@ class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
      */
     public function __construct(
         ResourceConnection $resource,
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfig = null
+        ?\Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfig = null
     ) {
         $this->resource = $resource;
         $this->stockConfig = $stockConfig ?: ObjectManager::getInstance()

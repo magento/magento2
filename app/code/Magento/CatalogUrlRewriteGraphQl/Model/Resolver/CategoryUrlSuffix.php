@@ -54,8 +54,8 @@ class CategoryUrlSuffix implements ResolverInterface, ResetAfterRequestInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ): ?string {
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();

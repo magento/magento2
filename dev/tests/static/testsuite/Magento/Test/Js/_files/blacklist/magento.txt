@@ -16,6 +16,7 @@ lib/web/varien/js.js
 lib/web/jquery/jquery.validate.js
 lib/web/prototype/**/*.js
 lib/web/jquery/jstree/jquery.jstree.js
+lib/web/jquery/colorpicker/js/colorpicker.js
 
 // MINIFIED FILES
 app/code/**/*.min.js

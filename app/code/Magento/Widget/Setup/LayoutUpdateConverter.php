@@ -40,7 +40,7 @@ class LayoutUpdateConverter extends SerializedToJson
         Serialize $serialize,
         Json $json,
         Normalizer $normalizer,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->normalizer = $normalizer;
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(

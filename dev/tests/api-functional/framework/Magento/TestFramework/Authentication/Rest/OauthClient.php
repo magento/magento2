@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\TestFramework\Authentication\Rest;
 
 use Magento\Framework\Oauth\Helper\Utility;
+use Magento\Framework\Oauth\Helper\Signature\Hmac;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use OAuth\Common\Consumer\Credentials;
@@ -19,8 +19,6 @@ use OAuth\OAuth1\Service\AbstractService;
 use OAuth\OAuth1\Signature\SignatureInterface;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 use OAuth\OAuth1\Token\TokenInterface;
-use Laminas\OAuth\Http\Utility as HTTPUtility;
-use Magento\Framework\Oauth\Helper\Signature\HmacFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -45,11 +43,11 @@ class OauthClient extends AbstractService
      */
     public function __construct(
         Credentials $credentials,
-        ClientInterface $httpClient = null,
-        TokenStorageInterface $storage = null,
-        SignatureInterface $signature = null,
-        UriInterface $baseApiUri = null,
-        Utility $helper = null
+        ?ClientInterface $httpClient = null,
+        ?TokenStorageInterface $storage = null,
+        ?SignatureInterface $signature = null,
+        ?UriInterface $baseApiUri = null,
+        ?Utility $helper = null
     ) {
         if (!isset($httpClient)) {
             $httpClient = new \Magento\TestFramework\Authentication\Rest\CurlClient();
@@ -60,7 +58,7 @@ class OauthClient extends AbstractService
         }
         if (!isset($helper)) {
             /** @phpstan-ignore-next-line */
-            $helper = new Utility(new HTTPUtility(), new HmacFactory(ObjectManager::getInstance()));
+            $helper = new Utility(new Hmac());
         }
         if (!isset($signature)) {
             $signature = new \Magento\TestFramework\Authentication\Rest\OauthClient\Signature($helper, $credentials);

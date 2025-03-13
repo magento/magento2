@@ -75,8 +75,8 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Session\Generic $reportSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

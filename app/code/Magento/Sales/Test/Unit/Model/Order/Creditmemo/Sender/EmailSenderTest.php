@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -120,6 +120,10 @@ class EmailSenderTest extends TestCase
      */
     private $senderBuilderFactoryMock;
 
+    private const CREDITMEMO_ID = 1;
+
+    private const ORDER_ID = 1;
+
     /**
      * @inheritDoc
      *
@@ -154,9 +158,11 @@ class EmailSenderTest extends TestCase
 
         $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setEmailSent'])
+            ->onlyMethods(['setEmailSent', 'getId'])
             ->addMethods(['setSendEmail'])
             ->getMock();
+        $this->creditmemoMock->method('getId')
+            ->willReturn(self::CREDITMEMO_ID);
 
         $this->commentMock = $this->getMockBuilder(CreditmemoCommentCreationInterface::class)
             ->disableOriginalConstructor()
@@ -192,6 +198,8 @@ class EmailSenderTest extends TestCase
         $this->orderMock->expects($this->any())
             ->method('getPayment')
             ->willReturn($this->paymentInfoMock);
+        $this->orderMock->method('getId')
+            ->willReturn(self::ORDER_ID);
 
         $this->paymentHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -285,7 +293,9 @@ class EmailSenderTest extends TestCase
         if (!$configValue || $forceSyncMode) {
             $transport = [
                 'order' => $this->orderMock,
+                'order_id' => self::ORDER_ID,
                 'creditmemo' => $this->creditmemoMock,
+                'creditmemo_id' => self::CREDITMEMO_ID,
                 'comment' => $isComment ? 'Comment text' : '',
                 'billing' => $this->addressMock,
                 'payment_html' => 'Payment Info Block',

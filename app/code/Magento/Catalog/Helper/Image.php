@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper;
 
@@ -143,8 +143,8 @@ class Image extends AbstractHelper implements ArgumentInterface
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\ConfigInterface $viewConfig,
-        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory = null,
-        CatalogMediaConfig $mediaConfig = null
+        ?\Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory = null,
+        ?CatalogMediaConfig $mediaConfig = null
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);
@@ -297,6 +297,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * @param int $quality
      * @return $this
      * @deprecated 103.0.1
+     * @see Updated deprecation doc annotations
      */
     public function setQuality($quality)
     {
@@ -448,6 +449,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * @return string
      *
      * @deprecated 102.0.0 Returns only default placeholder.
+     * @see Updated deprecation doc annotations
      * Does not take into account custom placeholders set in Configuration.
      */
     public function getPlaceholder($placeholder = null)
