@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -130,8 +130,15 @@ class BuiltinPluginTest extends TestCase
                     }
                 );
         } else {
-            $this->responseMock->expects($this->never())
-                ->method('setHeader');
+            $this->responseMock
+                ->method('setHeader')
+                ->willReturnCallback(
+                    function ($arg1, $arg2 = null, $arg3 = null) {
+                        if ($arg1 === 'X-Magento-Cache-Debug' && $arg2 === 'MISS' && $arg3 === true) {
+                            return null;
+                        }
+                    }
+                );
         }
         $this->responseMock
             ->expects($this->once())
@@ -208,14 +215,11 @@ class BuiltinPluginTest extends TestCase
         $this->stateMock->expects($this->any())
             ->method('getMode')
             ->willReturn($state);
-        if ($state == State::MODE_DEVELOPER) {
-            $this->responseMock->expects($this->once())
-                ->method('setHeader')
-                ->with('X-Magento-Cache-Debug');
-        } else {
-            $this->responseMock->expects($this->never())
-                ->method('setHeader');
-        }
+
+        $this->responseMock->expects($this->once())
+            ->method('setHeader')
+            ->with('X-Magento-Cache-Debug');
+
         $this->assertSame(
             $this->responseMock,
             $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock)

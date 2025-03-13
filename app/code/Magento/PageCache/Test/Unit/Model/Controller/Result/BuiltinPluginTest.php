@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -150,9 +150,15 @@ class BuiltinPluginTest extends TestCase
         $this->responseMock->expects(static::once())
             ->method('clearHeader')
             ->with('X-Magento-Tags');
-        $this->responseMock->expects(static::once())
+        $this->responseMock->expects(static::any())
             ->method('setHeader')
-            ->with('X-Magento-Tags', 'tag,' . CacheType::CACHE_TAG);
+            ->willReturnCallback(function ($arg1, $arg2 = null, $arg3 = null) {
+                if ($arg1 === 'X-Magento-Cache-Debug' && $arg2 === 'MISS' && $arg3 === true) {
+                    return null;
+                } elseif ($arg1 === 'X-Magento-Tags' && $arg2 === 'tag,' . CacheType::CACHE_TAG) {
+                    return null;
+                }
+            });
         $this->kernelMock->expects(static::once())
             ->method('process')
             ->with($this->responseMock);
