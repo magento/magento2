@@ -12,12 +12,14 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
 use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\CustomerCart as CustomerCartFixture;
 use Magento\Quote\Test\Fixture\QuoteIdMask;
+use Magento\Sales\Model\Order;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -40,44 +42,51 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
+     * @var Order
+     */
+    private $orderModel;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $this->orderModel = Bootstrap::getObjectManager()->get(Order::class);
+        $this->resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
     }
 
     /**
      * @throws Exception
      */
     #[
-    DataFixture(ProductFixture::class, as: 'product'),
-    DataFixture(CustomerFixture::class, as: 'customer'),
-    DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'quote'),
-    DataFixture(AddProductToCartFixture::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$']),
-    DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$quote.id$']),
-    DataFixture(QuoteIdMask::class, ['cart_id' => '$quote.id$'], 'quoteIdMask'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerFixture::class, as: 'customer'),
+        DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(QuoteIdMask::class, ['cart_id' => '$quote.id$'], 'quoteIdMask'),
     ]
-    public function testSetSameAsShipping(): void
+    public function testSetSameAsShippingAddressFieldTrue(): void
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
-        $headerMap = $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail());
+        $customerAuthHeaders = $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail());
 
         $this->graphQlMutation(
             $this->getBillingAddressMutationSameAsShipping($maskedQuoteId),
             [],
             '',
-            $headerMap
+            $customerAuthHeaders
         );
 
         $this->assertSameAsBillingField(
-            $this->graphQlQuery(
-                $this->getQuery($maskedQuoteId),
-                [],
-                '',
-                $headerMap
-            ),
+            $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $customerAuthHeaders),
             true
         );
     }
@@ -92,27 +101,84 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$']),
         DataFixture(QuoteIdMask::class, ['cart_id' => '$quote.id$'], 'quoteIdMask'),
     ]
-    public function testSetUseForShipping(): void
+    public function testBillingSetSameAsShippingAddressSave(): void
+    {
+        $customerAuthHeaders = $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail());
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+
+        //set shipping address to cart (save_in_address_book => true)
+        $this->graphQlMutation(
+            $this->getSetShippingAddressOnCartMutation($maskedQuoteId),
+            [],
+            '',
+            $customerAuthHeaders
+        );
+
+        //set billing address to cart same as shipping
+        $this->graphQlMutation(
+            $this->getBillingAddressMutationSameAsShipping($maskedQuoteId),
+            [],
+            '',
+            $customerAuthHeaders
+        );
+
+        //set shipping method on cart
+        $this->graphQlMutation(
+            $this->getShippingMethodMutation($maskedQuoteId),
+            [],
+            '',
+            $customerAuthHeaders
+        );
+
+        //set payment method on cart
+        $this->graphQlMutation(
+            $this->getPaymentMethodMutation($maskedQuoteId),
+            [],
+            '',
+            $customerAuthHeaders
+        );
+
+        //place order
+        $orderResponse = $this->graphQlMutation(
+            $this->getPlaceOrderMutation($maskedQuoteId),
+            [],
+            '',
+            $customerAuthHeaders
+        );
+
+        $orderNumber = $orderResponse['placeOrder']['order']['order_number'];
+        $order = $this->orderModel->loadByIncrementId($orderNumber);
+
+        self::assertNotNull($order->getShippingAddress()->getCustomerAddressId());
+
+        //Revert order as it is created through mutations and not fixtures
+        $this->revertOrder($orderNumber);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerFixture::class, as: 'customer'),
+        DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$']),
+        DataFixture(QuoteIdMask::class, ['cart_id' => '$quote.id$'], 'quoteIdMask'),
+    ]
+    public function testSetUseForShippingForBillingAddress(): void
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
-        $headerMap = $this->getCustomerAuthHeaders(
-            $this->fixtures->get('customer')->getEmail()
-        );
+        $customerAuthHeaders = $this->getCustomerAuthHeaders($this->fixtures->get('customer')->getEmail());
 
         $this->graphQlMutation(
             $this->getBillingAddressMutationUseForShipping($maskedQuoteId),
             [],
             '',
-            $headerMap
+            $customerAuthHeaders
         );
 
         $this->assertSameAsBillingField(
-            $this->graphQlQuery(
-                $this->getQuery($maskedQuoteId),
-                [],
-                '',
-                $headerMap
-            ),
+            $this->graphQlQuery($this->getQuery($maskedQuoteId), [], '', $customerAuthHeaders),
             true
         );
     }
@@ -166,6 +232,49 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
     }
 
     /**
+     * Get Set shipping address on cart mutation with save_in_address_book as true
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getSetShippingAddressOnCartMutation(string $maskedQuoteId): string
+    {
+        return <<<MUTATION
+            mutation {
+              setShippingAddressesOnCart(
+                input: {
+                  cart_id: "{$maskedQuoteId}"
+                  shipping_addresses: [
+                    {
+                      address: {
+                        firstname: "John"
+                        lastname: "Doe"
+                        company: "test"
+                        street: ["test", "test"]
+                        city: "Atlanta"
+                        region: "GA"
+                        postcode: "12345"
+                        country_code: "US"
+                        telephone: "9999999999"
+                        save_in_address_book: true
+                      },
+                    }
+                  ]
+                }
+              ) {
+                cart {
+                  id
+                  shipping_addresses {
+                    firstname
+                    lastname
+                  }
+                }
+              }
+            }
+        MUTATION;
+    }
+
+    /**
      * Returns GraphQl mutation for (setBillingAddressOnCart) with same_as_shipping: true
      *
      * @param string $maskedQuoteId
@@ -185,6 +294,10 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
               ) {
                 cart {
                   id
+                  shipping_addresses {
+                    firstname
+                    lastname
+                  }
                 }
               }
             }
@@ -229,6 +342,85 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
     }
 
     /**
+     * Get set shipping method on cart mutation
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getShippingMethodMutation(string $maskedQuoteId): string
+    {
+        return <<<MUTATION
+            mutation {
+              setShippingMethodsOnCart(
+                input: {
+                  cart_id: "{$maskedQuoteId}",
+                  shipping_methods: [
+                    {
+                      carrier_code: "flatrate"
+                      method_code: "flatrate"
+                    }
+                  ]
+                }
+              ) {
+                cart {
+                  id
+                }
+              }
+            }
+        MUTATION;
+    }
+
+    /**
+     * Get set payment method on cart mutation
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getPaymentMethodMutation(string $maskedQuoteId): string
+    {
+        return <<<MUTATION
+            mutation {
+              setPaymentMethodOnCart(input: {
+                  cart_id: "{$maskedQuoteId}"
+                  payment_method: {
+                      code: "checkmo"
+                  }
+              }) {
+                cart {
+                  selected_payment_method {
+                    code
+                    title
+                  }
+                }
+              }
+            }
+        MUTATION;
+    }
+
+    /**
+     * Get place order mutation
+     *
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getPlaceOrderMutation(string $maskedQuoteId): string
+    {
+        return <<<MUTATION
+            mutation {
+              placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
+                order {
+                    order_number
+                }
+                errors {
+                    message
+                    code
+                }
+              }
+            }
+        MUTATION;
+    }
+
+    /**
      * Returns GraphQl query with cart shipping_addresses.same_as_billing field
      *
      * @param string $maskedQuoteId
@@ -248,6 +440,25 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
     }
 
     /**
+     * Delete Orders from sales_order and sales_order_grid table
+     *
+     * @param string $orderNumber
+     * @return void
+     */
+    private function revertOrder(string $orderNumber): void
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $connection->delete(
+            $this->resourceConnection->getTableName('sales_order'),
+            ['increment_id = ?' => $orderNumber]
+        );
+        $connection->delete(
+            $this->resourceConnection->getTableName('sales_order_grid'),
+            ['increment_id = ?' => $orderNumber]
+        );
+    }
+
+    /**
      * Generates token for GQL and returns header with generated token
      *
      * @param string $customerEmail
@@ -257,9 +468,7 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
      */
     private function getCustomerAuthHeaders(string $customerEmail): array
     {
-        return [
-            'Authorization' => 'Bearer ' .
-                $this->customerTokenService->createCustomerAccessToken($customerEmail, 'password')
-        ];
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($customerEmail, 'password');
+        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 }

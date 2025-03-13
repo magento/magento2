@@ -160,7 +160,7 @@ type TaxItem @doc(description: "Contains tax item details.") {
 }
 
 type OrderTotal @doc(description: "Contains details about the sales total amounts used to calculate the final price.") {
-    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes.")
+    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes.") @deprecated(reason: "Use subtotal_excl_tax field instead")
     discounts: [Discount] @doc(description: "The applied discounts to the order.")
     total_tax: Money! @doc(description: "The amount of tax applied to the order.")
     taxes: [TaxItem] @doc(description: "The order tax details.")
@@ -168,6 +168,8 @@ type OrderTotal @doc(description: "Contains details about the sales total amount
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency.")
     total_shipping: Money! @doc(description: "The shipping amount for the order.")
     shipping_handling: ShippingHandling @doc(description: "Details about the shipping and handling costs for the order.")
+    subtotal_incl_tax: Money! @doc(description: "The subtotal of the order, including taxes.")
+    subtotal_excl_tax: Money! @doc(description: "The subtotal of the order, excluding taxes.")
 }
 
 type Invoice @doc(description: "Contains invoice details.") {
