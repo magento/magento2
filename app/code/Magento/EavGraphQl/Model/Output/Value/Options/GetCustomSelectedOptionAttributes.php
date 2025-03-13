@@ -8,23 +8,19 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Model\Output\Value\Options;
 
 use Magento\Eav\Model\AttributeRepository;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Custom attribute value provider for customer
  */
-class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInterface
+class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInterface, ResetAfterRequestInterface
 {
     private AttributeRepository $attributeRepository;
-    private StoreManagerInterface $storeManager;
     private array $optionsCache = [];
 
-    public function __construct(
-        AttributeRepository $attributeRepository,
-        StoreManagerInterface $storeManager
-    ) {
+    public function __construct(AttributeRepository $attributeRepository)
+    {
         $this->attributeRepository = $attributeRepository;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -58,20 +54,21 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
     private function getAttributeOptions(string $entity, string $code): array
     {
         $attribute = $this->attributeRepository->get($entity, $code);
-        $storeId = $attribute->getStoreId();
-        if ($storeId === null) {
-            $storeId = $this->storeManager->getStore()->getId();
-        }
 
-        if (!isset($this->optionsCache[$entity][$storeId][$code])) {
+        if (!isset($this->optionsCache[$entity][$code])) {
             $options = $attribute->getOptions();
             $optionsLabel = [];
             foreach ($options as $option) {
                 $optionsLabel[$option->getValue()] = $option->getLabel();
             }
-            $this->optionsCache[$entity][$storeId][$code] = $optionsLabel;
+            $this->optionsCache[$entity][$code] = $optionsLabel;
         }
 
-        return $this->optionsCache[$entity][$storeId][$code];
+        return $this->optionsCache[$entity][$code];
+    }
+
+    public function _resetState(): void
+    {
+        $this->optionsCache = [];
     }
 }
