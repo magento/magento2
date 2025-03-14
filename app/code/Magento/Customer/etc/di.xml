@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright 2025 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 -->
@@ -600,4 +600,9 @@
                 type="Magento\Customer\Plugin\AsyncRequestCustomerGroupAuthorization"
         />
     </type>
+    <virtualType name="Magento\Customer\Model\MviewAction" type="\Magento\Framework\Mview\View\BaseAction">
+        <arguments>
+            <argument name="indexerId" xsi:type="string">customer_grid</argument>
+        </arguments>
+    </virtualType>
 </config>
