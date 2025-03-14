@@ -16,13 +16,14 @@ class Curl extends CurlLibrary
      * Make DELETE request
      *
      * @param string $uri
+     * @param array|string $params
      * @return void
      *
      * @deprecated Replace with the core `delete` implementation
      * @see \Magento\Framework\HTTP\Client\Curl::delete
      */
-    public function delete($uri): void
+    public function delete($uri, array|string $params = []): void
     {
-        $this->makeRequest("DELETE", $uri);
+        $this->makeRequest("DELETE", $uri, $params);
     }
 }
