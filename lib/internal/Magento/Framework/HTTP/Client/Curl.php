@@ -279,7 +279,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      *
      * @url https://www.rfc-editor.org/rfc/rfc9110.html#section-9.3.5
      */
-    public function delete($uri)
+    public function delete($uri): void
     {
         $this->makeRequest("DELETE", $uri);
     }
