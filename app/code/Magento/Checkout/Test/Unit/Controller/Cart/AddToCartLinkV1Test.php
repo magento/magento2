@@ -201,7 +201,12 @@ class AddToCartLinkV1Test extends TestCase
         $this->_cartMock->expects($this->once())
             ->method('truncate');
 
-        // Set up product repository
+        // Set up product repository - first try by SKU, then by ID
+        // For first product: SKU lookup fails, ID lookup succeeds
+        $this->_productRepositoryMock->expects($this->exactly(2))
+            ->method('get')
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Product not found')));
+
         $this->_productRepositoryMock->expects($this->exactly(2))
             ->method('getById')
             ->willReturnMap([
@@ -209,12 +214,12 @@ class AddToCartLinkV1Test extends TestCase
                 [$productId2, false, null, false, $this->_productMock]
             ]);
 
-        // Set up cart add product
+        // Set up cart add product - now using product object
         $this->_cartMock->expects($this->exactly(2))
             ->method('addProduct')
             ->willReturnMap([
-                [$productId1, ['qty' => $qty1], $this->_cartMock],
-                [$productId2, ['qty' => $qty2], $this->_cartMock]
+                [$this->_productMock, ['qty' => $qty1], $this->_cartMock],
+                [$this->_productMock, ['qty' => $qty2], $this->_cartMock]
             ]);
 
         // Set up cart save
@@ -268,7 +273,12 @@ class AddToCartLinkV1Test extends TestCase
         $this->_cartMock->expects($this->once())
             ->method('truncate');
 
-        // Set up product repository to throw exception
+        // Set up product repository to throw exception for both SKU and ID lookups
+        $this->_productRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($productId)
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Product not found')));
+
         $this->_productRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($productId)
@@ -277,7 +287,7 @@ class AddToCartLinkV1Test extends TestCase
         // Set up error message
         $this->_messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
-            ->with(__('Product with ID "%1" was not found.', $productId));
+            ->with(__('Product with identifier "%1" was not found.', $productId));
 
         // Set up cart save
         $this->_cartMock->expects($this->once())

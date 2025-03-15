@@ -81,17 +81,31 @@ class AddToCartLinkV1 implements HttpGetActionInterface
             // Add products to cart
             foreach ($productItems as $item) {
                 try {
-                    $productId = $item['product_id'];
+                    $productIdentifier = $item['identifier'];
                     $qty = $item['qty'];
+                    $product = null;
 
-                    $product = $this->productRepository->getById($productId);
-                    $this->cart->addProduct($productId, ['qty' => $qty]);
-                } catch (NoSuchEntityException $e) {
-                    // Product not found, continue with next item
-                    $this->messageManager->addErrorMessage(
-                        __('Product with ID "%1" was not found.', $productId)
-                    );
-                    continue;
+                    // First try to load by SKU
+                    try {
+                        $product = $this->productRepository->get($productIdentifier);
+                    } catch (NoSuchEntityException $e) {
+                        // If SKU lookup fails, try by ID
+                        try {
+                            $product = $this->productRepository->getById($productIdentifier);
+                        } catch (NoSuchEntityException $idException) {
+                            // Both SKU and ID lookup failed
+                            $this->messageManager->addErrorMessage(
+                                __(
+                                    'Product with identifier "%1" was not found.', 
+                                    $productIdentifier
+                                )
+                            );
+                            continue;
+                        }
+                    }
+
+                    // Add product to cart using the product object
+                    $this->cart->addProduct($product, ['qty' => $qty]);
                 } catch (\Exception $e) {
                     // Other exceptions, continue with next item
                     $this->messageManager->addErrorMessage($e->getMessage());
@@ -129,7 +143,7 @@ class AddToCartLinkV1 implements HttpGetActionInterface
 
     /**
      * Parse the products parameter from the URL
-     * Format: product_id:qty,product_id:qty
+     * Format: identifier:qty,identifier:qty (where identifier can be SKU or product ID)
      *
      * @param string $productsParam Products parameter string
      *
@@ -144,7 +158,7 @@ class AddToCartLinkV1 implements HttpGetActionInterface
             $parts = explode(':', $pair);
             if (count($parts) === 2) {
                 $result[] = [
-                    'product_id' => $parts[0],
+                    'identifier' => $parts[0],
                     'qty' => (int)$parts[1]
                 ];
             }
