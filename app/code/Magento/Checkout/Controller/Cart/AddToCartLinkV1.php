@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -16,118 +17,75 @@ use Magento\Checkout\Model\Cart;
 use Magento\SalesRule\Model\CouponFactory;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Controller for Meta Checkout URL implementation
  */
-class AddToCartLinkV1 implements HttpGetActionInterface, ActionInterface
+class AddToCartLinkV1 implements HttpGetActionInterface
 {
+
     /**
+     * Request instance
+     *
      * @var RequestInterface
      */
-    private $request;
+    private $_request;
 
     /**
-     * @var CheckoutSession
-     */
-    private $checkoutSession;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var Cart
-     */
-    private $cart;
-
-    /**
-     * @var PageFactory
-     */
-    private $resultPageFactory;
-
-    /**
-     * @var RedirectFactory
-     */
-    private $resultRedirectFactory;
-    
-    /**
-     * @var CouponFactory
-     */
-    private $couponFactory;
-    
-    /**
-     * @var Usage
-     */
-    private $couponUsage;
-    
-    /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @param Context $context
-     * @param CheckoutSession $checkoutSession
-     * @param ProductRepositoryInterface $productRepository
-     * @param Cart $cart
-     * @param PageFactory $resultPageFactory
-     * @param RedirectFactory $resultRedirectFactory
-     * @param CouponFactory $couponFactory
-     * @param Usage $couponUsage
-     * @param ManagerInterface $messageManager
+     * Constructor
+     *
+     * @param Context                    $context               Context
+     * @param CheckoutSession            $checkoutSession       Checkout session
+     * @param ProductRepositoryInterface $productRepository     Product repository
+     * @param Cart                       $cart                  Cart
+     * @param PageFactory                $resultPageFactory     Result page factory
+     * @param RedirectFactory            $resultRedirectFactory Redirect factory
+     * @param CouponFactory              $couponFactory         Coupon factory
+     * @param Usage                      $couponUsage           Coupon usage
+     * @param ManagerInterface           $messageManager        Message manager
      */
     public function __construct(
         Context $context,
-        CheckoutSession $checkoutSession,
-        ProductRepositoryInterface $productRepository,
-        Cart $cart,
-        PageFactory $resultPageFactory,
-        RedirectFactory $resultRedirectFactory,
-        CouponFactory $couponFactory,
-        Usage $couponUsage,
-        ManagerInterface $messageManager
+        private readonly CheckoutSession $checkoutSession,
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly Cart $cart,
+        private readonly PageFactory $resultPageFactory,
+        private readonly RedirectFactory $resultRedirectFactory,
+        private readonly CouponFactory $couponFactory,
+        private readonly Usage $couponUsage,
+        private readonly ManagerInterface $messageManager
     ) {
-        $this->request = $context->getRequest();
-        $this->checkoutSession = $checkoutSession;
-        $this->productRepository = $productRepository;
-        $this->cart = $cart;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
-        $this->couponFactory = $couponFactory;
-        $this->couponUsage = $couponUsage;
-        $this->messageManager = $messageManager;
+        $this->_request = $context->getRequest();
     }
 
     /**
      * Execute action based on request and return result
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
-    public function execute()
+    public function execute(): ResultInterface
     {
         // Get products parameter
-        $productsParam = $this->request->getParam('products', '');
-        $couponCode = $this->request->getParam('coupon', '');
-        
+        $productsParam = $this->_request->getParam('products', '');
+        $couponCode = $this->_request->getParam('coupon', '');
+
         // Clear the cart first (required by Meta spec)
         $this->cart->truncate();
-        
+
         // Parse products parameter
         if (!empty($productsParam)) {
-            $productItems = $this->parseProductsParam($productsParam);
-            
+            $productItems = $this->_parseProductsParam($productsParam);
+
             // Add products to cart
             foreach ($productItems as $item) {
                 try {
                     $productId = $item['product_id'];
                     $qty = $item['qty'];
-                    
+
                     $product = $this->productRepository->getById($productId);
-                    $this->cart->addProduct($product, ['qty' => $qty]);
+                    $this->cart->addProduct($productId, ['qty' => $qty]);
                 } catch (NoSuchEntityException $e) {
                     // Product not found, continue with next item
                     $this->messageManager->addErrorMessage(
@@ -140,17 +98,17 @@ class AddToCartLinkV1 implements HttpGetActionInterface, ActionInterface
                     continue;
                 }
             }
-            
+
             // Save cart
             $this->cart->save();
         }
-        
+
         // Apply coupon code if provided
         if (!empty($couponCode)) {
             try {
                 $this->cart->getQuote()->setCouponCode($couponCode);
                 $this->cart->save();
-                
+
                 // Check if coupon was actually applied
                 if ($this->cart->getQuote()->getCouponCode() !== $couponCode) {
                     $this->messageManager->addErrorMessage(
@@ -163,24 +121,25 @@ class AddToCartLinkV1 implements HttpGetActionInterface, ActionInterface
                 );
             }
         }
-        
+
         // Render the checkout page directly (not a redirect)
         // This ensures the URL parameters remain in the browser address bar
         return $this->resultPageFactory->create();
     }
-    
+
     /**
      * Parse the products parameter from the URL
      * Format: product_id:qty,product_id:qty
      *
-     * @param string $productsParam
-     * @return array
+     * @param string $productsParam Products parameter string
+     *
+     * @return array<int, array<string, mixed>>
      */
-    private function parseProductsParam($productsParam)
+    private function _parseProductsParam(string $productsParam): array
     {
         $result = [];
         $productPairs = explode(',', $productsParam);
-        
+
         foreach ($productPairs as $pair) {
             $parts = explode(':', $pair);
             if (count($parts) === 2) {
@@ -190,7 +149,7 @@ class AddToCartLinkV1 implements HttpGetActionInterface, ActionInterface
                 ];
             }
         }
-        
+
         return $result;
     }
 }
