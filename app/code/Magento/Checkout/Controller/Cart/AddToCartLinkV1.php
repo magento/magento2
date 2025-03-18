@@ -105,7 +105,7 @@ class AddToCartLinkV1 implements HttpGetActionInterface
                     }
 
                     // Add product to cart using the product object
-                    $this->cart->addProduct($product, ['qty' => $qty]);
+                    $this->cart->addProduct($product->getId(), ['qty' => $qty]);
                 } catch (\Exception $e) {
                     // Other exceptions, continue with next item
                     $this->messageManager->addErrorMessage($e->getMessage());

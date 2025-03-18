@@ -214,12 +214,17 @@ class AddToCartLinkV1Test extends TestCase
                 [$productId2, false, null, false, $this->_productMock]
             ]);
 
-        // Set up cart add product - now using product object
+        // Set up product mock to return IDs
+        $this->_productMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturnOnConsecutiveCalls($productId1, $productId2);
+
+        // Set up cart add product - now using product ID
         $this->_cartMock->expects($this->exactly(2))
             ->method('addProduct')
             ->willReturnMap([
-                [$this->_productMock, ['qty' => $qty1], $this->_cartMock],
-                [$this->_productMock, ['qty' => $qty2], $this->_cartMock]
+                [$productId1, ['qty' => $qty1], $this->_cartMock],
+                [$productId2, ['qty' => $qty2], $this->_cartMock]
             ]);
 
         // Set up cart save
