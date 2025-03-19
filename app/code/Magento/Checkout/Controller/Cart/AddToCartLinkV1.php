@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -22,6 +24,8 @@ use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Controller for Meta Checkout URL implementation
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddToCartLinkV1 implements HttpGetActionInterface
 {
@@ -143,6 +147,7 @@ class AddToCartLinkV1 implements HttpGetActionInterface
 
     /**
      * Parse the products parameter from the URL
+     * 
      * Format: identifier:qty,identifier:qty (where identifier can be SKU or product ID)
      *
      * @param string $productsParam Products parameter string

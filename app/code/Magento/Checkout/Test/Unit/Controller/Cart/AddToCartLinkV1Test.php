@@ -1,8 +1,11 @@
 <?php
+declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Test\Unit\Controller\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -26,102 +29,104 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for AddToCartLinkV1 controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddToCartLinkV1Test extends TestCase
 {
     /**
-     * Controller instance
+     * Instance of the class under test
      *
      * @var AddToCartLinkV1
      */
     private $_controller;
 
     /**
-     * Context mock
+     * Application context object
      *
      * @var Context|MockObject
      */
     private $_contextMock;
 
     /**
-     * Checkout session mock
+     * Shopping cart checkout session
      *
      * @var CheckoutSession|MockObject
      */
     private $_checkoutSessionMock;
 
     /**
-     * Product repository mock
+     * Interface for product repository operations
      *
      * @var ProductRepositoryInterface|MockObject
      */
     private $_productRepositoryMock;
 
     /**
-     * Cart mock
+     * Shopping cart model instance
      *
      * @var Cart|MockObject
      */
     private $_cartMock;
 
     /**
-     * Result page factory mock
+     * Factory for creating result pages
      *
      * @var PageFactory|MockObject
      */
     private $_resultPageFactoryMock;
 
     /**
-     * Result redirect factory mock
+     * Factory for creating redirect responses
      *
      * @var RedirectFactory|MockObject
      */
     private $_resultRedirectFactoryMock;
 
     /**
-     * Coupon factory mock
+     * Factory for creating coupon models
      *
      * @var CouponFactory|MockObject
      */
     private $_couponFactoryMock;
 
     /**
-     * Coupon usage mock
+     * Resource model for coupon usage tracking
      *
      * @var Usage|MockObject
      */
     private $_couponUsageMock;
 
     /**
-     * Message manager mock
+     * Interface for managing messages and notifications
      *
      * @var ManagerInterface|MockObject
      */
     private $_messageManagerMock;
 
     /**
-     * Request mock
+     * HTTP request object interface
      *
      * @var RequestInterface|MockObject
      */
     private $_requestMock;
 
     /**
-     * Quote mock
+     * Shopping cart quote model
      *
      * @var Quote|MockObject
      */
     private $_quoteMock;
 
     /**
-     * Product mock
+     * Catalog product model
      *
      * @var Product|MockObject
      */
     private $_productMock;
 
     /**
-     * Page mock
+     * Result page object
      *
      * @var Page|MockObject
      */
@@ -264,7 +269,6 @@ class AddToCartLinkV1Test extends TestCase
     {
         $productsParam = '12345:2';
         $productId = '12345';
-        $qty = 2;
 
         // Set up request parameters
         $this->_requestMock->expects($this->exactly(2))
@@ -363,4 +367,4 @@ class AddToCartLinkV1Test extends TestCase
         $this->assertInstanceOf(ResultInterface::class, $result);
         $this->assertSame($this->_pageMock, $result);
     }
-} 
+}
