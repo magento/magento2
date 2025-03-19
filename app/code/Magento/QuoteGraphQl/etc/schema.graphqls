@@ -458,6 +458,8 @@ type CartItemPrices @doc(description: "Contains details about the price of the i
     total_item_discount: Money @doc(description: "The total of all discounts applied to the item.")
     original_item_price: Money! @doc(description: "The value of the original unit price for the item, including discounts.")
     original_row_total: Money! @doc(description: "The value of the original price multiplied by the quantity of the item.")
+    catalog_discount: ProductDiscount @doc(description: "The price discount for the unit price of the item represents the difference between its regular price and final price.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CatalogDiscount")
+    row_catalog_discount: ProductDiscount @doc(description: "The price discount multiplied by the item quantity represents the total difference between the regular price and the final price for the entire quote item.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\RowCatalogDiscount")
 }
 
 type SelectedCustomizableOption @doc(description: "Identifies a customized product that has been placed in a cart.") {
