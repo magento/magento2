@@ -33,8 +33,8 @@ class GiftMessage implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ): bool {
         if (!isset($value['model']) || !$value['model'] instanceof ProductInterface) {
             throw new LocalizedException(__('The product model is not available.'));
