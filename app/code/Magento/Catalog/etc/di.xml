@@ -77,6 +77,7 @@
     <preference for="Magento\Catalog\Api\CategoryListDeleteBySkuInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
     <preference for="Magento\Theme\CustomerData\MessagesProviderInterface" type="Magento\Catalog\Model\Theme\CustomerData\MessagesProvider"/>
     <preference for="Magento\Catalog\Api\ProductAttributeIsFilterableManagementInterface" type="Magento\Catalog\Model\Product\Attribute\IsFilterableManagement" />
+    <preference for="Magento\Catalog\Model\Product\Attribute\AttributeSetUnassignValidatorInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetUnassignValidator" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -1373,6 +1374,26 @@
                     Magento\Catalog\Model\Category\LayoutCacheTagResolver
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Virtual\Product\Attribute\GroupFactory" type="Magento\Eav\Model\Entity\Attribute\GroupFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Group</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Virtual\Product\Attribute\Set" type="Magento\Eav\Model\Entity\Attribute\Set">
+        <arguments>
+            <argument name="attrGroupFactory" xsi:type="object">Magento\Catalog\Virtual\Product\Attribute\GroupFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Virtual\Product\Attribute\SetFactory" type="Magento\Eav\Model\Entity\Attribute\SetFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Virtual\Product\Attribute\Set</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Set\Save">
+        <arguments>
+            <argument name="attributeSetFactory" xsi:type="object">Magento\Catalog\Virtual\Product\Attribute\SetFactory</argument>
         </arguments>
     </type>
 </config>

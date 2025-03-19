@@ -92,4 +92,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\CustomerManagement">
+        <plugin name="billing_address_save_same_as_shipping"
+                type="Magento\QuoteGraphQl\Plugin\CustomerManagementPlugin"/>
+    </type>
 </config>
