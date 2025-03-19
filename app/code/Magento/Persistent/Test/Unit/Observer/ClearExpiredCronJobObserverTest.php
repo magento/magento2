@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +13,7 @@ use Magento\Persistent\Model\SessionFactory;
 use Magento\Persistent\Observer\ClearExpiredCronJobObserver;
 use Magento\Store\Model\ResourceModel\Website\Collection;
 use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
+use Magento\Persistent\Model\CleanExpiredPersistentQuotes;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,6 +47,11 @@ class ClearExpiredCronJobObserverTest extends TestCase
     /**
      * @var MockObject
      */
+    protected $cleanExpiredPersistentQuotesMock;
+
+    /**
+     * @var MockObject
+     */
     protected $sessionMock;
 
     protected function setUp(): void
@@ -62,9 +67,12 @@ class ClearExpiredCronJobObserverTest extends TestCase
         $this->websiteCollectionMock
             = $this->createMock(Collection::class);
 
+        $this->cleanExpiredPersistentQuotesMock = $this->createMock(CleanExpiredPersistentQuotes::class);
+
         $this->model = new ClearExpiredCronJobObserver(
             $this->collectionFactoryMock,
-            $this->sessionFactoryMock
+            $this->sessionFactoryMock,
+            $this->cleanExpiredPersistentQuotesMock
         );
     }
 
@@ -80,6 +88,7 @@ class ClearExpiredCronJobObserverTest extends TestCase
             ->method('create')
             ->willReturn($this->sessionMock);
         $this->sessionMock->expects($this->once())->method('deleteExpired')->with(1);
+        $this->cleanExpiredPersistentQuotesMock->expects($this->once())->method('execute')->with(1);
         $this->model->execute($this->scheduleMock);
     }
 
