@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,14 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  */
 class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInterface, ResetAfterRequestInterface
 {
+    /**
+     * @var AttributeRepository
+     */
     private AttributeRepository $attributeRepository;
+
+    /**
+     * @var array
+     */
     private array $optionsCache = [];
 
     public function __construct(AttributeRepository $attributeRepository)
@@ -25,6 +32,12 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
 
     /**
      * @inheritDoc
+     *
+     * @param string $entity
+     * @param string $code
+     * @param string $value
+     * @return array|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(string $entity, string $code, string $value): ?array
     {
@@ -67,6 +80,9 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
         return $this->optionsCache[$entity][$code];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->optionsCache = [];

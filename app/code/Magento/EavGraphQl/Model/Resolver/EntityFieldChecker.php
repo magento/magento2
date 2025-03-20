@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,6 @@ use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- *
  * Check if the fields belongs to an entity
  */
 class EntityFieldChecker
@@ -31,8 +30,15 @@ class EntityFieldChecker
      */
     private ResourceConnection $resource;
 
+    /**
+     * @var EavConfig
+     */
     private EavConfig $eavConfig;
 
+    /**
+     * @param ResourceConnection $resource
+     * @param EavConfig $eavConfig
+     */
     public function __construct(
         ResourceConnection $resource,
         EavConfig $eavConfig

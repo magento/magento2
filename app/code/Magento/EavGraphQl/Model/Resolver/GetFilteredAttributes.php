@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,6 +31,9 @@ class GetFilteredAttributes
      */
     private EntityFieldChecker $entityFieldChecker;
 
+    /**
+     * @var array
+     */
     private array $filteredAttributesCache = [];
 
     /**
@@ -93,6 +96,13 @@ class GetFilteredAttributes
         return $this->filteredAttributesCache[$key];
     }
 
+    /**
+     * Get a key for filtered attributes cache
+     *
+     * @param array $filterArgs
+     * @param string $entityType
+     * @return string
+     */
     private function getFilteredAttributesKey(array $filterArgs, string $entityType): string
     {
         $key = $entityType;
