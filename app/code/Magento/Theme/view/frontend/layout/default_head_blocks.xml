@@ -13,9 +13,9 @@
     </head>
     <body>
         <referenceBlock name="head.critical">
-            <block name="critical_css_block" as="critical_css" template="Magento_Theme::html/header/criticalCss.phtml" ifconfig="dev/css/use_css_critical_path">
+            <block class="Magento\Theme\Block\Html\Header\CriticalCss" name="critical_css_block" as="critical_css" template="Magento_Theme::html/header/criticalCss.phtml" ifconfig="dev/css/use_css_critical_path">
                 <arguments>
-                    <argument name="criticalCssViewModel" xsi:type="object">Magento\Theme\Block\Html\Header\CriticalCss</argument>
+                    <argument name="file_path" xsi:type="string">css/critical.css</argument>
                 </arguments>
             </block>
             <!-- Todo: Block css_rel_preload_script will be removed in next release as polyfill isn't used anymore -->

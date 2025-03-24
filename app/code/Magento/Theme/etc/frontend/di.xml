@@ -30,9 +30,4 @@
         <plugin name="asyncCssLoad" type="Magento\Theme\Controller\Result\AsyncCssPlugin" sortOrder="-20" />
         <plugin name="deferJsToFooter" type="Magento\Theme\Controller\Result\JsFooterPlugin" sortOrder="-10" />
     </type>
-    <type name="Magento\Theme\Block\Html\Header\CriticalCss">
-        <arguments>
-            <argument name="filePath" xsi:type="string">css/critical.css</argument>
-        </arguments>
-    </type>
 </config>
