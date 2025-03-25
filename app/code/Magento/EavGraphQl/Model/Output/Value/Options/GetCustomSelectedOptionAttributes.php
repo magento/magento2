@@ -25,6 +25,9 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
      */
     private array $optionsCache = [];
 
+    /**
+     * @param AttributeRepository $attributeRepository
+     */
     public function __construct(AttributeRepository $attributeRepository)
     {
         $this->attributeRepository = $attributeRepository;
