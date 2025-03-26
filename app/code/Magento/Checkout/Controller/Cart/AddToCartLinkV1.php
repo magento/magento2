@@ -10,17 +10,13 @@ namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Checkout\Model\Cart;
-use Magento\SalesRule\Model\CouponFactory;
-use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 /**
  * Controller for Meta Checkout URL implementation
@@ -29,7 +25,6 @@ use Magento\Framework\Controller\ResultInterface;
  */
 class AddToCartLinkV1 implements HttpGetActionInterface
 {
-
     /**
      * Request instance
      *
@@ -40,25 +35,17 @@ class AddToCartLinkV1 implements HttpGetActionInterface
     /**
      * Constructor
      *
-     * @param Context                    $context               Context
-     * @param CheckoutSession            $checkoutSession       Checkout session
-     * @param ProductRepositoryInterface $productRepository     Product repository
-     * @param Cart                       $cart                  Cart
-     * @param PageFactory                $resultPageFactory     Result page factory
-     * @param RedirectFactory            $resultRedirectFactory Redirect factory
-     * @param CouponFactory              $couponFactory         Coupon factory
-     * @param Usage                      $couponUsage           Coupon usage
-     * @param ManagerInterface           $messageManager        Message manager
+     * @param Context                    $context           Context
+     * @param CheckoutSession            $checkoutSession   Checkout session
+     * @param ProductRepositoryInterface $productRepository Product repository
+     * @param PageFactory                $resultPageFactory Result page factory
+     * @param ManagerInterface           $messageManager    Message manager
      */
     public function __construct(
         Context $context,
         private readonly CheckoutSession $checkoutSession,
         private readonly ProductRepositoryInterface $productRepository,
-        private readonly Cart $cart,
         private readonly PageFactory $resultPageFactory,
-        private readonly RedirectFactory $resultRedirectFactory,
-        private readonly CouponFactory $couponFactory,
-        private readonly Usage $couponUsage,
         private readonly ManagerInterface $messageManager
     ) {
         $this->_request = $context->getRequest();
@@ -75,14 +62,17 @@ class AddToCartLinkV1 implements HttpGetActionInterface
         $productsParam = $this->_request->getParam('products', '');
         $couponCode = $this->_request->getParam('coupon', '');
 
-        // Clear the cart first (required by Meta spec)
-        $this->cart->truncate();
+        // Get quote from checkout session
+        $quote = $this->checkoutSession->getQuote();
+
+        // Clear the quote first (required by Meta spec)
+        $quote->removeAllItems();
 
         // Parse products parameter
         if (!empty($productsParam)) {
             $productItems = $this->_parseProductsParam($productsParam);
 
-            // Add products to cart
+            // Add products to quote
             foreach ($productItems as $item) {
                 try {
                     $productIdentifier = $item['identifier'];
@@ -100,7 +90,7 @@ class AddToCartLinkV1 implements HttpGetActionInterface
                             // Both SKU and ID lookup failed
                             $this->messageManager->addErrorMessage(
                                 __(
-                                    'Product with identifier "%1" was not found.', 
+                                    'Product with identifier "%1" was not found.',
                                     $productIdentifier
                                 )
                             );
@@ -108,8 +98,8 @@ class AddToCartLinkV1 implements HttpGetActionInterface
                         }
                     }
 
-                    // Add product to cart using the product object
-                    $this->cart->addProduct($product->getId(), ['qty' => $qty]);
+                    // Add product to quote using the product object
+                    $quote->addProduct($product, $qty);
                 } catch (\Exception $e) {
                     // Other exceptions, continue with next item
                     $this->messageManager->addErrorMessage($e->getMessage());
@@ -117,18 +107,23 @@ class AddToCartLinkV1 implements HttpGetActionInterface
                 }
             }
 
-            // Save cart
-            $this->cart->save();
+            // Save quote and collect totals
+            $quote->collectTotals();
+            $quote->save();
+            
+            // Update checkout session
+            $this->checkoutSession->setQuoteId($quote->getId());
         }
 
         // Apply coupon code if provided
         if (!empty($couponCode)) {
             try {
-                $this->cart->getQuote()->setCouponCode($couponCode);
-                $this->cart->save();
+                $quote->setCouponCode($couponCode);
+                $quote->collectTotals();
+                $quote->save();
 
                 // Check if coupon was actually applied
-                if ($this->cart->getQuote()->getCouponCode() !== $couponCode) {
+                if ($quote->getCouponCode() !== $couponCode) {
                     $this->messageManager->addErrorMessage(
                         __('The coupon code "%1" is not valid.', $couponCode)
                     );
@@ -147,8 +142,9 @@ class AddToCartLinkV1 implements HttpGetActionInterface
 
     /**
      * Parse the products parameter from the URL
-     * 
-     * Format: identifier:qty,identifier:qty (where identifier can be SKU or product ID)
+     *
+     * Format: identifier:qty,identifier:qty
+     * (where identifier can be SKU or product ID)
      *
      * @param string $productsParam Products parameter string
      *
