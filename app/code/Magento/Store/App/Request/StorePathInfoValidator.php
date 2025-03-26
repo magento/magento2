@@ -13,6 +13,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Request\PathInfo;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\App\Area;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreIsInactiveException;
@@ -87,7 +88,12 @@ class StorePathInfoValidator implements ResetAfterRequestInterface
         }
         $storeCode = $this->getStoreCode($pathInfo);
 
-        if (empty($storeCode) || $storeCode === Store::ADMIN_CODE || !$this->storeCodeValidator->isValid($storeCode)) {
+        if (
+            empty($storeCode)
+            || $storeCode === Area::AREA_GRAPHQL
+            || $storeCode === Store::ADMIN_CODE
+            || !$this->storeCodeValidator->isValid($storeCode)
+        ) {
             return null;
         }
 
