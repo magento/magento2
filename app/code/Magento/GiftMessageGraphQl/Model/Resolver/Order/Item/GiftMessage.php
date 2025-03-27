@@ -10,13 +10,11 @@ namespace Magento\GiftMessageGraphQl\Model\Resolver\Order\Item;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GiftMessage\Api\OrderItemRepositoryInterface;
-use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 use Magento\GiftMessageGraphQl\Model\Config\Messages;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class provides ability to get GiftMessage for order item
@@ -28,25 +26,17 @@ class GiftMessage implements ResolverInterface
      *
      * @param OrderItemRepositoryInterface $orderItemRepository
      * @param Messages $messagesConfig
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly OrderItemRepositoryInterface $orderItemRepository,
-        private readonly Messages $messagesConfig
+        private readonly Messages $messagesConfig,
+        private readonly LoggerInterface $logger
     ) {
     }
 
     /**
-     * Return information about Gift message for order item
-     *
-     * @param Field $field
-     * @param ContextInterface $context
-     * @param ResolveInfo $info
-     * @param array|null $value
-     * @param array|null $args
-     *
-     * @return array|Value|mixed
-     * @throws GraphQlInputException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function resolve(
         Field $field,
@@ -61,28 +51,27 @@ class GiftMessage implements ResolverInterface
 
         $orderItem = $value['model'];
 
-        if (!$this->messagesConfig->isMessagesAllowed('items', $orderItem)) {
-            return null;
-        }
-
-        if (!$this->messagesConfig->isMessagesAllowed('item', $orderItem)) {
+        if (!$this->messagesConfig->isMessagesAllowed('items', $orderItem) ||
+            !$this->messagesConfig->isMessagesAllowed('item', $orderItem)) {
             return null;
         }
 
         try {
             $giftItemMessage = $this->orderItemRepository->get($orderItem->getOrderId(), $orderItem->getItemId());
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Can\'t load message for order item'));
-        }
+            $this->logger->error('Can\'t load message for order item', [
+                'order_id' => $orderItem->getOrderId(),
+                'item_id' => $orderItem->getItemId(),
+                'message' => $e->getMessage(),
+            ]);
 
-        if ($giftItemMessage === null) {
             return null;
         }
 
-        return [
+        return $giftItemMessage ? [
             'to' => $giftItemMessage->getRecipient() ?? '',
-            'from' =>  $giftItemMessage->getSender() ?? '',
-            'message'=>  $giftItemMessage->getMessage() ?? ''
-        ];
+            'from' => $giftItemMessage->getSender() ?? '',
+            'message' => $giftItemMessage->getMessage() ?? '',
+        ] : null;
     }
 }
