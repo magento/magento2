@@ -320,9 +320,6 @@ class ImportTest extends AbstractImportTestCase
             ->method('getEntityTypeCode')
             ->willReturn($entityTypeCode);
         $behaviour = 'behaviour';
-        $this->_importData->expects($this->once())
-            ->method('getBehavior')
-            ->willReturn($behaviour);
         $this->import->expects($this->any())
             ->method('getDataSourceModel')
             ->willReturn($this->_importData);
@@ -389,9 +386,6 @@ class ImportTest extends AbstractImportTestCase
             ->method('getEntityTypeCode')
             ->willReturn($entityTypeCode);
         $behaviour = 'behaviour';
-        $this->_importData->expects($this->any())
-            ->method('getBehavior')
-            ->willReturn($behaviour);
         $this->import->expects($this->any())
             ->method('getDataSourceModel')
             ->willReturn($this->_importData);
