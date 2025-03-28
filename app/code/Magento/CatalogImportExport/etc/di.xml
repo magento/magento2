@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -32,6 +32,7 @@
                 <item name="quantity" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Quantity</item>
                 <item name="layout_update" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdate</item>
                 <item name="layout_update_permissions" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdatePermissions</item>
+                <item name="name" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Name</item>
             </argument>
         </arguments>
     </type>
