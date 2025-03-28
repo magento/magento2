@@ -75,11 +75,6 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
             // Sleep for time greater than wait_timeout and try to perform query
             sleep($minWaitTimeout + 1);
-
-            // Reconnect to the database to ensure the connection is valid
-            $this->getDbAdapter()->closeConnection();
-            $this->getDbAdapter()->getConnection(); // Reconnect
-
             $result = $this->executeQuery('SELECT 1');
             $this->assertInstanceOf(\Magento\Framework\DB\Statement\Pdo\Mysql::class, $result);
         } finally {
