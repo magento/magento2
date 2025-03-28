@@ -37,4 +37,7 @@
         <plugin name="validate_design_config"
                 type="Magento\Theme\Plugin\DesignProcessorFacade"/>
     </type>
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="designLoader" type="Magento\Theme\Plugin\LoadDesignPlugin"/>
+    </type>
 </config>

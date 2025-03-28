@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\SearchAdapter;
 
@@ -21,7 +21,7 @@ use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
  *
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
  * achieve this, use @ magentoConfigFixture to pass unique value for index_prefix for every test
- * method. E.g. '@ magentoConfigFixture current_store catalog/search/elasticsearch7_index_prefix adaptertest'
+ * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch8_index_prefix adaptertest'
  *
  * In ElasticSearch, a reindex is required if the test includes a new data fixture with new items to search, see
  * testAdvancedSearchDateField().

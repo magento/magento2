@@ -8,34 +8,33 @@ declare(strict_types=1);
 namespace Magento\Framework\Oauth\Test\Unit\Helper;
 
 use Magento\Framework\Oauth\Helper\Utility as OauthUtility;
-use Laminas\OAuth\Http\Utility as LaminasUtility;
-use Magento\Framework\Oauth\Helper\Signature\Hmac;
-use Magento\Framework\Oauth\Helper\Signature\HmacFactory;
+use Magento\Framework\Oauth\Helper\Signature\HmacInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UtilityTest extends TestCase
 {
     /**
-     * @var LaminasUtility|MockObject
+     * @var HmacInterface|MockObject
      */
-    private LaminasUtility $httpUtility;
+    private $hmacInterface;
 
     /**
-     * @var Hmac|MockObject
+     * @var OauthUtility
      */
-    private Hmac $hmac;
+    private $oauthUtility;
 
     /**
-     * @var HmacFactory|MockObject
+     * @throws Exception
      */
-    private HmacFactory $hmacFactory;
-
-    protected function setUp(): void
+    public function setup(): void
     {
-        $this->httpUtility = $this->createMock(LaminasUtility::class);
-        $this->hmac = $this->createMock(Hmac::class);
-        $this->hmacFactory = $this->createMock(HmacFactory::class);
+        $this->hmacInterface = $this->createMock(HmacInterface::class);
+
+        $this->oauthUtility = new OauthUtility(
+            $this->hmacInterface
+        );
     }
 
     /**
@@ -49,21 +48,11 @@ class UtilityTest extends TestCase
         $tokenSecret = 'tokenSecret';
         $method = 'POST';
         $url = 'http://example.com';
+        $expectedSignature = 'signature';
 
-        $expectedSignature = 'expectedSignature';
+        $this->hmacInterface->method('sign')->willReturn($expectedSignature);
 
-        $this->hmac->expects($this->once())
-            ->method('sign')
-            ->with($params, $method, $url)
-            ->willReturn($expectedSignature);
-        $this->hmacFactory->expects($this->once())
-            ->method('create')
-            ->with(['consumerSecret' => $consumerSecret, 'tokenSecret' => $tokenSecret, 'hashAlgo' => 'sha256'])
-            ->willReturn($this->hmac);
-
-        $utility = new OauthUtility($this->httpUtility, $this->hmacFactory);
-
-        $signature = $utility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
+        $signature = $this->oauthUtility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
 
         $this->assertEquals($expectedSignature, $signature);
     }
@@ -79,17 +68,11 @@ class UtilityTest extends TestCase
         $tokenSecret = 'tokenSecret';
         $method = 'POST';
         $url = 'http://example.com';
+        $expectedSignature = 'signature';
 
-        $expectedSignature = 'expectedSignature';
+        $this->hmacInterface->method('sign')->willReturn($expectedSignature);
 
-        $this->httpUtility->expects($this->once())
-            ->method('sign')
-            ->with($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url)
-            ->willReturn($expectedSignature);
-
-        $utility = new OauthUtility($this->httpUtility, $this->hmacFactory);
-
-        $signature = $utility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
+        $signature = $this->oauthUtility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
 
         $this->assertEquals($expectedSignature, $signature);
     }
