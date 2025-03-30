@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Test\Unit\Setup;
 
@@ -33,19 +34,10 @@ class ConfigOptionsListTest extends TestCase
      */
     private $configOptionsList;
 
-    /**
-     * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
-     */
     protected function setUp(): void
     {
-        $this->driverFactoryPoolMock = $this->getMockBuilder(DriverFactoryPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->driverFactoryPoolMock = $this->createMock(DriverFactoryPool::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->configOptionsList = new ConfigOptionsList(
             $this->driverFactoryPoolMock,
@@ -297,6 +289,39 @@ class ConfigOptionsListTest extends TestCase
                     ]
                 ]
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider getOptionsProvider
+     * @param string $name
+     * @param string $configPath
+     * @return void
+     */
+    public function testGetOptions(string $name, string $configPath): void
+    {
+        $options = $this->configOptionsList->getOptions();
+        $optionsMap = array_merge(
+            ...array_map(fn ($o) => [$o->getName() => $o->getConfigPath()], $options)
+        );
+        $this->assertArrayHasKey($name, $optionsMap);
+        $this->assertEquals($configPath, $optionsMap[$name]);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getOptionsProvider(): array
+    {
+        return [
+            ['remote-storage-driver', 'remote_storage/driver'],
+            ['remote-storage-prefix', 'remote_storage/prefix'],
+            ['remote-storage-endpoint', 'remote_storage/config/endpoint'],
+            ['remote-storage-bucket', 'remote_storage/config/bucket'],
+            ['remote-storage-region', 'remote_storage/config/region'],
+            ['remote-storage-key', 'remote_storage/config/credentials/key'],
+            ['remote-storage-secret', 'remote_storage/config/credentials/secret'],
+            ['remote-storage-path-style', 'remote_storage/config/path_style'],
         ];
     }
 }
