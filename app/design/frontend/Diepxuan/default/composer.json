@@ -9,9 +9,6 @@
     "config": {
         "sort-packages": true
     },
-    "require": {
-        "magento/theme-frontend-luma": "*"
-    },
     "autoload": {
         "files": [
             "registration.php"

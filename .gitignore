@@ -76,3 +76,9 @@ atlassian*
 /generated/*
 !/generated/.htaccess
 .DS_Store
+
+auth.json
+magento.code-workspace
+bin/magerun2
+.m2config
+.phpactor.json
