@@ -1,0 +1,21 @@
+{
+    "name": "diepxuan/module-synccrm",
+    "description": "DiepXuan CRM to Magento 2",
+    "type": "magento2-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tran Ngoc Duc",
+            "email": "ductn@diepxuan.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Diepxuan\\SyncCRM\\": ""
+        }
+    }
+}
