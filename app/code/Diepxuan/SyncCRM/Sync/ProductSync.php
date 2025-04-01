@@ -8,11 +8,12 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 19:30:22
+ * @lastupdate 2025-04-01 19:57:06
  */
 
 namespace Diepxuan\SyncCRM\Sync;
 
+use Diepxuan\SyncCRM\Helper\Config;
 use Diepxuan\SyncCRM\Helper\Context;
 use Magento\Catalog\Model\ProductFactory;
 

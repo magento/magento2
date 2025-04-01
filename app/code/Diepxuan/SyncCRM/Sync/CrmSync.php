@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 19:40:22
+ * @lastupdate 2025-04-01 20:52:01
  */
 
 namespace Diepxuan\SyncCRM\Sync;
@@ -50,15 +50,18 @@ class CrmSync
         $apiToken = $this->getConfig()->getApiToken();
 
         try {
-            $this->getCurl()->get($apiUrl, [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $apiToken,
-                ],
+            $this->getCurl()->setOption(CURLOPT_FOLLOWLOCATION, true);
+            $this->getCurl()->setHeaders([
+                'Authorization' => 'Bearer ' . $apiToken,
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
             ]);
+            $this->getCurl()->get($apiUrl);
 
             if (200 !== $this->getCurl()->getStatus()) {
                 return ['error' => 'Failed to fetch products. Status code: ' . $this->getCurl()->getStatus()];
             }
+
             $response = $this->getCurl()->getBody();
             if (empty($response)) {
                 return ['error' => 'No data received from API.'];

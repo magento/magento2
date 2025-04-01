@@ -10,5 +10,8 @@
         <job name="sync_crm_products" instance="Diepxuan\SyncCRM\Cron\ProductSyncCron" method="execute">
             <schedule>*/30 * * * *</schedule>
         </job>
+        <job name="sync_crm_categories" instance="Diepxuan\SyncCRM\Cron\CategorySyncCron" method="execute">
+            <schedule>*/30 * * * *</schedule>
+        </job>
     </group>
 </config>
