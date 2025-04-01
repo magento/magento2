@@ -8,11 +8,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Diepxuan\SyncCRM\Sync\ProductSync">
-        <arguments>
-            <argument name="productFactory" xsi:type="object">Magento\Catalog\Model\ProductFactory</argument>
-            <argument name="resource" xsi:type="object">Magento\Framework\App\ResourceConnection</argument>
-            <argument name="logger" xsi:type="object">Psr\Log\LoggerInterface</argument>
-        </arguments>
-    </type>
 </config>

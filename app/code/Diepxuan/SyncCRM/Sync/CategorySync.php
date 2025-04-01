@@ -8,36 +8,37 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 19:30:22
+ * @lastupdate 2025-04-01 19:32:34
  */
 
 namespace Diepxuan\SyncCRM\Sync;
 
+use Diepxuan\SyncCRM\Helper\Config;
 use Diepxuan\SyncCRM\Helper\Context;
-use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\CategoryFactory;
 
-class ProductSync extends CrmSync
+class CategorySync extends CrmSync
 {
     /**
-     * @var ProductFactory
+     * @var CategoryFactory
      */
-    protected $productFactory;
+    protected $categoryFactory;
 
     public function __construct(
         Context $context,
         Config $config,
-        ProductFactory $productFactory
+        CategoryFactory $categoryFactory
     ) {
         parent::__construct($context, $config);
-        $this->productFactory = $productFactory;
+        $this->categoryFactory = $categoryFactory;
     }
 
     public function sync(): void
     {
         try {
-            // Lấy danh sách sản phẩm từ CRM
-            $products = $this->fetch('products');
-            dd($products);
+            // Lấy danh sách danh mục từ CRM
+            $categories = $this->fetch('categories');
+            dd($categories);
 
             foreach ($products as $productData) {
                 echo $productData['sku'];

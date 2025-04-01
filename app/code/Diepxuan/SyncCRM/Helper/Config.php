@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 17:19:47
+ * @lastupdate 2025-04-01 19:39:09
  */
 
 namespace Diepxuan\SyncCRM\Helper;
@@ -36,9 +36,13 @@ class Config extends AbstractHelper
         $this->encryptor   = $context->getEncryptor();
     }
 
-    public function getApiUrl()
+    public function getApiUrl($path = null)
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_API_URL, ScopeInterface::SCOPE_STORE);
+        $path   = trim($path, '/');
+        $return = trim($this->scopeConfig->getValue(self::XML_PATH_API_URL, ScopeInterface::SCOPE_STORE), '/');
+        $return .= "/{$path}";
+
+        return trim($return, '/');
     }
 
     public function getApiToken()
@@ -46,5 +50,10 @@ class Config extends AbstractHelper
         $encryptedToken = $this->scopeConfig->getValue(self::XML_PATH_API_TOKEN, ScopeInterface::SCOPE_STORE);
 
         return $this->encryptor->decrypt($encryptedToken);
+    }
+
+    public function getScopeConfig(): ScopeConfigInterface
+    {
+        return $this->scopeConfig;
     }
 }

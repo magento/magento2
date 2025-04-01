@@ -8,13 +8,15 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 18:54:53
+ * @lastupdate 2025-04-01 19:40:22
  */
 
 namespace Diepxuan\SyncCRM\Sync;
 
+use Diepxuan\SyncCRM\Helper\Config;
 use Diepxuan\SyncCRM\Helper\Context;
 use Magento\Framework\HTTP\Client\Curl;
+use Psr\Log\LoggerInterface;
 
 class CrmSync
 {
@@ -22,6 +24,11 @@ class CrmSync
      * @var Curl
      */
     protected $curl;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * @var Config
@@ -33,25 +40,26 @@ class CrmSync
         Config $config
     ) {
         $this->curl   = $context->getCurl();
+        $this->logger = $context->getLogger();
         $this->config = $config;
     }
 
     public function fetch($path = '')
     {
-        $apiUrl   = $this->config->getApiUrl() . "/{$path}";
-        $apiToken = $this->config->getApiToken();
+        $apiUrl   = $this->getConfig()->getApiUrl($path);
+        $apiToken = $this->getConfig()->getApiToken();
 
         try {
-            $this->curl->get($apiUrl, [
+            $this->getCurl()->get($apiUrl, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $apiToken,
                 ],
             ]);
 
-            if (200 !== $this->curl->getStatus()) {
-                return ['error' => 'Failed to fetch products. Status code: ' . $this->curl->getStatus()];
+            if (200 !== $this->getCurl()->getStatus()) {
+                return ['error' => 'Failed to fetch products. Status code: ' . $this->getCurl()->getStatus()];
             }
-            $response = $this->curl->getBody();
+            $response = $this->getCurl()->getBody();
             if (empty($response)) {
                 return ['error' => 'No data received from API.'];
             }
@@ -66,5 +74,29 @@ class CrmSync
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
         }
+    }
+
+    /**
+     * @return Curl
+     */
+    public function getCurl()
+    {
+        return $this->curl;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @return Config
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }

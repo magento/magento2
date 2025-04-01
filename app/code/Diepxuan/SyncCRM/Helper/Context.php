@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 18:50:10
+ * @lastupdate 2025-04-01 19:27:43
  */
 
 namespace Diepxuan\SyncCRM\Helper;
