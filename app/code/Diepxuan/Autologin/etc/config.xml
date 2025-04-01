@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
-        <admin>
+        <diepxuan_autologin>
             <autologin>
                 <enable>1</enable>
                 <username>admin</username>
@@ -15,6 +15,6 @@
             <security>
                 <session_lifetime>5184000</session_lifetime>
             </security>
-        </admin>
+        </diepxuan_autologin>
     </default>
 </config>
