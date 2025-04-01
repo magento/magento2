@@ -8,14 +8,20 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="diepxuan_synccrm" translate="label" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
-            <label>SyncCRM</label>
+            <label>CRM synchronization</label>
             <tab>diepxuan</tab>
             <resource>Diepxuan_SyncCRM::config</resource>
 
             <group id="api_settings" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>API Settings</label>
 
-                <field id="api_token" translate="label" type="obscure" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="api_url" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API URL</label>
+                    <validate>required-entry</validate>
+                    <canRestore>1</canRestore>
+                    <comment>Nhập URL API của CRM (VD: https://diepxuan.com/api)</comment>
+                </field>
+                <field id="api_token" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Access Token</label>
                     <validate>required-entry</validate>
                     <canRestore>1</canRestore>

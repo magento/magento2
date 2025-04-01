@@ -10,6 +10,7 @@
         <diepxuan_synccrm>
             <api_settings>
                 <api_token></api_token>
+                <api_url>https://portal.diepxuan.io.vn/api/v1/</api_url>
             </api_settings>
         </diepxuan_synccrm>
     </default>

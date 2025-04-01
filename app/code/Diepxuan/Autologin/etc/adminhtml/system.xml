@@ -10,6 +10,7 @@
         <section id="diepxuan_autologin" translate="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
             <label>Auto Login</label>
             <tab>diepxuan</tab>
+            <resource>Diepxuan_Autologin::config</resource>
 
             <group id="autologin" translate="label" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Auto Login</label>
