@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-03-31 21:39:54
+ * @lastupdate 2025-03-31 21:48:09
  */
 
 namespace Diepxuan\SyncCRM\Console\Command;
@@ -45,7 +45,7 @@ class ProductSyncCommand extends Command
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @return void;
+     * @return null|int 0 if everything went fine, or an error code
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -54,7 +54,7 @@ class ProductSyncCommand extends Command
 
         $this->sync->sync();
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**
