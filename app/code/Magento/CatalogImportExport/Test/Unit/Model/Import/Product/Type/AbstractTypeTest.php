@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
@@ -331,7 +331,8 @@ class AbstractTypeTest extends TestCase
     {
         $rowData = [
             '_attribute_set' => 'attribute_set_name',
-            'sku' => 'sku'
+            'sku' => 'sku',
+            'attr_code' => 'test'
         ];
         $rowNum = 1;
         $this->entityModel->method('getRowScope')
