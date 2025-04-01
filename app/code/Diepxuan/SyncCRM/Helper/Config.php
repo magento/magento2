@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 10:23:09
+ * @lastupdate 2025-04-01 17:19:47
  */
 
 namespace Diepxuan\SyncCRM\Helper;
@@ -20,17 +20,25 @@ use Magento\Store\Model\ScopeInterface;
 
 class Config extends AbstractHelper
 {
-    const XML_PATH_API_TOKEN = 'synccrm/api_settings/api_token';
+    const XML_PATH_API_TOKEN = 'diepxuan_synccrm/api_settings/api_token';
+    const XML_PATH_API_URL   = 'diepxuan_synccrm/api_settings/api_url';
 
+    /** @var ScopeConfigInterface */
     protected $scopeConfig;
+
+    /** @var EncryptorInterface */
     protected $encryptor;
 
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        EncryptorInterface $encryptor
+        Context $context
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->encryptor   = $encryptor;
+        $this->scopeConfig = $context->getCoreConfig();
+        $this->encryptor   = $context->getEncryptor();
+    }
+
+    public function getApiUrl()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_API_URL, ScopeInterface::SCOPE_STORE);
     }
 
     public function getApiToken()

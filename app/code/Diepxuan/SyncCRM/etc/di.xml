@@ -4,6 +4,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="attributes:restoredefault" xsi:type="object">Diepxuan\SyncCRM\Console\Command\ProductSyncCommand</item>
+                <item name="attributes:restoredefault" xsi:type="object">Diepxuan\SyncCRM\Console\Command\CategorySyncCommand</item>
             </argument>
         </arguments>
     </type>
