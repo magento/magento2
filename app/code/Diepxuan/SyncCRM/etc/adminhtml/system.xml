@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework/Module/etc/system_file.xsd">
+<!--
+/**
+ * Copyright © 2017 Dxvn, Inc. All rights reserved.
+ * @author  Tran Ngoc Duc <caothu91@gmail.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="diepxuan" translate="label" sortOrder="100">
-            <label>Diepxuan SyncCRM</label>
-        </tab>
-        <section id="synccrm" translate="label" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
-            <label>SyncCRM Settings</label>
+        <section id="diepxuan_synccrm" translate="label" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>SyncCRM</label>
             <tab>diepxuan</tab>
             <resource>Diepxuan_SyncCRM::config</resource>
 

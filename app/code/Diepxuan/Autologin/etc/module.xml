@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_Security" />
             <module name="Magento_Backend" />
+            <module name="Diepxuan_Magento" />
         </sequence>
     </module>
 </config>

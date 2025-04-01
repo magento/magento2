@@ -9,7 +9,9 @@
             "email": "ductn@diepxuan.com"
         }
     ],
-    "require": {},
+    "require": {
+      "diepxuan/module-magento": "*"
+    },
     "autoload": {
         "files": [
             "registration.php"

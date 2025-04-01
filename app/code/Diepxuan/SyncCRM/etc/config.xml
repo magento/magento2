@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2023 Dxvn, Inc. All rights reserved.
+ * @author  Tran Ngoc Duc <caothu91@gmail.com>
+ */
+-->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework/Config/etc/config.xsd">
     <default>
-        <synccrm>
+        <diepxuan_synccrm>
             <api_settings>
                 <api_token></api_token>
             </api_settings>
-        </synccrm>
+        </diepxuan_synccrm>
     </default>
 </config>
