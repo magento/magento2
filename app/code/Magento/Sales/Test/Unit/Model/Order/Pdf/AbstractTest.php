@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order\Pdf\Config;
 use Magento\Sales\Model\Order\Pdf\ItemsFactory;
 use Magento\Sales\Model\Order\Pdf\Total\DefaultTotal;
 use Magento\Sales\Model\Order\Pdf\Total\Factory;
+use Magento\Tax\Helper\Data as TaxHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,6 +50,7 @@ class AbstractTest extends TestCase
         $filesystem = $this->createMock(Filesystem::class);
         $pdfItemsFactory = $this->createMock(ItemsFactory::class);
         $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $taxHelper = $this->createMock(TaxHelper::class);
 
         // Setup config file totals
         $configTotals = ['item1' => [''], 'item2' => ['model' => 'custom_class']];
@@ -98,7 +100,12 @@ class AbstractTest extends TestCase
                 $pdfItemsFactory,
                 $localeMock,
                 $translate,
-                $addressRenderer
+                $addressRenderer,
+                [],
+                null,
+                null,
+                null,
+                $taxHelper
             ],
             '',
             true,
@@ -134,6 +141,7 @@ class AbstractTest extends TestCase
         $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $translate = $this->getMockForAbstractClass(StateInterface::class);
         $addressRenderer = $this->createMock(Renderer::class);
+        $taxHelper = $this->createMock(TaxHelper::class);
 
         $abstractPdfMock = $this->getMockForAbstractClass(
             AbstractPdf::class,
@@ -147,7 +155,12 @@ class AbstractTest extends TestCase
                 $pdfItemsFactory,
                 $localeMock,
                 $translate,
-                $addressRenderer
+                $addressRenderer,
+                [],
+                null,
+                null,
+                null,
+                $taxHelper
             ],
             '',
             true,

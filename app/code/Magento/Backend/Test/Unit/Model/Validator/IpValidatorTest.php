@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -44,7 +45,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateIpsNoneAllowedDataProvider(): array
+    public static function validateIpsNoneAllowedDataProvider(): array
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],
@@ -72,7 +73,7 @@ class IpValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateIpsNoneNotAllowedDataProvider()
+    public static function validateIpsNoneNotAllowedDataProvider()
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],

@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -409,44 +410,44 @@ class HelperTest extends TestCase
     {
         return [
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
                 'tierPrice' => [1, 2, 3],
             ],
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 0],
-                'expected_website_ids' => ['1' => 1],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 0],
+                'expWebsiteIds' => ['1' => 1],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
             ],
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 0, '2' => 0],
-                'expected_website_ids' => [],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 0, '2' => 0],
+                'expWebsiteIds' => [],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
             ],
             [
-                'single_store' => true,
-                'website_ids' => [],
-                'expected_website_ids' => ['1' => 1],
+                'isSingleStore' => true,
+                'websiteIds' => [],
+                'expWebsiteIds' => ['1' => 1],
                 'links' => [],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
             ],
 
             // Related links
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -463,16 +464,16 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [
+                'expectedLinks' => [
                     ['type' => 'related', 'linked_product_sku' => 'Test'],
                 ],
             ],
 
             // Custom link
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'customlink' => [
                         0 => [
@@ -489,16 +490,16 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell', 'customlink'],
-                'expected_links' => [
+                'expectedLinks' => [
                     ['type' => 'customlink', 'linked_product_sku' => 'Testcustom'],
                 ],
             ],
 
             // Both links
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -528,7 +529,7 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell', 'customlink'],
-                'expected_links' => [
+                'expectedLinks' => [
                     ['type' => 'related', 'linked_product_sku' => 'Test'],
                     ['type' => 'customlink', 'linked_product_sku' => 'Testcustom'],
                 ],
@@ -536,9 +537,9 @@ class HelperTest extends TestCase
 
             // Undefined link type
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -568,16 +569,16 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [
+                'expectedLinks' => [
                     ['type' => 'related', 'linked_product_sku' => 'Test'],
                 ],
             ],
 
             // readonly links
             [
-                'single_store' => false,
-                'website_ids' => ['1' => 1, '2' => 2],
-                'expected_website_ids' => ['1' => 1, '2' => 2],
+                'isSingleStore' => false,
+                'websiteIds' => ['1' => 1, '2' => 2],
+                'expWebsiteIds' => ['1' => 1, '2' => 2],
                 'links' => [
                     'related' => [
                         0 => [
@@ -594,7 +595,7 @@ class HelperTest extends TestCase
                     ],
                 ],
                 'linkTypes' => ['related', 'upsell', 'crosssell'],
-                'expected_links' => [],
+                'expectedLinks' => [],
                 'tierPrice' => [],
                 true,
                 true,

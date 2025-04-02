@@ -105,7 +105,7 @@ class InfoTest extends TestCase
     /**
      * @return array
      */
-    public function getIsSecureModeDataProvider()
+    public static function getIsSecureModeDataProvider()
     {
         return [
             [false, true, null, null, false],
@@ -176,7 +176,7 @@ class InfoTest extends TestCase
     /**
      * @return array
      */
-    public function getValueAsArrayDataProvider()
+    public static function getValueAsArrayDataProvider()
     {
         return [
             [[], true, []],

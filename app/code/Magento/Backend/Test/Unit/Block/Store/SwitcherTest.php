@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -157,7 +158,7 @@ class SwitcherTest extends TestCase
      *
      * @return array
      */
-    public function getStoreNameDataProvider(): array
+    public static function getStoreNameDataProvider(): array
     {
         return [
             'test storeName with valid requested store' =>
@@ -200,7 +201,7 @@ class SwitcherTest extends TestCase
      *
      * @return array
      */
-    public function getWebsiteNameDataProvider(): array
+    public static function getWebsiteNameDataProvider(): array
     {
         return [
             'test websiteName with valid requested website' =>

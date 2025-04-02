@@ -21,5 +21,5 @@ interface ItemCreationValidatorInterface
      * @param OrderInterface|null $context
      * @return ValidatorResultInterface
      */
-    public function validate(CreditmemoItemCreationInterface $item, array $validators, OrderInterface $context = null);
+    public function validate(CreditmemoItemCreationInterface $item, array $validators, ?OrderInterface $context = null);
 }

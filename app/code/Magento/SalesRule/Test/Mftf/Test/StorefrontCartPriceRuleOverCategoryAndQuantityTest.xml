@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCartPriceRuleOverCategoryAndQuantityTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Customer should see cart price rule discount for greater than quantity and parent category for the product"/>
+            <description value="Customer should see cart price rule discount for greater than quantity and parent category for the product"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-13476"/>
+            <useCaseId value="ACP2E-3456"/>
+            <group value="SalesRule"/>
+        </annotations>
+
+        <before>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
+
+            <!-- Admin Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!--Create cart price rule-->
+            <actionGroup ref="AdminCreateCartPriceRuleWithConditionsAndDiscountActionGroup" stepKey="createRule">
+                <argument name="ruleName" value="TestSalesRule"/>
+                <argument name="condition1" value="Products subselection"/>
+                <argument name="condition2" value="Category"/>
+                <argument name="ruleToChange1" value="is"/>
+                <argument name="rule1" value="equals or greater than"/>
+                <argument name="ruleToChange2" value="..."/>
+                <argument name="rule2" value="3"/>
+                <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+            </actionGroup>
+
+            <!-- Create subcategories -->
+            <createData entity="SubCategoryWithParent" stepKey="subcategory2">
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="subcategory3">
+                <requiredEntity createDataKey="subcategory2"/>
+            </createData>
+
+            <!-- Create product and assign to subcategory -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="subcategory3"/>
+            </createData>
+        </before>
+
+        <after>
+            <!-- Delete created cart price rule -->
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{TestSalesRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+
+            <!-- Delete created category and product -->
+            <deleteData createDataKey="defaultCategory" stepKey="deleteDefaultCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Admin Logout -->
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Go to Storefront and add product to cart and checkout from cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage" />
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="3" stepKey="setQuantity"/>
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="AddProductToCard">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
+
+        <!--Check totals-->
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="grabSubtotal"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.discountPrice}}" stepKey="grabDiscount"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" stepKey="grabShippingTotal"/>
+        <grabTextFrom selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="grabTotal"/>
+
+        <assertEquals stepKey="assertSubtotal">
+            <expectedResult type="string">$369.00</expectedResult>
+            <actualResult type="variable">$grabSubtotal</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="assertDiscount">
+            <expectedResult type="string">-$184.50</expectedResult>
+            <actualResult type="variable">$grabDiscount</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="assertShippingTotal">
+            <expectedResult type="string">$15.00</expectedResult>
+            <actualResult type="variable">$grabShippingTotal</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="assertTotal">
+            <expectedResult type="string">$199.50</expectedResult>
+            <actualResult type="variable">$grabTotal</actualResult>
+        </assertEquals>
+    </test>
+</tests>

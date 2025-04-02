@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FilterProductGridByProductNameActionGroup">
+        <annotations>
+            <description>Filters the Admin Products grid by the provided Product (Name).</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForElementClickable selector="{{AdminProductGridFilterSection.filters}}" stepKey="openForFilterField"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <waitForElementVisible selector="{{AdminProductGridFilterSection.nameFilter}}" stepKey="waitForFilterFieldToBecomeActive"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{productName}}" stepKey="fillProductName"/>
+        <waitForElementClickable selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="waitToClickApplyFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
+    </actionGroup>
+</actionGroups>
+

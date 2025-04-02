@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -98,7 +99,7 @@ class ColumnsResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getColumnsDataProvider()
+    public static function getColumnsDataProvider()
     {
         return [
             'COUNT( DISTINCT `cpe`.`name`) AS name' => [

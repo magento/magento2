@@ -60,7 +60,7 @@ class ResourceLoader implements \Magento\Framework\Acl\LoaderInterface
      * @throws \InvalidArgumentException
      * @throws AclInvalidArgumentException
      */
-    protected function _addResourceTree(Acl $acl, array $resources, AclResource $parent = null)
+    protected function _addResourceTree(Acl $acl, array $resources, ?AclResource $parent = null)
     {
         foreach ($resources as $resourceConfig) {
             if (!isset($resourceConfig['id'])) {

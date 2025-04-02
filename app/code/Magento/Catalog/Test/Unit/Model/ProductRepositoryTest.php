@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -957,14 +958,15 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function cacheKeyDataProvider(): array
+    public static function cacheKeyDataProvider(): array
     {
-        $anyObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $anyObject->expects($this->any())
-            ->method('getId')
-            ->willReturn(123);
+        // There is no use of below object
+//        $anyObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getId'])
+//            ->disableOriginalConstructor()
+//            ->getMock();
+//        $anyObject->expects($this->any())
+//            ->method('getId')
+//            ->willReturn(123);
 
         return [
             [
@@ -1009,6 +1011,8 @@ class ProductRepositoryTest extends TestCase
      */
     public function testSaveExistingWithOptions(array $newOptions): void
     {
+        $newOptions[1][10] = $newOptions[1][10]($this);
+        $newOptions[1][11] = $newOptions[1][11]($this);
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->any())->method('getIdBySku')->willReturn(100);
         $this->productFactory->expects($this->any())
@@ -1032,11 +1036,67 @@ class ProductRepositoryTest extends TestCase
         $this->assertEquals($this->initializedProduct, $this->model->save($this->product));
     }
 
+    protected function getMockForOptionOneClass()
+    {
+        $existingOption = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingOption->setData(
+            [
+                'option_id' => 10,
+                'type' => 'drop_down'
+            ]
+        );
+        /** @var Value $existingOptionValue1 */
+        $existingOptionValue1 = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingOptionValue1->setData(
+            [
+                'option_type_id' => '8',
+                'title' => 'DropdownOptions_1',
+                'price' => 5
+            ]
+        );
+        $existingOptionValue2 = $this->getMockBuilder(Value::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingOptionValue2->setData(
+            [
+                'option_type_id' => '9',
+                'title' => 'DropdownOptions_2',
+                'price' => 6
+            ]
+        );
+        $existingOption->setValues(
+            [
+                '8' => $existingOptionValue1,
+                '9' => $existingOptionValue2
+            ]
+        );
+
+        return $existingOption;
+    }
+
+    protected function getMockForOptionTwoClass()
+    {
+        $existingOption = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $existingOption->setData(
+            [
+                'option_id' => 11,
+                'type' => 'drop_down'
+            ]
+        );
+        return $existingOption;
+    }
+
     /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function saveExistingWithOptionsDataProvider(): array
+    public static function saveExistingWithOptionsDataProvider(): array
     {
         $data = [];
 
@@ -1069,94 +1129,54 @@ class ProductRepositoryTest extends TestCase
             ]
         ];
 
-        /** @var Option|MockObject $existingOption1 */
-        $existingOption1 = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $existingOption1->setData(
-            [
-                'option_id' => 10,
-                'type' => 'drop_down'
-            ]
-        );
-        /** @var Value $existingOptionValue1 */
-        $existingOptionValue1 = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $existingOptionValue1->setData(
-            [
-                'option_type_id' => '8',
-                'title' => 'DropdownOptions_1',
-                'price' => 5
-            ]
-        );
-        $existingOptionValue2 = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $existingOptionValue2->setData(
-            [
-                'option_type_id' => '9',
-                'title' => 'DropdownOptions_2',
-                'price' => 6
-            ]
-        );
-        $existingOption1->setValues(
-            [
-                '8' => $existingOptionValue1,
-                '9' => $existingOptionValue2
-            ]
-        );
-        $existingOption2 = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $existingOption2->setData(
-            [
-                'option_id' => 11,
-                'type' => 'drop_down'
-            ]
-        );
+        $existingOption1 = static fn (self $testCase) => $testCase->getMockForOptionOneClass();
+
+        $existingOption2 = static fn (self $testCase) => $testCase->getMockForOptionTwoClass();
+
         $data['scenario_1'] = [
-            'new_options' => $newOptionsData,
-            'existing_options' => [
-                "10" => $existingOption1,
-                "11" => $existingOption2,
-            ],
-            'expected_data' => [
+            [
+                $newOptionsData,
                 [
-                    'option_id' => 10,
-                    'type' => 'drop_down',
-                    'values' => [
-                        [
-                            'title' => 'DropdownOptions_1',
-                            'option_type_id' => 8,
-                            'price' => 3
-                        ],
-                        [
-                            'title' => 'DropdownOptions_3',
-                            "price" => 4
-                        ],
-                        [
-                            'option_type_id' => 9,
-                            'title' => 'DropdownOptions_2',
-                            'price' => 6,
-                            'is_delete' => 1
-                        ]
-                    ]
+                    "10" => $existingOption1,
+                    "11" => $existingOption2,
                 ],
                 [
-                    'type' => 'checkbox',
-                    'values' => [
-                        [
-                            'title' => 'CheckBoxValue2',
-                            'price' => 5
+                    [
+                        'option_id' => 10,
+                        'type' => 'drop_down',
+                        'values' => [
+                            [
+                                'title' => 'DropdownOptions_1',
+                                'option_type_id' => 8,
+                                'price' => 3
+                            ],
+                            [
+                                'title' => 'DropdownOptions_3',
+                                "price" => 4
+                            ],
+                            [
+                                'option_type_id' => 9,
+                                'title' => 'DropdownOptions_2',
+                                'price' => 6,
+                                'is_delete' => 1
+                            ]
                         ]
+                    ],
+                    [
+                        'type' => 'checkbox',
+                        'values' => [
+                            [
+                                'title' => 'CheckBoxValue2',
+                                'price' => 5
+                            ]
+                        ]
+                    ],
+                    [
+                        'option_id' => 11,
+                        'type' => 'drop_down',
+                        'values' => [],
+                        'is_delete' => 1
                     ]
-                ],
-                [
-                    'option_id' => 11,
-                    'type' => 'drop_down',
-                    'values' => [],
-                    'is_delete' => 1
                 ]
             ]
         ];
@@ -1567,5 +1587,19 @@ class ProductRepositoryTest extends TestCase
         $this->product->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
         $this->model->save($this->product);
         $this->assertEquals($expectedResult, $this->initializedProduct->getMediaGallery('images'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveCouldNotSaveException(): void
+    {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $productData = [
+            'name' => 'Simple Product',
+            'price' => 100
+        ];
+        $this->product->setData($productData);
+        $this->model->save($this->product);
     }
 }

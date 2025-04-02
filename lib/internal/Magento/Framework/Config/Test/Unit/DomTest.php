@@ -51,7 +51,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function mergeDataProvider()
+    public static function mergeDataProvider()
     {
         // note differences of XML declaration in fixture files: sometimes encoding is specified, sometimes isn't
         return [
@@ -165,7 +165,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'valid' => ['<root><node id="id1"/><node id="id2"/></root>', []],

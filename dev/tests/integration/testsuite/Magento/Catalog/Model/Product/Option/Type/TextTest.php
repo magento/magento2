@@ -67,7 +67,7 @@ class TextTest extends TestCase
      *
      * @return array
      */
-    public function optionValueDataProvider()
+    public static function optionValueDataProvider()
     {
         return [
             [self::STUB_OPTION_DATA, 'string string', 'string string'],

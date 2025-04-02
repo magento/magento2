@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Helper;
 
@@ -132,7 +132,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
                 )->setLastname(
                     '<strong>LastName</strong>'
                 ),
-                '&lt;h1&gt;FirstName&lt;/h1&gt; &lt;strong&gt;LastName&lt;/strong&gt;',
+                '<h1>FirstName</h1> <strong>LastName</strong>',
             ],
         ];
     }

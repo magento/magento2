@@ -99,7 +99,7 @@ class ApplyDiscountOnPricesTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsDisplayed()
+    public static function dataProviderIsDisplayed()
     {
         return [
             [

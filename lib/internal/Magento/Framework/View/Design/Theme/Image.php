@@ -101,7 +101,7 @@ class Image
         Image\PathInterface $themeImagePath,
         \Psr\Log\LoggerInterface $logger,
         array $imageParams = [self::PREVIEW_IMAGE_WIDTH, self::PREVIEW_IMAGE_HEIGHT],
-        ThemeInterface $theme = null
+        ?ThemeInterface $theme = null
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);

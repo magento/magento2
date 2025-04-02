@@ -1,15 +1,14 @@
 <?php
-declare(strict_types=1);
-
 /**
- * Adminhtml AdminNotification Severity Renderer
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
+use Magento\AdminNotification\Controller\Adminhtml\Notification\MarkAsRead;
+use Magento\AdminNotification\Controller\Adminhtml\Notification\Remove;
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Magento\Framework\App\ActionInterface;
@@ -45,33 +44,41 @@ class Actions extends AbstractRenderer
      */
     public function render(DataObject $row)
     {
-        $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' .
+        $readDetailsHtml = $row->getUrl() ?
+            '<a class="action-details" target="_blank" href="' .
             $this->escapeUrl($row->getUrl())
             . '">' .
             __('Read Details') . '</a>' : '';
 
-        $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' . $this->getUrl(
-            '*/*/markAsRead/',
-            ['_current' => true, 'id' => $row->getNotificationId()]
-        ) . '">' . __(
-            'Mark as Read'
-        ) . '</a>' : '';
+        $markAsReadHtml = !$row->getIsRead()
+            && $this->_authorization->isAllowed(MarkAsRead::ADMIN_RESOURCE) ?
+            '<a class="action-mark" href="' . $this->escapeUrl($this->getUrl(
+                '*/*/markAsRead/',
+                ['_current' => true, 'id' => $row->getNotificationId()]
+            )) . '">' . __(
+                'Mark as Read'
+            ) . '</a>' : '';
 
-        $encodedUrl = $this->_urlHelper->getEncodedUrl();
+        $removeUrl = $this->getUrl(
+            '*/*/remove/',
+            [
+                '_current' => true,
+                'id' => $row->getNotificationId(),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->_urlHelper->getEncodedUrl()
+            ]
+        );
+
+        $removeHtml = $this->_authorization->isAllowed(Remove::ADMIN_RESOURCE) ?
+            '<a class="action-delete" href="'
+            . $this->escapeUrl($removeUrl)
+            .'" onClick="deleteConfirm('. __('\'Are you sure?\'') .', this.href); return false;">'
+            . __('Remove') .  '</a>' : '';
+
         return sprintf(
-            '%s%s<a class="action-delete" href="%s" onClick="deleteConfirm(\'%s\', this.href); return false;">%s</a>',
+            '%s%s%s',
             $readDetailsHtml,
             $markAsReadHtml,
-            $this->getUrl(
-                '*/*/remove/',
-                [
-                    '_current' => true,
-                    'id' => $row->getNotificationId(),
-                    ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl
-                ]
-            ),
-            __('Are you sure?'),
-            __('Remove')
+            $removeHtml,
         );
     }
 }

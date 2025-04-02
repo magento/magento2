@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -30,26 +31,26 @@ abstract class AbstractCacheManageCommandTestCase extends AbstractCacheCommandTe
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'implicit all' => [
                 [],
                 ['A', 'B', 'C', 'full_page'],
                 true,
-                $this->getExpectedExecutionOutput(['A', 'B', 'C', 'full_page']),
+                static::getExpectedExecutionOutput(['A', 'B', 'C', 'full_page']),
             ],
             'specified types' => [
                 ['types' => ['A', 'B']],
                 ['A', 'B'],
                 false,
-                $this->getExpectedExecutionOutput(['A', 'B']),
+                static::getExpectedExecutionOutput(['A', 'B']),
             ],
             'fpc_only' => [
                 ['types' => ['full_page']],
                 ['full_page'],
                 true,
-                $this->getExpectedExecutionOutput(['full_page']),
+                static::getExpectedExecutionOutput(['full_page']),
             ],
         ];
     }

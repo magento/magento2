@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -733,12 +733,12 @@ class OptionTest extends AbstractImportTestCase
     {
         $data = ['header' => [], 'data' => []];
 
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n", '"', '\\');
         foreach ($lines as $index => $line) {
             if ($index == 0) {
-                $data['header'] = str_getcsv($line);
+                $data['header'] = str_getcsv($line, ',', '"', '\\');
             } else {
-                $row = array_combine($data['header'], str_getcsv($line));
+                $row = array_combine($data['header'], str_getcsv($line, ',', '"', '\\'));
                 if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {
@@ -879,12 +879,12 @@ class OptionTest extends AbstractImportTestCase
     {
         return [
             'with_store_view_code' => [
-                '$rowData' => [
+                'rowData' => [
                     'store_view_code' => '',
                     'custom_options' => 'name=Test Field Title,type=field,required=1'
                         . ';sku=1-text,price=0,price_type=fixed'
                 ],
-                '$responseData' => [
+                'responseData' => [
                     'store_view_code' => '',
                     'custom_options' => [
                         'Test Field Title' => [
@@ -902,11 +902,11 @@ class OptionTest extends AbstractImportTestCase
                 ]
             ],
             'without_store_view_code' => [
-                '$rowData' => [
+                'rowData' => [
                     'custom_options' => 'name=Test Field Title,type=field,required=1'
                         . ';sku=1-text,price=0,price_type=fixed'
                 ],
-                '$responseData' => [
+                'responseData' => [
                     'custom_options' => [
                         'Test Field Title' => [
                             [
@@ -915,6 +915,120 @@ class OptionTest extends AbstractImportTestCase
                                 'required' => '1',
                                 'sku' => '1-text',
                                 'price' => '0',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Test parsing different option's type with _parseCustomOptions() method.
+     *
+     * @param array $rowData
+     * @param array $responseData
+     *
+     * @return void
+     * @dataProvider validateParseCustomOptionsDataProvider
+     * @throws \ReflectionException
+     */
+    public function testValidateParseCustomOptions(array $rowData, array $responseData): void
+    {
+        $reflection = new \ReflectionClass(Option::class);
+        $reflectionMethod = $reflection->getMethod('_parseCustomOptions');
+        $result = $reflectionMethod->invoke($this->model, $rowData);
+        $this->assertEquals($responseData, $result);
+    }
+
+    /**
+     * Data provider for testValidateParseCustomOptions.
+     *
+     * @return array
+     */
+    public static function validateParseCustomOptionsDataProvider(): array
+    {
+        return [
+            'file_type' => [
+                'rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=file,required=1,'
+                        . 'sku=1-text,price=12,file_extension=png,jpeg,jpg,gif,image_size_x=1024,'
+                        . 'image_size_y=1024,price_type=fixed'
+                ],
+                'responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'file',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '12',
+                                'file_extension' => 'png,jpeg,jpg,gif',
+                                'image_size_x' => '1024',
+                                'image_size_y' => '1024',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'drop_down' => [
+                'rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=drop_down,required=0,'
+                        . 'sku=1-text,price=10,price_type=fixed'
+                ],
+                'responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'drop_down',
+                                'required' => '0',
+                                'sku' => '1-text',
+                                'price' => '10',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'area' => [
+                'rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=area,required=1,'
+                        . 'sku=1-text,price=20,max_characters=150,price_type=fixed'
+                ],
+                'responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'area',
+                                'required' => '1',
+                                'sku' => '1-text',
+                                'price' => '20',
+                                'max_characters' => '150',
+                                'price_type' => 'fixed'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'date_time' => [
+                'rowData' => [
+                    'custom_options' => 'name=Test Field Title,type=date_time,required=0,'
+                        . 'sku=1-text,price=30,price_type=fixed'
+                ],
+                'responseData' => [
+                    'custom_options' => [
+                        'Test Field Title' => [
+                            [
+                                'name' => 'Test Field Title',
+                                'type' => 'date_time',
+                                'required' => '0',
+                                'sku' => '1-text',
+                                'price' => '30',
                                 'price_type' => 'fixed'
                             ]
                         ]
@@ -934,88 +1048,88 @@ class OptionTest extends AbstractImportTestCase
     {
         return [
             'main_valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
-                '$errors' => []
+                'rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
+                'errors' => []
             ],
             'main_invalid_store' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_store.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_invalid_store.php',
+                'errors' => [
                     Option::ERROR_INVALID_STORE => [1]
                 ]
             ],
             'main_incorrect_type' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_incorrect_type.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_incorrect_type.php',
+                'errors' => [
                     Option::ERROR_INVALID_TYPE => [1]
                 ]
             ],
             'main_no_title' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_no_title.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_no_title.php',
+                'errors' => [
                     Option::ERROR_EMPTY_TITLE => [1]
                 ]
             ],
             'main_empty_title' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_empty_title.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_empty_title.php',
+                'errors' => [
                     Option::ERROR_EMPTY_TITLE => [1]
                 ]
             ],
             'main_invalid_price' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_price.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_invalid_price.php',
+                'errors' => [
                     Option::ERROR_INVALID_PRICE => [1]
                 ]
             ],
             'main_invalid_max_characters' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_max_characters.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_invalid_max_characters.php',
+                'errors' => [
                     Option::ERROR_INVALID_MAX_CHARACTERS => [1]
                 ]
             ],
             'main_max_characters_less_zero' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_max_characters_less_zero.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_max_characters_less_zero.php',
+                'errors' => [
                     Option::ERROR_INVALID_MAX_CHARACTERS => [1]
                 ]
             ],
             'main_invalid_sort_order' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_invalid_sort_order.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_invalid_sort_order.php',
+                'errors' => [
                     Option::ERROR_INVALID_SORT_ORDER => [1]
                 ]
             ],
             'main_sort_order_less_zero' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_sort_order_less_zero.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_sort_order_less_zero.php',
+                'errors' => [
                     Option::ERROR_INVALID_SORT_ORDER => [1]
                 ]
             ],
             'secondary_valid' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_valid.php',
-                '$errors' => []
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_valid.php',
+                'errors' => []
             ],
             'secondary_invalid_store' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_invalid_store.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_invalid_store.php',
+                'errors' => [
                     Option::ERROR_INVALID_STORE => [1]
                 ]
             ],
             'secondary_incorrect_price' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_price.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_price.php',
+                'errors' => [
                     Option::ERROR_INVALID_ROW_PRICE => [1]
                 ]
             ],
             'secondary_incorrect_row_sort' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_row_sort.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_incorrect_row_sort.php',
+                'errors' => [
                     Option::ERROR_INVALID_ROW_SORT => [1]
                 ]
             ],
             'secondary_row_sort_less_zero' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_secondary_row_sort_less_zero.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_secondary_row_sort_less_zero.php',
+                'errors' => [
                     Option::ERROR_INVALID_ROW_SORT => [1]
                 ]
             ]
@@ -1031,26 +1145,26 @@ class OptionTest extends AbstractImportTestCase
     {
         return [
             'ambiguity_several_input_rows' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_main_valid.php',
+                'errors' => [
                     Option::ERROR_AMBIGUOUS_NEW_NAMES => [2, 2]
                 ],
-                '$behavior' => null,
-                '$numberOfValidations' => 2
+                'behavior' => null,
+                'numberOfValidations' => 2
             ],
             'ambiguity_different_type' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_ambiguity_different_type.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_ambiguity_different_type.php',
+                'errors' => [
                     Option::ERROR_AMBIGUOUS_TYPES => [1]
                 ],
-                '$behavior' => Import::BEHAVIOR_APPEND
+                'behavior' => Import::BEHAVIOR_APPEND
             ],
             'ambiguity_several_db_rows' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_ambiguity_several_db_rows.php',
-                '$errors' => [
+                'rowData' => include __DIR__ . '/_files/row_data_ambiguity_several_db_rows.php',
+                'errors' => [
                     Option::ERROR_AMBIGUOUS_OLD_NAMES => [1]
                 ],
-                '$behavior' => Import::BEHAVIOR_APPEND
+                'behavior' => Import::BEHAVIOR_APPEND
             ]
         ];
     }

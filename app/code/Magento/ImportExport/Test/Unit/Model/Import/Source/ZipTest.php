@@ -60,16 +60,16 @@ class ZipTest extends TestCase
     {
         return [
             [
-                '$fileName' => 'test_file.txt',
-                '$expectedfileName' => 'test_file.txt'
+                'fileName' => 'test_file.txt',
+                'expectedfileName' => 'test_file.txt'
             ],
             [
-                '$fileName' => 'test_file.zip',
-                '$expectedfileName' => 'test_file.csv'
+                'fileName' => 'test_file.zip',
+                'expectedfileName' => 'test_file.csv'
             ],
             [
-                '$fileName' => '.ziptest_.zip.file.zip.ZIP',
-                '$expectedfileName' => '.ziptest_.zip.file.zip.csv'
+                'fileName' => '.ziptest_.zip.file.zip.ZIP',
+                'expectedfileName' => '.ziptest_.zip.file.zip.csv'
             ]
         ];
     }

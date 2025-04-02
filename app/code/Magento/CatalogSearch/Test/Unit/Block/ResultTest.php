@@ -108,7 +108,7 @@ class ResultTest extends TestCase
     /**
      * @return array
      */
-    public function getNoResultTextDataProvider()
+    public static function getNoResultTextDataProvider()
     {
         return [[true, 'Minimum Search query length is 5'], [false, null]];
     }

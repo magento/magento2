@@ -153,7 +153,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function executeWithTwoImagesDataProvider(): array
+    public static function executeWithTwoImagesDataProvider(): array
     {
         return [
             'with_two_images' => [
@@ -237,7 +237,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function executeOnStoreViewDataProvider(): array
+    public static function executeOnStoreViewDataProvider(): array
     {
         return [
             'with_store_label' => [

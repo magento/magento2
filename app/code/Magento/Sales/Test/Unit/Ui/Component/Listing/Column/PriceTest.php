@@ -117,7 +117,7 @@ class PriceTest extends TestCase
      *
      * @return array
      */
-    public function testPrepareDataSourceDataProvider(): array
+    public static function testPrepareDataSourceDataProvider(): array
     {
         $dataSource1 = [
             'data' => [

@@ -113,7 +113,7 @@ class CategoryNameTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['category_name', [], true, 'name_category_1'],

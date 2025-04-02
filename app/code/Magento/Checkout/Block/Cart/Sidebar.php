@@ -52,7 +52,7 @@ class Sidebar extends AbstractCart
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         if (isset($data['jsLayout'])) {
             $this->jsLayout = array_merge_recursive($jsLayoutDataProvider->getData(), $data['jsLayout']);

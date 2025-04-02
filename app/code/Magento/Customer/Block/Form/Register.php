@@ -69,8 +69,8 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
         array $data = [],
-        Config $newsLetterConfig = null,
-        Address $addressHelper = null
+        ?Config $newsLetterConfig = null,
+        ?Address $addressHelper = null
     ) {
         $data['addressHelper'] = $addressHelper ?: ObjectManager::getInstance()->get(Address::class);
         $data['directoryHelper'] = $directoryHelper;

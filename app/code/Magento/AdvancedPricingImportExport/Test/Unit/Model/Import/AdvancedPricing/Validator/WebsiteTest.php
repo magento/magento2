@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -137,55 +138,55 @@ class WebsiteTest extends TestCase
         return [
             // False cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_TIER_PRICE => 'value',
                 ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => false,
-                '$expectedResult' => false,
+                'allWebsites' => 'not tier|group price website value',
+                'colTierPriceWebsite' => false,
+                'expectedResult' => false,
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_TIER_PRICE => 'tier value',
                 ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => false,
-                '$expectedResult' => false,
+                'allWebsites' => 'not tier|group price website value',
+                'colTierPriceWebsite' => false,
+                'expectedResult' => false,
             ],
             // True cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                 ],
-                '$allWebsites' => 'tier value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => true,
+                'allWebsites' => 'tier value',
+                'colTierPriceWebsite' => 'value',
+                'expectedResult' => true,
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                 ],
-                '$allWebsites' => 'group value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => true,
+                'allWebsites' => 'group value',
+                'colTierPriceWebsite' => 'value',
+                'expectedResult' => true,
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
                 ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => true,
+                'allWebsites' => 'not tier|group price website value',
+                'colTierPriceWebsite' => 'value',
+                'expectedResult' => true,
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                 ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => true,
+                'allWebsites' => 'not tier|group price website value',
+                'colTierPriceWebsite' => 'value',
+                'expectedResult' => true,
             ],
         ];
     }

@@ -83,7 +83,7 @@ class ValidateTest extends TestCase
         $attributeEmptyMessage = 'The "%1" attribute value is empty. Set the attribute and try again.';
         return [
             'without_required_fields' => [
-                'customer_data' => [],
+                'customerData' => [],
                 'expectedResults' => [
                     'valid' => false,
                     'messages' => [
@@ -96,7 +96,7 @@ class ValidateTest extends TestCase
                 ],
             ],
             'with_required_fields' => [
-                'customer_data' => [
+                'customerData' => [
                     CustomerInterface::WEBSITE_ID => 1,
                     CustomerInterface::GROUP_ID => 1,
                     CustomerInterface::FIRSTNAME => 'Jane',

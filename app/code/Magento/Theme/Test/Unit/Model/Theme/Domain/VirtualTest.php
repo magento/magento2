@@ -146,11 +146,7 @@ class VirtualTest extends TestCase
         $this->assertTrue($model->isAssigned());
     }
 
-    /**
-     * @return array
-     */
-    public function physicalThemeDataProvider(): array
-    {
+    protected function getMockForPhysicalTheme() {
         $physicalTheme = $this->getMockBuilder(ThemeInterface::class)
             ->onlyMethods(['isPhysical', 'getId'])
             ->getMockForAbstractClass();
@@ -160,7 +156,15 @@ class VirtualTest extends TestCase
         $physicalTheme->expects($this->once())
             ->method('getId')
             ->willReturn(1);
+        return $physicalTheme;
+    }
 
+    /**
+     * @return array
+     */
+    public static function physicalThemeDataProvider(): array
+    {
+        $physicalTheme = static fn (self $testCase) => $testCase->getMockForPhysicalTheme();
         return [
             'empty' => [null],
             'theme' => [$physicalTheme]
@@ -175,6 +179,9 @@ class VirtualTest extends TestCase
      */
     public function testGetPhysicalTheme($data): void
     {
+        if (is_callable($data)) {
+            $data = $data($this);
+        }
         $themeMock = $this->createPartialMock(Theme::class, ['__wakeup', 'getParentTheme']);
         $parentThemeMock = $this->createPartialMock(
             Theme::class,

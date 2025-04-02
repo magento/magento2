@@ -42,7 +42,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
     public function __construct(
         Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileResponseFactory,
-        Json $json = null
+        ?Json $json = null
     ) {
         $this->_fileResponseFactory = $fileResponseFactory;
         $this->json = $json ?: ObjectManager::getInstance()->get(Json::class);

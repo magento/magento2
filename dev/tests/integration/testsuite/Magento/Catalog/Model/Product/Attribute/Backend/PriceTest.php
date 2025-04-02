@@ -424,12 +424,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function saveCustomPriceAttributeDataProvider(): array
+    public static function saveCustomPriceAttributeDataProvider(): array
     {
         return [
             [
                 'attributes' => ['attr1', 'attr2', 'attr3'],
-                'set' => [
+                'updates' => [
                     'attr1' => [
                         'admin' => 9,
                     ],

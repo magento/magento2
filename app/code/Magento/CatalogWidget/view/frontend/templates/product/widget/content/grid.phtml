@@ -74,6 +74,12 @@ use Magento\Wishlist\Helper\Data;
                                                     <?php if ($_item->isSaleable()): ?>
                                                         <?php $postParams = $block->getAddToCartPostParams($_item); ?>
                                                         <form data-role="tocart-form" data-product-sku="<?= $escaper->escapeHtml($_item->getSku()) ?>" action="<?= $escaper->escapeUrl($postParams['action']) ?>" method="post">
+                                                            <?php $options = $block->getOptionsData($_item); ?>
+                                                            <?php foreach ($options as $optionItem): ?>
+                                                                <input type="hidden"
+                                                                       name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
+                                                                       value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
+                                                            <?php endforeach; ?>
                                                             <input type="hidden" name="product" value="<?= $escaper->escapeHtmlAttr($postParams['data']['product']) ?>">
                                                             <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>" value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
                                                             <?= $block->getBlockHtml('formkey') ?>
@@ -107,13 +113,13 @@ use Magento\Wishlist\Helper\Data;
                                                 <div class="actions-secondary" data-role="add-to-links">
                                                     <?php if ($this->helper(Data::class)->isAllow() && $showWishlist): ?>
                                                         <a href="#"
-                                                           data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist" title="<?= $block->escapeHtmlAttr(__('Add to Wish List')) ?>">
+                                                           data-post='<?= /* @noEscape */ $block->getAddToWishlistParams($_item) ?>' class="action towishlist" data-action="add-to-wishlist" title="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?>">
                                                             <span><?= $escaper->escapeHtml(__('Add to Wish List')) ?></span>
                                                         </a>
                                                     <?php endif; ?>
                                                     <?php if ($block->getAddToCompareUrl() && $showCompare): ?>
                                                         <?php $compareHelper = $this->helper(Compare::class);?>
-                                                        <a href="#" class="action tocompare" data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>' title="<?= $block->escapeHtmlAttr(__('Add to Compare')) ?>">
+                                                        <a href="#" class="action tocompare" data-post='<?= /* @noEscape */ $compareHelper->getPostDataParams($_item) ?>' title="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>">
                                                             <span><?= $escaper->escapeHtml(__('Add to Compare')) ?></span>
                                                         </a>
                                                     <?php endif; ?>

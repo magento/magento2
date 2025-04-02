@@ -67,7 +67,7 @@ class DesignLoader
         ImageFactory $subject,
         Product $product,
         string $imageId,
-        array $attributes = null
+        ?array $attributes = null
     ) {
         try {
             $area = $this->areaList->getArea($this->appState->getAreaCode());

@@ -179,7 +179,7 @@ class DeleteTest extends TestCase
     /**
      * @return array
      */
-    public function invalidArgumentDataProvider()
+    public static function invalidArgumentDataProvider()
     {
         return [
             'themeId'   => [null, true],

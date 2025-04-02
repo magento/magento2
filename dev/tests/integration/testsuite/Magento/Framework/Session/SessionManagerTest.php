@@ -122,7 +122,6 @@ namespace Magento\Framework\Session {
         {
             $this->sessionName = 'frontEndSession';
 
-            ini_set('session.use_only_cookies', '0');
             ini_set('session.name', $this->sessionName);
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -342,10 +341,10 @@ namespace Magento\Framework\Session {
         public static function dataConstructor(): array
         {
             return [
-                [Config::PARAM_SESSION_SAVE_METHOD =>'db'],
-                [Config::PARAM_SESSION_SAVE_METHOD =>'redis'],
-                [Config::PARAM_SESSION_SAVE_METHOD =>'memcached'],
-                [Config::PARAM_SESSION_SAVE_METHOD =>'user'],
+                ['saveMethod' =>'db'],
+                ['saveMethod' =>'redis'],
+                ['saveMethod' =>'memcached'],
+                ['saveMethod' =>'user'],
             ];
         }
 

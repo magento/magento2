@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -117,14 +117,14 @@ class Full extends AbstractAction
         Type $catalogProductType,
         Factory $indexerPriceFactory,
         DefaultPrice $defaultIndexerResource,
-        MetadataPool $metadataPool = null,
-        BatchSizeCalculator $batchSizeCalculator = null,
-        BatchProviderInterface $batchProvider = null,
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null,
-        TableMaintainer $dimensionTableMaintainer = null,
-        ProcessManager $processManager = null,
-        QueryGenerator $batchQueryGenerator = null
+        ?MetadataPool $metadataPool = null,
+        ?BatchSizeCalculator $batchSizeCalculator = null,
+        ?BatchProviderInterface $batchProvider = null,
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?DimensionCollectionFactory $dimensionCollectionFactory = null,
+        ?TableMaintainer $dimensionTableMaintainer = null,
+        ?ProcessManager $processManager = null,
+        ?QueryGenerator $batchQueryGenerator = null
     ) {
         parent::__construct(
             $config,

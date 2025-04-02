@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Pricing\Render;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Wishlist\Block\Customer\Sidebar;
 use Magento\Wishlist\CustomerData\Wishlist;
@@ -55,6 +56,9 @@ class WishlistTest extends TestCase
     /** @var WebsiteInterface|MockObject */
     private $websiteMock;
 
+    /** @var StoreInterface|MockObject */
+    private $storeMock;
+
     /** @var ImageFactory|MockObject */
     private $imageHelperFactory;
 
@@ -93,6 +97,11 @@ class WishlistTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->onlyMethods(['getId',])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->model = new Wishlist(
             $this->wishlistHelperMock,
             $this->sidebarMock,
@@ -127,7 +136,15 @@ class WishlistTest extends TestCase
             ->method('getWebsite')
             ->willReturn($this->websiteMock);
 
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
         $this->websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->storeMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
@@ -153,7 +170,8 @@ class WishlistTest extends TestCase
                     'delete_item_params' => $itemRemoveParams,
                 ],
             ],
-            'websiteId' => 1
+            'websiteId' => 1,
+            'storeId' => 1
         ];
 
         /** @var Item|MockObject $itemMock */
@@ -322,7 +340,15 @@ class WishlistTest extends TestCase
             ->method('getWebsite')
             ->willReturn($this->websiteMock);
 
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
         $this->websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->storeMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
 
@@ -366,7 +392,8 @@ class WishlistTest extends TestCase
                     'delete_item_params' => $itemRemoveParams,
                 ],
             ],
-            'websiteId' => 1
+            'websiteId' => 1,
+            'storeId' => 1
         ];
 
         $this->wishlistHelperMock->expects($this->once())
@@ -508,14 +535,23 @@ class WishlistTest extends TestCase
             ->method('getWebsite')
             ->willReturn($this->websiteMock);
 
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
         $this->websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+
+        $this->storeMock->expects($this->once())
             ->method('getId')
             ->willReturn(null);
 
         $result = [
             'counter' =>  null,
             'items' => [],
-            'websiteId' =>null
+            'websiteId' =>null,
+            'storeId' => null
         ];
 
         $this->wishlistHelperMock->expects($this->once())

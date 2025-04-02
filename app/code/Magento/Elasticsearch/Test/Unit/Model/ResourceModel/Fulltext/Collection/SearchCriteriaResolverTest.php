@@ -99,7 +99,7 @@ class SearchCriteriaResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveSortOrderDataProvider()
+    public static function resolveSortOrderDataProvider()
     {
         return [
             [

@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -138,7 +139,7 @@ class RetryTest extends TestCase
     /**
      * @return array
      */
-    public function executeExceptionsDataProvider()
+    public static function executeExceptionsDataProvider()
     {
         return [
             [new LocalizedException(__('TestMessage')), __('TestMessage')],

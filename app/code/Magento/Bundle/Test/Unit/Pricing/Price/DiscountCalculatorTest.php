@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -149,7 +150,7 @@ class DiscountCalculatorTest extends TestCase
     /**
      * @return array
      */
-    public function providerForWithDifferentAmount()
+    public static function providerForWithDifferentAmount()
     {
         return [
             'test case 1 with discount amount' => [20, 50, 10],

@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -191,7 +192,7 @@ class FileInfoTest extends TestCase
     /**
      * @return array
      */
-    public function isExistProvider()
+    public static function isExistProvider()
     {
         return [
             ['/filename.ext1', '/catalog/category/filename.ext1'],
@@ -216,7 +217,7 @@ class FileInfoTest extends TestCase
     /**
      * @return array
      */
-    public function isBeginsWithMediaDirectoryPathProvider()
+    public static function isBeginsWithMediaDirectoryPathProvider()
     {
         return [
             ['/pub/media/test/filename.ext1', true],

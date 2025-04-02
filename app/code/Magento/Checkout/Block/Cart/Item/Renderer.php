@@ -124,7 +124,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         \Magento\Framework\Module\Manager $moduleManager,
         InterpretationStrategyInterface $messageInterpretationStrategy,
         array $data = [],
-        ItemResolverInterface $itemResolver = null
+        ?ItemResolverInterface $itemResolver = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->imageBuilder = $imageBuilder;

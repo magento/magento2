@@ -71,7 +71,7 @@ class PoolTest extends TestCase
     /**
      * @return array
      */
-    public function getAdjustmentByCodeDataProvider()
+    public static function getAdjustmentByCodeDataProvider()
     {
         return [
             ['adj1', 'adj1_class|10'],

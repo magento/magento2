@@ -74,7 +74,7 @@ class Attribute extends AbstractDb
         StoreManagerInterface $storeManager,
         Type $eavEntityType,
         $connectionName = null,
-        PoisonPillPutInterface $pillPut = null
+        ?PoisonPillPutInterface $pillPut = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavEntityType = $eavEntityType;

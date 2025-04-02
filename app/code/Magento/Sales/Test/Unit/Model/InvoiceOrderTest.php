@@ -430,7 +430,7 @@ class InvoiceOrderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'TestWithNotifyTrue' => [1, true, [1 => 2], true, true],

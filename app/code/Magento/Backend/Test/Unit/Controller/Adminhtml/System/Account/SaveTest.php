@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -215,7 +215,8 @@ class SaveTest extends TestCase
             Form::IDENTITY_VERIFICATION_PASSWORD_FIELD => 'current_password'
         ];
 
-        $testedMessage = 'You saved the account.';
+        $testedMessage = "The password, username, firstname, lastname and email of this account"
+            ." have been modified successfully.";
 
         $this->authSessionMock->expects($this->any())->method('getUser')->willReturn($this->userMock);
 

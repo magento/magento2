@@ -58,7 +58,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function currencyDataProvider()
+    public static function currencyDataProvider()
     {
         return [
             ['amount' => '100', 'format' => true, 'includeContainer' => true, 'result' => '100grn.'],
@@ -95,7 +95,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function currencyByStoreDataProvider()
+    public static function currencyByStoreDataProvider()
     {
         return [
             ['amount' => '10', 'store' => 1, 'format' => true, 'includeContainer' => true, 'result' => '10grn.'],

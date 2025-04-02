@@ -68,8 +68,8 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         Grouped\Links $links,
-        ConfigInterface $config = null,
-        SkuStorage $skuStorage = null
+        ?ConfigInterface $config = null,
+        ?SkuStorage $skuStorage = null
     ) {
         $this->links = $links;
         $this->config = $config ?: ObjectManager::getInstance()->get(ConfigInterface::class);

@@ -59,7 +59,7 @@ class VerifyIsGuestCheckoutEnabledBeforePlaceOrder
     public function beforePlaceOrder(
         GuestCartManagementInterface $subject,
         $cartId,
-        PaymentInterface $paymentMethod = null
+        ?PaymentInterface $paymentMethod = null
     ): void {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');

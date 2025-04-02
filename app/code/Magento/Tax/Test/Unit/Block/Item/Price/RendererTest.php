@@ -111,24 +111,24 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayPriceInclTaxDataProvider()
+    public static function displayPriceInclTaxDataProvider()
     {
         $data = [
             'cart' => [
                 'zone' => Render::ZONE_CART,
-                'method_name' => 'displayCartPriceInclTax',
+                'methodName' => 'displayCartPriceInclTax',
             ],
             'anythingelse' => [
                 'zone' => 'anythingelse',
-                'method_name' => 'displayCartPriceInclTax',
+                'methodName' => 'displayCartPriceInclTax',
             ],
             'sale' => [
                 'zone' => Render::ZONE_SALES,
-                'method_name' => 'displaySalesPriceInclTax',
+                'methodName' => 'displaySalesPriceInclTax',
             ],
             'email' => [
                 'zone' => Render::ZONE_EMAIL,
-                'method_name' => 'displaySalesPriceInclTax',
+                'methodName' => 'displaySalesPriceInclTax',
             ],
         ];
 
@@ -161,24 +161,24 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayPriceExclTaxDataProvider()
+    public static function displayPriceExclTaxDataProvider()
     {
         $data = [
             'cart' => [
                 'zone' => Render::ZONE_CART,
-                'method_name' => 'displayCartPriceExclTax',
+                'methodName' => 'displayCartPriceExclTax',
             ],
             'anythingelse' => [
                 'zone' => 'anythingelse',
-                'method_name' => 'displayCartPriceExclTax',
+                'methodName' => 'displayCartPriceExclTax',
             ],
             'sale' => [
                 'zone' => Render::ZONE_SALES,
-                'method_name' => 'displaySalesPriceExclTax',
+                'methodName' => 'displaySalesPriceExclTax',
             ],
             'email' => [
                 'zone' => Render::ZONE_EMAIL,
-                'method_name' => 'displaySalesPriceExclTax',
+                'methodName' => 'displaySalesPriceExclTax',
             ],
         ];
 
@@ -211,24 +211,24 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function displayBothPricesDataProvider()
+    public static function displayBothPricesDataProvider()
     {
         $data = [
             'cart' => [
                 'zone' => Render::ZONE_CART,
-                'method_name' => 'displayCartBothPrices',
+                'methodName' => 'displayCartBothPrices',
             ],
             'anythingelse' => [
                 'zone' => 'anythingelse',
-                'method_name' => 'displayCartBothPrices',
+                'methodName' => 'displayCartBothPrices',
             ],
             'sale' => [
                 'zone' => Render::ZONE_SALES,
-                'method_name' => 'displaySalesBothPrices',
+                'methodName' => 'displaySalesBothPrices',
             ],
             'email' => [
                 'zone' => Render::ZONE_EMAIL,
-                'method_name' => 'displaySalesBothPrices',
+                'methodName' => 'displaySalesBothPrices',
             ],
         ];
 

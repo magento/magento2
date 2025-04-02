@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -85,7 +86,7 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @return array
      */
-    public function validateInvalidDataProvider()
+    public static function validateInvalidDataProvider()
     {
         return [
             [[ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => '**'], "Invalid backend frontname '**'"],

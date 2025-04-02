@@ -80,7 +80,7 @@ class AttributeFixedProductTaxTest extends TestCase
                         'state' => '',
                     ],
                 ],
-                'expected_data' => [
+                'expectedData' => [
                     [
                         'website_id' => '0',
                         'country' => 'GB',

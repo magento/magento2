@@ -11,6 +11,8 @@ namespace Magento\TestFramework\Event;
 
 use PHPUnit\Event\TestSuite\Started;
 use PHPUnit\Event\TestSuite\StartedSubscriber;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestSuite;
 
 class TestSuitStartedSubscriber implements StartedSubscriber
 {
@@ -21,7 +23,10 @@ class TestSuitStartedSubscriber implements StartedSubscriber
      */
     public function notify(Started $event): void
     {
-        $mageEvent = Magento::getDefaultEventManager();
-        $mageEvent->fireEvent('startTestSuite');
+        $phpUnit = Bootstrap::getObjectManager()->create(PhpUnit::class);
+        if (class_exists($event->testSuite()->name())) {
+            $testSuite = TestSuite::empty($event->testSuite()->name());
+            $phpUnit->startTestSuite($testSuite);
+        }
     }
 }

@@ -98,15 +98,15 @@
         "wikimedia/less.php": "^5.0"
     },
     "require-dev": {
-        "allure-framework/allure-phpunit": "^3",
+        "magento/magento-allure-phpunit": "^3.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7 || ^1.0",
         "dg/bypass-finals": "^1.4",
         "friendsofphp/php-cs-fixer": "^3.22",
-        "lusitanian/oauth": "^0.8",
+        "carlos-mg89/oauth": "^0.8.17",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^4.8",
-        "pdepend/pdepend": "^2.10",
-        "phpmd/phpmd": "^2.12",
+        "magento/magento2-functional-testing-framework": "^5.0",
+        "pdepend/pdepend": "3.x-dev",
+        "phpmd/phpmd": "3.x-dev",
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^10.5",
         "symfony/finder": "^6.4"
@@ -177,7 +177,7 @@
         "magento/module-eav": "*",
         "magento/module-open-search": "*",
         "magento/module-elasticsearch": "*",
-        "magento/module-elasticsearch-7": "*",
+        "magento/module-elasticsearch-8": "*",
         "magento/module-email": "*",
         "magento/module-encryption-key": "*",
         "magento/module-fedex": "*",
@@ -348,7 +348,6 @@
         "components/jquery": "1.11.0",
         "components/jqueryui": "1.10.4",
         "twbs/bootstrap": "3.1.0",
-        "tinymce/tinymce": "3.4.7",
         "magento/module-csp": "*",
         "magento/module-aws-s3": "*",
         "magento/module-remote-storage": "*",
@@ -375,8 +374,7 @@
             ],
             "twbs/bootstrap": [
                 "lib/web/jquery/jquery.tabs.js"
-            ],
-            "tinymce/tinymce": "lib/web/tiny_mce_5"
+            ]
         }
     },
     "autoload": {

@@ -124,8 +124,8 @@ class ImageResize
         ThemeCustomizationConfig $themeCustomizationConfig,
         ThemeCollection $themeCollection,
         Filesystem $filesystem,
-        FileStorageDatabase $fileStorageDatabase = null,
-        StoreManagerInterface $storeManager = null
+        ?FileStorageDatabase $fileStorageDatabase = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->appState = $appState;
         $this->imageConfig = $imageConfig;
@@ -175,7 +175,7 @@ class ImageResize
      * @return Generator
      * @throws NotFoundException
      */
-    public function resizeFromThemes(array $themes = null, bool $skipHiddenImages = false): Generator
+    public function resizeFromThemes(?array $themes = null, bool $skipHiddenImages = false): Generator
     {
         $count = $this->getCountProductImages($skipHiddenImages);
         if (!$count) {

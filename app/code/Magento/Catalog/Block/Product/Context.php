@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Product;
 
@@ -20,6 +20,7 @@ use Magento\Framework\Cache\LockGuardedCacheLoader;
  *
  * @deprecated 102.0.0
  * @SuppressWarnings(PHPMD)
+ * @see MAGETWO-69846
  */
 class Context extends \Magento\Framework\View\Element\Template\Context
 {
@@ -168,7 +169,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         ReviewRendererInterface $reviewRenderer,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        LockGuardedCacheLoader $lockQuery = null
+        ?LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->imageHelper = $imageHelper;
         $this->imageBuilder = $imageBuilder;

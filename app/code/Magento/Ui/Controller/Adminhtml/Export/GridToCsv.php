@@ -49,8 +49,8 @@ class GridToCsv extends Action
         Context $context,
         ConvertToCsv $converter,
         FileFactory $fileFactory,
-        Filter $filter = null,
-        LoggerInterface $logger = null
+        ?Filter $filter = null,
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($context);
         $this->converter = $converter;

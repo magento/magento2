@@ -171,7 +171,7 @@ class NvpTest extends TestCase
     /**
      * @return array
      */
-    public function callDataProvider()
+    public static function callDataProvider()
     {
         return [
             ['', [], null],
@@ -236,7 +236,7 @@ class NvpTest extends TestCase
      *
      * @return array
      */
-    public function callGetExpressCheckoutDetailsDataProvider()
+    public static function callGetExpressCheckoutDetailsDataProvider()
     {
         return [
             [

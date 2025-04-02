@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -164,7 +165,7 @@ class SaveTest extends ProductTestCase
     /**
      * @return array
      */
-    public function exceptionTypeDataProvider()
+    public static function exceptionTypeDataProvider()
     {
         return [
             [new LocalizedException(__('Message')), 'addExceptionMessage'],

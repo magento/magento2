@@ -304,12 +304,12 @@ class DataTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getCalculatedTaxesForOrderItemsDataProvider(): array
+    public static function getCalculatedTaxesForOrderItemsDataProvider(): array
     {
         $data = [
             //Scenario 1: two items, one item with 0 tax
             'two_items_with_one_zero_tax' => [
-                'order' => [
+                'orderData' => [
                     'order_id' => 1,
                     'shipping_tax_amount' => 0,
                     'order_tax_details' => [
@@ -329,7 +329,7 @@ class DataTest extends TestCase
                         ]
                     ]
                 ],
-                'invoice' => [
+                'invoiceData' => [
                     'invoice_items' => [
                         'item1' => new MagentoObject(
                             [
@@ -355,7 +355,7 @@ class DataTest extends TestCase
                         )
                     ]
                 ],
-                'expected_results' => [
+                'expectedResults' => [
                     [
                         'title' => 'US-CA-Sales-Tax',
                         'percent' => 20.0,
@@ -366,7 +366,7 @@ class DataTest extends TestCase
             ],
             //Scenario 2: one item with associated weee tax
             'item_with_weee_tax_partial_invoice' => [
-                'order' => [
+                'orderData' => [
                     'order_id' => 1,
                     'shipping_tax_amount' => 0,
                     'order_tax_details' => [
@@ -399,7 +399,7 @@ class DataTest extends TestCase
                         ]
                     ]
                 ],
-                'invoice' => [
+                'invoiceData' => [
                     'invoice_items' => [
                         'item1' => new MagentoObject(
                             [
@@ -416,7 +416,7 @@ class DataTest extends TestCase
                         )
                     ]
                 ],
-                'expected_results' => [
+                'expectedResults' => [
                     [
                         'title' => 'US-CA-Sales-Tax',
                         'percent' => 20.0,
@@ -428,7 +428,7 @@ class DataTest extends TestCase
             //Scenario 3: one item, with both shipping and product taxes
             // note that 'shipping tax' is listed before 'product tax'
             'one_item_with_both_shipping_and_product_taxes' => [
-                'order' => [
+                'orderData' => [
                     'order_id' => 1,
                     'shipping_tax_amount' => 2,
                     'order_tax_details' => [
@@ -461,7 +461,7 @@ class DataTest extends TestCase
                         ]
                     ]
                 ],
-                'invoice' => [
+                'invoiceData' => [
                     'shipping_tax_amount' => 2,
                     'invoice_items' => [
                         'item1' => new MagentoObject(
@@ -478,7 +478,7 @@ class DataTest extends TestCase
                     ]
                 ],
                 // note that 'shipping tax' is now listed after 'product tax'
-                'expected_results' => [
+                'expectedResults' => [
                     [
                         'title' => 'US-CA-Sales-Tax',
                         'percent' => 20.0,
@@ -546,7 +546,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderIsCatalogPriceDisplayAffectedByTax(): array
+    public static function dataProviderIsCatalogPriceDisplayAffectedByTax(): array
     {
         return [
             [true , true, false, false, false],

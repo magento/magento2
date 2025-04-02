@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -251,7 +252,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->category
             ->method('hasChildren')
-            ->willReturnOnConsecutiveCalls(true);
+            ->willReturn(true);
         $this->category->expects($this->any())
             ->method('getDisplayMode')
             ->willReturn('products');
@@ -297,9 +298,9 @@ class ViewTest extends TestCase
             ->getMock();
         $this->category
             ->method('hasChildren')
-            ->willReturnOnConsecutiveCalls(
-                $expectedData[1][0]['type'] === 'default'
-            );
+            ->willReturnCallback(function () use ($expectedData) {
+                return $expectedData[1][0]['type'] === 'default';
+            });
         $this->category->expects($this->any())
             ->method('getDisplayMode')
             ->willReturn($expectedData[2][0]['displaymode']);
@@ -341,21 +342,21 @@ class ViewTest extends TestCase
     {
         return [
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
                     [['displaymode' => 'products'], null, false]
                 ]
             ],
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
                     [['displaymode' => 'page'], null, false]
                 ]
             ],
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default'], null, false],
                     [['displaymode' => 'poducts_and_page'], null, false]

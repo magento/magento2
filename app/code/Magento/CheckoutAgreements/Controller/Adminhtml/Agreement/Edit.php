@@ -29,7 +29,7 @@ class Edit extends Agreement implements HttpGetActionInterface
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        AgreementFactory $agreementFactory = null
+        ?AgreementFactory $agreementFactory = null
     ) {
         $this->agreementFactory = $agreementFactory ?:
                 ObjectManager::getInstance()->get(AgreementFactory::class);

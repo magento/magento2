@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -46,9 +47,9 @@ class CacheEnableCommandTest extends AbstractCacheSetCommandTestCase
     /**
      * {@inheritdoc}
      */
-    public function getExpectedExecutionOutput(array $enabled)
+    public static function getExpectedExecutionOutput(array $enabled)
     {
-        $output = $this->getExpectedChangeOutput($enabled, true);
+        $output = static::getExpectedChangeOutput($enabled, true);
         if ($enabled) {
             $output .= 'Cleaned cache types:' . PHP_EOL;
             $output .= implode(PHP_EOL, $enabled) . PHP_EOL;

@@ -77,7 +77,7 @@ class ParamsOverriderTest extends TestCase
     /**
      * @return array
      */
-    public function overrideParamsDataProvider()
+    public static function overrideParamsDataProvider()
     {
         return [
             'force false, value present' => [

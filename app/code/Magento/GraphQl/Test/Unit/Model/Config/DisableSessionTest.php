@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,7 +29,7 @@ class DisableSessionTest extends TestCase
     private $model;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     public function setUp(): void
     {
@@ -53,7 +53,7 @@ class DisableSessionTest extends TestCase
      * Data provider for session disabled config test.
      * @return array[]
      */
-    public function disableSessionDataProvider()
+    public static function disableSessionDataProvider()
     {
         return [
             ['configValue' => '1', true],
