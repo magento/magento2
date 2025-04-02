@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-02 17:05:37
+ * @lastupdate 2025-04-02 17:15:21
  */
 
 namespace Diepxuan\SyncCRM\Sync;
@@ -148,14 +148,10 @@ class ProductSync extends CrmSync
 
     public function findCategoryBySimbaCategory($simbaCategoryValue)
     {
-        // Lấy category collection
         $categoryCollection = $this->categoryCollectionFactory->create();
-
-        // Lọc theo custom attribute simba_category
         $categoryCollection->addAttributeToSelect('*')
             ->addAttributeToFilter('simba_category', $simbaCategoryValue)
         ;
-
         $categories = $categoryCollection->getItems();
 
         return reset($categories) ?: null;
