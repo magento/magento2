@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 17:36:39
+ * @lastupdate 2025-04-02 09:35:47
  */
 
 namespace Diepxuan\SyncCRM\Console\Command;

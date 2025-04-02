@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-02 07:07:18
+ * @lastupdate 2025-04-02 09:35:22
  */
 
 namespace Diepxuan\SyncCRM\Sync;
@@ -67,43 +67,28 @@ class CategorySync extends CrmSync
                     continue;
                 }
 
-                try {
-                    $category = $this->getCategoryByName($categoryData['ten_nhvt']);
-                    if (!$category) {
-                        $category = $this->categoryFactory->create();
-                    }
-                    $categorySlug     = $this->filterManager->translitUrl(vn_convert_encoding($categoryData['ten_nhvt']));
-                    $categoryParentId = $this->getCategoryParentId($categoryData, $categories);
-                    $categoryId       = $category->getId();
-                    $category->setName($categoryData['ten_nhvt']);
-                    $category->setIsActive(true);
-                    $category->setCustomAttribute('url_key', $categorySlug);
-                    $category->setParentId($categoryParentId);
-                    $category->setPath($this->getCategoryPath($categoryData, $categories));
-                    // $category->setPath("1/2/{$categoryId}");
-                    // $category->setParentId($categoryData['parent_id'] ?? 2);
-                    // $category->setPath("1/{$categoryData['parent_id']}/{$categoryData['id']}");
-
-                    // dd($category);
-                    $category->save();
-                    $this->categoryRepository->save($category);
-                    // printf(
-                    //     "Đồng bộ sản phẩm %s (%s) thành công.\n",
-                    //     $categoryData['ten_nhvt'],
-                    //     $this->getCategoryPath($categoryData, $categories)
-                    // );
-
-                    // $this->getLogger()->info('Category Synced: ' . $categoryData['ten_nhvt']);
-                } catch (CouldNotSaveException $e) {
-                    // $this->getLogger()->error('Failed to sync category: ' . $e->getMessage());
+                $category = $this->getCategoryByName($categoryData['ten_nhvt']);
+                if (!$category) {
+                    $category = $this->categoryFactory->create();
                 }
-            }
 
-            // $this->getLogger()->info('✅ Đồng bộ sản phẩm từ CRM thành công.');
-            // printf("Đồng bộ sản phẩm từ CRM thành công.\n");
+                $categorySlug     = strtolower(vn_convert_encoding($categoryData['ma_nhvt']));
+                $categoryParentId = $this->getCategoryParentId($categoryData, $categories);
+                $category->setName($categoryData['ten_nhvt']);
+                $category->setIsActive(true);
+                $category->setParentId($categoryParentId);
+                $category->setPath($this->getCategoryPath($categoryData, $categories));
+                // $category->setPath("1/2/{$categoryId}");
+                // $category->setParentId($categoryData['parent_id'] ?? 2);
+                // $category->setPath("1/{$categoryData['parent_id']}/{$categoryData['id']}");
+
+                $category->setCustomAttribute('simba_category', $categorySlug);
+
+                $this->categoryRepository->save($category);
+            }
         } catch (\Exception $e) {
-            // $this->getLogger()->error('❌ Lỗi đồng bộ sản phẩm: ' . $e->getMessage());
-            printf("Lỗi đồng bộ sản phẩm: %s\n", $e->getMessage());
+            $this->getLogger()->error('❌ Lỗi đồng bộ sản phẩm: ' . $e->getMessage());
+            // printf("Lỗi đồng bộ sản phẩm: %s\n", $e->getMessage());
         }
     }
 

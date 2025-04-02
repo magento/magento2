@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 22:40:01
+ * @lastupdate 2025-04-02 09:25:29
  */
 
 namespace Diepxuan\Magento\Setup\Patch\Data;
@@ -21,7 +21,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
-class CategorySimbaAttribute implements DataPatchInterface, PatchVersionInterface
+class CreateCategorySimbaAttribute implements DataPatchInterface, PatchVersionInterface
 {
     private $eavSetupFactory;
     private $moduleDataSetup;
@@ -40,6 +40,9 @@ class CategorySimbaAttribute implements DataPatchInterface, PatchVersionInterfac
 
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->moduleDataSetup]);
+        if ($eavSetup->getAttribute(Category::ENTITY, 'simba_category')) {
+            $eavSetup->removeAttribute(Category::ENTITY, 'simba_category');
+        }
         $eavSetup->addAttribute(
             Category::ENTITY,
             'simba_category',
@@ -65,7 +68,7 @@ class CategorySimbaAttribute implements DataPatchInterface, PatchVersionInterfac
 
     public static function getVersion()
     {
-        return '2.4.6';
+        return '1.0.2';
     }
 
     public function getAliases()
