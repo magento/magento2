@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-02 13:01:07
+ * @lastupdate 2025-04-02 17:05:37
  */
 
 namespace Diepxuan\SyncCRM\Sync;
@@ -102,9 +102,9 @@ class ProductSync extends CrmSync
                 $product->setPrice($productData['gia_nt2']);
                 $product->setTypeId('simple');
                 $product->setAttributeSetId(4);
-                $product->setStatus($status);
+                $product->setStatus($product->getStatus() && $status);
                 $product->setVisibility(4);
-                $product->setCategoryIds($catIds);
+                $product->setCategoryIds(array_merge($product->getCategoryIds() ?: [], $catIds));
 
                 $product->setCustomAttribute('meta_title', $product->getName());
                 $product->setCustomAttribute('meta_keyword', $product->getName());
