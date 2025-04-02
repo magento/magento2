@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-02 13:17:30
+ * @lastupdate 2025-04-02 13:45:03
  */
 
 namespace Diepxuan\SyncCRM\Sync;
@@ -75,8 +75,8 @@ class CategorySync extends CrmSync
                 $categorySlug     = strtolower(vn_convert_encoding($categoryData['ma_nhvt']));
                 $categoryParentId = $this->getCategoryParentId($categoryData, $categories);
                 $category->setName($categoryData['ten_nhvt']);
-                $category->setIsActive($category->setIncludeInMenu());
-                $category->setIncludeInMenu($category->setIncludeInMenu());
+                $category->setIsActive($category->getIsActive());
+                $category->setIncludeInMenu($category->getIncludeInMenu());
                 $category->setParentId($categoryParentId);
                 $category->setPath($this->getCategoryPath($categoryData, $categories));
                 // $category->setPath("1/2/{$categoryId}");
