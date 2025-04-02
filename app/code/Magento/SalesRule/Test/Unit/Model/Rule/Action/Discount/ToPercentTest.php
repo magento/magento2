@@ -218,7 +218,7 @@ class ToPercentTest extends TestCase
                     'originalPrice' => 60,
                     'baseOriginalPrice' => 55,
                 ],
-                'expectedRuleDiscountQty' => 100,
+                'expectedRuleDiscountQty' => 86.5,
                 'expectedDiscountData' => [
                     'amount' => 98,
                     'baseAmount' => 59.49999999999999,

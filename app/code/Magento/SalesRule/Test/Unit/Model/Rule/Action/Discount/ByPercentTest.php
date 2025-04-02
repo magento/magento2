@@ -218,7 +218,7 @@ class ByPercentTest extends TestCase
                     'originalPrice' => 60,
                     'baseOriginalPrice' => 55,
                 ],
-                'expectedRuleDiscountQty' => 85,
+                'expectedRuleDiscountQty' => 68.5,
                 'expectedDiscountData' => [
                     'amount' => 42,
                     'baseAmount' => 25.5,
@@ -236,7 +236,7 @@ class ByPercentTest extends TestCase
                     'originalPrice' => 60,
                     'baseOriginalPrice' => 55,
                 ],
-                'expectedRuleDiscountQty' => 85,
+                'expectedRuleDiscountQty' => 68.5,
                 'expectedDiscountData' => [
                     'amount' => 72,
                     'baseAmount' => 52.5,
