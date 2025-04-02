@@ -44,6 +44,7 @@
         "colinmollenhour/php-redis-session-abstract": "^1.5",
         "composer/composer": "^2.0, !=2.2.16",
         "diepxuan/module-magento": "*",
+        "diepxuan/php-charset": "*",
         "elasticsearch/elasticsearch": "~7.17.0 || ~8.5.0",
         "ezyang/htmlpurifier": "^4.17",
         "guzzlehttp/guzzle": "^7.5",

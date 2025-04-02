@@ -8,56 +8,152 @@ declare(strict_types=1);
  * @author     Tran Ngoc Duc <ductn@diepxuan.com>
  * @author     Tran Ngoc Duc <caothu91@gmail.com>
  *
- * @lastupdate 2025-04-01 19:32:34
+ * @lastupdate 2025-04-02 07:07:18
  */
 
 namespace Diepxuan\SyncCRM\Sync;
 
 use Diepxuan\SyncCRM\Helper\Config;
 use Diepxuan\SyncCRM\Helper\Context;
-use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Framework\Filter\FilterManager;
 
 class CategorySync extends CrmSync
 {
     /**
-     * @var CategoryFactory
+     * @var CategoryRepositoryInterface
      */
     protected $categoryFactory;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepository;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryCollectionFactory;
+
+    /**
+     * @var FilterManager
+     */
+    protected $filterManager;
 
     public function __construct(
         Context $context,
         Config $config,
-        CategoryFactory $categoryFactory
+        CategoryRepositoryInterface $categoryRepository,
+        CategoryInterfaceFactory $categoryFactory,
+        CollectionFactory $categoryCollectionFactory,
+        FilterManager $filterManager
     ) {
         parent::__construct($context, $config);
-        $this->categoryFactory = $categoryFactory;
+        $this->categoryRepository        = $categoryRepository;
+        $this->categoryFactory           = $categoryFactory;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->filterManager             = $filterManager;
     }
 
     public function sync(): void
     {
         try {
-            // Lấy danh sách danh mục từ CRM
             $categories = $this->fetch('categories');
-            dd($categories);
 
-            foreach ($products as $productData) {
-                echo $productData['sku'];
-                $product = $this->productFactory->create();
-                // $product->setSku($productData['sku']);
-                // $product->setName($productData['name']);
-                // $product->setPrice($productData['price']);
-                // $product->setTypeId('simple');
-                // $product->setAttributeSetId(4);
-                // $product->setStatus(1);
-                // $product->setVisibility(4);
-                // $product->save();
+            foreach ($categories as $categoryData) {
+                if ('PRODUCT' === $categoryData['ma_nhvt']) {
+                    continue;
+                }
+
+                try {
+                    $category = $this->getCategoryByName($categoryData['ten_nhvt']);
+                    if (!$category) {
+                        $category = $this->categoryFactory->create();
+                    }
+                    $categorySlug     = $this->filterManager->translitUrl(vn_convert_encoding($categoryData['ten_nhvt']));
+                    $categoryParentId = $this->getCategoryParentId($categoryData, $categories);
+                    $categoryId       = $category->getId();
+                    $category->setName($categoryData['ten_nhvt']);
+                    $category->setIsActive(true);
+                    $category->setCustomAttribute('url_key', $categorySlug);
+                    $category->setParentId($categoryParentId);
+                    $category->setPath($this->getCategoryPath($categoryData, $categories));
+                    // $category->setPath("1/2/{$categoryId}");
+                    // $category->setParentId($categoryData['parent_id'] ?? 2);
+                    // $category->setPath("1/{$categoryData['parent_id']}/{$categoryData['id']}");
+
+                    // dd($category);
+                    $category->save();
+                    $this->categoryRepository->save($category);
+                    // printf(
+                    //     "Đồng bộ sản phẩm %s (%s) thành công.\n",
+                    //     $categoryData['ten_nhvt'],
+                    //     $this->getCategoryPath($categoryData, $categories)
+                    // );
+
+                    // $this->getLogger()->info('Category Synced: ' . $categoryData['ten_nhvt']);
+                } catch (CouldNotSaveException $e) {
+                    // $this->getLogger()->error('Failed to sync category: ' . $e->getMessage());
+                }
             }
 
-            $this->getLogger()->info('✅ Đồng bộ sản phẩm từ CRM thành công.');
-            printf("Đồng bộ sản phẩm từ CRM thành công.\n");
+            // $this->getLogger()->info('✅ Đồng bộ sản phẩm từ CRM thành công.');
+            // printf("Đồng bộ sản phẩm từ CRM thành công.\n");
         } catch (\Exception $e) {
-            $this->getLogger()->error('❌ Lỗi đồng bộ sản phẩm: ' . $e->getMessage());
+            // $this->getLogger()->error('❌ Lỗi đồng bộ sản phẩm: ' . $e->getMessage());
             printf("Lỗi đồng bộ sản phẩm: %s\n", $e->getMessage());
         }
+    }
+
+    private function getCategoryByName($name)
+    {
+        $collection = $this->categoryCollectionFactory->create();
+        $collection->addAttributeToFilter('name', $name);
+        $collection->setPageSize(1);
+
+        return $collection->getFirstItem()->getId() ? $collection->getFirstItem() : null;
+    }
+
+    private function getCategoryParentId($category, $categories)
+    {
+        try {
+            $nhom_me        = $category['nhom_me'];
+            $parentCategory = array_filter($categories, static fn ($category) => $category['ma_nhvt'] === $nhom_me);
+            $parentCategory = reset($parentCategory);
+            $parentCategory = $this->getCategoryByName($parentCategory['ten_nhvt']);
+
+            return $parentCategory ? $parentCategory->getId() : 2;
+        } catch (\Exception $e) {
+            return 2;
+        }
+    }
+
+    private function getCategoryPath($category, $categories)
+    {
+        $path = [];
+
+        while ($category) {
+            $path[] = $category['ten_nhvt'];
+
+            $category = array_filter($categories, static fn ($cat) => $cat['ma_nhvt'] === $category['nhom_me']);
+            $category = reset($category) ?: null;
+        }
+        $path[] = 1;
+
+        foreach ($path as $i => $ten_nhvt) {
+            if ('Hang Hoa' === $ten_nhvt) {
+                $path[$i] = 2;
+
+                continue;
+            }
+            $category = $this->getCategoryByName($ten_nhvt);
+            if ($category) {
+                $path[$i] = $category->getId();
+            }
+        }
+
+        return implode('/', array_reverse($path));
     }
 }
