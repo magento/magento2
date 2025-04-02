@@ -115,7 +115,8 @@ class Processor
     private function lockLoadedCoupon(Coupon $coupon, UpdateInfo $updateInfo, array $incrementedCouponIds): void
     {
         $isIncrement = $updateInfo->isIncrement();
-        $lockName = self::LOCK_NAME . $coupon->getCode();
+        // Lock name based on coupon id, rather than coupon code that may contain illegal symbols for file based lock
+        $lockName = self::LOCK_NAME . $coupon->getId();
         if ($this->lockManager->lock($lockName, self::LOCK_TIMEOUT)) {
             try {
                 $coupon = $this->couponRepository->getById($coupon->getId());

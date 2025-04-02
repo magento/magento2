@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Rule\Model\Condition\Sql;
@@ -166,7 +166,6 @@ class Builder
             throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
         }
 
-        $defaultValue = 0;
         //operator 'contains {}' is mapped to 'IN()' query that cannot work with substrings
         // adding mapping to 'LIKE %%'
         if ($condition->getInputType() === 'string'
@@ -174,10 +173,7 @@ class Builder
         ) {
             $sql = str_replace(
                 ':field',
-                (string) $this->_connection->getIfNullSql(
-                    $this->_connection->quoteIdentifier($argument),
-                    $defaultValue
-                ),
+                (string)$this->_connection->quoteIdentifier($argument),
                 $this->stringConditionOperatorMap[$conditionOperator]
             );
             $bindValue = $condition->getBindArgumentValue();
@@ -185,10 +181,7 @@ class Builder
         } else {
             $sql = str_replace(
                 ':field',
-                (string) $this->_connection->getIfNullSql(
-                    $this->_connection->quoteIdentifier($argument),
-                    $defaultValue
-                ),
+                (string)$this->_connection->quoteIdentifier($argument),
                 $this->_conditionOperatorMap[$conditionOperator]
             );
             $bindValue = $condition->getBindArgumentValue();
@@ -196,12 +189,15 @@ class Builder
         }
         // values for multiselect attributes can be saved in comma-separated format
         // below is a solution for matching such conditions with selected values
-        if (is_array($bindValue) && \in_array($conditionOperator, ['()', '{}'], true)) {
-            foreach ($bindValue as $item) {
-                $expression .= $this->_connection->quoteInto(
-                    " OR (FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}) > 0)",
-                    $item
-                );
+        $attribute = $condition->getAttributeObject();
+        if ($attribute && $attribute->getFrontendInput() === 'multiselect') {
+            if (is_array($bindValue) && \in_array($conditionOperator, ['()', '{}'], true)) {
+                foreach ($bindValue as $item) {
+                    $expression .= $this->_connection->quoteInto(
+                        " OR (FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}) > 0)",
+                        $item
+                    );
+                }
             }
         }
         return $this->_expressionFactory->create(
