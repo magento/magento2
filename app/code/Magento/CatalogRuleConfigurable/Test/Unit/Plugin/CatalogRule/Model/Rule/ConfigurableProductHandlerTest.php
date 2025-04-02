@@ -88,7 +88,7 @@ class ConfigurableProductHandlerTest extends TestCase
         $this->configurableProductsProviderMock->expects($this->once())->method('getIds')
             ->willReturn(['conf1', 'conf2']);
         $this->configurableMock->expects($this->any())->method('getChildrenIds')->willReturnMap([
-            ['conf1', true, [ 0 => ['simple1']]],
+            ['conf1', true, [ 0 => ['simple1', 'simple3']]],
             ['conf2', true, [ 0 => ['simple1', 'simple2']]],
         ]);
         $this->ruleMock->expects($this->never())
@@ -119,6 +119,12 @@ class ConfigurableProductHandlerTest extends TestCase
                             3 => true,
                             4 => false,
                         ],
+                        'simple1' => [
+                            0 => false,
+                        ],
+                        'simple2' => [
+                            3 => true,
+                        ]
                     ];
                 }
             )
@@ -209,7 +215,7 @@ class ConfigurableProductHandlerTest extends TestCase
                 ['simple11', 'simple12',],
                 ['simple11', 'conf1',],
                 ['simple11' => [1 => false], 'conf1' => [1 => true],],
-                ['simple11' => [1 => true], 'simple12' => [1 => true],],
+                ['simple11' => [1 => true]],
             ],
             [
                 ['conf1', 'simple11', 'simple12'],
