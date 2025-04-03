@@ -116,7 +116,17 @@
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="email_confirmed_template" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="max_number_confirmation_email_requests" translate="label comment" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Max Number of Confirmation Email  Requests</label>
+                    <comment>Limit the number of confirmation email requests within a specified time interval. Use 0 to disable.</comment>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                </field>
+                <field id="min_time_between_confirmation_email_requests" translate="label comment" type="text" sortOrder="120" showInDefault="1" canRestore="1">
+                    <label>Min Time Between Confirmation Email Requests</label>
+                    <comment>Delay in minutes between password reset requests. Use 0 to disable.</comment>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                </field>
+                <field id="email_confirmed_template" translate="label comment" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Welcome Email</label>
                     <comment><![CDATA[
                         This email will be sent instead of the Default Welcome Email, after account confirmation. <br /><br />
@@ -124,7 +134,7 @@
                     ]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="generate_human_friendly_id" translate="label" type="select" sortOrder="120" showInDefault="1" canRestore="1">
+                <field id="generate_human_friendly_id" translate="label" type="select" sortOrder="140" showInDefault="1" canRestore="1">
                     <label>Generate Human-Friendly Customer ID</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

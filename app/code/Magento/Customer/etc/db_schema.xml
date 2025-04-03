@@ -561,4 +561,21 @@
             <column name="website_id"/>
         </index>
     </table>
+    <table name="customer_confirmation_log" resource="default" engine="innodb"
+           comment="Customer Confirmation Log Table">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
+                comment="Confirmation ID"/>
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="false" identity="false"
+                comment="Customer ID"/>
+        <column xsi:type="smallint" name="email_sent_counter" unsigned="true" nullable="false"
+                comment="Confirmation Email Counter"/>
+        <column xsi:type="timestamp" name="last_email_sent_at" on_update="false" nullable="false"
+                comment="Last Email Sent Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="CUSTOMER_CONFIRMATION_LOG_CUSTOMER_ID">
+            <column name="customer_id"/>
+        </constraint>
+    </table>
 </schema>

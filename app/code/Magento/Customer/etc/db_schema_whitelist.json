@@ -369,5 +369,23 @@
         "constraint": {
             "PRIMARY": true
         }
+    },
+    "customer_confirmation_log": {
+        "id": {
+            "type": "integer",
+            "description": "Unique identifier for the confirmation log."
+        },
+        "customer_id": {
+            "type": "integer",
+            "description": "ID of the associated customer."
+        },
+        "email_sent_counter": {
+            "type": "integer",
+            "description": "Counter for the number of confirmation emails sent."
+        },
+        "last_email_sent_at": {
+            "type": "timestamp",
+            "description": "Timestamp of the last confirmation email sent."
+        }
     }
 }

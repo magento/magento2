@@ -104,6 +104,8 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
                 return $this->getRedirect('*/*/index', ['_secure' => true]);
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addErrorMessage(__('Wrong email.'));
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
             }
         }
 
