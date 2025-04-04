@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2025 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -137,6 +136,12 @@ class InputParamsResolver
         $routeServiceClass = $route->getServiceClass();
         $routeServiceMethod = $route->getServiceMethod();
         $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
+
+        if (!array_is_list($inputData)) {
+            throw new Exception(
+                __('Request body must be an array'),
+            );
+        }
 
         $this->validateParameters($routeServiceClass, $routeServiceMethod, array_keys($route->getParameters()));
 
