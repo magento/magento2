@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
@@ -27,6 +27,8 @@ use Magento\Framework\EntityManager\MetadataPool;
  */
 abstract class AbstractType
 {
+    private const NON_REQUIRED_ATTRIBUTES_EXISTING_PRODUCTS = [Product::COL_NAME];
+
     /**
      * @var array
      */
@@ -581,7 +583,9 @@ abstract class AbstractType
                     // For the default scope - if this is a new product or
                     // for an old product, if the imported doc has the column present for the attrCode
                     if (Product::SCOPE_DEFAULT == $rowScope &&
-                        ($isNewProduct || array_key_exists($attrCode, $rowData))) {
+                        ($isNewProduct || !in_array($attrCode, self::NON_REQUIRED_ATTRIBUTES_EXISTING_PRODUCTS)) &&
+                        array_key_exists($attrCode, $rowData)
+                    ) {
                         $this->_entityModel->addRowError(
                             RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
                             $rowNum,
