@@ -109,7 +109,12 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
      */
     private function validateCustomerAddress(DataObject $response): DataObject
     {
-        $addressForm = $this->formFactory->create('customer_address', 'adminhtml_customer_address');
+        $addressForm = $this->formFactory->create(
+                'customer_address',
+                'adminhtml_customer_address',
+                [],
+                true
+        );
         $formData = $addressForm->extractData($this->getRequest());
 
         $errors = $addressForm->validateData($formData);
