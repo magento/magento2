@@ -43,4 +43,14 @@ class Image implements ArgumentInterface
     {
         return $this->image->getUrl($category, $attributeCode);
     }
+
+    /**
+     * Get unique container ID for image
+     * @param $productid string
+     * @return string
+     */
+    public function getProductUniqId( $productid) : string
+    {
+        return uniqid($productid);
+    }
 }
