@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,23 +22,13 @@ use Magento\Weee\Helper\Data;
 class FixedProductTax implements ResolverInterface
 {
     /**
-     * @var Data
-     */
-    private $weeeHelper;
-
-    /**
-     * @var TaxHelper
-     */
-    private $taxHelper;
-
-    /**
      * @param Data $weeeHelper
      * @param TaxHelper $taxHelper
      */
-    public function __construct(Data $weeeHelper, TaxHelper $taxHelper)
-    {
-        $this->weeeHelper = $weeeHelper;
-        $this->taxHelper = $taxHelper;
+    public function __construct(
+        private readonly Data $weeeHelper,
+        private readonly TaxHelper $taxHelper
+    ) {
     }
 
     /**

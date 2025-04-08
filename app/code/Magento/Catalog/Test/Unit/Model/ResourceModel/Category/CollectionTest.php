@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2024 Adobe
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -203,16 +203,13 @@ class CollectionTest extends TestCase
 
     public function testLoadProductCount() : void
     {
-        $this->select->expects($this->exactly(3))
+        $this->select->expects($this->exactly(1))
             ->method('from')
             ->willReturnSelf();
-        $this->select->expects($this->exactly(3))
+        $this->select->expects($this->exactly(1))
             ->method('where')
             ->willReturnSelf();
-        $this->select->expects($this->exactly(1))
-            ->method('group')
-            ->willReturnSelf();
-        $this->connection->expects($this->exactly(2))
+        $this->connection->expects($this->exactly(1))
             ->method('fetchPairs')
             ->with($this->select)
             ->willReturn([]);
