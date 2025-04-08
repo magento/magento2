@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -110,10 +114,10 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
     private function validateCustomerAddress(DataObject $response): DataObject
     {
         $addressForm = $this->formFactory->create(
-                'customer_address',
-                'adminhtml_customer_address',
-                [],
-                true
+            'customer_address',
+            'adminhtml_customer_address',
+            [],
+            true
         );
         $formData = $addressForm->extractData($this->getRequest());
 
