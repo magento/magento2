@@ -27,8 +27,9 @@
                 <td <?= /* @noEscape */ $block->getLabelProperties() ?>>
                     <?= $block->escapeHtml($title) ?>
                     <?php if ($percent !== null) : ?>
-                        (<?= (float) $percent ?>%)
+                        (<?= number_format((float)$percent, 1, ',', '') ?>%)
                     <?php endif; ?>
+
                     <br />
                 </td>
                 <td <?= /* @noEscape */ $block->getValueProperties() ?> rowspan="1">

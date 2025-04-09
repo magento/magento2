@@ -40,6 +40,24 @@ define([
          */
         isCalculated: function () {
             return this.totals() && totals.getSegment('tax') !== null;
-        }
+        },
+
+        formatPercent: function (percent) {
+            try {
+                var locale = (window.checkoutConfig && window.checkoutConfig.locale) 
+                    ? window.checkoutConfig.locale.replace('_', '-') 
+                    : 'de-DE'; // fallback
+        
+                if (typeof percent === 'number' || (typeof percent === 'string' && percent.match(/^[\d.]+$/))) {
+                    return parseFloat(percent).toLocaleString(locale, {
+                        minimumFractionDigits: 1,
+                        maximumFractionDigits: 2
+                    });
+                }
+            } catch (e) {
+                console.warn('Percent formatting failed:', e);
+            }
+            return percent;
+        }           
     });
 });
