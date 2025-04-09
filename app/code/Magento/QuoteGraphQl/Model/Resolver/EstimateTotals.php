@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2023 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -20,6 +20,7 @@ use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\AddressFactory;
+use Magento\QuoteGraphQl\Model\ErrorMapper;
 
 /**
  * Apply address and shipping method to totals estimate and return the quote
@@ -32,13 +33,15 @@ class EstimateTotals implements ResolverInterface
      * @param AddressFactory $addressFactory
      * @param TotalsInformationManagementInterface $totalsInformationManagement
      * @param TotalsInformationInterfaceFactory $totalsInformationFactory
+     * @param ErrorMapper $errorMapper
      */
     public function __construct(
         private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         private readonly CartRepositoryInterface $cartRepository,
         private readonly AddressFactory $addressFactory,
         private readonly TotalsInformationManagementInterface $totalsInformationManagement,
-        private readonly TotalsInformationInterfaceFactory $totalsInformationFactory
+        private readonly TotalsInformationInterfaceFactory $totalsInformationFactory,
+        private readonly ErrorMapper $errorMapper
     ) {
     }
 
@@ -62,7 +65,9 @@ class EstimateTotals implements ResolverInterface
                     [
                         'masked_id' => $args['input']['cart_id']
                     ]
-                )
+                ),
+                $exception,
+                $this->errorMapper->getErrorMessageId('Could not find a cart with ID')
             );
         }
 
