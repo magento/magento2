@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Multishipping\Model\Checkout\Type;
@@ -703,7 +703,7 @@ class Multishipping extends \Magento\Framework\DataObject
         $store = $order->getStore();
         $amountPrice = $store->getBaseCurrency()
             ->convert($shippingPrice, $store->getCurrentCurrencyCode());
-        $order->setBaseShippingAmount($shippingPrice);
+        $order->setBaseShippingAmount((float)$shippingPrice);
         $order->setShippingAmount($amountPrice);
 
         $order->setQuote($quote);
