@@ -7,6 +7,7 @@ namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
+use Magento\CatalogRule\Model\Rule;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider;
 use Magento\Framework\Exception\InputException;
@@ -84,9 +85,6 @@ class ConfigurableProductHandler
         foreach ($configurableProductIds as $productId) {
             if (!isset($this->childrenProducts[$productId])) {
                 $this->childrenProducts[$productId] = $this->configurable->getChildrenIds($productId)[0];
-            }
-
-            if (isset($this->childrenProducts[$productId])) {
                 $this->childrenProducts[$productId] =
                     $this->validateChildrenProducts($rule, $this->childrenProducts[$productId])
                     ?? $this->childrenProducts[$productId];
@@ -103,9 +101,7 @@ class ConfigurableProductHandler
                         ? array_filter($productIds[$subProductId])
                         : [];
 
-                    if (isset($productIds[$subProductId])) {
-                        $productIds[$subProductId] = $parentValidationResult + $childValidationResult;
-                    }
+                    $productIds[$subProductId] = $parentValidationResult + $childValidationResult;
                 }
 
             }
@@ -115,26 +111,29 @@ class ConfigurableProductHandler
     }
 
     /**
-     * @param $rule
-     * @param $productIds
-     * @return mixed
+     * Filter the provided child product IDs by applying the rule's conditions
+     *
+     * @param Rule $rule
+     * @param array $productIds
+     * @return array|false
      */
-    private function validateChildrenProducts($rule, $productIds): mixed
+    private function validateChildrenProducts(Rule $rule, array $productIds): array|false
     {
-        try {
-            $collection = $this->productCollectionFactory->create();
-            $collection->addAttributeToSelect('*');
-            $collection->addFieldToFilter('entity_id', ['in' => $productIds]);
-            $productCollection = [];
+        if ($rule->getConditions()) {
+            try {
+                $collection = $this->productCollectionFactory->create();
+                $collection->addAttributeToSelect('*');
+                $collection->addFieldToFilter('entity_id', ['in' => $productIds]);
 
-            if ($rule->getConditions()) {
                 $productCollection = $this->conditionsToCollectionApplier
                     ->applyConditionsToCollection($rule->getConditions(), $collection);
-            }
 
-            return $productCollection->getAllIds() ?? false;
-        } catch (InputException $e) {
-            return false;
+                return $productCollection->getAllIds();
+            } catch (InputException $e) {
+                return false;
+            }
         }
+
+        return $productIds;
     }
 }

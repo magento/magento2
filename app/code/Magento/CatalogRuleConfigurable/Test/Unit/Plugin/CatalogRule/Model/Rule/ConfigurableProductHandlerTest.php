@@ -13,6 +13,8 @@ use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurablePr
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogRule\Model\ResourceModel\Product\ConditionsToCollectionApplier;
 
 /**
  * Unit test for Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler
@@ -34,6 +36,16 @@ class ConfigurableProductHandlerTest extends TestCase
      */
     private $configurableProductsProviderMock;
 
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    private $productCollectionFactoryMock;
+
+    /**
+     * @var ConditionsToCollectionApplier|MockObject
+     */
+    private $conditionsToCollectionApplierMock;
+
     /** @var Rule|MockObject */
     private $ruleMock;
 
@@ -50,11 +62,23 @@ class ConfigurableProductHandlerTest extends TestCase
             ConfigurableProductsProvider::class,
             ['getIds']
         );
+        $this->productCollectionFactoryMock = $this->createPartialMock(
+            CollectionFactory::class,
+            ['create']
+        );
+
+        $this->conditionsToCollectionApplierMock = $this->createPartialMock(
+            ConditionsToCollectionApplier::class,
+            ['applyConditionsToCollection']
+        );
+
         $this->ruleMock = $this->createMock(Rule::class);
 
         $this->configurableProductHandler = new ConfigurableProductHandler(
             $this->configurableMock,
-            $this->configurableProductsProviderMock
+            $this->configurableProductsProviderMock,
+            $this->productCollectionFactoryMock,
+            $this->conditionsToCollectionApplierMock
         );
     }
 
