@@ -1,8 +1,20 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
+declare(strict_types=1);
 
 namespace Magento\User\Block\User;
 
@@ -70,7 +82,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                     'label' => __('Force Sign-In'),
                     'class' => 'invalidate-token',
                     'onclick' => "deleteConfirm('" . $this->escapeJs($this->escapeHtml($deleteConfirmMsg)) .
-                        "', '" . $this->getInvalidateUrl() . "')",
+                        "', '" . $this->getInvalidateUrl() . "', {data:{{$this->_objectId}:{$objId}}})",
                 ]
             );
         }
@@ -149,6 +161,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getInvalidateUrl()
     {
-        return $this->getUrl('adminhtml/*/invalidatetoken', ['_current' => true]);
+        return $this->getUrl('adminhtml/*/invalidatetoken');
     }
 }
