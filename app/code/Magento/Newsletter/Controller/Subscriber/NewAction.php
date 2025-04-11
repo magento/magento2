@@ -173,7 +173,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     {
         if ($this->getRequest()->isPost()
             && $this->getRequest()->getPost('email')
-            && $this->newsletterConfig->isActive()
+            && $this->newsletterConfig->isActive(ScopeInterface::SCOPE_STORE)
         ) {
             $email = (string)$this->getRequest()->getPost('email');
 
