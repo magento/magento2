@@ -1126,7 +1126,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
      */
     public function reindex()
     {
-        $this->getIndexer()->reindexRow($this->getId());
+        if (!$this->getIndexer()->isScheduled()) {
+            $this->getIndexer()->reindexRow($this->getId());
+        }
     }
 
     /**

@@ -19,8 +19,6 @@
             <testCaseId value="MAGETWO-95960"/>
             <useCaseId value="MAGETWO-95823"/>
             <group value="cloud"/>
-            <!--Will be fixed in the scope of ACQE-7552 -->
-            <group value="pr_exclude"/>
         </annotations>
 
         <before>

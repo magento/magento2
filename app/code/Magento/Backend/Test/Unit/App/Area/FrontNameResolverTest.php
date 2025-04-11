@@ -129,6 +129,7 @@ class FrontNameResolverTest extends TestCase
             ->willReturnMap(
                 [
                     [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
+                    [Store::XML_PATH_SECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
                     [
                         FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_URL,
                         ScopeInterface::SCOPE_STORE,
@@ -160,7 +161,6 @@ class FrontNameResolverTest extends TestCase
                     ->setHost(parse_url($url, PHP_URL_HOST))
                     ->setPort(parse_url($url, PHP_URL_PORT))
             );
-
         $this->assertEquals($expectedValue, $this->model->isHostBackend());
     }
 
