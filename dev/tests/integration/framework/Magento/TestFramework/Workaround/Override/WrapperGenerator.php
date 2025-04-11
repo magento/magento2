@@ -16,7 +16,7 @@ use Magento\TestFramework\SkippableTrait;
  */
 class WrapperGenerator
 {
-    private const SKIPPABLE_SUFFIX = 'Skippable';
+    public const SKIPPABLE_SUFFIX = 'Skippable';
 
     /**
      * @var ClassGenerator
