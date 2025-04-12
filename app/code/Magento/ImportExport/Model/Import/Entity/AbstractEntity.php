@@ -813,7 +813,7 @@ abstract class AbstractEntity implements EntityInterface
                     if (!$this->isAttributeParticular($columnName)) {
                         if (trim($columnName ?? '') == '') {
                             $emptyHeaderColumns[] = $columnNumber;
-                        } elseif (!$columnName || !preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
+                     } elseif (!$columnName || !preg_match('/^[a-zA-Z][a-z0-9_]*$/', $columnName)) {
                             $invalidColumns[] = $columnName;
                         } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                             $invalidAttributes[] = $columnName;
