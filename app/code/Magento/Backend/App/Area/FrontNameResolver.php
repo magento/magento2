@@ -117,6 +117,9 @@ class FrontNameResolver implements FrontNameResolverInterface
     /**
      * Return whether the host from request is the backend host
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return bool
      */
     public function isHostBackend()
@@ -128,10 +131,11 @@ class FrontNameResolver implements FrontNameResolverInterface
         if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
             $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
         } else {
-            $backendUrl = $this->config->getValue(Store::XML_PATH_UNSECURE_BASE_URL);
+            $xmlPath = $this->request->isSecure() ? Store::XML_PATH_SECURE_BASE_URL : Store::XML_PATH_UNSECURE_BASE_URL;
+            $backendUrl = $this->config->getValue($xmlPath);
             if ($backendUrl === null) {
                 $backendUrl = $this->scopeConfig->getValue(
-                    Store::XML_PATH_UNSECURE_BASE_URL,
+                    $xmlPath,
                     ScopeInterface::SCOPE_STORE
                 );
             }
