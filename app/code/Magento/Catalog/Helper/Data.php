@@ -550,7 +550,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $taxClassKey->setType(TaxClassKeyInterface::TYPE_ID)
                 ->setValue($product->getTaxClassId());
 
-            if ($ctc === null && $this->_customerSession->getCustomerGroupId() != null) {
+            if ($ctc === null && $this->_customerSession->getCustomerGroupId() !== null) {
                 $ctc = $this->customerGroupRepository->getById($this->_customerSession->getCustomerGroupId())
                     ->getTaxClassId();
             }
