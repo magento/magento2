@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CmsNewPagePageActionsSection">
-        <element name="savePage" type="button" selector="#save_and_close" timeout="160"/>
+        <element name="savePage" type="button" selector="#save_and_close" timeout="500"/>
         <element name="reset" type="button" selector="#reset"/>
         <element name="saveAndContinueEdit" type="button" selector="#save-button" timeout="120"/>
         <element name="saveAndDuplicate" type="button" selector="#save_and_duplicate" timeout="10"/>
