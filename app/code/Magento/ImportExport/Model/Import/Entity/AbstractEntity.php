@@ -817,7 +817,7 @@ abstract class AbstractEntity implements EntityInterface
                             $invalidColumns[] = $columnName;
                         } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                             $invalidAttributes[] = $columnName;
-                     }
+                        }
                     }
                 }
                 $this->addErrors(self::ERROR_CODE_INVALID_ATTRIBUTE, $invalidAttributes);
