@@ -1,7 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
  */
 declare(strict_types=1);
 
@@ -31,16 +40,16 @@ class PhpCookieManager implements CookieManagerInterface
      * RFC 2109 - Page 15
      * http://www.ietf.org/rfc/rfc6265.txt
      */
-    private const MAX_NUM_COOKIES = 50;
+    public const MAX_NUM_COOKIES = 50;
     public const MAX_COOKIE_SIZE = 4096;
-    private const EXPIRE_NOW_TIME = 1;
-    private const EXPIRE_AT_END_OF_SESSION_TIME = 0;
+    public const EXPIRE_NOW_TIME = 1;
+    public const EXPIRE_AT_END_OF_SESSION_TIME = 0;
     /**#@-*/
 
     /**#@+
      * Constant for metadata array key
      */
-    private const KEY_EXPIRE_TIME = 'expiry';
+    public const KEY_EXPIRE_TIME = 'expiry';
     /**#@-*/
 
     /**
