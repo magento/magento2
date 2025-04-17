@@ -21,6 +21,7 @@
                 <number_items_to_display_pager>20</number_items_to_display_pager>
                 <crosssell_enabled>1</crosssell_enabled>
                 <enable_clear_shopping_cart>0</enable_clear_shopping_cart>
+                <enable_add_to_cart_link_v1>1</enable_add_to_cart_link_v1>
             </cart>
             <cart_link>
                 <use_qty>1</use_qty>
