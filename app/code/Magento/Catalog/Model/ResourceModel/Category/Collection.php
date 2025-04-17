@@ -374,20 +374,22 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private function getCountFromCategoryTableBulk(
         array $categoryIds,
         int $websiteId
-    ) : array {
-        $subSelect = clone $this->_conn->select();
-        $subSelect->from(['ce2' => $this->getTable('catalog_category_entity')], 'ce2.entity_id')
-            ->where("ce2.path LIKE CONCAT(ce.path, '/%') OR ce2.path = ce.path");
-
+    ): array {
         $select = clone $this->_conn->select();
         $select->from(
             ['ce' => $this->getTable('catalog_category_entity')],
             'ce.entity_id'
         );
-        $joinCondition =  new \Zend_Db_Expr("cp.category_id IN ({$subSelect})");
+
+        $select->joinLeft(
+            ['ce2' => $this->getTable('catalog_category_entity')],
+            new \Zend_Db_Expr("ce2.path LIKE CONCAT(ce.path, '/%') OR ce2.path = ce.path"),
+            []
+        );
+
         $select->joinLeft(
             ['cp' => $this->getProductTable()],
-            $joinCondition,
+            'cp.category_id = ce2.entity_id',
             'COUNT(DISTINCT cp.product_id) AS product_count'
         );
         if ($websiteId) {
