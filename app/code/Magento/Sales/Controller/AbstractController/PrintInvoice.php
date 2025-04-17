@@ -53,9 +53,21 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
     {
         $invoiceId = (int)$this->getRequest()->getParam('invoice_id');
         if ($invoiceId) {
-            $invoice = $this->_objectManager->create(
-                \Magento\Sales\Api\InvoiceRepositoryInterface::class
-            )->get($invoiceId);
+            try {
+                $invoice = $this->_objectManager->create(
+                    \Magento\Sales\Api\InvoiceRepositoryInterface::class
+                )->get($invoiceId);
+            }catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->messageManager->addError(__($e->getMessage()));
+                /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+                $resultRedirect = $this->resultRedirectFactory->create();
+                if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
+                    $resultRedirect->setPath('*/*/history');
+                } else {
+                    $resultRedirect->setPath('sales/guest/form');
+                }
+                return $resultRedirect;
+            }
             $order = $invoice->getOrder();
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
