@@ -82,7 +82,14 @@ class CartItemProcessor implements CartItemProcessorInterface
             return $cartItem;
         }
         $productOptions = [];
-        $bundleOptions = $cartItem->getBuyRequest()->getBundleOption();
+
+        // Bundle option multiselect selections added over Graphql
+        if ($cartItem->getBuyRequest()->getBundleOptionsData()) {
+            $bundleOptions = $this->getPreparedOptions($cartItem->getBuyRequest()->getBundleOptionsData());
+        } else {
+            $bundleOptions = $cartItem->getBuyRequest()->getBundleOption();
+        }
+
         $bundleOptionsQty = $cartItem->getBuyRequest()->getBundleOptionQty();
         $bundleOptionsQty = is_array($bundleOptionsQty) ? $bundleOptionsQty : [];
         if (is_array($bundleOptions)) {
@@ -109,5 +116,23 @@ class CartItemProcessor implements CartItemProcessorInterface
             $cartItem->getProductOption()->setExtensionAttributes($extension);
         }
         return $cartItem;
+    }
+
+    /**
+     * Get prepared options with selection ids
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @param array $options
+     * @return array
+     */
+    private function getPreparedOptions(array $options): array
+    {
+        foreach ($options as $optionId => $option) {
+            foreach ($option as $selectionId => $optionQty) {
+                $options[$optionId][$selectionId] = $selectionId;
+            }
+        }
+
+        return $options;
     }
 }
