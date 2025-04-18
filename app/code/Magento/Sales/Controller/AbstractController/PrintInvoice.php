@@ -56,7 +56,7 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
                 $invoice = $this->_objectManager->create(
                     \Magento\Sales\Api\InvoiceRepositoryInterface::class
                 )->get($invoiceId);
-            }catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $this->messageManager->addError(__($e->getMessage()));
                 /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
