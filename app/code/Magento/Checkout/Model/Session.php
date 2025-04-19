@@ -160,7 +160,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;

@@ -47,7 +47,7 @@ class SearchCriteriaProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
         $this->searchCriteriaApplier->process($searchCriteria, $collection);
 

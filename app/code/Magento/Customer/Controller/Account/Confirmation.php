@@ -67,7 +67,7 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
         PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement,
-        Url $customerUrl = null
+        ?Url $customerUrl = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;

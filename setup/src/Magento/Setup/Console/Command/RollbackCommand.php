@@ -68,7 +68,7 @@ class RollbackCommand extends AbstractSetupCommand
         ObjectManagerProvider $objectManagerProvider,
         MaintenanceMode $maintenanceMode,
         DeploymentConfig $deploymentConfig,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->backupRollbackFactory = $this->objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class);

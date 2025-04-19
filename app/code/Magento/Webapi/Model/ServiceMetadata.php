@@ -106,7 +106,7 @@ class ServiceMetadata
         WebApiCache $cache,
         ClassReflector $classReflector,
         TypeProcessor $typeProcessor,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->config = $config;
         $this->cache = $cache;

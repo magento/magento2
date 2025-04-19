@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -75,12 +75,13 @@
         </after>
         <!--Navigate to home page-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
-        <!--Search for word "5127S"-->
+        <!--Search for word "5127AB"-->
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search1">
-            <argument name="phrase" value="5127S"/>
+            <argument name="phrase" value="5127AB"/>
         </actionGroup>
         <!--Assert that product1 is present in the search result-->
-        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct1">
+        <comment userInput="BIC workaround" stepKey="seeProduct1"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct1inAB">
             <argument name="productName" value="$$product1.name$$"/>
         </actionGroup>
         <!--Assert that product2 is not present in the search result-->
@@ -88,11 +89,13 @@
             <argument name="productName" value="$$product2.name$$"/>
         </actionGroup>
         <!--Assert that product2 is not present in the search result-->
-        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct3">
+        <comment userInput="BIC workaround" stepKey="dontSeeProduct3"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct3inAB">
             <argument name="productName" value="$$product3.name$$"/>
         </actionGroup>
         <!--Assert that product4 is present in the search result-->
-        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct4">
+        <comment userInput="BIC workaround" stepKey="seeProduct4"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct4inAB">
             <argument name="productName" value="$$product4.name$$"/>
         </actionGroup>
         <!--Assert that product5 is not present in the search result-->
@@ -100,7 +103,8 @@
             <argument name="productName" value="$$product5.name$$"/>
         </actionGroup>
         <!--Assert that product6 is not present in the search result-->
-        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct6">
+        <comment userInput="BIC workaround" stepKey="dontSeeProduct6"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct6inAB">
             <argument name="productName" value="$$product6.name$$"/>
         </actionGroup>
 
@@ -163,4 +167,3 @@
         </actionGroup>
     </test>
 </tests>
-

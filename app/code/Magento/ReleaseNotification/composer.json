@@ -2,7 +2,7 @@
     "name": "magento/module-release-notification",
     "description": "N/A",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/module-user": "*",
         "magento/module-backend": "*",
         "magento/module-ui": "*",

@@ -23,7 +23,7 @@ class ArrayFilter
     /**
      * @param FilterChain|null $filterChain
      */
-    public function __construct(FilterChain $filterChain = null)
+    public function __construct(?FilterChain $filterChain = null)
     {
         $this->filterChain = $filterChain ?? new FilterChain();
     }

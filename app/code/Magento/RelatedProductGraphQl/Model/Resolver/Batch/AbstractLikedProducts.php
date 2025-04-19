@@ -124,7 +124,9 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
         $relatedProducts = [];
         /** @var ProductInterface $item */
         foreach ($relatedSearchResult->getItems() as $item) {
-            $relatedProducts[$item->getId()] = $item;
+            if ($item->isAvailable()) {
+                $relatedProducts[$item->getId()] = $item;
+            }
         }
 
         //Matching products with related products.

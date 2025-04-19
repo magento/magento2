@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -16,6 +16,8 @@
         <element name="imageUploadPreviewByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader-preview')]//img" parameterized="true"/>
         <element name="addSelectedFromMediaGallery" type="input" selector="//button[contains(@title,'Add Selected')]"/>
         <element name="htmlHeaderSection" type="text" selector="[data-index='head']"/>
+        <element name="headerSection" type="text" selector="[data-index='header']"/>
+        <element name="deleteHeaderSectionImage" type="text" selector="//button[@title='Delete image']"/>
         <element name="selectFromGalleryByFieldsetName" type="input" selector="//*[contains(@class,'fieldset-wrapper')][child::*[contains(@class,'fieldset-wrapper-title')]//*[contains(text(),'{{arg1}}')]]//*[contains(@class,'file-uploader')]//label[contains(text(), 'Select from Gallery')]" parameterized="true"/>
         <element name="imageUploadFromMediaGallery" type="input" selector="//input[contains(@class,'fileupload')]" />
         <element name="saveConfiguration" type="input" selector="//button[contains(@title, 'Save Configuration')]" />

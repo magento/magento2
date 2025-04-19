@@ -76,7 +76,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
         ResolverInterface $localeResolver,
         $model = Document::class,
         $connection = null,
-        AbstractDb $resource = null
+        ?AbstractDb $resource = null
     ) {
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
@@ -148,7 +148,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }
@@ -182,7 +182,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }

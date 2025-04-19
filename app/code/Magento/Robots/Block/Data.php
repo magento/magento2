@@ -46,7 +46,7 @@ class Data extends AbstractBlock implements IdentityInterface
         Context $context,
         Robots $robots,
         StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
+        ?StoreManagerInterface $storeManager = null,
         array $data = []
     ) {
         $this->robots = $robots;

@@ -91,9 +91,9 @@ class Config implements ConfigInterface
      * @param SortItemsHelper|null $sortItemsHelper
      */
     public function __construct(
-        RelationsInterface $relations = null,
-        DefinitionInterface $definitions = null,
-        SortItemsHelper $sortItemsHelper = null
+        ?RelationsInterface $relations = null,
+        ?DefinitionInterface $definitions = null,
+        ?SortItemsHelper $sortItemsHelper = null
     ) {
         $this->_relations = $relations ?: new \Magento\Framework\ObjectManager\Relations\Runtime();
         $this->_definitions = $definitions ?: new \Magento\Framework\ObjectManager\Definition\Runtime();

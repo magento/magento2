@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product;
@@ -11,14 +11,11 @@ namespace Magento\Catalog\Model\Product;
  *
  * @api
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Action extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Product website factory
-     *
      * @var \Magento\Catalog\Model\Product\WebsiteFactory
      */
     protected $_productWebsiteFactory;
@@ -56,8 +53,8 @@ class Action extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_productWebsiteFactory = $productWebsiteFactory;

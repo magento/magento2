@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 
@@ -16,7 +16,7 @@ class Chooser extends \Magento\Backend\App\Action implements HttpPostActionInter
     /**
      * Authorization level of a basic admin session
      */
-    const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
+    public const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -43,7 +43,7 @@ class Chooser extends \Magento\Backend\App\Action implements HttpPostActionInter
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\Escaper $escaper = null
+        ?\Magento\Framework\Escaper $escaper = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;

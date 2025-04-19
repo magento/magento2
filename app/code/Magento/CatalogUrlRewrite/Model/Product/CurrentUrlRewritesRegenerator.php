@@ -84,9 +84,9 @@ class CurrentUrlRewritesRegenerator
         UrlFinderInterface $urlFinder,
         ProductUrlPathGenerator $productUrlPathGenerator,
         UrlRewriteFactory $urlRewriteFactory,
-        UrlRewriteFinder $urlRewriteFinder = null,
-        MergeDataProviderFactory $mergeDataProviderFactory = null,
-        CategoryRepository $categoryRepository = null
+        ?UrlRewriteFinder $urlRewriteFinder = null,
+        ?MergeDataProviderFactory $mergeDataProviderFactory = null,
+        ?CategoryRepository $categoryRepository = null
     ) {
         $this->urlFinder = $urlFinder;
         $this->productUrlPathGenerator = $productUrlPathGenerator;
@@ -241,7 +241,7 @@ class CurrentUrlRewritesRegenerator
      * @param ObjectRegistry|null $productCategories
      * @return Category|null|bool
      */
-    protected function retrieveCategoryFromMetadata($url, ObjectRegistry $productCategories = null)
+    protected function retrieveCategoryFromMetadata($url, ?ObjectRegistry $productCategories = null)
     {
         $metadata = $url->getMetadata();
         if (isset($metadata['category_id'])) {

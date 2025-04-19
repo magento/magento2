@@ -246,7 +246,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * @return void
      * @throws NoSuchEntityException
      */
-    protected function updateUrlPathForCategory(Category $category, Category $parentCategory = null)
+    protected function updateUrlPathForCategory(Category $category, ?Category $parentCategory = null)
     {
         $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));

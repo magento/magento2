@@ -37,7 +37,7 @@ class IsSubscribed implements ResolverInterface
      */
     public function __construct(
         SubscriberFactory $subscriberFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->subscriberFactory = $subscriberFactory;
         $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
@@ -50,8 +50,8 @@ class IsSubscribed implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));

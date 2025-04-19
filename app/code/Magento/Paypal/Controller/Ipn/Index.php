@@ -47,7 +47,7 @@ class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareAct
         \Magento\Framework\App\Action\Context $context,
         \Magento\Paypal\Model\IpnFactory $ipnFactory,
         \Psr\Log\LoggerInterface $logger,
-        OrderFactory $orderFactory = null
+        ?OrderFactory $orderFactory = null
     ) {
         $this->_logger = $logger;
         $this->_ipnFactory = $ipnFactory;

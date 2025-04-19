@@ -318,7 +318,7 @@ class Info
      * @param array|null $map
      * @return array|\Magento\Framework\DataObject
      */
-    public function &exportFromPayment(\Magento\Payment\Model\InfoInterface $payment, $to, array $map = null)
+    public function &exportFromPayment(\Magento\Payment\Model\InfoInterface $payment, $to, ?array $map = null)
     {
         $fullMap = array_merge($this->_paymentMap, $this->_systemMap);
         \Magento\Framework\DataObject\Mapper::accumulateByMap(

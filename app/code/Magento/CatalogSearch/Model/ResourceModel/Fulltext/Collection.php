@@ -164,18 +164,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $requestBuilder = null,
         $searchEngine = null,
         $temporaryStorageFactory = null,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container',
-        SearchResultFactory $searchResultFactory = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
-        \Magento\Search\Api\SearchInterface $search = null,
-        \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
-        SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
-        SearchResultApplierFactory $searchResultApplierFactory = null,
-        TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
-        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
+        ?SearchResultFactory $searchResultFactory = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?MetadataPool $metadataPool = null,
+        ?\Magento\Search\Api\SearchInterface $search = null,
+        ?\Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?\Magento\Framework\Api\FilterBuilder $filterBuilder = null,
+        ?SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
+        ?SearchResultApplierFactory $searchResultApplierFactory = null,
+        ?TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
+        ?DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
         $this->searchResultFactory = $searchResultFactory
             ?? ObjectManager::getInstance()->get(SearchResultFactory::class);

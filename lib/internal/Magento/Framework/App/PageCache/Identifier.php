@@ -36,7 +36,7 @@ class Identifier implements IdentifierInterface
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\Http\Context $context,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->request = $request;
         $this->context = $context;

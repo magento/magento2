@@ -53,7 +53,7 @@ class Scoped extends \Magento\Framework\Config\Data
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_reader = $reader;
         $this->_configScope = $configScope;
