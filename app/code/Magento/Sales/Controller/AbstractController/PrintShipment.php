@@ -64,9 +64,9 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
                     $resultRedirect->setPath('*/*/history');
                 } else {
                     $resultRedirect->setPath('sales/guest/form');
-                 }
+                }
                  return $resultRedirect;
-           }
+            }
             $order = $shipment->getOrder();
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
