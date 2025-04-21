@@ -397,6 +397,5 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true,
-    "minimum-stability": "beta"
+    "prefer-stable": true
 }
