@@ -1,10 +1,8 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
@@ -279,8 +277,10 @@ class DeploymentConfigTest extends TestCase
         $this->readerMock->expects($this->once())->method('load')->willReturn(['a'=>'b']);
         putenv('MAGENTO_DC_A=c');
         putenv('MAGENTO_DC_B__B__B=D');
+        putenv('MAGENTO_DC_C=false');
         $this->assertSame('c', $this->deploymentConfig->get('a'));
         $this->assertSame('D', $this->deploymentConfig->get('b/b/b'));
+        $this->assertFalse($this->deploymentConfig->get('c'));
     }
 
     public function testEnvVariablesSubstitution(): void

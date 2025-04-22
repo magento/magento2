@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  */
-$viewFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/magento-icon.svg');
+if ($block->getConfig()->isB2bEnabled()) {
+    $adobeFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/adobe-icon.svg');
+} else {
+    $adobeFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/magento-icon.svg');
+}
 ?>
 <?php if ($block->getConfig()->isEnabled()): ?>
     <div class="lac-notification-sticky"
@@ -17,7 +21,7 @@ $viewFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images
         <div class="lac-notification clearfix" data-bind="visible: isVisible" style="display: none">
             <div class="top-container">
                 <div class="lac-notification-icon wrapper">
-                    <img class="logo-img"  src="<?= $escaper->escapeUrl($viewFileUrl) ?>" alt="Magento" />
+                    <img class="logo-img"  src="<?= $escaper->escapeUrl($adobeFileUrl) ?>" alt="Magento" />
                 </div>
                 <div class="lac-notification-text wrapper">
                     <span data-bind="html: notificationText"></span>
