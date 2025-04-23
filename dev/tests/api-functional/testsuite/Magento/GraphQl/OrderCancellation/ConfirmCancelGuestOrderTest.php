@@ -475,7 +475,7 @@ MUTATION);
             $this->graphQlMutation(
                 $this->getConfirmCancelOrderMutationWithErrorV2(
                     $this->idEncoder->encode((string)$order->getEntityId()),
-                    $this->confirmationKey->execute($order, 'Cancel sample reason')
+                    $this->confirmationKey->execute($order, 'Other')
                 )
             )
         );

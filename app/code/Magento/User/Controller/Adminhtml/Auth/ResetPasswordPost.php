@@ -1,18 +1,33 @@
 <?php
-/**
+/************************************************************************
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
+declare(strict_types=1);
+
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\User\Controller\Adminhtml\Auth;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Helper\Data;
 use Magento\User\Model\UserFactory;
+use Magento\User\Helper\ForceSignIn;
 
-class ResetPasswordPost extends Auth
+class ResetPasswordPost extends Auth implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var Data
@@ -20,18 +35,27 @@ class ResetPasswordPost extends Auth
     private $backendDataHelper;
 
     /**
+     * @var ForceSignIn
+     */
+    private ForceSignIn $forceSignIn;
+
+    /**
      * @param Context $context
      * @param UserFactory $userFactory
-     * @param Data $backendDataHelper
+     * @param Data|null $backendDataHelper
+     * @param ForceSignIn|null $forceSignIn
      */
     public function __construct(
         Context $context,
         UserFactory $userFactory,
-        ?Data $backendDataHelper = null
+        ?Data $backendDataHelper = null,
+        ?ForceSignIn $forceSignIn = null
     ) {
         parent::__construct($context, $userFactory);
         $this->backendDataHelper = $backendDataHelper ?: ObjectManager::getInstance()->get(Data::class);
+        $this->forceSignIn = $forceSignIn ?: ObjectManager::getInstance()->get(ForceSignIn::class);
     }
+
     /**
      * Reset forgotten password
      *
@@ -75,6 +99,7 @@ class ResetPasswordPost extends Auth
                 }
             } else {
                 $user->save();
+                $this->forceSignIn->updateAdminSessionStatus($userId);
                 $this->messageManager->addSuccess(__('You updated your password.'));
                 $this->getResponse()->setRedirect(
                     $this->backendDataHelper->getHomePageUrl()

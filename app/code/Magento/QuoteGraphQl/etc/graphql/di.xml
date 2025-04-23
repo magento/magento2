@@ -96,4 +96,7 @@
         <plugin name="billing_address_save_same_as_shipping"
                 type="Magento\QuoteGraphQl\Plugin\CustomerManagementPlugin"/>
     </type>
+    <type name="Magento\Payment\Model\MethodList">
+        <plugin name="restrict_payment_methods_graphql" type="Magento\QuoteGraphQl\Plugin\Model\RestrictPaymentMethods"/>
+    </type>
 </config>
