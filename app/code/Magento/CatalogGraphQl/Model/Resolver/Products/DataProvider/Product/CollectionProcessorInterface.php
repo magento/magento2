@@ -31,6 +31,6 @@ interface CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection;
 }

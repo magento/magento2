@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="magento">
+        <binding id="catalog_product_generate_urls" topic="catalog_product_generate_urls" destination="catalog_product_generate_urls"/>
+    </exchange>
+</config>

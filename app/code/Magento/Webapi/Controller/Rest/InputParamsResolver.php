@@ -83,7 +83,7 @@ class InputParamsResolver
         ServiceInputProcessor $serviceInputProcessor,
         Router $router,
         RequestValidator $requestValidator,
-        MethodsMap $methodsMap = null,
+        ?MethodsMap $methodsMap = null,
         ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->request = $request;

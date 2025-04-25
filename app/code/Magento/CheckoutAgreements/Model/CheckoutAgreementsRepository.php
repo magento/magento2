@@ -90,8 +90,8 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         AgreementResource $agreementResource,
         AgreementFactory $agreementFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $agreementsList = null,
-        ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
+        ?\Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $agreementsList = null,
+        ?ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;

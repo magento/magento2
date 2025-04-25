@@ -41,7 +41,7 @@ class CustomerScopeData extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         parent::__construct($context, $data);
         $this->storeManager = $context->getStoreManager();

@@ -34,7 +34,7 @@ class Standard implements DriverInterface
      *
      * @param array|null $config
      */
-    public function __construct(array $config = null)
+    public function __construct(?array $config = null)
     {
         $this->_initOutputs($config);
         $this->_initStat($config);
@@ -54,7 +54,7 @@ class Standard implements DriverInterface
      * @param array|null $config
      * @return void
      */
-    protected function _initOutputs(array $config = null)
+    protected function _initOutputs(?array $config = null)
     {
         if (!$config) {
             return;
@@ -103,7 +103,7 @@ class Standard implements DriverInterface
      * @param array $config
      * @return array
      */
-    protected function _getOutputConfigs(array $config = null)
+    protected function _getOutputConfigs(?array $config = null)
     {
         $result = [];
         if (isset($config['outputs'])) {
@@ -120,7 +120,7 @@ class Standard implements DriverInterface
      * @param array|null $config
      * @return OutputFactory
      */
-    protected function _getOutputFactory(array $config = null)
+    protected function _getOutputFactory(?array $config = null)
     {
         if (isset($config['outputFactory']) && $config['outputFactory'] instanceof OutputFactory) {
             $result = $config['outputFactory'];
@@ -136,7 +136,7 @@ class Standard implements DriverInterface
      * @param array|null $config
      * @return void
      */
-    protected function _initStat(array $config = null)
+    protected function _initStat(?array $config = null)
     {
         if (isset($config['stat']) && $config['stat'] instanceof Stat) {
             $this->_stat = $config['stat'];
@@ -164,7 +164,7 @@ class Standard implements DriverInterface
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function start($timerId, array $tags = null)
+    public function start($timerId, ?array $tags = null)
     {
         $this->_stat->start($timerId, microtime(true), memory_get_usage(true), memory_get_usage());
     }

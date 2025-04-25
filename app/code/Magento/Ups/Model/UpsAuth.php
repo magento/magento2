@@ -43,7 +43,7 @@ class UpsAuth extends AbstractCarrier
      * @param ErrorFactory $rateErrorFactory
      */
     public function __construct(
-        AsyncClientInterface $asyncHttpClient = null,
+        ?AsyncClientInterface $asyncHttpClient,
         Cache $cacheManager,
         ErrorFactory $rateErrorFactory
     ) {

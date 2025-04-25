@@ -98,12 +98,12 @@ class Directive extends Action implements HttpGetActionInterface
         Context $context,
         DecoderInterface $urlDecoder,
         RawFactory $resultRawFactory,
-        AdapterFactory $adapterFactory = null,
-        LoggerInterface $logger = null,
-        Config $config = null,
-        Filter $filter = null,
-        File $file = null,
-        Filesystem $filesystem = null
+        ?AdapterFactory $adapterFactory = null,
+        ?LoggerInterface $logger = null,
+        ?Config $config = null,
+        ?Filter $filter = null,
+        ?File $file = null,
+        ?Filesystem $filesystem = null
     ) {
         parent::__construct($context);
         $this->urlDecoder = $urlDecoder;

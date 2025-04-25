@@ -48,7 +48,7 @@ class DownloadCss extends Theme implements HttpGetActionInterface
         FileFactory $fileFactory,
         Repository $assetRepo,
         Filesystem $appFileSystem,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->escaper = $escaper ?? $context->getObjectManager()->get(Escaper::class);
         parent::__construct($context, $coreRegistry, $fileFactory, $assetRepo, $appFileSystem);

@@ -77,7 +77,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
             DataCategoryUrlRewriteDatabaseMap::class,
             DataProductUrlRewriteDatabaseMap::class
         ],
-        CollectionFactory $storeGroupFactory = null
+        ?CollectionFactory $storeGroupFactory = null
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->urlRewriteHandler = $urlRewriteHandler;

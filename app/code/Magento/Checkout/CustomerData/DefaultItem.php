@@ -65,8 +65,8 @@ class DefaultItem extends AbstractItem
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Framework\Escaper $escaper = null,
-        ItemResolverInterface $itemResolver = null
+        ?\Magento\Framework\Escaper $escaper = null,
+        ?ItemResolverInterface $itemResolver = null
     ) {
         $this->configurationPool = $configurationPool;
         $this->imageHelper = $imageHelper;

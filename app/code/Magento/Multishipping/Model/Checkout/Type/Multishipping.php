@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Multishipping\Model\Checkout\Type;
@@ -229,11 +229,11 @@ class Multishipping extends \Magento\Framework\DataObject
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         array $data = [],
-        \Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null,
-        AllowedCountries $allowedCountryReader = null,
-        Multishipping\PlaceOrderFactory $placeOrderFactory = null,
-        LoggerInterface $logger = null,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper = null
+        ?\Magento\Quote\Api\Data\CartExtensionFactory $cartExtensionFactory = null,
+        ?AllowedCountries $allowedCountryReader = null,
+        ?Multishipping\PlaceOrderFactory $placeOrderFactory = null,
+        ?LoggerInterface $logger = null,
+        ?\Magento\Framework\Api\DataObjectHelper $dataObjectHelper = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -703,7 +703,7 @@ class Multishipping extends \Magento\Framework\DataObject
         $store = $order->getStore();
         $amountPrice = $store->getBaseCurrency()
             ->convert($shippingPrice, $store->getCurrentCurrencyCode());
-        $order->setBaseShippingAmount($shippingPrice);
+        $order->setBaseShippingAmount((float)$shippingPrice);
         $order->setShippingAmount($amountPrice);
 
         $order->setQuote($quote);

@@ -38,7 +38,7 @@ class AuthenticationData implements AuthenticationDataInterface
     public function __construct(
         int $customerId,
         int $adminId,
-        AuthenticationDataExtensionInterface $extensionAttributes = null
+        ?AuthenticationDataExtensionInterface $extensionAttributes = null
     ) {
         $this->customerId = $customerId;
         $this->adminId = $adminId;

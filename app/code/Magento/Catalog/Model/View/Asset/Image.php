@@ -1,17 +1,7 @@
 <?php
-/************************************************************************
- * Copyright 2024 Adobe
+/**
+ * Copyright 2016 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 
 namespace Magento\Catalog\Model\View\Asset;
@@ -119,9 +109,9 @@ class Image implements LocalInterface
         EncryptorInterface $encryptor,
         $filePath,
         array $miscParams,
-        ImageHelper $imageHelper = null,
-        CatalogMediaConfig $catalogMediaConfig = null,
-        StoreManagerInterface $storeManager = null,
+        ?ImageHelper $imageHelper = null,
+        ?CatalogMediaConfig $catalogMediaConfig = null,
+        ?StoreManagerInterface $storeManager = null,
         ?ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat = null
     ) {
         if (isset($miscParams['image_type'])) {

@@ -58,8 +58,8 @@ class StoreProcessor implements HttpHeaderProcessorInterface
         StoreManagerInterface $storeManager,
         HttpContext $httpContext,
         StoreCookieManagerInterface $storeCookieManager,
-        ResolverInterface $localeResolver = null,
-        LoggerInterface $logger = null
+        ?ResolverInterface $localeResolver = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->storeManager = $storeManager;
         $this->httpContext = $httpContext;

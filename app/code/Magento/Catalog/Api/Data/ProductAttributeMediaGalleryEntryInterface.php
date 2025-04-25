@@ -1,9 +1,7 @@
 <?php
 /**
- * Product Media Attribute
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api\Data;
 
@@ -15,14 +13,14 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  */
 interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInterface
 {
-    const ID = 'id';
-    const LABEL = 'label';
-    const POSITION = 'position';
-    const DISABLED = 'disabled';
-    const TYPES = 'types';
-    const MEDIA_TYPE = 'media_type';
-    const FILE = 'file';
-    const CONTENT = 'content';
+    public const ID = 'id';
+    public const LABEL = 'label';
+    public const POSITION = 'position';
+    public const DISABLED = 'disabled';
+    public const TYPES = 'types';
+    public const MEDIA_TYPE = 'media_type';
+    public const FILE = 'file';
+    public const CONTENT = 'content';
 
     /**
      * Retrieve gallery entry ID
@@ -112,7 +110,7 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
      * @param string[] $types
      * @return $this
      */
-    public function setTypes(array $types = null);
+    public function setTypes(?array $types = null);
 
     /**
      * Get file path

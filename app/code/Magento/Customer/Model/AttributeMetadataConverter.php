@@ -72,7 +72,7 @@ class AttributeMetadataConverter
         ValidationRuleInterfaceFactory $validationRuleFactory,
         AttributeMetadataInterfaceFactory $attributeMetadataFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->optionFactory = $optionFactory;
         $this->validationRuleFactory = $validationRuleFactory;

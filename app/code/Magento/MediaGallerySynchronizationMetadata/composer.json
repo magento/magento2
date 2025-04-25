@@ -2,7 +2,7 @@
     "name": "magento/module-media-gallery-synchronization-metadata",
     "description": "Magento module responsible for images metadata synchronization",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-media-gallery-metadata-api": "*",

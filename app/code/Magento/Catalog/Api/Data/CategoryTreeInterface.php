@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api\Data;
@@ -14,11 +13,15 @@ namespace Magento\Catalog\Api\Data;
 interface CategoryTreeInterface
 {
     /**
+     * Get Id
+     *
      * @return int|null
      */
     public function getId();
 
     /**
+     * Set Id
+     *
      * @param int $id
      * @return $this
      */
@@ -116,13 +119,17 @@ interface CategoryTreeInterface
     public function setProductCount($productCount);
 
     /**
+     * Get Children Data
+     *
      * @return \Magento\Catalog\Api\Data\CategoryTreeInterface[]
      */
     public function getChildrenData();
 
     /**
+     * Set Children Data
+     *
      * @param \Magento\Catalog\Api\Data\CategoryTreeInterface[] $childrenData
      * @return $this
      */
-    public function setChildrenData(array $childrenData = null);
+    public function setChildrenData(?array $childrenData = null);
 }

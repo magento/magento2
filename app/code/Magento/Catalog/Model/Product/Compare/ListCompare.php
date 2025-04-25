@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Compare;
 
@@ -21,36 +21,26 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class ListCompare extends \Magento\Framework\DataObject
 {
     /**
-     * Customer visitor
-     *
      * @var \Magento\Customer\Model\Visitor
      */
     protected $_customerVisitor;
 
     /**
-     * Customer session
-     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * Catalog product compare item
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
      */
     protected $_catalogProductCompareItem;
 
     /**
-     * Item collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
     /**
-     * Compare item factory
-     *
      * @var \Magento\Catalog\Model\Product\Compare\ItemFactory
      */
     protected $_compareItemFactory;
@@ -78,7 +68,7 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
         array $data = [],
-        ProductRepository $productRepository = null
+        ?ProductRepository $productRepository = null
     ) {
         $this->_compareItemFactory = $compareItemFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;

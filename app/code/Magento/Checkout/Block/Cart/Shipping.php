@@ -62,8 +62,8 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         CompositeConfigProvider $configProvider,
         array $layoutProcessors = [],
         array $data = [],
-        Json $serializer = null,
-        JsonHexTag $jsonHexTagSerializer = null
+        ?Json $serializer = null,
+        ?JsonHexTag $jsonHexTagSerializer = null
     ) {
         $this->configProvider = $configProvider;
         $this->layoutProcessors = $layoutProcessors;

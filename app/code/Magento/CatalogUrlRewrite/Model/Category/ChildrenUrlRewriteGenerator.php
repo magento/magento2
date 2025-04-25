@@ -46,8 +46,8 @@ class ChildrenUrlRewriteGenerator
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,
         CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory,
-        MergeDataProviderFactory $mergeDataProviderFactory = null,
-        CategoryRepositoryInterface $categoryRepository = null
+        ?MergeDataProviderFactory $mergeDataProviderFactory = null,
+        ?CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGeneratorFactory = $categoryUrlRewriteGeneratorFactory;

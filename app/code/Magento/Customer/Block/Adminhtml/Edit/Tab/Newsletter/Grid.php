@@ -62,8 +62,8 @@ class Grid extends Extended
         CollectionFactory $collectionFactory,
         Registry $coreRegistry,
         array $data = [],
-        Share $shareConfig = null,
-        SystemStore $systemStore = null
+        ?Share $shareConfig = null,
+        ?SystemStore $systemStore = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_collectionFactory = $collectionFactory;

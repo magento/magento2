@@ -2,7 +2,7 @@
     "name": "magento/module-login-as-customer-sales",
     "description": "",
     "require": {
-        "php": "~8.2.0||~8.3.0",
+        "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-user": "*",
