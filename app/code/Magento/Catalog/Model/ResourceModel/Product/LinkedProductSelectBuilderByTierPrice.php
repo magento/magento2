@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
@@ -23,7 +23,7 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
      *
      * Constant represents default website id
      */
-    const DEFAULT_WEBSITE_ID = 0;
+    public const DEFAULT_WEBSITE_ID = 0;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -69,7 +69,7 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Helper\Data $catalogHelper,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        BaseSelectProcessorInterface $baseSelectProcessor = null
+        ?BaseSelectProcessorInterface $baseSelectProcessor = null
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;

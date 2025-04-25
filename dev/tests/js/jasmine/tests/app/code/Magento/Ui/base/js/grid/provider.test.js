@@ -63,5 +63,16 @@ define(['squire', 'underscore'], function (Squire, _) {
                 expect(storage.requestConfig.method).toEqual('PATCH');
             });
         });
+        describe('"onError" method', function () {
+            it('test onError.', function () {
+                model.trigger = jasmine.createSpy();
+                model.set = jasmine.createSpy();
+                model.onError({statusText: 'error'});
+                expect(model.set).toHaveBeenCalledWith('lastError', true);
+                expect(model.trigger).toHaveBeenCalledWith('reloaded');
+                expect(model.firstLoad).toEqual(false);
+                expect(model.triggerDataReload).toEqual(false);
+            });
+        });
     });
 });

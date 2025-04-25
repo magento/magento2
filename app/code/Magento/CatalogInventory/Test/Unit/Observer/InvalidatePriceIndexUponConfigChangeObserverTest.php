@@ -59,7 +59,7 @@ class InvalidatePriceIndexUponConfigChangeObserverTest extends TestCase
         $this->observerMock = $this->createMock(Observer::class);
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getChangedPaths'])
+            ->addMethods(['getChangedPaths'])
             ->getMock();
 
         $this->observer = $objectManager->getObject(

@@ -45,7 +45,7 @@ class CollectionTest extends TestCase
 
         $resource = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getConnection'])
+            ->onlyMethods(['__wakeup', 'getConnection'])
             ->getMockForAbstractClass();
         $resource->expects($this->any())
             ->method('getConnection')
@@ -60,7 +60,7 @@ class CollectionTest extends TestCase
         $this->collection = $this->getMockBuilder(
             Collection::class
         )->setConstructorArgs($arguments)
-            ->setMethods(['addFilter', 'getSelect', 'getTable', '_initSelect'])
+            ->onlyMethods(['addFilter', 'getSelect', 'getTable', '_initSelect'])
             ->getMock();
     }
 

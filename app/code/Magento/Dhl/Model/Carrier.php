@@ -116,13 +116,6 @@ class Carrier extends AbstractDhl implements CarrierInterface
     protected $_request;
 
     /**
-     * Rate result data
-     *
-     * @var Result|null
-     */
-    protected $_result;
-
-    /**
      * Countries parameters data
      *
      * @var Element|null
@@ -332,8 +325,8 @@ class Carrier extends AbstractDhl implements CarrierInterface
         DateTime $dateTime,
         LaminasClientFactory $httpClientFactory,
         array $data = [],
-        XmlValidator $xmlValidator = null,
-        ProductMetadataInterface $productMetadata = null,
+        ?XmlValidator $xmlValidator = null,
+        ?ProductMetadataInterface $productMetadata = null,
         ?AsyncClientInterface $httpClient = null,
         ?ProxyDeferredFactory $proxyDeferredFactory = null
     ) {
@@ -1493,7 +1486,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getContainerTypes(DataObject $params = null)
+    public function getContainerTypes(?DataObject $params = null)
     {
         return [
             self::DHL_CONTENT_TYPE_DOC => __('Documents'),
@@ -2157,7 +2150,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
      * @param string|null $datetime
      * @return string
      */
-    private function buildMessageTimestamp(string $datetime = null): string
+    private function buildMessageTimestamp(?string $datetime = null): string
     {
         return $this->_coreDate->date(DATE_RFC3339, $datetime);
     }

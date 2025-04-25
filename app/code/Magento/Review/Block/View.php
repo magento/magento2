@@ -9,7 +9,6 @@ namespace Magento\Review\Block;
  * Review detailed view block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class View extends \Magento\Catalog\Block\Product\AbstractProduct
@@ -121,6 +120,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve rating summary for current product
      *
      * @deprecated 100.3.3
+     * @see f72f74d3
      * @return string
      */
     public function getRatingSummary()

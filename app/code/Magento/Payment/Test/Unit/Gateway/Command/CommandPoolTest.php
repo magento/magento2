@@ -22,7 +22,7 @@ class CommandPoolTest extends TestCase
             ->getMockForAbstractClass();
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
@@ -57,7 +57,7 @@ class CommandPoolTest extends TestCase
 
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()

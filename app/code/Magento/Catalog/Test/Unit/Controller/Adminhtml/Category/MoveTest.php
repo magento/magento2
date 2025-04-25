@@ -19,6 +19,7 @@ use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
@@ -73,12 +74,32 @@ class MoveTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Store\Model\StoreManagerInterface::class,
+                $this->createMock(\Magento\Store\Model\StoreManagerInterface::class)
+            ],
+            [
+                \Magento\Framework\Registry::class,
+                $this->createMock(\Magento\Framework\Registry::class)
+            ],
+            [
+                \Magento\Cms\Model\Wysiwyg\Config::class,
+                $this->createMock(\Magento\Cms\Model\Wysiwyg\Config::class)
+            ],
+            [
+                \Magento\Backend\Model\Auth\Session::class,
+                $this->createMock(\Magento\Backend\Model\Auth\Session::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->layoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->context = $this->createMock(Context::class);
@@ -98,7 +119,7 @@ class MoveTest extends TestCase
     {
         $this->request = $this
             ->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
@@ -141,8 +162,13 @@ class MoveTest extends TestCase
             ->getMock();
         $this->request->expects($this->exactly(2))
             ->method('getPost')
-            ->withConsecutive(['pid', false], ['aid', false])
-            ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'pid' && $arg2 == false) {
+                    return 2;
+                } elseif ($arg1 == 'aid' && $arg2 == false) {
+                    return 1;
+                }
+            });
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(Category::class)
@@ -212,8 +238,13 @@ class MoveTest extends TestCase
             ->getMock();
         $this->request->expects($this->exactly(2))
             ->method('getPost')
-            ->withConsecutive(['pid', false], ['aid', false])
-            ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'pid' && $arg2 == false) {
+                    return 2;
+                } elseif ($arg1 == 'aid' && $arg2 == false) {
+                    return 1;
+                }
+            });
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(Category::class)
@@ -281,8 +312,13 @@ class MoveTest extends TestCase
             ->getMock();
         $this->request->expects($this->exactly(2))
             ->method('getPost')
-            ->withConsecutive(['pid', false], ['aid', false])
-            ->willReturnMap([['pid', false, 2], ['aid', false, 1]]);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'pid' && $arg2 == false) {
+                    return 2;
+                } elseif ($arg1 == 'aid' && $arg2 == false) {
+                    return 1;
+                }
+            });
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(Category::class)

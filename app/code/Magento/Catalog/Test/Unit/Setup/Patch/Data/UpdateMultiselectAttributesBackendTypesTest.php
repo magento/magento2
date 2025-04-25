@@ -52,6 +52,8 @@ class UpdateMultiselectAttributesBackendTypesTest extends TestCase
         $select1 = $this->createMock(Select::class);
         $select2 = $this->createMock(Select::class);
         $select3 = $this->createMock(Select::class);
+        $statement = $this->createMock(\Zend_Db_Statement_Interface::class);
+
         $this->eavSetupFactory->method('create')
             ->willReturn($eavSetup);
         $this->dataSetup->method('getConnection')
@@ -61,11 +63,19 @@ class UpdateMultiselectAttributesBackendTypesTest extends TestCase
         $eavSetup->method('getEntityTypeId')
             ->willReturn(4);
         $eavSetup->method('updateAttribute')
-            ->withConsecutive(
-                [$entityTypeId, 3, 'backend_type', 'text'],
-                [$entityTypeId, 7, 'backend_type', 'text']
-            );
-        $connection->expects($this->exactly(3))
+            ->willReturnCallback(function (...$args) use ($entityTypeId) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$entityTypeId, 3, 'backend_type', 'text'],
+                    [$entityTypeId, 7, 'backend_type', 'text']
+                ];
+
+                $index++;
+                if ($args === $expectedArgs[$index - 1]) {
+                    return null;
+                }
+            });
+        $connection->expects($this->exactly(2))
             ->method('select')
             ->willReturnOnConsecutiveCalls($select1, $select2, $select3);
         $connection->method('describeTable')
@@ -78,6 +88,10 @@ class UpdateMultiselectAttributesBackendTypesTest extends TestCase
                     'row_id' => [],
                 ]
             );
+        $connection->method('query')
+            ->willReturn($statement);
+        $connection->method('fetchAll')
+            ->willReturn([]);
         $connection->method('fetchCol')
             ->with($select1)
             ->willReturn($attributeIds);
@@ -91,12 +105,17 @@ class UpdateMultiselectAttributesBackendTypesTest extends TestCase
             ->with('eav_attribute', ['attribute_id'])
             ->willReturnSelf();
         $select1->method('where')
-            ->withConsecutive(
-                ['entity_type_id = ?', $entityTypeId],
-                ['backend_type = ?', 'varchar'],
-                ['frontend_input = ?', 'multiselect']
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function (...$args) use ($entityTypeId, $select1) {
+                static $index = 0;
+                $expectedArgs = [
+                    ['entity_type_id = ?', $entityTypeId,null],
+                    ['backend_type = ?', 'varchar',null],
+                    ['frontend_input = ?', 'multiselect',null]
+                ];
+                $returnValue = $select1;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
         $select2->method('from')
             ->with('catalog_product_entity_varchar')
             ->willReturnSelf();

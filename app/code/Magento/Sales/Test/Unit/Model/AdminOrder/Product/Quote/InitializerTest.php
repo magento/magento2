@@ -73,7 +73,7 @@ class InitializerTest extends TestCase
 
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(

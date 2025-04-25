@@ -47,7 +47,7 @@ class TermTest extends TestCase
 
         $this->filterInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getValue',
                 'getField',
             ])

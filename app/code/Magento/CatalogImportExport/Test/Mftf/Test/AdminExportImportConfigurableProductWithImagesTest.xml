@@ -131,7 +131,7 @@
             </actionGroup>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-    </before>
+        </before>
         <after>
             <!-- Remove downloadable domains -->
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>

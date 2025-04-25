@@ -91,7 +91,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
         GroupInterfaceFactory $groupDataFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
-        SortOrderBuilder $sortOrderBuilder = null
+        ?SortOrderBuilder $sortOrderBuilder = null
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;

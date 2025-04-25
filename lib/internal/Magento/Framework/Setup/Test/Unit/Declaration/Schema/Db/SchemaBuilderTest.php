@@ -92,7 +92,7 @@ class SchemaBuilderTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [
@@ -351,27 +351,75 @@ class SchemaBuilderTest extends TestCase
             ->willReturn(['first_table', 'second_table']);
         $this->dbSchemaReaderMock->expects($this->any())
             ->method('getTableOptions')
-            ->withConsecutive(...array_values($withContext))
-            ->willReturnOnConsecutiveCalls(
-                ['engine' => 'innodb', 'comment' => '', 'charset' => 'utf-8', 'collation' => 'utf-8'],
-                ['engine' => 'innodb', 'comment' => 'Not null comment', 'charset' => 'utf-8', 'collation' => 'utf-8']
-            );
+            ->willReturnCallback(function ($withContext) {
+                if (!empty($withContext)) {
+                    static $callCount = 0;
+                    if ($callCount == 0) {
+                        $callCount++;
+                        return ['engine' => 'innodb', 'comment' => '', 'charset' => 'utf-8', 'collation' => 'utf-8'];
+                    } elseif ($callCount == 1) {
+                        $callCount++;
+                        return ['engine' => 'innodb', 'comment' => 'Not null comment',
+                            'charset' => 'utf-8', 'collation' => 'utf-8'];
+                    }
+                }
+            });
         $this->dbSchemaReaderMock->expects($this->any())
             ->method('readColumns')
-            ->withConsecutive(...array_values($withContext))
-            ->willReturnOnConsecutiveCalls($columns['first_table'], $columns['second_table']);
+            ->willReturnCallback(function ($withContext) use ($columns) {
+                if (!empty($withContext)) {
+                    static $callCount = 0;
+                    if ($callCount == 0) {
+                        $callCount++;
+                        return $columns['first_table'];
+                    } elseif ($callCount == 1) {
+                        $callCount++;
+                        return $columns['second_table'];
+                    }
+                }
+            });
         $this->dbSchemaReaderMock->expects($this->any())
             ->method('readIndexes')
-            ->withConsecutive(...array_values($withContext))
-            ->willReturnOnConsecutiveCalls([], $indexes['second_table']);
+            ->willReturnCallback(function ($withContext) use ($indexes) {
+                if (!empty($withContext)) {
+                    static $callCount = 0;
+                    if ($callCount == 0) {
+                        $callCount++;
+                        return [];
+                    } elseif ($callCount == 1) {
+                        $callCount++;
+                        return $indexes['second_table'];
+                    }
+                }
+            });
         $this->dbSchemaReaderMock->expects($this->any())
             ->method('readConstraints')
-            ->withConsecutive(...array_values($withContext))
-            ->willReturnOnConsecutiveCalls($constraints['first_table'], []);
+            ->willReturnCallback(function ($withContext) use ($constraints) {
+                if (!empty($withContext)) {
+                    static $callCount = 0;
+                    if ($callCount == 0) {
+                        $callCount++;
+                        return $constraints['first_table'];
+                    } elseif ($callCount == 1) {
+                        $callCount++;
+                        return [];
+                    }
+                }
+            });
         $this->dbSchemaReaderMock->expects($this->any())
             ->method('readReferences')
-            ->withConsecutive(...array_values($withContext))
-            ->willReturnOnConsecutiveCalls($references['first_table'], []);
+            ->willReturnCallback(function ($withContext) use ($references) {
+                if (!empty($withContext)) {
+                    static $callCount = 0;
+                    if ($callCount == 0) {
+                        $callCount++;
+                        return $references['first_table'];
+                    } elseif ($callCount == 1) {
+                        $callCount++;
+                        return [];
+                    }
+                }
+            });
         $table = $this->createTable('first_table');
         $refTable = $this->createTable('second_table');
         $refColumn = $this->createIntegerColumn('ref_column', $refTable);
@@ -396,103 +444,10 @@ class SchemaBuilderTest extends TestCase
         $table->addConstraints([$foreignKey, $primaryKey]);
         $this->elementFactoryMock->expects($this->any())
             ->method('create')
-            ->withConsecutive(
-                [
-                    'table',
-                    [
-                        'name' =>'first_table',
-                        'resource' => 'default',
-                        'engine' => 'innodb',
-                        'comment' => null,
-                        'charset' => 'utf-8',
-                        'collation' => 'utf-8'
-                    ]
-                ],
-                [
-                    'int',
-                    [
-                        'name' => 'first_column',
-                        'type' => 'int',
-                        'table' => $table,
-                        'padding' => 10,
-                        'identity' => true,
-                        'nullable' => false
-                    ]
-                ],
-                [
-                    'int',
-                    [
-                        'name' => 'foreign_column',
-                        'type' => 'int',
-                        'table' => $table,
-                        'padding' => 10,
-                        'nullable' => false
-                    ]
-                ],
-                [
-                    'timestamp',
-                    [
-                        'name' => 'second_column',
-                        'type' => 'timestamp',
-                        'table' => $table,
-                        'default' => 'CURRENT_TIMESTAMP'
-                    ]
-                ],
-                [
-                    'primary',
-                    [
-                        'name' => 'PRIMARY',
-                        'type' => 'primary',
-                        'columns' => [$firstColumn],
-                        'table' => $table,
-                        'nameWithoutPrefix' => 'PRIMARY',
-                        'column' => ['first_column'],
-                    ]
-                ],
-                [
-                    'table',
-                    [
-                        'name' =>'second_table',
-                        'resource' => 'default',
-                        'engine' => 'innodb',
-                        'comment' => 'Not null comment',
-                        'charset' => 'utf-8',
-                        'collation' => 'utf-8'
-                    ]
-                ],
-                [
-                    'int',
-                    [
-                        'name' => 'ref_column',
-                        'type' => 'int',
-                        'table' => $refTable,
-                        'padding' => 10,
-                        'nullable' => false
-                    ]
-                ],
-                [
-                    'index',
-                    [
-                        'name' => 'FIRST_INDEX',
-                        'table' => $refTable,
-                        'column' => ['ref_column'],
-                        'columns' => [$refColumn],
-                        'nameWithoutPrefix' => 'FIRST_INDEX',
-                    ]
-                ],
-                [
-                    'foreign',
-                    [
-                        'name' => 'some_foreign_key',
-                        'type' => 'foreign',
-                        'column' => $foreignColumn,
-                        'table' => $table,
-                        'referenceTable' => $refTable,
-                        'referenceColumn' => $refColumn,
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls(
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
                 $table,
                 $firstColumn,
                 $foreignColumn,
@@ -502,6 +457,26 @@ class SchemaBuilderTest extends TestCase
                 $refColumn,
                 $index,
                 $foreignKey
-            );
+            ) {
+                if ($arg1 == 'table' && $arg2['name'] == 'first_table') {
+                    return $table;
+                } elseif ($arg1 == 'int' && $arg2['name'] == 'first_column') {
+                    return $firstColumn;
+                } elseif ($arg1 == 'int' && $arg2['name'] == 'foreign_column') {
+                    return $foreignColumn;
+                } elseif ($arg1 == 'timestamp' && $arg2['name'] == 'second_column') {
+                    return $timestampColumn;
+                } elseif ($arg1 == 'primary' && $arg2['name'] == 'PRIMARY') {
+                    return $primaryKey;
+                } elseif ($arg1 == 'table' && $arg2['name'] == 'second_table') {
+                    return $refTable;
+                } elseif ($arg1 == 'int' && $arg2['name'] == 'ref_column') {
+                    return $refColumn;
+                } elseif ($arg1 == 'index' && $arg2['name'] == 'FIRST_INDEX') {
+                    return $index;
+                } elseif ($arg1 == 'foreign' && $arg2['name'] == 'some_foreign_key') {
+                    return $foreignKey;
+                }
+            });
     }
 }

@@ -125,7 +125,7 @@
         <!-- Assert Shipping total is not yet calculated -->
         <actionGroup ref="AssertStorefrontNotCalculatedValueInShippingTotalInOrderSummaryActionGroup" stepKey="assertNotYetCalculated"/>
 
-        <!--  Assert order cannot be placed and error message will shown. -->
+        <!--  Assert order cannot be placed and error message will be shown. -->
         <actionGroup ref="AssertStorefrontOrderIsNotPlacedActionGroup" stepKey="assertOrderCannotBePlaced">
             <argument name="error" value="The shipping method is missing. Select the shipping method and try again."/>
         </actionGroup>
@@ -144,7 +144,7 @@
         <!-- Place order assert succeed -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="checkoutPlaceOrder"/>
 
-        <!-- Loged in Customer Test Scenario -->
+        <!-- Logged in Customer Test Scenario -->
         <!-- Login with created Customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>

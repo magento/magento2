@@ -15,19 +15,21 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
+use Magento\Framework\Indexer\SaveHandler\StackedActionsIndexerInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\CacheContext;
 
 /**
  * Indexer Handler for Elasticsearch engine.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexerHandler implements IndexerInterface
+class IndexerHandler implements IndexerInterface, StackedActionsIndexerInterface
 {
     /**
      * Size of default batch
      */
-    const DEFAULT_BATCH_SIZE = 500;
+    public const DEFAULT_BATCH_SIZE = 500;
 
     /**
      * @var IndexStructureInterface
@@ -98,6 +100,7 @@ class IndexerHandler implements IndexerInterface
      * @param DeploymentConfig|null $deploymentConfig
      * @param CacheContext|null $cacheContext
      * @param Processor|null $processor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
@@ -121,6 +124,37 @@ class IndexerHandler implements IndexerInterface
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->processor = $processor ?: ObjectManager::getInstance()->get(Processor::class);
+    }
+
+    /**
+     * Disables stacked actions mode
+     *
+     * @return void
+     */
+    public function disableStackedActions(): void
+    {
+        $this->adapter->disableStackQueriesMode();
+    }
+
+    /**
+     * Enables stacked actions mode
+     *
+     * @return void
+     */
+    public function enableStackedActions(): void
+    {
+        $this->adapter->enableStackQueriesMode();
+    }
+
+    /**
+     * Runs stacked actions
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function triggerStackedActions(): void
+    {
+        $this->adapter->triggerStackedQueries();
     }
 
     /**
@@ -181,7 +215,9 @@ class IndexerHandler implements IndexerInterface
         $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         $documentIds = [];
         foreach ($documents as $document) {
-            $documentIds[$document] = $document;
+            if ($document) {
+                $documentIds[$document] = $document;
+            }
         }
         $this->adapter->deleteDocs($documentIds, $scopeId, $this->getIndexerId());
         return $this;

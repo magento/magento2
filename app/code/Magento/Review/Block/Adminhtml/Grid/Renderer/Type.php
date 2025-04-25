@@ -7,8 +7,6 @@ namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
 
 /**
  * Adminhtml review grid item renderer for item type
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {

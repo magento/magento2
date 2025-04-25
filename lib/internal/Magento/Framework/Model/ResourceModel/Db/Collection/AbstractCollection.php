@@ -125,8 +125,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
@@ -151,17 +151,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function _resetState(): void
     {
         parent::_resetState();
-        $this->_model = null;
-        $this->_resourceModel = null;
         $this->_fieldsToSelect = null;
         $this->expressionFieldsToSelect = [];
         $this->_initialFieldsToSelect = null;
         $this->_fieldsToSelectChanged = false;
         $this->_joinedTables = [];
-        $this->_mainTable = null;
         $this->_resetItemsDataChanged = false;
-        $this->_eventPrefix = '';
-        $this->_eventObject = '';
         $this->_construct();
         $this->_initSelect();
     }

@@ -13,4 +13,5 @@ use Magento\Ui\Block\Wrapper;
  */
 class RecentlyViewed extends Wrapper implements \Magento\Widget\Block\BlockInterface
 {
+    protected const RENDER_TYPE = 'html';
 }

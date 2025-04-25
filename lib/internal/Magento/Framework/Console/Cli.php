@@ -1,27 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Console;
 
+use Laminas\ServiceManager\ServiceManager;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ProductMetadata;
 use Magento\Framework\Composer\ComposerJsonFinder;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Console\CommandLoader\Aggregate;
 use Magento\Framework\Console\Exception\GenerationDirectoryAccessException;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Application;
+use Magento\Setup\Console\CommandLoader as SetupCommandLoader;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Magento 2 CLI Application.
@@ -37,16 +40,18 @@ class Cli extends Console\Application
     /**
      * Name of input option.
      */
-    const INPUT_KEY_BOOTSTRAP = 'bootstrap';
+    public const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
     /**#@+
      * Cli exit codes.
      */
-    const RETURN_SUCCESS = 0;
-    const RETURN_FAILURE = 1;
+    public const RETURN_SUCCESS = 0;
+    public const RETURN_FAILURE = 1;
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var ServiceManager
+     */
     private $serviceManager;
 
     /**
@@ -57,8 +62,6 @@ class Cli extends Console\Application
     private $initException;
 
     /**
-     * Object Manager.
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -88,8 +91,10 @@ class Cli extends Console\Application
             $output->writeln(
                 '<error>' . $exception->getMessage() . '</error>'
             );
+            // phpcs:disable
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(static::RETURN_FAILURE);
+            // phpcs:enable
         }
 
         if ($version == 'UNKNOWN') {
@@ -102,6 +107,7 @@ class Cli extends Console\Application
         parent::__construct($name, $version);
         $this->serviceManager->setService(\Symfony\Component\Console\Application::class, $this);
         $this->logger = $this->objectManager->get(LoggerInterface::class);
+        $this->setCommandLoader($this->getCommandLoader());
     }
 
     /**
@@ -130,7 +136,7 @@ class Cli extends Console\Application
     /**
      * @inheritdoc
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands():array
     {
         return array_merge(parent::getDefaultCommands(), $this->getApplicationCommands());
     }
@@ -144,11 +150,6 @@ class Cli extends Console\Application
     {
         $commands = [];
         try {
-            if (class_exists(\Magento\Setup\Console\CommandList::class)) {
-                $setupCommandList = new \Magento\Setup\Console\CommandList($this->serviceManager);
-                $commands = array_merge($commands, $setupCommandList->getCommands());
-            }
-
             if ($this->objectManager->get(DeploymentConfig::class)->isAvailable()) {
                 /** @var CommandListInterface */
                 $commandList = $this->objectManager->create(CommandListInterface::class);
@@ -229,5 +230,24 @@ class Cli extends Console\Application
         }
 
         return array_merge([], ...$commands);
+    }
+
+    /**
+     * Generate and return the Command Loader
+     *
+     * @throws \LogicException
+     * @throws \BadMethodCallException
+     */
+    private function getCommandLoader(): Console\CommandLoader\CommandLoaderInterface
+    {
+        $commandLoaders = [];
+        if (class_exists(SetupCommandLoader::class)) {
+            $commandLoaders[] = new SetupCommandLoader($this->serviceManager);
+        }
+        $commandLoaders[] = $this->objectManager->create(CommandLoader::class);
+
+        return $this->objectManager->create(Aggregate::class, [
+            'commandLoaders' => $commandLoaders
+        ]);
     }
 }

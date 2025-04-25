@@ -41,7 +41,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart implements HttpPostActi
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(\Magento\Framework\Escaper::class);
         parent::__construct($context, $scopeConfig, $checkoutSession, $storeManager, $formKeyValidator, $cart);

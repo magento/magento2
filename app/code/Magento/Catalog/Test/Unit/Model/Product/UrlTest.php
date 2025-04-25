@@ -11,6 +11,7 @@ use Magento\Catalog\Helper\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Url;
 use Magento\Catalog\Model\Product\Url as ProductUrl;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -21,6 +22,9 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UrlTest extends TestCase
 {
     /**
@@ -53,14 +57,18 @@ class UrlTest extends TestCase
      */
     protected $sidResolver;
 
+    /**
+     * @var ScopeConfigInterface
+     */
+    private ScopeConfigInterface $scopeConfig;
+
     protected function setUp(): void
     {
         $this->filter = $this->getMockBuilder(
             FilterManager::class
         )->disableOriginalConstructor()
-            ->setMethods(
-                ['translitUrl']
-            )->getMock();
+            ->addMethods(['translitUrl'])
+            ->getMock();
 
         $this->urlFinder = $this->getMockBuilder(
             UrlFinderInterface::class
@@ -70,7 +78,7 @@ class UrlTest extends TestCase
         $this->url = $this->getMockBuilder(
             \Magento\Framework\Url::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['setScope', 'getUrl']
             )->getMock();
 
@@ -87,6 +95,8 @@ class UrlTest extends TestCase
         $urlFactory->method('create')
             ->willReturn($this->url);
 
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             ProductUrl::class,
@@ -96,11 +106,15 @@ class UrlTest extends TestCase
                 'storeManager' => $storeManager,
                 'urlFactory' => $urlFactory,
                 'sidResolver' => $this->sidResolver,
+                'scopeConfig' => $this->scopeConfig
             ]
         );
     }
 
-    public function testFormatUrlKey()
+    /**
+     * @return void
+     */
+    public function testFormatUrlKey(): void
     {
         $strIn = 'Some string';
         $resultString = 'some';
@@ -115,6 +129,29 @@ class UrlTest extends TestCase
             $resultString
         );
 
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with(
+                \Magento\Catalog\Helper\Product::XML_PATH_APPLY_TRANSLITERATION_TO_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn(true);
+        $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
+    }
+
+    /**
+     * @return void
+     */
+    public function testFormatUrlKeyWithoutTransliteration(): void
+    {
+        $strIn = 'Some string ';
+        $resultString = 'some-string';
+
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with(
+                \Magento\Catalog\Helper\Product::XML_PATH_APPLY_TRANSLITERATION_TO_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )->willReturn(false);
         $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
     }
 
@@ -149,17 +186,14 @@ class UrlTest extends TestCase
         $product = $this->getMockBuilder(
             Product::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getUrlKey', 'setRequestPath', 'hasUrlDataObject', 'getDoNotUseCategoryId'])
+            ->onlyMethods(
                 [
                     'getStoreId',
                     'getEntityId',
                     'getId',
-                    'getUrlKey',
-                    'setRequestPath',
-                    'hasUrlDataObject',
                     'getRequestPath',
-                    'getCategoryId',
-                    'getDoNotUseCategoryId',
+                    'getCategoryId'
                 ]
             )->getMock();
         $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
@@ -197,7 +231,7 @@ class UrlTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             [

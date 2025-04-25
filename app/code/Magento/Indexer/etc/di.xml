@@ -13,6 +13,7 @@
     <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy" />
     <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
     <preference for="Magento\Framework\Indexer\IndexMutexInterface" type="Magento\Indexer\Model\IndexMutex" />
+    <preference for="Magento\Framework\Indexer\DeferredCacheCleanerInterface" type="Magento\Indexer\Model\Indexer\DeferredCacheCleaner" />
     <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
@@ -57,6 +58,7 @@
                 <item name="info" xsi:type="object">Magento\Indexer\Console\Command\IndexerInfoCommand</item>
                 <item name="reindex" xsi:type="object">Magento\Indexer\Console\Command\IndexerReindexCommand</item>
                 <item name="set-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetModeCommand</item>
+                <item name="set-status" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetStatusCommand</item>
                 <item name="show-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowModeCommand</item>
                 <item name="status" xsi:type="object">Magento\Indexer\Console\Command\IndexerStatusCommand</item>
                 <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
@@ -76,5 +78,8 @@
     </type>
     <type name="Magento\Framework\Indexer\CacheContext">
         <plugin name="defer_cache_cleaning" type="Magento\Indexer\Model\Indexer\DeferCacheCleaning" />
+    </type>
+    <type name="Magento\Framework\Mview\ViewInterface">
+        <plugin name="skip_suspended_indexer_mview_update" type="Magento\Indexer\Plugin\Mview\ViewUpdatePlugin" sortOrder="10"/>
     </type>
 </config>

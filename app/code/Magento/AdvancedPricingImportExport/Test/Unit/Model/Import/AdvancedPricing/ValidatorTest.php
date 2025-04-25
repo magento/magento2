@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -44,7 +45,7 @@ class ValidatorTest extends TestCase
         $this->validator = $this->getMockBuilder(
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator::class
         )
-            ->setMethods(['_clearMessages', '_addMessages'])
+            ->onlyMethods(['_clearMessages', '_addMessages'])
             ->setConstructorArgs([$this->validators])
             ->getMock();
     }
@@ -84,16 +85,16 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function isValidDataProvider()
+    public static function isValidDataProvider()
     {
         return [
             [
-                '$validatorResult' => true,
-                '$expectedResult' => true,
+                'validatorResult' => true,
+                'expectedResult' => true,
             ],
             [
-                '$validatorResult' => false,
-                '$expectedResult' => false,
+                'validatorResult' => false,
+                'expectedResult' => false,
             ]
         ];
     }

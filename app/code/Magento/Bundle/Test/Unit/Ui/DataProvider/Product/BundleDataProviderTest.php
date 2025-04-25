@@ -66,7 +66,7 @@ class BundleDataProviderTest extends TestCase
             ->getMockForAbstractClass();
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'toArray',
                     'isLoaded',
@@ -79,14 +79,14 @@ class BundleDataProviderTest extends TestCase
             )->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->collectionMock);
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllowedSelectionTypes'])
+            ->onlyMethods(['getAllowedSelectionTypes'])
             ->getMock();
     }
 

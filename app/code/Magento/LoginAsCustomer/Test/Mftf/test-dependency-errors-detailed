@@ -1,0 +1,13 @@
+
+File "/var/www/html/app/code/Magento/LoginAsCustomer/Test/Mftf/Test/AdminLoginAsCustomerMultishippingLoggingTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping
+	 CliEnableFlatRateShippingMethodActionGroup from module(s): magento/module-offline-shipping
+	 CliEnableCheckMoneyOrderPaymentMethodActionGroup from module(s): magento/module-offline-payments
+	 CliDisableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping
+	 CheckingWithMultipleAddressesActionGroup from module(s): magento/module-multishipping
+	 SelectMultiShippingInfoActionGroup from module(s): magento/module-multishipping
+	 SelectBillingInfoActionGroup from module(s): magento/module-multishipping
+	 ReviewOrderForMultiShipmentActionGroup from module(s): magento/module-multishipping
+	 StorefrontPlaceOrderForMultipleAddressesActionGroup from module(s): magento/module-multishipping

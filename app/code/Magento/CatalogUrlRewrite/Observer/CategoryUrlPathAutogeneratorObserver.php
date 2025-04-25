@@ -125,7 +125,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                     }
                 }
             }
-            $category->setUrlKey(null)->setUrlPath(null);
         }
     }
 
@@ -210,7 +209,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                         Category::ENTITY
                     )) {
                         $child = $this->categoryRepository->get($childId, $storeId);
-                        $this->updateUrlPathForCategory($child);
+                        $this->updateUrlPathForCategory($child, $category);
                     }
                 }
             }
@@ -247,7 +246,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * @return void
      * @throws NoSuchEntityException
      */
-    protected function updateUrlPathForCategory(Category $category, Category $parentCategory = null)
+    protected function updateUrlPathForCategory(Category $category, ?Category $parentCategory = null)
     {
         $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));

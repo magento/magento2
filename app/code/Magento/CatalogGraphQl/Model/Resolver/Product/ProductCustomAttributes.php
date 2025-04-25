@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -78,8 +79,8 @@ class ProductCustomAttributes implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $filtersArgs = $args['filters'] ?? [];
 
@@ -106,7 +107,7 @@ class ProductCustomAttributes implements ResolverInterface
             if (!array_key_exists($attributeCode, $productData)) {
                 continue;
             }
-            $attributeValue = $productData[$attributeCode];
+            $attributeValue = $productData[$attributeCode] ?? "";
             if (is_array($attributeValue)) {
                 $attributeValue = implode(',', $attributeValue);
             }

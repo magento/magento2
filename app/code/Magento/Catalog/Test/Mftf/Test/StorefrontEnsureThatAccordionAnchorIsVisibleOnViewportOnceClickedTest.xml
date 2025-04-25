@@ -187,6 +187,6 @@
 
         <!-- Scroll so that the description is visible and More info tab is on the upper middle of the page -->
         <scrollTo selector="{{StorefrontProductInfoDetailsSection.detailsTab}}" stepKey="scrollToMoreInfoTab"/>
-        <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
+        <resizeWindow width="1920" height="1080" stepKey="resizeWindowToDesktop"/>
     </test>
 </tests>

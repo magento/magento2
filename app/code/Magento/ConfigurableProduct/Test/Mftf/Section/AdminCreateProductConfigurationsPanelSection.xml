@@ -32,7 +32,7 @@
         <element name="attributeCheckboxByIndex" type="input" selector="li.attribute-option:nth-of-type({{var1}}) input" parameterized="true"/>
 
         <element name="applySingleSetOfImages" type="radio" selector=".admin__field-label[for='apply-single-set-radio']" timeout="30"/>
-        <element name="imageFileUpload" type="input" selector=".steps-wizard-section input[type='file'][name='image']"/>
+        <element name="imageFileUpload" type="input" selector=".steps-wizard-section .uppy-Dashboard-input"/>
         <element name="imageUploadButton" type="button" selector=".steps-wizard-section div.gallery"/>
 
         <element name="applyUniquePricesByAttributeToEachSku" type="radio" selector=".admin__field-label[for='apply-unique-prices-radio']"/>
@@ -62,5 +62,8 @@
         <element name="attributeRowByAttributeCode" type="block" selector="//td[count(../../..//th[./*[.='Attribute Code']]/preceding-sibling::th) + 1][./*[.='{{attribute_code}}']]/../td//input[@data-action='select-row']" parameterized="true"/>
         <element name="qtyForColorAttribute" type="text" selector="//span[text()='{{var1}}']/../..//input[@type='text']" parameterized="true"/>
         <element name="configProductName" type="text" selector="//table[@class='data-grid data-grid-configurable']//tbody//tr[{{row}}]//td[2]//span" parameterized="true"/>
+        <element name="optionsWithTitle" type="text" selector="//*[@class='attribute-entity-title' and text()='{{attributeTitle}}']//ancestor::div[@class='attribute-entity-top']//following-sibling::button[@class='action-create-new action-tertiary']/span" parameterized="true"/>
+        <element name="cancel" type="button" selector=".action-cancel"/>
+        <element name="back" type="button" selector=".action-back-step"/>
     </section>
 </sections>

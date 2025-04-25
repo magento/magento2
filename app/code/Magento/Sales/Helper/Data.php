@@ -9,8 +9,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Sales module base helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

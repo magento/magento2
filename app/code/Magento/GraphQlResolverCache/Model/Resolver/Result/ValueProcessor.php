@@ -9,6 +9,7 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagSetter\FlagSetterInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagGetter\FlagGetterInterface;
@@ -16,7 +17,7 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagGetter
 /**
  * Value processor for cached resolver value.
  */
-class ValueProcessor implements ValueProcessorInterface
+class ValueProcessor implements ValueProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * @var HydratorProviderInterface
@@ -113,6 +114,7 @@ class ValueProcessor implements ValueProcessorInterface
         $hydrator = $this->hydratorProvider->getHydratorForResolver($resolver);
         if ($hydrator) {
             $this->hydrators[$cacheKey] = $hydrator;
+            $hydrator->prehydrate($value);
             $this->getFlagSetterForType($info)->setFlagOnValue($value, $cacheKey);
         }
     }
@@ -128,29 +130,24 @@ class ValueProcessor implements ValueProcessorInterface
     /**
      * Perform data hydration.
      *
-     * @param array|null $value
+     * @param array $value
      * @return void
      */
-    private function hydrateData(&$value)
+    private function hydrateData(array &$value): void
     {
-        if ($value === null) {
-            return;
-        }
         // the parent value is always a single object that contains currently resolved value
         $reference = $this->defaultFlagGetter->getFlagFromValue($value) ?? null;
         if (isset($reference['cacheKey']) && isset($reference['index'])) {
             $cacheKey = $reference['cacheKey'];
             $index = $reference['index'];
-            if ($cacheKey) {
-                if (isset($this->processedValues[$cacheKey][$index])) {
-                    $value = $this->processedValues[$cacheKey][$index];
-                } elseif (isset($this->hydrators[$cacheKey])
-                    && $this->hydrators[$cacheKey] instanceof HydratorInterface
-                ) {
-                    $this->hydrators[$cacheKey]->hydrate($value);
-                    $this->defaultFlagSetter->unsetFlagFromValue($value);
-                    $this->processedValues[$cacheKey][$index] = $value;
-                }
+            if (isset($this->processedValues[$cacheKey][$index])) {
+                $value = $this->processedValues[$cacheKey][$index];
+            } elseif (isset($this->hydrators[$cacheKey])
+                && $this->hydrators[$cacheKey] instanceof HydratorInterface
+            ) {
+                $this->hydrators[$cacheKey]->hydrate($value);
+                $this->defaultFlagSetter->unsetFlagFromValue($value);
+                $this->processedValues[$cacheKey][$index] = $value;
             }
         }
     }
@@ -164,5 +161,14 @@ class ValueProcessor implements ValueProcessorInterface
         if ($dehydrator) {
             $dehydrator->dehydrate($value);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->hydrators = [];
+        $this->processedValues = [];
     }
 }

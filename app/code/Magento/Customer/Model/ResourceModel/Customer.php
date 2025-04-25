@@ -97,8 +97,8 @@ class Customer extends AbstractEntity
         DateTime $dateTime,
         StoreManagerInterface $storeManager,
         $data = [],
-        AccountConfirmation $accountConfirmation = null,
-        EncryptorInterface $encryptor = null
+        ?AccountConfirmation $accountConfirmation = null,
+        ?EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
 
@@ -112,6 +112,7 @@ class Customer extends AbstractEntity
         $this->storeManager = $storeManager;
         $this->encryptor = $encryptor ?? ObjectManager::getInstance()
                 ->get(EncryptorInterface::class);
+        $this->getEntityIdField();
     }
 
     /**

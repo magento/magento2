@@ -3,6 +3,9 @@
 //  * See COPYING.txt for license details.
 //  */
 
+/**
+ * @codingStandardsIgnoreStart
+ */
 .block-footer .action-add {
     -webkit-appearance: none;
     &:extend(.action-default, button all);
@@ -25,3 +28,16 @@
         font-size: 1.3rem;
     }
 }
+
+.admin__collapsible-block-wrapper {
+    .admin__collapsible-title._show {
+        &:before {
+            content: @icon-expand-close__content;
+            font-size: @collapsible-title-icon__size;
+            position: absolute;
+            right: @data-grid__font-size;
+            top: 2.3rem;
+        }
+    }
+}
+//@codingStandardsIgnoreEnd

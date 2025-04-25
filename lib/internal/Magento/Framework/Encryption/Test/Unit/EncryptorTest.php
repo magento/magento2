@@ -175,7 +175,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function validateHashDataProvider(): array
+    public static function validateHashDataProvider(): array
     {
         return [
             ['password', 'hash:salt:1', false, 1],
@@ -235,7 +235,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function emptyKeyDataProvider(): array
+    public static function emptyKeyDataProvider(): array
     {
         return [[null], [0], [''], ['0']];
     }
@@ -306,8 +306,15 @@ class EncryptorTest extends TestCase
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock
             ->method('get')
-            ->withConsecutive([Encryptor::PARAM_CRYPT_KEY], [Encryptor::PARAM_CRYPT_KEY])
-            ->willReturnOnConsecutiveCalls(self::CRYPT_KEY_1, self::CRYPT_KEY_1 . "\n" . self::CRYPT_KEY_2);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == Encryptor::PARAM_CRYPT_KEY) {
+                        return self::CRYPT_KEY_1;
+                    } elseif ($arg == Encryptor::PARAM_CRYPT_KEY) {
+                        return self::CRYPT_KEY_1 . "\n" . self::CRYPT_KEY_2;
+                    }
+                }
+            );
         $model1 = new Encryptor($this->randomGeneratorMock, $deploymentConfigMock);
         // simulate an encryption key is being added
         $model2 = new Encryptor($this->randomGeneratorMock, $deploymentConfigMock);
@@ -349,7 +356,7 @@ class EncryptorTest extends TestCase
      *
      * @return array
      */
-    public function useSpecifiedHashingAlgoDataProvider(): array
+    public static function useSpecifiedHashingAlgoDataProvider(): array
     {
         return [
             [

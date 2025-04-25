@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddOptionForAttributeActionGroup">
+        <annotations>
+            <description>Admin add default option for attribute.</description>
+        </annotations>
+        <!--Add option to attribute-->
+        <waitForElementClickable selector="{{AdminNewAttributePanel.addOption}}" stepKey="waitForAddOption"/>
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickOnAddOption"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.optionAdminValue('1')}}" stepKey="waitForAdminLabel"/>
+        <fillField selector="{{AdminNewAttributePanel.optionAdminValue('1')}}" userInput="10" stepKey="fillAdminLabelForOption"/>
+    </actionGroup>
+</actionGroups>

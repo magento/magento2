@@ -12,78 +12,78 @@ define([
 
     $.widget('mage.validation', $.mage.validation, {
         options: {
-            radioCheckboxClosest: 'ul, ol',
+            radioCheckboxClosest: 'ul, ol'
+        },
 
-            /**
-             * @param {*} error
-             * @param {HTMLElement} element
-             */
-            errorPlacement: function (error, element) {
-                var messageBox,
-                    dataValidate;
+        /**
+         * @param {*} error
+         * @param {HTMLElement} element
+         */
+        errorPlacement: function (error, element) {
+            var messageBox,
+                dataValidate;
 
-                if ($(element).hasClass('datetime-picker')) {
-                    element = $(element).parent();
+            if ($(element).hasClass('datetime-picker')) {
+                element = $(element).parent();
 
-                    if (element.parent().find('.mage-error').length) {
-                        return;
-                    }
-                }
-
-                if (element.attr('data-errors-message-box')) {
-                    messageBox = $(element.attr('data-errors-message-box'));
-                    messageBox.html(error);
-
+                if (element.parent().find('.mage-error').length) {
                     return;
                 }
+            }
 
-                dataValidate = element.attr('data-validate');
+            if (element.attr('data-errors-message-box')) {
+                messageBox = $(element.attr('data-errors-message-box'));
+                messageBox.html(error);
 
-                if (dataValidate && dataValidate.indexOf('validate-one-checkbox-required-by-name') > 0) {
-                    error.appendTo('#links-advice-container');
-                } else if (element.is(':radio, :checkbox')) {
-                    element.closest(this.radioCheckboxClosest).after(error);
-                } else {
-                    element.after(error);
-                }
-            },
+                return;
+            }
 
-            /**
-             * @param {HTMLElement} element
-             * @param {String} errorClass
-             */
-            highlight: function (element, errorClass) {
-                var dataValidate = $(element).attr('data-validate');
+            dataValidate = element.attr('data-validate');
 
-                if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
-                    $(element).parent().find('.datetime-picker').each(function () {
-                        $(this).removeClass(errorClass);
+            if (dataValidate && dataValidate.indexOf('validate-one-checkbox-required-by-name') > 0) {
+                error.appendTo('#links-advice-container');
+            } else if (element.is(':radio, :checkbox')) {
+                element.closest(this.radioCheckboxClosest).after(error);
+            } else {
+                element.after(error);
+            }
+        },
 
-                        if ($(this).val().length === 0) {
-                            $(this).addClass(errorClass);
-                        }
-                    });
-                } else if ($(element).is(':radio, :checkbox')) {
-                    $(element).closest(this.radioCheckboxClosest).addClass(errorClass);
-                } else {
-                    $(element).addClass(errorClass);
-                }
-            },
+        /**
+         * @param {HTMLElement} element
+         * @param {String} errorClass
+         */
+        highlight: function (element, errorClass) {
+            var dataValidate = $(element).attr('data-validate');
 
-            /**
-             * @param {HTMLElement} element
-             * @param {String} errorClass
-             */
-            unhighlight: function (element, errorClass) {
-                var dataValidate = $(element).attr('data-validate');
+            if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
+                $(element).parent().find('.datetime-picker').each(function () {
+                    $(this).removeClass(errorClass);
 
-                if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
-                    $(element).parent().find('.datetime-picker').removeClass(errorClass);
-                } else if ($(element).is(':radio, :checkbox')) {
-                    $(element).closest(this.radioCheckboxClosest).removeClass(errorClass);
-                } else {
-                    $(element).removeClass(errorClass);
-                }
+                    if ($(this).val().length === 0) {
+                        $(this).addClass(errorClass);
+                    }
+                });
+            } else if ($(element).is(':radio, :checkbox')) {
+                $(element).closest(this.radioCheckboxClosest).addClass(errorClass);
+            } else {
+                $(element).addClass(errorClass);
+            }
+        },
+
+        /**
+         * @param {HTMLElement} element
+         * @param {String} errorClass
+         */
+        unhighlight: function (element, errorClass) {
+            var dataValidate = $(element).attr('data-validate');
+
+            if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
+                $(element).parent().find('.datetime-picker').removeClass(errorClass);
+            } else if ($(element).is(':radio, :checkbox')) {
+                $(element).closest(this.radioCheckboxClosest).removeClass(errorClass);
+            } else {
+                $(element).removeClass(errorClass);
             }
         }
     });

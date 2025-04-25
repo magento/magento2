@@ -8,11 +8,18 @@ declare(strict_types=1);
 namespace Magento\OfflineShipping\Test\Unit\Model\ResourceModel\Carrier;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFactory;
@@ -32,30 +39,53 @@ class TablerateTest extends TestCase
     /**
      * @var Tablerate
      */
-    private $model;
+    private Tablerate $model;
 
     /**
-     * @var MockObject
+     * @var StoreManagerInterface|MockObject
      */
-    private $storeManagerMock;
+    private StoreManagerInterface $storeManagerMock;
 
     /**
-     * @var MockObject
+     * @var Filesystem|MockObject
      */
-    private $filesystemMock;
+    private Filesystem $filesystemMock;
 
     /**
-     * @var MockObject
+     * @var ResourceConnection|MockObject
      */
-    private $resource;
+    private ResourceConnection $resource;
 
     /**
-     * @var MockObject
+     * @var Import|MockObject
      */
-    private $importMock;
+    private Import $importMock;
+
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private DeploymentConfig $deploymentConfig;
+
+    /**
+     * @var RequestFactory|MockObject
+     */
+    private RequestFactory $requestFactory;
 
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $configOptionClassMock = $this->getMockBuilder(IoFile::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $objects = [
+            [
+                IoFile::class,
+                $configOptionClassMock
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $contextMock = $this->createMock(Context::class);
         $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $coreConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
@@ -65,6 +95,8 @@ class TablerateTest extends TestCase
         $this->importMock = $this->createMock(Import::class);
         $rateQueryFactoryMock = $this->createMock(RateQueryFactory::class);
         $this->resource = $this->createMock(ResourceConnection::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->requestFactory = $this->createMock(RequestFactory::class);
 
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resource);
 
@@ -76,18 +108,26 @@ class TablerateTest extends TestCase
             $carrierTablerateMock,
             $this->filesystemMock,
             $this->importMock,
-            $rateQueryFactoryMock
+            $rateQueryFactoryMock,
+            null,
+            $this->deploymentConfig,
+            $this->requestFactory
         );
     }
 
     public function testUploadAndImport()
     {
-        $_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'] = 'some/path/to/file';
+        $files['groups']['tablerate']['fields']['import']['value'] = [
+            'tmp_name' => 'some/path/to/file/import.csv'
+        ];
         $object = $this->getMockBuilder(\Magento\OfflineShipping\Model\Config\Backend\Tablerate::class)
             ->addMethods(['getScopeId'])
             ->disableOriginalConstructor()
             ->getMock();
 
+        $request = $this->createMock(Http::class);
+        $request->expects($this->once())->method('getFiles')->willReturn($files);
+        $this->requestFactory->expects($this->once())->method('create')->willReturn($request);
         $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $directoryReadMock = $this->getMockForAbstractClass(ReadInterface::class);
         $fileReadMock = $this->createMock(\Magento\Framework\Filesystem\File\ReadInterface::class);
@@ -97,10 +137,15 @@ class TablerateTest extends TestCase
         $object->expects($this->once())->method('getScopeId')->willReturn(1);
         $websiteMock->expects($this->once())->method('getId')->willReturn(1);
 
+        $writeMock = $this->createMock(WriteInterface::class);
+        $writeMock->expects($this->once())->method('delete')->with('import.csv')->willReturn(true);
         $this->filesystemMock->expects($this->once())->method('getDirectoryReadByPath')
-            ->with('some/path/to')->willReturn($directoryReadMock);
+            ->with('some/path/to/file')->willReturn($directoryReadMock);
         $directoryReadMock->expects($this->once())->method('openFile')
-            ->with('file')->willReturn($fileReadMock);
+            ->with('import.csv')->willReturn($fileReadMock);
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::VAR_IMPORT_EXPORT)->willReturn($writeMock);
 
         $this->resource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
 
@@ -112,6 +157,5 @@ class TablerateTest extends TestCase
         $this->importMock->expects($this->once())->method('getData')->willReturn([]);
 
         $this->model->uploadAndImport($object);
-        unset($_FILES['groups']);
     }
 }

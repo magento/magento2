@@ -5,13 +5,14 @@
  */
 namespace Magento\Customer\Model\Indexer;
 
+use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Config\Source\FilterConditionType;
 use Magento\Customer\Model\Customer;
-use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Eav\Model\Config;
-use Magento\Customer\Model\Attribute;
+use Magento\Framework\Indexer\FieldsetInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-class AttributeProvider implements FieldsetInterface
+class AttributeProvider implements FieldsetInterface, ResetAfterRequestInterface
 {
     /**
      * EAV entity
@@ -35,6 +36,14 @@ class AttributeProvider implements FieldsetInterface
         Config $eavConfig
     ) {
         $this->eavConfig = $eavConfig;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = null;
     }
 
     /**

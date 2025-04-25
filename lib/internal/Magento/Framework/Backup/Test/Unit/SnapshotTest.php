@@ -19,7 +19,7 @@ class SnapshotTest extends TestCase
         $filesystem = $this->createMock(Filesystem::class);
         $backupFactory = $this->createMock(Factory::class);
         $manager = $this->getMockBuilder(Snapshot::class)
-            ->setMethods(['getBackupFilename'])
+            ->onlyMethods(['getBackupFilename'])
             ->setConstructorArgs([$filesystem, $backupFactory])
             ->getMock();
 

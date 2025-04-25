@@ -1,0 +1,14 @@
+{
+    "sales_order_confirm_cancel": {
+        "column": {
+            "order_id": true,
+            "confirmation_key": true,
+            "reason": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "SALES_ORDER_CONFIRM_CANCEL_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
+    }
+}

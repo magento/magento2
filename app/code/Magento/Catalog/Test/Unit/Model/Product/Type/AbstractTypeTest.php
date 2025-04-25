@@ -48,18 +48,19 @@ class AbstractTypeTest extends TestCase
         $this->model = $this->objectManagerHelper->getObject(Simple::class);
 
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getHasOptions', '__sleep', 'getResource', 'getStatus'])
+            ->addMethods(['getHasOptions'])
+            ->onlyMethods(['__sleep', 'getResource', 'getStatus'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
-            ->setMethods(['getSortedAttributes', 'loadAllAttributes'])
+            ->onlyMethods(['getSortedAttributes', 'loadAllAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->product->expects($this->any())->method('getResource')->willReturn($this->productResource);
 
         $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getGroupSortPath', 'getSortPath'])
+            ->addMethods(['getGroupSortPath', 'getSortPath'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -106,7 +107,7 @@ class AbstractTypeTest extends TestCase
     /**
      * @return array
      */
-    public function attributeCompareProvider()
+    public static function attributeCompareProvider()
     {
         return [
             [2, 2, 0],

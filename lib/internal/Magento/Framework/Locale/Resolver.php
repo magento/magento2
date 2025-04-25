@@ -73,7 +73,7 @@ class Resolver implements ResolverInterface, ResetAfterRequestInterface
         $defaultLocalePath,
         $scopeType,
         $locale = null,
-        DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->defaultLocalePath = $defaultLocalePath;
@@ -180,7 +180,8 @@ class Resolver implements ResolverInterface, ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->locale = null;
-        $this->emulatedLocales = [];
+        while (!empty($this->emulatedLocales)) {
+            $this->revert();
+        }
     }
 }

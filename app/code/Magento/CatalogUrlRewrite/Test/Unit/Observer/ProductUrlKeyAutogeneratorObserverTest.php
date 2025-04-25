@@ -42,12 +42,12 @@ class ProductUrlKeyAutogeneratorObserverTest extends TestCase
     {
         $this->productUrlPathGenerator = $this->getMockBuilder(ProductUrlPathGenerator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrlKey'])
+            ->onlyMethods(['getUrlKey'])
             ->getMock();
 
         $this->compositeUrlValidator = $this->getMockBuilder(CompositeUrlKey::class)
             ->disableOriginalConstructor()
-            ->setMethods(['validate'])
+            ->onlyMethods(['validate'])
             ->getMock();
 
         $this->productUrlKeyAutogeneratorObserver = (new ObjectManagerHelper($this))->getObject(
@@ -68,18 +68,18 @@ class ProductUrlKeyAutogeneratorObserverTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setUrlKey'])
+            ->addMethods(['setUrlKey'])
             ->getMock();
         $product->expects($this->atLeastOnce())->method('setUrlKey')->with($urlKey);
         $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
         $event->expects($this->atLeastOnce())->method('getProduct')->willReturn($product);
         /** @var Observer|MockObject $observer */
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
+            ->onlyMethods(['getEvent'])
             ->getMock();
         $observer->expects($this->atLeastOnce())->method('getEvent')->willReturn($event);
         $this->productUrlPathGenerator->expects($this->atLeastOnce())->method('getUrlKey')->with($product)
@@ -97,18 +97,18 @@ class ProductUrlKeyAutogeneratorObserverTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setUrlKey'])
+            ->addMethods(['setUrlKey'])
             ->getMock();
         $product->expects($this->never())->method('setUrlKey');
         $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
         $event->expects($this->atLeastOnce())->method('getProduct')->willReturn($product);
         /** @var Observer|MockObject $observer */
         $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
+            ->onlyMethods(['getEvent'])
             ->getMock();
         $observer->expects($this->atLeastOnce())->method('getEvent')->willReturn($event);
         $this->productUrlPathGenerator->expects($this->atLeastOnce())->method('getUrlKey')->with($product)

@@ -105,7 +105,7 @@ class CollectionTest extends TestCase
         $snapshotClassName = Snapshot::class;
         $this->entitySnapshotMock = $this->getMockBuilder($snapshotClassName)
             ->disableOriginalConstructor()
-            ->setMethods(['registerSnapshot'])
+            ->onlyMethods(['registerSnapshot'])
             ->getMock();
 
         $helper = new ObjectManager($this);

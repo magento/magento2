@@ -75,17 +75,10 @@ class BundleTest extends TestCase
         $this->minificationMock
             ->expects($this->any())
             ->method('addMinifiedSign')
-            ->withConsecutive(
-                ['onefile.js'],
-                ['onefile.js'],
-                ['path-to-theme/js/bundle/bundle0.js']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'onefile.min.js',
-                'onefile.min.js',
-                'path-to-theme/js/bundle/bundle0.min.js'
-            );
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['onefile.js'] => 'onefile.min.js',
+                ['path-to-theme/js/bundle/bundle0.js'] => 'path-to-theme/js/bundle/bundle0.min.js'
+            });
         $contextMock = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -107,7 +100,7 @@ class BundleTest extends TestCase
             ->willReturn('path-to-theme');
 
         $assetMock = $this->getMockBuilder(LocalInterface::class)
-            ->setMethods(['getContentType', 'getContext'])
+            ->onlyMethods(['getContentType', 'getContext'])
             ->getMockForAbstractClass();
         $assetMock->method('getContext')
             ->willReturn($contextMock);

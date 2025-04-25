@@ -41,7 +41,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         $connectionName = null,
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         $this->_eventManager = $eventManager;
         $this->metadataPool = $metadataPool ? : ObjectManager::getInstance()->get(MetadataPool::class);

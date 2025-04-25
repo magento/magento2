@@ -67,7 +67,7 @@ class Collection implements ResetAfterRequestInterface
         CollectionFactory $attributeCollectionFactory,
         ProductFactory $productFactory,
         MetadataPool $metadataPool,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->productFactory = $productFactory;
@@ -103,6 +103,16 @@ class Collection implements ResetAfterRequestInterface
         }
 
         return $attributes[$productId];
+    }
+
+    /**
+     * Retrieve all attributes
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->fetch();
     }
 
     /**

@@ -31,7 +31,7 @@ class MergeConflictException extends LocalizedException
      * @param \Exception|null $cause
      * @param int $code
      */
-    public function __construct(array $conflictingSynonyms, Phrase $phrase = null, \Exception $cause = null, $code = 0)
+    public function __construct(array $conflictingSynonyms, ?Phrase $phrase = null, ?\Exception $cause = null, $code = 0)
     {
         parent::__construct($phrase, $cause, $code);
         $this->conflictingSynonyms = $conflictingSynonyms;

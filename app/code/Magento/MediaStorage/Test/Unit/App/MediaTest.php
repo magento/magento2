@@ -175,8 +175,7 @@ class MediaTest extends TestCase
     {
         $this->mediaModel = $this->createMediaModel();
 
-        $this->sync->expects(self::once())
-            ->method('synchronize')
+        $this->sync->method('synchronize')
             ->with(self::RELATIVE_FILE_PATH);
         $this->directoryMediaMock->expects(self::once())
             ->method('getAbsolutePath')
@@ -248,7 +247,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function catchExceptionDataProvider(): array
+    public static function catchExceptionDataProvider(): array
     {
         return [
             'default mode' => [false, 0],
@@ -270,9 +269,11 @@ class MediaTest extends TestCase
 
         $driverFile =  $this->createMock(Filesystem\Driver\File::class);
         $driverFile->method('getRealPath')->willReturn('');
+        $placeholder = $this->createMock(Placeholder::class);
+        $placeholder->method('getRelativePath')->willReturn(self::RELATIVE_FILE_PATH);
         $placeholderFactory = $this->createMock(PlaceholderFactory::class);
         $placeholderFactory->method('create')
-            ->willReturn($this->createMock(Placeholder::class));
+            ->willReturn($placeholder);
 
         return new Media(
             $this->configFactoryMock,

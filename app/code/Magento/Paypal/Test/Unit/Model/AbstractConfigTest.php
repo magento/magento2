@@ -35,7 +35,7 @@ class AbstractConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
 
         $this->config = new AbstractConfigTesting($this->scopeConfigMock);
@@ -48,6 +48,9 @@ class AbstractConfigTest extends TestCase
      */
     public function testSetMethod($method, $expected)
     {
+        if (is_callable($method)) {
+            $method = $method($this);
+        }
         $this->assertSame($this->config, $this->config->setMethod($method));
         $this->assertEquals($expected, $this->config->getMethodCode());
     }
@@ -60,6 +63,15 @@ class AbstractConfigTest extends TestCase
         $this->assertSame($this->config, $this->config->setMethodInstance($methodInterfaceMock));
     }
 
+    protected function getMockForMethodInterface() {
+        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
+            ->getMockForAbstractClass();
+        $methodInterfaceMock->expects($this->once())
+            ->method('getCode')
+            ->willReturn('payment_code');
+        return $methodInterfaceMock;
+    }
+
     /**
      * @case #1 The method value is string - we expected same string value
      * @case #2 The method value is instance of MethodInterface - we expect result MethodInterface::getCode
@@ -67,14 +79,10 @@ class AbstractConfigTest extends TestCase
      *
      * @return array
      */
-    public function setMethodDataProvider()
+    public static function setMethodDataProvider()
     {
         /** @var MethodInterface $methodInterfaceMock */
-        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
-        $methodInterfaceMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn('payment_code');
+        $methodInterfaceMock = static fn (self $testCase) => $testCase->getMockForMethodInterface();
         return [
             ['payment_code', 'payment_code'],
             [$methodInterfaceMock, 'payment_code'],
@@ -122,7 +130,7 @@ class AbstractConfigTest extends TestCase
      *
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             [
@@ -206,7 +214,7 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isWppApiAvailabeDataProvider()
+    public static function isWppApiAvailabeDataProvider()
     {
         return [
             [
@@ -280,7 +288,7 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodAvailableDataProvider()
+    public static function isMethodAvailableDataProvider()
     {
         return [
             [null, 'payment/settedMethod/active'],
@@ -335,7 +343,7 @@ class AbstractConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isMethodActiveBmlDataProvider()
+    public static function isMethodActiveBmlDataProvider()
     {
         return [
             ['CREDIT,CARD,ELV', 0, 0, 0, false],

@@ -15,7 +15,7 @@ use Magento\Framework\Validator\AbstractValidator;
  */
 class Name extends AbstractValidator
 {
-    private const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`\s\d]){1,255}+/u';
+    private const PATTERN_NAME = '/(?:[\p{L}\p{M}\,\-\_\.\'’`&\s\d]){1,255}+/u';
 
     /**
      * Validate name fields.

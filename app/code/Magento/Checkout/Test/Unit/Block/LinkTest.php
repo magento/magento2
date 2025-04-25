@@ -9,10 +9,12 @@ namespace Magento\Checkout\Test\Unit\Block;
 
 use Magento\Checkout\Block\Link;
 use Magento\Checkout\Helper\Data;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
 
 class LinkTest extends TestCase
@@ -25,6 +27,18 @@ class LinkTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManagerHelper = new ObjectManager($this);
+
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->_objectManagerHelper->prepareObjectManager($objects);
     }
 
     public function testGetUrl()
@@ -51,14 +65,14 @@ class LinkTest extends TestCase
         $helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['canOnepageCheckout', 'isModuleOutputEnabled']
             )->getMock();
 
         $moduleManager = $this->getMockBuilder(
             Manager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['isOutputEnabled']
             )->getMock();
 
@@ -83,7 +97,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider()
     {
         return [[false, true], [true, false], [false, false]];
     }

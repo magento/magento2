@@ -19,6 +19,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
  * @see \Magento\Quote\Api\Data\CartInterface
  * @since 100.0.2
@@ -522,6 +523,7 @@ class Cart extends DataObject implements CartInterface
         );
 
         $qtyRecalculatedFlag = false;
+        $itemErrors = [];
         foreach ($data as $itemId => $itemInfo) {
             $item = $this->getQuote()->getItemById($itemId);
             if (!$item) {
@@ -540,7 +542,7 @@ class Cart extends DataObject implements CartInterface
                 $item->setQty($qty);
 
                 if ($item->getHasError()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
+                    $itemErrors[$item->getId()] = __($item->getMessage());
                 }
 
                 if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
@@ -563,6 +565,10 @@ class Cart extends DataObject implements CartInterface
             'checkout_cart_update_items_after',
             ['cart' => $this, 'info' => $infoDataObject]
         );
+
+        if (count($itemErrors)) {
+            throw new \Magento\Framework\Exception\LocalizedException(current($itemErrors));
+        }
 
         return $this;
     }

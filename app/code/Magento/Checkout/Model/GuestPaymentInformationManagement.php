@@ -11,6 +11,7 @@ use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Model\Quote;
@@ -127,7 +128,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         $this->paymentsRateLimiter->limit();
         try {
@@ -139,9 +140,14 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         }
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->logger->critical(
-                'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
+                'Placing an Order failed (reason: '.  $e->getMessage() .')',
+                [
+                    'quote_id' => $cartId,
+                    'exception' => (string)$e,
+                    'is_guest_checkout' => true
+                ]
             );
             throw new CouldNotSaveException(
                 __($e->getMessage()),
@@ -165,7 +171,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if (!$this->saveRateLimitDisabled) {
             try {

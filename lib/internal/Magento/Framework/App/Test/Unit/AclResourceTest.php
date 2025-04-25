@@ -50,11 +50,11 @@ class AclResourceTest extends TestCase
     protected function setUp(): void
     {
         $this->connectionFactory = $this->getMockBuilder(ConnectionFactoryInterface::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->config = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnectionName'])
+            ->onlyMethods(['getConnectionName'])
             ->getMockForAbstractClass();
         $this->config->expects($this->any())
             ->method('getConnectionName')
@@ -129,7 +129,7 @@ class AclResourceTest extends TestCase
     /**
      * @return array
      */
-    public function getTableNameDataProvider()
+    public static function getTableNameDataProvider()
     {
         return [
             ['tableName', self::TABLE_PREFIX . 'tableName'],
@@ -157,7 +157,7 @@ class AclResourceTest extends TestCase
     /**
      * @return array
      */
-    public function getTableNameMappedDataProvider()
+    public static function getTableNameMappedDataProvider()
     {
         return [
             ['tableName', 'tableName', 'mappedTableName', 'mappedTableName'],

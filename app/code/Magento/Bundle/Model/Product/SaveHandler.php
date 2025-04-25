@@ -21,6 +21,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Bundle product save handler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveHandler implements ExtensionInterface
 {
@@ -107,8 +108,7 @@ class SaveHandler implements ExtensionInterface
 
         if (!$entity->getCopyFromView()) {
             $this->processRemovedOptions($entity, $existingOptionsIds, $optionIds);
-            $newOptionsIds = array_diff($optionIds, $existingOptionsIds);
-            $this->saveOptions($entity, $bundleProductOptions, $newOptionsIds);
+            $this->saveOptions($entity, $bundleProductOptions, $existingBundleProductOptions);
         } else {
             //save only labels and not selections + product links
             $this->saveOptions($entity, $bundleProductOptions);
@@ -150,20 +150,20 @@ class SaveHandler implements ExtensionInterface
     /**
      * Perform save for all options entities.
      *
-     * @param object $entity
+     * @param ProductInterface $entity
      * @param array $options
-     * @param array $newOptionsIds
-     *
+     * @param array $existingBundleProductOptions
      * @return void
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    private function saveOptions($entity, array $options, array $newOptionsIds = []): void
-    {
-        foreach ($options as $option) {
-            if (in_array($option->getOptionId(), $newOptionsIds)) {
-                $option->setOptionId(null);
-            }
-        }
-        $this->optionSave->saveBulk($entity, $options);
+    private function saveOptions(
+        ProductInterface $entity,
+        array $options,
+        array $existingBundleProductOptions = []
+    ): void {
+        $this->optionSave->saveBulk($entity, $options, $existingBundleProductOptions);
     }
 
     /**

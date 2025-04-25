@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCompleteOrderPaidWithPayPalStandardTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Complete a Sales Order Paid with PayPal Payments Standard"/>
+            <description value="Complete order paid with PayPalStandard"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5320"/>
+            <group value="paypalStandard"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <!-- Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">140.98</field>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to StoreFront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillShippingAddress"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState"/>
+        <waitForPageLoad stepKey="waitForShippingPageToLoad"/>
+        <!-- Click Next button -->
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <!-- Click on PayPal payment radio button and click on continue btn -->
+        <actionGroup ref="AdminSelectPaypalStandardPaymentInPaymentPageActionGroup" stepKey="selectPaypalStandardPaymentAndClickOnContinuebtn"/>
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
+        <actionGroup ref="StorefrontLoginToPayPalStandardPaymentActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!--Go to Admin and check order information-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!-- Check status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <!-- Create Shipment -->
+        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createNewShipment">
+            <argument name="Title" value="Title"/>
+            <argument name="Number" value="99"/>
+            <argument name="Qty" value="1"/>
+            <argument name="Comment" value="comments for shipment"/>
+        </actionGroup>
+        <!--Create Invoice for this Order-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $145.98." stepKey="seeOrderHistoryNotes"/>
+    </test>
+</tests>

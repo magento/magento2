@@ -18,9 +18,12 @@
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForConfigPageLoad"/>
-        <click selector ="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="expandOtherPaypalConfigButton"/>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
+        <waitForElementVisible selector="{{PayPalPayflowProConfigSection.paymentGateway(countryCode)}}" stepKey="waitForPayPalPaymentsProConfigureBtn"/>
         <scrollTo selector="{{PayPalPayflowProConfigSection.paymentGateway(countryCode)}}" stepKey="scrollToConfigure"/>
         <click selector ="{{PayPalPayflowProConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalPaymentsProConfigureBtn"/>
+        <waitForElementVisible selector="{{PayPalPayflowProConfigSection.partner(countryCode)}}" stepKey="waitForPartner"/>
         <scrollTo selector="{{PayPalPayflowProConfigSection.partner(countryCode)}}" stepKey="scrollToBottom"/>
         <fillField selector ="{{PayPalPayflowProConfigSection.partner(countryCode)}}" userInput="{{credentials.paypal_paymentspro_parner}}" stepKey="inputPartner"/>
         <fillField selector ="{{PayPalPayflowProConfigSection.user(countryCode)}}" userInput="{{credentials.paypal_paymentspro_user}}" stepKey="inputUser"/>
@@ -31,6 +34,6 @@
         <selectOption selector ="{{PayPalPayflowProConfigSection.enableVault(countryCode)}}" userInput="Yes" stepKey="enableSolutionValut"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSaving"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>

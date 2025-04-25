@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -157,7 +157,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\App\Response\Http $response,
-        AccountConfirmation $accountConfirmation = null
+        ?AccountConfirmation $accountConfirmation = null
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerUrl = $customerUrl;
@@ -211,7 +211,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         } else {
             $this->_httpContext->setValue(
                 Context::CONTEXT_GROUP,
-                $customer->getGroupId(),
+                (string)$customer->getGroupId(),
                 \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
             );
             $this->setCustomerId($customer->getId());
@@ -271,7 +271,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_customerModel = $customerModel;
         $this->_httpContext->setValue(
             Context::CONTEXT_GROUP,
-            $customerModel->getGroupId(),
+            (string)$customerModel->getGroupId(),
             \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
         );
         $this->setCustomerId($customerModel->getId());
@@ -332,10 +332,8 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function getCustomerId()
     {
-        if ($this->storage->getData('customer_id')) {
-            return $this->storage->getData('customer_id');
-        }
-        return null;
+        $customerId = $this->storage->getData('customer_id');
+        return ($customerId && $this->checkCustomerId($customerId)) ? $customerId : null;
     }
 
     /**

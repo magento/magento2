@@ -14,16 +14,14 @@
         </design>
         <system>
             <full_page_cache>
+                <varnish7>
+                    <path>varnish7.vcl</path>
+                </varnish7>
                 <varnish6>
                     <path>varnish6.vcl</path>
                 </varnish6>
-                <varnish5>
-                    <path>varnish5.vcl</path>
-                </varnish5>
-                <varnish4>
-                    <path>varnish4.vcl</path>
-                </varnish4>
                 <ttl>86400</ttl>
+                <handles_size>100</handles_size>
                 <caching_application>1</caching_application>
                 <default>
                     <access_list>localhost</access_list>

@@ -40,7 +40,7 @@ class MessageControllerTest extends TestCase
     {
         $this->lockFactory = $this->getMockBuilder(LockInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->messageController = $objectManager->getObject(

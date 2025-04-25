@@ -43,8 +43,11 @@ class CollectionTest extends TestCase
             ->getMock();
         $directoryWrite->expects($this->any())->method('create')->with('backups');
         $directoryWrite->method('getAbsolutePath')
-            ->withConsecutive([], [], ['backups'])
-            ->willReturnOnConsecutiveCalls('', '');
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'backups' || $arg1 == []) {
+                    return '';
+                }
+            });
         $directoryWrite->expects($this->any())->method('isDirectory')->willReturn(true);
         $directoryWrite->expects($this->any())->method('getDriver')->willReturn($driver);
         $targetDirectory = $this->getMockBuilder(TargetDirectory::class)

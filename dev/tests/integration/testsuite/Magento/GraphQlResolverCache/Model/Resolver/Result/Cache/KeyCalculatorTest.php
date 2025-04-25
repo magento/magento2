@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result\Cache;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\CalculationException;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue\ProcessedValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Psr\Log\LoggerInterface;
 
 /**
  * Test for graphql resolver-level cache key calculator.
@@ -181,16 +181,18 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array[]
      */
-    public function keyFactorDataProvider()
+    public static function keyFactorDataProvider()
     {
+        $salt = Bootstrap::getObjectManager()->get(DeploymentConfig::class)
+            ->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
         return [
             'no factors' => [
-                'factorProviders' => [],
+                'factorDataArray' => [],
                 'parentResolverData' => null,
                 'expectedCacheKey' => null
             ],
             'single factor' => [
-                'factorProviders' => [
+                'factorDataArray' => [
                     [
                         'interface' => GenericFactorProviderInterface::class,
                         'name' => 'test',
@@ -198,10 +200,10 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'parentResolverData' => null,
-                'expectedCacheKey' => hash('sha256', strtoupper('testValue')),
+                'expectedCacheKey' => hash('sha256', strtoupper('testValue') . "|$salt"),
             ],
             'unsorted multiple factors' => [
-                'factorProviders' => [
+                'factorDataArray' => [
                     [
                         'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',
@@ -219,10 +221,13 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'parentResolverData' => null,
-                'expectedCacheKey' => hash('sha256', strtoupper('a_testValue|b_testValue|c_testValue')),
+                'expectedCacheKey' => hash(
+                    'sha256',
+                    strtoupper('a_testValue|b_testValue|c_testValue') . "|$salt"
+                ),
             ],
             'unsorted multiple factors with parent data' => [
-                'factorProviders' => [
+                'factorDataArray' => [
                     [
                         'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',
@@ -242,10 +247,13 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                 'parentResolverData' => [
                     'object_id' => 123
                 ],
-                'expectedCacheKey' => hash('sha256', strtoupper('a_testValue|object_123|c_testValue')),
+                'expectedCacheKey' => hash(
+                    'sha256',
+                    strtoupper('a_testValue|object_123|c_testValue') . "|$salt"
+                ),
             ],
             'unsorted multifactor with no parent data and parent factored interface' => [
-                'factorProviders' => [
+                'factorDataArray' => [
                     [
                         'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',
@@ -263,7 +271,10 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'parentResolverData' => null,
-                'expectedCacheKey' => hash('sha256', strtoupper('a_testValue|some value|c_testValue')),
+                'expectedCacheKey' => hash(
+                    'sha256',
+                    strtoupper('a_testValue|some value|c_testValue') . "|$salt"
+                ),
             ],
         ];
     }
@@ -302,7 +313,10 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $key = $keyCalculator->calculateCacheKey($value);
-        $this->assertEquals('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', $key);
+        $salt = Bootstrap::getObjectManager()->get(DeploymentConfig::class)
+            ->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+        $expectedResult = hash('sha256', "|$salt");
+        $this->assertEquals($expectedResult, $key);
 
         $this->objectManager->removeSharedInstance('TestValueFactorMock');
         $this->objectManager->removeSharedInstance('TestContextFactorMock');
@@ -366,7 +380,10 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $key = $keyCalculator->calculateCacheKey($value);
-        $this->assertEquals('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', $key);
+        $salt = Bootstrap::getObjectManager()->get(DeploymentConfig::class)
+            ->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+        $expectedResult = hash('sha256', "|$salt");
+        $this->assertEquals($expectedResult, $key);
 
         $this->objectManager->removeSharedInstance('TestValueFactorMock');
         $this->objectManager->removeSharedInstance('TestContextFactorMock');
@@ -404,7 +421,10 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
         ]);
 
         $key = $keyCalculator->calculateCacheKey($value);
-        $this->assertEquals('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', $key);
+        $salt = Bootstrap::getObjectManager()->get(DeploymentConfig::class)
+            ->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+        $expectedResult = hash('sha256', "|$salt");
+        $this->assertEquals($expectedResult, $key);
 
         $this->objectManager->removeSharedInstance('TestContextFactorMock');
     }

@@ -48,22 +48,21 @@ class ActiveTableSwitcherTest extends TestCase
 
         $connectionMock->expects($this->exactly(2))
             ->method('showTableStatus')
-            ->withConsecutive(
-                [$tableName],
-                [$replicaName]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $tableData,
-                $replicaData
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$tableName] => $tableData,
+                [$replicaName] => $replicaData
+            });
 
         $connectionMock->expects($this->exactly(2))
             ->method('changeTableComment')
-            ->withConsecutive(
-                [$tableName, $replicaData['Comment']],
-                [$replicaName, $tableData['Comment']]
-            )
-            ->willReturn($statement);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($tableName, $replicaData, $statement, $replicaName, $tableData) {
+                if ($arg1 == $tableName && $arg2 == $replicaData['Comment']) {
+                    return $statement;
+                } elseif ($arg1 == $replicaName && $arg2 == $tableData['Comment']) {
+                    return $statement;
+                }
+            });
 
         $connectionMock->expects($this->once())
             ->method('renameTablesBatch')

@@ -131,7 +131,7 @@ class CartItemProcessorTest extends TestCase
         $cartItemMock = $this->getMockForAbstractClass(CartItemInterface::class);
         $cartItemMock->expects($this->exactly(3))->method('getProductOption')->willReturn($productOptionMock);
         $extAttributesMock = $this->getMockBuilder(ProductOptionInterface::class)
-            ->setMethods(['getConfigurableItemOptions'])
+            ->addMethods(['getConfigurableItemOptions'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productOptionMock

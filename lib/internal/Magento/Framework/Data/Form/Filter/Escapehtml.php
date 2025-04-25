@@ -28,7 +28,7 @@ class Escapehtml implements \Magento\Framework\Data\Form\Filter\FilterInterface
      * @param Escaper|null $escaper
      */
     public function __construct(
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class

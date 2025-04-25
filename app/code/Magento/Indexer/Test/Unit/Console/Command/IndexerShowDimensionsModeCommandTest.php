@@ -98,7 +98,12 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
         $this->configureAdminArea();
         /** @var CommandTester $commandTester */
         $commandTester = new CommandTester($this->command);
-        $this->indexerMock->method('load')->withConsecutive(...$indexers);
+        $this->indexerMock->method('load')
+            ->willReturnCallback(function (...$indexers) {
+                if (!empty($indexers)) {
+                    return null;
+                }
+            });
         $this->indexerMock->method('getTitle')->willReturnOnConsecutiveCalls(...$indexerTitles);
         $commandTester->execute($command);
         $actualValue = $commandTester->getDisplay();
@@ -134,12 +139,12 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     /**
      * @return array
      */
-    public function dimensionModesDataProvider(): array
+    public static function dimensionModesDataProvider(): array
     {
         return [
             'get_all'                => [
                 'command' => [],
-                'output'  => sprintf(
+                'consoleOutput'  => sprintf(
                     '%-50s ',
                     'indexer_title1' . ':'
                 ) . 'none' . PHP_EOL .
@@ -153,7 +158,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                 'command' => [
                     'indexer' => ['indexer_1'],
                 ],
-                'output'  => sprintf(
+                'consoleOutput'  => sprintf(
                     '%-50s ',
                     'indexer_title1' . ':'
                 ) . 'none' . PHP_EOL
@@ -163,7 +168,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
                 'command' => [
                     'indexer' => ['indexer_1', 'indexer_2'],
                 ],
-                'output'  => sprintf(
+                'consoleOutput'  => sprintf(
                     '%-50s ',
                     'indexer_title1' . ':'
                 ) . 'none' . PHP_EOL .

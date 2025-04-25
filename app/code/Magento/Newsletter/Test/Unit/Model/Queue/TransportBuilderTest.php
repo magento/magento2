@@ -94,7 +94,8 @@ class TransportBuilderTest extends TestCase
         $this->templateFactoryMock = $this->getMockForAbstractClass(FactoryInterface::class);
         $this->messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setBodyHtml', 'setSubject'])
+            ->addMethods(['setBodyHtml'])
+            ->onlyMethods(['setSubject'])
             ->getMockForAbstractClass();
 
         $this->emailMessageInterfaceFactoryMock = $this->createMock(EmailMessageInterfaceFactory::class);
@@ -104,7 +105,7 @@ class TransportBuilderTest extends TestCase
         $this->senderResolverMock = $this->getMockForAbstractClass(SenderResolverInterface::class);
         $this->mailTransportFactoryMock = $this->getMockBuilder(TransportInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->builder = $objectManagerHelper->getObject(

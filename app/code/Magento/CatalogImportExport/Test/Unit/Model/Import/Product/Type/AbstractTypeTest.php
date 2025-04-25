@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
@@ -165,10 +165,14 @@ class AbstractTypeTest extends TestCase
         $this->entityModel->method('getEntityTypeId')
             ->willReturn(3);
         $this->entityModel->method('getAttributeOptions')
-            ->willReturnOnConsecutiveCalls(
-                ['option1', 'option2'],
-                ['yes' => 1, 'no' => 0]
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                if ($callCount === 1) {
+                    return ['option1', 'option2'];
+                } elseif ($callCount === 2) {
+                    return ['yes' => 1, 'no' => 0];
+                }
+            });
         $attrSetColFactory->method('create')
             ->willReturn($attrSetCollection);
         $attrSetCollection->method('setEntityTypeFilter')
@@ -182,33 +186,22 @@ class AbstractTypeTest extends TestCase
         $attributeSet->method('getAttributeSetName')
             ->willReturn('attribute_set_name');
         $attrCollection->method('addFieldToFilter')
-            ->withConsecutive(
-                [
-                    ['main_table.attribute_id'],
-                    [
-                        [
-                            'in' => ['1', '2', '3'],
-                        ],
-                    ]
-                ],
-                [
-                    ['main_table.attribute_code'],
-                    [
-                        [
-                            'in' => [
-                                'related_tgtr_position_behavior',
-                                'related_tgtr_position_limit',
-                                'upsell_tgtr_position_behavior',
-                                'upsell_tgtr_position_limit',
-                                'thumbnail_label',
-                                'small_image_label',
-                                'image_label',
-                            ],
-                        ],
-                    ]
-                ],
-            )
-            ->willReturnOnConsecutiveCalls([$attribute1, $attribute2, $attribute3], []);
+        ->willReturnCallback(function ($field, $conditions) use ($attribute1, $attribute2, $attribute3) {
+            if ($field === ['main_table.attribute_id'] && $conditions === [['in' => ['1', '2', '3']]]) {
+                return [$attribute1, $attribute2, $attribute3];
+            } elseif ($field === ['main_table.attribute_code'] &&
+                $conditions === [['in' =>
+                    ['related_tgtr_position_behavior',
+                        'related_tgtr_position_limit',
+                        'upsell_tgtr_position_behavior',
+                        'upsell_tgtr_position_limit',
+                        'thumbnail_label',
+                        'small_image_label',
+                        'image_label']]]) {
+                return [];
+            }
+        });
+
         $this->connection = $this->getMockBuilder(Mysql::class)
             ->addMethods(['joinLeft'])
             ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto'])
@@ -338,7 +331,8 @@ class AbstractTypeTest extends TestCase
     {
         $rowData = [
             '_attribute_set' => 'attribute_set_name',
-            'sku' => 'sku'
+            'sku' => 'sku',
+            'attr_code' => 'test'
         ];
         $rowNum = 1;
         $this->entityModel->method('getRowScope')
@@ -368,19 +362,19 @@ class AbstractTypeTest extends TestCase
     /**
      * @return array
      */
-    public function addAttributeOptionDataProvider()
+    public static function addAttributeOptionDataProvider()
     {
         return [
             [
-                '$code' => 'attr set name value key',
-                '$optionKey' => 'option key',
-                '$optionValue' => 'option value',
-                '$initAttributes' => [
+                'code' => 'attr set name value key',
+                'optionKey' => 'option key',
+                'optionValue' => 'option value',
+                'initAttributes' => [
                     'attr set name' => [
                         'attr set name value key' => [],
                     ],
                 ],
-                '$resultAttributes' => [
+                'resultAttributes' => [
                     'attr set name' => [
                         'attr set name value key' => [
                             'options' => [
@@ -391,15 +385,15 @@ class AbstractTypeTest extends TestCase
                 ],
             ],
             [
-                '$code' => 'attr set name value key',
-                '$optionKey' => 'option key',
-                '$optionValue' => 'option value',
-                '$initAttributes' => [
+                'code' => 'attr set name value key',
+                'optionKey' => 'option key',
+                'optionValue' => 'option value',
+                'initAttributes' => [
                     'attr set name' => [
                         'not equal to code value' => [],
                     ],
                 ],
-                '$resultAttributes' => [
+                'resultAttributes' => [
                     'attr set name' => [
                         'not equal to code value' => [],
                     ],

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2020 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -10,7 +10,7 @@
     <section name="MediaGallerySection">
         <element name="Browse" type="button" selector=".tox-browse-url"/>
         <element name="browseForImage" type="button" selector="#srcbrowser"/>
-        <element name="BrowseUploadImage" type="file" selector=".fileupload"/>
+        <element name="BrowseUploadImage" type="file" selector="#fileUploader + .uppy-Root .uppy-Dashboard-input"/>
         <element name="image" type="text" selector="//small[text()='{{var1}}']" parameterized="true"/>
         <element name="imageOrImageCopy" type="text" selector="//div[contains(@class,'media-gallery-modal')]//img[contains(@alt, '{{arg1}}.{{arg2}}')]|//img[contains(@alt,'{{arg1}}_') and contains(@alt,'.{{arg2}}')]" parameterized="true"/>
         <element name="lastImageOrImageCopy" type="text" selector="(//div[contains(@class,'media-gallery-modal')]//img[contains(@alt, '{{arg1}}.{{arg2}}')]|//img[contains(@alt,'{{arg1}}_') and contains(@alt,'.{{arg2}}')])[last()]" parameterized="true"/>
@@ -20,6 +20,9 @@
         <element name="ImageDescriptionTinyMCE" type="input" selector="#alt" />
         <element name="Height" type="input" selector="//label[text()='Height']/parent::div//input"/>
         <element name="UploadImage" type="file" selector=".fileupload"/>
+        <element name="UploadImageNew" type="file" selector="#upload_image"/>
+        <element name="UploadImageSelector" type="file" selector="#fileUploader"/>
+        <element name="UploadImageWithUploaderId" type="file" selector="#fileUploader + .uppy-Root .uppy-Dashboard-input"/>
         <element name="OkBtn" type="button" selector=".tox-dialog__footer button[title='Save']"/>
         <element name="insertBtn" type="button" selector="#insert"/>
         <element name="InsertFile" type="text" selector="#insert_files" timeout="30"/>
@@ -27,6 +30,7 @@
         <element name="DeleteFolder" type="button" selector="#delete_folder"/>
         <element name="DeleteSelectedBtn" type="button" selector="#delete_files" timeout="30"/>
         <element name="CancelBtn" type="button" selector="#cancel"/>
+        <element name="wysiwygAnchor" type="button" selector="#wysiwyg_anchor"/>
         <element name="FolderName" type="button" selector="input[data-role='promptField']"/>
         <element name="FolderContainer" type="button" selector="div[data-role='tree']"/>
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept"/>

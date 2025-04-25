@@ -161,6 +161,7 @@
     <type name="Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice">
         <arguments>
             <argument name="priceResolver" xsi:type="object">ConfigurableRegularPriceResolver</argument>
+            <argument name="configurableMaxPriceCalculator" xsi:type="object">Magento\ConfigurableProduct\Model\ConfigurableMaxPriceCalculator</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
@@ -283,5 +284,8 @@
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="updateStockChangedAuto" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler">
+        <plugin name="tier_price_update_handler_plugin" type="Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandlerPlugin" sortOrder="10" disabled="false"/>
     </type>
 </config>

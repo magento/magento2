@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateShippingLabelForFedExShipmentTest">
+        <annotations>
+            <stories value="Creating Shipment for FedEx"/>
+            <title value="Create Shipping Label with two packages when Creating Shipment for FedEx"/>
+            <description value="Admin Should be Able to Create Shipments"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5441"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProductWithWeight" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Configurable Product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleProductWithPrice1" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+            <!-- Create bundle product -->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createBundleDynamicProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="createBundleDynamicProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createNewBundleLink">
+                <requiredEntity createDataKey="createBundleDynamicProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnableFedExConfigurationActionGroup" stepKey="enableFedEx"/>
+            <!--Set US Shipping settings origin data-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
+                <argument name="country" value="United States"/>
+                <argument name="state" value="California"/>
+                <argument name="postcode" value="90001"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetShippingOriginOtherConfigActionGroup" stepKey="setShippingOriginOtherConfigurationData"/>
+            <!--Go to configuration general page-->
+            <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigurationGeneralPage"/>
+            <actionGroup ref="SelectEuropeanUnionCountryActionGroup" stepKey="setEuropeanUnionCountry">
+                <argument name="countries" value="EuropeanCountry"/>
+            </actionGroup>
+            <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
+            <fillField selector="{{StoreConfigSection.storeName}}" userInput="Test" stepKey="fillStoreName" />
+            <fillField selector="{{StoreConfigSection.storePhoneNumber}}" userInput="9876543210" stepKey="fillStorePhone" />
+            <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+            <!-- Login to StoreFront -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <!-- Add product to cart -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+            <!-- Go to bundle product page -->
+            <amOnPage url="{{StorefrontProductPage.url($$createBundleDynamicProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <!-- Add product to the cart -->
+            <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
+            <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+                <argument name="productName" value="$$createBundleDynamicProduct.name$$"/>
+            </actionGroup>
+            <!-- Add configurable product to the cart  -->
+            <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+                <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+                <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+                <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
+                <argument name="qty" value="1"/>
+            </actionGroup>
+            <!-- Go to Checkout Page -->
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSelectFedexShippingMethod"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" visible="true" stepKey="selectFedexShippingMethod"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" visible="true" stepKey="selectFedexShippingMethodGround"/>
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+            <!-- Click on PayPal payment radio button -->
+            <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPayPalRadioButton"/>
+            <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="selectCheckOrMoneyOrder"/>
+            <!-- I see order successful Page -->
+            <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+        </before>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+            <!--Open created order in admin-->
+            <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+                <argument name="orderId" value="$orderNumber"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+            <!--Create shipping label-->
+            <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipmentIntoOrder"/>
+            <waitForElementVisible selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="waitForCreateShippingLabel"/>
+            <checkOption selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="checkCreateShippingLabel"/>
+            <waitForElementClickable selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="waitForSubmitShipment"/>
+            <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+            <actionGroup ref="AdminShipmentCreateMultipleShippingLabelActionGroup" stepKey="createPackage">
+                <argument name="productName" value="$$createProduct.name$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateShipmentPackageActionGroup" stepKey="createShipmentPackage">
+                <argument name="bundleProductName" value="$$createBundleDynamicProduct.name$$"/>
+                <argument name="configurableProductName" value="$$createConfigProduct.name$$"/>
+            </actionGroup>
+            <waitForElementClickable selector="{{AdminShipmentTrackingInformationShippingSection.trackOrder}}" stepKey="waitForTrackOrderLinkVisible"/>
+            <click selector="{{AdminShipmentTrackingInformationShippingSection.trackOrder}}" stepKey="clickForTrackOrderLinkVisible"/>
+            <switchToNextTab stepKey="switchToInContentTab"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <actionGroup ref="StorefrontAssertTrackingInformationActionGroup" stepKey="adminVerifyTrackingInformation"/>
+           <!-- Switch to the previous tab. -->
+            <switchToPreviousTab stepKey="switchToPreviousTab"/>
+            <!-- Assert shipment in grid -->
+            <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterShipmentGridByOrderId">
+                <argument name="orderId" value="$orderNumber"/>
+            </actionGroup>
+            <waitForElementClickable selector="{{AdminShipmentGridSection.firstRow}}" stepKey="waitForShipmentRow"/>
+            <click selector="{{AdminShipmentGridSection.firstRow}}" stepKey="openCreatedShipment"/>
+            <waitForPageLoad stepKey="waitForShipmentDetailsPageToLoad"/>
+            <waitForElementClickable selector="{{AdminShipmentTrackingInformationShippingSection.printShippingLabelButton}}" stepKey="waitForPrintShippingButton"/>
+            <click selector="{{AdminShipmentTrackingInformationShippingSection.printShippingLabelButton}}" stepKey="clickOnPrintShippingButton"/>
+            <waitForElementClickable selector="{{AdminShipmentTrackingInformationShippingSection.showPackage}}" stepKey="waitForShowPackageButton"/>
+            <click selector="{{AdminShipmentTrackingInformationShippingSection.showPackage}}" stepKey="clickOnShowPackage"/>
+            <actionGroup ref="CheckShipmentPackageActionGroup" stepKey="checkFirstPackage">
+                <argument name="packageNumber" value="1"/>
+            </actionGroup>
+            <actionGroup ref="CheckShipmentPackageActionGroup" stepKey="checkSecondPackageName">
+                <argument name="packageNumber" value="2"/>
+            </actionGroup>
+            <waitForElementClickable selector="{{AdminShipmentTrackingInformationShippingSection.cancelPackageSideWindow}}" stepKey="waitForCancelPackageSlideOut"/>
+            <click selector="{{AdminShipmentTrackingInformationShippingSection.cancelPackageSideWindow}}" stepKey="clickOnCancelButton"/>
+            <!-- Go to Storefront and Open My Account Page from Customer dropdown -->
+            <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+            <!-- Goto Orders tab from Sidebar menu in Storefront page -->
+            <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+                <argument name="menu" value="My Orders"/>
+            </actionGroup>
+            <!-- Clicking View Order from My Orders Grid -->
+            <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+            <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+            <actionGroup ref="StorefrontOpenOrderShipmentsTabByOrderIdActionGroup" stepKey="amOnOrderShipmentPage">
+                <argument name="orderId" value="$grabOrderId"/>
+            </actionGroup>
+            <waitForElementClickable selector="{{StorefrontOrderShipmentSection.trackingNumber('1')}}" stepKey="waitForFirstTrackingNumber"/>
+            <click selector="{{StorefrontOrderShipmentSection.trackingNumber('1')}}" stepKey="clickOnFirstTrackingNumber"/>
+            <switchToNextTab stepKey="switchToTrackingWindow"/>
+            <waitForPageLoad stepKey="waitForTrackingPageToLoad"/>
+            <actionGroup ref="StorefrontAssertTrackingInformationActionGroup" stepKey="verifyTrackingInformation"/>
+            <switchToPreviousTab stepKey="switchToAccount"/>
+            <waitForElementClickable selector="{{StorefrontOrderShipmentSection.trackingNumber('2')}}" stepKey="waitForOtherTrackingNumber"/>
+            <click selector="{{StorefrontOrderShipmentSection.trackingNumber('2')}}" stepKey="clickOnOtherTrackingNumber"/>
+            <switchToNextTab stepKey="switchToAnotherTrackingWindow"/>
+            <waitForPageLoad stepKey="waitForTrackingPageLoad"/>
+            <actionGroup ref="StorefrontAssertTrackingInformationActionGroup" stepKey="verifyOtherTrackingInformation"/>
+            <switchToPreviousTab stepKey="switchToShipmentPage"/>
+        <after>
+            <!-- Reset shipping origin -->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
+            <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} 0" stepKey="disableCheckout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete configurable product data -->
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete bundle product data -->
+            <deleteData createDataKey="createBundleDynamicProduct" stepKey="deleteBundleProduct"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        </test>
+    </tests>

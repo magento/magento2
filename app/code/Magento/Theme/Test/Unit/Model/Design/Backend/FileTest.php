@@ -141,7 +141,7 @@ class FileTest extends TestCase
         $builder =  $this->getMockBuilder($class)
             ->disableOriginalConstructor();
         if (count($methods)) {
-            $builder->setMethods($methods);
+            $builder->onlyMethods($methods);
         }
         return  $builder->getMock();
     }
@@ -277,7 +277,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'Normal file name' => ['filename.jpg'],
@@ -354,7 +354,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function getRelativeMediaPathDataProvider(): array
+    public static function getRelativeMediaPathDataProvider(): array
     {
         return [
             'Normal path' => ['pub/media/', 'filename.jpg'],

@@ -26,4 +26,8 @@
         <data key="class_name">Taxable Goods</data>
         <data key="class_type">PRODUCT</data>
     </entity>
+    <entity name="shippingTaxClass" type="taxClass">
+        <data key="class_name">Shipping Tax Class </data>
+        <data key="class_type">PRODUCT</data>
+    </entity>
 </entities>

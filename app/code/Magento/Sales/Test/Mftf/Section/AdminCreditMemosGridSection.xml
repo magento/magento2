@@ -22,6 +22,7 @@
         <element name="memoId" type="text" selector="//*[@id='sales_order_view_tabs_order_creditmemos_content']//tbody/tr/td[2]/div"/>
         <element name="rowCreditMemos" type="text" selector="div.data-grid-cell-content"/>
         <element name="viewButton" type="button" selector="//div[@id='sales_order_view_tabs_order_creditmemos_content']//a[@class='action-menu-item']"/>
+        <element name="grandTotal" type="text" selector=".admin__data-grid-wrap table>tbody>tr:nth-child(1)>td:nth-child(8)>div"/>
     </section>
 </sections>
 

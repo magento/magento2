@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCloseOrderForPartialRefundTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Close Order for Partial refund"/>
+            <title value="Check Close order placed if refunded partially"/>
+            <description value="Check the Closed Order Status If an order is refunded partially"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-12940"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProductWithWeight" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Configurable Product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleProductWithPrice1" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+            <!-- Login to StoreFront -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <!-- Add product to cart -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+            <!-- Add configurable product to the cart  -->
+            <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+                <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+                <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+                <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
+                <argument name="qty" value="1"/>
+            </actionGroup>
+            <!-- Go to Checkout Page -->
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+            <!-- Select shipping -->
+            <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatrate">
+                <argument name="shippingMethodName" value="Flat Rate"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+            <!-- I see order successful Page -->
+            <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+            <!-- Grab order number-->
+            <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOderNumber"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <!-- Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Go to Admin and check order information-->
+            <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
+                <argument name="orderId" value="$grabOrderNumber"/>
+            </actionGroup>
+            <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+            <!-- Go to invoice tab and fill data -->
+            <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
+            <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+            <!-- Assert invoice with shipment success message -->
+            <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
+            <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
+                <argument name="status" value="Processing"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Reset shipping origin -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete configurable product data -->
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Create Credit Memo-->
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="startCreatingCreditMemo"/>
+        <waitForElementVisible selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" stepKey="waitToItemToRefundTextField"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.itemQtyToRefund('1')}}" userInput="0" stepKey="partialRefund"/>
+        <waitForElementClickable selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="waitToClickUpdateQuantity"/>
+        <click selector="{{AdminCreditMemoItemsSection.updateQty}}" stepKey="updateQuantityToRefund"/>
+        <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
+        <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateTotals"/>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
+        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemoFromOrderPageActionGroup"/>
+        <click selector="{{AdminInvoiceTotalSection.backButton}}" stepKey="clickBackButton"/>
+        <waitForPageLoad stepKey="waitForViewCreditMemoPageLoad"/>
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="createAgainCreditMemo"/>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitAgainCreditMemo"/>
+        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openAgainCreditMemoFromOrderPageActionGroup"/>
+        <!-- Check status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Closed"/>
+        </actionGroup>
+    </test>
+</tests>
+

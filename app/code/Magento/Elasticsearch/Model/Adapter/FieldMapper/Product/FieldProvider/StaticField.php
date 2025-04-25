@@ -24,6 +24,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 /**
  * Provide static fields for mapping of product.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class StaticField implements FieldProviderInterface
 {
@@ -164,7 +166,8 @@ class StaticField implements FieldProviderInterface
                 ),
                 'index' => $this->indexTypeConverter->convert(
                     IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                )
+                ),
+                'normalizer' => 'folding',
             ];
         }
 
@@ -202,7 +205,8 @@ class StaticField implements FieldProviderInterface
                     ),
                     'index' => $this->indexTypeConverter->convert(
                         IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                    )
+                    ),
+                    'normalizer' => 'folding',
                 ];
             }
         }

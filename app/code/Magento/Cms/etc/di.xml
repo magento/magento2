@@ -316,4 +316,13 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Theme\Model\LayoutCacheTagResolverFactory">
+        <arguments>
+            <argument name="cacheTagsResolvers" xsi:type="array">
+                <item name="Magento\Cms\Model\Page" xsi:type="object">
+                    Magento\Cms\Model\Page\LayoutCacheTagResolver
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

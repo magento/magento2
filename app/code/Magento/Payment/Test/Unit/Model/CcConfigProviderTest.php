@@ -89,10 +89,11 @@ class CcConfigProviderTest extends TestCase
 
         $this->ccConfigMock->expects($this->atLeastOnce())
             ->method('createAsset')
-            ->withConsecutive(
-                [$ccAvailableTypesMock['vi']['fileId']],
-                [$ccAvailableTypesMock['ae']['fileId']]
-            )->willReturn($assetMock);
+            ->willReturnCallback(function ($arg1) use ($ccAvailableTypesMock, $assetMock) {
+                if ($arg1 == $ccAvailableTypesMock['vi']['fileId'] || $arg1 == $ccAvailableTypesMock['ae']['fileId']) {
+                     return $assetMock;
+                }
+            });
         $this->assetSourceMock->expects($this->atLeastOnce())
             ->method('findSource')
             ->with($assetMock)

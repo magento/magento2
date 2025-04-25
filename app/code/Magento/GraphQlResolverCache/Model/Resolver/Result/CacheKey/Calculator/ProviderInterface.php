@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
 
 /**
- * Interface for custom cache key calculator provider.
+ * Interface for cache key calculator provider.
  */
 interface ProviderInterface
 {
@@ -20,6 +20,8 @@ interface ProviderInterface
      *
      * @param ResolverInterface $resolver
      * @return Calculator
+     *
+     * @throws \InvalidArgumentException
      */
     public function getKeyCalculatorForResolver(ResolverInterface $resolver): Calculator;
 }

@@ -992,7 +992,8 @@
         "index": {
             "CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID": true,
             "CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID": true,
-            "CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE": true
+            "CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE": true,
+            "CAT_PRD_IDX_PRICE_TMP_ENTT_ID_CSTR_GROUP_ID_WS_ID": true
         },
         "constraint": {
             "PRIMARY": true

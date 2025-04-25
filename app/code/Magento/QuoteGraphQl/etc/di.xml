@@ -9,7 +9,6 @@
     <preference for="Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValueInterface" type="Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Composite" />
     <preference for="Magento\QuoteGraphQl\Model\CartItem\DataProvider\Processor\ItemDataProcessorInterface" type="Magento\QuoteGraphQl\Model\CartItem\DataProvider\Processor\ItemDataCompositeProcessor" />
     <preference for="Magento\QuoteGraphQl\Model\CartItem\PrecursorInterface" type="Magento\QuoteGraphQl\Model\CartItem\PrecursorComposite" />
-    <preference for="Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutexInterface" type="Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutex" />
     <type name="Magento\QuoteGraphQl\Model\Resolver\CartItemTypeResolver">
         <arguments>
             <argument name="supportedTypes" xsi:type="array">
@@ -32,6 +31,7 @@
                 <item name="radio" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Dropdown</item>
                 <item name="checkbox" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Multiple</item>
                 <item name="multiple" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Multiple</item>
+                <item name="file" xsi:type="string">Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\File</item>
             </argument>
         </arguments>
     </type>

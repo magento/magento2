@@ -29,4 +29,7 @@
     <type name="Magento\Integration\Api\UserTokenRevokerInterface">
         <plugin name="set-guest-after-revoke" type="Magento\GraphQlCache\Model\Plugin\Auth\TokenRevoker"/>
     </type>
+    <type name="Magento\Framework\View\LayoutInterface">
+        <plugin name="add_block_cache_tags_to_query_cache" type="Magento\GraphQlCache\Model\Plugin\View\Layout"/>
+    </type>
 </config>

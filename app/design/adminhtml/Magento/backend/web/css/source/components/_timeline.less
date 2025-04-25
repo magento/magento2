@@ -14,7 +14,7 @@
 @timeline__no-records__background-color: @color-white;
 
 @timeline-item__height: 3.6rem;
-@timeline-unit__width: 100%/7;
+@timeline-unit__width: (100%/7);
 
 @timeline-event__background-color: #ccf391;
 @timeline-event__border-color: #81c21d;
@@ -346,7 +346,7 @@ svg {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: @timeline-unit__width/@timeline__scale;
+    width: (@timeline-unit__width/@timeline__scale);
 
     &:last-child {
         border-right: 0;

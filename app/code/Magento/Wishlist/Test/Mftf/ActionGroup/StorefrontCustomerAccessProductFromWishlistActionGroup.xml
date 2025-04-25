@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerAccessProductFromWishlistActionGroup">
+        <annotations>
+            <description>Go to product page from Wish List. Validates that the quantity is the same from Wish List.</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar" type="string"/>
+            <argument name="quantity" type="string"/>
+        </arguments>
+
+        <click selector="{{StorefrontCustomerWishlistSection.productLinkByProductName(productVar)}}" stepKey="goToProductPageFromWishlist"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInField selector="{{StorefrontProductInfoMainSection.qtyByClassAndQuantity(quantity)}}" userInput="{{quantity}}" stepKey="assertProductQuantity"/>
+    </actionGroup>
+</actionGroups>

@@ -110,6 +110,7 @@
         <see userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.shippingMethodInformation}}" stepKey="assertShippingMethodInformation"/>
 
         <!-- Place order and Assert success message -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
 

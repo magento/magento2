@@ -10,6 +10,9 @@
         <tab id="general" translate="label" sortOrder="100">
             <label>General</label>
         </tab>
+        <tab id="security" translate="label" sortOrder="200">
+            <label>Security</label>
+        </tab>
         <tab id="service" translate="label" sortOrder="99999">
             <label>Services</label>
         </tab>

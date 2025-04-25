@@ -113,7 +113,7 @@ class Context
      */
     private function processInvalidStoreRequested(
         RequestInterface $request,
-        NoSuchEntityException $previousException = null
+        ?NoSuchEntityException $previousException = null
     ) {
         $store = $this->storeManager->getStore();
         $this->updateContext($request, $store);

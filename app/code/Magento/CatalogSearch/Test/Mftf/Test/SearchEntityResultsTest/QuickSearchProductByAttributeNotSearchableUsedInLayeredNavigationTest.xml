@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchProductByAttributeNotSearchableUsedInLayeredNavigationTest">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="Products should not appear in search results when search by attribute value if attribute has the Use in search set to No"/>
+            <description value="A product should not be searchable by attribute value if attribute has 'Use in search' to 'No' even if 'Use in Layered Navigation is set"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-9146"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+        <before>
+            <!--Create category, attribute set with multiselect product attribute with two options-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="multipleSelectProductAttribute" stepKey="createMultiselectAttribute"/>
+            <createData entity="ProductAttributeOption10" stepKey="firstMultiselectOption">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOption11" stepKey="secondMultiselectOption">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getFirstMultiselectOption">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getSecondMultiselectOption">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </getData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$createAttributeSet.attribute_set_id$/" stepKey="onAttributeSetEdit"/>
+            <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignMultiselectAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$createMultiselectAttribute.attribute_code$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+
+            <!-- Create simple product with multiselect attribute -->
+            <createData entity="SimpleOne" storeCode="all" stepKey="createFirstSimpleProduct">
+                <field key="attribute_set_id">$createAttributeSet.attribute_set_id$</field>
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+                <requiredEntity createDataKey="getFirstMultiselectOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createMultiselectAttribute" stepKey="deleteMultiselectAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Set Use in layered navigation for attribute to Filterable -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="goToDropdownAttributePage">
+            <argument name="productAttributeCode" value="$createMultiselectAttribute.attribute_code$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeUnsearchableInAQuickSearch">
+            <argument name="useInSearchValue" value="No"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetProductAttributeUseInLayeredNavigationOptionActionGroup" stepKey="setDropdownUseInLayeredNavigationNoResults">
+            <argument name="useInLayeredNavigationValue" value="Filterable (no results)"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveMultiSelectAttribute"/>
+
+        <!-- Perform search with attribute value -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$getFirstMultiselectOption.label$"/>
+        </actionGroup>
+
+        <!-- Should not see any search results -->
+        <dontSee userInput="$$createFirstSimpleProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
+        <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>
+    </test>
+</tests>

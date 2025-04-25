@@ -1,0 +1,33 @@
+// /************************************************************************
+//  * Copyright 2025 Adobe
+//  * All Rights Reserved.
+//  *
+//  * NOTICE: All information contained herein is, and remains
+//  * the property of Adobe and its suppliers, if any. The intellectual
+//  * and technical concepts contained herein are proprietary to Adobe
+//  * and its suppliers and are protected by all applicable intellectual
+//  * property laws, including trade secret and copyright laws.
+//  * Dissemination of this information or reproduction of this material
+//  * is strictly forbidden unless prior written permission is obtained
+//  * from Adobe.
+//  * ***********************************************************************
+//  */
+
+//
+//  Invoice, Credit Memo, Shipment information
+//  ---------------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .invoice-information,
+    .creditmemo-information,
+    .shipment-information {
+        float: left;
+        width: ~'calc( (100% * 0.5) - 30px )';
+    }
+}
+
+.invoice-information-table,
+.creditmemo-information-table,
+.shipment-information-table {
+    &:extend(.abs-admin--table-secondary-edit-order all);
+}

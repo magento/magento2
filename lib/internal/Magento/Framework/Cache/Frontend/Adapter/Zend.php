@@ -30,6 +30,13 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     private $pid;
 
     /**
+     * We need to keep references to parent's frontends so that they don't get destroyed
+     *
+     * @var array
+     */
+    private $parentFrontends = [];
+
+    /**
      * @param \Closure $frontendFactory
      */
     public function __construct(\Closure $frontendFactory)
@@ -40,7 +47,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function test($identifier)
     {
@@ -48,7 +55,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($identifier)
     {
@@ -56,7 +63,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -64,7 +71,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($identifier)
     {
@@ -72,7 +79,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @throws \InvalidArgumentException Exception is thrown when non-supported cleaning mode is specified
      * @throws \Zend_Cache_Exception
@@ -97,7 +104,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBackend()
     {
@@ -105,7 +112,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLowLevelFrontend()
     {
@@ -147,6 +154,9 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
         if (getmypid() === $this->pid) {
             return $this->_frontend;
         }
+        // Note: We hide the parent process's _frontend so that the destructor won't get called on it.
+        // If the destructor were called, then the parent process's connection would be disconnected.
+        $this->parentFrontends[] = $this->_frontend;
         $frontendFactory = $this->frontendFactory;
         $this->_frontend = $frontendFactory();
         $this->pid = getmypid();

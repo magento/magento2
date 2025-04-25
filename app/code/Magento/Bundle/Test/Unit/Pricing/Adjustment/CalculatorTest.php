@@ -84,7 +84,8 @@ class CalculatorTest extends TestCase
     protected function setUp(): void
     {
         $this->saleableItem = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup', 'getStore', 'getTypeInstance'])
+            ->addMethods(['getPriceType'])
+            ->onlyMethods(['getPriceInfo', '__wakeup', 'getStore', 'getTypeInstance'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -192,17 +193,17 @@ class CalculatorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForGetterAmount()
+    public static function dataProviderForGetterAmount()
     {
         return [
             // first case with minimal amount
-            'case with getting minimal amount' => $this->getCaseWithMinAmount(),
+            'case with getting minimal amount' => self::getCaseWithMinAmount(),
             // second case with maximum amount
-            'case with getting maximum amount' => $this->getCaseWithMaxAmount(),
+            'case with getting maximum amount' => self::getCaseWithMaxAmount(),
             // third case without saleable items
-            'case without saleable items' => $this->getCaseWithoutSaleableItems(),
+            'case without saleable items' => self::getCaseWithoutSaleableItems(),
             // fourth case without require options
-            'case without required options' => $this->getCaseMinAmountWithoutRequiredOptions(),
+            'case without required options' => self::getCaseMinAmountWithoutRequiredOptions(),
         ];
     }
 
@@ -221,7 +222,8 @@ class CalculatorTest extends TestCase
     {
         /** @var MockObject|\Magento\Framework\Pricing\Amount\Base $amount */
         $amount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
-            ->setMethods(['getAdjustmentAmounts', 'getValue', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getAdjustmentAmounts', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $amount->expects($this->any())->method('getAdjustmentAmounts')
@@ -263,7 +265,8 @@ class CalculatorTest extends TestCase
     {
         /** @var MockObject|Product $selection */
         $selection = $this->getMockBuilder(Product::class)
-            ->setMethods(['isSalable', 'getQuantity', 'getAmount', 'getProduct', '__wakeup'])
+            ->addMethods(['getQuantity', 'getAmount', 'getProduct'])
+            ->onlyMethods(['isSalable', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -277,7 +280,8 @@ class CalculatorTest extends TestCase
         $selection->expects($this->any())->method('getQuantity')->willReturn(1);
 
         $innerProduct = $this->getMockBuilder(Product::class)
-            ->setMethods(['getSelectionCanChangeQty', '__wakeup'])
+            ->addMethods(['getSelectionCanChangeQty'])
+            ->onlyMethods(['__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $innerProduct->expects($this->any())->method('getSelectionCanChangeQty')->willReturn(false);
@@ -291,7 +295,7 @@ class CalculatorTest extends TestCase
      *
      * @return array
      */
-    protected function getCaseWithMinAmount()
+    protected static function getCaseWithMinAmount()
     {
         return [
             'amountForBundle' => [
@@ -334,7 +338,7 @@ class CalculatorTest extends TestCase
      *
      * @return array
      */
-    protected function getCaseWithMaxAmount()
+    protected static function getCaseWithMaxAmount()
     {
         return [
             'amountForBundle' => [
@@ -412,7 +416,7 @@ class CalculatorTest extends TestCase
      *
      * @return array
      */
-    protected function getCaseWithoutSaleableItems()
+    protected static function getCaseWithoutSaleableItems()
     {
         return [
             'amountForBundle' => [
@@ -447,7 +451,7 @@ class CalculatorTest extends TestCase
      *
      * @return array
      */
-    protected function getCaseMinAmountWithoutRequiredOptions()
+    protected static function getCaseMinAmountWithoutRequiredOptions()
     {
         return [
             'amountForBundle' => [
@@ -507,7 +511,7 @@ class CalculatorTest extends TestCase
         /** @var Calculator|MockObject $calculatorMock */
         $calculatorMock = $this->getMockBuilder(Calculator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['calculateBundleAmount'])
+            ->onlyMethods(['calculateBundleAmount'])
             ->getMock();
 
         $calculatorMock->expects($this->once())
@@ -528,7 +532,7 @@ class CalculatorTest extends TestCase
         /** @var Calculator|MockObject $calculatorMock */
         $calculatorMock = $this->getMockBuilder(Calculator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptionsAmount'])
+            ->onlyMethods(['getOptionsAmount'])
             ->getMock();
 
         $calculatorMock->expects($this->once())
@@ -551,7 +555,7 @@ class CalculatorTest extends TestCase
         /** @var Calculator|MockObject $calculatorMock */
         $calculatorMock = $this->getMockBuilder(Calculator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptionsAmount'])
+            ->onlyMethods(['getOptionsAmount'])
             ->getMock();
 
         $calculatorMock->expects($this->once())
@@ -577,7 +581,7 @@ class CalculatorTest extends TestCase
         /** @var Calculator|MockObject $calculatorMock */
         $calculatorMock = $this->getMockBuilder(Calculator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['calculateBundleAmount', 'getSelectionAmounts'])
+            ->onlyMethods(['calculateBundleAmount', 'getSelectionAmounts'])
             ->getMock();
 
         $selections[] = $this->getMockBuilder(BundleSelectionPrice::class)
@@ -607,7 +611,7 @@ class CalculatorTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionsAmountDataProvider()
+    public static function getOptionsAmountDataProvider()
     {
         return [
             'true, true' => [

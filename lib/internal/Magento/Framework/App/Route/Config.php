@@ -1,15 +1,17 @@
 <?php
 /**
- * Routes configuration model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Route;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
-class Config implements ConfigInterface
+/**
+ * Routes configuration model
+ */
+class Config implements ConfigInterface, ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Framework\App\Route\Config\Reader
@@ -37,12 +39,12 @@ class Config implements ConfigInterface
     protected $_areaList;
 
     /**
-     * @var array
+     * @var array|null
      */
     protected $_routes;
 
     /**
-     * @var SerializerInterface
+     * @var SerializerInterface|null
      */
     private $serializer;
 
@@ -65,6 +67,15 @@ class Config implements ConfigInterface
         $this->_cacheId = $cacheId;
         $this->_configScope = $configScope;
         $this->_areaList = $areaList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_routes = null;
+        $this->serializer = null;
     }
 
     /**
@@ -153,7 +164,6 @@ class Config implements ConfigInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 101.0.0
      */
     private function getSerializer()
     {

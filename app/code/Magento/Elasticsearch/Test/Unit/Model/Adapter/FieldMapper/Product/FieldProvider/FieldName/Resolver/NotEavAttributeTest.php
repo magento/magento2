@@ -48,7 +48,7 @@ class NotEavAttributeTest extends TestCase
     {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEavAttribute', 'getAttributeCode'])
+            ->onlyMethods(['isEavAttribute', 'getAttributeCode'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isEavAttribute')
@@ -66,7 +66,7 @@ class NotEavAttributeTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['code', true, [], ''],

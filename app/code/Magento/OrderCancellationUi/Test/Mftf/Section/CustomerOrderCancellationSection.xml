@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CustomerOrderCancellationSection">
+        <element name="linkToOrder" type="button" selector="a.order-number"/>
+        <element name="textOrderStatus" type="text" selector=".order-status"/>
+        <element name="linkToOpenModal" type="button" selector=".actions .cancel-order" />
+        <element name="valueForOrderCancellationReason" type="select" selector=".cancel-order-reason"/>
+        <element name="confirmOrderCancellation" type="button" selector=".cancel-order-button" />
+        <element name="referenceToLatestOrderStatus" type="text" selector=".table-order-items tr:first-child td.status" />
+        <element name="referenceToLatestOrderId" type="text" selector=".table-order-items tr:first-child td.id" />
+        <element name="messageAtTheTop" type="text" selector=".messages .message-error" />
+        <element name="loadingMask" type="text" selector=".loading-mask" />
+        <element name="linkToOpenViewOrder" type="button" selector=".actions .action.view" />
+    </section>
+</sections>

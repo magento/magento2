@@ -26,7 +26,7 @@ class Shipment extends Order
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\ResourceModel\Report $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
         $resource->init('sales_shipping_aggregated');

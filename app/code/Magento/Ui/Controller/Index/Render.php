@@ -74,9 +74,9 @@ class Render extends \Magento\Framework\App\Action\Action
         Context $context,
         UiComponentFactory $uiComponentFactory,
         ?UiComponentTypeResolver $contentTypeResolver = null,
-        JsonFactory $resultJsonFactory = null,
-        Escaper $escaper = null,
-        LoggerInterface $logger = null
+        ?JsonFactory $resultJsonFactory = null,
+        ?Escaper $escaper = null,
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($context);
         $this->context = $context;

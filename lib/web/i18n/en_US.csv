@@ -50,6 +50,7 @@ Submit,Submit
 "Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890.","Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890."
 "Please enter a valid fax number (Ex: 123-456-7890).","Please enter a valid fax number (Ex: 123-456-7890)."
 "Please enter a valid email address (Ex: johndoe@domain.com).","Please enter a valid email address (Ex: johndoe@domain.com)."
+"Please use only visible characters and spaces. The colon character is not allowed.","Please use only visible characters and spaces. The colon character is not allowed." 
 "Please enter 6 or more characters. Leading and trailing spaces will be ignored.","Please enter 6 or more characters. Leading and trailing spaces will be ignored."
 "Please enter 7 or more characters, using both numeric and alphabetic.","Please enter 7 or more characters, using both numeric and alphabetic."
 "Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored.","Minimum length of this field must be equal or greater than %1 symbols. Leading and trailing spaces will be ignored."

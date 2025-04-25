@@ -73,7 +73,7 @@ class DateTimeFormatterTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderFormatObject()
+    public static function dataProviderFormatObject()
     {
         $date = new \DateTime('2013-06-06 17:05:06 Europe/Dublin');
         $calendar = \IntlCalendar::fromDateTime('2013-06-06 17:05:06 Europe/Dublin');
@@ -162,10 +162,10 @@ class DateTimeFormatterTest extends TestCase
             $format,
             'en_US'
         );
-        $this->assertEquals($expected, $result);
+        $this->assertEquals($expected, str_replace(' ', " ", $result));
     }
 
-    public function formatObjectNumericFormatDataProvider()
+    public static function formatObjectNumericFormatDataProvider()
     {
         return [
             [null, 'Mar 30, 2022, 12:01:02 AM'],

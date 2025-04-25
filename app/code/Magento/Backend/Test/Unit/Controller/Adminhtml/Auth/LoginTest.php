@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -30,6 +31,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Backend\Controller\Adminhtml\Auth\Login.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginTest extends TestCase
 {
@@ -99,7 +102,7 @@ class LoginTest extends TestCase
 
         $this->helperMock = $this->createMock(Data::class);
         $this->requestMock = $this->getMockBuilder(Request::class)
-            ->setMethods(['getUri', 'getRequestUri'])
+            ->addMethods(['getUri', 'getRequestUri'])
             ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -186,7 +189,7 @@ class LoginTest extends TestCase
      *
      * @return array[]
      */
-    public function isValidBackendUriDataProvider()
+    public static function isValidBackendUriDataProvider()
     {
         return [
             'Rewrites on, valid url' => ['/index.php/admin', 'http://magento2.local/', 'admin', true],

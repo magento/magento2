@@ -9,11 +9,14 @@ namespace Magento\Vault\Test\Unit\Observer;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Store\Model\Store;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
@@ -67,10 +70,23 @@ class AfterPaymentSaveObserverTest extends TestCase
     protected $salesOrderPaymentMock;
 
     /**
+     * @var Store|MockObject
+     */
+    protected $storeMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                KeyValidator::class,
+                $this->createMock(KeyValidator::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         /** @var Random|MockObject $encryptorRandomGenerator */
         $encryptorRandomGenerator = $this->createMock(Random::class);
         /** @var DeploymentConfig|MockObject $deploymentConfigMock */
@@ -82,17 +98,17 @@ class AfterPaymentSaveObserverTest extends TestCase
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
+            ->addMethods(['__wakeup', 'setVaultPaymentToken', 'getVaultPaymentToken'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagement::class)
-            ->setMethods(['saveTokenWithPaymentLink'])
+            ->onlyMethods(['saveTokenWithPaymentLink'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->setMethods(null)
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -101,9 +117,14 @@ class AfterPaymentSaveObserverTest extends TestCase
         // Sales Order Model
         $this->salesOrderMock = $this->createMock(Order::class);
 
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->onlyMethods(['getWebsiteId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         // Sales Order Payment Model
         $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods(['getAdditionalInformation'])
+            ->onlyMethods(['getAdditionalInformation'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderPaymentMock->setOrder($this->salesOrderMock);
@@ -111,7 +132,7 @@ class AfterPaymentSaveObserverTest extends TestCase
 
         // Arguments to observer container
         $this->eventObserverArgMock = $this->getMockBuilder(Observer::class)
-            ->setMethods(['getDataByKey'])
+            ->onlyMethods(['getDataByKey'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventObserverArgMock->expects($this->any())
@@ -137,17 +158,26 @@ class AfterPaymentSaveObserverTest extends TestCase
      * @param array $additionalInfo
      * @dataProvider positiveCaseDataProvider
      */
-    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method, $additionalInfo)
+    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method, $websiteId, $additionalInfo)
     {
         $this->paymentTokenMock->setGatewayToken($token);
         $this->paymentTokenMock->setCustomerId($customerId);
         $this->paymentTokenMock->setCreatedAt($createdAt);
         $this->paymentTokenMock->setPaymentMethodCode($method);
         $this->paymentTokenMock->setIsActive($isActive);
+        $this->paymentTokenMock->setWebsiteId($websiteId);
 
         $this->paymentExtension->expects($this->exactly(2))
             ->method('getVaultPaymentToken')
             ->willReturn($this->paymentTokenMock);
+
+        $this->salesOrderMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
+        $this->storeMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
 
         $this->salesOrderPaymentMock->method('getAdditionalInformation')->willReturn($additionalInfo);
 
@@ -184,7 +214,7 @@ class AfterPaymentSaveObserverTest extends TestCase
      *
      * @return array
      */
-    public function positiveCaseDataProvider()
+    public static function positiveCaseDataProvider()
     {
         return [
             [
@@ -193,6 +223,7 @@ class AfterPaymentSaveObserverTest extends TestCase
                 'asdfg',
                 true,
                 'paypal',
+                1,
                 [],
             ],
             [
@@ -201,6 +232,7 @@ class AfterPaymentSaveObserverTest extends TestCase
                 'asdfg',
                 true,
                 'paypal',
+                1,
                 [VaultConfigProvider::IS_ACTIVE_CODE => true],
             ],
             [
@@ -209,7 +241,26 @@ class AfterPaymentSaveObserverTest extends TestCase
                 'asdfg',
                 true,
                 'paypal',
+                1,
                 [VaultConfigProvider::IS_ACTIVE_CODE => false],
+            ],
+            [
+                1,
+                '10\20\2015',
+                'asdfg',
+                true,
+                'braintree_cc_vault',
+                2,
+                [VaultConfigProvider::IS_ACTIVE_CODE => true],
+            ],
+            [
+                1,
+                '10\20\2015',
+                'asdfg',
+                true,
+                'braintree_cc_vault',
+                1,
+                [VaultConfigProvider::IS_ACTIVE_CODE => true],
             ],
             [
                 null,
@@ -217,6 +268,7 @@ class AfterPaymentSaveObserverTest extends TestCase
                 null,
                 false,
                 null,
+                1,
                 [],
             ],
         ];

@@ -43,7 +43,7 @@ class SpecialPrice extends \Magento\Catalog\Pricing\Price\SpecialPrice implement
         }
 
         $specialPrice = $this->getDiscountPercent();
-        if ($specialPrice) {
+        if ($specialPrice !== false) {
             $regularPrice = $this->getRegularPrice();
             $this->value = $regularPrice * ($specialPrice / 100);
         } else {
@@ -63,6 +63,8 @@ class SpecialPrice extends \Magento\Catalog\Pricing\Price\SpecialPrice implement
     }
 
     /**
+     * Returns true as special price is always percentage for bundle products
+     *
      * @return bool
      */
     public function isPercentageDiscount()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
 
@@ -84,9 +84,9 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Customer\Model\Session $session,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connectionName = null,
-        IndexScopeResolverInterface $priceTableResolver = null,
-        Context $httpContext = null,
-        DimensionFactory $dimensionFactory = null
+        ?IndexScopeResolverInterface $priceTableResolver = null,
+        ?Context $httpContext = null,
+        ?DimensionFactory $dimensionFactory = null
     ) {
         $this->layer = $layerResolver->get();
         $this->session = $session;

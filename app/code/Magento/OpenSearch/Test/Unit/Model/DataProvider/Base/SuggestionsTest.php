@@ -10,7 +10,6 @@ namespace Magento\OpenSearch\Test\Unit\Model\DataProvider\Base;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\Model\DataProvider\Base\Suggestions;
-use Magento\Elasticsearch\Model\DataProvider\Suggestions as SuggestionsDataProvider;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -31,7 +30,7 @@ use Psr\Log\LoggerInterface;
 class SuggestionsTest extends TestCase
 {
     /**
-     * @var SuggestionsDataProvider
+     * @var Suggestions
      */
     private $model;
 

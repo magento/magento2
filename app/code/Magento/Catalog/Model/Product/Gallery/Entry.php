@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
@@ -86,6 +85,8 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     }
 
     /**
+     * Get Content
+     *
      * @return \Magento\Framework\Api\Data\ImageContentInterface|null
      */
     public function getContent()
@@ -143,7 +144,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
      * @param string[] $types
      * @return $this
      */
-    public function setTypes(array $types = null)
+    public function setTypes(?array $types = null)
     {
         return $this->setData(self::TYPES, $types);
     }
@@ -162,7 +163,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     /**
      * Set media gallery content
      *
-     * @param $content \Magento\Framework\Api\Data\ImageContentInterface
+     * @param \Magento\Framework\Api\Data\ImageContentInterface $content
      * @return $this
      */
     public function setContent($content)
@@ -171,7 +172,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return ProductAttributeMediaGalleryEntryExtensionInterface|null
      */
@@ -181,7 +182,7 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param ProductAttributeMediaGalleryEntryExtensionInterface $extensionAttributes
      * @return $this

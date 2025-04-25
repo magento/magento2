@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +26,7 @@ class DefaultBackendTest extends TestCase
      *
      * @return array
      */
-    public function getAttributeConfigurations(): array
+    public static function getAttributeConfigurations(): array
     {
         return [
             'basic-attribute' => [true, false, true, 'basic', 'value', false, true, false],

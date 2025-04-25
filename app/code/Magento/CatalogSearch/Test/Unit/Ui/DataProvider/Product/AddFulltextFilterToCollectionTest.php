@@ -41,14 +41,14 @@ class AddFulltextFilterToCollectionTest extends TestCase
         $this->objectManager = new ObjectManagerHelper($this);
 
         $this->searchCollection = $this->getMockBuilder(SearchCollection::class)
-            ->setMethods(['addBackendSearchFilter', 'load', 'getAllIds'])
+            ->onlyMethods(['addBackendSearchFilter', 'load', 'getAllIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchCollection->expects($this->any())
             ->method('load')
             ->willReturnSelf();
         $this->collection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['addIdFilter'])
+            ->addMethods(['addIdFilter'])
             ->disableOriginalConstructor()
             ->getMock();
 

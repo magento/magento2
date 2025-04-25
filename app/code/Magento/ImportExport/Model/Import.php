@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ImportExport\Model;
@@ -79,7 +79,7 @@ class Import extends AbstractModel
     public const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
 
     /**
-     * Validation startegt field name
+     * Validation strategy field name
      */
     public const FIELD_NAME_VALIDATION_STRATEGY = 'validation_strategy';
 
@@ -253,10 +253,10 @@ class Import extends AbstractModel
         History $importHistoryModel,
         DateTime $localeDate,
         array $data = [],
-        ManagerInterface $messageManager = null,
-        Random $random = null,
-        Upload $upload = null,
-        LocaleEmulatorInterface $localeEmulator = null
+        ?ManagerInterface $messageManager = null,
+        ?Random $random = null,
+        ?Upload $upload = null,
+        ?LocaleEmulatorInterface $localeEmulator = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -521,14 +521,8 @@ class Import extends AbstractModel
      */
     private function importSourceCallback()
     {
-        $ids = $this->_getEntityAdapter()->getIds();
-        if (empty($ids)) {
-            $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
-            if (null !== $idsFromPostData && '' !== $idsFromPostData) {
-                $ids = explode(",", $idsFromPostData);
-                $this->_getEntityAdapter()->setIds($ids);
-            }
-        }
+        $ids = $this->getImportIds();
+        $this->_getEntityAdapter()->setIds($ids);
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
 
@@ -560,24 +554,46 @@ class Import extends AbstractModel
         $this->getDataSourceModel()->markProcessedBunches($ids);
 
         if ($result) {
-            $this->addLogComment(
-                [
-                    __(
-                        'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
-                        $this->getProcessedRowsCount(),
-                        $this->getProcessedEntitiesCount(),
-                        $this->getErrorAggregator()->getInvalidRowsCount(),
-                        $this->getErrorAggregator()->getErrorsCount()
-                    ),
-                    __('The import was successful.'),
-                ]
-            );
+            $logComments = [
+                __(
+                    'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
+                    $this->getProcessedRowsCount(),
+                    $this->getProcessedEntitiesCount(),
+                    $this->getErrorAggregator()->getInvalidRowsCount(),
+                    $this->getErrorAggregator()->getErrorsCount()
+                )
+            ];
+            foreach ($this->getErrorAggregator()->getAllErrors() as $error) {
+                $logComments[] = $error->getErrorMessage();
+            }
+            $logComments[] = $this->getForceImport() == '0' && $this->getErrorAggregator()->getErrorsCount() > 0 ?
+                __('The import was not successful.') : __('The import was successful.');
+            $this->addLogComment($logComments);
             $this->importHistoryModel->updateReport($this, true);
         } else {
             $this->importHistoryModel->invalidateReport($this);
         }
 
         return $result;
+    }
+
+    /**
+     * Get entity import ids
+     *
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getImportIds(): array
+    {
+        $ids = $this->_getEntityAdapter()->getIds();
+        if (empty($ids)) {
+            $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
+            if (null !== $idsFromPostData && '' !== $idsFromPostData) {
+                $ids = explode(",", $idsFromPostData);
+            }
+        }
+
+        return $ids;
     }
 
     /**
@@ -721,11 +737,18 @@ class Import extends AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->isErrorLimitExceeded();
-        if ($result) {
-            $this->addLogComment(__('Import data validation is complete.'));
+        if ($errorAggregator->isErrorLimitExceeded()) {
+            return false;
         }
-        return $result;
+
+        if ($this->getProcessedRowsCount() <= $errorAggregator->getInvalidRowsCount()) {
+            $this->addLogComment(__('There are no valid rows to import.'));
+            return false;
+        }
+
+        $this->addLogComment(__('Import data validation is complete.'));
+
+        return true;
     }
 
     /**
@@ -881,7 +904,7 @@ class Import extends AbstractModel
                     $this->_varDirectory->writeFile($copyFile, $content);
                 }
             } catch (FileSystemException $e) {
-                throw new LocalizedException(__('Source file coping failed'));
+                throw new LocalizedException(__('Source file copying failed'));
             }
             $this->importHistoryModel->addReport($copyName);
         }

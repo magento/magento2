@@ -90,9 +90,9 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         Config $eavConfig,
         ScopeConfigInterface $scopeConfig,
         $connectionName = null,
-        GetStatusExpression $getStatusExpression = null,
-        StockConfigurationInterface $stockConfiguration = null,
-        QueryProcessorComposite $queryProcessorComposite = null
+        ?GetStatusExpression $getStatusExpression = null,
+        ?StockConfigurationInterface $stockConfiguration = null,
+        ?QueryProcessorComposite $queryProcessorComposite = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);

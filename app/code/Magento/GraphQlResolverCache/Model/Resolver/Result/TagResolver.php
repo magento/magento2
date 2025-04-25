@@ -8,10 +8,16 @@ declare(strict_types=1);
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 
 use Magento\Framework\App\Cache\Tag\Resolver;
-use Magento\Framework\App\Cache\Tag\Strategy\Factory as StrategyFactory;
+use Magento\Framework\App\Cache\Tag\Strategy\Factory as OtherCachesStrategyFactory;
+use Magento\GraphQlResolverCache\App\Cache\Tag\Strategy\Locator as ResolverCacheStrategyLocator;
 
 class TagResolver extends Resolver
 {
+    /**
+     * @var ResolverCacheStrategyLocator
+     */
+    private $resolverCacheTagStrategyLocator;
+
     /**
      * @var array
      */
@@ -20,16 +26,19 @@ class TagResolver extends Resolver
     /**
      * GraphQL Resolver cache-specific tag resolver for the purpose of invalidation
      *
-     * @param StrategyFactory $factory
+     * @param ResolverCacheStrategyLocator $resolverCacheStrategyLocator
+     * @param OtherCachesStrategyFactory $otherCachesStrategyFactory
      * @param array $invalidatableObjectTypes
      */
     public function __construct(
-        StrategyFactory $factory,
+        ResolverCacheStrategyLocator $resolverCacheStrategyLocator,
+        OtherCachesStrategyFactory $otherCachesStrategyFactory,
         array $invalidatableObjectTypes = []
     ) {
+        $this->resolverCacheTagStrategyLocator = $resolverCacheStrategyLocator;
         $this->invalidatableObjectTypes = $invalidatableObjectTypes;
 
-        parent::__construct($factory);
+        parent::__construct($otherCachesStrategyFactory);
     }
 
     /**
@@ -49,6 +58,12 @@ class TagResolver extends Resolver
 
         if (!$isInvalidatable) {
             return [];
+        }
+
+        $resolverCacheTagStrategy = $this->resolverCacheTagStrategyLocator->getStrategy($object);
+
+        if ($resolverCacheTagStrategy) {
+            return $resolverCacheTagStrategy->getTags($object);
         }
 
         return parent::getTags($object);

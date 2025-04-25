@@ -146,7 +146,27 @@ class RepositoryTest extends TestCase
         $quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
         $quoteMock->expects($this->once())->method('getLastAddedItem')->willReturn($itemId);
 
-        $this->assertEquals($itemId, $this->repository->save($this->itemMock));
+        $this->assertEquals(
+            $itemId,
+            $this->invokeMethod($this->repository, 'saveItem', [$this->itemMock])
+        );
+    }
+
+    /**
+     * Invokes private method.
+     *
+     * @param $object
+     * @param $methodName
+     * @param array $parameters
+     * @return mixed
+     */
+    private function invokeMethod(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 
     /**

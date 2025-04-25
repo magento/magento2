@@ -9,33 +9,27 @@ namespace Magento\QuoteGraphQl\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Framework\GraphQl\Query\Fields;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Quote\Config as QuoteConfig;
 
 /**
  * Class for extending product attributes for quote.
  */
-class ProductAttributesExtender
+class ProductAttributesExtender implements ResetAfterRequestInterface
 {
     /**
-     * @var Fields
+     * @var array
      */
-    private $fields;
-
-    /**
-     * @var AttributeCollectionFactory
-     */
-    private $attributeCollectionFactory;
+    private $attributes;
 
     /**
      * @param Fields $fields
      * @param AttributeCollectionFactory $attributeCollectionFactory
      */
     public function __construct(
-        Fields $fields,
-        AttributeCollectionFactory $attributeCollectionFactory
+        private Fields $fields,
+        private AttributeCollectionFactory $attributeCollectionFactory,
     ) {
-        $this->fields = $fields;
-        $this->attributeCollectionFactory = $attributeCollectionFactory;
     }
 
     /**
@@ -48,13 +42,22 @@ class ProductAttributesExtender
      */
     public function afterGetProductAttributes(QuoteConfig $subject, array $result): array
     {
-        $attributeCollection = $this->attributeCollectionFactory->create()
-            ->removeAllFieldsFromSelect()
-            ->addFieldToSelect('attribute_code')
-            ->setCodeFilter($this->fields->getFieldsUsedInQuery())
-            ->load();
-        $attributes = $attributeCollection->getColumnValues('attribute_code');
+        if (!$this->attributes) {
+            $attributeCollection = $this->attributeCollectionFactory->create()
+                ->removeAllFieldsFromSelect()
+                ->addFieldToSelect('attribute_code')
+                ->setCodeFilter($this->fields->getFieldsUsedInQuery())
+                ->load();
+            $this->attributes = $attributeCollection->getColumnValues('attribute_code');
+        }
+        return array_unique(array_merge($result, $this->attributes));
+    }
 
-        return array_unique(array_merge($result, $attributes));
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = [];
     }
 }

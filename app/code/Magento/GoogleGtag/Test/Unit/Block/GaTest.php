@@ -77,13 +77,10 @@ class GaTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock->expects($this->once())
-            ->method('getEscaper')
-            ->willReturn($objectManager->getObject(Escaper::class));
-
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
         $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -110,6 +107,20 @@ class GaTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $escaper->expects($this->any())
+            ->method('escapeHtmlAttr')
+            ->willReturnCallback(function ($value) {
+                return $value;
+            });
+
+        $escaper->expects($this->any())
+            ->method('escapeHtml')
+            ->willReturnOnConsecutiveCalls('sku0', 'testName0', 'test');
+
         $this->gaBlock = $objectManager->getObject(
             Ga::class,
             [
@@ -118,7 +129,8 @@ class GaTest extends TestCase
                 'cookieHelper' => $this->cookieHelperMock,
                 'serializer' => $this->serializerMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
-                'orderRepository' => $this->orderRepository
+                'orderRepository' => $this->orderRepository,
+                '_escaper' => $escaper
             ]
         );
     }
@@ -163,21 +175,21 @@ class GaTest extends TestCase
             'orders' => [
                 [
                     'transaction_id' => 100,
-                    'affiliation' => 'test',
                     'value' => 10.00,
                     'tax' => 2.00,
-                    'shipping' => 1.00
+                    'shipping' => 1.00,
+                    'currency' => 'USD'
                 ]
             ],
             'products' => [
                 [
                     'item_id' => 'sku0',
                     'item_name' => 'testName0',
+                    'affiliation' => 'test',
                     'price' => 0.00,
                     'quantity' => 1
                 ]
             ],
-            'currency' => 'USD'
         ];
         $this->gaBlock->setOrderIds([1, 2]);
         $tempResults = $this->gaBlock->getOrdersTrackingData();

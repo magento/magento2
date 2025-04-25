@@ -51,6 +51,9 @@ class UserExpirationTest extends TestCase
             \IntlDateFormatter::MEDIUM,
             \IntlDateFormatter::MEDIUM
         );
+        if (version_compare(PHP_VERSION, '8.3', '>=') && $locale === 'uk_UA') {
+            $expireDate = str_replace(' р.', ' р.', $expireDate);
+        }
         $userExpirationFactory = Bootstrap::getObjectManager()->get(UserExpirationFactory::class);
         $userExpiration = $userExpirationFactory->create();
         $userExpiration->setExpiresAt($expireDate);
@@ -67,17 +70,17 @@ class UserExpirationTest extends TestCase
      *
      * @return array
      */
-    public function userExpirationSaveDataProvider(): array
+    public static function userExpirationSaveDataProvider(): array
     {
         return [
             'default' => [
-                'locale_code' => 'en_US',
+                'locale' => 'en_US',
             ],
             'non_default_english_textual' => [
-                'locale_code' => 'de_DE',
+                'locale' => 'de_DE',
             ],
             'non_default_non_english_textual' => [
-                'locale_code' => 'uk_UA',
+                'locale' => 'uk_UA',
             ],
         ];
     }

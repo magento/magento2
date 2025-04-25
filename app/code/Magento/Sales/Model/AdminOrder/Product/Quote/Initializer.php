@@ -6,9 +6,6 @@
 
 /**
  * Product quote initializer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  */
 namespace Magento\Sales\Model\AdminOrder\Product\Quote;
 
@@ -29,6 +26,8 @@ class Initializer
     }
 
     /**
+     * Initializing quote product
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\DataObject $config

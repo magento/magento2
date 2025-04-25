@@ -35,7 +35,7 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
      */
     public function __construct(
         WebApiAsyncConfig $webapiAsyncConfig,
-        DefaultValueProvider $defaultValueProvider = null
+        ?DefaultValueProvider $defaultValueProvider = null
     ) {
         $this->webapiAsyncConfig = $webapiAsyncConfig;
         $this->defaultValueProvider = $defaultValueProvider
