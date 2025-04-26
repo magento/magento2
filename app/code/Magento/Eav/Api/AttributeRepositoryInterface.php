@@ -6,6 +6,9 @@
  */
 namespace Magento\Eav\Api;
 
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+
 /**
  * Interface AttributeRepositoryInterface
  * @api
@@ -20,43 +23,51 @@ interface AttributeRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Eav\Api\Data\AttributeSearchResultsInterface
      */
-    public function getList($entityTypeCode, \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getList(
+        string $entityTypeCode,
+        SearchCriteriaInterface $searchCriteria
+    ): Data\AttributeSearchResultsInterface;
 
     /**
      * Retrieve specific attribute
      *
      * @param string $entityTypeCode
      * @param string $attributeCode
+     *
      * @return \Magento\Eav\Api\Data\AttributeInterface
+     *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($entityTypeCode, $attributeCode);
+    public function get(string $entityTypeCode, string $attributeCode): Data\AttributeInterface;
 
     /**
      * Create attribute data
      *
      * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
-     * @return string
+     *
+     * @return \Magento\Eav\Api\Data\AttributeInterface
+     *
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function save(\Magento\Eav\Api\Data\AttributeInterface $attribute);
+    public function save(AttributeInterface $attribute): AttributeInterface;
 
     /**
      * Delete Attribute
      *
      * @param Data\AttributeInterface $attribute
      * @return bool True if the entity was deleted
+     *
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function delete(Data\AttributeInterface $attribute);
+    public function delete(Data\AttributeInterface $attribute): bool;
 
     /**
      * Delete Attribute By Id
      *
-     * @param int $attributeId
+     * @param int|string $attributeId
      * @return bool True if the entity was deleted
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function deleteById($attributeId);
+    public function deleteById(int|string $attributeId): bool;
 }

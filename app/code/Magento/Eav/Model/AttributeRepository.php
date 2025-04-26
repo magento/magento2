@@ -6,8 +6,11 @@
 
 namespace Magento\Eav\Model;
 
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Api\Data\AttributeSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -83,20 +86,24 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     /**
      * {@inheritdoc}
      */
-    public function save(\Magento\Eav\Api\Data\AttributeInterface $attribute)
+    public function save(AttributeInterface $attribute): AttributeInterface
     {
         try {
             $this->eavResource->save($attribute);
         } catch (\Exception $e) {
             throw new StateException(__("The attribute can't be saved."), $e);
         }
+
         return $attribute;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getList($entityTypeCode, \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(
+        string $entityTypeCode,
+        SearchCriteriaInterface $searchCriteria
+    ): AttributeSearchResultsInterface
     {
         if (!$entityTypeCode) {
             throw InputException::requiredField('entity_type_code');
@@ -158,7 +165,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     /**
      * {@inheritdoc}
      */
-    public function get($entityTypeCode, $attributeCode)
+    public function get(string $entityTypeCode, string $attributeCode): AttributeInterface
     {
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
         $attribute = $this->eavConfig->getAttribute($entityTypeCode, $attributeCode);
@@ -170,13 +177,14 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
                 )
             );
         }
+
         return $attribute;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\Eav\Api\Data\AttributeInterface $attribute)
+    public function delete(AttributeInterface $attribute): bool
     {
         try {
             $this->eavResource->delete($attribute);
@@ -189,7 +197,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     /**
      * {@inheritdoc}
      */
-    public function deleteById($attributeId)
+    public function deleteById(int|string $attributeId): bool
     {
         /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
         $attribute = $this->attributeFactory->create();
@@ -211,13 +219,14 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
      * @deprecated 101.0.0
      * @return CollectionProcessorInterface
      */
-    private function getCollectionProcessor()
+    private function getCollectionProcessor(): CollectionProcessorInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 CollectionProcessor::class
             );
         }
+
         return $this->collectionProcessor;
     }
 }

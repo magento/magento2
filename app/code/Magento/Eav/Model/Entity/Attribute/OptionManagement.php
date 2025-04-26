@@ -46,17 +46,19 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     }
 
     /**
-     * Add option to attribute.
+     * Add an option to attribute.
      *
-     * @param int $entityType
+     * @param string $entityType
      * @param string $attributeCode
-     * @param AttributeOptionInterface $option
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     *
      * @return string
+     *
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws StateException
      */
-    public function add($entityType, $attributeCode, $option)
+    public function add(string $entityType, string $attributeCode, AttributeOptionInterface $option): string
     {
         $attribute = $this->loadAttribute($entityType, (string)$attributeCode);
 
@@ -160,7 +162,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     }
 
     /**
-     * Get option id to create new option
+     * Get option id to create a new option
      *
      * @param AttributeOptionInterface $option
      * @return string
@@ -178,7 +180,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     /**
      * @inheritdoc
      */
-    public function delete($entityType, $attributeCode, $optionId)
+    public function delete(string $entityType, string $attributeCode, string|int $optionId): bool
     {
         $attribute = $this->loadAttribute($entityType, $attributeCode);
         $this->validateOption($attribute, $optionId);
@@ -202,7 +204,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     /**
      * @inheritdoc
      */
-    public function getItems($entityType, $attributeCode)
+    public function getItems(string $entityType, string $attributeCode): array
     {
         if (empty($attributeCode)) {
             throw new InputException(__('The attribute code is empty. Enter the code and try again.'));
@@ -226,7 +228,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
      * @return void
      * @throws NoSuchEntityException
      */
-    protected function validateOption($attribute, $optionId)
+    protected function validateOption(EavAttributeInterface $attribute, int $optionId): void
     {
         if ($attribute->getSource()->getOptionText($optionId) === false) {
             throw new NoSuchEntityException(
@@ -242,14 +244,14 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     /**
      * Load attribute
      *
-     * @param string|int $entityType
+     * @param string $entityType
      * @param string $attributeCode
      * @return EavAttributeInterface
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws StateException
      */
-    private function loadAttribute($entityType, string $attributeCode): EavAttributeInterface
+    private function loadAttribute(string $entityType, string $attributeCode): EavAttributeInterface
     {
         if (empty($attributeCode)) {
             throw new InputException(__('The attribute code is empty. Enter the code and try again.'));
@@ -278,6 +280,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     ) : string {
         $label = $option->getLabel() !== null ? trim($option->getLabel()) : '';
         $optionId = $attribute->getSource()->getOptionId($label);
+
         if ($optionId) {
             $option->setValue($optionId);
         } elseif (is_array($option->getStoreLabels())) {

@@ -13,38 +13,44 @@ namespace Magento\Eav\Api;
 interface AttributeOptionManagementInterface
 {
     /**
-     * Add option to attribute
+     * Add an option to attribute
      *
-     * @param int $entityType
+     * @param string $entityType
      * @param string $attributeCode
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
-     * @throws \Magento\Framework\Exception\StateException
-     * @throws \Magento\Framework\Exception\InputException
+     *
      * @return string
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
      */
-    public function add($entityType, $attributeCode, $option);
+    public function add(string $entityType, string $attributeCode, Data\AttributeOptionInterface $option): string;
 
     /**
      * Delete option from attribute
      *
-     * @param int $entityType
+     * @param string $entityType
      * @param string $attributeCode
      * @param string $optionId
+     *
+     * @return bool
+     *
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @return bool
      */
-    public function delete($entityType, $attributeCode, $optionId);
+    public function delete(string $entityType, string $attributeCode, string|int $optionId): bool;
 
     /**
-     * Retrieve list of attribute options
+     * Retrieve a list of attribute options
      *
-     * @param int $entityType
+     * @param string $entityType
      * @param string $attributeCode
+     *
+     * @return \Magento\Eav\Api\Data\AttributeOptionInterface[]
+     *
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
-     * @return \Magento\Eav\Api\Data\AttributeOptionInterface[]
      */
-    public function getItems($entityType, $attributeCode);
+    public function getItems(string $entityType, string $attributeCode): array;
 }
