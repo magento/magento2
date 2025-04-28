@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertAvailableShippingRateIsChangedBasedOnInputedDataTest">
+        <annotations>
+            <features value="Fedex"/>
+            <stories value="Shipping Rates"/>
+            <title value="Storefront available shipping rate is changed on shipping page"/>
+            <description value="Testcase verifies On storefront Available shipping rate is changed on fly according to inputed data"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-9283"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">10</field>
+            </createData>
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="enableFreeShippingMethod"/>
+            <actionGroup ref="AdminEnableFreeShippingToSpecificCountriesActionGroup" stepKey="enableToSpecificCountries"/>
+            <actionGroup ref="AdminEnableFedExConfigurationActionGroup" stepKey="enableFedEx"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
+            <actionGroup ref="AdminEnableFreeShippingToAllCountriesActionGroup" stepKey="enableAllCountries"/>
+            <actionGroup ref="AdminDisableFedexConfigurationActionGroup" stepKey="disableFedEx"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <!-- Add product to cart -->
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Go to checkout page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="openCheckoutShippingPage"/>
+        <!-- Assert Shipping Page -->
+        <actionGroup ref="StorefrontAssertShippingAddressPageDisplayActionGroup" stepKey="assertShippingPageDisplay"/>
+        <waitForElement selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailField" />
+        <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyFlatRateShippingMethod"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelNotVisible"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFedexLabel}}" stepKey="waitForFedexNullLabelVisible"/>
+        <!-- Change country value -->
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="Afghanistan" stepKey="fillCountryField"/>
+        <waitForPageLoad stepKey="waitForChangeAfterCountryLoad"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="1001" stepKey="enterPostcode"/>
+        <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyShippingMethodAfterCountryChange"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="waitForFreeShippingVisibleAfterCountryChange"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="waitForFreeShippingLabelVisibleAfterCountryChange"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFedexLabel}}" stepKey="waitForFedexNullLabelVisibleAfterCountryChange"/>
+        <waitForText selector="{{CheckoutShippingMethodsSection.shippingDHLErrorMessage}}" userInput="This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us." stepKey="seeFedexErrorMessage"/>
+        <!-- Fill customer new shipping address -->
+        <actionGroup ref="CustomerCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="againWaitForFreeShippingLabelNotVisible"/>
+        <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyFlatRateShippingMethodAfterCountryChangeToUS"/>
+        <actionGroup ref="StorefrontVerifyFedexShippingMethodPricesActionGroup" stepKey="verifyFedexShippingMethodPrices"/>
+    </test>
+</tests>

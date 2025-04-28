@@ -265,7 +265,7 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function deletePostJsonDataProvider()
+    public static function deletePostJsonDataProvider()
     {
         $url = 'http://localhost.com/dev/checkout/cart/delete/';
         $uenc = strtr(base64_encode($url), '+/=', '-_,');

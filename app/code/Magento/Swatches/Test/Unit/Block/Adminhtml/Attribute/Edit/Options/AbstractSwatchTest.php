@@ -187,7 +187,7 @@ class AbstractSwatchTest extends TestCase
     /**
      * @return array
      */
-    public function dataForGetStoreOptionValues(): array
+    public static function dataForGetStoreOptionValues(): array
     {
         return [
             [

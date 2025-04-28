@@ -1,16 +1,28 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ***********************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Comment;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order\Invoice\Comment;
 use Magento\Sales\Model\Order\Invoice\Comment\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Helper\SalesEntityCommentValidator;
 
 class ValidatorTest extends TestCase
 {
@@ -25,15 +37,28 @@ class ValidatorTest extends TestCase
     protected $commentModelMock;
 
     /**
+     * @var SalesEntityCommentValidator|MockObject
+     */
+    private $salesEntityCommentValidator;
+
+    /**
      * Set up
      */
     protected function setUp(): void
     {
+        $this->salesEntityCommentValidator = $this->getMockBuilder(SalesEntityCommentValidator::class)
+            ->disableOriginalConstructor()->getMock();
         $this->commentModelMock = $this->createPartialMock(
             Comment::class,
             ['hasData', 'getData']
         );
-        $this->validator = new Validator();
+        $objectManager = new ObjectManager($this);
+        $this->validator = $objectManager->getObject(
+            Validator::class,
+            [
+                'salesEntityCommentValidator' => $this->salesEntityCommentValidator
+            ]
+        );
     }
 
     /**
@@ -61,7 +86,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function providerCommentData()
+    public static function providerCommentData()
     {
         return [
             [
@@ -71,9 +96,11 @@ class ValidatorTest extends TestCase
                 ],
                 [
                     'parent_id' => 25,
-                    'comment' => 'Hello world!'
+                    'comment' => 'Hello World!'
                 ],
-                [],
+                [
+                    'comment' => 'User is not authorized to edit comment.'
+                ]
             ],
             [
                 [

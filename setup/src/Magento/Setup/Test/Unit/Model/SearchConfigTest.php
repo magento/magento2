@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -110,11 +110,11 @@ class SearchConfigTest extends TestCase
         $this->searchConfig->saveConfiguration($installInput);
     }
 
-    public function installInputDataProvider()
+    public static function installInputDataProvider()
     {
         return [
             [
-                'all' => [
+                'installInput' => [
                     'amqp-host' => '',
                     'amqp-port' => '5672',
                     'amqp-user' => '',
@@ -141,7 +141,7 @@ class SearchConfigTest extends TestCase
                     'base-url-secure' => null,
                     'use-secure-admin' => null,
                     'admin-use-security-key' => null,
-                    'search-engine' => 'elasticsearch7',
+                    'search-engine' => 'elasticsearch8',
                     'elasticsearch-host' => 'localhost',
                     'elasticsearch-port' => '9200',
                     'elasticsearch-enable-auth' => false,
@@ -149,8 +149,8 @@ class SearchConfigTest extends TestCase
                     'elasticsearch-timeout' => 15,
                     'no-interaction' => false,
                 ],
-                'search' => [
-                    'search-engine' => 'elasticsearch7',
+                'searchInput' => [
+                    'search-engine' => 'elasticsearch8',
                     'elasticsearch-host' => 'localhost',
                     'elasticsearch-port' => '9200',
                     'elasticsearch-enable-auth' => false,

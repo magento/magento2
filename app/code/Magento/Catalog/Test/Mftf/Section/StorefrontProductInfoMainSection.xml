@@ -113,5 +113,9 @@
         <element name="customOptionDayPart" type="date" selector="//div[@class='field date required']//span[text()='{{option}}']/../..//div/select[@data-calendar-role='day_part']" parameterized="true"/>
         <element name="swatchOptionDisabled" type="text" selector=".//*[@class='swatch-option color disabled']"/>
         <element name="addToCartEnabled" type="button" selector="#product-addtocart-button:not([disabled])"/>
+        <element name="selectCustomOptionDropDown" type="select" selector="//select[contains(@class,' required product-custom-option admin__control-select')]"/>
+        <element name="productCalenderButton" type="button" selector="//*[@id='product-options-wrapper']/div/div/fieldset/div/button" />
+        <element name="productCalenderGoToday" type="button" selector="//*[@id='ui-datepicker-div']/div[2]/button[1]" />
+        <element name="customDateField" type="text" selector='//*[@class="product-custom-option datetime-picker input-text _has-datepicker"]' />
     </section>
 </sections>

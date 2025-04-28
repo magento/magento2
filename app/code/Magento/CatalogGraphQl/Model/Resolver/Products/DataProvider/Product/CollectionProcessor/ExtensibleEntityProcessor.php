@@ -47,7 +47,7 @@ class ExtensibleEntityProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
         $this->joinProcessor->process($collection);
 

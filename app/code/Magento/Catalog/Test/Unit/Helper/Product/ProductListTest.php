@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -15,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProductListTest extends TestCase
 {
-    const STUB_VIEW_MODE = 'grid';
+    private const STUB_VIEW_MODE = 'grid';
     /**
      * @var ScopeConfigInterface|MockObject
      */
@@ -55,18 +56,18 @@ class ProductListTest extends TestCase
         $this->assertSame($expectedReturn, $returnedValue);
     }
 
-    public function defaultAvailableLimitsDataProvider(): array
+    public static function defaultAvailableLimitsDataProvider(): array
     {
         return [
             'limit-available' => [
-                'values' => '10,20,30',
-                'default' => 10,
-                'expected' => 10
+                'availableValues' => '10,20,30',
+                'defaultValue' => 10,
+                'expectedReturn' => 10
             ],
             'limit-not-available' => [
-                'values' => '10,20,30',
-                'default' => 1,
-                'expected' => 10
+                'availableValues' => '10,20,30',
+                'defaultValue' => 1,
+                'expectedReturn' => 10
             ]
         ];
     }

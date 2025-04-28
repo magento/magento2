@@ -120,11 +120,17 @@ class TagScopeTest extends TestCase
     {
         $this->_frontend
             ->method('clean')
-            ->withConsecutive(
-                [\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['test_tag_one', 'enforced_tag']],
-                [\Zend_Cache::CLEANING_MODE_MATCHING_TAG, ['test_tag_two', 'enforced_tag']]
-            )
-            ->willReturnOnConsecutiveCalls($fixtureResultOne, $fixtureResultTwo);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($fixtureResultOne, $fixtureResultTwo) {
+                    if ($arg1 == \Zend_Cache::CLEANING_MODE_MATCHING_TAG &&
+                        $arg2 == ['test_tag_one', 'enforced_tag']) {
+                        return $fixtureResultOne;
+                    } elseif ($arg1 == \Zend_Cache::CLEANING_MODE_MATCHING_TAG &&
+                        $arg2 == ['test_tag_two', 'enforced_tag']) {
+                        return $fixtureResultTwo;
+                    }
+                }
+            );
         $actualResult = $this->_object->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
             ['test_tag_one', 'test_tag_two']
@@ -135,7 +141,7 @@ class TagScopeTest extends TestCase
     /**
      * @return array
      */
-    public function cleanModeMatchingAnyTagDataProvider(): array
+    public static function cleanModeMatchingAnyTagDataProvider(): array
     {
         return [
             'failure, failure' => [false, false, false],

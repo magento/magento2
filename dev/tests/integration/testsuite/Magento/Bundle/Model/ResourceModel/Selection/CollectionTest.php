@@ -48,17 +48,17 @@ class CollectionTest extends \Magento\Bundle\Model\Product\BundlePriceAbstract
         $this->assertCount($expectedCount, $items);
     }
 
-    public function getTestCases()
+    public static function getTestCases()
     {
         return [
             'Dynamic bundle product with three Simple products' => [
-                'variation' => $this->getBundleConfiguration(),
+                'strategy' => self::getBundleConfiguration(),
                 'expectedCount' => 1
             ]
         ];
     }
 
-    private function getBundleConfiguration()
+    private static function getBundleConfiguration()
     {
         $optionsData = [
             [

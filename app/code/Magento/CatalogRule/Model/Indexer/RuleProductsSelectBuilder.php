@@ -68,7 +68,7 @@ class RuleProductsSelectBuilder
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
         ActiveTableSwitcher $activeTableSwitcher,
-        TableSwapper $tableSwapper = null
+        ?TableSwapper $tableSwapper = null
     ) {
         $this->eavConfig = $eavConfig;
         $this->storeManager = $storeManager;

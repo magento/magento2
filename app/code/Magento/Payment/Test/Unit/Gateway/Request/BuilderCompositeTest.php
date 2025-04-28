@@ -19,7 +19,7 @@ class BuilderCompositeTest extends TestCase
     {
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
@@ -51,7 +51,7 @@ class BuilderCompositeTest extends TestCase
     {
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
@@ -123,7 +123,7 @@ class BuilderCompositeTest extends TestCase
     /**
      * Get list of variations
      */
-    public function buildDataProvider()
+    public static function buildDataProvider()
     {
         return [
             [[

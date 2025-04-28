@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -77,12 +78,18 @@ class PriceBackendTest extends TestCase
     public static function aroundValidateDataProvider()
     {
         return [
-            ['type' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_FIXED, 'result' => static::CLOSURE_VALUE],
-            ['type' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'result' => static::CLOSURE_VALUE],
-            ['type' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_FIXED, 'result' => static::CLOSURE_VALUE],
-            ['type' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'result' => true],
-            ['type' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_FIXED, 'result' => static::CLOSURE_VALUE],
-            ['type' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_DYNAMIC, 'result' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_SIMPLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_BUNDLE, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => true],
+            ['typeId' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_FIXED,
+                'expectedResult' => static::CLOSURE_VALUE],
+            ['typeId' => Type::TYPE_VIRTUAL, 'priceType' => Price::PRICE_TYPE_DYNAMIC,
+                'expectedResult' => static::CLOSURE_VALUE],
         ];
     }
 }

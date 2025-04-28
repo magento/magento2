@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All rights reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Payment;
 
@@ -11,7 +11,6 @@ use Magento\Sales\Model\Spi\TransactionResourceInterface;
 /**
  * Sales transaction resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Transaction extends EntityAbstract implements TransactionResourceInterface
 {
@@ -34,7 +33,8 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
 
     /**
      * Update transactions in database using provided transaction as parent for them
-     * have to repeat the business logic to avoid accidental injection of wrong transactions
+     *
+     * Have to repeat the business logic to avoid accidental injection of wrong transactions
      *
      * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @return void
@@ -126,11 +126,14 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
 
     /**
      * Lookup for parent_id in already saved transactions of this payment by the order_id
+     *
      * Also serialize additional information, if any
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $transaction)
     {
@@ -139,7 +142,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
         $orderId = $transaction->getData('order_id');
         $paymentId = $transaction->getData('payment_id');
         $idFieldName = $this->getIdFieldName();
-
+        $txnType = $transaction->getData('txn_type');
         if ($parentTxnId) {
             if (!$txnId || !$orderId || !$paymentId) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -147,8 +150,14 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
                 );
             }
             $parentId = (int)$this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
-            if ($parentId) {
+            if ($parentId && $txnType == 'authorization') {
                 $transaction->setData('parent_id', $parentId);
+            }
+        } else {
+            $result = $this->getParentId($orderId);
+            if ($result) {
+                $transaction->setData('parent_id', $result[0]['transaction_id']);
+                $transaction->setData('parent_txn_id', $result[0]['parent_txn_id']);
             }
         }
 
@@ -169,7 +178,7 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
      * @param int $orderId
      * @param int $paymentId
      * @param string $txnId
-     * @param mixed (array|string|object) $columns
+     * @param mixed $columns (array|string|object) $columns
      * @param bool $isRow
      * @param string $txnType
      * @return array|string
@@ -210,5 +219,24 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             'txn_id = ?',
             $txnId
         );
+    }
+
+    /**
+     * Retrieve transaction by the unique key of order_id
+     *
+     * @param int $orderId
+     * @return array
+     */
+    protected function getParentId(int $orderId): array
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
+            $this->getMainTable(),
+            ['transaction_id','parent_txn_id']
+        )->where(
+            'order_id = ?',
+            $orderId
+        )->order('transaction_id', 'ASC')->limit(1);
+        return $connection->fetchAll($select);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2023 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -18,7 +18,9 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\AddressFactory;
+use Magento\QuoteGraphQl\Model\ErrorMapper;
 
 /**
  * Apply address and shipping method to totals estimate and return the quote
@@ -31,13 +33,15 @@ class EstimateTotals implements ResolverInterface
      * @param AddressFactory $addressFactory
      * @param TotalsInformationManagementInterface $totalsInformationManagement
      * @param TotalsInformationInterfaceFactory $totalsInformationFactory
+     * @param ErrorMapper $errorMapper
      */
     public function __construct(
         private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         private readonly CartRepositoryInterface $cartRepository,
         private readonly AddressFactory $addressFactory,
         private readonly TotalsInformationManagementInterface $totalsInformationManagement,
-        private readonly TotalsInformationInterfaceFactory $totalsInformationFactory
+        private readonly TotalsInformationInterfaceFactory $totalsInformationFactory,
+        private readonly ErrorMapper $errorMapper
     ) {
     }
 
@@ -46,7 +50,7 @@ class EstimateTotals implements ResolverInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
@@ -61,7 +65,9 @@ class EstimateTotals implements ResolverInterface
                     [
                         'masked_id' => $args['input']['cart_id']
                     ]
-                )
+                ),
+                $exception,
+                $this->errorMapper->getErrorMessageId('Could not find a cart with ID')
             );
         }
 
@@ -69,7 +75,8 @@ class EstimateTotals implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "country_code" is missing'));
         }
 
-        $this->totalsInformationManagement->calculate($cartId, $this->getTotalsInformation($args['input']));
+        $data = $this->getTotalsInformation($args['input']);
+        $this->totalsInformationManagement->calculate($cartId, $data);
 
         return [
             'cart' => [
@@ -106,14 +113,14 @@ class EstimateTotals implements ResolverInterface
      */
     private function getAddress(array $data): AddressInterface
     {
-        $data = [
-            AddressInterface::KEY_COUNTRY_ID => $data['country_code'],
-            AddressInterface::KEY_REGION => $data['region'][AddressInterface::KEY_REGION] ?? null,
-            AddressInterface::KEY_REGION_ID => $data['region'][AddressInterface::KEY_REGION_ID] ?? null,
-            AddressInterface::KEY_REGION_CODE => $data['region'][AddressInterface::KEY_REGION_CODE] ?? null,
-            AddressInterface::KEY_POSTCODE => $data[AddressInterface::KEY_POSTCODE] ?? null,
-        ];
+        /** @var Address $address */
+        $address = $this->addressFactory->create();
+        $address->setCountryId($data['country_code']);
+        $address->setRegion($data['region'][AddressInterface::KEY_REGION] ?? null);
+        $address->setRegionId($data['region'][AddressInterface::KEY_REGION_ID] ?? null);
+        $address->setRegionCode($data['region'][AddressInterface::KEY_REGION_CODE] ?? null);
+        $address->setPostcode($data[AddressInterface::KEY_POSTCODE] ?? null);
 
-        return $this->addressFactory->create(['data' => array_filter($data)]);
+        return $address;
     }
 }

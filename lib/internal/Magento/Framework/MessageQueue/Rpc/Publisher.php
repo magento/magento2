@@ -70,10 +70,10 @@ class Publisher implements PublisherInterface
         EnvelopeFactory $envelopeFactory,
         $messageQueueConfig = null,
         $amqpConfig = null,
-        MessageEncoder $messageEncoder = null,
-        MessageValidator $messageValidator = null,
-        ResponseQueueNameBuilder $responseQueueNameBuilder = null,
-        PublisherConfig $publisherConfig = null
+        ?MessageEncoder $messageEncoder = null,
+        ?MessageValidator $messageValidator = null,
+        ?ResponseQueueNameBuilder $responseQueueNameBuilder = null,
+        ?PublisherConfig $publisherConfig = null
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;

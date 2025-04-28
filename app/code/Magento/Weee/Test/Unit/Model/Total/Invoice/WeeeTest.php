@@ -53,7 +53,7 @@ class WeeeTest extends TestCase
     protected function setUp(): void
     {
         $this->weeeData = $this->getMockBuilder(Data::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRowWeeeTaxInclTax',
                     'getBaseRowWeeeTaxInclTax',
@@ -185,13 +185,13 @@ class WeeeTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         $result = [];
 
         // 3 item_1, $100 with $weee, 8.25 tax rate, full invoice
         $result['complete_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -207,7 +207,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -260,7 +260,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 16.09,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -292,7 +292,7 @@ class WeeeTest extends TestCase
 
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice, invoice qty=2
         $result['partial_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -308,7 +308,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -361,7 +361,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 9.49,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -394,7 +394,7 @@ class WeeeTest extends TestCase
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice: one item invoiced
         // invoice another item
         $result['second_partial_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -410,7 +410,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -463,7 +463,7 @@ class WeeeTest extends TestCase
                     'base_subtotal_incl_tax' => 108.25,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -496,7 +496,7 @@ class WeeeTest extends TestCase
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice: two item invoiced
         // invoice another item
         $result['last_partial_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -512,7 +512,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -565,7 +565,7 @@ class WeeeTest extends TestCase
                     'base_subtotal_incl_tax' => 104.95,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [
@@ -598,7 +598,7 @@ class WeeeTest extends TestCase
 
         // 3 item_1, $100 with $weee, 8.25 tax rate. Invoicing qty 0.
         $result['zero_invoice'] = [
-            'order_data' => [
+            'orderData' => [
                 'previous_invoices' => [
                 ],
                 'data_fields' => [
@@ -614,7 +614,7 @@ class WeeeTest extends TestCase
                     'base_subtotal' => '300',
                 ],
             ],
-            'invoice_data' => [
+            'invoiceData' => [
                 'items' => [
                     'item_1' => [
                         'order_item' => [
@@ -667,7 +667,7 @@ class WeeeTest extends TestCase
                     'base_tax_amount' => 16.09,
                 ],
             ],
-            'expected_results' => [
+            'expectedResults' => [
                 'invoice_items' => [
                     'item_1' => [
                         'applied_weee' => [

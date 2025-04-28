@@ -73,8 +73,8 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
      * @param \Magento\Framework\Image\AdapterFactory $imageAdapterFactory
      * @param \Magento\Framework\HTTP\Adapter\Curl $curl
      * @param \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility
-     * @param \Magento\Framework\Validator\ValidatorInterface $protocolValidator
-     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator
+     * @param \Magento\Framework\Validator\ValidatorInterface|null $protocolValidator
+     * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension|null $extensionValidator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -84,8 +84,8 @@ class RetrieveImage extends \Magento\Backend\App\Action implements HttpPostActio
         \Magento\Framework\Image\AdapterFactory $imageAdapterFactory,
         \Magento\Framework\HTTP\Adapter\Curl $curl,
         \Magento\MediaStorage\Model\ResourceModel\File\Storage\File $fileUtility,
-        \Magento\Framework\Validator\ValidatorInterface $protocolValidator = null,
-        \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator = null
+        ?\Magento\Framework\Validator\ValidatorInterface $protocolValidator = null,
+        ?\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $extensionValidator = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;

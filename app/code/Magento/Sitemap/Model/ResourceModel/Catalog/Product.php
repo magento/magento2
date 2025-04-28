@@ -121,11 +121,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         $connectionName = null,
-        \Magento\Catalog\Model\Product $productModel = null,
-        \Magento\Catalog\Helper\Image $catalogImageHelper = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
-        UrlBuilder $urlBuilder = null,
-        ProductSelectBuilder $productSelectBuilder = null
+        ?\Magento\Catalog\Model\Product $productModel = null,
+        ?\Magento\Catalog\Helper\Image $catalogImageHelper = null,
+        ?\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
+        ?UrlBuilder $urlBuilder = null,
+        ?ProductSelectBuilder $productSelectBuilder = null
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;

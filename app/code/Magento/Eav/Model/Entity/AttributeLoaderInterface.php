@@ -23,5 +23,5 @@ interface AttributeLoaderInterface
      * @param DataObject|null $entity
      * @return AbstractEntity
      */
-    public function loadAllAttributes(AbstractEntity $resource, DataObject $entity = null);
+    public function loadAllAttributes(AbstractEntity $resource, ?DataObject $entity = null);
 }

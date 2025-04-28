@@ -65,7 +65,7 @@ abstract class AbstractSchemaGenerator
         ServiceTypeListInterface $serviceTypeList,
         ServiceMetadata $serviceMetadata,
         Authorization $authorization,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->cache = $cache;
         $this->typeProcessor = $typeProcessor;

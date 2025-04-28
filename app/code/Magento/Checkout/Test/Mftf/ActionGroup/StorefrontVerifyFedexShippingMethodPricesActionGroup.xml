@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright 2025 Adobe
+      * All Rights Reserved.
+      */
+    -->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyFedexShippingMethodPricesActionGroup">
+        <annotations>
+            <description>Validates that the Fedex Shipping method prices in the checkout page.</description>
+        </annotations>
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <waitForElement selector="{{CheckoutShippingMethodsSection.smartPostFedexMethod}}" stepKey="waitForSmartPostFedexMethod"/>
+        <grabTextFrom selector="{{CheckoutShippingMethodsSection.smartPostFedexPrice}}" stepKey="smartPostPrice"/>
+        <assertRegExp stepKey="waitForSmartPostPriceVisible">
+            <actualResult type="variable">$smartPostPrice</actualResult>
+            <expectedResult type="string">\$([0-9]+(\.[0-9]+)?)$</expectedResult>
+        </assertRegExp>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.groundFedexMethod}}" stepKey="waitForGroundFedexMethod"/>
+        <grabTextFrom selector="{{CheckoutShippingMethodsSection.groundFedexPrice}}" stepKey="groundFedexPrice"/>
+        <assertRegExp stepKey="waitForGroundPriceVisible">
+            <actualResult type="variable">$groundFedexPrice</actualResult>
+            <expectedResult type="string">\$([0-9]+(\.[0-9]+)?)$</expectedResult>
+        </assertRegExp>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.expressSaverFedexPrice}}" stepKey="waitForExpressSaverFedexMethod"/>
+        <grabTextFrom selector="{{CheckoutShippingMethodsSection.expressSaverFedexPrice}}" stepKey="expressSaverFedexPrice"/>
+        <assertRegExp stepKey="waitForExpressPriceVisible">
+            <actualResult type="variable">$expressSaverFedexPrice</actualResult>
+            <expectedResult type="string">\$([0-9]+(\.[0-9]+)?)$</expectedResult>
+        </assertRegExp>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.twoDayFedexMethod}}" stepKey="waitForRwoDayFedexMethod"/>
+        <grabTextFrom selector="{{CheckoutShippingMethodsSection.twoDayFedexPrice}}" stepKey="twoDayFedexPrice"/>
+        <assertRegExp stepKey="waitForTwodayPriceVisible">
+            <actualResult type="variable">$twoDayFedexPrice</actualResult>
+            <expectedResult type="string">\$([0-9]+(\.[0-9]+)?)$</expectedResult>
+        </assertRegExp>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.twoDayAMFedexMethod}}" stepKey="waitForTwoDayAMFedexMethod"/>
+        <grabTextFrom selector="{{CheckoutShippingMethodsSection.twoDayAMFedexPrice}}" stepKey="twoDayAMFedexPrice"/>
+        <assertRegExp stepKey="waitForTwodayAMPriceVisible">
+            <actualResult type="variable">$twoDayAMFedexPrice</actualResult>
+            <expectedResult type="string">\$([0-9]+(\.[0-9]+)?)$</expectedResult>
+        </assertRegExp>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.standardOvernightFedexMethod}}" stepKey="waitForStandardOvernightFedexMethod"/>
+        <grabTextFrom selector="{{CheckoutShippingMethodsSection.standardOvernightFedexPrice}}" stepKey="standardOvernightFedexPrice"/>
+        <assertRegExp stepKey="waitForStandardPriceVisible">
+            <actualResult type="variable">$standardOvernightFedexPrice</actualResult>
+            <expectedResult type="string">\$([0-9]+(\.[0-9]+)?)$</expectedResult>
+        </assertRegExp>
+        <waitForElement selector="{{CheckoutShippingMethodsSection.priorityOvernightFedexMethod}}" stepKey="waitForPriorityOvernightFedexMethod"/>
+        <grabTextFrom selector="{{CheckoutShippingMethodsSection.priorityOvernightFedexPrice}}" stepKey="priorityOvernightFedexPrice"/>
+        <assertRegExp stepKey="waitForOvernightPriceVisible">
+            <actualResult type="variable">$priorityOvernightFedexPrice</actualResult>
+            <expectedResult type="string">\$([0-9]+(\.[0-9]+)?)$</expectedResult>
+        </assertRegExp>
+    </actionGroup>
+</actionGroups>

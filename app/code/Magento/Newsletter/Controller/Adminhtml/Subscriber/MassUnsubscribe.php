@@ -30,7 +30,7 @@ class MassUnsubscribe extends Subscriber implements HttpPostActionInterface
     public function __construct(
         Context $context,
         FileFactory $fileFactory,
-        SubscriberFactory $subscriberFactory = null
+        ?SubscriberFactory $subscriberFactory = null
     ) {
         $this->subscriberFactory = $subscriberFactory ?: ObjectManager::getInstance()->get(SubscriberFactory::class);
         parent::__construct($context, $fileFactory);

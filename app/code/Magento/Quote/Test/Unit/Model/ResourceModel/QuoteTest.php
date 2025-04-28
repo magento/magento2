@@ -84,7 +84,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getReservedOrderIdDataProvider(): array
+    public static function getReservedOrderIdDataProvider(): array
     {
         return [
             [Order::ENTITY, 1, '1000000001'],

@@ -17,13 +17,13 @@ use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css;
 use Magento\Theme\Helper\Theme;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends ThemeTest
+class EditTest extends ThemeTestCase
 {
     /**
      * @var string

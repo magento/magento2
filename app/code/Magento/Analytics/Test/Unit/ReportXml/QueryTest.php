@@ -84,4 +84,31 @@ class QueryTest extends TestCase
 
         $this->assertSame($expectedResult, $this->query->jsonSerialize());
     }
+
+    public function testGetSelectCountSql()
+    {
+        $resetParams = [
+            Select::ORDER,
+            Select::LIMIT_COUNT,
+            Select::LIMIT_OFFSET,
+            Select::COLUMNS
+        ];
+
+        $this->selectMock
+            ->expects($this->exactly(4))
+            ->method('reset')
+            ->willReturnCallback(
+                function (string $value) use (&$resetParams) {
+                    $this->assertEquals(array_shift($resetParams), $value);
+                }
+            );
+
+        $this->selectMock
+            ->expects($this->once())
+            ->method('columns')
+            ->with(new \Zend_Db_Expr('COUNT(*)'))
+            ->willReturnSelf();
+
+        $this->assertEquals($this->selectMock, $this->query->getSelectCountSql());
+    }
 }

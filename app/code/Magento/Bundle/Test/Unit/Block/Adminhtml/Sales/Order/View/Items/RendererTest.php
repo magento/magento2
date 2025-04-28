@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -68,7 +69,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isShipmentSeparatelyWithoutItemDataProvider()
+    public static function isShipmentSeparatelyWithoutItemDataProvider()
     {
         return [
             [['shipment_type' => 1], true],
@@ -98,7 +99,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isShipmentSeparatelyWithItemDataProvider()
+    public static function isShipmentSeparatelyWithItemDataProvider()
     {
         return [
             [['shipment_type' => 1], false, false],
@@ -122,7 +123,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isChildCalculatedWithoutItemDataProvider()
+    public static function isChildCalculatedWithoutItemDataProvider()
     {
         return [
             [['product_calculations' => 0], true],
@@ -159,7 +160,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function isChildCalculatedWithItemDataProvider()
+    public static function isChildCalculatedWithItemDataProvider()
     {
         return [
             [['product_calculations' => 0], false, false],
@@ -229,7 +230,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function canShowPriceInfoDataProvider()
+    public static function canShowPriceInfoDataProvider()
     {
         return [
             [true, ['product_calculations' => 0], true],
@@ -257,7 +258,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function getValueHtmlWithoutShipmentSeparatelyDataProvider()
+    public static function getValueHtmlWithoutShipmentSeparatelyDataProvider()
     {
         return [
             [1],

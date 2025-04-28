@@ -37,7 +37,7 @@ class DocRootLocator
      * @param ReadFactory $readFactory
      * @param Filesystem|null $filesystem
      */
-    public function __construct(RequestInterface $request, ReadFactory $readFactory, Filesystem $filesystem = null)
+    public function __construct(RequestInterface $request, ReadFactory $readFactory, ?Filesystem $filesystem = null)
     {
         $this->request = $request;
         $this->readFactory = $readFactory;

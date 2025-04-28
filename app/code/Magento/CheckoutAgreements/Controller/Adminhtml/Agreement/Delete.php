@@ -29,7 +29,7 @@ class Delete extends Agreement implements HttpPostActionInterface
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        CheckoutAgreementsRepositoryInterface $agreementRepository = null
+        ?CheckoutAgreementsRepositoryInterface $agreementRepository = null
     ) {
         $this->agreementRepository = $agreementRepository ?:
                 ObjectManager::getInstance()->get(CheckoutAgreementsRepositoryInterface::class);

@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -65,9 +66,12 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
     public function testDeserialize(
         string $body,
         string $contentType,
-        DeserializerInterface $deserializer,
+        $deserializer,
         array $expectedResult
     ): void {
+        if (is_callable($deserializer)) {
+            $deserializer = $deserializer($this);
+        }
         $this->requestMock->method('getContentType')
             ->willReturn($contentType);
         $this->deserializeFactoryMock->expects($this->any())
@@ -77,7 +81,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->requestTypeBasedDeserializer->deserialize($body));
     }
 
-    public function getDeserializerDataProvider(): array
+    public static function getDeserializerDataProvider(): array
     {
         return [
             'request body with xml data' => [
@@ -90,8 +94,8 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
                                    <status>1</status>
 	                           </product>
                            </products>',
-                'content-type' => 'application/xml',
-                'deserializer' => $this->prepareXmlDeserializer(),
+                'contentType' => 'application/xml',
+                'deserializer' => static fn (self $testCase) => $testCase->prepareXmlDeserializer(),
                 'expectedResult' => [
                     'product' => [
                         'sku' => 'testSku1',
@@ -112,8 +116,8 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
                         "status": 0
                     }
                 }',
-                'content-type' => 'application/json',
-                'deserializer' => $this->prepareJsonDeserializer(),
+                'contentType' => 'application/json',
+                'deserializer' => static fn (self $testCase) => $testCase->prepareJsonDeserializer(),
                 'expectedResult' => [
                     'product' => [
                         'sku' => 'testSku2',
@@ -132,7 +136,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      *
      * @return DeserializerJson
      */
-    private function prepareJsonDeserializer(): DeserializerJson
+    protected function prepareJsonDeserializer(): DeserializerJson
     {
         /** @var Decoder|MockObject $decoder */
         $decoder = $this->createMock(Decoder::class);
@@ -147,7 +151,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      *
      * @return DeserializerXml
      */
-    private function prepareXmlDeserializer(): DeserializerXml
+    protected function prepareXmlDeserializer(): DeserializerXml
     {
         $parserXml = new ParserXml();
         /** @var State|MockObject $appStateMock */

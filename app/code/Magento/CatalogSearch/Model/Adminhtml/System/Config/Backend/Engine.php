@@ -42,10 +42,10 @@ class Engine extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Search\EngineResolverInterface $engineResolver = null
+        ?\Magento\Framework\Search\EngineResolverInterface $engineResolver = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
         $this->engineResolver = $engineResolver

@@ -1,28 +1,31 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Customer\Block\Address\Book $block */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <div class="block block-addresses-default">
     <div class="block-title"><strong><?= $escaper->escapeHtml(__('Default Addresses')) ?></strong></div>
     <div class="block-content">
-        <?php if ($_pAddsses = $block->getDefaultBilling()): ?>
+        <?php if ($defaultBillingAddress = $block->getDefaultBilling()): ?>
             <div class="box box-address-billing">
                 <strong class="box-title">
                     <span><?= $escaper->escapeHtml(__('Default Billing Address')) ?></span>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?= $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
+                        <?= $block->getAddressHtml($block->getAddressById($defaultBillingAddress)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a 
-                    class="action edit"
-                    href="<?= $escaper->escapeUrl($block->getAddressEditUrl($_pAddsses) . '?billingAddress')?>">
+                    <a class="action edit"
+                        href="
+                        <?= $escaper->escapeUrl($block->getAddressEditUrl($defaultBillingAddress) . '?billingAddress')
+                        ?>">
                         <span><?= $escaper->escapeHtml(__('Change Billing Address')) ?></span>
                     </a>
                 </div>
@@ -38,20 +41,21 @@
             </div>
         <?php endif ?>
 
-        <?php if ($_pAddsses = $block->getDefaultShipping()): ?>
+        <?php if ($defaultShippingAddress = $block->getDefaultShipping()): ?>
             <div class="box box-address-shipping">
                 <strong class="box-title">
                     <span><?= $escaper->escapeHtml(__('Default Shipping Address')) ?></span>
                 </strong>
                 <div class="box-content">
                     <address>
-                        <?= $block->getAddressHtml($block->getAddressById($_pAddsses)) ?>
+                        <?= $block->getAddressHtml($block->getAddressById($defaultShippingAddress)) ?>
                     </address>
                 </div>
                 <div class="box-actions">
-                    <a
-                    class="action edit"
-                    href="<?= $escaper->escapeUrl($block->getAddressEditUrl($_pAddsses) . '?shippingAddress') ?>">
+                    <a class="action edit"
+                    href="
+                    <?= $escaper->escapeUrl($block->getAddressEditUrl($defaultShippingAddress) . '?shippingAddress') ?>
+                    ">
                         <span><?= $escaper->escapeHtml(__('Change Shipping Address')) ?></span>
                     </a>
                 </div>

@@ -47,7 +47,7 @@ class ContextTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderContextByPath()
+    public static function dataProviderContextByPath()
     {
         return [
             [
@@ -113,7 +113,7 @@ class ContextTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderPathToLocaleDirectoryByContext()
+    public static function dataProviderPathToLocaleDirectoryByContext()
     {
         return [
             [

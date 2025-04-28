@@ -64,8 +64,8 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
         Context $context,
         UserFactory $userFactory,
         SecurityManager $securityManager,
-        CollectionFactory $userCollectionFactory = null,
-        Data $backendDataHelper = null,
+        ?CollectionFactory $userCollectionFactory = null,
+        ?Data $backendDataHelper = null,
         ?NotificatorInterface $notificator = null
     ) {
         parent::__construct($context, $userFactory);

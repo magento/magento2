@@ -1,8 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
+/*eslint-disable max-nested-callbacks*/
 define([
     'jquery',
     'Magento_Swatches/js/swatch-renderer'
@@ -197,6 +198,73 @@ define([
             widget._getPrices  = jasmine.createSpy().and.returnValue({});
             qtyElement.trigger('input');
             expect(priceBox.trigger).toHaveBeenCalledWith('updatePrice', { prices: {}});
+        });
+
+        describe('_addFotoramaVideoEvents', function () {
+            let mageAddFotoramaVideoEventsWidget,
+                jQueryFnAddFotoramaVideoEvents,
+                jQueryFnOn,
+                galleryElement;
+
+            beforeEach(function () {
+                mageAddFotoramaVideoEventsWidget = $.mage.AddFotoramaVideoEvents;
+                jQueryFnAddFotoramaVideoEvents = $.fn.AddFotoramaVideoEvents;
+                jQueryFnOn = $.fn.on;
+                galleryElement = window.document.createElement('div');
+                galleryElement.id = 'gallery-' + new Date().getTime();
+                window.document.body.append(galleryElement);
+            });
+
+            afterEach(function () {
+                $.mage.AddFotoramaVideoEvents = mageAddFotoramaVideoEventsWidget;
+                $.fn.AddFotoramaVideoEvents = jQueryFnAddFotoramaVideoEvents;
+                $.fn.on = jQueryFnOn;
+                window.document.body.removeChild(galleryElement);
+                galleryElement = null;
+            });
+
+            it('Should not call AddFotoramaVideoEvents if $.mage.AddFotoramaVideoEvents is undefined', function () {
+                $.mage.AddFotoramaVideoEvents = undefined;
+                $.fn.AddFotoramaVideoEvents = jasmine.createSpy().and.returnValue({});
+                $.fn.on = jasmine.createSpy();
+
+                widget.options.mediaGallerySelector = '#' + galleryElement.id;
+                widget._addFotoramaVideoEvents();
+
+                expect($.fn.AddFotoramaVideoEvents).not.toHaveBeenCalled();
+                expect($.fn.on).toHaveBeenCalledWith('addfotoramavideoeventscreate', jasmine.any(Function));
+            });
+
+            it('Should not call AddFotoramaVideoEvents if the element has not been initialized', function () {
+                $.mage.AddFotoramaVideoEvents = jasmine.createSpy();
+                $.fn.AddFotoramaVideoEvents = jasmine.createSpy().and.returnValue(undefined);
+                $.fn.on = jasmine.createSpy();
+
+                widget.options.mediaGallerySelector = '#' + galleryElement.id;
+                widget._addFotoramaVideoEvents();
+
+                expect($.fn.AddFotoramaVideoEvents).toHaveBeenCalledTimes(1);
+                expect($.fn.AddFotoramaVideoEvents).toHaveBeenCalledWith('instance');
+                expect($.fn.on).toHaveBeenCalledWith('addfotoramavideoeventscreate', jasmine.any(Function));
+            });
+
+            it('Should call AddFotoramaVideoEvents immediately if the element has already been initialized',
+                function () {
+                    $.mage.AddFotoramaVideoEvents = jasmine.createSpy();
+                    $.fn.AddFotoramaVideoEvents = jasmine.createSpy().and.returnValue({});
+
+                    widget.options.mediaGallerySelector = '#' + galleryElement.id;
+                    widget.options.gallerySwitchStrategy = 'prepend';
+                    widget.getProduct = jasmine.createSpy().and.returnValue(1);
+                    widget._addFotoramaVideoEvents();
+
+                    expect($.fn.AddFotoramaVideoEvents).toHaveBeenCalledTimes(2);
+                    expect($.fn.AddFotoramaVideoEvents).toHaveBeenCalledWith('instance');
+                    expect($.fn.AddFotoramaVideoEvents).toHaveBeenCalledWith({
+                        selectedOption: 1,
+                        dataMergeStrategy: widget.options.gallerySwitchStrategy
+                    });
+                });
         });
     });
 });

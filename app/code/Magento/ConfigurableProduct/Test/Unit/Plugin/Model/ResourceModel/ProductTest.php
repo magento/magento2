@@ -71,7 +71,7 @@ class ProductTest extends TestCase
         $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $this->productAttributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMockForAbstractClass();
         $this->searchCriteriaBuilderMock = $this->createPartialMock(
             SearchCriteriaBuilder::class,

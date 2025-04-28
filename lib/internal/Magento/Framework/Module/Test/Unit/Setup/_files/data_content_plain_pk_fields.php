@@ -8,7 +8,7 @@ use Magento\Framework\Module\Setup\Migration;
  * See COPYING.txt for license details.
  */
 return [
-    '$replaceRules' => [
+    'replaceRules' => [
         [
             'table',
             'collection',
@@ -17,10 +17,10 @@ return [
             ['pk_field1', 'pk_field2'],
         ],
     ],
-    '$tableData' => [
+    'tableData' => [
         ['collection' => 'customer/attribute_collection', 'pk_field1' => 'pk_value1', 'pk_field2' => 'pk_value2'],
     ],
-    '$expected' => [
+    'expected' => [
         'updates' => [
             [
                 'table' => 'table',

@@ -33,7 +33,7 @@ class Stock extends AbstractSource
      * @param MetadataPool|null $metadataPool
      */
     public function __construct(
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
     }

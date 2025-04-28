@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -8,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Backend\Test\Unit\Model\Validator;
 
 use Magento\Backend\Model\Validator\IpValidator;
+use Magento\Framework\App\Utility\IPAddress;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,7 +27,9 @@ class IpValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->ipValidator = new IpValidator();
+        $this->ipValidator = new IpValidator(
+            new IPAddress()
+        );
     }
 
     /**
@@ -41,10 +45,11 @@ class IpValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateIpsNoneAllowedDataProvider(): array
+    public static function validateIpsNoneAllowedDataProvider(): array
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],
+            [['127.0.0.0/24'], []],
             [['none'], []],
             [['none', '127.0.0.1'], ["Multiple values are not allowed when 'none' is used"]],
             [['127.0.0.1', 'none'], ["Multiple values are not allowed when 'none' is used"]],
@@ -68,10 +73,11 @@ class IpValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateIpsNoneNotAllowedDataProvider()
+    public static function validateIpsNoneNotAllowedDataProvider()
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],
+            [['127.0.0.0/24'], []],
             [['none'], ["'none' is not allowed"]],
             [['none', '127.0.0.1'], ["'none' is not allowed"]],
             [['127.0.0.1', 'none'], ["'none' is not allowed"]],

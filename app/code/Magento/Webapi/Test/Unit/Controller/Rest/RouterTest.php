@@ -40,7 +40,7 @@ class RouterTest extends TestCase
         $this->_routeMock = $this->getMockBuilder(
             Route::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['match']
             )->getMock();
 

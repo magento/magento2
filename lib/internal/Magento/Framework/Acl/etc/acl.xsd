@@ -57,7 +57,7 @@
     <xs:simpleType name="typeId">
         <xs:annotation>
             <xs:documentation>
-                Item id attribute can has only [a-z0-9/_]. Minimal length 3 symbol. Case insensitive.
+                Item id attribute can have only [a-z0-9/_]. Minimal length 3 characters. Case insensitive.
             </xs:documentation>
         </xs:annotation>
 

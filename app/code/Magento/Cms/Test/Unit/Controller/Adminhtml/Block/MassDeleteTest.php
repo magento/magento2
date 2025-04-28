@@ -10,10 +10,10 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
 use Magento\Cms\Controller\Adminhtml\Block\MassDelete;
 use Magento\Cms\Model\ResourceModel\Block\Collection;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
-use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTest;
+use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class MassDeleteTest extends AbstractMassActionTest
+class MassDeleteTest extends AbstractMassActionTestCase
 {
     /**
      * @var MassDelete

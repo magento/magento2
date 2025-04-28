@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -316,5 +316,35 @@
     <entity name="DisableVaultPayflowPro">
         <data key="path">payment/payflowpro_cc_vault/active</data>
         <data key="value">0</data>
+    </entity>
+      <entity name="StorefrontPaypalPayflowProSalePaymentActionOptionConfigData">
+        <data key="path">payment/payflowpro/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Sale</data>
+    </entity>
+    <entity name="StorefrontPaypalPayflowProAuthorizationPaymentActionOptionConfigData">
+        <data key="path">payment/payflowpro/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Authorization</data>
+    </entity>
+    <entity name="StorefrontPaypalExpressAuthorizationBillingAgreementPaymentActionOptionConfigData">
+        <data key="path">payment/paypal_billing_agreement/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Authorization</data>
+    </entity>
+    <entity name="StorefrontPaypalStandardAuthorizationPaymentActionOptionConfigData">
+        <data key="path">payment/paypal_standard/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Authorization</data>
+    </entity>
+    <entity name="StorefrontPaypalStandardAuthorizationPaymentActionOptionConfigDataToDefaultValue">
+        <data key="path">payment/paypal_standard/payment_action</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">Order</data>
     </entity>
 </entities>

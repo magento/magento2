@@ -81,7 +81,7 @@ class ProductUrlPathGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function getUrlPathDataProvider(): array
+    public static function getUrlPathDataProvider(): array
     {
         return [
             'path based on url key uppercase' => ['Url-Key', null, 1, 'url-key'],
@@ -134,7 +134,7 @@ class ProductUrlPathGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function getUrlKeyDataProvider(): array
+    public static function getUrlKeyDataProvider(): array
     {
         return [
             'URL Key use default' => [false, null],
@@ -166,7 +166,7 @@ class ProductUrlPathGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function getUrlPathDefaultUrlKeyDataProvider(): array
+    public static function getUrlPathDefaultUrlKeyDataProvider(): array
     {
         return [
             ['default-store-view-url-key', null, 'default-store-view-url-key'],

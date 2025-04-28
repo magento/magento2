@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
@@ -165,10 +165,14 @@ class AbstractTypeTest extends TestCase
         $this->entityModel->method('getEntityTypeId')
             ->willReturn(3);
         $this->entityModel->method('getAttributeOptions')
-            ->willReturnOnConsecutiveCalls(
-                ['option1', 'option2'],
-                ['yes' => 1, 'no' => 0]
-            );
+            ->willReturnCallback(function () use (&$callCount) {
+                $callCount++;
+                if ($callCount === 1) {
+                    return ['option1', 'option2'];
+                } elseif ($callCount === 2) {
+                    return ['yes' => 1, 'no' => 0];
+                }
+            });
         $attrSetColFactory->method('create')
             ->willReturn($attrSetCollection);
         $attrSetCollection->method('setEntityTypeFilter')
@@ -327,7 +331,8 @@ class AbstractTypeTest extends TestCase
     {
         $rowData = [
             '_attribute_set' => 'attribute_set_name',
-            'sku' => 'sku'
+            'sku' => 'sku',
+            'attr_code' => 'test'
         ];
         $rowNum = 1;
         $this->entityModel->method('getRowScope')
@@ -361,15 +366,15 @@ class AbstractTypeTest extends TestCase
     {
         return [
             [
-                '$code' => 'attr set name value key',
-                '$optionKey' => 'option key',
-                '$optionValue' => 'option value',
-                '$initAttributes' => [
+                'code' => 'attr set name value key',
+                'optionKey' => 'option key',
+                'optionValue' => 'option value',
+                'initAttributes' => [
                     'attr set name' => [
                         'attr set name value key' => [],
                     ],
                 ],
-                '$resultAttributes' => [
+                'resultAttributes' => [
                     'attr set name' => [
                         'attr set name value key' => [
                             'options' => [
@@ -380,15 +385,15 @@ class AbstractTypeTest extends TestCase
                 ],
             ],
             [
-                '$code' => 'attr set name value key',
-                '$optionKey' => 'option key',
-                '$optionValue' => 'option value',
-                '$initAttributes' => [
+                'code' => 'attr set name value key',
+                'optionKey' => 'option key',
+                'optionValue' => 'option value',
+                'initAttributes' => [
                     'attr set name' => [
                         'not equal to code value' => [],
                     ],
                 ],
-                '$resultAttributes' => [
+                'resultAttributes' => [
                     'attr set name' => [
                         'not equal to code value' => [],
                     ],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Compare;
 
@@ -18,13 +18,14 @@ use Magento\Catalog\Model\Product;
  * @method int getStoreId()
  * @method \Magento\Catalog\Model\Product\Compare\Item setStoreId(int $value)
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Model cache tag
      */
-    const CACHE_TAG = 'compare_item';
+    public const CACHE_TAG = 'compare_item';
 
     /**
      * Prefix of model events names
@@ -43,29 +44,21 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     protected $_eventObject = 'item';
 
     /**
-     * Catalog product compare
-     *
      * @var \Magento\Catalog\Helper\Product\Compare
      */
     protected $_catalogProductCompare = null;
 
     /**
-     * Customer session
-     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * Customer visitor
-     *
      * @var \Magento\Customer\Model\Visitor
      */
     protected $_customerVisitor;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -88,8 +81,8 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -200,7 +193,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function bindCustomerLogout(\Magento\Framework\Event\Observer $observer = null)
+    public function bindCustomerLogout(?\Magento\Framework\Event\Observer $observer = null)
     {
         $this->_getResource()->purgeVisitorByCustomer($this);
 

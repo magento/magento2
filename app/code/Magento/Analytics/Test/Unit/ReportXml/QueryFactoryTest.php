@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,8 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class QueryFactoryTest extends TestCase
 {
-    const STUB_QUERY_NAME = 'test_query';
-    const STUB_CONNECTION = 'default';
+    private const STUB_QUERY_NAME = 'test_query';
+    private const STUB_CONNECTION = 'default';
 
     /**
      * @var QueryFactory
@@ -224,11 +225,11 @@ class QueryFactoryTest extends TestCase
      *
      * @return array
      */
-    public function queryDataProvider(): array
+    public static function queryDataProvider(): array
     {
         return [
             [
-                'getQueryDataMock' => [
+                'queryDataMock' => [
                     'connectionName' => self::STUB_CONNECTION,
                     'config' => [
                         'name' => self::STUB_QUERY_NAME,
@@ -236,7 +237,7 @@ class QueryFactoryTest extends TestCase
                     ],
                     'select_parts' => []
                 ],
-                'getQueryDataJsonEncodeMock' => '{"connectionName":"default",' .
+                'jsonEncodeData' => '{"connectionName":"default",' .
                     '"config":{"name":"test_query",' .
                     '"connection":"default"},"select_parts":[]}'
             ]

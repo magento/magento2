@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminPaypalProductPageConfigSection">
+        <element name="expandCatalogProductPage" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage-head" parameterized="true"/>
+        <element name="display" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_display" parameterized="true"/>
+        <element name="position" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_position" parameterized="true"/>
+        <element name="styleLayout" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_stylelayout" parameterized="true" />
+        <element name="logoType" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_logotype" parameterized="true" />
+        <element name="logoPosition" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_logoposition" parameterized="true" />
+        <element name="textColor" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_textcolor" parameterized="true" />
+        <element name="textSize" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_us_express_checkout_required_advertise_paylater_settings_paylater_productpage_paylater_productpage_textsize" parameterized="true" />
+    </section>
+</sections>

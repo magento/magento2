@@ -290,11 +290,11 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionWithAlreadyExistingUrlKeyDataProvider()
+    public static function saveActionWithAlreadyExistingUrlKeyDataProvider()
     {
         return [
             [
-                'post_data' => [
+                'postData' => [
                     'product' =>
                         [
                             'attribute_set_id' => '4',
@@ -369,11 +369,11 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionTierPriceDataProvider()
+    public static function saveActionTierPriceDataProvider()
     {
         return [
             [
-                'post_data' => [
+                'postData' => [
                     'id' => '1',
                     'type' => 'simple',
                     'store' => '0',
@@ -390,7 +390,7 @@ class ProductTest extends AbstractBackendController
                     'configurable_matrix_serialized' => '[]',
                     'associated_product_ids_serialized' => '[]'
                 ],
-                'tier_price_for_request' => [
+                'tierPrice' => [
                     [
                         'price_id' => '1',
                         'website_id' => '0',
@@ -648,11 +648,11 @@ class ProductTest extends AbstractBackendController
      *
      * @return array
      */
-    public function saveActionWithInvalidUrlKeyDataProvider()
+    public static function saveActionWithInvalidUrlKeyDataProvider()
     {
         return [
             [
-                'post_data' => [
+                'postData' => [
                     'product' =>
                         [
                             'attribute_set_id' => '4',

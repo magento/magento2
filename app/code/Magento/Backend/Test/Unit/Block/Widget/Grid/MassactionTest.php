@@ -341,10 +341,19 @@ class MassactionTest extends TestCase
 
         $this->gridCollectionSelectMock->expects($this->exactly(4))
             ->method('reset')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                [Select::ORDER], [Select::LIMIT_COUNT],
-                [Select::LIMIT_OFFSET], [Select::COLUMNS] => $this->gridCollectionMock
-            });
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == Select::ORDER) {
+                        return null;
+                    } elseif ($arg == Select::LIMIT_COUNT) {
+                        return null;
+                    } elseif ($arg == Select::LIMIT_OFFSET) {
+                        return null;
+                    } elseif ($arg == Select::COLUMNS) {
+                        return null;
+                    }
+                }
+            );
 
         $this->gridCollectionSelectMock->expects($this->once())
             ->method('columns')

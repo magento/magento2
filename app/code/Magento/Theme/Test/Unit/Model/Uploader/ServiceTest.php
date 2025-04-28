@@ -83,7 +83,7 @@ class ServiceTest extends TestCase
 
         $this->_fileSizeMock = $this->getMockBuilder(
             Size::class
-        )->setMethods(
+        )->onlyMethods(
             ['getMaxFileSize']
         )->disableOriginalConstructor()
             ->getMock();

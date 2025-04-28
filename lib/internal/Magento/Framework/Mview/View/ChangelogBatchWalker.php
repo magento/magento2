@@ -81,12 +81,14 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
+        $processID = getmypid();
+
         $idsTable = $this->idsTableBuilder->build($changelog);
+        $idsColumns = $this->getIdsColumns($idsTable);
 
         try {
+            # Prepare list of changed entries to return
             $connection->createTable($idsTable);
-
-            $columns = $this->getIdsColumns($idsTable);
 
             $select = $this->idsSelectBuilder->build($changelog);
             $select
@@ -98,11 +100,12 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
                 $connection->insertFromSelect(
                     $select,
                     $idsTable->getName(),
-                    $columns,
+                    $idsColumns,
                     AdapterInterface::INSERT_IGNORE
                 )
             );
 
+            # Provide list of changed entries
             $select = $connection->select()
                 ->from($idsTable->getName());
 
@@ -115,7 +118,7 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
             foreach ($queries as $query) {
                 $idsQuery = (clone $query)
                     ->reset(Select::COLUMNS)
-                    ->columns($columns);
+                    ->columns($idsColumns);
 
                 $ids = $this->idsFetcher->fetch($idsQuery);
 
@@ -124,19 +127,26 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
                 }
 
                 yield $ids;
+
+                if ($this->isChildProcess($processID)) {
+                    return;
+                }
             }
         } finally {
-            $connection->dropTable($idsTable->getName());
+            # Cleanup list of changed entries
+            if (!$this->isChildProcess($processID)) {
+                $connection->dropTable($idsTable->getName());
+            }
         }
     }
 
     /**
      * Collect columns used as ID of changed entries
      *
-     * @param \Magento\Framework\DB\Ddl\Table $table
+     * @param \Magento\Framework\DB\Ddl\Table $idsTable
      * @return array
      */
-    private function getIdsColumns(Table $table): array
+    private function getIdsColumns(Table $idsTable): array
     {
         return array_values(
             array_map(
@@ -144,12 +154,24 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
                     return $column['COLUMN_NAME'];
                 },
                 array_filter(
-                    $table->getColumns(),
+                    $idsTable->getColumns(),
                     static function (array $column) {
                         return $column['PRIMARY'] === false;
                     }
                 )
             )
         );
+    }
+
+    /**
+     * Check if the process was forked
+     *
+     * @param int $processID
+     * @return bool
+     */
+    private function isChildProcess(
+        int $processID
+    ): bool {
+        return $processID !== getmypid();
     }
 }

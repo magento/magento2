@@ -41,7 +41,7 @@ class Group implements \Magento\Framework\Option\ArrayInterface
     public function __construct(
         GroupManagementInterface $groupManagement,
         \Magento\Framework\Convert\DataObject $converter,
-        GroupSourceLoggedInOnlyInterface $groupSourceForLoggedInCustomers = null
+        ?GroupSourceLoggedInOnlyInterface $groupSourceForLoggedInCustomers = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;

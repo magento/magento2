@@ -85,7 +85,7 @@ class ImageProcessor implements ImageProcessorInterface
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
         $entityType,
-        CustomAttributesDataInterface $previousCustomerData = null
+        ?CustomAttributesDataInterface $previousCustomerData = null
     ) {
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(

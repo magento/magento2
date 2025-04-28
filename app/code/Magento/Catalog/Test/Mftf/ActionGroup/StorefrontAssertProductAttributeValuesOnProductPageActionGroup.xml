@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertProductAttributeValuesOnProductPageActionGroup">
+        <annotations>
+            <description>Asserting storefront product attribute values on product page.</description>
+        </annotations>
+        <arguments>
+            <argument name="textAttribute" type="string" defaultValue="Text_EN"/>
+            <argument name="areaAttribute" type="string" defaultValue="Area_EN"/>
+            <argument name="dateAttribute" type="string" defaultValue="Date_EN"/>
+            <argument name="yesAttribute" type="string" defaultValue="Yes_EN"/>
+            <argument name="dropdownAttribute" type="string" defaultValue="Dropdown_EN"/>
+            <argument name="multiAttribute" type="string" defaultValue="Multi_EN"/>
+            <argument name="priceAttribute" type="string" defaultValue="Price_EN"/>
+            <argument name="dropdownAttributeValue" type="string" defaultValue="Yellow"/>
+            <argument name="multiAttributeValue" type="string" defaultValue="Value_1_EN, Value_2_EN"/>
+        </arguments>
+        <waitForElement selector="{{StorefrontProductPageSection.attributeTypes('textAttribute')}}" stepKey="assertTextAttribute"/>
+        <waitForElement selector="{{StorefrontProductPageSection.attributeTypes('areaAttribute')}}" stepKey="assertAreaAttribute"/>
+        <waitForElement selector="{{StorefrontProductPageSection.attributeTypes('dateAttribute')}}" stepKey="assertDateAttribute"/>
+        <waitForElement selector="{{StorefrontProductPageSection.attributeTypes('yesAttribute')}}" stepKey="assertYesAttribute"/>
+        <waitForElement selector="{{StorefrontProductPageSection.attributeTypes('dropdownAttribute')}}" stepKey="assertDropdownAttribute"/>
+        <waitForElement selector="{{StorefrontProductPageSection.attributeTypes('multiAttribute')}}" stepKey="assertMultiAttribute"/>
+        <waitForElement selector="{{StorefrontProductPageSection.attributeTypes('priceAttribute')}}" stepKey="assertPriceAttribute"/>
+        <waitForText selector="{{StorefrontProductPageSection.attributeTypes('dropdownAttribute')}}" userInput="{{dropdownAttributeValue}}" stepKey="assertDropdownAttributeValue"/>
+        <waitForText selector="{{StorefrontProductPageSection.attributeTypes('multiAttribute')}}" userInput="{{multiAttributeValue}}" stepKey="assertMultiAttributeValue"/>
+    </actionGroup>
+</actionGroups>

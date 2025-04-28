@@ -92,7 +92,7 @@ class DisableMultishippingModeTest extends TestCase
      *
      * @return array
      */
-    public function pluginWithChangedMultishippingModeDataProvider(): array
+    public static function pluginWithChangedMultishippingModeDataProvider(): array
     {
         return [
             'check_when_totals_are_collected' => [true],

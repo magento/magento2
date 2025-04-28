@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -54,7 +55,7 @@ class TierPriceTest extends TestCase
     {
         $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->getMockForAbstractClass();
 
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
@@ -65,7 +66,7 @@ class TierPriceTest extends TestCase
         $this->tierPrice = $this->getMockBuilder(
             TierPrice::class
         )
-            ->setMethods(['isValidValueAndLength', 'hasEmptyColumns', '_addMessages'])
+            ->onlyMethods(['isValidValueAndLength', 'hasEmptyColumns', '_addMessages'])
             ->setConstructorArgs([$this->groupRepository, $this->searchCriteriaBuilder, $this->storeResolver])
             ->getMock();
     }
@@ -87,7 +88,7 @@ class TierPriceTest extends TestCase
 
         $groupTest = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
         $groupTest->expects($this->once())->method('getCode');
         $groupTest->method('getId');
@@ -114,7 +115,7 @@ class TierPriceTest extends TestCase
 
         $groupTest = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
 
         $expectedCode = 'code';
@@ -184,7 +185,7 @@ class TierPriceTest extends TestCase
 
         $groupTest = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getId'])
+            ->onlyMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();
         $groupTest->expects($this->once())->method('getCode');
         $groupTest->method('getId');
@@ -198,105 +199,105 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function isValidResultFalseDataProvider()
+    public static function isValidResultFalseDataProvider()
     {
         return [
             // First if condition cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
                     AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => null,
                     AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
                     AdvancedPricing::COL_TIER_PRICE_QTY => null,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
                     AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
                     AdvancedPricing::COL_TIER_PRICE => null,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
                     AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => true,
-                '$customerGroups' => [
+                'hasEmptyColumns' => true,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
             ],
             // Second if condition  cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'not ALL GROUPS',
                     AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
             ],
             // Third if condition cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
                     AdvancedPricing::COL_TIER_PRICE_QTY => -1000,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
             ],
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
                     AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
                     AdvancedPricing::COL_TIER_PRICE => -1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
             ],
@@ -306,50 +307,50 @@ class TierPriceTest extends TestCase
     /**
      * @return array
      */
-    public function isValidAddMessagesCallDataProvider()
+    public static function isValidAddMessagesCallDataProvider()
     {
         return [
             // First if condition cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => null,
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
                     AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
-                '$expectedMessages' => [Validator::ERROR_TIER_DATA_INCOMPLETE],
+                'expectedMessages' => [Validator::ERROR_TIER_DATA_INCOMPLETE],
             ],
             // Second if condition cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'not ALL GROUPS',
                     AdvancedPricing::COL_TIER_PRICE_QTY => 1000,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
-                '$expectedMessages' => [Validator::ERROR_INVALID_TIER_PRICE_GROUP],
+                'expectedMessages' => [Validator::ERROR_INVALID_TIER_PRICE_GROUP],
             ],
             // Third if condition cases.
             [
-                '$value' => [
+                'value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'value',
                     AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'value',
                     AdvancedPricing::COL_TIER_PRICE_QTY => -1000,
                     AdvancedPricing::COL_TIER_PRICE => 1000,
                 ],
-                '$hasEmptyColumns' => null,
-                '$customerGroups' => [
+                'hasEmptyColumns' => null,
+                'customerGroups' => [
                     'value' => 'value'
                 ],
-                '$expectedMessages' => [Validator::ERROR_INVALID_TIER_PRICE_QTY],
+                'expectedMessages' => [Validator::ERROR_INVALID_TIER_PRICE_QTY],
             ],
         ];
     }

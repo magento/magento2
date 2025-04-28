@@ -61,7 +61,7 @@ class CurrencyTest extends TestCase
             ->getMockForAbstractClass();
         $this->numberFormatterFactory = $this->getMockBuilder(NumberFormatterFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
@@ -136,7 +136,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getOutputFormatDataProvider(): array
+    public static function getOutputFormatDataProvider(): array
     {
         $ar_DZ = "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s";
         if (version_compare(PHP_VERSION, '8.3', '>=')) {
@@ -203,7 +203,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getFormatTxtNumberFormatterDataProvider(): array
+    public static function getFormatTxtNumberFormatterDataProvider(): array
     {
         return [
             ['en_US', 'USD', '9999', [], '$9,999.00'],
@@ -272,7 +272,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getFormatTxtZendCurrencyDataProvider(): array
+    public static function getFormatTxtZendCurrencyDataProvider(): array
     {
         return [
             ['9999', ['display' => Currency::USE_SYMBOL, 'foo' => 'bar'], '$9,999.00'],

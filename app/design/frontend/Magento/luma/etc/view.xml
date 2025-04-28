@@ -238,7 +238,7 @@
         <var name="breakpoints">
             <var name="mobile">
                 <var name="conditions">
-                    <var name="max-width">768px</var>
+                    <var name="max-width">767px</var>
                 </var>
                 <var name="options">
                     <var name="options">

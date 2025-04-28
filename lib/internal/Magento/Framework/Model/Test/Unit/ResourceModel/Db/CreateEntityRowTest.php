@@ -112,7 +112,7 @@ class CreateEntityRowTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         $inputData = [
             'test_field_1' => 'test_value_1',

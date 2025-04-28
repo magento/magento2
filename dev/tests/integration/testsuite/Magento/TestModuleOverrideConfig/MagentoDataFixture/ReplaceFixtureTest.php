@@ -62,7 +62,7 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function replacedFixturesProvider(): array
+    public static function replacedFixturesProvider(): array
     {
         return [
             'first_data_set' => [
@@ -93,7 +93,7 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             'first_data_set' => [

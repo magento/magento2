@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -31,7 +32,7 @@ class ValidatorTest extends TestCase
         $validate = $helper->getObject(NotEmpty::class, ['options' => NotEmpty::ALL]);
 
         $validateFactory = $this->getMockBuilder(NotEmptyFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $validateFactory->expects($this->once())
@@ -57,7 +58,7 @@ class ValidatorTest extends TestCase
     {
         /** @var MockObject|Option $option */
         $option = $this->getMockBuilder(Option::class)
-            ->setMethods(['getTitle', 'getType'])
+            ->onlyMethods(['getTitle', 'getType'])
             ->disableOriginalConstructor()
             ->getMock();
         $option->expects($this->once())
@@ -74,7 +75,7 @@ class ValidatorTest extends TestCase
     /**
      * Provider for testIsValid
      */
-    public function providerIsValid()
+    public static function providerIsValid()
     {
         return [
             ['title', 'select', true, []],

@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -135,7 +136,7 @@ class SessionTest extends TestCase
             ->getMock();
         $this->aclBuilder->expects($this->any())->method('getAcl')->willReturn($aclMock);
         $userMock = $this->getMockBuilder(User::class)
-            ->addMethods(['getReloadAclFlag','setReloadAclFlag'])
+            ->addMethods(['getReloadAclFlag', 'setReloadAclFlag'])
             ->onlyMethods(['unsetData', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -154,7 +155,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function refreshAclDataProvider()
+    public static function refreshAclDataProvider()
     {
         return [
             'User set via params' => [true],
@@ -278,7 +279,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public static function isAllowedDataProvider()
     {
         return [
             "Negative: User not defined" => [false, true, true, false],
@@ -301,7 +302,7 @@ class SessionTest extends TestCase
     /**
      * @return array
      */
-    public function firstPageAfterLoginDataProvider()
+    public static function firstPageAfterLoginDataProvider()
     {
         return [
             'First page after login' => [true],

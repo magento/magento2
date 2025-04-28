@@ -71,13 +71,11 @@ class DatetimeTest extends TestCase
 
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->dateTimeFormatterMock = $this
             ->getMockBuilder(DateTimeFormatterInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->columnMock = $this->getMockBuilder(Column::class)
@@ -88,7 +86,6 @@ class DatetimeTest extends TestCase
 
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->escaperMock = $this->getMockBuilder(Escaper::class)

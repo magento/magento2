@@ -59,7 +59,7 @@ class Dependency
         Filesystem $filesystem,
         PackageFactory $packageFactory,
         ComponentRegistrarInterface $componentRegistrar,
-        \Magento\Framework\Filesystem\Directory\ReadFactory $directoryReadFactory = null
+        ?\Magento\Framework\Filesystem\Directory\ReadFactory $directoryReadFactory = null
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageFactory = $packageFactory;

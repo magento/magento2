@@ -46,14 +46,14 @@ class AuthorizationTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->setMethods(['getUserType', 'getUserId'])
+            ->onlyMethods(['getUserType', 'getUserId'])
             ->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(ResourceOrder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getId'])
+            ->onlyMethods(['getCustomerId', 'getId'])
             ->getMock();
         $this->plugin = $this->objectManager->getObject(
             Authorization::class,

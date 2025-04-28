@@ -26,7 +26,7 @@ class ValidatorCompositeTest extends TestCase
             ->getMockForAbstractClass();
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
@@ -78,7 +78,7 @@ class ValidatorCompositeTest extends TestCase
             ->getMockForAbstractClass();
         $resultFactory = $this->getMockBuilder(ResultInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultFactory->expects(static::once())
             ->method('create')
@@ -111,7 +111,7 @@ class ValidatorCompositeTest extends TestCase
             ->getMockForAbstractClass();
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $tMap = $this->getMockBuilder(TMap::class)
             ->disableOriginalConstructor()
@@ -158,7 +158,7 @@ class ValidatorCompositeTest extends TestCase
             ->getMockForAbstractClass();
         $resultFactory = $this->getMockBuilder(ResultInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultFactory->expects($this->once())
             ->method('create')

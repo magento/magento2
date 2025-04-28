@@ -56,7 +56,7 @@ class RemoteAddress implements ResetAfterRequestInterface
     public function __construct(
         RequestInterface $httpRequest,
         array $alternativeHeaders = [],
-        array $trustedProxies = null
+        ?array $trustedProxies = null
     ) {
         $this->request = $httpRequest;
         $this->alternativeHeaders = $alternativeHeaders;

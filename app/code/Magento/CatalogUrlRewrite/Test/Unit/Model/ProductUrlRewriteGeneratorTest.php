@@ -180,8 +180,15 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ->getMock();
         $productCategoriesMock->expects($this->exactly(2))
             ->method('addAttributeToSelect')
-            ->withConsecutive(['url_key'], ['url_path'])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) use ($productCategoriesMock) {
+                    if ($arg == 'url_key') {
+                        return $productCategoriesMock;
+                    } elseif ($arg == 'url_path') {
+                        return $productCategoriesMock;
+                    }
+                }
+            );
         $productMock->expects($this->once())
             ->method('getCategoryCollection')
             ->willReturn($productCategoriesMock);

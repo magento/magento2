@@ -67,7 +67,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestMaskStatusForArea()
+    public static function dataProviderForTestMaskStatusForArea()
     {
         return [
             ['fraud', 'Suspected Fraud'],

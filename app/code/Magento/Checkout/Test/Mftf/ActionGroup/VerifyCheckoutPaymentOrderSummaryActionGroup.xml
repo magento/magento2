@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,6 +19,7 @@
             <argument name="orderSummaryTotal" type="string"/>
         </arguments>
 
+        <wait time="30" stepKey="waitForShippingSummary"/>
         <see selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" userInput="{{orderSummarySubTotal}}" stepKey="seeCorrectSubtotal"/>
         <see selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" userInput="{{orderSummaryShippingTotal}}" stepKey="seeCorrectShipping"/>
         <see selector="{{CheckoutPaymentSection.orderSummaryTotal}}" userInput="{{orderSummaryTotal}}" stepKey="seeCorrectOrderTotal"/>

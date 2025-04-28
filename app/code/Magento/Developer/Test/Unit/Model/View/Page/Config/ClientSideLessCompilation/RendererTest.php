@@ -54,7 +54,7 @@ class RendererTest extends TestCase
         $this->model = $this->getMockBuilder(
             Renderer::class
         )
-            ->setMethods(['renderAssetGroup'])
+            ->onlyMethods(['renderAssetGroup'])
             ->setConstructorArgs($mocks)
             ->getMock();
     }

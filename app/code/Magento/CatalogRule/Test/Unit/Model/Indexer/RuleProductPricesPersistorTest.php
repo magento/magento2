@@ -102,20 +102,23 @@ class RuleProductPricesPersistorTest extends TestCase
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive(['catalogrule_product_price'], [$tableName])
-            ->willReturnOnConsecutiveCalls('catalogrule_product_price', $tableName);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['catalogrule_product_price'] =>'catalogrule_product_price',
+                [$tableName] => $tableName
+            });
 
         $this->dateTimeMock
             ->method('formatDate')
-            ->withConsecutive(
-                [$priceData[0]['rule_date'], false],
-                [$priceData[0]['latest_start_date'], false],
-                [$priceData[0]['earliest_end_date'], false]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $priceData[0]['rule_date'],
-                $priceData[0]['latest_start_date'],
-                $priceData[0]['earliest_end_date']
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($priceData) {
+                    if ($arg1 == $priceData[0]['rule_date'] && $arg2 == false) {
+                        return $priceData[0]['rule_date'];
+                    } elseif ($arg1 == $priceData[0]['latest_start_date'] && $arg2 == false) {
+                        return $priceData[0]['latest_start_date'];
+                    } elseif ($arg1 == $priceData[0]['earliest_end_date'] && $arg2 == false) {
+                        return $priceData[0]['earliest_end_date'];
+                    }
+                }
             );
 
         $connectionMock->expects($this->once())
@@ -149,15 +152,16 @@ class RuleProductPricesPersistorTest extends TestCase
 
         $this->dateTimeMock
             ->method('formatDate')
-            ->withConsecutive(
-                [$priceData[0]['rule_date'], false],
-                [$priceData[0]['latest_start_date'], false],
-                [$priceData[0]['earliest_end_date'], false]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $priceData[0]['rule_date'],
-                $priceData[0]['latest_start_date'],
-                $priceData[0]['earliest_end_date']
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($priceData) {
+                    if ($arg1 == $priceData[0]['rule_date'] && $arg2 == false) {
+                        return $priceData[0]['rule_date'];
+                    } elseif ($arg1 == $priceData[0]['latest_start_date'] && $arg2 == false) {
+                        return $priceData[0]['latest_start_date'];
+                    } elseif ($arg1 == $priceData[0]['earliest_end_date'] && $arg2 == false) {
+                        return $priceData[0]['earliest_end_date'];
+                    }
+                }
             );
 
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
@@ -171,8 +175,10 @@ class RuleProductPricesPersistorTest extends TestCase
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive(['catalogrule_product_price'], [$tableName])
-            ->willReturnOnConsecutiveCalls('catalogrule_product_price', $tableName);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['catalogrule_product_price'] =>'catalogrule_product_price',
+                [$tableName] => $tableName
+            });
 
         $this->assertTrue($this->model->execute($priceData, true));
     }

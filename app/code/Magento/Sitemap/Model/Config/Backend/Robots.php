@@ -53,8 +53,8 @@ class Robots extends Value implements IdentityInterface
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         StoreManagerInterface $storeManager,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->storeManager = $storeManager;
