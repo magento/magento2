@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model;
 
@@ -1563,6 +1563,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $item = $this->getItemById($itemId);
 
         if ($item) {
+
+            // Remove gift message from cart
+            if ((int)$this->getItemsCount() === 1) {
+                $this->setGiftMessageId(0);
+            }
+
             $item->setQuote($this);
             $item->isDeleted(true);
             if ($item->getHasChildren()) {
@@ -1596,6 +1602,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 $item->isDeleted(true);
             }
         }
+
+        // Remove gift message from cart
+        $this->setGiftMessageId(0);
+
         return $this;
     }
 
