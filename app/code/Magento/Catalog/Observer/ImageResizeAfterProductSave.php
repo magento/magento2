@@ -95,7 +95,7 @@ class ImageResizeAfterProductSave implements ObserverInterface
             $new = $product->getData('media_gallery');
 
             foreach ($new['images'] as $key => $value) {
-                if($value['removed'] == 1){
+                if ($value['removed'] == 1) {
                     unset($new['images'][$key]);
                 }
             }
