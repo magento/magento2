@@ -111,7 +111,6 @@ class Transaction
                 $this->_eventManager->fireEvent('startTransaction', [$test]);
                 restore_error_handler();
             } catch (\Exception $e) {
-                $this->_isTransactionActive = false;
                 $test->getTestResultObject()->addFailure(
                     $test,
                     new \PHPUnit\Framework\AssertionFailedError((string)$e),
