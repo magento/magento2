@@ -12,8 +12,10 @@
 $viewModel = $block->getViewModel();
 $regionProvider = $block->getRegionProvider();
 ?>
-<?php $shippingParam = $block->getRequest()->getParam('shippingAddress') !== null; ?>
-<?php $billingParam = $block->getRequest()->getParam('billingAddress') !== null; ?>
+<?php 
+$defaultShipping = ($block->getRequest()->getParam('shippingAddress') !== null) ? 1 : 0;
+$defaultBilling = ($block->getRequest()->getParam('billingAddress') !== null) ? 1 : 0;
+?>
 <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
 <?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
 <?php $_fax = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Fax::class) ?>
@@ -33,7 +35,7 @@ $regionProvider = $block->getRegionProvider();
     trim(str_replace('required-entry', '', $_streetValidationClass)) : ''; ?>
 <?php $_regionValidationClass = $viewModel->addressGetAttributeValidationClass('region'); ?>
 <form class="form-address-edit"
-action="<?= $escaper->escapeUrl($block->getSaveUrl($shippingParam, $billingParam)) ?>"
+        action="<?= $escaper->escapeUrl($block->getSaveUrlWithParams($defaultShipping, $defaultBilling)) ?>"
         method="post"
         id="form-validate"
         enctype="multipart/form-data"

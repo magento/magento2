@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright 2017 Adobe
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Api\AddressMetadataInterface;
@@ -240,32 +242,42 @@ class Edit extends \Magento\Directory\Block\Data
     /**
      * Return the Url for saving.
      *
+     * @return string
+     */
+    public function getSaveUrl()
+    {
+        return $this->getSaveUrlWithParams();
+    }
+
+    /**
+     * Return the Url for saving with parameters.
+     *
      * @param int $defaultShipping Default shipping flag
      * @param int $defaultBilling Default billing flag
      * @return string
      */
-    public function getSaveUrl($defaultShipping = 0, $defaultBilling = 0)
+    public function getSaveUrlWithParams($defaultShipping = 0, $defaultBilling = 0)
     {
         $queryParams = ['_secure' => true];
+
+        // Consolidate $defaultShipping and $defaultBilling conditions
         if ($defaultShipping == 1) {
             $queryParams['default_shipping'] = 1;
-        } elseif ($defaultBilling == 1) {
+        }
+        if ($defaultBilling == 1) {
             $queryParams['default_billing'] = 1;
         }
 
-        if ($this->getAddress()->isDefaultBilling() && $this->getAddress()->isDefaultShipping()) {
-            $postURL = $this->_urlBuilder->getUrl(
-                'customer/address/formPost',
-                $queryParams
-            );
-        } else {
+        // Add 'id' parameter only if the address is not both default billing and shipping
+        if (!$this->getAddress()->isDefaultBilling() || !$this->getAddress()->isDefaultShipping()) {
             $queryParams['id'] = $this->getAddress()->getId();
-            $postURL = $this->_urlBuilder->getUrl(
-                'customer/address/formPost',
-                $queryParams
-            );
         }
-        return $postURL;
+
+        // URL construction remains in a single block
+        return $this->_urlBuilder->getUrl(
+            'customer/address/formPost',
+            $queryParams
+        );
     }
 
     /**
