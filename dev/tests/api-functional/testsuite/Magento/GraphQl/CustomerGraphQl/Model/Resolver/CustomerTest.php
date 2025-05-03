@@ -13,6 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\CustomerGraphQl\Model\Resolver\Customer as CustomerResolver;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
@@ -25,6 +26,7 @@ use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -61,6 +63,11 @@ class CustomerTest extends ResolverCacheAbstract
      */
     private $registry;
 
+    /**
+     * @var SerializerInterface
+     */
+    private $json;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -76,6 +83,7 @@ class CustomerTest extends ResolverCacheAbstract
         $this->websiteRepository = $this->objectManager->get(
             WebsiteRepositoryInterface::class
         );
+        $this->json = $this->objectManager->get(SerializerInterface::class);
 
         // first register secure area so we have permission to delete customer in tests
         $this->registry = $this->objectManager->get(Registry::class);
@@ -828,6 +836,47 @@ MUTATIONDELETE;
           }
         }
         QUERY;
+    }
+
+    /**
+     * Test that updated customer email is returned in the response
+     *
+     * @throws Exception
+     */
+    #[
+        DbIsolation(false),
+        DataFixture(CustomerFixture::class, ['email' => 'customer@example.com'], as: 'customer'),
+    ]
+    public function testChangeEmailSuccessfully(): void
+    {
+        $currentPassword = 'password';
+        $updatedEmail = 'customer2@example.com';
+        $query
+            = <<<QUERY
+mutation {
+  updateCustomerEmail(
+    email: "$updatedEmail",
+    password: "$currentPassword"
+  ) {
+  customer {
+    email
+    }
+  }
+}
+QUERY;
+        $customer = $this->customerRepository->get('customer@example.com');
+        $customerToken = $this->generateCustomerToken(
+            $customer->getEmail(),
+            'password'
+        );
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $customerToken]
+        );
+
+        $this->assertEquals($updatedEmail, $response['updateCustomerEmail']['customer']['email']);
     }
 
     /**

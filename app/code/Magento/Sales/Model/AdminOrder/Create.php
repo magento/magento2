@@ -2359,25 +2359,22 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Remove cart from transferred items and update the qty.
+     * Remove cart from transferred items
      *
      * @param int|null|Item $cartItem
      * @param int $itemId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @see AC-14442
      */
     private function removeCartTransferredItemsAndUpdateQty(int|null|Item $cartItem, int $itemId)
     {
         $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
         if (isset($removeCartTransferredItems['cart'])) {
             $removeTransferredItemKey = array_search($cartItem->getId(), $removeCartTransferredItems['cart']);
-            if ($removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
+            if ($removeTransferredItemKey !== false && $removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
                 $cartItem->clearMessage();
                 $cartItem->setHasError(false);
-                if (isset($this->request->get('item')[$itemId]['qty'])) {
-                    $qty = $this->request->get('item')[$itemId]['qty'];
-                    $cartItem->setQty($qty);
-                }
-
                 if ($cartItem->getHasError()) {
                     throw new LocalizedException(__($cartItem->getMessage()));
                 }

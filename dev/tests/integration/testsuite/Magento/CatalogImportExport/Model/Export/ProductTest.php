@@ -818,16 +818,25 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     * @dataProvider websiteIdFilterDataProvider
      */
-    public function testExportProductWithRestrictedWebsite(): void
+    public function testFilterByWebsiteId(string $websiteIdFilter): void
     {
         $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
         $website = $websiteRepository->get('second_website');
 
-        $exportData = $this->doExport(['website_id' => $website->getId()]);
+        $exportData = $this->doExport([$websiteIdFilter => $website->getId()]);
 
         $this->assertStringContainsString('"Simple Product"', $exportData);
         $this->assertStringNotContainsString('"Virtual Product With Custom Options"', $exportData);
+    }
+
+    public static function websiteIdFilterDataProvider(): array
+    {
+        return [
+            ['website_id'],
+            ['website_ids'],
+        ];
     }
 
     public function testFilterAttributeCollection(): void
