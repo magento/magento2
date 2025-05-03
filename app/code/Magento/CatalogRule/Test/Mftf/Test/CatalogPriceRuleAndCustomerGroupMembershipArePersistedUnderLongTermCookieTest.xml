@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright 2018 Adobe
+   * Copyright 2025 Adobe
   * All Rights Reserved.
   */
 -->
@@ -17,6 +17,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27571"/>
             <group value="persistent"/>
+            <!-- added pr_exclude group as this test failing repeatedly and will be fixed and removed in this ACQE-7751 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a80bcea0bbbe042d4696d4618f45ff37",
+    "content-hash": "42c84910fd4d281b51e61bad5976ff5b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -11488,16 +11488,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "36",
+            "version": "37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "d7ece6da506db4fadaa63c7ae31d15f1d9ff1443"
+                "reference": "243690c32b92c7a11be11ad7a5c74802e8fc0285"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/d7ece6da506db4fadaa63c7ae31d15f1d9ff1443",
-                "reference": "d7ece6da506db4fadaa63c7ae31d15f1d9ff1443",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/243690c32b92c7a11be11ad7a5c74802e8fc0285",
+                "reference": "243690c32b92c7a11be11ad7a5c74802e8fc0285",
                 "shasum": ""
             },
             "require": {
@@ -11532,9 +11532,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/36"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v37"
             },
-            "time": "2024-12-19T10:09:28+00:00"
+            "time": "2025-04-15T14:29:46+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -11831,7 +11831,7 @@
                 "easy-doc/easy-doc": "0.0.0 || ^1.2.3",
                 "friendsofphp/php-cs-fixer": "^3.57",
                 "gregwar/rst": "^1.0.6",
-                "phpstan/phpstan": "~1.12.0",
+                "phpstan/phpstan": "~2.1.0",
                 "phpunit/phpunit": "^10.5.20,<10.5.32",
                 "squizlabs/php_codesniffer": "^3.8.0"
             },
@@ -12172,7 +12172,7 @@
                 "friendsofphp/php-cs-fixer": "^3.57",
                 "gregwar/rst": "^1.0",
                 "mikey179/vfsstream": "^1.6.8",
-                "phpstan/phpstan": "~1.12.0",
+                "phpstan/phpstan": "~2.1.0",
                 "phpunit/phpunit": "^10.5.20,<10.5.32",
                 "squizlabs/php_codesniffer": "^3.8.0"
             },
@@ -14680,7 +14680,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 10,
         "pdepend/pdepend": 20,
@@ -14709,6 +14709,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }
