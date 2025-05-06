@@ -6,14 +6,14 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Catalog product option file type
@@ -354,7 +354,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             if ($value === null) {
                 return $optionValue;
             }
-            $optionId = str_replace(AbstractType::OPTION_PREFIX, '', $this->getConfigurationItemOption()->getCode());
+            $optionId = str_replace(
+                AbstractType::OPTION_PREFIX,
+                '',
+                (string)$this->getConfigurationItemOption()->getCode()
+            );
             $customOptionUrlParams = $this->getCustomOptionUrlParams()
                 ? $this->getCustomOptionUrlParams()
                 : [

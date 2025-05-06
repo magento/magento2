@@ -1,20 +1,19 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Download;
 
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Action\Context;
-use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory;
 
 /**
  * Download Custom Option Controller
