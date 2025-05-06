@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc713685ade6309bb576551ed5114f82",
+    "content-hash": "42c84910fd4d281b51e61bad5976ff5b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10396,77 +10396,6 @@
             "time": "2025-02-26T14:28:23+00:00"
         },
         {
-            "name": "carlos-mg89/oauth",
-            "version": "0.8.17",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/carlos-mg89/PHPoAuthLib.git",
-                "reference": "7003d50bbb90383408abc1450d943657d087fc70"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/carlos-mg89/PHPoAuthLib/zipball/7003d50bbb90383408abc1450d943657d087fc70",
-                "reference": "7003d50bbb90383408abc1450d943657d087fc70",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 || ^8.0"
-            },
-            "replace": {
-                "lusitanian/oauth": "~0.3"
-            },
-            "require-dev": {
-                "ext-curl": "*",
-                "ext-dom": "*",
-                "ext-json": "*",
-                "friendsofphp/php-cs-fixer": "^3.0",
-                "phpunit/phpunit": "^8.5",
-                "predis/predis": "0.8.*@dev",
-                "squizlabs/php_codesniffer": "^3.5",
-                "symfony/finder": "^5.1",
-                "symfony/http-foundation": "~2.1",
-                "symfony/var-dumper": "^5.1"
-            },
-            "suggest": {
-                "ext-openssl": "Allows for usage of secure connections with the stream-based HTTP client.",
-                "predis/predis": "Allows using the Redis storage backend.",
-                "symfony/http-foundation": "Allows using the Symfony Session storage backend."
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "OAuth\\": "src/OAuth"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Carlos Martínez Gadea",
-                    "email": "carlosmartinezgadea@gmail.com"
-                }
-            ],
-            "description": "PHP 7.2 oAuth 1/2 Library",
-            "keywords": [
-                "Authentication",
-                "authorization",
-                "oauth",
-                "security"
-            ],
-            "support": {
-                "issues": "https://github.com/carlos-mg89/PHPoAuthLib/issues",
-                "source": "https://github.com/carlos-mg89/PHPoAuthLib/tree/0.8.17"
-            },
-            "time": "2025-02-08T12:14:07+00:00"
-        },
-        {
             "name": "clue/ndjson-react",
             "version": "v1.3.0",
             "source": {
@@ -11559,16 +11488,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "36",
+            "version": "37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "d7ece6da506db4fadaa63c7ae31d15f1d9ff1443"
+                "reference": "243690c32b92c7a11be11ad7a5c74802e8fc0285"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/d7ece6da506db4fadaa63c7ae31d15f1d9ff1443",
-                "reference": "d7ece6da506db4fadaa63c7ae31d15f1d9ff1443",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/243690c32b92c7a11be11ad7a5c74802e8fc0285",
+                "reference": "243690c32b92c7a11be11ad7a5c74802e8fc0285",
                 "shasum": ""
             },
             "require": {
@@ -11603,9 +11532,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/36"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v37"
             },
-            "time": "2024-12-19T10:09:28+00:00"
+            "time": "2025-04-15T14:29:46+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -11902,7 +11831,7 @@
                 "easy-doc/easy-doc": "0.0.0 || ^1.2.3",
                 "friendsofphp/php-cs-fixer": "^3.57",
                 "gregwar/rst": "^1.0.6",
-                "phpstan/phpstan": "~1.12.0",
+                "phpstan/phpstan": "~2.1.0",
                 "phpunit/phpunit": "^10.5.20,<10.5.32",
                 "squizlabs/php_codesniffer": "^3.8.0"
             },
@@ -12243,7 +12172,7 @@
                 "friendsofphp/php-cs-fixer": "^3.57",
                 "gregwar/rst": "^1.0",
                 "mikey179/vfsstream": "^1.6.8",
-                "phpstan/phpstan": "~1.12.0",
+                "phpstan/phpstan": "~2.1.0",
                 "phpunit/phpunit": "^10.5.20,<10.5.32",
                 "squizlabs/php_codesniffer": "^3.8.0"
             },
@@ -14751,7 +14680,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "beta",
+    "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 10,
         "pdepend/pdepend": 20,
@@ -14780,6 +14709,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }

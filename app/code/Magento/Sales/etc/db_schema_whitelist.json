@@ -542,7 +542,10 @@
             "is_customer_notified": true,
             "is_visible_on_front": true,
             "comment": true,
-            "created_at": true
+            "created_at": true,
+            "user_id": true,
+            "user_type": true,
+            "updated_at": true
         },
         "index": {
             "SALES_SHIPMENT_COMMENT_CREATED_AT": true,
@@ -550,7 +553,8 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "SALES_SHIPMENT_COMMENT_PARENT_ID_SALES_SHIPMENT_ENTITY_ID": true
+            "SALES_SHIPMENT_COMMENT_PARENT_ID_SALES_SHIPMENT_ENTITY_ID": true,
+            "SALES_SHIPMENT_COMMENT_ENTITY_ID_USER_ID_USER_TYPE": true
         }
     },
     "sales_invoice": {
@@ -710,7 +714,10 @@
             "is_customer_notified": true,
             "is_visible_on_front": true,
             "comment": true,
-            "created_at": true
+            "created_at": true,
+            "user_id": true,
+            "user_type": true,
+            "updated_at": true
         },
         "index": {
             "SALES_INVOICE_COMMENT_CREATED_AT": true,
@@ -718,7 +725,8 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "SALES_INVOICE_COMMENT_PARENT_ID_SALES_INVOICE_ENTITY_ID": true
+            "SALES_INVOICE_COMMENT_PARENT_ID_SALES_INVOICE_ENTITY_ID": true,
+            "SALES_INVOICE_COMMENT_ENTITY_ID_USER_ID_USER_TYPE": true
         }
     },
     "sales_creditmemo": {
@@ -881,7 +889,10 @@
             "is_customer_notified": true,
             "is_visible_on_front": true,
             "comment": true,
-            "created_at": true
+            "created_at": true,
+            "user_id": true,
+            "user_type": true,
+            "updated_at": true
         },
         "index": {
             "SALES_CREDITMEMO_COMMENT_CREATED_AT": true,
@@ -889,7 +900,8 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "SALES_CREDITMEMO_COMMENT_PARENT_ID_SALES_CREDITMEMO_ENTITY_ID": true
+            "SALES_CREDITMEMO_COMMENT_PARENT_ID_SALES_CREDITMEMO_ENTITY_ID": true,
+            "SALES_CREDITMEMO_COMMENT_ENTITY_ID_USER_ID_USER_TYPE": true
         }
     },
     "sales_invoiced_aggregated": {

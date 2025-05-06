@@ -47,6 +47,9 @@
             <!--Delete Simple Product 1,customer and Category-->
             <deleteData createDataKey="createSimple1" stepKey="deleteSimple1"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGrid">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteJohnSmithCustomer">
                 <argument name="customerEmail" value="John_Smith_Customer.email"/>
             </actionGroup>
