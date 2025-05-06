@@ -336,7 +336,8 @@
         },
         "index": {
             "SALES_ORDER_ITEM_ORDER_ID": true,
-            "SALES_ORDER_ITEM_STORE_ID": true
+            "SALES_ORDER_ITEM_STORE_ID": true,
+            "SALES_ORDER_ITEM_QUOTE_ITEM_ID": true
         },
         "constraint": {
             "PRIMARY": true,
