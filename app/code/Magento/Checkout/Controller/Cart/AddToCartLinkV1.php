@@ -21,6 +21,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
  * Controller for Meta Checkout URL implementation
@@ -34,6 +35,12 @@ class AddToCartLinkV1 implements HttpGetActionInterface
      * Configuration path for enabling the Add To Cart Link feature.
      */
     const XML_PATH_ENABLE_ADD_TO_CART_LINK = 'checkout/cart/enable_add_to_cart_link_v1';
+
+    /**
+     * Maximum number of products that can be processed in a single request to
+     * prevent abuse (DoS via extremely large cart payloads).
+     */
+    private const MAX_PRODUCTS_PER_REQUEST = 25;
 
     /**
      * Request instance
@@ -53,6 +60,7 @@ class AddToCartLinkV1 implements HttpGetActionInterface
      * @param ScopeConfigInterface       $scopeConfig       Scope configuration
      * @param ForwardFactory             $resultForwardFactory Result forward factory
      * @param StoreManagerInterface      $storeManager      Store manager
+     * @param CartRepositoryInterface    $cartRepository    Cart repository
      */
     public function __construct(
         Context $context,
@@ -62,7 +70,8 @@ class AddToCartLinkV1 implements HttpGetActionInterface
         private readonly ManagerInterface $messageManager,
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly ForwardFactory $resultForwardFactory,
-        private readonly StoreManagerInterface $storeManager
+        private readonly StoreManagerInterface $storeManager,
+        private readonly CartRepositoryInterface $cartRepository
     ) {
         $this->_request = $context->getRequest();
     }
@@ -105,14 +114,23 @@ class AddToCartLinkV1 implements HttpGetActionInterface
         $couponCode = $this->_request->getParam('coupon', '');
 
         // Get quote from checkout session (should now reflect the correct store)
-        $quote = $this->checkoutSession->getQuote();
-
-        // Ensure quote is associated with the correct store ID after potential switch
-        if ($quote->getStoreId() !== $this->storeManager->getStore()->getId()) {
-             $quote->setStoreId($this->storeManager->getStore()->getId());
-             // May need to reload or recalculate parts of the quote if store change affects it
+        try {
+            $quote = $this->checkoutSession->getQuote();
+        } catch (\Exception $e) {
+            $this->messageManager->addErrorMessage(__('Unable to initialize the shopping cart.'));
+            return $this->resultPageFactory->create();
         }
 
+        // Ensure quote is associated with the correct store ID after potential switch
+        try {
+            $currentStoreId = $this->storeManager->getStore()->getId();
+            if ($quote->getStoreId() !== $currentStoreId) {
+                $quote->setStoreId($currentStoreId);
+                // May need to reload or recalculate parts of the quote if store change affects it
+            }
+        } catch (NoSuchEntityException $e) {
+            // Store could not be resolved – fall back to default behaviour and continue
+        }
 
         // Clear the quote first (required by Meta spec)
         $quote->removeAllItems();
@@ -120,6 +138,14 @@ class AddToCartLinkV1 implements HttpGetActionInterface
         // Parse products parameter
         if (!empty($productsParam)) {
             $productItems = $this->_parseProductsParam($productsParam);
+
+            // Enforce maximum allowed items in one request
+            if (count($productItems) > self::MAX_PRODUCTS_PER_REQUEST) {
+                $this->messageManager->addErrorMessage(
+                    __('You can only add up to %1 products at once.', self::MAX_PRODUCTS_PER_REQUEST)
+                );
+                $productItems = array_slice($productItems, 0, self::MAX_PRODUCTS_PER_REQUEST);
+            }
 
             // Add products to quote
             foreach ($productItems as $item) {
@@ -199,7 +225,11 @@ class AddToCartLinkV1 implements HttpGetActionInterface
 
             // Save quote and collect totals
             $quote->collectTotals();
-            $quote->save();
+            try {
+                $this->cartRepository->save($quote);
+            } catch (\Exception $e) {
+                $this->messageManager->addErrorMessage(__('Unable to save cart.'));
+            }
 
             // Update checkout session
             $this->checkoutSession->setQuoteId($quote->getId());
@@ -208,21 +238,18 @@ class AddToCartLinkV1 implements HttpGetActionInterface
         // Apply coupon code if provided
         if (!empty($couponCode)) {
             try {
-                // Ensure coupon is applied in the context of the potentially switched store
-                $quote->setCouponCode($couponCode)->collectTotals()->save();
+                $quote->setCouponCode($couponCode)->collectTotals();
+                $this->cartRepository->save($quote);
 
                 // Check if coupon was actually applied
                 if ($quote->getCouponCode() !== $couponCode) {
-                     // Coupon might be invalid or not applicable to the current store/cart contents
+                    // Coupon might be invalid or not applicable to the current store/cart contents
                     $this->messageManager->addErrorMessage(
                         __('The coupon code "%1" is not valid or cannot be applied.', $couponCode)
                     );
-                } else {
-                    // Optionally add a success message
-                    // $this->messageManager->addSuccessMessage(__('Coupon code "%1" was applied.', $couponCode));
                 }
             } catch (\Exception $e) {
-                 // Log the error for debugging
+                // Log the error for debugging
                 $this->messageManager->addErrorMessage(
                     __('Could not apply coupon code "%1".', $couponCode)
                 );

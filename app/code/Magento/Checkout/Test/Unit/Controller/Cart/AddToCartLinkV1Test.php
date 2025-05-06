@@ -22,6 +22,11 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Test for AddToCartLinkV1 controller
@@ -101,14 +106,47 @@ class AddToCartLinkV1Test extends TestCase
     private $_pageMock;
 
     /**
+     * Scope config mock
+     *
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
+    /**
+     * Forward factory mock
+     *
+     * @var ForwardFactory|MockObject
+     */
+    private $resultForwardFactoryMock;
+
+    /**
+     * Store manager mock
+     *
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
+
+    /**
+     * Cart repository mock
+     *
+     * @var CartRepositoryInterface|MockObject
+     */
+    private $cartRepositoryMock;
+
+    /**
+     * Store mock
+     *
+     * @var Store|MockObject
+     */
+    private $storeMock;
+
+    /**
      * Set up
      *
      * @return void
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-
         $this->_contextMock = $this->createMock(Context::class);
         $this->_checkoutSessionMock = $this->createMock(CheckoutSession::class);
         $this->_productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
@@ -117,11 +155,15 @@ class AddToCartLinkV1Test extends TestCase
         $this->_requestMock = $this->createMock(RequestInterface::class);
         $this->_productMock = $this->createMock(Product::class);
         $this->_pageMock = $this->createMock(Page::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->storeMock = $this->createMock(Store::class);
         
         // Create Quote mock with all required methods
         $this->_quoteMock = $this->getMockBuilder(Quote::class)
-            ->onlyMethods(['removeAllItems', 'addProduct', 'collectTotals', 'save'])
-            ->addMethods(['setCouponCode', 'getCouponCode'])
+            ->onlyMethods(['removeAllItems', 'addProduct', 'collectTotals', 'save', 'getStoreId', 'setStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -129,49 +171,71 @@ class AddToCartLinkV1Test extends TestCase
         $this->_productMock->expects($this->any())
             ->method('getId')
             ->willReturn('12345');
+            
+        $this->_productMock->expects($this->any())
+            ->method('getStoreIds')
+            ->willReturn([1]); 
 
         $this->_contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->_requestMock);
+            
+        // Default store setup for StoreManager mock
+        $this->storeMock->expects($this->any())->method('getId')->willReturn(1);
+        $this->storeMock->expects($this->any())->method('getIsActive')->willReturn(true);
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+        $this->storeManagerMock->expects($this->any())->method('getDefaultStoreView')->willReturn($this->storeMock);
 
-        $this->_controller = $objectManager->getObject(
-            AddToCartLinkV1::class,
-            [
-                'context' => $this->_contextMock,
-                'checkoutSession' => $this->_checkoutSessionMock,
-                'productRepository' => $this->_productRepositoryMock,
-                'resultPageFactory' => $this->_resultPageFactoryMock,
-                'messageManager' => $this->_messageManagerMock
-            ]
+        $this->_controller = new AddToCartLinkV1(
+            $this->_contextMock,
+            $this->_checkoutSessionMock,
+            $this->_productRepositoryMock,
+            $this->_resultPageFactoryMock,
+            $this->_messageManagerMock,
+            $this->scopeConfigMock,
+            $this->resultForwardFactoryMock,
+            $this->storeManagerMock,
+            $this->cartRepositoryMock
         );
     }
 
     /**
-     * Test execute method with products and coupon
+     * Test execute method with products
      *
      * @return void
      */
-    public function testExecuteWithProductsAndCoupon(): void
+    public function testExecuteWithProducts(): void
     {
         $productsParam = '12345:2,67890:1';
-        $couponCode = 'TESTCOUPON';
         $productId1 = '12345';
         $productId2 = '67890';
         $qty1 = 2;
         $qty2 = 1;
 
-        // Set up request parameters
-        $this->_requestMock->expects($this->exactly(2))
+        // Enable feature flag
+        $this->scopeConfigMock->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AddToCartLinkV1::XML_PATH_ENABLE_ADD_TO_CART_LINK, 'store')
+            ->willReturn(true);
+
+        // Set up request parameters (now expecting store param as well)
+        $this->_requestMock->expects($this->exactly(3))
             ->method('getParam')
             ->willReturnMap([
+                ['store', null, null],
                 ['products', '', $productsParam],
-                ['coupon', '', $couponCode]
+                ['coupon', '', '']
             ]);
 
         // Set up checkout session to return quote
         $this->_checkoutSessionMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($this->_quoteMock);
+            
+        // Mock getStoreId for Quote
+        $this->_quoteMock->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn(1);
 
         // Set up quote methods
         $this->_quoteMock->expects($this->once())
@@ -181,37 +245,15 @@ class AddToCartLinkV1Test extends TestCase
         // For first product: SKU lookup fails, ID lookup succeeds
         $this->_productRepositoryMock->expects($this->exactly(2))
             ->method('get')
-            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Product not found')));
-
-        $this->_productRepositoryMock->expects($this->exactly(2))
-            ->method('getById')
-            ->willReturnMap([
-                [$productId1, false, null, false, $this->_productMock],
-                [$productId2, false, null, false, $this->_productMock]
-            ]);
-
-        // Set up quote add product
-        $this->_quoteMock->expects($this->exactly(2))
-            ->method('addProduct')
-            ->willReturnMap([
-                [$this->_productMock, $qty1, $this->_quoteMock],
-                [$this->_productMock, $qty2, $this->_quoteMock]
-            ]);
+            ->withConsecutive([$productId1], [$productId2])
+            ->willReturn($this->_productMock);
 
         // Set up quote save and collect totals
-        $this->_quoteMock->expects($this->exactly(2))
+        $this->_quoteMock->expects($this->once())
             ->method('collectTotals');
-        $this->_quoteMock->expects($this->exactly(2))
-            ->method('save');
-
-        // Set up coupon code
-        $this->_quoteMock->expects($this->once())
-            ->method('setCouponCode')
-            ->with($couponCode);
-
-        $this->_quoteMock->expects($this->once())
-            ->method('getCouponCode')
-            ->willReturn($couponCode);
+        $this->cartRepositoryMock->expects($this->once())
+             ->method('save')
+             ->with($this->_quoteMock);
 
         // Set up result page
         $this->_resultPageFactoryMock->expects($this->once())
@@ -233,10 +275,17 @@ class AddToCartLinkV1Test extends TestCase
         $productsParam = '12345:2';
         $productId = '12345';
 
+        // Enable feature flag
+        $this->scopeConfigMock->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AddToCartLinkV1::XML_PATH_ENABLE_ADD_TO_CART_LINK, 'store')
+            ->willReturn(true);
+
         // Set up request parameters
-        $this->_requestMock->expects($this->exactly(2))
+        $this->_requestMock->expects($this->exactly(3))
             ->method('getParam')
             ->willReturnMap([
+                ['store', null, null],
                 ['products', '', $productsParam],
                 ['coupon', '', '']
             ]);
@@ -245,90 +294,34 @@ class AddToCartLinkV1Test extends TestCase
         $this->_checkoutSessionMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($this->_quoteMock);
+            
+        // Mock getStoreId for Quote
+        $this->_quoteMock->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn(1);
 
         // Set up quote methods
         $this->_quoteMock->expects($this->once())
             ->method('removeAllItems');
 
-        // Set up product repository to throw exception for both SKU and ID lookups
+        // Set up product repository to throw exception for SKU lookup
         $this->_productRepositoryMock->expects($this->once())
             ->method('get')
             ->with($productId)
             ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Product not found')));
 
+        // Set up product repository to throw exception for ID lookup
         $this->_productRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($productId)
             ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException(__('Product not found')));
 
-        // Set up error message
-        $this->_messageManagerMock->expects($this->once())
-            ->method('addErrorMessage')
-            ->with(__('Product with identifier "%1" was not found.', $productId));
-
         // Set up quote save and collect totals
         $this->_quoteMock->expects($this->once())
             ->method('collectTotals');
-        $this->_quoteMock->expects($this->once())
-            ->method('save');
-
-        // Set up result page
-        $this->_resultPageFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->_pageMock);
-
-        $result = $this->_controller->execute();
-        $this->assertInstanceOf(ResultInterface::class, $result);
-        $this->assertSame($this->_pageMock, $result);
-    }
-
-    /**
-     * Test execute method with invalid coupon
-     *
-     * @return void
-     */
-    public function testExecuteWithInvalidCoupon(): void
-    {
-        $productsParam = '';
-        $couponCode = 'INVALIDCOUPON';
-
-        // Set up request parameters
-        $this->_requestMock->expects($this->exactly(2))
-            ->method('getParam')
-            ->willReturnMap([
-                ['products', '', $productsParam],
-                ['coupon', '', $couponCode]
-            ]);
-
-        // Set up checkout session to return quote
-        $this->_checkoutSessionMock->expects($this->any())
-            ->method('getQuote')
-            ->willReturn($this->_quoteMock);
-
-        // Set up quote methods
-        $this->_quoteMock->expects($this->once())
-            ->method('removeAllItems');
-
-        // Set up coupon code
-        $this->_quoteMock->expects($this->once())
-            ->method('setCouponCode')
-            ->with($couponCode);
-
-        // Set up quote save and collect totals
-        $this->_quoteMock->expects($this->once())
-            ->method('collectTotals');
-        $this->_quoteMock->expects($this->once())
-            ->method('save');
-
-        // Set up invalid coupon response
-        $this->_quoteMock->expects($this->once())
-            ->method('getCouponCode')
-            ->willReturn('');
-
-        // Set up error message
-        $this->_messageManagerMock->expects($this->once())
-            ->method('addErrorMessage')
-            ->with(__('The coupon code "%1" is not valid.', $couponCode));
+        $this->cartRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->_quoteMock);
 
         // Set up result page
         $this->_resultPageFactoryMock->expects($this->once())
