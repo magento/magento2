@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -353,10 +354,13 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             if ($value === null) {
                 return $optionValue;
             }
+            $optionId = str_replace(AbstractType::OPTION_PREFIX, '', $this->getConfigurationItemOption()->getCode());
             $customOptionUrlParams = $this->getCustomOptionUrlParams()
                 ? $this->getCustomOptionUrlParams()
                 : [
                     'id' => $this->getConfigurationItemOption()->getId(),
+                    'item' => $this->getConfigurationItemOption()->getItemId(),
+                    'option' => $optionId,
                     'key' => $value['secret_key']
                 ];
 
