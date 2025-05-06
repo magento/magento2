@@ -105,11 +105,15 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
         }
 
         if ($optionData) {
-            $info = $this->serializer->unserialize($optionData);
-            if ($this->getRequest()->getParam('key') != $info['secret_key']) {
+            try {
+                $info = $this->serializer->unserialize($optionData);
+                if ($this->getRequest()->getParam('key') != $info['secret_key']) {
+                    return $resultForward->forward('noroute');
+                }
+                return $this->download->createResponse($info);
+            } catch (\Exception $e) {
                 return $resultForward->forward('noroute');
             }
-            return $this->download->createResponse($info);
         }
         return $resultForward->forward('noroute');
         $this->endExecute();
