@@ -250,6 +250,7 @@ type ShipmentTracking @doc(description: "Contains order shipment tracking detail
 type OrderPaymentMethod @doc(description: "Contains details about the payment method used to pay for the order.") {
     name: String! @doc(description: "The label that describes the payment method.")
     type: String! @doc(description: "The payment method code that indicates how the order was paid for.")
+    order_place_redirect_url: String @doc(description: "Checkout order place redirect URL") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Order\\OrderPayments\\QuoteOrderPlaceRedirectUrl")
     additional_data: [KeyValue] @doc(description:  "Additional data per payment method type.")
 }
 

@@ -367,6 +367,7 @@ type AvailablePaymentMethod @doc(description: "Describes a payment method that t
 type SelectedPaymentMethod @doc(description: "Describes the payment method the shopper selected.") {
     code: String! @doc(description: "The payment method code.")
     title: String! @doc(description: "The payment method title.")
+    order_place_redirect_url: String @doc(description: "Checkout order place redirect URL")
     purchase_order_number: String @doc(description: "The purchase order number.")
 }
 
