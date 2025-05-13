@@ -269,7 +269,7 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('OPTIONS');
         $response = $this->graphql->dispatch($this->request);
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals(204, $response->getStatusCode());
         self::assertEmpty($response->getContent());
     }
 

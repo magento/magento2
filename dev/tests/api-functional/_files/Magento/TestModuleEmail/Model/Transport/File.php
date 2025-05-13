@@ -63,10 +63,10 @@ class File implements TransportInterface
         $config = $this->json->unserialize($directory->readFile(self::CONFIG_FILE));
         $directory = $this->filesystem->getDirectoryWrite($config['directory']);
         $mail = $message->toString();
-        $addresses = $this->message->getHeaders()->get('To')?->getAddresses() ?? [];
+        $addresses = $message->getHeaders()->get('To')?->getAddresses() ?? [];
         foreach ($addresses as $address) {
             $index = 1;
-            $filename = preg_replace('/[^a-z0-9_]/', '__', strtolower($address->getEmail()));
+            $filename = preg_replace('/[^a-z0-9_]/', '__', strtolower($address->getAddress()));
             $basePath = $config['path']. DIRECTORY_SEPARATOR . $filename;
             $path = $basePath . '.eml';
             while ($directory->isExist($path)) {

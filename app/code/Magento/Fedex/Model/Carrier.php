@@ -717,7 +717,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INTERNATIONAL_ECONOMY_FREIGHT' => __('Intl Economy Freight'),
                 'INTERNATIONAL_FIRST' => __('International First'),
                 'INTERNATIONAL_GROUND' => __('International Ground'),
-                'INTERNATIONAL_PRIORITY' => __('International Priority'),
+                'FEDEX_INTERNATIONAL_PRIORITY' => __('International Priority'),
+                'FEDEX_INTERNATIONAL_PRIORITY_EXPRESS' => __('International Priority Express'),
+                'FEDEX_FIRST' => __('First'),
+                'FEDEX_PRIORITY' => __('Priority'),
+                'FEDEX_PRIORITY_EXPRESS' => __('Priority Express'),
+                'FEDEX_PRIORITY_EXPRESS_FREIGHT' => __('Priority Express Freight'),
+                'FEDEX_PRIORITY_FREIGHT' => __('Priority Freight'),
+                'FEDEX_ECONOMY_SELECT' => __('Economy Select'),
                 'INTERNATIONAL_PRIORITY_FREIGHT' => __('Intl Priority Freight'),
                 'PRIORITY_OVERNIGHT' => __('Priority Overnight'),
                 'SMART_POST' => __('Smart Post'),
@@ -756,7 +763,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             ],
                         ],
                         'from_us' => [
-                            'method' => ['INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY'],
+                            'method' => [
+                                'INTERNATIONAL_FIRST',
+                                'INTERNATIONAL_ECONOMY',
+                                'FEDEX_INTERNATIONAL_PRIORITY'
+                            ],
                         ],
                     ],
                 ],
@@ -778,7 +789,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             ],
                         ],
                         'from_us' => [
-                            'method' => ['INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY'],
+                            'method' => [
+                                'INTERNATIONAL_FIRST',
+                                'INTERNATIONAL_ECONOMY',
+                                'FEDEX_INTERNATIONAL_PRIORITY'
+                            ],
                         ],
                     ],
                 ],
@@ -786,7 +801,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'containers' => ['FEDEX_10KG_BOX', 'FEDEX_25KG_BOX'],
                     'filters' => [
                         'within_us' => [],
-                        'from_us' => ['method' => ['INTERNATIONAL_PRIORITY']],
+                        'from_us' => ['method' => ['FEDEX_INTERNATIONAL_PRIORITY']],
                     ],
                 ],
                 [
@@ -814,7 +829,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             'method' => [
                                 'INTERNATIONAL_FIRST',
                                 'INTERNATIONAL_ECONOMY',
-                                'INTERNATIONAL_PRIORITY',
+                                'FEDEX_INTERNATIONAL_PRIORITY',
+                                'FEDEX_INTERNATIONAL_PRIORITY_EXPRESS',
                                 'INTERNATIONAL_GROUND',
                                 'FEDEX_FREIGHT',
                                 'FEDEX_1_DAY_FREIGHT',

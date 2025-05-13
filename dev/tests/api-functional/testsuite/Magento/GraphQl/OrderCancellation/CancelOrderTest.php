@@ -136,7 +136,7 @@ MUTATION,
             $this->graphQlMutation(
                 $this->getCancelOrderMutationWithErrorV2(
                     $this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId()),
-                    "Sample reason"
+                    "Other"
                 ),
                 [],
                 '',
@@ -163,7 +163,7 @@ MUTATION,
         mutation {
             cancelOrder(
               input: {
-                reason: "Cancel sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -516,7 +516,7 @@ MUTATION,
         $this->assertEquals("Order cancellation notification email was sent.", $comment->getComment());
 
         $comment = array_pop($comments);
-        $this->assertEquals('Cancel sample reason', $comment->getComment());
+        $this->assertEquals('Other', $comment->getComment());
         $this->assertEquals('canceled', $comment->getStatus());
     }
 
@@ -559,7 +559,7 @@ MUTATION,
         $this->assertEquals("Order cancellation notification email was sent.", $comment->getComment());
 
         $comment = array_pop($comments);
-        $this->assertEquals('Cancel sample reason', $comment->getComment());
+        $this->assertEquals('Other', $comment->getComment());
         $this->assertEquals('closed', $comment->getStatus());
     }
 
@@ -638,7 +638,7 @@ MUTATION,
         $this->assertEquals("Order cancellation notification email was sent.", $comment->getComment());
 
         $comment = array_pop($comments);
-        $this->assertEquals('Cancel sample reason', $comment->getComment());
+        $this->assertEquals('Other', $comment->getComment());
         $this->assertEquals('closed', $comment->getStatus());
     }
 
@@ -658,10 +658,10 @@ MUTATION,
             [
                 'cancelOrder' =>
                     [
-                        'errorV2' => null,
-                        'order' => [
-                            'status' => 'Closed'
-                        ]
+                        'errorV2' => [
+                            'message' => 'Order cancellation reason is invalid.'
+                        ],
+                        'order' => null
                     ]
             ],
             $this->graphQlMutation(
@@ -674,11 +674,6 @@ MUTATION,
                 $this->getCustomerAuthHeaders()
             )
         );
-
-        $comments = $order->getStatusHistories();
-        $comment = reset($comments);
-        $this->assertEquals('&lt;script&gt;while(true){alert(666);}&lt;/script&gt;', $comment->getComment());
-        $this->assertEquals('closed', $comment->getStatus());
     }
 
     #[
@@ -742,7 +737,7 @@ MUTATION,
         $this->assertEquals("Order cancellation notification email was sent.", $comment->getComment());
 
         $comment = array_pop($comments);
-        $this->assertEquals('Cancel sample reason', $comment->getComment());
+        $this->assertEquals('Other', $comment->getComment());
         $this->assertEquals('canceled', $comment->getStatus());
     }
 
@@ -759,7 +754,7 @@ MUTATION,
             cancelOrder(
               input: {
                 order_id: "{$orderId}"
-                reason: "Sample reason"
+                reason: "Other"
               }
             ){
                 error
@@ -778,7 +773,7 @@ MUTATION;
      * @param string $reason
      * @return string
      */
-    private function getCancelOrderMutationWithErrorV2(string $orderId, string $reason = "Cancel sample reason"): string
+    private function getCancelOrderMutationWithErrorV2(string $orderId, string $reason = "Other"): string
     {
         return <<<MUTATION
         mutation {

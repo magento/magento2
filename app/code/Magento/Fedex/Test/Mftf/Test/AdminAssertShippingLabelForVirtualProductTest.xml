@@ -15,6 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-9286"/>
             <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="defaultVirtualProduct" after="createProduct" stepKey="initialVirtualProduct">
