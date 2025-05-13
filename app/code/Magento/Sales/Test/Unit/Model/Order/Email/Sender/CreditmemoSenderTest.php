@@ -19,7 +19,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * Test for Magento\Sales\Model\Order\Email\Sender\CreditmemoSender class.
  */
-class CreditmemoSenderTest extends AbstractSenderTest
+class CreditmemoSenderTest extends AbstractSenderTestCase
 {
     private const CREDITMEMO_ID = 1;
 
@@ -221,9 +221,14 @@ class CreditmemoSenderTest extends AbstractSenderTest
         } else {
             $this->creditmemoResourceMock
                 ->method('saveAttribute')
-                ->withConsecutive(
-                    [$this->creditmemoMock, 'email_sent'],
-                    [$this->creditmemoMock, 'send_email']
+                ->willReturnCallback(
+                    function ($arg1, $arg2) {
+                        if ($arg1 === $this->creditmemoMock && $arg2 === 'email_sent') {
+                            return null;
+                        } elseif ($arg1 === $this->creditmemoMock && $arg2 === 'send_email') {
+                            return null;
+                        }
+                    }
                 );
 
             $this->assertFalse(
@@ -235,7 +240,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendDataProvider(): array
+    public static function sendDataProvider(): array
     {
         return [
             [0, 0, 1, true],
@@ -346,7 +351,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendVirtualOrderDataProvider(): array
+    public static function sendVirtualOrderDataProvider(): array
     {
         return [
             [true, 1, null],

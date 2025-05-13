@@ -48,7 +48,7 @@ class GroupTest extends TestCase
         $mockBuilder = $this->getMockBuilder(
             CollectionFactory::class
         );
-        $mock = $mockBuilder->setMethods(['create'])
+        $mock = $mockBuilder->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

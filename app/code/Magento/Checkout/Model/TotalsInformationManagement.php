@@ -6,6 +6,8 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Checkout\Api\Data\TotalsInformationInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\CartTotalRepositoryInterface;
 
 /**
  * Class for management of totals information.
@@ -13,25 +15,25 @@ use Magento\Checkout\Api\Data\TotalsInformationInterface;
 class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInformationManagementInterface
 {
     /**
-     * @var \Magento\Quote\Api\CartTotalRepositoryInterface
+     * @var CartTotalRepositoryInterface
      */
     protected $cartTotalRepository;
 
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $cartRepository;
 
     /**
-     * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
-     * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalRepository
+     * @param CartRepositoryInterface $cartRepository
+     * @param CartTotalRepositoryInterface $cartTotalRepository
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
-        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalRepository
+        CartRepositoryInterface $cartRepository,
+        CartTotalRepositoryInterface $cartTotalRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->cartTotalRepository = $cartTotalRepository;
@@ -66,6 +68,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
                 }
                 $quoteShippingAddress->setCollectShippingRates(true)
                     ->setShippingMethod($shippingMethod);
+                $quoteShippingAddress->save();
             }
         }
         $quote->collectTotals();

@@ -16,8 +16,6 @@ use Magento\Store\Model\Store;
 class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Catalog data
-     *
      * @var Data
      */
     protected $_catalogData = null;
@@ -66,15 +64,11 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
                 ]
             );
 
-            $title = [];
             $path = $this->_catalogData->getBreadcrumbPath();
 
             foreach ($path as $name => $breadcrumb) {
                 $breadcrumbsBlock->addCrumb($name, $breadcrumb);
-                $title[] = $breadcrumb['label'];
             }
-
-            $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($title)));
         }
         return parent::_prepareLayout();
     }

@@ -10,13 +10,12 @@ namespace Magento\Framework\Webapi;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\HTTP\PhpEnvironment\Response;
-use Magento\Framework\ObjectManager\RegisterShutdownInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Request dependent Error Processor
  */
-class RequestAwareErrorProcessor extends ErrorProcessor implements RegisterShutdownInterface
+class RequestAwareErrorProcessor extends ErrorProcessor
 {
     /**
      * @var Request
@@ -42,9 +41,9 @@ class RequestAwareErrorProcessor extends ErrorProcessor implements RegisterShutd
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        Json $serializer = null,
-        Request $request = null,
-        Response $response = null
+        ?Json $serializer = null,
+        ?Request $request = null,
+        ?Response $response = null
     ) {
         $this->request = $request ?: ObjectManager::getInstance()->get(Request::class);
         $this->response = $response ?: ObjectManager::getInstance()->get(Response::class);
@@ -82,13 +81,5 @@ class RequestAwareErrorProcessor extends ErrorProcessor implements RegisterShutd
         }
         // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
         echo $output;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function registerShutdown()
-    {
-        $this->apiShutdownFunction();
     }
 }

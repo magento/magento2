@@ -1,0 +1,66 @@
+varnishtest "Compression handling"
+
+server s1 {
+    # first request will be the probe, handle it and be on our way
+    rxreq
+    expect req.url == "/health_check.php"
+    txresp
+
+    # the probe expects the connection to close
+    close
+    accept
+
+    # reply with a 200
+    loop 4 {
+        rxreq
+        txresp -hdr "answer-to: POST"
+    }
+
+    rxreq
+    txresp -hdr "answer-to: GET"
+} -start
+
+# generate usable VCL pointing towards s1
+# mostly, we replace the place-holders, but we also jack up the probe
+# interval to avoid further interference
+shell {
+    # testdir is automatically set to the directory containing the present vtc
+    sed \
+        -e 's@\.interval = 5s;@.interval = 5m; .initial = 10;@' \
+        -e 's@/\* {{ host }} \*/@${s1_addr}@' \
+        -e 's@/\* {{ port }} \*/@${s1_port}@' \
+        -e 's@/\* {{ ssl_offloaded_header }} \*/@unused@' \
+        -e 's@/\* {{ grace_period }} \*/@0@' \
+        ${testdir}/../../../app/code/Magento/PageCache/etc/varnish6.vcl > ${tmpdir}/output.vcl
+}
+
+# little trick here: we leverage the fact that subroutines with the same name
+# are concatenated in the order they are seen. This allows us to tweak the
+# backend response before the official VCL processes it, so we can tell
+# client c1 which AE header was sent to the backend
+varnish v1 -vcl {
+    sub vcl_backend_response {
+        set beresp.http.sent-accept-encoding = bereq.http.accept-encoding;
+    }
+    include "${tmpdir}/output.vcl";
+}-start
+
+# make sur ethe probe request fired
+delay 1
+
+client c1 {
+    # Uncacheable (it's a POST), Varnish should send it verbatim to s1
+    txreq -method "POST" -hdr "accept-encoding: something completely random"
+    rxresp
+    expect resp.http.sent-accept-encoding == "something completely random"
+
+    # cacheable GET
+    txreq -hdr "accept-encoding: will be overridden"
+    rxresp
+    expect resp.http.sent-accept-encoding == "gzip"
+
+    # same thing, but the extension suggest an already compressed response
+    txreq -url "/foo.tgz" -hdr "accept-encoding: will be overridden"
+    rxresp
+    expect resp.http.sent-accept-encoding == "gzip"
+} -run

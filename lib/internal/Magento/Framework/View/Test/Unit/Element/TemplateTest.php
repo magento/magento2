@@ -167,8 +167,7 @@ class TemplateTest extends TestCase
             ->willReturn(false);
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception)
-            ->willReturn(null);
+            ->with($exception);
         $this->assertEquals($output, $this->block->fetchView($template));
     }
 

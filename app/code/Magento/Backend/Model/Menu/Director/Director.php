@@ -6,6 +6,10 @@
 
 namespace Magento\Backend\Model\Menu\Director;
 
+use Magento\Backend\Model\Menu\Builder;
+use Magento\Backend\Model\Menu\Builder\AbstractCommand;
+use Psr\Log\LoggerInterface;
+
 /**
  * @api
  * @since 100.0.2
@@ -23,14 +27,14 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * Get command object
      *
      * @param array $data command params
-     * @param \Psr\Log\LoggerInterface $logger
-     * @return \Magento\Backend\Model\Menu\Builder\AbstractCommand
+     * @param LoggerInterface $logger
+     * @return AbstractCommand
      */
     protected function _getCommand($data, $logger)
     {
         $command = $this->_commandFactory->create($data['type'], ['data' => $data]);
         if (isset($this->_messagePatterns[$data['type']])) {
-            $logger->info(
+            $logger->debug(
                 sprintf($this->_messagePatterns[$data['type']], $command->getId())
             );
         }
@@ -41,14 +45,14 @@ class Director extends \Magento\Backend\Model\Menu\AbstractDirector
      * Build menu instance
      *
      * @param array $config
-     * @param \Magento\Backend\Model\Menu\Builder $builder
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param Builder $builder
+     * @param LoggerInterface $logger
      * @return void
      */
     public function direct(
         array $config,
-        \Magento\Backend\Model\Menu\Builder $builder,
-        \Psr\Log\LoggerInterface $logger
+        Builder $builder,
+        LoggerInterface $logger
     ) {
         foreach ($config as $data) {
             $builder->processCommand($this->_getCommand($data, $logger));

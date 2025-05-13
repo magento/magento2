@@ -147,4 +147,61 @@
     <entity name="SecondTaxRateTexas" extends="TaxRateTexas">
         <data key="rate">0.125</data>
     </entity>
+    <entity name="ThirdTaxRateTexas" extends="TaxRateTexas">
+        <data key="rate">20</data>
+    </entity>
+    <entity name="TaxRateCalifornia" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_region">CA</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.2500</data>
+    </entity>
+    <entity name="Product_Rate_CA" type="taxRate">
+        <data key="code">Product Rate CA</data>
+        <data key="tax_region">CA</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">10.0000</data>
+    </entity>
+    <entity name="Product_Rate_NY" type="taxRate">
+        <data key="code">Product Rate NY</data>
+        <data key="tax_region">NY</data>
+        <data key="tax_region_id">43</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">7.0000</data>
+    </entity>
+    <entity name="Shipping_Rate_NY" type="taxRate">
+        <data key="code">Shipping Rate NY</data>
+        <data key="tax_region">NY</data>
+        <data key="tax_region_id">43</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">3.0000</data>
+    </entity>
+    <entity name="Shipping_Rate_CA" type="taxRate">
+        <data key="code">Shipping Rate CA</data>
+        <data key="tax_region">CA</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">5.0000</data>
+    </entity>
+    <entity name="US_CA_Rate_20" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_region">CA</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">20</data>
+    </entity>
 </entities>

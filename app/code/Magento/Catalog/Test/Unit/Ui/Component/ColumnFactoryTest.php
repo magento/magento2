@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -132,15 +133,15 @@ class ColumnFactoryTest extends TestCase
      *
      * @return array
      */
-    public function filterModifiersProvider(): array
+    public static function filterModifiersProvider(): array
     {
         return [
             'without' => [
-                'filter_modifiers' => [],
+                'filterModifiers' => [],
                 'filter' => null,
             ],
             'with' => [
-                'filter_modifiers' => [
+                'filterModifiers' => [
                     'color' => [
                         'condition_type' => 'notnull',
                     ],
@@ -229,13 +230,13 @@ class ColumnFactoryTest extends TestCase
      *
      * @return array
      */
-    public function createDateColumnDataProvider(): array
+    public static function createDateColumnDataProvider(): array
     {
         return [
             [
                 'frontendInput' => 'date',
                 'showsTime' => false,
-                'dateFormat' => 'date_format',
+                'expectedDateFormat' => 'date_format',
                 'expectedTimezone' => 'default_timezone',
             ],
             [

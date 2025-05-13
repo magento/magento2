@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2024 Adobe
+All Rights Reserved.
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReportsOrderProductsDatePickerTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Calendar Date Button"/>
+            <title value="Admin Ordered Products Report date range visibility issue."/>
+            <description value="Admin Ordered Products Report date range visibility issue."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-12188"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsOrderedPage">
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsProductsOrdered.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuReportsProductsOrdered.pageTitle}}"/>
+        </actionGroup>
+        <click selector="{{OrderedProductsSection.refresh}}" stepKey="refresh"/>
+        <waitForPageLoad time="5" stepKey="waitForOrderList"/>
+        <click selector="{{OrderReportMainSection.fromDatePicker}}" stepKey="clickFromDatePicker"/>
+        <waitForElementVisible selector="{{OrderReportMainSection.datePickerCalendar}}" stepKey="seePopupDatePicker"/>
+        <click selector="{{OrderReportMainSection.selectTodayButton}}" stepKey="clickOnTodayButton"/>
+        <click selector="{{OrderReportMainSection.selectCloseButton}}" stepKey="clickOnCloseButton"/>
+
+        <!-- Verify data -->
+        <grabValueFrom selector="{{SoldReportFilterSection.dateTo}}" stepKey="fillToDate"/>
+        <assertNotEmpty stepKey="assertToDateNotEmpty">
+            <actualResult type="variable">$fillToDate</actualResult>
+        </assertNotEmpty>
+    </test>
+</tests>

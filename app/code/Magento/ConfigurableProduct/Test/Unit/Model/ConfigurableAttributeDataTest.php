@@ -91,7 +91,8 @@ class ConfigurableAttributeDataTest extends TestCase
 
         $productAttributeMock = $this->getMockBuilder(\Magento\Catalog\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreLabel', 'getAttributeCode', 'getId', 'getAttributeLabel'])
+            ->addMethods(['getAttributeLabel'])
+            ->onlyMethods(['getStoreLabel', 'getAttributeCode', 'getId'])
             ->getMock();
         $productAttributeMock->expects($this->once())
             ->method('getId')
@@ -104,7 +105,8 @@ class ConfigurableAttributeDataTest extends TestCase
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['getProductAttribute', 'getLabel', 'getOptions', 'getAttributeId', 'getPosition'])
+            ->addMethods(['getProductAttribute'])
+            ->onlyMethods(['getLabel', 'getOptions', 'getAttributeId', 'getPosition'])
             ->getMock();
         $attributeMock->expects($this->once())
             ->method('getProductAttribute')

@@ -35,7 +35,7 @@ class AbstractCollectionTest extends TestCase
 
         $resource = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->getMockForAbstractClass();
         $resource->method('getConnection')->willReturn($connection);
 

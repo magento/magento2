@@ -30,20 +30,6 @@ use Jose\Component\Signature\Algorithm\RS512;
 class JwsAlgorithmManagerFactory
 {
     /**
-     * @var AlgorithmProviderFactory
-     */
-    private AlgorithmProviderFactory $algorithmProviderFactory;
-
-    /**
-     * Default constructor.
-     * @param AlgorithmProviderFactory $algorithmProviderFactory
-     */
-    public function __construct(AlgorithmProviderFactory $algorithmProviderFactory)
-    {
-        $this->algorithmProviderFactory = $algorithmProviderFactory;
-    }
-
-    /**
      * Returns the list of names of supported algorithms.
      *
      * @return AlgorithmManager

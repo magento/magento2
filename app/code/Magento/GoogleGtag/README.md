@@ -21,7 +21,6 @@ A lot of functionality in the module is on JavaScript, use [mixins](https://deve
 ### Layouts
 
 This module introduces the following layouts in the `view/frontend/layout` directory:
-
 - `default`
 - `checkout_onepage_success`
 
@@ -29,4 +28,4 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 
 ## Additional information
 
-[Learn how to configure Google Analytics](https://docs.magento.com/user-guide/marketing/google-universal-analytics.html).
+[Learn how to configure Google Analytics](https://experienceleague.adobe.com/docs/commerce-admin/marketing/google-tools/google-analytics.html).

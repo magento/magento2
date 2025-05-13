@@ -21,17 +21,17 @@
         </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSTypeSystem}}" userInput="disabled" stepKey="grabUPSTypeDisabled"/>
         <assertEquals stepKey="assertUPSTypeDisabled">
-			<actualResult type="const">$grabUPSTypeDisabled</actualResult>
-			<expectedResult type="string">true</expectedResult>
+            <actualResult type="const">$grabUPSTypeDisabled</actualResult>
+            <expectedResult type="string">true</expectedResult>
         </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSAccountLive}}" userInput="disabled" stepKey="grabUPSAccountLiveDisabled"/>
         <assertEquals stepKey="assertUPSAccountLiveDisabled">
 			<actualResult type="const">$grabUPSAccountLiveDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
         </assertEquals>
-        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSGatewayXMLUrl}}" userInput="disabled" stepKey="grabUPSGatewayXMLUrlDisabled"/>
-        <assertEquals stepKey="assertUPSGatewayXMLUrlDisabled">
-			<actualResult type="const">$grabUPSGatewayXMLUrlDisabled</actualResult>
+        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSGatewayXMLUrl}}" userInput="disabled" stepKey="grabUPSGatewayUrlDisabled"/>
+        <assertEquals stepKey="assertUPSGatewayUrlDisabled">
+			<actualResult type="const">$grabUPSGatewayUrlDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
         </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSModeXML}}" userInput="disabled" stepKey="grabUPSModeXMLDisabled"/>
@@ -74,9 +74,9 @@
 			<actualResult type="const">$grabUPSDestTypeDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
         </assertEquals>
-        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSTrackingXmlUrl}}" userInput="disabled" stepKey="grabUPSTrackingXmlUrlDisabled"/>
-        <assertEquals stepKey="assertUPSTrackingXmlUrlDisabled">
-			<actualResult type="const">$grabUPSTrackingXmlUrlDisabled</actualResult>
+        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSTrackingUrl}}" userInput="disabled" stepKey="grabUPSTrackingUrlDisabled"/>
+        <assertEquals stepKey="assertUPSTrackingUrlDisabled">
+			<actualResult type="const">$grabUPSTrackingUrlDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
         </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSUnitOfMeasure}}" userInput="disabled" stepKey="grabUPSUnitOfMeasureDisabled"/>

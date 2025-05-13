@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All rights reserved.
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -293,7 +293,7 @@
                         <scopeLabel>[GLOBAL]</scopeLabel>
                         <validation>
                             <rule name="validate-number" xsi:type="boolean">true</rule>
-                            <rule name="validate-greater-than-zero" xsi:type="boolean">true</rule>
+                            <rule name="validate-nonempty-number-greater-than-zero" xsi:type="boolean">true</rule>
                         </validation>
                         <label translate="true">Maximum Qty Allowed in Shopping Cart</label>
                         <dataScope>max_sale_qty</dataScope>

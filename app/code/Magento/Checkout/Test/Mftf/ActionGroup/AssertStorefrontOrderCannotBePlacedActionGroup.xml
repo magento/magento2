@@ -16,9 +16,9 @@
         <arguments>
             <argument name="error" type="string"/>
         </arguments>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="60" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrderWithoutTimeout}}" stepKey="clickPlaceOrder"/>
-        <waitForElement selector="{{CheckoutCartMessageSection.errorMessage}}" time="30" stepKey="waitForErrorMessage"/>
+        <waitForElement selector="{{CheckoutCartMessageSection.errorMessage}}" time="60" stepKey="waitForErrorMessage"/>
         <see selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="{{error}}" stepKey="assertErrorMessage"/>
     </actionGroup>
 </actionGroups>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="ConfigPayPalStandardNewSuite">
+        <before>
+            <!-- Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Config PayPal Standard-->
+            <actionGroup ref="AdminPayPalStandardEnableForGuestCheckoutActionGroup" stepKey="ConfigPayPalStandard"/>
+            <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentAction"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Cleanup PayPal Standard configurations -->
+            <magentoCLI command="config:set {{DisablePaypalPayStandardNew.path}} {{DisablePaypalPayStandardNew.value}}" stepKey="disablePayPalStandard"/>
+            <magentoCLI command="config:set {{StorefrontPaypalStandardAuthorizationPaymentActionOptionConfigDataToDefaultValue.path}} {{StorefrontPaypalStandardAuthorizationPaymentActionOptionConfigDataToDefaultValue.value}}" stepKey="setPaymentActionToOrder"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+        <include>
+            <group name="paypalStandard"/>
+        </include>
+    </suite>
+</suites>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertCategoryCountInCategoryTreeWidgetActionGroup">
+        <annotations>
+            <description>This action group verifies that the total number of expanded categories in the admin category tree widget matches the provided expected count.</description>
+        </annotations>
+        <arguments>
+            <argument name="ExpectedCount" type="string" defaultValue="1"/>
+        </arguments>
+        <grabMultiple selector="{{CmsNewWidgetUpdateLayoutSection.CountAllNestedCat}}" stepKey="countNestedCategory"/>
+        <assertCount stepKey="check">
+            <expectedResult type="int">{{ExpectedCount}}</expectedResult>
+            <actualResult type="variable">countNestedCategory</actualResult>
+        </assertCount>
+    </actionGroup>
+</actionGroups>

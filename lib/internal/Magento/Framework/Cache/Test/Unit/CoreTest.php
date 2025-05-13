@@ -11,8 +11,13 @@ declare(strict_types=1);
 namespace Magento\Framework\Cache\Test\Unit;
 
 use Magento\Framework\Cache\Backend\Decorator\AbstractDecorator;
+use Magento\Framework\Cache\Backend\Redis;
 use Magento\Framework\Cache\Core;
+use Magento\Framework\Cache\Frontend\Adapter\Zend;
+use Magento\Framework\Cache\Frontend\Decorator\Bare;
+use Magento\Framework\Cache\FrontendInterface;
 use PHPUnit\Framework\TestCase;
+use Zend_Cache_Exception;
 
 class CoreTest extends TestCase
 {
@@ -69,7 +74,7 @@ class CoreTest extends TestCase
     /**
      * @return array
      */
-    public function setBackendExceptionProvider()
+    public static function setBackendExceptionProvider()
     {
         return [
             'string' => ['string'],
@@ -198,5 +203,34 @@ class CoreTest extends TestCase
 
         $result = $frontend->getIdsNotMatchingTags($tags);
         $this->assertEquals($ids, $result);
+    }
+
+    public function testLoadAllowsToUseCurlyBracketsInPrefixOnRedisBackend()
+    {
+        $id = 'abc';
+
+        $mockBackend = $this->createMock(Redis::class);
+        $core = new Core([
+            'cache_id_prefix' => '{prefix}_'
+        ]);
+        $core->setBackend($mockBackend);
+
+        $core->load($id);
+        $this->assertNull(null);
+    }
+
+    public function testLoadNotAllowsToUseCurlyBracketsInPrefixOnNonRedisBackend()
+    {
+        $id = 'abc';
+
+        $core = new Core([
+            'cache_id_prefix' => '{prefix}_'
+        ]);
+        $core->setBackend($this->_mockBackend);
+
+        $this->expectException(Zend_Cache_Exception::class);
+        $this->expectExceptionMessage("Invalid id or tag '{prefix}_abc' : must use only [a-zA-Z0-9_]");
+
+        $core->load($id);
     }
 }

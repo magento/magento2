@@ -59,6 +59,7 @@
 
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <deleteData createDataKey="createBundleProduct" stepKey="deleteProduct"/>
@@ -78,7 +79,7 @@
             <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad"/>
-        
+
         <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
             <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>

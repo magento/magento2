@@ -48,7 +48,9 @@
                 <argument name="customStore" value="storeViewData2"/>
             </actionGroup>
 
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!--Create Second website,store and 2 store views-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite" >

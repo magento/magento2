@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,6 @@ use Magento\EavGraphQl\Model\Output\Value\GetAttributeValueInterface;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\GraphQl\Query\Uid;
-use Magento\EavGraphQl\Model\Uid as EavUid;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Item;
@@ -79,6 +78,7 @@ class ExtractQuoteAddressData
                     'region_id'=> $address->getRegionId()
                 ],
                 'uid' => $this->uidEncoder->encode((string)$address->getAddressId()) ,
+                'id' => $address->getCustomerAddressId(),
                 'street' => $address->getStreet(),
                 'items_weight' => $address->getWeight(),
                 'customer_notes' => $address->getCustomerNotes(),

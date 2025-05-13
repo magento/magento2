@@ -39,7 +39,8 @@ class StoreViewServiceTest extends TestCase
     {
         $this->config = $this->createMock(Config::class);
         $this->select = $this->getMockBuilder(DbSelect::class)
-            ->setMethods(['select', 'from', 'where', 'join'])
+            ->addMethods(['select'])
+            ->onlyMethods(['from', 'where', 'join'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
@@ -72,7 +73,7 @@ class StoreViewServiceTest extends TestCase
     /**
      * @return array
      */
-    public function overriddenUrlKeyForStoreDataProvider()
+    public static function overriddenUrlKeyForStoreDataProvider()
     {
         return [
             [1, [1, 2], true],
@@ -93,7 +94,7 @@ class StoreViewServiceTest extends TestCase
         $productId = 'product_id';
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getBackendTable', 'getId', 'getEntity'])
+            ->onlyMethods(['__wakeup', 'getBackendTable', 'getId', 'getEntity'])
             ->getMockForAbstractClass();
         $this->config->expects($this->once())->method('getAttribute')->with($entityType, 'url_key')
             ->willReturn($attribute);

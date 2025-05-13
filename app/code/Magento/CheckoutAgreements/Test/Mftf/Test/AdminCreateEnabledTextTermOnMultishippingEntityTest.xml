@@ -27,7 +27,9 @@
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createdCustomer"/>
             <createData entity="SimpleTwo" stepKey="createdProduct1"/>
             <createData entity="SimpleTwo" stepKey="createdProduct2"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>

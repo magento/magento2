@@ -30,7 +30,7 @@ class NamespaceResolver
      * NamespaceResolver constructor.
      * @param ScalarTypesProvider $scalarTypesProvider
      */
-    public function __construct(ScalarTypesProvider $scalarTypesProvider = null)
+    public function __construct(?ScalarTypesProvider $scalarTypesProvider = null)
     {
         $this->scalarTypesProvider = $scalarTypesProvider ?: new ScalarTypesProvider();
     }

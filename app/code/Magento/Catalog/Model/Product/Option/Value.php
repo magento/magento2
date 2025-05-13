@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option;
@@ -83,10 +83,10 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory $valueCollectionFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CustomOptionPriceCalculator $customOptionPriceCalculator = null
+        ?CustomOptionPriceCalculator $customOptionPriceCalculator = null
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;
         $this->customOptionPriceCalculator = $customOptionPriceCalculator

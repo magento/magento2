@@ -31,7 +31,7 @@ class Fields implements ResetAfterRequestInterface
     /**
      * @param QueryParser|null $queryParser
      */
-    public function __construct(QueryParser $queryParser = null)
+    public function __construct(?QueryParser $queryParser = null)
     {
         $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }
@@ -44,7 +44,7 @@ class Fields implements ResetAfterRequestInterface
      *
      * @return void
      */
-    public function setQuery(DocumentNode|string $query, array $variables = null)
+    public function setQuery(DocumentNode|string $query, ?array $variables = null)
     {
         $queryFields = [];
         try {
@@ -101,8 +101,11 @@ class Fields implements ResetAfterRequestInterface
         foreach ($variables as $key => $value) {
             if (is_array($value)) {
                 $this->extractVariables($fields, $value);
+            } else {
+                if (is_string($key)) {
+                    $fields[$key] = $key;
+                }
             }
-            $fields[$key] = $key;
         }
     }
 

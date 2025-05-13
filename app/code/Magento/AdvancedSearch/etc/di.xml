@@ -40,4 +40,11 @@
         </arguments>
     </type>
     <preference for="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider" />
+    <type name="Magento\Search\Model\Autocomplete">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="10" xsi:type="object">Magento\AdvancedSearch\Model\DataProvider\AutocompleteSuggestions</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

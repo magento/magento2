@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Ui\Component\Listing;
 
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,9 @@ class AttributeRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->model = Bootstrap::getObjectManager()->create(AttributeRepository::class);
+        $indexerRegistry = Bootstrap::getObjectManager()->create(IndexerRegistry::class);
+        $indexer = $indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
     }
 
     /**

@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
 /**
  * Category chooser for Wysiwyg CMS widget
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Widget;
 
@@ -27,6 +26,8 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
     protected $_template = 'Magento_Catalog::catalog/category/widget/tree.phtml';
 
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()
@@ -152,7 +153,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         if (in_array($node->getId(), $this->getSelectedCategories())) {
             $item['checked'] = true;
         }
-        $item['is_anchor'] = (int)$node->getIsAnchor();
+        $item['is_anchor'] = $node->getIsAnchor() !== null ? (int) $node->getIsAnchor() : 1;
         $item['url_key'] = $node->getData('url_key');
         return $item;
     }

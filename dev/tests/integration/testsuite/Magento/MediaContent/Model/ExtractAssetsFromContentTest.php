@@ -60,7 +60,7 @@ class ExtractAssetsFromContentTest extends TestCase
      *
      * @return array
      */
-    public function contentProvider()
+    public static function contentProvider()
     {
         return [
             'Empty Content' => [
@@ -73,6 +73,12 @@ class ExtractAssetsFromContentTest extends TestCase
             ],
             'Relevant paths in content' => [
                 'content {{media url="testDirectory/path.jpg"}} content',
+                [
+                    2020
+                ]
+            ],
+            'Relevant paths in content without quotes' => [
+                'content {{media url=testDirectory/path.jpg}} content',
                 [
                     2020
                 ]

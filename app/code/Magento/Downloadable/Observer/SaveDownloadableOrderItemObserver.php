@@ -98,12 +98,8 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
         if ($purchasedLink->getId()) {
             return $this;
         }
-        $storeId = $orderItem->getOrder()->getStoreId();
-        $orderStatusToEnableItem = $this->_scopeConfig->getValue(
-            \Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        $storeId = $orderItem->getOrder()->getStoreId() !== null ? (int)$orderItem->getOrder()->getStoreId() : null;
+        $orderItemStatusToEnableDownload = $this->getEnableDownloadStatus($storeId);
         if (!$product) {
             $product = $this->_createProductModel()->setStoreId(
                 $storeId
@@ -136,8 +132,9 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
                     );
                 $linkPurchased->setLinkSectionTitle($linkSectionTitle)->save();
                 $linkStatus = \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING;
-                if ($orderStatusToEnableItem == \Magento\Sales\Model\Order\Item::STATUS_PENDING
+                if ($orderItemStatusToEnableDownload === \Magento\Sales\Model\Order\Item::STATUS_PENDING
                     || $orderItem->getOrder()->getState() == \Magento\Sales\Model\Order::STATE_COMPLETE
+                    || $orderItem->getStatusId() === $orderItemStatusToEnableDownload
                 ) {
                     $linkStatus = \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE;
                 }
@@ -209,6 +206,21 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
     protected function _createPurchasedItemModel()
     {
         return $this->_itemFactory->create();
+    }
+
+    /**
+     * Returns order item status to enable download.
+     *
+     * @param int|null $storeId
+     * @return int
+     */
+    private function getEnableDownloadStatus(?int $storeId): int
+    {
+        return (int)$this->_scopeConfig->getValue(
+            \Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     /**

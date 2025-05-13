@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderCustomizableProductDatepickerTest">
+        <annotations>
+            <title value="Create Order in Admin with datepicker for product with multiple customizable options"/>
+            <stories value="ACP2E-3097: Datepicker for product with multiple Customizable Options with date fields not working when placing order from admin"/>
+            <description value="Create order with datepicker for product with multiple customizable options."/>
+            <features value="Sales"/>
+            <testCaseId value="AC-12089"/>
+            <severity value="AVERAGE"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableJavascriptCalendar.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableDatepicker"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="CashOnDeliveryPaymentMethodDefault" stepKey="cashOnDeliveryPaymentMethod"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisableCashOnDeliveryPaymentMethod.path}} {{DisableCashOnDeliveryPaymentMethod.value}}" stepKey="disableCashOnDeliveryMethod"/>
+            <magentoCLI command="config:set {{DisableJavascriptCalendar.path}} {{DisableJavascriptCalendar.value}}" stepKey="disableDatepicker"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteCustomizableProduct">
+                <argument name="productName" value="productCustomizableDatepicker.name"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Create customizable product -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickSimpleProductFromDropDownList">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{productCustomizableDatepicker.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{productCustomizableDatepicker.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{productCustomizableDatepicker.price}}" stepKey="fillSimpleProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{productCustomizableDatepicker.weight}}" stepKey="fillSimpleProductWeight"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{productCustomizableDatepicker.quantity}}"/>
+        </actionGroup>
+        <click selector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" stepKey="clickAdminProductCustomizableOption"/>
+
+        <!-- Create datepicker option1 -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton1"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="{{productCustomizableDatepickerOption1.title}}" stepKey="fillOptionTitleForFirstDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('1')}}" stepKey="selectOptionTypeDropDownFirstDataSet"/>
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" y="50" stepKey="scrollToOptionList1" />
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('1', productCustomizableDatepickerOption1.type)}}" stepKey="selectOptionFieldFromDropDownForFirstDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPrice('0')}}" userInput="{{productCustomizableDatepickerOption1.option_0_price}}" stepKey="fillOptionPriceForFirstDataSet"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType('0')}}" userInput="{{productCustomizableDatepickerOption1.option_0_price_type}}" stepKey="selectOptionPriceTypeForFirstDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionSku('0')}}" userInput="{{productCustomizableDatepickerOption1.option_0_sku}}" stepKey="fillOptionSkuForFirstDataSet"/>
+
+        <!-- Create datepicker option2 -->
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('1')}}" userInput="{{productCustomizableDatepickerOption2.title}}" stepKey="fillOptionTitleForSecondDataSet"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('2')}}" stepKey="selectOptionTypeDropDownSecondDataSet"/>
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" y="50" stepKey="scrollToOptionList2" />
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('2', productCustomizableDatepickerOption2.type)}}" stepKey="selectOptionFieldFromDropDownForSecondDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionPrice('1')}}" userInput="{{productCustomizableDatepickerOption2.option_0_price}}" stepKey="fillOptionPriceForSecondDataSet"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.optionPriceType('1')}}" userInput="{{productCustomizableDatepickerOption2.option_0_price_type}}" stepKey="selectOptionPriceTypeForSecondDataSet"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionSku('1')}}" userInput="{{productCustomizableDatepickerOption2.option_0_sku}}" stepKey="fillOptionSkuForSecondDataSet"/>
+
+        <!-- Successful product save -->
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
+
+        <!-- Create order with datepicker for product with multiple customizable date options -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductsButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="customizable_datepicker_product" stepKey="fillSkuFilterConfigurable"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectCustomizableProduct"/>
+        <wait time="2" stepKey="waitForOptionsToLoad"/>
+        <click selector="{{AdminOrderFormItemsSection.productCompositeDatePicker('1')}}" stepKey="clickForDataPickerOption1"/>
+        <click selector="{{AdminOrderFormItemsSection.datepickerGoToday}}" stepKey="selectTodayOption1"/>
+        <click selector="{{AdminOrderFormItemsSection.datepickerClose}}" stepKey="closeSelectTodayOption1"/>
+        <click selector="{{AdminOrderFormItemsSection.productCompositeDatePicker('2')}}" stepKey="clickForDataPickerOption2"/>
+        <click selector="{{AdminOrderFormItemsSection.datepickerGoToday}}" stepKey="selectTodayOption2"/>
+        <click selector="{{AdminOrderFormItemsSection.datepickerClose}}" stepKey="closeSelectTodayOption2"/>
+        <fillField selector="{{AdminOrderFormCustomOptionsSection.quantity}}" userInput="1" stepKey="fillProductQty" />
+        <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickSaveOptionButton"/>
+        <waitForPageLoad stepKey="waitForSavedConfigure"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+        <actionGroup ref="SelectCashOnDeliveryPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+    </test>
+</tests>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class AggregateExceptionMessageFormatter
     /**
      * @var ExceptionMessageFormatterInterface[]
      */
-    private $messageFormatters;
+    private array $messageFormatters;
 
     /**
      * @param ExceptionMessageFormatterInterface[] $messageFormatters
@@ -54,11 +54,12 @@ class AggregateExceptionMessageFormatter
         ResolveInfo $info
     ): ClientAware {
         foreach ($this->messageFormatters as $formatter) {
-            $formatted = $formatter->getFormatted($e, $messagePrefix, $field, $context, $info);
-            if ($formatted) {
+            if ($formatted = $formatter->getFormatted($e, $messagePrefix, $field, $context, $info)) {
                 return $formatted;
             }
         }
-        return new GraphQlInputException($defaultMessage, $e);
+
+        $message = $e->getCode() ? __($e->getMessage()) : $defaultMessage;
+        return new GraphQlInputException($message, $e, $e->getCode());
     }
 }

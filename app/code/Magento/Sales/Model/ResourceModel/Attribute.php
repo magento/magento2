@@ -9,9 +9,10 @@ namespace Magento\Sales\Model\ResourceModel;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Sales\Model\AbstractModel;
 
-class Attribute
+class Attribute implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection
@@ -19,7 +20,7 @@ class Attribute
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|null
      */
     protected $connection;
 
@@ -41,6 +42,16 @@ class Attribute
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->connection = null;
+    }
+
+    /**
+     * Gets the connection, lazy loading it if needed
+     *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function getConnection()
@@ -77,11 +88,11 @@ class Attribute
      * Perform actions after object save
      *
      * @param AbstractModel $object
-     * @param string $attribute
+     * @param mixed $attribute
      * @return $this
      * @throws \Exception
      */
-    public function saveAttribute(AbstractModel $object, $attribute)
+    public function saveAttribute(AbstractModel $object, mixed $attribute)
     {
         if ($attribute instanceof AbstractAttribute) {
             $attributes = $attribute->getAttributeCode();

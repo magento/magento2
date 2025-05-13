@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,12 +18,15 @@
         <conditionalClick selector="{{PayPalPaymentSection.notYouLink}}" dependentSelector="{{PayPalPaymentSection.notYouLink}}" visible="true" stepKey="selectNotYouSection"/>
         <conditionalClick selector="{{PayPalPaymentSection.existingAccountLoginBtn}}" dependentSelector="{{PayPalPaymentSection.existingAccountLoginBtn}}" visible="true" stepKey="skipAccountCreationAndLogin"/>
         <waitForPageLoad stepKey="waitForLoginPageLoad"/>
-        <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm" />
-        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm"/>
+        <click selector="{{PayPalPaymentSection.email}}" stepKey="focusOnEmailField"/>
+        <clearField selector="{{PayPalPaymentSection.email}}" stepKey="clearEmailField"/>
+        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/PAYPAL_LOGIN}}" stepKey="fillEmail"/>
         <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordField"/>
         <click selector="{{PayPalPaymentSection.password}}" stepKey="focusOnPasswordField"/>
-        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
+        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/PAYPAL_PWD}}" stepKey="fillPassword"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.loginBtn}}" stepKey="waitForLoginBtn"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
         <waitForPageLoad stepKey="wait"/>
     </actionGroup>

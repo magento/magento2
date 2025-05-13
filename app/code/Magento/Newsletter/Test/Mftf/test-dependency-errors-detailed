@@ -1,0 +1,10 @@
+
+File "/var/www/html/app/code/Magento/Newsletter/Test/Mftf/Test/AdminAddImageToWYSIWYGNewsletterTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliMediaGalleryEnhancedEnableActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/Newsletter/Test/Mftf/Test/AdminReportsNewsletterProblemReportsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics

@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -203,7 +204,7 @@ class CacheTest extends TestCase
     /**
      * @return array
      */
-    protected function getTestData()
+    protected static function getTestData()
     {
         return [
             'product_image' => [

@@ -148,7 +148,11 @@ class BundlePanelTest extends TestCase
         ];
         $this->arrayManagerMock
             ->method('merge')
-            ->withConsecutive([], [], [], [], [], [], [], [], [], [], [], [], $metaArgument);
+            ->willReturnCallback(function ($arg1) use ($metaArgument) {
+                if (is_null($arg1) || $arg1 == $metaArgument) {
+                    return null;
+                }
+            });
         $this->bundlePanelModel->modifyMeta($sourceMeta);
     }
 
@@ -157,7 +161,7 @@ class BundlePanelTest extends TestCase
      *
      * @return string[][]
      */
-    public function getDataModifyMeta(): array
+    public static function getDataModifyMeta(): array
     {
         return [
             [

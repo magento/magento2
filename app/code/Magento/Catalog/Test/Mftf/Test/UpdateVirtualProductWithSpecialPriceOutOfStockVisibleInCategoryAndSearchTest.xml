@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateVirtualProductWithSpecialPriceOutOfStockVisibleInCategoryAndSearchTest">
+        <annotations>
+            <stories value="Update Virtual Product"/>
+            <title value="Update Virtual Product with Special Price (Out of Stock) Visible in Category and Search"/>
+            <description value="Test log in to Update Virtual Product and Update Virtual Product with Special Price (Out of Stock) Visible in Category and Search"/>
+            <testCaseId value="MC-6505"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteDefaultVirtualProduct">
+                <argument name="sku" value="{{updateVirtualProductSpecialPriceOutOfStock.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Search default virtual product in the grid page -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchProductGrid">
+            <argument name="keyword" value="$$initialVirtualProduct.name$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Update virtual product with special price(out of stock) -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.price}}" stepKey="fillProductPrice"/>
+        <!-- Press enter to validate advanced pricing link -->
+        <pressKey selector="{{AdminProductFormSection.productPrice}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressEnterKey"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.special_price}}" stepKey="fillSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.productTaxClass}}" stepKey="selectProductStockClass"/>
+        <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.status}}" stepKey="selectStockStatusInStock"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <waitForPageLoad stepKey="waitForCategory1"/>
+        <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <waitForPageLoad stepKey="waitForCategory2"/>
+        <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.visibility}}" stepKey="selectVisibility"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.urlKey}}" stepKey="fillUrlKey"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+        <!-- Verify we see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSaveSuccessMessage"/>
+
+        <!-- Search updated virtual product with special price(out of stock) in the grid -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedVirtualProduct"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.name}}" stepKey="fillVirtualProductNameInNameFilter"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.sku}}" stepKey="fillVirtualProductSku"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedVirtualProductVisibleInGrid"/>
+        <waitForPageLoad stepKey="waitUntilVirtualProductPageIsOpened"/>
+        <!-- Verify customer see updated virtual product with special price(out of stock) in the product form page -->
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.name}}" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.sku}}" stepKey="seeProductSku"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.price}}" stepKey="seeProductPrice"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink1"/>
+        <seeInField selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.special_price}}" stepKey="seeSpecialPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.advancedPricingCloseButton}}" stepKey="clickAdvancedPricingCloseButton"/>
+        <seeInField selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.productTaxClass}}" stepKey="seeProductTaxClass"/>
+        <see selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.status}}" stepKey="seeProductStockStatus"/>
+        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
+        <grabMultiple selector="{{AdminProductFormSection.selectMultipleCategories}}" stepKey="selectedCategories" />
+        <assertEquals stepKey="assertSelectedCategories">
+            <actualResult type="variable">selectedCategories</actualResult>
+            <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
+        </assertEquals>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneOnCategorySelect"/>
+        <see selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.visibility}}" stepKey="seeVisibility"/>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
+        <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.urlKey}}" stepKey="seeUrlKey"/>
+
+        <!--Verify customer see updated virtual product with special price(out of stock) on product storefront page -->
+        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPriceOutOfStock.urlKey)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeVirtualProductNameOnStoreFrontPage">
+            <argument name="value" value="{{updateVirtualProductSpecialPriceOutOfStock.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductSpecialPriceOutOfStock.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="productSku" value="{{updateVirtualProductSpecialPriceOutOfStock.sku}}"/>
+        </actionGroup>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
+        <assertEquals stepKey="assertStockAvailableOnProductPage">
+            <expectedResult type="string">{{updateVirtualProductSpecialPriceOutOfStock.storefrontStatus}}</expectedResult>
+            <actualResult type="variable">productStockAvailableStatus</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" stepKey="productPriceAmount"/>
+        <assertEquals stepKey="assertOldPriceTextOnProductPage">
+            <expectedResult type="string">${{updateVirtualProductSpecialPriceOutOfStock.price}}</expectedResult>
+            <actualResult type="variable">productPriceAmount</actualResult>
+        </assertEquals>
+         <!--Verify customer see virtual product with special price on the storefront page-->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>
+        <assertEquals stepKey="assertSpecialPriceTextOnProductPage">
+            <expectedResult type="string">${{updateVirtualProductSpecialPriceOutOfStock.special_price}}</expectedResult>
+            <actualResult type="variable">specialPriceAmount</actualResult>
+        </assertEquals>
+
+        <!--Verify customer don't see updated virtual product link on magento storefront page and is searchable by sku -->
+        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPriceOutOfStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillVirtualProductName">
+            <argument name="phrase" value="{{updateVirtualProductSpecialPriceOutOfStock.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeVirtualProductNameOnStorefrontPage">
+            <argument name="productName" value="{{updateVirtualProductSpecialPriceOutOfStock.name}}"/>
+        </actionGroup>
+
+    </test>
+</tests>

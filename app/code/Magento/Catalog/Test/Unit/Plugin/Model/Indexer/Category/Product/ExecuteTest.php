@@ -29,11 +29,11 @@ class ExecuteTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isEnabled'])
+            ->onlyMethods(['isEnabled'])
             ->getMock();
         $this->typeList = $this->getMockBuilder(TypeListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['invalidate'])
+            ->onlyMethods(['invalidate'])
             ->getMockForAbstractClass();
 
         $this->execute = new Execute($this->config, $this->typeList);

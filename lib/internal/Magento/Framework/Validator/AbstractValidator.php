@@ -6,6 +6,7 @@
 namespace Magento\Framework\Validator;
 
 use Laminas\Validator\Translator\TranslatorInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Abstract validator class.
@@ -14,7 +15,7 @@ use Laminas\Validator\Translator\TranslatorInterface;
  * @api
  * @since 100.0.2
  */
-abstract class AbstractValidator implements ValidatorInterface
+abstract class AbstractValidator implements ValidatorInterface, ResetAfterRequestInterface
 {
     /**
      * @var TranslatorInterface|null
@@ -32,12 +33,21 @@ abstract class AbstractValidator implements ValidatorInterface
     protected $_messages = [];
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_translator = null;
+        $this->_messages = [];
+    }
+
+    /**
      * Set default translator instance
      *
      * @param TranslatorInterface|null $translator
      * @return void
      */
-    public static function setDefaultTranslator(TranslatorInterface $translator = null)
+    public static function setDefaultTranslator(?TranslatorInterface $translator = null)
     {
         self::$_defaultTranslator = $translator;
     }

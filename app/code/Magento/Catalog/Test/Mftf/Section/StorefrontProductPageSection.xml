@@ -27,5 +27,7 @@
         <element name="customOptionRadio" type="input" selector="//span[contains(text(),'{{customOption}}')]/../../input" parameterized="true"/>
         <element name="onlyProductsLeft" type="block" selector="//div[@class='product-info-price']//div[@class='product-info-stock-sku']//div[@class='availability only']"/>
         <element name="qtyErr" type="text" selector="//*[@data-ui-id='message-error']//div"/>
+        <element name="addToCart" type="button" selector="button#product-addtocart-button" />
+        <element name="attributeTypes" type="text" selector="//th[@class='col label' and text()='{{attributeName}}']/following-sibling::td[@class='col data']" parameterized="true"/>
     </section>
 </sections>

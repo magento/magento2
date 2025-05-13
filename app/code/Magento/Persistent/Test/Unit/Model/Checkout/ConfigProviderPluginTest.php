@@ -96,7 +96,7 @@ class ConfigProviderPluginTest extends TestCase
     /**
      * @return array
      */
-    public function configDataProvider()
+    public static function configDataProvider()
     {
         return [
             [false, true, true], //disabled persistence case

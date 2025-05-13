@@ -17,6 +17,8 @@ define([
     $.widget('mage.dashboardChart', {
         options: {
             updateUrl: '',
+            responsive: true,
+            maintainAspectRatio: false,
             periodSelect: null,
             periodUnits: [],
             precision: 0,

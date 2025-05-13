@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /************************************************************************
+ /**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCMSPageCreatePageWithBlockInNonStandardPlaceTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create a CMS Page via the Admin"/>
+            <title value="Create CMS Page that puts block in non standard place via the Admin"/>
+            <description value="Admin should be able to create a CMS Page with standard block in custom place"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-10974"/>
+            <useCaseId value="ACP2E-2693"/>
+            <group value="backend"/>
+            <group value="Cms"/>
+            <group value="WYSIWYGDisabled"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Clear Homepage -->
+            <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="clearRecentlyViewedWidgetsFromCMSContent">
+                <argument name="content" value="{{CmsHomePageContent.content}}"/>
+                <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Add Subscribe block to HomePage -->
+        <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addSubscribeBlockToHomePage">
+            <argument name="content" value="{{block class=&apos;Magento\Newsletter\Block\Subscribe&apos; name=&apos;home.form.subscribe&apos; template=&apos;Magento_Newsletter::subscribe.phtml&apos;}}"/>
+            <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+        </actionGroup>
+
+        <!-- Verify page with Subscribe block on frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
+        <actionGroup ref="AssertStoreFrontCMSPageContentActionGroup" stepKey="verifySubscribeBlockToHomePage">
+            <argument name="cmsContent" value="Subscribe"/>
+        </actionGroup>
+
+        <!-- Add Contact block to HomePage -->
+        <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addContactBlockToHomePage">
+            <argument name="content" value="{{block class=&apos;Magento\Contact\Block\ContactForm&apos; name=&apos;home.form.contact&apos; template=&apos;Magento_Contact::form.phtml&apos;}}"/>
+            <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+        </actionGroup>
+
+        <!-- Verify page with Contact block on frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage2"/>
+        <actionGroup ref="AssertStoreFrontCMSPageContentActionGroup" stepKey="verifyContactBlockToHomePage">
+            <argument name="cmsContent" value="Phone"/>
+        </actionGroup>
+
+        <!-- Add Forgot Password block to HomePage -->
+        <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addForgotPasswordBlockToHomePage">
+            <argument name="content" value="{{block class=&apos;Magento\Customer\Block\Account\Forgotpassword&apos; name=&apos;home.form.forgotpassword&apos; template=&apos;Magento_Customer::form/forgotpassword.phtml&apos;}}"/>
+            <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+        </actionGroup>
+
+        <!-- Verify page with Forgot Password block on frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage3"/>
+        <actionGroup ref="AssertStoreFrontCMSPageContentActionGroup" stepKey="verifyForgotPasswordBlockToHomePage">
+            <argument name="cmsContent" value="password"/>
+        </actionGroup>
+
+        <!-- Add Login block to HomePage -->
+        <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addLoginBlockToHomePage">
+            <argument name="content" value="{{block class=&apos;Magento\Customer\Block\Form\Login&apos; name=&apos;home.form.login&apos; template=&apos;Magento_Customer::form/login.phtml&apos;}}"/>
+            <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+        </actionGroup>
+
+        <!-- Verify page with Login block on frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage4"/>
+        <actionGroup ref="AssertStoreFrontCMSPageContentActionGroup" stepKey="verifyLoginBlockToHomePage">
+            <argument name="cmsContent" value="Registered"/>
+        </actionGroup>
+
+        <!-- Add Register block to HomePage -->
+        <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addRegisterBlockToHomePage">
+            <argument name="content" value="{{block class=&apos;Magento\Customer\Block\Form\Register&apos; name=&apos;home.form.register&apos; template=&apos;Magento_Customer::form/register.phtml&apos;}}"/>
+            <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+        </actionGroup>
+
+        <!-- Verify page with Register block on frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage5"/>
+        <actionGroup ref="AssertStoreFrontCMSPageContentActionGroup" stepKey="verifyRegisterBlockToHomePage">
+            <argument name="cmsContent" value="Personal"/>
+        </actionGroup>
+
+        <!-- Add Send To Friend block to HomePage -->
+        <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="addSendToFriendBlockToHomePage">
+            <argument name="content" value="{{block class=&apos;Magento\SendFriend\Block\Send&apos; name=&apos;home.form.send&apos; template=&apos;Magento_SendFriend::send.phtml&apos;}}"/>
+            <argument name="pageId" value="{{CmsHomePageContent.page_id}}"/>
+        </actionGroup>
+
+        <!-- Verify page with Send To Friend block on frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage6"/>
+        <actionGroup ref="AssertStoreFrontCMSPageContentActionGroup" stepKey="verifySendToFriendBlockToHomePage">
+            <argument name="cmsContent" value="Sender"/>
+        </actionGroup>
+
+    </test>
+</tests>

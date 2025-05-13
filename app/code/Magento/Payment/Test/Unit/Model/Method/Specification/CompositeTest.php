@@ -83,8 +83,10 @@ class CompositeTest extends TestCase
 
         $this->factoryMock
             ->method('create')
-            ->withConsecutive(['SpecificationFirst'], ['SpecificationSecond'])
-            ->willReturnOnConsecutiveCalls($specificationFirst, $specificationSecond);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['SpecificationFirst'] =>  $specificationFirst,
+                ['SpecificationSecond'] => $specificationSecond
+            });
 
         $composite = $this->createComposite(['SpecificationFirst', 'SpecificationSecond']);
 
@@ -98,7 +100,7 @@ class CompositeTest extends TestCase
     /**
      * @return array
      */
-    public function compositeDataProvider(): array
+    public static function compositeDataProvider(): array
     {
         return [
             [true, true, true],

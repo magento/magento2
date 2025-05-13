@@ -12,6 +12,7 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Session\Generic;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 
@@ -34,6 +35,11 @@ class LoginPostTest extends AbstractController
     private $customerUrl;
 
     /**
+     * @var Generic
+     */
+    private $generic;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -43,6 +49,7 @@ class LoginPostTest extends AbstractController
         $this->session = $this->_objectManager->get(Session::class);
         $this->urlEncoder = $this->_objectManager->get(EncoderInterface::class);
         $this->customerUrl = $this->_objectManager->get(Url::class);
+        $this->generic = $this->_objectManager->get(Generic::class);
     }
 
     /**
@@ -70,34 +77,34 @@ class LoginPostTest extends AbstractController
     /**
      * @return array
      */
-    public function missingParametersDataProvider(): array
+    public static function missingParametersDataProvider(): array
     {
         return [
             'missing_email' => [
                 'email' => null,
                 'password' => 'password',
-                'expected_error_message' => 'A login and a password are required.',
+                'expectedErrorMessage' => 'A login and a password are required.',
             ],
             'missing_password' => [
                 'email' => 'customer@example.com',
                 'password' => null,
-                'expected_error_message' => 'A login and a password are required.',
+                'expectedErrorMessage' => 'A login and a password are required.',
             ],
             'missing_both_parameters' => [
                 'email' => null,
                 'password' => null,
-                'expected_error_message' => 'A login and a password are required.',
+                'expectedErrorMessage' => 'A login and a password are required.',
             ],
             'wrong_email' => [
                 'email' => 'wrongemail@example.com',
                 'password' => 'password',
-                'expected_error_message' => 'The account sign-in was incorrect or your account is disabled temporarily.'
+                'expectedErrorMessage' => 'The account sign-in was incorrect or your account is disabled temporarily.'
                     . ' Please wait and try again later.',
             ],
             'wrong_password' => [
                 'email' => 'customer@example.com',
                 'password' => 'wrongpassword',
-                'expected_error_message' => 'The account sign-in was incorrect or your account is disabled temporarily.'
+                'expectedErrorMessage' => 'The account sign-in was incorrect or your account is disabled temporarily.'
                     . ' Please wait and try again later.',
             ],
         ];
@@ -218,6 +225,25 @@ class LoginPostTest extends AbstractController
             $this->equalTo([new Phrase('Invalid Form Key. Please refresh the page.')]),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/startup/redirect_dashboard 1
+     * @magentoConfigFixture current_store customer/captcha/enable 0
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testVisitorForCustomerLoginPostAction(): void
+    {
+        $this->assertEmpty($this->generic->getVisitorData());
+        $this->prepareRequest('customer@example.com', 'password');
+        $this->dispatch('customer/account/loginPost');
+        $this->assertTrue($this->session->isLoggedIn());
+        $this->assertRedirect($this->stringContains('customer/account/'));
+        $this->assertNotEmpty($this->generic->getVisitorData()['visitor_id']);
+        $this->assertNotEmpty($this->generic->getVisitorData()['customer_id']);
     }
 
     /**

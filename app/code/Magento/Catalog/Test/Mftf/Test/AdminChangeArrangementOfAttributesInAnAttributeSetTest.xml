@@ -34,7 +34,9 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Navigate to Stores > Attributes > Attribute Set -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>

@@ -9,6 +9,7 @@ use Laminas\Http\Exception\RuntimeException;
 use Laminas\Http\Request;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Psr\Log\LoggerInterface;
 
@@ -38,20 +39,28 @@ class Deployments
     protected $clientFactory;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * Constructor
      *
      * @param Config $config
      * @param LoggerInterface $logger
      * @param LaminasClientFactory $clientFactory
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         Config $config,
         LoggerInterface $logger,
-        LaminasClientFactory $clientFactory
+        LaminasClientFactory $clientFactory,
+        SerializerInterface $serializer
     ) {
         $this->config = $config;
         $this->logger = $logger;
         $this->clientFactory = $clientFactory;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -97,8 +106,7 @@ class Deployments
                 'revision' => $revision
             ]
         ];
-
-        $client->setParameterPost($params);
+        $client->setRawBody($this->serializer->serialize($params));
 
         try {
             $response = $client->send();

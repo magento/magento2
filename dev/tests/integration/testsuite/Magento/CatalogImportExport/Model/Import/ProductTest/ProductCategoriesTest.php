@@ -130,7 +130,7 @@ class ProductCategoriesTest extends ProductTestBase
     /**
      * @return array
      */
-    public function categoryTestDataProvider()
+    public static function categoryTestDataProvider()
     {
         return [
             ['import_new_categories_default_separator.csv', ','],

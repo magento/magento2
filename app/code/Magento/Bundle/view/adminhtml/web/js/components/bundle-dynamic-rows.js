@@ -71,15 +71,10 @@ define([
          * @param {Number|String} index - element index
          */
         removeBundleItemsFromOption: function (index) {
-            var bundleSelections = registry.get(this.name + '.' + index + '.' + this.bundleSelectionsName),
-                bundleSelectionsLength = (bundleSelections.elems() || []).length,
-                i;
+            let bundleSelections = registry.get(this.name + '.' + index + '.' + this.bundleSelectionsName);
 
-            if (bundleSelectionsLength) {
-                for (i = 0; i < bundleSelectionsLength; i++) {
-                    bundleSelections.elems()[0].destroy();
-                }
-            }
+            bundleSelections.destroyChildren();
+            bundleSelections._elems.clear();
         },
 
         /**
@@ -87,9 +82,9 @@ define([
         */
         processingAddChild: function (ctx, index, prop) {
             var recordIds = _.map(this.recordData(), function (rec) {
-                return parseInt(rec['record_id'], 10);
-            }),
-            maxRecordId = _.max(recordIds);
+                    return parseInt(rec['record_id'], 10);
+                }),
+                maxRecordId = _.max(recordIds);
 
             prop = maxRecordId > -1 ? maxRecordId + 1 : prop;
             this._super(ctx, index, prop);

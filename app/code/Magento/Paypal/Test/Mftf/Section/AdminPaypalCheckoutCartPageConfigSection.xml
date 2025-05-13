@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminPaypalCheckoutCartPageConfigSection">
+        <element name="expandCheckoutCartPage" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_cartpage-head" parameterized="true"/>
+        <element name="display" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_cartpage_paylater_cartpage_display" parameterized="true"/>
+        <element name="position" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_cartpage_paylater_cartpage_position" parameterized="true"/>
+        <element name="styleLayout" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_cartpage_paylater_cartpage_stylelayout" parameterized="true" />
+        <element name="logoType" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_cartpage_paylater_cartpage_logotype" parameterized="true" />
+        <element name="logoPosition" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_cartpage_paylater_cartpage_logoposition" parameterized="true" />
+        <element name="textColor" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_advertise_paylater_settings_paylater_cartpage_paylater_cartpage_textcolor" parameterized="true" />
+    </section>
+</sections>

@@ -18,6 +18,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for \Magento\Framework\ObjectManager\Factory\Compiled.
@@ -50,12 +51,17 @@ class CompiledTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                LoggerInterface::class,
+                $this->createMock(LoggerInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->config = $this->getMockBuilder(ConfigInterface::class)
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->sharedInstances = [];
@@ -299,14 +305,12 @@ class CompiledTest extends TestCase
                 '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
-                        '_i_' => \Magento\Framework\ObjectManager\Test\Unit::class
-                            . '\Factory\Fixture\Compiled\DependencySharedTesting',
+                        '_i_' => DependencySharedTesting::class,
                     ],
                     'array_configured_array' => [
                         'array_array_value' => 'value',
                         'array_array_configured_instance' => [
-                            '_ins_' => \Magento\Framework\ObjectManager::class
-                                . '\Test\Unit\Factory\Fixture\Compiled\DependencyTesting',
+                            '_ins_' => DependencyTesting::class,
                         ],
                     ],
                     'array_global_argument' => [

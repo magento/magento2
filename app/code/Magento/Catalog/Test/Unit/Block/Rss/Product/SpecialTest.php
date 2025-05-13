@@ -98,8 +98,10 @@ class SpecialTest extends TestCase
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['store_id'], ['cid'])
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['store_id'] => null,
+                ['cid'] => null
+            });
 
         $this->httpContext = $this->getMockBuilder(Context::class)
             ->onlyMethods(['getValue'])->disableOriginalConstructor()

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductFormSection">
         <element name="additionalOptions" type="select" selector=".admin__control-multiselect"/>
         <element name="datepickerNewAttribute" type="input" selector="[data-index='{{attrName}}'] input" timeout="30" parameterized="true"/>
@@ -69,6 +69,7 @@
         <element name="attributeRequiredInput" type="input" selector="//input[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
         <element name="attributeFieldError" type="text" selector="//*[@class='admin__field _required _error']/..//label[contains(.,'This is a required field.')]"/>
         <element name="customSelectField" type="select" selector="//select[@name='product[{{var}}]']" parameterized="true"/>
+        <element name="customInputField" type="input" selector="//input[@name='product[{{var}}]']" parameterized="true"/>
         <element name="searchCategory" type="input" selector="//*[@data-index='category_ids']//input[contains(@class, 'multiselect-search')]" timeout="30"/>
         <element name="selectCategory" type="input" selector="//*[@data-index='category_ids']//label[contains(., '{{categoryName}}')]" parameterized="true" timeout="30"/>
         <element name="done" type="button" selector="//*[@data-index='category_ids']//button[@data-action='close-advanced-select']" timeout="30"/>
@@ -83,5 +84,13 @@
         <element name="newAddedAttributeValue" type="text" selector="//option[contains(@data-title,'{{attributeValue}}')]" parameterized="true"/>
         <element name="country_Of_Manufacture" type="select" selector="//td[contains(text(), 'country_of_manufacture')]"/>
         <element name="textArea" type="text" selector="//textarea[@name='product[test_custom_attribute]']" timeout="30"/>
+        <element name="assignedSourcesQty" type="input" selector="//input[@name='sources[assigned_sources][0][quantity]']"/>
+        <element name="btnAdvancedInventory" type="button" selector="//button//span[text()='Advanced Inventory']/.."/>
+        <element name="saveCategory" type="button" selector="//button[@data-action='close-advanced-select']" timeout="30"/>
+        <element name="attributeRequiredInputField" type="select" selector="//select[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
+        <element name="customTextAttribute" type="input" selector="//input[@name='product[{{attribute_code}}]']" parameterized="true"/>
+        <element name="customSelectAttribute" type="select" selector="//select[@name='product[{{attribute_code}}]']" parameterized="true"/>
+        <element name="customSwitcherAttribute" type="checkbox" selector="//input[@name='product[{{attribute_code}}]' and @value='{{checked_value}}']/parent::div[@data-role='switcher']" parameterized="true"/>
+        <element name="attributeOptionUncheckDefaultValue" type="checkbox" selector="input[name='use_default[{{attribute_code}}]']" parameterized="true"/>
     </section>
 </sections>

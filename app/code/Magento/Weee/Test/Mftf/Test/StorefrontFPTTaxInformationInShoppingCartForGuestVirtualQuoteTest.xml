@@ -43,7 +43,9 @@
                 <field key="price">40.00</field>
             </createData>
 
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -52,7 +54,9 @@
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!--  Test Steps  -->

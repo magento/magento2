@@ -16,9 +16,11 @@
                 </field>
                 <field id="gateway_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Gateway URL</label>
+                    <backend_model>Magento\Usps\Model\Config\Backend\UspsUrl</backend_model>
                 </field>
                 <field id="gateway_secure_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Secure Gateway URL</label>
+                    <backend_model>Magento\Usps\Model\Config\Backend\UspsUrl</backend_model>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>

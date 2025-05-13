@@ -129,7 +129,7 @@ class UpdateProductsInWishlist
      *
      * @return void
      */
-    private function addError(string $message, string $code = null): void
+    private function addError(string $message, ?string $code = null): void
     {
         $this->errors[] = new Data\Error(
             $message,

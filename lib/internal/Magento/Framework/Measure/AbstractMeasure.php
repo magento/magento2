@@ -87,7 +87,7 @@ abstract class AbstractMeasure
      * @param string|null $locale
      * @return AbstractMeasure
      */
-    public function setLocale(string $locale = null): AbstractMeasure
+    public function setLocale(?string $locale = null): AbstractMeasure
     {
         $this->locale = $locale ?? Locale::getDefault();
 
@@ -127,7 +127,7 @@ abstract class AbstractMeasure
      * @param string|null $locale
      * @return float|string
      */
-    public function getValue(int $round = -1, string $locale = null)
+    public function getValue(int $round = -1, ?string $locale = null)
     {
         $result = $round < 0 ? $this->value : round((float) $this->value, $round);
 
@@ -265,7 +265,7 @@ abstract class AbstractMeasure
      * @param int|null $scale
      * @return string
      */
-    private function add(string $firstOption, string $secondOption, int $scale = null): string
+    private function add(string $firstOption, string $secondOption, ?int $scale = null): string
     {
         $firstOption = $this->exponent($firstOption, $scale);
         $secondOption = $this->exponent($secondOption, $scale);
@@ -281,7 +281,7 @@ abstract class AbstractMeasure
      * @param int|null $scale
      * @return string
      */
-    private function sub(string $firstOption, string $secondOption, int $scale = null): string
+    private function sub(string $firstOption, string $secondOption, ?int $scale = null): string
     {
         $firstOption = $this->exponent($firstOption, $scale);
         $secondOption = $this->exponent($secondOption, $scale);
@@ -297,7 +297,7 @@ abstract class AbstractMeasure
      * @param int|null $scale
      * @return string
      */
-    private function div(string $firstOption, string $secondOption, int $scale = null): string
+    private function div(string $firstOption, string $secondOption, ?int $scale = null): string
     {
         $firstOption = $this->exponent($firstOption, $scale);
         $secondOption = $this->exponent($secondOption, $scale);
@@ -313,7 +313,7 @@ abstract class AbstractMeasure
      * @param int|null $scale
      * @return string
      */
-    private function mul(string $firstOption, string $secondOption, int $scale = null): string
+    private function mul(string $firstOption, string $secondOption, ?int $scale = null): string
     {
         $firstOption = $this->exponent($firstOption, $scale);
         $secondOption = $this->exponent($secondOption, $scale);
@@ -328,7 +328,7 @@ abstract class AbstractMeasure
      * @param int|null $scale
      * @return string
      */
-    private function exponent(string $value, int $scale = null): string
+    private function exponent(string $value, ?int $scale = null): string
     {
         if (!extension_loaded('bcmath')) {
             return $value;

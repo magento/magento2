@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\AwsS3\Driver\AwsS3;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -287,10 +288,18 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $path = $mediaDirectory->getAbsolutePath($product->getMediaConfig()->getMediaPath($entry->getFile()));
         $fileName = $this->file->getPathInfo($path)['basename'];
-        $imageFileContent = $mediaDirectory->getDriver()->fileGetContents($path);
+        $fileDriver = $mediaDirectory->getDriver();
+        $imageFileContent = $fileDriver->fileGetContents($path);
+
+        if ($fileDriver instanceof AwsS3) {
+            $remoteMediaMimeType = $fileDriver->getMetadata($path);
+            $mediaMimeType = $remoteMediaMimeType['mimetype'];
+        } else {
+            $mediaMimeType = $this->mime->getMimeType($path);
+        }
         return $this->imageContentInterface->create()
             ->setName($fileName)
             ->setBase64EncodedData(base64_encode($imageFileContent))
-            ->setType($this->mime->getMimeType($path));
+            ->setType($mediaMimeType);
     }
 }

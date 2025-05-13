@@ -52,7 +52,7 @@ class ConfigDataTest extends TestCase
     /**
      * @return array
      */
-    public function setWrongKeyDataProvider()
+    public static function setWrongKeyDataProvider()
     {
         return [
             'segment is empty' => [

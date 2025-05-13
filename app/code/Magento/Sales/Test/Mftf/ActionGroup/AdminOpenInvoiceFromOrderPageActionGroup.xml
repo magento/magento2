@@ -12,7 +12,8 @@
         <annotations>
             <description>Admin open invoice from order</description>
         </annotations>
-        <conditionalClick selector="{{AdminOrderDetailsOrderViewSection.invoices}}" dependentSelector="{{AdminOrderInvoicesTabSection.viewInvoice}}" visible="false" stepKey="openInvoicesTab"/>
+        <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="waitForInvoicesTabClickable" />
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="openInvoicesTab"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvocesTabOpened"/>
         <click selector="{{AdminOrderInvoicesTabSection.viewGridRow('1')}}" stepKey="viewInvoice"/>
         <waitForPageLoad stepKey="waitForInvoiceOpened"/>

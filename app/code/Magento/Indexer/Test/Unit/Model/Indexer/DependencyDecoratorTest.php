@@ -102,7 +102,7 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function overloadDataProvider()
+    public static function overloadDataProvider()
     {
         return [
             ['getData', [], ['field_id' => 'field_value']],
@@ -111,12 +111,15 @@ class DependencyDecoratorTest extends TestCase
     }
 
     /**
-     * @param string $methodName
+     * @param string|\Closure $methodName
      * @param mixed $result
      * @dataProvider transitMethodsDataProvider
      */
-    public function testTransitMethods(string $methodName, $result)
+    public function testTransitMethods(string|\Closure $methodName, $result)
     {
+        if (is_callable($result)) {
+            $result = $result($this);
+        }
         $this->indexerMock
             ->expects($this->once())
             ->method($methodName)
@@ -125,10 +128,23 @@ class DependencyDecoratorTest extends TestCase
         $this->assertSame($result, $this->dependencyDecorator->{$methodName}());
     }
 
+    protected function getMockForViewClass()
+    {
+        return $this->getMockBuilder(View::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    protected function getMockForStateInterfaceClass()
+    {
+        return $this->getMockBuilder(StateInterface::class)
+            ->getMockForAbstractClass();
+    }
+
     /**
      * @return array
      */
-    public function transitMethodsDataProvider()
+    public static function transitMethodsDataProvider()
     {
         return [
             ['getId', 'indexer_1'],
@@ -138,11 +154,8 @@ class DependencyDecoratorTest extends TestCase
             ['getFields', ['one', 'two']],
             ['getSources', ['one', 'two']],
             ['getHandlers', ['one', 'two']],
-            ['getView', $this->getMockBuilder(View::class)
-                ->disableOriginalConstructor()
-                ->getMock()],
-            ['getState', $this->getMockBuilder(StateInterface::class)
-                ->getMockForAbstractClass()],
+            ['getView', static fn (self $testCase) => $testCase->getMockForViewClass()],
+            ['getState', static fn (self $testCase) => $testCase->getMockForStateInterfaceClass()],
             ['isScheduled', true],
             ['isValid', false],
             ['isInvalid', true],
@@ -169,7 +182,7 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function transitMethodsWithParamsAndEmptyReturnDataProvider()
+    public static function transitMethodsWithParamsAndEmptyReturnDataProvider()
     {
         return [
             ['setScheduled', [true]],
@@ -183,6 +196,9 @@ class DependencyDecoratorTest extends TestCase
      */
     public function testTransitMethodsWithParamsAndSelfReturn(string $methodName, array $params)
     {
+        if (!empty($params) && is_callable($params[0])) {
+            $params[0] = $params[0]($this);
+        }
         $this->indexerMock
             ->expects($this->once())
             ->method($methodName)
@@ -193,14 +209,13 @@ class DependencyDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function transitMethodsWithParamsAndSelfReturnDataProvider()
+    public static function transitMethodsWithParamsAndSelfReturnDataProvider()
     {
         return [
             [
                 'setState',
                 [
-                    $this->getMockBuilder(StateInterface::class)
-                        ->getMockForAbstractClass()
+                    static fn (self $testCase) => $testCase->getMockForStateInterfaceClass()
                 ]
             ],
             ['load', ['indexer_1']],
@@ -239,6 +254,9 @@ class DependencyDecoratorTest extends TestCase
             ->method('getIndexerIdsToRunAfter')
             ->with($indexerId)
             ->willReturn($dependentIds);
+        $this->dependencyInfoProviderMock
+            ->expects($this->never())
+            ->method('getIndexerIdsToRunBefore');
         $this->indexerRegistryMock
             ->expects($this->exactly(count($dependentIds)))
             ->method('get')

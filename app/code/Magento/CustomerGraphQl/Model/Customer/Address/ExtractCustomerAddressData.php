@@ -167,6 +167,11 @@ class ExtractCustomerAddressData
             },
             $attributes
         );
+        usort($customAttributes['custom_attributesV2'], function (array $a, array $b) {
+            $aPosition = $a['sort_order'];
+            $bPosition = $b['sort_order'];
+            return $aPosition <=> $bPosition;
+        });
 
         return $customAttributes;
     }

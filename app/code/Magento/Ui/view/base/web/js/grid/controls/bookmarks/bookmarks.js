@@ -58,7 +58,8 @@ define([
                 activeView: true,
                 hasChanges: true,
                 customLabel: true,
-                customVisible: true
+                customVisible: true,
+                isActiveIndexChanged: false
             },
             listens: {
                 activeIndex: 'onActiveIndexChange',
@@ -105,9 +106,9 @@ define([
             var data = this.getViewData(this.defaultIndex);
 
             if (!_.size(data) && (this.current.columns && this.current.positions)) {
-                    this.setViewData(this.defaultIndex, this.current)
-                        .saveView(this.defaultIndex);
-                    this.defaultDefined = true;
+                this.setViewData(this.defaultIndex, this.current)
+                    .saveView(this.defaultIndex);
+                this.defaultDefined = true;
             }
 
             return this;
@@ -195,6 +196,7 @@ define([
                 .remove(viewPath)
                 .removeStored(viewPath)
                 .updateArray();
+            this.isActiveIndexChanged = false;
 
             return this;
         },
@@ -446,7 +448,10 @@ define([
          * @returns {Bookmarks} Chainable.
          */
         saveState: function () {
-            this.store('current');
+            if (!this.isActiveIndexChanged) {
+                this.store('current');
+            }
+            this.isActiveIndexChanged = false;
             return this;
         },
 
@@ -554,6 +559,7 @@ define([
             this.activeView = this.getActiveView();
             this.updateActiveView();
             this.store('activeIndex');
+            this.isActiveIndexChanged = true;
         },
 
         /**
@@ -565,6 +571,15 @@ define([
 
             if (!this.defaultDefined) {
                 resolver(this.initDefaultView, this);
+            }
+
+            if (!_.isUndefined(this.activeView)
+                && !_.isUndefined(this.activeView.data)
+                && !_.isUndefined(this.current)) {
+                if (JSON.stringify(this.activeView.data.filters) === JSON.stringify(this.current.filters)
+                    && JSON.stringify(this.activeView.data.positions) !== JSON.stringify(this.current.positions)) {
+                    this.updateActiveView();
+                }
             }
         }
     });

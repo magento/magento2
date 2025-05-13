@@ -20,10 +20,13 @@
         </annotations>
 
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Delete all products left by prev tests because it sensitive for search-->
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
+
             <magentoCLI stepKey="enableLimitNumberOfProductsInGrid" command="config:set admin/grid/limit_total_number_of_products 1"/>
             <magentoCLI stepKey="setCustomRecordsLimit" command="config:set admin/grid/records_limit 2"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct1"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>

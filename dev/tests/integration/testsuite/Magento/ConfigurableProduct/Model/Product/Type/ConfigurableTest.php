@@ -656,7 +656,7 @@ class ConfigurableTest extends TestCase
      */
     public function testAddCustomOptionToConfigurableChildProduct(): void
     {
-        $this->expectErrorMessage(
+        $this->expectExceptionMessage(
             'Required custom options cannot be added to a simple product that is a part of a composite product.'
         );
 

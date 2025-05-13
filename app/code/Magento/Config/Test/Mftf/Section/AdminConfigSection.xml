@@ -27,5 +27,10 @@
         <element name="allowedCurrencies" type="multiselect" selector="#currency_options_allow" />
         <element name="defaultCurrencyCheckbox" type="checkbox" selector="#currency_options_default_inherit"/>
         <element name="allowedCurrencyCheckbox" type="checkbox" selector="#currency_options_allow_inherit"/>
+        <element name="baseCurrency" type="button" selector="#currency_options_base"/>
+        <element name="selectWebsiteName" type="button" selector="//a[@data-role='website-id' and contains(text(),'{{selectWebsite}}')]" parameterized="true"/>
+        <element name="currencyOptionsTab" type="button" selector="//a[@id='currency_options-head']"/>
+        <element name="defaultCurrencySelect" type="select" selector="//tr[@id='row_currency_options_default']//select[@id='currency_options_default']"/>
+        <element name="baseCurrencyCheckbox" type="checkbox" selector="//input[@id='currency_options_base_inherit']"/>
     </section>
 </sections>

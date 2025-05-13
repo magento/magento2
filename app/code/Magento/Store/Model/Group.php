@@ -138,12 +138,12 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        PoisonPillPutInterface $pillPut = null,
-        StoreValidator $modelValidator = null
+        ?\Magento\Framework\Event\ManagerInterface $eventManager = null,
+        ?PoisonPillPutInterface $pillPut = null,
+        ?StoreValidator $modelValidator = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
@@ -510,6 +510,17 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function getIdentities()
     {
         return [self::CACHE_TAG];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $parentTags = parent::getCacheTags();
+
+        return array_unique(array_merge($identities, $parentTags));
     }
 
     /**

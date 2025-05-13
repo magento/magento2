@@ -1,0 +1,24 @@
+#  Copyright 2024 Adobe
+#  All Rights Reserved.
+
+
+type Discount {
+    coupon: AppliedCoupon @resolver(class: "Magento\\SalesRuleGraphQl\\Model\\Resolver\\Coupon") @doc(description:"The coupon related to the discount.")
+}
+
+type StoreConfig {
+    share_all_sales_rule: Boolean! @doc(description: "Configuration data from promo/graphql/share_all_sales_rule")
+    share_applied_sales_rule: Boolean! @doc(description: "Configuration data from promo/graphql/share_applied_sales_rule")
+}
+
+type Query {
+    allCartRules: [CartRule!] @doc(description: "Provides all active cart rules in the store.") @resolver(class: "Magento\\SalesRuleGraphQl\\Model\\Resolver\\AllCartRules")
+}
+
+type Cart {
+    rules: [CartRule!] @doc(description: "Provides applied cart rules in the current active cart") @resolver(class: "Magento\\SalesRuleGraphQl\\Model\\Resolver\\AppliedCartRules")
+}
+
+type CartRule {
+    name: String! @doc(description: "Name of the cart price rule")
+}

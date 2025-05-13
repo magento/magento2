@@ -3,52 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper;
 
-use Magento\AdvancedSearch\Model\Client\ClientResolver;
-use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
-
 /**
- * Proxy for data mapping of categories fields
+ * @deprecated Handle the Backward Compatibility issue with ES7 and ES8
+ * @see AC-10652
+ * phpcs:disable Generic.Files.LineLength.TooLong
  */
-class CategoryFieldsProviderProxy implements AdditionalFieldsProviderInterface
+class CategoryFieldsProviderProxy extends \Magento\Elasticsearch\ElasticAdapter\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy
 {
-    /**
-     * @var ClientResolver
-     */
-    private $clientResolver;
-
-    /**
-     * @var AdditionalFieldsProviderInterface[]
-     */
-    private $categoryFieldsProviders;
-
-    /**
-     * CategoryFieldsProviderProxy constructor.
-     * @param ClientResolver $clientResolver
-     * @param AdditionalFieldsProviderInterface[] $categoryFieldsProviders
-     */
-    public function __construct(
-        ClientResolver $clientResolver,
-        array $categoryFieldsProviders
-    ) {
-        $this->clientResolver = $clientResolver;
-        $this->categoryFieldsProviders = $categoryFieldsProviders;
-    }
-
-    /**
-     * @return AdditionalFieldsProviderInterface
-     */
-    private function getCategoryFieldsProvider()
-    {
-        return $this->categoryFieldsProviders[$this->clientResolver->getCurrentEngine()];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getFields(array $productIds, $storeId)
-    {
-        return $this->getCategoryFieldsProvider()->getFields($productIds, $storeId);
-    }
 }

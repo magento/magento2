@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderNotesSection">
         <element name="customerNotifiedStatusOfOrderNoteByText" type="text" selector="//div[@class='note-list-comment' and contains(text(),'{{text}}')]//preceding-sibling::span[@class='note-list-customer']/span" parameterized="true"/>
+        <element name="voidAuthorizationNotes" type="text" selector=".//*[@class='note-list-comment'and contains(text(),'{{transactionID}}')]" parameterized="true"/>
     </section>
 </sections>

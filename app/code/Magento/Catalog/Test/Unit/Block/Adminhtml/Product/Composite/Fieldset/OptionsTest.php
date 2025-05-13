@@ -68,7 +68,7 @@ class OptionsTest extends TestCase
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optionFactoryMock]
         );
         $dateBlock = $this->getMockBuilder(Options::class)
-            ->setMethods(['setSkipJsReloadPrice'])
+            ->addMethods(['setSkipJsReloadPrice'])
             ->setConstructorArgs(['context' => $context, 'option' => $option])
             ->disableOriginalConstructor()
             ->getMock();

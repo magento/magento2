@@ -489,4 +489,48 @@
         <data key="group">General</data>
         <requiredEntity type="address">Canada_Address</requiredEntity>
     </entity>
+    <entity name="Custom_US_Customer" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <data key="group">General</data>
+        <requiredEntity type="address">US_Address_CA_CC</requiredEntity>
+    </entity>
+    <entity name="Simple_Customer_With_Multiple_Address" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">false</data>
+        <data key="default_shipping">false</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">DE_Berlin_State</requiredEntity>
+        <requiredEntity type="address">UK_State_Address</requiredEntity>
+        <requiredEntity type="address">US_Address_NY_Not_Default_Address</requiredEntity>
+        <requiredEntity type="address">US_California_State</requiredEntity>
+    </entity>
+    <entity name="Simple_US_Customer_With_Brisbane_Address" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <data key="group">General</data>
+        <requiredEntity type="address">US_Address_Bris</requiredEntity>
+    </entity>
 </entities>

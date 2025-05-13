@@ -621,7 +621,7 @@ class LinkManagementTest extends TestCase
             ->method('create')
             ->willReturn($bundle);
 
-        $selection = $this->createPartialMock(Selection::class, ['save']);
+        $selection = $this->createPartialMock(Selection::class, ['save', 'load']);
         $selection->expects($this->once())->method('save')
             ->willReturnCallback(
                 static function () {
@@ -696,7 +696,7 @@ class LinkManagementTest extends TestCase
             ->willReturn($selections);
         $this->bundleFactoryMock->expects($this->once())->method('create')->willReturn($bundle);
 
-        $selection = $this->createPartialMock(Selection::class, ['save', 'getId']);
+        $selection = $this->createPartialMock(Selection::class, ['save', 'getId', 'load']);
         $selection->expects($this->once())->method('save');
         $selection->expects($this->once())->method('getId')->willReturn(42);
         $this->bundleSelectionMock->expects($this->once())->method('create')->willReturn($selection);
@@ -751,8 +751,10 @@ class LinkManagementTest extends TestCase
         $linkedProductMock->expects($this->once())->method('isComposite')->willReturn(false);
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$bundleProductSku], ['linked_product_sku'])
-            ->willReturnOnConsecutiveCalls($productMock, $linkedProductMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$bundleProductSku] => $productMock,
+                ['linked_product_sku'] => $linkedProductMock
+            });
 
         $store = $this->createMock(Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($store);
@@ -832,8 +834,10 @@ class LinkManagementTest extends TestCase
             ->willReturn(false);
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$bundleProductSku], ['linked_product_sku'])
-            ->willReturnOnConsecutiveCalls($productMock, $linkedProductMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$bundleProductSku] => $productMock,
+                ['linked_product_sku'] => $linkedProductMock
+            });
 
         $store = $this->createMock(Store::class);
         $this->storeManagerMock->method('getStore')
@@ -903,8 +907,10 @@ class LinkManagementTest extends TestCase
             ->willReturn(false);
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$bundleProductSku], [$linkedProductSku])
-            ->willReturnOnConsecutiveCalls($productMock, $linkedProductMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$bundleProductSku] => $productMock,
+                [$linkedProductSku] => $linkedProductMock
+            });
 
         $this->model->saveChild($bundleProductSku, $productLink);
     }
@@ -937,8 +943,10 @@ class LinkManagementTest extends TestCase
             ->willReturn(false);
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$bundleProductSku], [$linkedProductSku])
-            ->willReturnOnConsecutiveCalls($productMock, $linkedProductMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$bundleProductSku] => $productMock,
+                [$linkedProductSku] => $linkedProductMock
+            });
 
         $selection = $this->createPartialMock(
             Selection::class,
@@ -981,8 +989,10 @@ class LinkManagementTest extends TestCase
         $linkedProductMock->expects($this->once())->method('isComposite')->willReturn(true);
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$bundleProductSku], [$linkedProductSku])
-            ->willReturnOnConsecutiveCalls($productMock, $linkedProductMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$bundleProductSku] => $productMock,
+                [$linkedProductSku] => $linkedProductMock
+            });
 
         $this->model->saveChild($bundleProductSku, $productLink);
     }

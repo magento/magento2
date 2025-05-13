@@ -13,6 +13,6 @@
         <element name="columnName" type="button" selector="//label[contains(text(), '{{var1}}')]" parameterized="true" timeout="5"/>
 
         <element name="reset" type="button" selector="//div[@class='admin__action-dropdown-menu-footer']/div/button[contains(text(), 'Reset')]" timeout="5"/>
-        <element name="cancel" type="button" selector="//div[@class='admin__action-dropdown-menu-footer']/div/button[contains(text(), 'Cancel')]" timeout="5"/>
+        <element name="cancel" type="button" selector="//div[@class='admin__action-dropdown-wrap admin__data-grid-action-columns _active']//button[text()='Cancel']" timeout="5"/>
     </section>
 </sections>

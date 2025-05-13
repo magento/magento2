@@ -148,14 +148,15 @@ class FulltextTest extends TestCase
 
         $this->resource->expects($this->exactly(2))
             ->method('getTableName')
-            ->withConsecutive(
-                ['catalog_product_relation', ResourceConnection::DEFAULT_CONNECTION],
-                ['catalog_product_entity', ResourceConnection::DEFAULT_CONNECTION]
-            )
-            ->will($this->onConsecutiveCalls(
-                $testTable1,
-                $testTable2
-            ));
+            ->willReturnCallback(function ($tableName, $connectionName) use ($testTable1, $testTable2) {
+                if ($tableName == 'catalog_product_relation'
+                    && $connectionName == ResourceConnection::DEFAULT_CONNECTION) {
+                    return $testTable1;
+                } elseif ($tableName == 'catalog_product_entity'
+                    && $connectionName == ResourceConnection::DEFAULT_CONNECTION) {
+                    return $testTable2;
+                }
+            });
 
         self::assertSame($ids, $this->target->getRelationsByChild($ids));
     }

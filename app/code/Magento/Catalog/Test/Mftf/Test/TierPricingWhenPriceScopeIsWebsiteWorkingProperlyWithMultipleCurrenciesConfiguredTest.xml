@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="TierPricingWhenPriceScopeIsWebsiteWorkingProperlyWithMultipleCurrenciesConfiguredTest">
+        <annotations>
+            <stories value="Tire Price"/>
+            <title value="Tier pricing when price scope is Website working properly with multiple currencies configured"/>
+            <description value="Tier pricing when price scope is Website working properly with multiple currencies configured"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-6094"/>
+        </annotations>
+        <before>
+            <!-- Set in Stores > Configuration > Catalog > Catalog > Price - Catalog Price Scope = "Website" -->
+            <magentoCLI command="config:set {{WebsiteCatalogPriceScopeConfigData.path}} {{WebsiteCatalogPriceScopeConfigData.value}}" stepKey="setPriceScopeWebsite"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create website, Store and Store View -->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                   <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                   <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage1"/>
+            <waitForElementClickable selector="{{CurrencySetupSection.currencyOptions}}" stepKey="waitForCurrencyOptions"/>
+            <conditionalClick selector="{{CurrencySetupSection.currencyOptions}}" dependentSelector="{{CurrencySetupSection.CheckCurrencyOptionsIfTabExpand}}" stepKey="openCurrencyOptions" visible="true"/>
+            <waitForElementVisible selector="{{CurrencySetupSection.baseCurrencyUseDefault}}" stepKey="waitForUseDefaultCheckbox"/>
+            <uncheckOption selector="{{CurrencySetupSection.baseCurrencyUseDefault}}" stepKey="uncheckUseDefaultOption"/>
+            <selectOption selector="{{CurrencySetupSection.baseCurrency}}" userInput="Swedish Krona" stepKey="setBaseCurrencyField"/>
+            <selectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['Euro', 'US Dollar']" stepKey="selectCurrencies"/>
+            <click stepKey="saveConfigs" selector="{{AdminConfigSection.saveButton}}"/>
+            <wait time="15" stepKey="waitfordefaultupdate"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="NewWebSiteData"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForPageLoad7"/>
+            <actionGroup ref="AdminSetBaseCurrencyActionGroup" stepKey="setBaseCurrencyEUR">
+                <argument name="currency" value="Euro"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetDefaultCurrencyActionGroup" stepKey="setDefaultCurrencyEUR">
+                <argument name="currency" value="Euro"/>
+            </actionGroup>
+            <uncheckOption selector="{{CurrencySetupSection.allowcurrenciescheckbox}}" stepKey="uncheckAllowCurrencyUseDefaultOption1"/>
+            <unselectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['US Dollar']" stepKey="deselectUSCurrency"/>
+            <click stepKey="saveConfigs1" selector="{{AdminConfigSection.saveButton}}"/>
+            <wait time="15" stepKey="waitforNewWebsiteupdate"/>
+            <click selector="{{AdminMainActionsSection.storeViewDropdown}}" stepKey="clickWebsiteSwitchDropdown"/>
+            <waitForElementVisible selector="{{AdminMainActionsSection.websiteByName('Main Website')}}" stepKey="waitForWebsiteAreVisible"/>
+            <click selector="{{AdminMainActionsSection.allStoreViews}}" stepKey="clickWebsiteByName"/>
+            <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitingForInformationModal"/>
+            <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreSwitch"/>
+            <waitForPageLoad stepKey="waitForPageLoad8"/>
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="revertCurrencyRates1">
+                <argument name="firstCurrency" value="EUR"/>
+                <argument name="secondCurrency" value="SEK"/>
+                <argument name="rate" value="10.7500"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="revertCurrencyRates2">
+                <argument name="firstCurrency" value="EUR"/>
+                <argument name="secondCurrency" value="USD"/>
+                <argument name="rate" value="1.1200"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="revertCurrencyRates3">
+                <argument name="firstCurrency" value="SEK"/>
+                <argument name="secondCurrency" value="EUR"/>
+                <argument name="rate" value="0.0930"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="revertCurrencyRates4">
+                <argument name="firstCurrency" value="SEK"/>
+                <argument name="secondCurrency" value="USD"/>
+                <argument name="rate" value="0.1000"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+
+            <!-- Go to Catalog -> Products  -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductPage"/>
+
+            <!-- Click Edit option for Simple2 -->
+            <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterSimopleProduct2">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+            <click selector="{{AdminDataGridTableSection.rowViewAction('1')}}" stepKey="clickProduct2"/>
+            <waitForPageLoad stepKey="waitForEditProductPage"/>
+
+            <actionGroup ref="ProductSetAdvancedPricingWithIndexActionGroup" stepKey="addProductTierPrice1">
+                <argument name="quantity" value="10"/>
+                <argument name="price" value="Discount"/>
+                <argument name="amount" value="10"/>
+                <argument name="index" value="0"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetAdvancedPricingWithIndexActionGroup" stepKey="addProductTierPrice2">
+                <argument name="quantity" value="20"/>
+                <argument name="price" value="Discount"/>
+                <argument name="amount" value="20"/>
+                <argument name="index" value="1"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetAdvancedPricingWithIndexActionGroup" stepKey="addProductTierPrice3">
+                <argument name="quantity" value="30"/>
+                <argument name="price" value="Discount"/>
+                <argument name="amount" value="30"/>
+                <argument name="index" value="2"/>
+            </actionGroup>
+            <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteForProduct2">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <uncheckOption selector="{{ProductInWebsitesSection.website(_defaultWebsite.name)}}" stepKey="uncheckMainWebsite"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
+            <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="openWebsiteToGetId">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <click selector="{{AdminNewWebsiteActionsSection.setAsDefault}}" stepKey="setNewWebsiteAsDefault"/>
+            <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveNewWebsite"/>
+            <waitForPageLoad stepKey="waitForSuccess"/>
+            <!-- Clean config and full page cache after making website a default one-->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+    </before>
+    <after>
+        <magentoCLI command="config:set {{GlobalCatalogPriceScopeConfigData.path}} {{GlobalCatalogPriceScopeConfigData.value}}" stepKey="setPriceScopeGlobal"/>
+        <amOnPage url="{{ConfigCurrencySetupPage.url}}" stepKey="navigateToConfigCurrencySetupPage2"/>
+        <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="openCurrencyOptions2"/>
+        <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="openCurrencyOptions3"/>
+        <selectOption selector="{{CurrencySetupSection.baseCurrency}}" userInput="US Dollar" stepKey="setBaseCurrencyFieldUSD"/>
+        <unselectOption selector="{{CurrencySetupSection.allowCurrencies}}" parameterArray="['Euro']" stepKey="unselectCurrencies"/>
+        <click stepKey="saveConfigs" selector="{{AdminConfigSection.saveButton}}"/>
+        <!-- Delete data -->
+        <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+        <actionGroup ref="AdminGoCreatedWebsitePageActionGroup" stepKey="openOldWebsiteToGetId">
+                <argument name="websiteName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+        <click selector="{{AdminNewWebsiteActionsSection.setAsDefault}}" stepKey="setOldWebsiteAsDefault"/>
+        <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveOldWebsite"/>
+        <waitForPageLoad stepKey="waitForSuccess"/>
+
+        <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+            <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+    </after>
+        <!-- Click Edit option for Simple2 -->
+        <!-- Go to Catalog -> Products  -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductPage1"/>
+
+        <!-- Click Edit option for Simple2 -->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterSimopleProduct3">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.rowViewAction('1')}}" stepKey="clickProduct3"/>
+        <waitForPageLoad stepKey="waitForEditProductPage"/>
+
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillPrice">
+            <argument name="price" value="10"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveSimpleProduct1"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductInStoreFront">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageTierPriceWithCurrencyActionGroup" stepKey="assertProductTierPriceText">
+            <argument name="tierProductPriceDiscountQuantity" value="10"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="9.00"/>
+            <argument name="productSavedPricePercent" value="10"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageTierPriceWithCurrencyActionGroup" stepKey="assertProductTierPriceText2">
+            <argument name="tierProductPriceDiscountQuantity" value="20"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="8.00"/>
+            <argument name="productSavedPricePercent" value="20"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageTierPriceWithCurrencyActionGroup" stepKey="assertProductTierPriceText3">
+            <argument name="tierProductPriceDiscountQuantity" value="30"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="7.00"/>
+            <argument name="productSavedPricePercent" value="30"/>
+            <argument name="index" value="3"/>
+        </actionGroup>
+    </test>
+</tests>

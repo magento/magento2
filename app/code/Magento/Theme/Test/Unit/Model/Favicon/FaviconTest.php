@@ -129,9 +129,15 @@ class FaviconTest extends TestCase
             ->willReturn(true);
         $this->mediaDir
             ->method('isFile')
-            ->withConsecutive([$expectedFile], [$expectedFile])
-            ->willReturnOnConsecutiveCalls(false, true);
-
+            ->willReturnCallback(function ($expectedFile) {
+                static $count = 0;
+                if ($count == 0) {
+                    $count++;
+                    return false;
+                } else {
+                    return true;
+                }
+            });
         $results = $this->object->getFaviconFile();
         $this->assertEquals(
             $expectedUrl,

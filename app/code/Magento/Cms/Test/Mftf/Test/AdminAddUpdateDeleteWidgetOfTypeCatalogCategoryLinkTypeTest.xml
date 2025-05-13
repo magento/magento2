@@ -70,7 +70,9 @@
             <argument name="row" value="1"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitToDeleteAllWidgets"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateToHomePage3"/>
         <waitForPageLoad stepKey="waitToLoadHomePage3"/>
         <dontSeeElement selector="{{StorefrontHeaderSection.categoryWidgetLink}}" stepKey="doNotSeeWidgetLink"/>

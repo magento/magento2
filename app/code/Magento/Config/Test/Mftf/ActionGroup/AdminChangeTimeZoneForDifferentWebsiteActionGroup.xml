@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeTimeZoneForDifferentWebsiteActionGroup">
+        <annotations>
+            <description>set the time zone for different website</description>
+        </annotations>
+        <arguments>
+            <argument name="websiteName" type="string" defaultValue="{{SimpleProduct.sku}}"/>
+            <argument name="timeZoneName" type="string"/>
+        </arguments>
+        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="navigateToLocaleConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <click selector="{{LocaleOptionsSection.changeStoreConfigButton}}" stepKey="changeStoreButton"/>
+        <waitForPageLoad stepKey="waitForStoreOption"/>
+        <click selector="{{LocaleOptionsSection.changeStoreConfigToSpecificWebsite(websiteName)}}" stepKey="selectNewWebsite"/>
+        <waitForPageLoad stepKey="waitForWebsiteChange"/>
+        <!-- Accept the current popup visible on the page. -->
+        <click selector="{{LocaleOptionsSection.changeWebsiteConfirmButton}}" stepKey="confirmModal"/>
+        <waitForPageLoad stepKey="waitForSaveChange"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.checkIfTabExpand}}" visible="true"/>
+        <click selector="{{LocaleOptionsSection.useDefault}}"  stepKey="unCheckCheckbox"/>
+        <waitForElementVisible selector="{{LocaleOptionsSection.timezone}}" stepKey="waitForLocaleTimeZone"/>
+        <selectOption userInput="{{timeZoneName}}" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectDefaultOption"/>
+    </actionGroup>
+</actionGroups>

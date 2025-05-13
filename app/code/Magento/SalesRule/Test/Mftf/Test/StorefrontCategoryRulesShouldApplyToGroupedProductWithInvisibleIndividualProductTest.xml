@@ -20,8 +20,12 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="ApiCategory" stepKey="createCategoryOne"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
                 <field key ="price">100</field>
@@ -77,9 +81,7 @@
             <deleteData createDataKey="createSecondGroupedProduct" stepKey="deleteSecondGroupedProduct"/>
             <deleteData createDataKey="createCategoryOne" stepKey="deleteCategoryOne"/>
             <deleteData createDataKey="createCategoryTwo" stepKey="deleteCategoryTwo"/>
-            <actionGroup ref="AdminDeleteCartPriceRuleActionGroup" stepKey="deleteCartPriceRule">
-                <argument name="ruleName" value="TestSalesRule"/>
-            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteCartPriceRule"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">

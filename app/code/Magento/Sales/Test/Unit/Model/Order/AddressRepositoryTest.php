@@ -91,10 +91,10 @@ class AddressRepositoryTest extends TestCase
 
         $this->attributeMetadataDataProvider = $this->getMockBuilder(AttributeMetadataDataProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadAttributesCollection'])
+            ->onlyMethods(['loadAttributesCollection'])
             ->getMock();
         $collectionAttribute = $this->getMockBuilder(FormAttributeCollection::class)
-            ->setMethods(['addFieldToFilter', 'getIterator'])
+            ->onlyMethods(['addFieldToFilter', 'getIterator'])
             ->disableOriginalConstructor()
             ->getMock();
         $collectionAttribute->method('getIterator')
@@ -176,7 +176,7 @@ class AddressRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             [null, null],
@@ -364,7 +364,7 @@ class AddressRepositoryTest extends TestCase
     ): void {
         $orderAddress = $this->getMockBuilder(OrderAddress::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'hasData', 'getData', 'setData'])
+            ->onlyMethods(['getEntityId', 'hasData', 'getData', 'setData'])
             ->getMock();
 
         $orderAddress->expects($this->any())
@@ -386,7 +386,7 @@ class AddressRepositoryTest extends TestCase
             ->willReturn($mapper);
 
         $attributeModel = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['getFrontendInput', 'getAttributeCode'])
+            ->onlyMethods(['getFrontendInput', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMock();
         $attributeModel->method('getFrontendInput')->willReturn($attributeType);
@@ -416,7 +416,7 @@ class AddressRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function dataMultiAttribute(): array
+    public static function dataMultiAttribute(): array
     {
         $data = [
             'multiselect' => [

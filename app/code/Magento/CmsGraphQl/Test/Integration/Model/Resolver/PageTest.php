@@ -14,8 +14,8 @@ use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Service\GraphQlRequest;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
-use Magento\GraphQlCache\Model\Plugin\Query\Resolver\Result\Cache as ResolverResultCachePlugin;
+use Magento\GraphQlResolverCache\Model\Plugin\Resolver\Cache as ResolverResultCachePlugin;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 

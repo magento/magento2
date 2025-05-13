@@ -47,7 +47,7 @@ class MultilineTest extends TextTest
     /**
      * @return array
      */
-    public function validateValueRequiredDataProvider()
+    public static function validateValueRequiredDataProvider()
     {
         return array_merge(
             parent::validateValueRequiredDataProvider(),
@@ -74,7 +74,7 @@ class MultilineTest extends TextTest
     /**
      * @return array
      */
-    public function validateValueLengthDataProvider()
+    public static function validateValueLengthDataProvider()
     {
         return array_merge(
             parent::validateValueLengthDataProvider(),
@@ -93,5 +93,29 @@ class MultilineTest extends TextTest
                 ]
             ]
         );
+    }
+
+    /**
+     * @param array $value value to pass to compactValue()
+     * @param string $expected expected output
+     *
+     * @dataProvider compactValueDataProvider
+     */
+    public function testCompactValue($value, $expected)
+    {
+        $this->assertSame($expected, $this->getClass("line")->compactValue($value));
+    }
+
+    /**
+     * @return array
+     */
+    public static function compactValueDataProvider()
+    {
+        return [
+            [
+                ["b"=>"element1", "a"=>"element2"],
+                ["element2\nelement1"],
+            ]
+        ];
     }
 }

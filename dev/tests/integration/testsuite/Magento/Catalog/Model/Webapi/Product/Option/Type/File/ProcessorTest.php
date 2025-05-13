@@ -58,7 +58,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($directory->isExist($filePath));
     }
 
-    public function pathConfigDataProvider()
+    public static function pathConfigDataProvider()
     {
         return [
             // default config

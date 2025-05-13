@@ -37,7 +37,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewOne">
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = store view-->
             <magentoCLI command="config:set {{RecentlyViewedProductScopeStore.path}} {{RecentlyViewedProductScopeStore.value}}" stepKey="RecentlyViewedProductScopeStore"/>
@@ -66,7 +68,9 @@
 
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterDeletion"/>
         </after>
 

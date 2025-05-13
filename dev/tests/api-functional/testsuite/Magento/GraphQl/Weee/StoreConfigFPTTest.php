@@ -71,11 +71,11 @@ class StoreConfigFPTTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function sameFPTDisplaySettingsProvider()
+    public static function sameFPTDisplaySettingsProvider()
     {
         return [
             [
-                'weeTaxSettingsDisplayIncludedOnly' => [
+                'weeTaxSettings' => [
                     'tax/weee/enable' => '1',
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_INCL,
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_INCL,
@@ -84,7 +84,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                 'displayValue' => 'INCLUDE_FPT_WITHOUT_DETAILS',
             ],
             [
-                'weeTaxSettingsDisplayIncludedAndDescription' => [
+                'weeTaxSettings' => [
                     'tax/weee/enable' => '1',
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_INCL_DESCR,
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_INCL_DESCR,
@@ -93,7 +93,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                 'displayValue' => 'INCLUDE_FPT_WITH_DETAILS',
             ],
             [
-                'weeTaxSettingsDisplayIncludedAndExcludedAndDescription' => [
+                'weeTaxSettings' => [
                     'tax/weee/enable' => '1',
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
@@ -102,7 +102,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                 'displayValue' => 'EXCLUDE_FPT_AND_INCLUDE_WITH_DETAILS',
             ],
             [
-                'weeTaxSettingsDisplayExcluded' => [
+                'weeTaxSettings' => [
                     'tax/weee/enable' => '1',
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_EXCL,
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL,
@@ -111,7 +111,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
                 'displayValue' => 'EXCLUDE_FPT_WITHOUT_DETAILS',
             ],
             [
-                'weeTaxSettingsDisplayExcluded' => [
+                'weeTaxSettings' => [
                     'tax/weee/enable' => '0',
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_EXCL,
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_EXCL,
@@ -170,11 +170,11 @@ class StoreConfigFPTTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function differentFPTDisplaySettingsProvider()
+    public static function differentFPTDisplaySettingsProvider()
     {
         return [
             [
-                'weeTaxSettingsDisplay' => [
+                'weeTaxSettings' => [
                     'tax/weee/enable' => '1',
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW => WeeeDisplayConfig::DISPLAY_INCL,
                     Config::XML_PATH_FPT_DISPLAY_PRODUCT_LIST => WeeeDisplayConfig::DISPLAY_INCL_DESCR,

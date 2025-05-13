@@ -40,7 +40,7 @@ class CategoryTest extends TestCase
             ->getMock();
 
         $this->category = $this->getMockBuilder(Category::class)
-            ->setMethods(['getName', 'getId'])
+            ->addMethods(['getName', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -49,7 +49,7 @@ class CategoryTest extends TestCase
          */
         $categoryCollectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $categoryCollectionFactory->expects($this->any())->method('create')->willReturn(

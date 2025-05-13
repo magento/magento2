@@ -24,7 +24,9 @@
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                     <argument name="customStore" value="storeViewGermany"/>
                 </actionGroup>
-                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
@@ -33,7 +35,9 @@
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
                 <argument name="customStore" value="storeViewGermany"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
             <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>

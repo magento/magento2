@@ -16,7 +16,7 @@
             <argument name="product"/>
             <argument name="productCount" type="string"/>
         </arguments>
-
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButtonToClick"/>
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>

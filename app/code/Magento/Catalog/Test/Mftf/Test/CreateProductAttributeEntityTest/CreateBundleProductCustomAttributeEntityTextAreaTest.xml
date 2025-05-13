@@ -44,9 +44,16 @@
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="test_custom_attribute"/>
             </actionGroup>
-            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
-            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
-            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickDelete"/>
+            <comment userInput="BIC workaround" stepKey="clickOk"/>
+            <comment userInput="BIC workaround" stepKey="waitForDeletion"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
             <deleteData createDataKey="simpleCategory1" stepKey="deleteCategory"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>

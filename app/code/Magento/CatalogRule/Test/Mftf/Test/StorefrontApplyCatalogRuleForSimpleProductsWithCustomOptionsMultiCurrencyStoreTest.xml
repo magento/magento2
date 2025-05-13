@@ -71,7 +71,9 @@
 
             <!-- Clear all catalog price rules before test -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
-            <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesBeforeTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
@@ -95,7 +97,9 @@
 
             <!-- Delete the catalog price rule -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
-            <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfterTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesAfterTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>

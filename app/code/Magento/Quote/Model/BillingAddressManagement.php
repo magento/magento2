@@ -1,22 +1,33 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
-use Magento\Framework\Exception\InputException;
-use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
-use Psr\Log\LoggerInterface as Logger;
-use Magento\Quote\Api\BillingAddressManagementInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Quote\Api\BillingAddressManagementInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Quote billing address write service object.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BillingAddressManagement implements BillingAddressManagementInterface
 {
+    /**
+     * Billing address lock const
+     *
+     * @var string
+     */
+    private const CART_BILLING_ADDRESS_LOCK = 'cart_billing_address_lock_';
+
     /**
      * Validator.
      *
@@ -25,21 +36,21 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     protected $addressValidator;
 
     /**
-     * Logger.
+     * Logger object.
      *
      * @var Logger
      */
     protected $logger;
 
     /**
-     * Quote repository.
+     * Quote repository object.
      *
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     * @var AddressRepositoryInterface
      */
     protected $addressRepository;
 
@@ -49,33 +60,63 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     private $shippingAddressAssignment;
 
     /**
+     * @var CartAddressMutexInterface
+     */
+    private $cartAddressMutex;
+
+    /**
      * Constructs a quote billing address service object.
      *
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository Quote repository.
+     * @param CartRepositoryInterface $quoteRepository Quote repository.
      * @param QuoteAddressValidator $addressValidator Address validator.
      * @param Logger $logger Logger.
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param AddressRepositoryInterface $addressRepository
+     * @param CartAddressMutexInterface|null $cartAddressMutex
      */
     public function __construct(
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        CartRepositoryInterface $quoteRepository,
         QuoteAddressValidator $addressValidator,
         Logger $logger,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+        AddressRepositoryInterface $addressRepository,
+        ?CartAddressMutexInterface $cartAddressMutex = null
     ) {
         $this->addressValidator = $addressValidator;
         $this->logger = $logger;
         $this->quoteRepository = $quoteRepository;
         $this->addressRepository = $addressRepository;
+        $this->cartAddressMutex = $cartAddressMutex ??
+            ObjectManager::getInstance()->get(CartAddressMutex::class);
     }
 
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
+    public function assign($cartId, AddressInterface $address, $useForShipping = false)
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
+        /** @var Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
+        $billingAddressId = (int) $quote->getBillingAddress()->getId();
+
+        return $this->cartAddressMutex->execute(
+            self::CART_BILLING_ADDRESS_LOCK.$billingAddressId,
+            $this->assignBillingAddress(...),
+            $billingAddressId,
+            [$address, $quote, $useForShipping]
+        );
+    }
+
+    /**
+     * Assign billing address to cart
+     *
+     * @param AddressInterface $address
+     * @param Quote $quote
+     * @param bool $useForShipping
+     * @return mixed
+     * @throws InputException
+     */
+    private function assignBillingAddress(AddressInterface $address, Quote $quote, bool $useForShipping = false)
+    {
         $address->setCustomerId($quote->getCustomerId());
         $quote->removeAddress($quote->getBillingAddress()->getId());
         $quote->setBillingAddress($address);
@@ -84,9 +125,10 @@ class BillingAddressManagement implements BillingAddressManagementInterface
             $quote->setDataChanges(true);
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->logger->critical($e->getMessage());
             throw new InputException(__('The address failed to save. Verify the address and try again.'));
         }
+
         return $quote->getBillingAddress()->getId();
     }
 
@@ -104,6 +146,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
      *
      * @return \Magento\Quote\Model\ShippingAddressAssignment
      * @deprecated 101.0.0
+     * @see \Magento\Quote\Model\ShippingAddressAssignment
      */
     private function getShippingAddressAssignment()
     {

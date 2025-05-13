@@ -57,13 +57,19 @@ class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
         $errors = [];
         foreach (self::$observerClasses as $observerClass) {
             $reflection = (new \ReflectionClass($observerClass));
+            $publicMethodsCount = 0;
             $maxCountMethod = $reflection->getConstructor() ? 2 : 1;
+            $publicMethods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+            foreach ($publicMethods as $publicMethod) {
+                if (!str_starts_with($publicMethod->getName(), '_')) {
+                    $publicMethodsCount++;
+                }
+            }
 
-            if (count($reflection->getMethods(\ReflectionMethod::IS_PUBLIC)) > $maxCountMethod) {
+            if ($publicMethodsCount > $maxCountMethod) {
                 $errors[] = $observerClass;
             }
         }
-        $errors = array_diff($errors, [GetPriceConfigurationObserver::class]);
 
         if ($errors) {
             $errors = array_unique($errors);

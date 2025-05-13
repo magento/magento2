@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Sales\Block\Order;
 
 use Magento\Framework\App\ObjectManager;
@@ -57,7 +54,7 @@ class Items extends AbstractItems
         Context $context,
         Registry $registry,
         array $data = [],
-        CollectionFactory $itemCollectionFactory = null
+        ?CollectionFactory $itemCollectionFactory = null
     ) {
         $this->_coreRegistry = $registry;
         $this->itemCollectionFactory = $itemCollectionFactory ?: ObjectManager::getInstance()

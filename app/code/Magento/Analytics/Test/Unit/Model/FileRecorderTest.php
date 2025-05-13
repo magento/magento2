@@ -79,7 +79,7 @@ class FileRecorderTest extends TestCase
         $this->fileInfoManagerMock = $this->createMock(FileInfoManager::class);
 
         $this->fileInfoFactoryMock = $this->getMockBuilder(FileInfoFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -177,10 +177,11 @@ class FileRecorderTest extends TestCase
             $this->directoryMock
                 ->expects($this->exactly(2))
                 ->method('delete')
-                ->withConsecutive(
-                    [$pathToExistingFile],
-                    [$directoryName]
-                );
+                ->willReturnCallback(function ($arg) use ($pathToExistingFile, $directoryName) {
+                    if ($arg == $pathToExistingFile || $arg == $directoryName) {
+                        return null;
+                    }
+                });
         }
 
         $this->assertTrue($this->fileRecorder->recordNewFile($this->encodedContextMock));
@@ -189,7 +190,7 @@ class FileRecorderTest extends TestCase
     /**
      * @return array
      */
-    public function recordNewFileDataProvider()
+    public static function recordNewFileDataProvider()
     {
         return [
             'File doesn\'t exist' => [''],

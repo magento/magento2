@@ -10,14 +10,18 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogUrlRewrite\Model\GetVisibleForStores;
+use Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder;
 use Magento\CatalogUrlRewrite\Model\Products\AppendUrlRewritesToProducts;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Eav\Model\ResourceModel\AttributeValue;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Store\Model\StoreResolver\GetStoresListByWebsiteIds;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -70,6 +74,21 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     private $storeViewService;
 
     /**
+     * @var AttributeValue|MockObject
+     */
+    private $attributeValue;
+
+    /**
+     * @var UrlRewriteFinder|MockObject
+     */
+    private $urlRewriteFinder;
+
+    /**
+     * @var GetVisibleForStores|MockObject
+     */
+    private $visibilityForStores;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -77,6 +96,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->urlPersist = $this->getMockForAbstractClass(UrlPersistInterface::class);
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getStoreIds'])
             ->getMockForAbstractClass();
         $this->event = $this->getMockBuilder(Event::class)
             ->addMethods(['getProduct'])
@@ -103,12 +123,18 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
 
         $this->storeViewService = $this->createMock(StoreViewService::class);
 
+        $this->attributeValue = $this->createMock(AttributeValue::class);
+        $this->urlRewriteFinder = $this->createMock(UrlRewriteFinder::class);
+        $this->visibilityForStores = $this->createMock(GetVisibleForStores::class);
+
         $this->model = new ProductProcessUrlRewriteSavingObserver(
             $this->urlPersist,
             $this->appendRewrites,
             $this->scopeConfig,
             $getStoresList,
-            $this->storeViewService
+            $this->storeViewService,
+            $this->urlRewriteFinder,
+            $this->visibilityForStores
         );
     }
 
@@ -118,9 +144,24 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function urlKeyDataProvider()
+    public static function urlKeyDataProvider()
     {
         return [
+            'websites changed' => [
+                'origData' => [
+                    'entity_id' => 101,
+                    'id' => 101,
+                    'url_key' => 'simple',
+                    'visibility' => Visibility::VISIBILITY_BOTH,
+                    'website_ids' => [1],
+                    'store_id' => 1,
+                    'is_changed_categories' => null,
+                ],
+                'newData' => [
+                    'website_ids' => [1, 2],
+                ],
+                'expectedExecutionCount' => 1,
+            ],
             'url changed' => [
                 'origData' => [
                     'entity_id' => 101,
@@ -136,7 +177,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 ],
                 'expectedExecutionCount' => 1,
             ],
-            'no chnages' => [
+            'no changes' => [
                 'origData' => [
                     'entity_id' => 101,
                     'id' => 101,
@@ -161,21 +202,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 ],
                 'newData' => [
                     'visibility' => Visibility::VISIBILITY_IN_CATALOG,
-                ],
-                'expectedExecutionCount' => 1,
-            ],
-            'websites changed' => [
-                'origData' => [
-                    'entity_id' => 101,
-                    'id' => 101,
-                    'url_key' => 'simple',
-                    'visibility' => Visibility::VISIBILITY_BOTH,
-                    'website_ids' => [1],
-                    'store_id' => 1,
-                    'is_changed_categories' => null,
-                ],
-                'newData' => [
-                    'website_ids' => [1, 2],
                 ],
                 'expectedExecutionCount' => 1,
             ],
@@ -302,8 +328,10 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      * @param array $origData
      * @param array $newData
      * @param int $expectedExecutionCount
-     * @param int $expectedStoresToAdd
-     * @throws \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
+     * @param array $expectedStoresToAdd
+     * @param array $doesEntityHaveOverriddenVisibilityForStore
+     * @param array $expectedStoresToRemove
+     * @throws UrlAlreadyExistsException
      * @dataProvider urlKeyDataProvider
      */
     public function testExecuteUrlKey(
@@ -317,6 +345,8 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->product->setData($origData);
         $this->product->setOrigData();
         $this->product->addData($newData);
+
+        $currentData = array_merge($origData, $newData);
 
         $this->storeViewService
             ->method('doesEntityHaveOverriddenVisibilityForStore')
@@ -356,6 +386,10 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                     ]
                 );
         }
+
+        $this->product->expects($this->any())
+            ->method('getStoreIds')
+            ->willReturn($currentData['store_ids'] ?? [1]);
 
         $this->model->execute($this->observer);
     }

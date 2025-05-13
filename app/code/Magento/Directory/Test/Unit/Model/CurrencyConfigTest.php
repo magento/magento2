@@ -52,7 +52,7 @@ class CurrencyConfigTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStores', 'getWebsites'])
+            ->onlyMethods(['getStores', 'getWebsites'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->appState = $this->getMockBuilder(State::class)
@@ -75,25 +75,25 @@ class CurrencyConfigTest extends TestCase
      * @dataProvider getConfigCurrenciesDataProvider
      * @return void
      */
-    public function testGetConfigCurrencies(string $areCode)
+    public function testGetConfigCurrencies(string $areaCode)
     {
         $path = 'test/path';
         $expected = ['ARS', 'AUD', 'BZD'];
 
         $this->appState->expects(self::once())
             ->method('getAreaCode')
-            ->willReturn($areCode);
+            ->willReturn($areaCode);
 
         /** @var StoreInterface|MockObject $store */
         $store = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $store->expects(self::once())
             ->method('getCode')
             ->willReturn('testCode');
 
-        if (in_array($areCode, [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])) {
+        if (in_array($areaCode, [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])) {
             $this->storeManager->expects(self::once())
                 ->method('getStores')
                 ->willReturn([$store]);
@@ -119,7 +119,7 @@ class CurrencyConfigTest extends TestCase
      *
      * @return array
      */
-    public function getConfigCurrenciesDataProvider()
+    public static function getConfigCurrenciesDataProvider()
     {
         return [
             ['areaCode' => Area::AREA_ADMINHTML],

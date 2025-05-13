@@ -50,7 +50,9 @@
             <block name="customer.customer.data"  class="Magento\Customer\Block\CustomerData"
                    template="Magento_Customer::js/customer-data.phtml">
                 <arguments>
-                    <argument name="view_model" xsi:type="object">Magento\Customer\ViewModel\Customer\Data</argument>
+                    <argument name="auth" xsi:type="object">Magento\Customer\ViewModel\Customer\Auth</argument>
+                    <argument name="json_serializer" xsi:type="object">Magento\Customer\ViewModel\Customer\JsonSerializer</argument>
+                    <argument name="cookie_settings" xsi:type="object">Magento\Customer\ViewModel\CookieSettings</argument>
                 </arguments>
             </block>
             <block name="customer.data.invalidation.rules" class="Magento\Customer\Block\CustomerScopeData"

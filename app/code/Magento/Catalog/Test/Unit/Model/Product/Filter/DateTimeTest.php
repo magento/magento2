@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -74,7 +75,7 @@ class DateTimeTest extends TestCase
      *
      * @return array
      */
-    public function provideFilter(): array
+    public static function provideFilter(): array
     {
         return [
             ['1999-12-31', '1999-12-31 00:00:00', 'en_US'],

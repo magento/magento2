@@ -9,6 +9,9 @@ namespace Magento\ReleaseNotification\Model;
 /**
  * Requests the release notification content data from a defined service
  * @api
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
 interface ContentProviderInterface
 {

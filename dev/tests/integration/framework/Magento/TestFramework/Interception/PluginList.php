@@ -48,9 +48,9 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         array $scopePriorityScheme,
         $cacheId = 'plugins',
-        SerializerInterface $serializer = null,
-        ConfigLoaderInterface $configLoader = null,
-        PluginListGenerator $pluginListGenerator = null
+        ?SerializerInterface $serializer = null,
+        ?ConfigLoaderInterface $configLoader = null,
+        ?PluginListGenerator $pluginListGenerator = null
     ) {
         parent::__construct(
             $reader,

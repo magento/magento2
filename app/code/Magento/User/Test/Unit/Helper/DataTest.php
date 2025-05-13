@@ -38,12 +38,10 @@ class DataTest extends TestCase
     {
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);

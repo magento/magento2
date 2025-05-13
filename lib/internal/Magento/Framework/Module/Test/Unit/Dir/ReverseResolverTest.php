@@ -63,7 +63,7 @@ class ReverseResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getModuleNameDataProvider()
+    public static function getModuleNameDataProvider()
     {
         return [
             'module root dir' => ['app/code/Fixture/ModuleOne', 'Fixture_ModuleOne'],

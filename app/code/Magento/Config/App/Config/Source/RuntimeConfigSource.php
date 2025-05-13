@@ -100,6 +100,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
             } else {
                 $code = $this->scopeCodeResolver->resolve($item->getScope(), $item->getScopeId());
                 $config[$item->getScope()][$code][$item->getPath()] = $item->getValue();
+                $config[$item->getScope()][strtolower($code)][$item->getPath()] = $item->getValue();
             }
         }
 

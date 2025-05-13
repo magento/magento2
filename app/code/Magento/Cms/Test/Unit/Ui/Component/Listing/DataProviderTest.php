@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\Reporting;
 use Magento\Ui\Component\Container;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Cms\Api\Data\PageInterface;
 
 class DataProviderTest extends TestCase
 {
@@ -66,6 +67,17 @@ class DataProviderTest extends TestCase
      */
     private $requestFieldName = 'id';
 
+    /**
+     * @var array
+     */
+    private array $pageLayoutColumns = [
+        PageInterface::PAGE_LAYOUT,
+        PageInterface::CUSTOM_THEME,
+        PageInterface::CUSTOM_THEME_FROM,
+        PageInterface::CUSTOM_THEME_TO,
+        PageInterface::CUSTOM_ROOT_TEMPLATE
+    ];
+
     protected function setUp(): void
     {
         $this->authorizationMock = $this->getMockBuilder(Authorization::class)
@@ -111,10 +123,15 @@ class DataProviderTest extends TestCase
      */
     public function testPrepareMetadata()
     {
-        $this->authorizationMock->expects($this->once())
+        $this->authorizationMock->expects($this->exactly(2))
             ->method('isAllowed')
-            ->with('Magento_Cms::save')
-            ->willReturn(false);
+            ->willReturnMap(
+                [
+                    ['Magento_Cms::save', null, false],
+                    ['Magento_Cms::save_design', null, false],
+
+                ]
+            );
 
         $metadata = [
             'cms_page_columns' => [
@@ -130,6 +147,21 @@ class DataProviderTest extends TestCase
                 ]
             ]
         ];
+
+        foreach ($this->pageLayoutColumns as $column) {
+            $metadata['cms_page_columns']['children'][$column] = [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'editor' => [
+                                'editorType' => false
+                            ],
+                            'componentType' => Container::NAME
+                        ]
+                    ]
+                ]
+            ];
+        }
 
         $this->assertEquals(
             $metadata,

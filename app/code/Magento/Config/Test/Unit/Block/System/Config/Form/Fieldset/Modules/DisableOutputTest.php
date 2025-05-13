@@ -43,7 +43,7 @@ class DisableOutputTest extends TestCase
     /**
      * @var array
      */
-    protected $elementData = [
+    protected static $elementData = [
         'htmlId'      => 'test_field_id',
         'name'        => 'test_name',
         'label'       => 'test_label',
@@ -107,7 +107,7 @@ class DisableOutputTest extends TestCase
             ->getMock();
 
         $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
-            ->setMethods(['getNames', 'has', 'getAll', 'getOne'])
+            ->onlyMethods(['getNames', 'has', 'getAll', 'getOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -125,12 +125,12 @@ class DisableOutputTest extends TestCase
             ->willReturn(null);
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods(['getUser'])
+            ->addMethods(['getUser'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->userMock = $this->getMockBuilder(User::class)
-            ->setMethods(['getExtra'])
+            ->addMethods(['getExtra'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -139,7 +139,7 @@ class DisableOutputTest extends TestCase
             ->willReturn($this->userMock);
 
         $groupMock = $this->getMockBuilder(Group::class)
-            ->setMethods(['getFieldsetCss'])
+            ->onlyMethods(['getFieldsetCss'])
             ->disableOriginalConstructor()
             ->getMock();
         $groupMock->expects($this->any())->method('getFieldsetCss')->willReturn('test_fieldset_css');
@@ -181,16 +181,18 @@ class DisableOutputTest extends TestCase
             'secureRenderer' => $secureRendererMock
         ];
 
+        $this->objectManager->prepareObjectManager();
         $this->object = $this->objectManager->getObject(
             DisableOutput::class,
             $data
         );
 
         $this->elementMock = $this->getMockBuilder(Text::class)
-            ->setMethods(
+            ->addMethods(['getExpanded', 'getLegend', 'getComment', 'getTooltip', 'getIsNested'])
+            ->onlyMethods(
                 [
-                    'getId', 'getHtmlId', 'getName', 'getExpanded', 'getLegend', 'getComment', 'getTooltip', 'toHtml',
-                    'addField', 'setRenderer', 'getElements', 'getIsNested'
+                    'getId', 'getHtmlId', 'getName', 'toHtml',
+                    'addField', 'setRenderer', 'getElements'
                 ]
             )
             ->disableOriginalConstructor()
@@ -200,25 +202,25 @@ class DisableOutputTest extends TestCase
 
         $this->elementMock->expects($this->any())
             ->method('getId')
-            ->willReturn($this->elementData['htmlId']);
+            ->willReturn(self::$elementData['htmlId']);
         $this->elementMock->expects($this->any())
             ->method('getHtmlId')
-            ->willReturn($this->elementData['htmlId']);
+            ->willReturn(self::$elementData['htmlId']);
         $this->elementMock->expects($this->any())
             ->method('getName')
-            ->willReturn($this->elementData['name']);
+            ->willReturn(self::$elementData['name']);
         $this->elementMock->expects($this->any())
             ->method('getLegend')
-            ->willReturn($this->elementData['legend']);
+            ->willReturn(self::$elementData['legend']);
         $this->elementMock->expects($this->any())
             ->method('getComment')
-            ->willReturn($this->elementData['comment']);
+            ->willReturn(self::$elementData['comment']);
         $this->elementMock->expects($this->any())
             ->method('getTooltip')
-            ->willReturn($this->elementData['tooltip']);
+            ->willReturn(self::$elementData['tooltip']);
         $this->elementMock->expects($this->any())
             ->method('toHtml')
-            ->willReturn($this->elementData['elementHTML']);
+            ->willReturn(self::$elementData['elementHTML']);
         $this->elementMock->expects($this->any())
             ->method('addField')
             ->willReturn($this->elementMock);
@@ -243,11 +245,11 @@ class DisableOutputTest extends TestCase
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $actualHtml = $this->object->render($this->elementMock);
 
-        $this->assertStringContainsString($this->elementData['htmlId'], $actualHtml);
-        $this->assertStringContainsString($this->elementData['legend'], $actualHtml);
-        $this->assertStringContainsString($this->elementData['comment'], $actualHtml);
-        $this->assertStringContainsString($this->elementData['tooltip'], $actualHtml);
-        $this->assertStringContainsString($this->elementData['elementHTML'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['htmlId'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['legend'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['comment'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['tooltip'], $actualHtml);
+        $this->assertStringContainsString(self::$elementData['elementHTML'], $actualHtml);
         if ($nested) {
             $this->assertStringContainsString('nested', $actualHtml);
         }
@@ -256,7 +258,7 @@ class DisableOutputTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             'expandedNestedExtra' => [
@@ -267,7 +269,7 @@ class DisableOutputTest extends TestCase
             'collapsedNotNestedExtra' => [
                 'expanded' => false,
                 'nested'   => false,
-                'extra'    => ['configState' => [$this->elementData['htmlId'] => true]],
+                'extra'    => ['configState' => [self::$elementData['htmlId'] => true]],
             ],
             'collapsedNotNestedNoExtra' => [
                 'expanded' => false,

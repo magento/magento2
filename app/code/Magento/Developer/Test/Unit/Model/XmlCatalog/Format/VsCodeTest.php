@@ -104,17 +104,13 @@ class VsCodeTest extends TestCase
 
         $this->fileWriteFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
-                [
-                    $configFile,
-                    DriverPool::FILE,
-                    VsCode::FILE_MODE_WRITE
-                ]
-            )->willReturnOnConsecutiveCalls(
-                $this->throwException(new FileSystemException($message)),
-                $fileMock
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($configFile, $fileMock, $message) {
+                if ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_READ) {
+                    throw new FileSystemException($message);
+                } elseif ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_WRITE) {
+                    return $fileMock;
+                }
+            });
 
         $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
@@ -145,11 +141,13 @@ class VsCodeTest extends TestCase
 
         $this->fileWriteFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_WRITE]
-            )
-            ->willReturnOnConsecutiveCalls($fileMock1, $fileMock2);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($configFile, $fileMock1, $fileMock2) {
+                if ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_READ) {
+                    return $fileMock1;
+                } elseif ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_WRITE) {
+                    return $fileMock2;
+                }
+            });
 
         $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
@@ -180,11 +178,13 @@ class VsCodeTest extends TestCase
 
         $this->fileWriteFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_WRITE]
-            )
-            ->willReturnOnConsecutiveCalls($fileMock1, $fileMock2);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($configFile, $fileMock1, $fileMock2) {
+                if ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_READ) {
+                    return $fileMock1;
+                } elseif ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_WRITE) {
+                    return $fileMock2;
+                }
+            });
 
         $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
@@ -215,11 +215,13 @@ class VsCodeTest extends TestCase
 
         $this->fileWriteFactoryMock
             ->method('create')
-            ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_WRITE]
-            )
-            ->willReturnOnConsecutiveCalls($fileMock1, $fileMock2);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($configFile, $fileMock1, $fileMock2) {
+                if ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_READ) {
+                    return $fileMock1;
+                } elseif ($arg1 === $configFile && $arg2 === DriverPool::FILE && $arg3 === VsCode::FILE_MODE_WRITE) {
+                    return $fileMock2;
+                }
+            });
 
         $this->vscodeFormat->generateCatalog($dictionary, $configFile);
     }
@@ -229,7 +231,7 @@ class VsCodeTest extends TestCase
      *
      * @return array
      */
-    public function dictionaryDataProvider(): array
+    public static function dictionaryDataProvider(): array
     {
         $fixtureXmlFile = __DIR__ . '/_files/valid_catalog.xml';
         $content = file_get_contents($fixtureXmlFile);

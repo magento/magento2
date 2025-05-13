@@ -59,13 +59,6 @@ define([
             this.exports.value = this.provider + ':' + this.exportDataLink;
         },
 
-        /** @inheritdoc */
-        destroy: function () {
-            this._super();
-
-            this.source.remove(this.exportDataLink);
-        },
-
         /**
          * Get HTML array from data scope.
          *

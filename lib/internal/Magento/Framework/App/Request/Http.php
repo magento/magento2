@@ -125,7 +125,7 @@ class Http extends Request implements
         ObjectManagerInterface $objectManager,
         $uri = null,
         $directFrontNames = [],
-        PathInfo $pathInfoService = null
+        ?PathInfo $pathInfoService = null
     ) {
         parent::__construct($cookieReader, $converter, $uri);
         $this->routeConfig = $routeConfig;
@@ -458,5 +458,6 @@ class Http extends Request implements
         $this->headers = null;
         $this->metadata = [];
         $this->content = '';
+        $this->distroBaseUrl = null;
     }
 }

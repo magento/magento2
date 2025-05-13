@@ -42,7 +42,7 @@ class CartItemErrors implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
@@ -70,7 +70,7 @@ class CartItemErrors implements ResolverInterface
         $errors = [];
         foreach ($cartItem->getErrorInfos() as $error) {
             $errorType = $error['code'] ?? self::ERROR_UNDEFINED;
-            $message = $error['message'] ?? $cartItem->getMessage();
+            $message = (string) ($error['message'] ?? $cartItem->getMessage());
             $errorEnumCode = $this->enumLookup->getEnumValueFromField(
                 'CartItemErrorType',
                 (string)$errorType

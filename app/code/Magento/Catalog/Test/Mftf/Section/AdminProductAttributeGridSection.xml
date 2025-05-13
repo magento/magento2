@@ -24,6 +24,8 @@
         <element name="isSearchableColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_searchable')]"/>
         <element name="isComparableColumn" type="text" selector="//div[@id='attributeGrid']//td[contains(@class,'a-center col-is_comparable')]"/>
         <element name="addSelected" type="button" selector="//*[contains(text(),'Add Selected')]" timeout="30"/>
+        <element name="deleteSpecificColorAttribute" type="button" selector="//input[@value='{{var}}']/../..//button[@class='action- scalable delete delete-option']" parameterized="true"/>
+        <element name="attributeNameInGrid" type="text" selector="//td[contains(@class,'col-attribute_code') and contains(text(),'{{attribute_code}}')]/following-sibling::td[contains(@class,'col-frontend_label')]" parameterized="true"/>
     </section>
 </sections>
 

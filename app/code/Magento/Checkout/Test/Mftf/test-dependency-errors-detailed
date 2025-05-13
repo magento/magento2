@@ -1,0 +1,96 @@
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/AdminCheckZeroSubtotalOrderWithCustomStatus.xml"
+contains entity references that violate dependency constraints:
+		
+	 CliEnableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping
+	 CliDisableFreeShippingMethodActionGroup from module(s): magento/module-offline-shipping
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/ConfiguringInstantPurchaseFunctionalityTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontPaypalCheckoutSection from module(s): magento/module-paypal
+	 StorefrontInstantPurchaseSection from module(s): magento/module-instant-purchase
+	 StorefrontInstantPurchasePopupSection from module(s): magento/module-instant-purchase
+	 StorefrontPaypalFillCardDataActionGroup from module(s): magento/module-paypal
+	 AdminOpenInstantPurchaseConfigPageActionGroup from module(s): magento/module-instant-purchase
+	 AdminChangeInstantPurchaseStatusActionGroup from module(s): magento/module-instant-purchase
+	 AdminChangeInstantPurchaseButtonTextActionGroup from module(s): magento/module-instant-purchase
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/DeleteConfigurableProductFromShoppingCartTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/DeleteGroupedProductFromShoppingCartTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddThreeGroupedProductToTheCartActionGroup from module(s): magento/module-grouped-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/OnePageCheckoutWithAllProductTypesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/StorefrontAddConfigurableProductToShoppingCartTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/StorefrontAddGroupedProductToShoppingCartTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddThreeGroupedProductToTheCartActionGroup from module(s): magento/module-grouped-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/StorefrontCheckoutWithSpecialPriceProductsTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/StorefrontDeleteConfigurableProductFromMiniShoppingCartTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/StorefrontNotApplicableShippingMethodInReviewAndPaymentStepTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminFedexEnableForCheckoutConfigData from module(s): magento/module-fedex
+	 AdminFedexEnableSandboxModeConfigData from module(s): magento/module-fedex
+	 AdminFedexEnableDebugConfigData from module(s): magento/module-fedex
+	 AdminFedexEnableShowMethodConfigData from module(s): magento/module-fedex
+	 AdminFedexDisableForCheckoutConfigData from module(s): magento/module-fedex
+	 AdminFedexDisableSandboxModeConfigData from module(s): magento/module-fedex
+	 AdminFedexDisableDebugConfigData from module(s): magento/module-fedex
+	 AdminFedexDisableShowMethodConfigData from module(s): magento/module-fedex
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/Test/StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAddConfigurableProductToTheCartActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/ActionGroup/StorefrontCheckSelectedBillingAddressInCheckoutWithSearchActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CheckoutBillingAddressSection from module(s): magento/module-checkout-address-search
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/ActionGroup/StorefrontOpenCustomerAddressesOnPaymentStepInCheckoutActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CheckoutBillingAddressSection from module(s): magento/module-checkout-address-search
+	 CheckoutShippingAddressSearchSection from module(s): magento/module-checkout-address-search
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/ActionGroup/StorefrontSearchAddressInSelectBillingAddressPopupOnPaymentStepOnCheckoutActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CheckoutBillingAddressSearchSection from module(s): magento/module-checkout-address-search
+
+File "/var/www/html/app/code/Magento/Checkout/Test/Mftf/ActionGroup/StorefrontSelectCustomerAddressOnPaymentStepInCheckoutActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 CheckoutBillingAddressSearchSection from module(s): magento/module-checkout-address-search
+	 CheckoutShippingAddressSearchSection from module(s): magento/module-checkout-address-search

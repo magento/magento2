@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -73,10 +73,12 @@
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
-    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="Magento\Catalog\Model\MassAction" />
     <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
     <preference for="Magento\Catalog\Api\CategoryListDeleteBySkuInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
     <preference for="Magento\Theme\CustomerData\MessagesProviderInterface" type="Magento\Catalog\Model\Theme\CustomerData\MessagesProvider"/>
+    <preference for="Magento\Catalog\Api\ProductAttributeIsFilterableManagementInterface" type="Magento\Catalog\Model\Product\Attribute\IsFilterableManagement" />
+    <preference for="Magento\Catalog\Model\Product\Attribute\AttributeSetUnassignValidatorInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetUnassignValidator" />
+    <preference for="Magento\Catalog\Model\ProductMutexInterface" type="Magento\Catalog\Model\ProductMutex" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -554,6 +556,11 @@
     <type name="Magento\Catalog\Model\ResourceModel\Config">
         <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\ResourceModel\Config" />
     </type>
+    <type name="Magento\Catalog\Plugin\Model\ResourceModel\Config">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_eav_cache</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Catalog\Api\ProductLinkTypeListInterface" type="Magento\Catalog\Model\Product\LinkTypeProvider" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkAttributeInterface" type="Magento\Catalog\Model\ProductLink\Attribute" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkTypeInterface" type="Magento\Catalog\Model\ProductLink\Type" />
@@ -739,6 +746,7 @@
                 <item name="Magento\Catalog\Model\Product\Attribute\Backend\Category" xsi:type="string">int[]</item>
                 <item name="Magento\Catalog\Model\Product\Attribute\Backend\Stock" xsi:type="string">Magento\CatalogInventory\Api\Data\StockItemInterface[]</item>
                 <item name="Magento\Catalog\Model\Category\Attribute\Backend\Sortby" xsi:type="string">string[]</item>
+                <item name="Magento\Catalog\Model\Category\Attribute\Backend\DefaultSortby" xsi:type="string">string</item>
             </argument>
         </arguments>
     </type>
@@ -1328,6 +1336,7 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="remove_images_from_gallery_after_removing_product"
                 type="Magento\Catalog\Plugin\RemoveImagesFromGalleryAfterRemovingProduct"/>
+        <plugin name="add_mutex_to_save_operation" type="Magento\Catalog\Plugin\ProductRepositorySaveOperationSynchronizer"/>
     </type>
     <type name="Magento\Catalog\Observer\ImageResizeAfterProductSave">
         <arguments>
@@ -1341,6 +1350,52 @@
                     <item name="product_reserved_attribute_codes" xsi:type="object">\Magento\Catalog\Model\Product\ReservedAttributeCheckerAdapter</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface"
+                type="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver" />
+    <type name="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_Catalog::AttributeRepository" xsi:type="object">Magento\Catalog\Model\Category\AttributeRepository</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\LayoutCacheTagResolverFactory">
+        <arguments>
+            <argument name="cacheTagsResolvers" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product" xsi:type="object">
+                    Magento\Catalog\Model\Product\LayoutCacheTagResolver
+                </item>
+                <item name="Magento\Catalog\Model\Category" xsi:type="object">
+                    Magento\Catalog\Model\Category\LayoutCacheTagResolver
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Virtual\Product\Attribute\GroupFactory" type="Magento\Eav\Model\Entity\Attribute\GroupFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Group</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Virtual\Product\Attribute\Set" type="Magento\Eav\Model\Entity\Attribute\Set">
+        <arguments>
+            <argument name="attrGroupFactory" xsi:type="object">Magento\Catalog\Virtual\Product\Attribute\GroupFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Virtual\Product\Attribute\SetFactory" type="Magento\Eav\Model\Entity\Attribute\SetFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Catalog\Virtual\Product\Attribute\Set</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Set\Save">
+        <arguments>
+            <argument name="attributeSetFactory" xsi:type="object">Magento\Catalog\Virtual\Product\Attribute\SetFactory</argument>
         </arguments>
     </type>
 </config>

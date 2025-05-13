@@ -247,7 +247,7 @@ class GroupedTest extends TestCase
      *
      * @return array
      */
-    public function getIsLastFieldsetDataProvider()
+    public static function getIsLastFieldsetDataProvider()
     {
         return [
             'case1' => ['options' => false, 'expectedResult' => true],

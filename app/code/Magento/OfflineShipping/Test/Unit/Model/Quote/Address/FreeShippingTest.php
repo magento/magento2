@@ -13,7 +13,6 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,12 +21,24 @@ use PHPUnit\Framework\TestCase;
  */
 class FreeShippingTest extends TestCase
 {
+    /**
+     * @var int
+     */
     private static $websiteId = 1;
 
+    /**
+     * @var int
+     */
     private static $customerGroupId = 2;
 
+    /**
+     * @var int
+     */
     private static $couponCode = 3;
 
+    /**
+     * @var int
+     */
     private static $storeId = 1;
 
     /**
@@ -36,22 +47,15 @@ class FreeShippingTest extends TestCase
     private $model;
 
     /**
-     * @var MockObject|StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var MockObject|Calculator
      */
     private $calculator;
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->calculator = $this->createMock(Calculator::class);
 
         $this->model = new FreeShipping(
-            $this->storeManager,
             $this->calculator
         );
     }
@@ -74,19 +78,17 @@ class FreeShippingTest extends TestCase
         $sItem = $this->getItem($quote);
         $items = [$fItem, $sItem];
 
-        $this->calculator->method('init')
-            ->with(self::$websiteId, self::$customerGroupId, self::$couponCode);
+        $this->calculator->method('initFromQuote')
+            ->with($this->getQuote($this->getShippingAddress()));
         $this->calculator->method('processFreeShipping')
-            ->withConsecutive(
-                [$fItem],
-                [$sItem]
-            )
             ->willReturnCallback(
-                function () use ($fItem, $sItem, $addressFree, $fItemFree, $sItemFree) {
-                    // emulate behavior of cart rule calculator
-                    $fItem->getAddress()->setFreeShipping($addressFree);
-                    $fItem->setFreeShipping($fItemFree);
-                    $sItem->setFreeShipping($sItemFree);
+                function ($arg1) use ($fItem, $sItem, $addressFree, $fItemFree, $sItemFree) {
+                    if ($arg1 === $fItem) {
+                        $fItem->getAddress()->setFreeShipping($addressFree);
+                        $fItem->setFreeShipping($fItemFree);
+                    } elseif ($arg1 === $sItem) {
+                        $sItem->setFreeShipping($sItemFree);
+                    }
                 }
             );
 
@@ -100,7 +102,7 @@ class FreeShippingTest extends TestCase
      *
      * @return array
      */
-    public function itemsDataProvider(): array
+    public static function itemsDataProvider(): array
     {
         return [
             ['addressFree' => 1, 'fItemFree' => 0, 'sItemFree' => 0, 'expected' => true],
@@ -118,9 +120,6 @@ class FreeShippingTest extends TestCase
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->storeManager->method('getStore')
-            ->with(self::$storeId)
-            ->willReturn($store);
 
         $store->method('getWebsiteId')
             ->willReturn(self::$websiteId);
@@ -137,9 +136,9 @@ class FreeShippingTest extends TestCase
         /** @var Quote|MockObject $quote */
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getCouponCode'])
+            ->onlyMethods(
                 [
-                    'getCouponCode',
                     'getCustomerGroupId',
                     'getShippingAddress',
                     'getStoreId',
@@ -172,7 +171,7 @@ class FreeShippingTest extends TestCase
         /** @var Address|MockObject $address */
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->setMethods(['beforeSave'])
+            ->onlyMethods(['beforeSave'])
             ->getMock();
 
         return $address;
@@ -189,7 +188,7 @@ class FreeShippingTest extends TestCase
         /** @var Item|MockObject $item */
         $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getHasChildren'])
+            ->addMethods(['getHasChildren'])
             ->getMock();
         $item->setQuote($quote);
         $item->setNoDiscount(0);

@@ -95,25 +95,25 @@ class WebapiTest extends TestCase
     /**
      * @return array
      */
-    public function canShowTabProvider()
+    public static function canShowTabProvider()
     {
         return [
             'null data' => [
-                null,
-                true
+                'integrationData' => null,
+                'expectedValue' => true
             ],
             'empty integration data' => [
-                [],
-                true
+                'integrationData' => [],
+                'expectedValue' => true
             ],
             'manual integration data' => [
-                Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL,
-                true
+                'integrationData' => [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_MANUAL],
+                'expectedValue' => true
             ],
             'config integration data' => [
-                [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG],
-                false
-            ],
+                'integrationData' => [Info::DATA_SETUP_TYPE => IntegrationModel::TYPE_CONFIG],
+                'expectedValue' => false
+            ]
         ];
     }
 
@@ -142,7 +142,7 @@ class WebapiTest extends TestCase
     /**
      * @return array
      */
-    public function isEverythingAllowedProvider()
+    public static function isEverythingAllowedProvider()
     {
         return [
             'root resource in array' => [
@@ -208,7 +208,7 @@ class WebapiTest extends TestCase
     /**
      * @return array
      */
-    public function isEverythingAllowedWithSavedFromDataProvider()
+    public static function isEverythingAllowedWithSavedFromDataProvider()
     {
         return [
             'root resource in array' => [
@@ -227,7 +227,7 @@ class WebapiTest extends TestCase
     /**
      * @param array $integrationData
      * @param array $selectedResources
-     * @return Webapi
+     * @return Webapi|object
      */
     private function getWebapiBlock($integrationData = [], array $selectedResources = [])
     {
@@ -241,12 +241,11 @@ class WebapiTest extends TestCase
         }
 
         $this->registry->expects($this->any())
-            ->method('registry')->withConsecutive(
-                [IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE],
-                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION],
-                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION]
-            )
-            ->willReturnOnConsecutiveCalls(false, $integrationData, $integrationData);
+            ->method('registry')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [IntegrationController::REGISTRY_KEY_CURRENT_RESOURCE] => false,
+                [IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION] => $integrationData
+            });
 
         return $this->objectManager->getObject(
             Webapi::class,

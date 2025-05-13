@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use GraphQL\Language\AST\NodeKind;
+use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\Framework\GraphQl\Query\FieldTranslator;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -19,14 +19,23 @@ class ProductFieldsSelector
     /**
      * @var FieldTranslator
      */
-    private $fieldTranslator;
+    private FieldTranslator $fieldTranslator;
+
+    /**
+     * @var AttributesJoiner
+     */
+    private AttributesJoiner $attributesJoiner;
 
     /**
      * @param FieldTranslator $fieldTranslator
+     * @param AttributesJoiner $attributesJoiner
      */
-    public function __construct(FieldTranslator $fieldTranslator)
-    {
+    public function __construct(
+        FieldTranslator $fieldTranslator,
+        AttributesJoiner $attributesJoiner
+    ) {
         $this->fieldTranslator = $fieldTranslator;
+        $this->attributesJoiner = $attributesJoiner;
     }
 
     /**
@@ -36,27 +45,17 @@ class ProductFieldsSelector
      * @param string $productNodeName
      * @return string[]
      */
-    public function getProductFieldsFromInfo(ResolveInfo $info, string $productNodeName = 'product') : array
+    public function getProductFieldsFromInfo(ResolveInfo $info, string $productNodeName = 'product'): array
     {
         $fieldNames = [];
         foreach ($info->fieldNodes as $node) {
             if ($node->name->value !== $productNodeName) {
                 continue;
             }
-            foreach ($node->selectionSet->selections as $selectionNode) {
-                if ($selectionNode->kind === NodeKind::INLINE_FRAGMENT) {
-                    foreach ($selectionNode->selectionSet->selections as $inlineSelection) {
-                        if ($inlineSelection->kind === NodeKind::INLINE_FRAGMENT) {
-                            continue;
-                        }
-                        $fieldNames[] = $this->fieldTranslator->translate($inlineSelection->name->value);
-                    }
-                    continue;
-                }
-                $fieldNames[] = $this->fieldTranslator->translate($selectionNode->name->value);
-            }
+                $queryFields = $this->attributesJoiner->getQueryFields($node, $info);
+                $fieldNames[] = $queryFields;
         }
 
-        return $fieldNames;
+        return array_merge(...$fieldNames);
     }
 }

@@ -12,7 +12,7 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
     /**
      * @return array
      */
-    public function exportImportDataProvider(): array
+    public static function exportImportDataProvider(): array
     {
         return [
             'configurable-product' => [
@@ -106,7 +106,7 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
         $skus,
         $skippedAttributes,
         $usePagination = false,
-        string $csvfile = null
+        ?string $csvfile = null
     ) {
         $skippedAttributes = array_merge($skippedAttributes, ['_cache_instance_product_set_attributes']);
         parent::executeImportReplaceTest($skus, $skippedAttributes, $usePagination, $csvfile);

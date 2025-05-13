@@ -64,8 +64,8 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
         \Magento\Indexer\Model\ResourceModel\Indexer\State $resource,
         \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection $resourceCollection,
         array $data = [],
-        \Magento\Framework\Lock\LockManagerInterface $lockManager = null,
-        \Magento\Framework\App\DeploymentConfig $configReader = null
+        ?\Magento\Framework\Lock\LockManagerInterface $lockManager = null,
+        ?\Magento\Framework\App\DeploymentConfig $configReader = null
     ) {
         if (!isset($data['status'])) {
             $data['status'] = self::STATUS_INVALID;

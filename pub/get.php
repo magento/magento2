@@ -62,13 +62,13 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
             $fileRelativePath = str_replace(rtrim($mediaDirectory, '/') . '/', '', $fileAbsolutePath);
 
             if (!$isAllowed($fileRelativePath, $allowedResources)) {
-                require_once 'errors/404.php';
+                require 'errors/404.php';
                 exit;
             }
 
             if (is_readable($fileAbsolutePath)) {
                 if (is_dir($fileAbsolutePath)) {
-                    require_once 'errors/404.php';
+                    require 'errors/404.php';
                     exit;
                 }
 

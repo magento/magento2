@@ -8,6 +8,8 @@ namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogUrlRewrite\Model\GetVisibleForStores;
+use Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder;
 use Magento\CatalogUrlRewrite\Model\Products\AppendUrlRewritesToProducts;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
@@ -24,6 +26,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * Class ProductProcessUrlRewriteSavingObserver
  *
  * Generates urls for product url rewrites
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 {
@@ -53,24 +56,40 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private $storeViewService;
 
     /**
+     * @var UrlRewriteFinder
+     */
+    private $urlRewriteFinder;
+
+    /**
+     * @var GetVisibleForStores
+     */
+    private $visibleForStores;
+
+    /**
      * @param UrlPersistInterface $urlPersist
      * @param AppendUrlRewritesToProducts $appendRewrites
      * @param ScopeConfigInterface $scopeConfig
      * @param GetStoresListByWebsiteIds $getStoresList
      * @param StoreViewService $storeViewService
+     * @param UrlRewriteFinder $urlRewriteFinder
+     * @param GetVisibleForStores $visibleForStores
      */
     public function __construct(
-        UrlPersistInterface $urlPersist,
+        UrlPersistInterface         $urlPersist,
         AppendUrlRewritesToProducts $appendRewrites,
-        ScopeConfigInterface $scopeConfig,
-        GetStoresListByWebsiteIds $getStoresList,
-        StoreViewService $storeViewService
+        ScopeConfigInterface        $scopeConfig,
+        GetStoresListByWebsiteIds   $getStoresList,
+        StoreViewService            $storeViewService,
+        UrlRewriteFinder            $urlRewriteFinder,
+        GetVisibleForStores         $visibleForStores
     ) {
         $this->urlPersist = $urlPersist;
         $this->appendRewrites = $appendRewrites;
         $this->scopeConfig = $scopeConfig;
         $this->getStoresList = $getStoresList;
         $this->storeViewService = $storeViewService;
+        $this->urlRewriteFinder = $urlRewriteFinder;
+        $this->visibleForStores = $visibleForStores;
     }
 
     /**
@@ -87,29 +106,41 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 
         if ($this->isNeedUpdateRewrites($product)) {
             $this->deleteObsoleteRewrites($product);
-            $oldWebsiteIds = $product->getOrigData('website_ids') ?? [];
-            $storesToAdd = $this->getStoresList->execute(
-                array_diff($product->getWebsiteIds(), $oldWebsiteIds)
-            );
-
-            if ($product->getStoreId() === Store::DEFAULT_STORE_ID
-                && $product->dataHasChangedFor('visibility')
-                && (int) $product->getOrigData('visibility') === Visibility::VISIBILITY_NOT_VISIBLE
-            ) {
-                foreach ($product->getStoreIds() as $storeId) {
-                    if (!$this->storeViewService->doesEntityHaveOverriddenVisibilityForStore(
-                        $storeId,
-                        $product->getId(),
-                        Product::ENTITY
-                    )
-                    ) {
-                        $storesToAdd[] = $storeId;
-                    }
-                }
-                $storesToAdd = array_unique($storesToAdd);
-            }
-            $this->appendRewrites->execute([$product], $storesToAdd);
+            $this->addMissingRewrites($product);
         }
+    }
+
+    /**
+     * Add missing url rewrites
+     *
+     * @param Product $product
+     * @return void
+     * @throws UrlAlreadyExistsException
+     */
+    private function addMissingRewrites(Product $product)
+    {
+        $oldWebsiteIds = $product->getOrigData('website_ids') ?? [];
+        $storesToAdd = $this->getStoresList->execute(
+            array_diff($product->getWebsiteIds(), $oldWebsiteIds)
+        );
+
+        if ($product->getStoreId() === Store::DEFAULT_STORE_ID
+            && $product->dataHasChangedFor('visibility')
+            && (int)$product->getOrigData('visibility') === Visibility::VISIBILITY_NOT_VISIBLE
+        ) {
+            foreach ($product->getStoreIds() as $storeId) {
+                if (!$this->storeViewService->doesEntityHaveOverriddenVisibilityForStore(
+                    $storeId,
+                    $product->getId(),
+                    Product::ENTITY
+                )
+                ) {
+                    $storesToAdd[] = $storeId;
+                }
+            }
+            $storesToAdd = array_unique($storesToAdd);
+        }
+        $this->appendRewrites->execute([$product], $storesToAdd);
     }
 
     /**
@@ -182,7 +213,8 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                 && (int)$product->getVisibility() !== Visibility::VISIBILITY_NOT_VISIBLE)
             || ($product->getIsChangedCategories() && $this->isGenerateCategoryProductRewritesEnabled())
             || $this->isWebsiteChanged($product)
-            || $product->dataHasChangedFor('visibility');
+            || $product->dataHasChangedFor('visibility')
+            || $this->isMissingUrlRewrites($product);
     }
 
     /**
@@ -193,5 +225,31 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     private function isGenerateCategoryProductRewritesEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag('catalog/seo/generate_category_product_rewrites');
+    }
+
+    /**
+     * Check if url rewrites are missing for a store
+     *
+     * @param Product $product
+     * @return bool
+     */
+    private function isMissingUrlRewrites(Product $product): bool
+    {
+        $visibleForStores = $this->visibleForStores->execute($product);
+        foreach ($product->getStoreIds() as $storeId) {
+            if (!isset($visibleForStores[$storeId]) && isset($visibleForStores[Store::DEFAULT_STORE_ID])
+                || isset($visibleForStores[$storeId])) {
+                $urlRewrite = $this->urlRewriteFinder->findAllByData(
+                    $product->getId(),
+                    $storeId,
+                    'product'
+                );
+
+                if (count($urlRewrite) === 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

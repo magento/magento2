@@ -87,11 +87,11 @@ QUERY;
      *
      * @return array
      */
-    public function getProductCustomizableOptionsProvider(): array
+    public static function getProductCustomizableOptionsProvider(): array
     {
         return [
             'products' => [
-                'items' => [
+                'optionDataProvider' => [
                     'options' => [
                         [
                             'title' => 'test_option_code_1'

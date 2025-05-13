@@ -11,10 +11,12 @@ use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSetCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
+use Magento\Config\Console\Command\LocaleEmulatorInterface;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\ValidatorException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -57,6 +59,11 @@ class ConfigSetCommandTest extends TestCase
     private $processorFacadeMock;
 
     /**
+     * @var LocaleEmulatorInterface|MockObject
+     */
+    private $localeEmulatorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -76,12 +83,15 @@ class ConfigSetCommandTest extends TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->localeEmulatorMock = $this->getMockBuilder(LocaleEmulatorInterface::class)
+            ->getMockForAbstractClass();
 
         $this->command = new ConfigSetCommand(
             $this->emulatedAreProcessorMock,
             $this->changeDetectorMock,
             $this->processorFacadeFactoryMock,
-            $this->deploymentConfigMock
+            $this->deploymentConfigMock,
+            $this->localeEmulatorMock
         );
     }
 
@@ -103,6 +113,11 @@ class ConfigSetCommandTest extends TestCase
             ->method('process')
             ->willReturnCallback(function ($function) {
                 return $function();
+            });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) {
+                return $callback();
             });
 
         $tester = new CommandTester($this->command);

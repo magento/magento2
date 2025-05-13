@@ -141,8 +141,8 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        EntityFactoryInterface $_entityFactory = null,
-        \Magento\Framework\Filesystem $filesystem = null
+        ?EntityFactoryInterface $_entityFactory = null,
+        ?\Magento\Framework\Filesystem $filesystem = null
     ) {
         $this->_entityFactory = $_entityFactory ?? ObjectManager::getInstance()->get(EntityFactoryInterface::class);
 

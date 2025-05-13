@@ -131,7 +131,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param null|array $predefinedStoreIds
      * @return array
      */
-    public function getCurrentStoreIds(array $predefinedStoreIds = null)
+    public function getCurrentStoreIds(?array $predefinedStoreIds = null)
     {
         $stores = [];
         // get all or specified stores

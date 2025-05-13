@@ -14,6 +14,7 @@
             <description value="Login as admin and check the configurable product price when one child product child product price is updated"/>
             <severity value="CRITICAL"/>
             <group value="product"/>
+            <group value="indexers_by_schedule_mode_only"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -86,17 +87,17 @@
             </createData>
 
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
-            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
-
-            <!-- Run cron -->
-            <magentoCron stepKey="runIndexCronJobs" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="Adding the comment to replace 'indexer:set-mode schedule' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- Wait till cron job runs for schedule updates -->
             <wait time="60" stepKey="waitForUpdateStarts"/>
         </before>
         <after>
-            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="realtime" />
+            <comment userInput="Adding the comment to replace 'indexer:set-mode realtime' command for preserving Backward Compatibility" stepKey="setIndexerMode"/>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindex"/>
 
             <!-- Delete Created Data -->
@@ -108,7 +109,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Open Product in Store Front Page -->
@@ -164,9 +165,9 @@
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
 
         <updateData entity="SimpleProductUpdatePrice90" createDataKey="createConfigChildProduct1" stepKey="updateSimpleProductOne"/>
-
-        <!-- Run cron -->
-        <magentoCron stepKey="runIndexCronJobs" groups="index"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Wait till cron job runs for schedule updates -->

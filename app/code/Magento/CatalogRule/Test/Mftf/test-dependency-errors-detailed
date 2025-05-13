@@ -1,0 +1,22 @@
+
+File "/var/www/html/app/code/Magento/CatalogRule/Test/Mftf/Test/AdminDeleteCatalogPriceRuleTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute from module(s): magento/module-configurable-product
+	 CreateConfigurableProductActionGroup from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/CatalogRule/Test/Mftf/Test/ApplyCatalogPriceRuleByProductAttributeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 NewProduct from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/CatalogRule/Test/Mftf/Test/CatalogPriceRuleAndCustomerGroupMembershipArePersistedUnderLongTermCookieTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 StorefrontAssertPersistentCustomerWelcomeMessageActionGroup from module(s): magento/module-persistent
+
+File "/var/www/html/app/code/Magento/CatalogRule/Test/Mftf/Test/StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsMultiCurrencyStoreTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCurrencyRatesPageActionGroup from module(s): magento/module-currency-symbol
+	 AdminSetCurrencyRatesActionGroup from module(s): magento/module-currency-symbol

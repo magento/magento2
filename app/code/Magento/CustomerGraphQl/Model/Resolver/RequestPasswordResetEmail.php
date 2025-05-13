@@ -83,8 +83,8 @@ class RequestPasswordResetEmail implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (empty($args['email'])) {
             throw new GraphQlInputException(__('You must specify an email address.'));

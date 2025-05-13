@@ -9,41 +9,38 @@ use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
 use Magento\Paypal\Model\Payflow\Transparent;
 
-/**
- * Class CVV2Match
- */
 class CVV2Match implements ValidatorInterface
 {
     /**
      * Result of the card security code (CVV2) check
      */
-    const CVV2MATCH = 'cvv2match';
+    public const CVV2MATCH = 'cvv2match';
 
     /**
      * This field returns the transaction amount, or if performing a partial authorization,
      * the amount approved for the partial authorization.
      */
-    const AMT = 'amt';
+    public const AMT = 'amt';
 
     /**
      * Message if validation fail
      */
-    const ERROR_MESSAGE = 'Card security code does not match.';
+    public const ERROR_MESSAGE = 'Card security code does not match.';
 
     /**#@+ Values of the response */
-    const RESPONSE_YES = 'y';
+    public const RESPONSE_YES = 'y';
 
-    const RESPONSE_NO = 'n';
+    public const RESPONSE_NO = 'n';
 
-    const RESPONSE_NOT_SUPPORTED = 'x';
+    public const RESPONSE_NOT_SUPPORTED = 'x';
     /**#@-*/
 
     /**#@+ Validation settings payments */
-    const CONFIG_ON = 1;
+    public const CONFIG_ON = 1;
 
-    const CONFIG_OFF = 0;
+    public const CONFIG_OFF = 0;
 
-    const CONFIG_NAME = 'avs_security_code';
+    public const CONFIG_NAME = 'avs_security_code';
     /**#@-*/
 
     /**
@@ -55,7 +52,7 @@ class CVV2Match implements ValidatorInterface
      */
     public function validate(DataObject $response, Transparent $transparentModel)
     {
-        if ($transparentModel->getConfig()->getValue(static::CONFIG_NAME) === static::CONFIG_OFF) {
+        if ((int)$transparentModel->getConfig()->getValue(static::CONFIG_NAME) === static::CONFIG_OFF) {
             return true;
         }
 

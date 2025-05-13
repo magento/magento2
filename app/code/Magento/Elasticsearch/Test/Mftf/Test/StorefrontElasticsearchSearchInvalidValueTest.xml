@@ -25,7 +25,9 @@
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Set Minimal Query Length-->
             <magentoCLI command="config:set {{SetMinQueryLength2Config.path}} {{SetMinQueryLength2Config.value}}" stepKey="setMinQueryLength"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
@@ -87,11 +89,11 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm">
             <argument name="phrase" value="?searchable;"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductName"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductName"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForSecondSearchTerm">
             <argument name="phrase" value="? searchable ;"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductNameSecondTime"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductNameSecondTime"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForSecondSearchTerm">
             <argument name="phrase" value="?;"/>
         </actionGroup>
@@ -99,11 +101,11 @@
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbols">
             <argument name="phrase" value="?{{ProductWithSpecialSymbols.name}};"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbols"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbols"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchProductForWithSpecialSymbolsSecondTime">
             <argument name="phrase" value="? {{ProductWithSpecialSymbols.name}} ;"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbolsSecondTime"/>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ProductWithSpecialSymbols.name}}" stepKey="seeProductWithSpecialSymbolsSecondTime"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForThirdSearchTerm">
             <argument name="phrase" value="?anythingcangobetween;"/>
         </actionGroup>

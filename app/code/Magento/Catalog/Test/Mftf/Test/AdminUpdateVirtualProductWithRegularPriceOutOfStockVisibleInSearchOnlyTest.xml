@@ -25,7 +25,9 @@
             <createData entity="defaultVirtualProduct" stepKey="initialVirtualProduct">
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteDefaultVirtualProduct">

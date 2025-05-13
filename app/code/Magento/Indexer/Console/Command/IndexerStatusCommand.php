@@ -95,6 +95,9 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
             case \Magento\Framework\Indexer\StateInterface::STATUS_WORKING:
                 $status = 'Processing';
                 break;
+            case \Magento\Framework\Indexer\StateInterface::STATUS_SUSPENDED:
+                $status = 'Suspended';
+                break;
         }
         return $status;
     }

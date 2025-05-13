@@ -7,44 +7,52 @@
 
 define([
     'jquery',
-    'squire'
-], function ($, Squire) {
+    'Magento_Backend/js/media-uploader'
+], function ($) {
     'use strict';
 
-    describe('Magento_Backend/js/media-uploader', function () {
-        let injector = new Squire(),
-            mediaUploaderComponent;
+    describe('Magento_Backend/js/media-uploader::_create()', function () {
 
-        beforeEach(function (done) {
-            injector.require([
-                'Magento_Backend/js/media-uploader',
-                'knockoutjs/knockout-es5'
-            ], function (mediaUploader) {
-                mediaUploaderComponent = new mediaUploader({});
-                done();
+        beforeEach(function () {
+            window.Uppy = {
+                Uppy: jasmine.createSpy('Uppy'),
+                Dashboard: jasmine.createSpy('Dashboard'),
+                Compressor: jasmine.createSpy('Compressor'),
+                DropTarget: jasmine.createSpy('DropTarget'),
+                XHRUpload: jasmine.createSpy('XHRUpload')
+            };
+
+            window.FORM_KEY = 'form_key';
+
+            window.Uppy.Uppy.and.returnValue({
+                use: jasmine.createSpy('uppyUse'),
+                on: jasmine.createSpy('uppyOn')
+            });
+
+            window.byteConvert = jasmine.createSpy('byteConvert');
+
+            spyOn($.fn, 'appendTo');
+
+            $('<div>').mediaUploader();
+        });
+
+        it('Uppy instance should get created with correct options', function () {
+            expect(window.Uppy.Uppy).toHaveBeenCalledWith({
+                autoProceed: true,
+                onBeforeFileAdded: jasmine.any(Function),
+                meta: {
+                    'form_key': jasmine.any(String),
+                    isAjax: true
+                }
             });
         });
 
-        afterEach(function () {
-            try {
-                injector.clean();
-                injector.remove();
-            } catch (e) {
-            }
-        });
+        it('Uppy should get configured with necessary plugins', function () {
+            const uppyInstance = window.Uppy.Uppy.calls.mostRecent().returnValue;
 
-        describe('_create() method', function () {
-            it('_create method to be trigger and check the dropzone attribute key and value', function () {
-                spyOn(jQuery.fn, 'fileupload');
-                mediaUploaderComponent._create();
-                expect(jQuery.fn.fileupload).toHaveBeenCalledWith(
-                    jasmine.objectContaining({
-                        dropZone: mediaUploaderComponent.
-                                    element.find('input[type=file]')
-                                    .closest('[role="dialog"]')
-                    }
-                ));
-            });
+            expect(uppyInstance.use).toHaveBeenCalledWith(window.Uppy.Dashboard, jasmine.any(Object));
+            expect(uppyInstance.use).toHaveBeenCalledWith(window.Uppy.DropTarget, jasmine.any(Object));
+            expect(uppyInstance.use).toHaveBeenCalledWith(window.Uppy.XHRUpload, jasmine.any(Object));
         });
     });
 });

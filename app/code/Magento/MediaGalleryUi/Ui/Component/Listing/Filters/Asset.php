@@ -45,7 +45,7 @@ class Asset extends Select
         FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
         GetContentByAssetIdsInterface $getContentIdentities,
-        OptionSourceInterface $optionsProvider = null,
+        ?OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {

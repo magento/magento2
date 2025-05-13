@@ -94,36 +94,30 @@ class CreditmemoLoaderTest extends TestCase
         $this->creditmemoFactoryMock = $this->createMock(CreditmemoFactory::class);
         $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->invoiceRepositoryMock = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->helperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->stockConfiguration = $this->getMockBuilder(Configuration::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->loader = new CreditmemoLoader(
@@ -148,7 +142,6 @@ class CreditmemoLoaderTest extends TestCase
 
         $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->creditmemoRepositoryMock->expects($this->once())
             ->method('get')
@@ -168,7 +161,6 @@ class CreditmemoLoaderTest extends TestCase
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
@@ -184,7 +176,6 @@ class CreditmemoLoaderTest extends TestCase
             ->willReturn($orderMock);
         $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $invoiceMock->expects($this->any())
             ->method('setOrder')
@@ -213,7 +204,6 @@ class CreditmemoLoaderTest extends TestCase
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
@@ -241,16 +231,13 @@ class CreditmemoLoaderTest extends TestCase
             ->willReturn($invoiceMock);
         $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $creditmemoItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $creditmemoItemMock->expects($this->any())
             ->method('getOrderItem')
