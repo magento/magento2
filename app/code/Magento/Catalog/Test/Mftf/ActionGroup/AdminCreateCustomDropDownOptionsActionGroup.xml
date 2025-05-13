@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -20,6 +20,7 @@
             <argument name="secondOption" type="entity"/>
         </arguments>
 
+        <waitForElementClickable stepKey="waitForAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
         <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
         <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
 

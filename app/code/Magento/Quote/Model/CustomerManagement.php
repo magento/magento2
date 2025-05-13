@@ -163,6 +163,7 @@ class CustomerManagement
             $billingAddress = $quote->getBillingAddress();
             $customerAddress = $this->customerAddressFactory->create();
             $customerAddress->setFirstname($billingAddress->getFirstname());
+            $customerAddress->setMiddlename($billingAddress?->getMiddlename());
             $customerAddress->setLastname($billingAddress->getLastname());
             $customerAddress->setStreet($billingAddress->getStreet());
             $customerAddress->setCity($billingAddress->getCity());
