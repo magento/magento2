@@ -96,4 +96,14 @@
         <plugin name="billing_address_save_same_as_shipping"
                 type="Magento\QuoteGraphQl\Plugin\CustomerManagementPlugin"/>
     </type>
+    <type name="Magento\Payment\Model\MethodList">
+        <plugin name="restrict_payment_methods_graphql" type="Magento\QuoteGraphQl\Plugin\Model\RestrictPaymentMethods"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\MergeCarts">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="gift_message_id" xsi:type="string">gift_message_id</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

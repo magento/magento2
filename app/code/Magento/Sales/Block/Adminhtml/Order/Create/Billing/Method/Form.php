@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method;
 
@@ -9,14 +9,11 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Billing\Method;
  * Adminhtml sales order create payment method form block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Form extends \Magento\Payment\Block\Form\Container
 {
     /**
-     * Session quote
-     *
      * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
@@ -106,6 +103,7 @@ class Form extends \Magento\Payment\Block\Form\Container
      *
      * @return true
      * @deprecated 100.1.0 unused
+     * @see nothing
      */
     public function hasSsCardType()
     {

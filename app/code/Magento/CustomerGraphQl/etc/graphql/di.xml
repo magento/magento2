@@ -214,4 +214,11 @@
         <plugin name="merge_order_after_customer_signup"
                 type="Magento\CustomerGraphQl\Plugin\Model\MergeGuestOrder" />
     </type>
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
+        <arguments>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="authorizationValidator" xsi:type="object">Magento\CustomerGraphQl\Controller\HttpRequestValidator\AuthorizationRequestValidator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
