@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,10 +9,10 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\ProductDataProvider;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
  * Fetches the Product data according to the GraphQL schema
@@ -20,16 +20,13 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class ProductResolver implements ResolverInterface
 {
     /**
-     * @var ProductDataProvider
-     */
-    private $productDataProvider;
-
-    /**
+     * ProductResolver Constructor
+     *
      * @param ProductDataProvider $productDataProvider
      */
-    public function __construct(ProductDataProvider $productDataProvider)
-    {
-        $this->productDataProvider = $productDataProvider;
+    public function __construct(
+        private readonly ProductDataProvider $productDataProvider
+    ) {
     }
 
     /**
@@ -43,11 +40,13 @@ class ProductResolver implements ResolverInterface
         ?array $args = null
     ) {
         if (!isset($value['associatedProduct'])) {
-            throw new LocalizedException(__('Missing key "associatedProduct" in Order Item value data'));
+            throw new GraphQlNoSuchEntityException(
+                __("This product is currently out of stock or not available.")
+            );
         }
         /** @var Product $product */
         $product = $value['associatedProduct'];
 
-        return $this->productDataProvider->getProductDataById((int) $product->getId());
+        return $this->productDataProvider->getProductDataById((int)$product->getId());
     }
 }

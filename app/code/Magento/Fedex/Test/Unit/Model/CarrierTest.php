@@ -996,6 +996,75 @@ class CarrierTest extends TestCase
     }
 
     /**
+     * Test getCode with invalid type
+     */
+    public function testGetCodeWithInvalidType(): void
+    {
+        $result = $this->carrier->getCode('invalid_type');
+        $this->assertFalse($result, 'Should return false for invalid type');
+    }
+
+    /**
+     * Test getCode with valid type and no code (returns all codes)
+     */
+    public function testGetCodeWithValidTypeNoCode(): void
+    {
+        $result = $this->carrier->getCode('method');
+        $this->assertIsArray($result, 'Should return array of all method codes');
+        $this->assertArrayHasKey('FEDEX_INTERNATIONAL_PRIORITY', $result);
+        $this->assertArrayHasKey('FEDEX_INTERNATIONAL_PRIORITY_EXPRESS', $result);
+        $this->assertEquals(__('International Priority'), $result['FEDEX_INTERNATIONAL_PRIORITY']);
+    }
+
+    /**
+     * Test getCode with valid type and valid code
+     */
+    public function testGetCodeWithValidTypeAndCode(): void
+    {
+        $result = $this->carrier->getCode('method', 'FEDEX_INTERNATIONAL_PRIORITY');
+        $this->assertInstanceOf(
+            \Magento\Framework\Phrase::class,
+            $result,
+            'Should return Phrase object for valid method code'
+        );
+        $this->assertEquals('International Priority', $result->getText());
+    }
+
+    /**
+     * Test getCode with valid type and invalid code
+     */
+    public function testGetCodeWithValidTypeAndInvalidCode(): void
+    {
+        $result = $this->carrier->getCode('method', 'INVALID_CODE');
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test getCode with packaging type
+     */
+    public function testGetCodeWithPackagingType(): void
+    {
+        $result = $this->carrier->getCode('packaging', 'FEDEX_ENVELOPE');
+        $this->assertInstanceOf(
+            \Magento\Framework\Phrase::class,
+            $result,
+            'Should return Phrase object for valid packaging code'
+        );
+        $this->assertEquals('FedEx Envelope', $result->getText());
+    }
+
+    /**
+     * Test getCode with dropoff type and empty code
+     */
+    public function testGetCodeWithDropoffTypeNoCode(): void
+    {
+        $result = $this->carrier->getCode('dropoff');
+        $this->assertIsArray($result, 'Should return array of all dropoff codes');
+        $this->assertArrayHasKey('REGULAR_PICKUP', $result);
+        $this->assertEquals(__('Regular Pickup'), $result['REGULAR_PICKUP']);
+    }
+
+    /**
      * Gets list of variations for testing ship date.
      *
      * @return array
@@ -1065,7 +1134,7 @@ class CarrierTest extends TestCase
             ],
             'tracking8' => [
                 'tracking8',
-                'shipTimestamp' => '2024-09-19T02:06:35+03:00',
+                'shipTimeStamp' => '2024-09-19T02:06:35+03:00',
                 'expectedDate' => '2024-09-21',
                 '18:31:00',
                 true

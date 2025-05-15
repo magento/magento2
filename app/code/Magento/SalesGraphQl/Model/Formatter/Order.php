@@ -57,7 +57,7 @@ class Order
             'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
             'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),
             'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
-            'applied_coupons' => $orderModel->getCouponCode() ? ['code' => $orderModel->getCouponCode()] : [],
+            'applied_coupons' => $orderModel->getCouponCode() ? [['code' => $orderModel->getCouponCode()]] : [],
             'model' => $orderModel,
             'comments' => $this->getOrderComments($orderModel)
         ];
