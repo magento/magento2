@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe.
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Account;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Customer\Model\Form;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Customer\Model\Context;
+use Magento\Framework\App\Http\Context as HttpContext;
 
 /**
  * @api
@@ -25,20 +28,28 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     private $serializer;
 
     /**
+     * @var array
+     */
+    private $layoutProcessors;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param array $layoutProcessors
      * @throws \RuntimeException
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         array $data = [],
-        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        array $layoutProcessors = []
     ) {
         parent::__construct($context, $data);
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->layoutProcessors = $layoutProcessors;
     }
 
     /**
@@ -48,6 +59,9 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      */
     public function getJsLayout()
     {
+        foreach ($this->layoutProcessors as $processor) {
+            $this->jsLayout = $processor->process($this->jsLayout);
+        }
         return $this->serializer->serialize($this->jsLayout);
     }
 
