@@ -9,6 +9,7 @@ use Magento\Framework\EntityManager\OperationInterface;
 
 /**
  * Interface for reading entity data
+ * @deprecated
  */
 interface ReadInterface extends OperationInterface
 {

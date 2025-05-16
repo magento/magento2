@@ -16,6 +16,8 @@ namespace Magento\Catalog\Model\Layer;
  *
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with their
  * corresponding abstract classes.
+ *
+ * @deprecated
  */
 interface ContextInterface
 {

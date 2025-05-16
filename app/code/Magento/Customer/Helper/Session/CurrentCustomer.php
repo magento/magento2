@@ -15,6 +15,8 @@ use Magento\Framework\View\LayoutInterface;
 
 /**
  * Class CurrentCustomer
+ * @deprecated use \Magento\Customer\Model\Session
+ *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CurrentCustomer

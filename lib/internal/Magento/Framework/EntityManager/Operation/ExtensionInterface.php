@@ -7,6 +7,7 @@ namespace Magento\Framework\EntityManager\Operation;
 
 /**
  * Interface ExtensionInterface
+ * @deprecated
  */
 interface ExtensionInterface
 {

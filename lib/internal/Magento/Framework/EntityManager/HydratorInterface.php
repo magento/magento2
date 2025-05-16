@@ -8,6 +8,7 @@ namespace Magento\Framework\EntityManager;
 
 /**
  * Interface HydratorInterface
+ * @deprecated
  */
 interface HydratorInterface
 {
