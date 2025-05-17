@@ -11,8 +11,9 @@
 $width = (int)$block->getWidth();
 $height = (int)$block->getHeight();
 $paddingBottom = $block->getRatio() * 100;
+$productUniqId = $block->getViewModel()->getProductUniqId($block->getProductId());
 ?>
-<span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
+<span class="product-image-container product-image-container-<?= /* @noEscape */ $productUniqId ?>">
     <span class="product-image-wrapper">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
@@ -26,7 +27,7 @@ $paddingBottom = $block->getRatio() * 100;
 </span>
 <?php
 $styles = <<<STYLE
-.product-image-container-{$block->getProductId()} {
+.product-image-container-{$productUniqId} {
     width: {$width}px;
     height: auto;
     aspect-ratio: {$width} / {$height};
@@ -35,7 +36,7 @@ $styles = <<<STYLE
     height: 100%;
     width: 100%;
 }
-@supports not (aspect-ratio: auto) { 
+@supports not (aspect-ratio: auto) {
     .product-image-container-{$block->getProductId()} span.product-image-wrapper {
         padding-bottom: {$paddingBottom}%;
     }
