@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
@@ -10,7 +10,6 @@ namespace Magento\Config\Block\System\Config\Form\Field\FieldArray;
  * Backend system config array field renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
- * @api
  * @since 100.0.2
  */
 abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Form\Field
@@ -126,10 +125,12 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    // @codingStandardsIgnoreStart
     protected function _prepareArrayRow(\Magento\Framework\DataObject $row)
     {
         // override in descendants
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Obtain existing data from form element
@@ -196,16 +197,23 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     public function renderCellTemplate($columnName)
     {
         if (empty($this->_columns[$columnName])) {
+            //  phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Wrong column name specified.');
         }
         $column = $this->_columns[$columnName];
         $inputName = $this->_getCellInputElementName($columnName);
+        $inputId = $this->_getCellInputElementId('<%- _id %>', $columnName);
 
         if ($column['renderer']) {
-            return $column['renderer']->setInputName(
+            return $column['renderer']->setName(
+                $inputName
+            )->setId(
+                $inputId
+                // setInputName() and setInputId() are called for BC.
+            )->setInputName(
                 $inputName
             )->setInputId(
-                $this->_getCellInputElementId('<%- _id %>', $columnName)
+                $inputId
             )->setColumnName(
                 $columnName
             )->setColumn(
@@ -213,10 +221,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             )->toHtml();
         }
 
-        return '<input type="text" id="' . $this->_getCellInputElementId(
-            '<%- _id %>',
-            $columnName
-        ) .
+        return '<input type="text" id="' . $inputId .
             '"' .
             ' name="' .
             $inputName .
@@ -237,10 +242,12 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
      *
      * @return void
      */
+    // @codingStandardsIgnoreStart
     protected function _prepareToRender()
     {
         // Override in descendants to add columns, change add button label etc
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Render block HTML
@@ -255,6 +262,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             $this->_isPreparedToRender = true;
         }
         if (empty($this->_columns)) {
+            //  phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('At least one column must be defined.');
         }
         return parent::_toHtml();
@@ -281,6 +289,8 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
     }
 
     /**
+     * Add Button Label
+     *
      * @return string
      * @since 101.0.0
      */

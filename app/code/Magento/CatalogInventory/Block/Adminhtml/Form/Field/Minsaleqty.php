@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
  * @deprecated 100.3.0 Replaced with Multi Source Inventory
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
+ * @see Nothing
  */
 class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
@@ -33,9 +34,7 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
     {
         if (!$this->_groupRenderer) {
             $this->_groupRenderer = $this->getLayout()->createBlock(
-                \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup::class,
-                '',
-                ['data' => ['is_render_to_js_template' => true]]
+                \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup::class
             );
             $this->_groupRenderer->setClass('customer_group_select admin__control-select');
         }
@@ -69,6 +68,8 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
      *
      * @param \Magento\Framework\DataObject $row
      * @return void
+     * @deprecated
+     * @see Nothing
      */
     protected function _prepareArrayRow(\Magento\Framework\DataObject $row)
     {
