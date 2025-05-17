@@ -160,7 +160,7 @@ class OrderItemPricesWithFPTTest extends GraphQlAbstract
             $this->getQuery(
                 $order->getIncrementId(),
                 $order->getBillingAddress()->getEmail(),
-                $order->getBillingAddress()->getPostcode()
+                $order->getBillingAddress()->getLastname()
             )
         );
 
@@ -247,17 +247,17 @@ class OrderItemPricesWithFPTTest extends GraphQlAbstract
      *
      * @param string $number
      * @param string $email
-     * @param string $postcode
+     * @param string $lastname
      * @return string
      */
-    private function getQuery(string $number, string $email, string $postcode): string
+    private function getQuery(string $number, string $email, string $lastname): string
     {
         return <<<QUERY
 {
   guestOrder(input: {
       number: "{$number}",
       email: "{$email}",
-      postcode: "{$postcode}"
+      lastname: "{$lastname}"
   }) {
     items {
       prices {

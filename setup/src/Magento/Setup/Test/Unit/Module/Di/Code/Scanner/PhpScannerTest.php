@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,15 +71,19 @@ class PhpScannerTest extends TestCase
 
         $this->log
             ->method('add')
-            ->willReturnCallback(
-                function ($arg1, $arg2, $arg3) {
-                    if ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Module\Factory') {
-                        return null;
-                    } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Element\Factory') {
-                        return null;
-                    }
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($testFiles) {
+                if ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Module\Factory'
+                    && $arg3 == 'Invalid Factory for nonexistent class Magento\SomeModule\Module in file '
+                    . $testFiles[0]
+                ) {
+                    return null;
+                } elseif ($arg1 == 4 && $arg2 == 'Magento\SomeModule\Element\Factory'
+                    && $arg3 == 'Invalid Factory declaration for class Magento\SomeModule\Element in file '
+                    . $testFiles[0]
+                ) {
+                    return null;
                 }
-            );
+            });
 
         $result = $this->scanner->collectEntities($testFiles);
 

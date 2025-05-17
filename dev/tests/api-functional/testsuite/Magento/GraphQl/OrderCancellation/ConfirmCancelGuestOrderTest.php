@@ -10,10 +10,10 @@ namespace Magento\GraphQl\OrderCancellation;
 use Exception;
 use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\OrderCancellation\Model\GetConfirmationKey;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Quote\Test\Fixture\GuestCart;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderRepository;
@@ -59,6 +59,16 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 class ConfirmCancelGuestOrderTest extends GraphQlAbstract
 {
     /**
+     * @var Uid
+     */
+    private $idEncoder;
+
+    /**
+     * @var DataFixtureStorageManager
+     */
+    private $fixtures;
+
+    /**
      * @var GetConfirmationKey
      */
     private $confirmationKey;
@@ -68,6 +78,8 @@ class ConfirmCancelGuestOrderTest extends GraphQlAbstract
      */
     protected function setUp(): void
     {
+        $this->idEncoder = Bootstrap::getObjectManager()->get(Uid::class);
+        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
         $this->confirmationKey = Bootstrap::getObjectManager()->get(GetConfirmationKey::class);
     }
 
@@ -75,9 +87,11 @@ class ConfirmCancelGuestOrderTest extends GraphQlAbstract
      * @return void
      * @throws Exception
      */
-    public function testAttemptToConfirmCancelOrderWhenMissingOrderId()
+    public function testAttemptToConfirmCancelOrderWhenMissingOrderId(): void
     {
-        $query = <<<MUTATION
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage("Field ConfirmCancelOrderInput.order_id of required type ID! was not provided.");
+        $this->graphQlMutation(<<<MUTATION
         mutation {
             confirmCancelOrder(
               input: {
@@ -90,42 +104,24 @@ class ConfirmCancelGuestOrderTest extends GraphQlAbstract
                 }
             }
           }
-MUTATION;
-        $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage("Field ConfirmCancelOrderInput.order_id of required type ID! was not provided.");
-        $this->graphQlMutation($query);
+MUTATION);
     }
 
     /**
      * @return void
      * @throws Exception
      */
-    public function testAttemptToConfirmCancelNonExistingOrder()
+    public function testAttemptToConfirmCancelNonExistingOrder(): void
     {
-        $query = <<<MUTATION
-        mutation {
-            confirmCancelOrder(
-              input: {
-                order_id: 99999999,
-                confirmation_key: "4f8d1e2a6c7e5b4f9a2d3e0f1c5a747d"
-              }
-            ){
-                error
-                order {
-                    status
-                }
-            }
-          }
-MUTATION;
-
         $this->assertEquals(
             [
-                'confirmCancelOrder' => [
-                    'error' => 'The entity that was requested doesn\'t exist. Verify the entity and try again.',
-                    'order' => null
-                ]
+                'confirmCancelOrder' =>
+                    [
+                        'error' => "The entity that was requested doesn't exist. Verify the entity and try again.",
+                        'order' => null
+                    ]
             ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation($this->getConfirmCancelOrderMutation("MTAwMDA="))
         );
     }
 
@@ -133,27 +129,26 @@ MUTATION;
      * @return void
      * @throws Exception
      */
-    public function testAttemptToConfirmCancelOrderWhenMissingKey()
+    public function testAttemptToConfirmCancelOrderWhenMissingKey(): void
     {
-        $query = <<<MUTATION
-        mutation {
-            confirmCancelOrder(
-              input: {
-                order_id: 9999999
-              }
-            ){
-                error
-                order {
-                    status
-                }
-            }
-          }
-MUTATION;
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
             "Field ConfirmCancelOrderInput.confirmation_key of required type String! was not provided."
         );
-        $this->graphQlMutation($query);
+        $this->graphQlMutation(<<<MUTATION
+        mutation {
+            confirmCancelOrder(
+              input: {
+                order_id: "{$this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())}"
+              }
+            ){
+                error
+                order {
+                    status
+                }
+            }
+          }
+MUTATION);
     }
 
     /**
@@ -164,14 +159,8 @@ MUTATION;
     #[
         Config('sales/cancellation/enabled', 0)
     ]
-    public function testAttemptToConfirmCancelOrderWhenCancellationFeatureDisabled()
+    public function testAttemptToConfirmCancelOrderWhenCancellationFeatureDisabled(): void
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-
-        $query = $this->getConfirmCancelOrderMutation($order);
         $this->assertEquals(
             [
                 'confirmCancelOrder' => [
@@ -181,7 +170,54 @@ MUTATION;
                     'order' => null
                 ]
             ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation(
+                $this->getConfirmCancelOrderMutationWithErrorV2(
+                    $this->idEncoder->encode(
+                        (string)$this->fixtures->get('order')->getEntityId()
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @param string $status
+     * @param string $expectedStatus
+     * @return void
+     * @throws AuthenticationException
+     * @throws LocalizedException
+     *
+     * @dataProvider orderStatusProvider
+     */
+    #[
+        Config('sales/cancellation/enabled', 1)
+    ]
+    public function testAttemptToConfirmCancelOrderWithSomeStatuses(string $status, string $expectedStatus): void
+    {
+        $order = $this->fixtures->get('order');
+
+        $order->setStatus($status);
+        $order->setState($status);
+
+        /** @var OrderRepositoryInterface $orderRepo */
+        $orderRepo = Bootstrap::getObjectManager()->get(OrderRepository::class);
+        $orderRepo->save($order);
+
+        $this->assertEquals(
+            [
+                'confirmCancelOrder' =>
+                    [
+                        'errorV2' => [
+                            'message' => 'Order already closed, complete, cancelled or on hold',
+                        ],
+                        'order' => [
+                            'status' => $expectedStatus
+                        ]
+                    ]
+            ],
+            $this->graphQlMutation($this->getConfirmCancelOrderMutationWithErrorV2(
+                $this->idEncoder->encode((string)$order->getEntityId())
+            ))
         );
     }
 
@@ -205,13 +241,8 @@ MUTATION;
         DataFixture(ShipmentFixture::class, ['order_id' => '$order.id$']),
         Config('sales/cancellation/enabled', 1)
     ]
-    public function testAttemptToConfirmCancelOrderWithOfflinePaymentFullyInvoicedFullyShipped()
+    public function testAttemptToConfirmCancelOrderWithOfflinePaymentFullyInvoicedFullyShipped(): void
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getConfirmCancelOrderMutation($order);
         $this->assertEquals(
             [
                 'confirmCancelOrder' =>
@@ -224,7 +255,9 @@ MUTATION;
                         ]
                     ]
             ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation($this->getConfirmCancelOrderMutationWithErrorV2(
+                $this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())
+            ))
         );
     }
 
@@ -261,13 +294,8 @@ MUTATION;
         ),
         Config('sales/cancellation/enabled', 1)
     ]
-    public function testAttemptToConfirmCancelOrderWithOfflinePaymentFullyInvoicedPartiallyShipped()
+    public function testAttemptToConfirmCancelOrderWithOfflinePaymentFullyInvoicedPartiallyShipped(): void
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getConfirmCancelOrderMutation($order);
         $this->assertEquals(
             [
                 'confirmCancelOrder' =>
@@ -280,7 +308,9 @@ MUTATION;
                         ]
                     ]
             ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation($this->getConfirmCancelOrderMutationWithErrorV2(
+                $this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())
+            ))
         );
     }
 
@@ -304,13 +334,8 @@ MUTATION;
         DataFixture(CreditmemoFixture::class, ['order_id' => '$order.id$'], 'creditmemo'),
         Config('sales/cancellation/enabled', 1)
     ]
-    public function testAttemptToConfirmCancelOrderWithOfflinePaymentFullyInvoicedFullyRefunded()
+    public function testAttemptToConfirmCancelOrderWithOfflinePaymentFullyInvoicedFullyRefunded(): void
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getConfirmCancelOrderMutation($order);
         $this->assertEquals(
             [
                 'confirmCancelOrder' =>
@@ -323,7 +348,9 @@ MUTATION;
                         ]
                     ]
             ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation($this->getConfirmCancelOrderMutationWithErrorV2(
+                $this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())
+            ))
         );
     }
 
@@ -340,24 +367,21 @@ MUTATION;
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
         Config('sales/cancellation/enabled', 1)
     ]
-    public function testAttemptToConfirmCancelOrderForWhichConfirmationKeyNotGenerated()
+    public function testAttemptToConfirmCancelOrderForWhichConfirmationKeyNotGenerated(): void
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getConfirmCancelOrderMutation($order);
         $this->assertEquals(
             [
                 'confirmCancelOrder' =>
                     [
                         'errorV2' => [
-                            'message' => 'The order cancellation could not be confirmed.'
+                            'message' => "The order cancellation could not be confirmed."
                         ],
                         'order' => null
                     ]
             ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation($this->getConfirmCancelOrderMutationWithErrorV2(
+                $this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())
+            ))
         );
     }
 
@@ -374,13 +398,8 @@ MUTATION;
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
         Config('sales/cancellation/enabled', 1)
     ]
-    public function testAttemptToConfirmCancelCustomerOrder()
+    public function testAttemptToConfirmCancelCustomerOrder(): void
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        $query = $this->getConfirmCancelOrderMutation($order);
         $this->assertEquals(
             [
                 'confirmCancelOrder' =>
@@ -391,7 +410,9 @@ MUTATION;
                         'order' => null
                     ]
             ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation($this->getConfirmCancelOrderMutationWithErrorV2(
+                $this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())
+            ))
         );
     }
 
@@ -408,26 +429,19 @@ MUTATION;
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
         Config('sales/cancellation/enabled', 1)
     ]
-    public function testAttemptToConfirmCancelOrderWithInvalidConfirmationKey()
+    public function testAttemptToConfirmCancelOrderWithInvalidConfirmationKey(): void
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        $this->confirmationKey->execute($order, 'Simple reason');
-
-        $query = $this->getConfirmCancelOrderMutation($order);
         $this->assertEquals(
             [
                 'confirmCancelOrder' =>
                     [
-                        'errorV2' => [
-                            'message' => 'The order cancellation could not be confirmed.'
-                        ],
+                        'error' => 'The order cancellation could not be confirmed.',
                         'order' => null
                     ]
             ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation($this->getConfirmCancelOrderMutation(
+                $this->idEncoder->encode((string)$this->fixtures->get('order')->getEntityId())
+            ))
         );
     }
 
@@ -444,31 +458,10 @@ MUTATION;
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
         Config('sales/cancellation/enabled', 1)
     ]
-    public function testConfirmCancelOrderWithOutAnyAmountPaid()
+    public function testConfirmCancelOrderWithOutAnyAmountPaid(): void
     {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        $confirmationKey = $this->confirmationKey->execute($order, 'Cancel sample reason');
+        $order = $this->fixtures->get('order');
 
-        $query = <<<MUTATION
-        mutation {
-            confirmCancelOrder(
-              input: {
-                order_id: "{$order->getEntityId()}"
-                confirmation_key: "{$confirmationKey}"
-              }
-            ){
-                errorV2 {
-                    message
-                }
-                order {
-                    status
-                }
-            }
-          }
-MUTATION;
         $this->assertEquals(
             [
                 'confirmCancelOrder' =>
@@ -479,66 +472,57 @@ MUTATION;
                         ]
                     ]
             ],
-            $this->graphQlMutation($query)
-        );
-    }
-
-    /**
-     * @param string $status
-     * @param string $expectedStatus
-     * @return void
-     * @throws AuthenticationException
-     * @throws LocalizedException
-     *
-     * @dataProvider orderStatusProvider
-     */
-    #[
-        Config('sales/cancellation/enabled', 1)
-    ]
-    public function testAttemptToConfirmCancelOrderWithSomeStatuses(string $status, string $expectedStatus)
-    {
-        /**
-         * @var $order OrderInterface
-         */
-        $order = DataFixtureStorageManager::getStorage()->get('order');
-        $order->setStatus($status);
-        $order->setState($status);
-
-        /** @var OrderRepositoryInterface $orderRepo */
-        $orderRepo = Bootstrap::getObjectManager()->get(OrderRepository::class);
-        $orderRepo->save($order);
-
-        $query = $this->getConfirmCancelOrderMutation($order);
-        $this->assertEquals(
-            [
-                'confirmCancelOrder' =>
-                    [
-                        'errorV2' => [
-                            'message' => 'Order already closed, complete, cancelled or on hold',
-                        ],
-                        'order' => [
-                            'status' => $expectedStatus
-                        ]
-                    ]
-            ],
-            $this->graphQlMutation($query)
+            $this->graphQlMutation(
+                $this->getConfirmCancelOrderMutationWithErrorV2(
+                    $this->idEncoder->encode((string)$order->getEntityId()),
+                    $this->confirmationKey->execute($order, 'Other')
+                )
+            )
         );
     }
 
     /**
      * Get confirm cancel order mutation
      *
-     * @param OrderInterface $order
+     * @param string $orderUid
      * @return string
      */
-    private function getConfirmCancelOrderMutation(OrderInterface $order): string
+    private function getConfirmCancelOrderMutation(string $orderUid): string
     {
-        return  <<<MUTATION
-        mutation {
+        return <<<MUTATION
+         mutation {
             confirmCancelOrder(
               input: {
-                order_id: "{$order->getEntityId()}"
+                order_id: "{$orderUid}"
                 confirmation_key: "4f8d1e2a6c7e5b4f9a2d3e0f1c5a747d"
+              }
+            ){
+                error
+                order {
+                    status
+                }
+            }
+          }
+MUTATION;
+    }
+
+    /**
+     * Get confirm cancel order mutation with errorV2
+     *
+     * @param string $orderUid
+     * @param string $confirmationKey
+     * @return string
+     */
+    private function getConfirmCancelOrderMutationWithErrorV2(
+        string $orderUid,
+        string $confirmationKey = "4f8d1e2a6c7e5b4f9a2d3e0f1c5a747d"
+    ): string {
+        return <<<MUTATION
+         mutation {
+            confirmCancelOrder(
+              input: {
+                order_id: "{$orderUid}"
+                confirmation_key: "{$confirmationKey}"
               }
             ){
                 errorV2 {

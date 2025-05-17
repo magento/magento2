@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -268,5 +268,30 @@
                 <item name="ELV" xsi:type="string">Elektronisches Lastschriftverfahren - German ELV</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Quote\Model\CustomerManagement">
+        <plugin name="paypal_payment_skip_addresses_validate" type="Magento\Paypal\Plugin\CustomerManagementPlugin"/>
+    </type>
+    <type name="Magento\Paypal\Plugin\CustomerManagementPlugin">
+        <arguments>
+            <argument name="paymentMethodSkipAddressValidation" xsi:type="array">
+                <item name="paypal_express" xsi:type="string">paypal_express</item>
+                <item name="wps_express" xsi:type="string">wps_express</item>
+                <item name="wps_express_bml" xsi:type="string">wps_express_bml</item>
+                <item name="paypal_express_bml" xsi:type="string">paypal_express_bml</item>
+                <item name="paypal_direct" xsi:type="string">paypal_direct</item>
+                <item name="paypal_payment_pro" xsi:type="string">paypal_payment_pro</item>
+                <item name="payflow_express" xsi:type="string">payflow_express</item>
+                <item name="payflow_express_bml" xsi:type="string">payflow_express_bml</item>
+                <item name="payflowpro" xsi:type="string">payflowpro</item>
+                <item name="payflow_link" xsi:type="string">payflow_link</item>
+                <item name="payflow_advanced" xsi:type="string">payflow_advanced</item>
+                <item name="hosted_pro" xsi:type="string">hosted_pro</item>
+                <item name="paypal_billing_agreement" xsi:type="string">paypal_billing_agreement</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Controller\Payflow\ReturnUrl">
+        <plugin name="payflow_silentpost" type="Magento\Paypal\Plugin\PayflowSilentPost"/>
     </type>
 </config>

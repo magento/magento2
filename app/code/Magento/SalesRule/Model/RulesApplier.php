@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Model\Data\RuleDiscount;
@@ -73,6 +75,11 @@ class RulesApplier
     private $discountAggregator;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * @param CalculatorFactory $calculatorFactory
      * @param ManagerInterface $eventManager
      * @param Utility $utility
@@ -81,6 +88,7 @@ class RulesApplier
      * @param RuleDiscountInterfaceFactory|null $discountInterfaceFactory
      * @param DiscountDataInterfaceFactory|null $discountDataInterfaceFactory
      * @param SelectRuleCoupon|null $selectRuleCoupon
+     * @param PriceCurrencyInterface|null $priceCurrency
      */
     public function __construct(
         CalculatorFactory $calculatorFactory,
@@ -90,7 +98,8 @@ class RulesApplier
         ?DataFactory $discountDataFactory = null,
         ?RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
         ?DiscountDataInterfaceFactory $discountDataInterfaceFactory = null,
-        ?SelectRuleCoupon $selectRuleCoupon = null
+        ?SelectRuleCoupon $selectRuleCoupon = null,
+        ?PriceCurrencyInterface $priceCurrency = null
     ) {
         $this->calculatorFactory = $calculatorFactory;
         $this->validatorUtility = $utility;
@@ -104,6 +113,7 @@ class RulesApplier
             ?: ObjectManager::getInstance()->get(DiscountDataInterfaceFactory::class);
         $this->selectRuleCoupon = $selectRuleCoupon
             ?: ObjectManager::getInstance()->get(SelectRuleCoupon::class);
+        $this->priceCurrency = $priceCurrency ?: ObjectManager::getInstance()->get(PriceCurrencyInterface::class);
     }
 
     /**
@@ -237,21 +247,28 @@ class RulesApplier
     {
         if ($item->getChildren() && $item->isChildrenCalculated()) {
             $cloneItem = clone $item;
-
-            $applyToChildren = false;
-            foreach ($item->getChildren() as $childItem) {
-                if ($rule->getActions()->validate($childItem)) {
-                    $discountData = $this->getDiscountData($childItem, $rule, $address, $couponCodes);
-                    $this->setDiscountData($discountData, $childItem);
-                    $applyToChildren = true;
-                }
-            }
             /**
-             * validate without children
+             * Validates item without children to check whether the rule can be applied to the item itself
+             * If the rule can be applied to the item, the discount is applied to the item itself and
+             * distributed among its children
              */
-            if (!$applyToChildren && $rule->getActions()->validate($cloneItem)) {
-                $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
+            if ($rule->getActions()->validate($cloneItem)) {
+                // Aggregate discount data from children
+                $discountData = $this->getDiscountDataFromChildren($item);
                 $this->setDiscountData($discountData, $item);
+                // Calculate discount data based on parent item
+                $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
+                $this->distributeDiscount($discountData, $item);
+                // reset discount data in parent item after distributing discount to children
+                $discountData = $this->discountFactory->create();
+                $this->setDiscountData($discountData, $item);
+            } else {
+                foreach ($item->getChildren() as $childItem) {
+                    if ($rule->getActions()->validate($childItem)) {
+                        $discountData = $this->getDiscountData($childItem, $rule, $address, $couponCodes);
+                        $this->setDiscountData($discountData, $childItem);
+                    }
+                }
             }
         } else {
             $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
@@ -262,6 +279,63 @@ class RulesApplier
         $this->maintainAddressCouponCode($address, $rule, $address->getQuote()->getCouponCode());
 
         return $this;
+    }
+
+    /**
+     * Get discount data from children
+     *
+     * @param AbstractItem $item
+     * @return Data
+     */
+    private function getDiscountDataFromChildren(AbstractItem $item): Data
+    {
+        $discountData = $this->discountFactory->create();
+
+        foreach ($item->getChildren() as $child) {
+            $discountData->setAmount($discountData->getAmount() + $child->getDiscountAmount());
+            $discountData->setBaseAmount($discountData->getBaseAmount() + $child->getBaseDiscountAmount());
+            $discountData->setOriginalAmount($discountData->getOriginalAmount() + $child->getOriginalDiscountAmount());
+            $discountData->setBaseOriginalAmount(
+                $discountData->getBaseOriginalAmount() + $child->getBaseOriginalDiscountAmount()
+            );
+        }
+
+        return $discountData;
+    }
+
+    /**
+     * Distributes discount applied from parent item to its children items
+     *
+     * This method originates from \Magento\SalesRule\Model\Quote\Discount::distributeDiscount()
+     *
+     * @param Data $discountData
+     * @param AbstractItem $item
+     * @see \Magento\SalesRule\Model\Quote\Discount::distributeDiscount()
+     */
+    private function distributeDiscount(Data $discountData, AbstractItem $item): void
+    {
+        $data = [
+            'discount_amount' => $discountData->getAmount() - $item->getDiscountAmount(),
+            'base_discount_amount' => $discountData->getBaseAmount() - $item->getBaseDiscountAmount(),
+        ];
+
+        $parentBaseRowTotal = max(0, $item->getBaseRowTotal() - $item->getBaseDiscountAmount());
+        $keys = array_keys($data);
+        $roundingDelta = [];
+        foreach ($keys as $key) {
+            //Initialize the rounding delta to a tiny number to avoid floating point precision problem
+            $roundingDelta[$key] = 0.0000001;
+        }
+        foreach ($item->getChildren() as $child) {
+            $childBaseRowTotalWithDiscount = max(0, $child->getBaseRowTotal() - $child->getBaseDiscountAmount());
+            $ratio = min(1, $parentBaseRowTotal != 0 ? $childBaseRowTotalWithDiscount / $parentBaseRowTotal : 0);
+            foreach ($keys as $key) {
+                $value = $data[$key] * $ratio;
+                $roundedValue = $this->priceCurrency->round($value + $roundingDelta[$key]);
+                $roundingDelta[$key] += $value - $roundedValue;
+                $child->setData($key, $child->getData($key) + $roundedValue);
+            }
+        }
     }
 
     /**

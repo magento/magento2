@@ -202,10 +202,10 @@ class ProductStock
      * Returns the lowest stock value of bundle product
      *
      * @param Item $cartItem
-     * @param float $thresholdQty
+     * @param float|null $thresholdQty
      * @return float
      */
-    private function getLowestSaleableQtyOfBundleProduct(Item $cartItem, float $thresholdQty): float
+    private function getLowestSaleableQtyOfBundleProduct(Item $cartItem, ?float $thresholdQty): float
     {
         $bundleStock = [];
         foreach ($cartItem->getQtyOptions() as $qtyOption) {
@@ -231,7 +231,20 @@ class ProductStock
         if ($thresholdQty === 0.0) {
             return $this->getProductAvailableStock($cartItem);
         }
-        
+
+        return $this->getSaleableQtyByCartItem($cartItem, $thresholdQty);
+    }
+
+    /**
+     * Returns the saleable qty value by cart item
+     *
+     * @param Item $cartItem
+     * @param float|null $thresholdQty
+     * @return float
+     * @throws NoSuchEntityException
+     */
+    public function getSaleableQtyByCartItem(Item $cartItem, ?float $thresholdQty): float
+    {
         if ($cartItem->getProductType() === self::PRODUCT_TYPE_BUNDLE) {
             return $this->getLowestSaleableQtyOfBundleProduct($cartItem, $thresholdQty);
         }
@@ -248,15 +261,18 @@ class ProductStock
      * Get product saleable qty when "Catalog > Inventory > Stock Options > Only X left Threshold" is greater than 0
      *
      * @param ProductInterface $product
-     * @param float $thresholdQty
+     * @param float|null $thresholdQty
      * @return float
      */
-    private function getSaleableQty(ProductInterface $product, float $thresholdQty): float
+    public function getSaleableQty(ProductInterface $product, ?float $thresholdQty): float
     {
-        $stockItem = $this->stockRegistry->getStockItem($product->getId());
         $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $product->getStore()->getWebsiteId());
-        $stockCurrentQty = $stockStatus->getQty();
-        $stockLeft = $stockCurrentQty - $stockItem->getMinQty();
-        return ($stockCurrentQty >= 0 && $stockLeft <= $thresholdQty) ? (float)$stockCurrentQty : 0.0;
+        $stockQty = (float)$stockStatus->getQty();
+        if ($thresholdQty === null) {
+            return $stockQty;
+        }
+        $stockLeft = $stockQty - $this->stockRegistry->getStockItem($product->getId())->getMinQty();
+
+        return ($stockQty >= 0 && $stockLeft <= $thresholdQty) ? $stockQty : 0.0;
     }
 }

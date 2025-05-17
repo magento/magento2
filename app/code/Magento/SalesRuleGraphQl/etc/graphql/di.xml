@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="share_all_sales_rule" xsi:type="string">promo/graphql/share_all_sales_rule</item>
+                <item name="share_applied_sales_rule" xsi:type="string">promo/graphql/share_applied_sales_rule</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

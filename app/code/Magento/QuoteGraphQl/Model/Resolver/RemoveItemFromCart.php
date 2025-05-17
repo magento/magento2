@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteId;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
+use Magento\QuoteGraphQl\Model\ErrorMapper;
 
 /**
  * @inheritdoc
@@ -27,39 +28,47 @@ class RemoveItemFromCart implements ResolverInterface
     /**
      * @var GetCartForUser
      */
-    private $getCartForUser;
+    private GetCartForUser $getCartForUser;
 
     /**
      * @var CartItemRepositoryInterface
      */
-    private $cartItemRepository;
+    private CartItemRepositoryInterface $cartItemRepository;
 
     /**
      * @var MaskedQuoteIdToQuoteId
      */
-    private $maskedQuoteIdToQuoteId;
+    private MaskedQuoteIdToQuoteId $maskedQuoteIdToQuoteId;
 
     /**
      * @var ArgumentsProcessorInterface
      */
-    private $argsSelection;
+    private ArgumentsProcessorInterface $argsSelection;
+
+    /**
+     * @var ErrorMapper
+     */
+    private ErrorMapper $errorMapper;
 
     /**
      * @param GetCartForUser $getCartForUser
      * @param CartItemRepositoryInterface $cartItemRepository
      * @param MaskedQuoteIdToQuoteId $maskedQuoteIdToQuoteId
      * @param ArgumentsProcessorInterface $argsSelection
+     * @param ErrorMapper $errorMapper
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartItemRepositoryInterface $cartItemRepository,
         MaskedQuoteIdToQuoteId $maskedQuoteIdToQuoteId,
-        ArgumentsProcessorInterface $argsSelection
+        ArgumentsProcessorInterface $argsSelection,
+        ErrorMapper $errorMapper
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartItemRepository = $cartItemRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->argsSelection = $argsSelection;
+        $this->errorMapper = $errorMapper;
     }
 
     /**
@@ -76,7 +85,9 @@ class RemoveItemFromCart implements ResolverInterface
             $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(
-                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $maskedCartId])
+                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $maskedCartId]),
+                $exception,
+                $this->errorMapper->getErrorMessageId('Could not find a cart with ID')
             );
         }
 
