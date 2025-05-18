@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2018 Adobe All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\SchemaBuilder;
@@ -331,6 +332,87 @@ class SchemaBuilderTest extends TestCase
     }
 
     /**
+     *  This test verifies that the system does not crash or throw unexpected errors when attempting to build
+     *  a schema with missing column definitions.
+     *
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testBuildHandlesMissingColumnsGracefully()
+    {
+        $data = [
+            'table' => [
+                'test_table' => [
+                    'name' => 'test_table_fail',
+                    'resource' => 'default',
+                    'engine' => 'innodb',
+                    'comment' => 'test table',
+                    'disabled' => 'true',
+                ]
+            ]
+        ];
+
+        $this->shardingMock->expects(self::once())
+            ->method('getResources')
+            ->willReturn(['default']);
+
+        $this->dbSchemaReaderMock->expects(self::once())
+            ->method('readTables')
+            ->with('default')
+            ->willReturn(['test_table']);
+
+        $this->dbSchemaReaderMock->expects(self::once())
+            ->method('readColumns')
+            ->with('test_table')
+            ->willReturn([]);
+
+        $this->dbSchemaReaderMock->expects(self::once())
+            ->method('readIndexes')
+            ->with('test_table')
+            ->willReturn([]);
+
+        $this->dbSchemaReaderMock->expects(self::once())
+            ->method('readReferences')
+            ->willReturn([]);
+
+        $this->dbSchemaReaderMock->expects(self::once())
+            ->method('readConstraints')
+            ->with('test_table')
+            ->willReturn([]);
+
+        $this->dbSchemaReaderMock->expects(self::once())
+            ->method('getTableOptions')
+            ->with('test_table')
+            ->willReturn([
+                'engine' => 'innodb',
+                'comment' => '',
+                'charset' => 'utf-8',
+                'collation' => 'utf-8'
+            ]);
+
+        $this->elementFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->createMock(Table::class));
+
+        $readerCompositeMock = $this->getMockBuilder(ReaderComposite::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $readerCompositeMock->expects($this->once())
+            ->method('read')
+            ->willReturn($data);
+
+        $schemaBuilder = new SchemaBuilder(
+            $this->elementFactoryMock,
+            $this->dbSchemaReaderMock,
+            $this->shardingMock,
+            $readerCompositeMock
+        );
+
+        $schemaBuilder->build($this->createMock(Schema::class));
+        $this->assertTrue(true, 'System did not crash when columns were missing.');
+    }
+
+    /**
      * Prepare mocks for test.
      *
      * @param array $columns
@@ -338,6 +420,8 @@ class SchemaBuilderTest extends TestCase
      * @param array $constraints
      * @param array $indexes
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function prepareSchemaMocks(array $columns, array $references, array $constraints, array $indexes)
     {
