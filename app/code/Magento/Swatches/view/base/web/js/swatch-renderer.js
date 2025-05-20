@@ -516,7 +516,7 @@ define([
                     swatchOptions.each(function (key, value) {
                         let optionId = $(value).data('option-id');
 
-                        if (!salableProducts.hasOwnProperty(optionId)) {
+                        if (salableProducts != undefined && salableProducts.length > 0 && !salableProducts.hasOwnProperty(optionId)) {
                             $(value).attr('disabled', true).addClass('disabled');
                         }
                     });
