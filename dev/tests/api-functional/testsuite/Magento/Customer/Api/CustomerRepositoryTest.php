@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -654,8 +654,8 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => '"%fieldName" is required. Enter and try again.',
-                    'parameters' => ['fieldName' => Address::FIRSTNAME],
+                    'message' => '"%1" is a required value.',
+                    'parameters' => ['0' => 'First Name'],
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
             }
