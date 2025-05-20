@@ -219,6 +219,7 @@ automations:
       - ['merged', 'eq', true]
     actions:
       - moveTo: [23, 'Recently Merged'] #['Pull Requests Dashboard', 'Recently Merged']
+      - moveTo: [22, 'Recently Merged'] #['Community Dashboard', 'Recently Merged']
 
   # 18. Whenever a pull request is closed:
   #   a. it must be removed from the "Pull Requests Dashboard" project
