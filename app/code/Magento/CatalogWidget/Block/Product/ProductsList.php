@@ -333,6 +333,16 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected function _beforeToHtml()
     {
         $this->setProductCollection($this->createCollection());
+        echo "<pre style='background-color: green; white-space: pre-wrap;'>";
+        var_dump($this->getProductCollection()->getSelect()->__toString());
+//        var_dump($this->getProductCollection()->count());
+//        var_dump(array_reduce($this->getProductCollection()->getItems(), function($carry, Product $product) {
+//            $carry[$product->getId()] = $product->getSku();
+//            return $carry;
+//        }, []));
+//        $this->getProductCollection()->clear();
+//        var_dump($this->getProductCollection()->count());
+        echo "</pre>";
         return parent::_beforeToHtml();
     }
 
