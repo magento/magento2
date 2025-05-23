@@ -294,7 +294,7 @@
         <column xsi:type="text" name="default_value" nullable="true" comment="Default Value"/>
         <column xsi:type="smallint" name="is_unique" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Defines Is Unique"/>
-        <column xsi:type="varchar" name="note" nullable="true" length="255" comment="Note"/>
+        <column xsi:type="text" name="note" nullable="true" comment="Note"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="attribute_id"/>
         </constraint>
