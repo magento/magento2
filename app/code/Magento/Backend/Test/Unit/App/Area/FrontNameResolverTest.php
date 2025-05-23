@@ -80,12 +80,16 @@ class FrontNameResolverTest extends TestCase
      */
     public function testIfCustomPathUsed(): void
     {
-        $this->configMock
+        $this->configMock->expects($this->once())
+            ->method('isSetFlag')
+            ->with(FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_PATH)
+            ->willReturn(true);
+
+        $this->configMock->expects($this->once())
             ->method('getValue')
-            ->willReturnCallback(fn($param) => match ([$param]) {
-                ['admin/url/use_custom_path'] => true,
-                ['admin/url/custom_path'] => 'expectedValue'
-            });
+            ->with(FrontNameResolver::XML_PATH_CUSTOM_ADMIN_PATH)
+            ->willReturn('expectedValue');
+
         $this->assertEquals('expectedValue', $this->model->getFrontName());
     }
 
@@ -94,15 +98,11 @@ class FrontNameResolverTest extends TestCase
      */
     public function testIfCustomPathNotUsed(): void
     {
-        $this->configMock->expects(
-            $this->once()
-        )->method(
-            'getValue'
-        )->with(
-            'admin/url/use_custom_path'
-        )->willReturn(
-            false
-        );
+        $this->configMock->expects($this->once())
+            ->method('isSetFlag')
+            ->with(FrontNameResolver::XML_PATH_USE_CUSTOM_ADMIN_PATH)
+            ->willReturn(false);
+
         $this->assertEquals($this->_defaultFrontName, $this->model->getFrontName());
     }
 
@@ -125,7 +125,12 @@ class FrontNameResolverTest extends TestCase
         string $customAdminUrl,
         bool $expectedValue
     ): void {
-        $this->scopeConfigMock->method('getValue')
+        $this->scopeConfigMock
+            ->method('isSetFlag')
+            ->willReturn($useCustomAdminUrl);
+
+        $this->scopeConfigMock
+            ->method('getValue')
             ->willReturnMap(
                 [
                     [Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE, null, $url],
@@ -138,7 +143,7 @@ class FrontNameResolverTest extends TestCase
                     ],
                     [
                         FrontNameResolver::XML_PATH_CUSTOM_ADMIN_URL,
-                        ScopeInterface::SCOPE_STORE,
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         $customAdminUrl
                     ]
