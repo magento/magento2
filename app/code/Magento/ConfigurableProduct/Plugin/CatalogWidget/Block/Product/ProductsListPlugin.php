@@ -8,26 +8,15 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Plugin\CatalogWidget\Block\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogWidget\Block\Product\ProductsList;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 
 class ProductsListPlugin
 {
-    /**
-     * @var CollectionFactory
-     */
-    private CollectionFactory $productCollectionFactory;
-
-    /**
-     * @var Visibility
-     */
-    private Visibility $catalogProductVisibility;
-
     /**
      * @var ResourceConnection
      */
@@ -39,19 +28,13 @@ class ProductsListPlugin
     private MetadataPool $metadataPool;
 
     /**
-     * @param CollectionFactory $productCollectionFactory
-     * @param Visibility $catalogProductVisibility
      * @param ResourceConnection $resource
      * @param MetadataPool $metadataPool
      */
     public function __construct(
-        CollectionFactory  $productCollectionFactory,
-        Visibility         $catalogProductVisibility,
         ResourceConnection $resource,
         MetadataPool $metadataPool
     ) {
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->catalogProductVisibility = $catalogProductVisibility;
         $this->resource = $resource;
         $this->metadataPool = $metadataPool;
     }
@@ -95,18 +78,36 @@ class ProductsListPlugin
                     ->where('link_table.product_id IN (?)', $searchProducts)
             );
 
-            $configurableProductCollection = $this->productCollectionFactory->create();
-            $configurableProductCollection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
-            $configurableProductCollection->addIdFilter($productIds);
-
-            /** @var Product $item */
-            foreach ($configurableProductCollection->getItems() as $item) {
-                if (false === in_array($item->getId(), $currentIds)) {
-                    $result->addItem($item->load($item->getId()));
-                }
+            if (empty($productIds)) {
+                return $result;
             }
+            $this->addParentProductsToSelect($result, $productIds);
         }
 
         return $result;
+    }
+
+    /**
+     * @param Collection $result The product collection
+     * @param array $productIds Array of parent product IDs to include
+     * @return void
+     */
+    protected function addParentProductsToSelect(Collection $result, array $productIds): void
+    {
+        $connection = $this->resource->getConnection();
+        $select = $result->getSelect();
+        $originalWhere = $select->getPart(Select::WHERE);
+        if (!empty($originalWhere)) {
+            $originalWhere = array_filter($originalWhere, 'strlen');
+        }
+        $parentCondition = $connection->quoteInto('e.entity_id IN (?)', $productIds);
+
+        $newWhere = [];
+        if (!empty($originalWhere)) {
+            $newWhere[] = '(' . implode(' ', $originalWhere) . ')';
+        }
+        $newWhere[] = $parentCondition;
+        $select->reset(Select::WHERE);
+        $select->where(new \Zend_Db_Expr(implode(' OR ', $newWhere)));
     }
 }
