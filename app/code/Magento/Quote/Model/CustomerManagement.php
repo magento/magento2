@@ -162,7 +162,7 @@ class CustomerManagement
         if (empty($addresses) && $quote->getCustomerIsGuest()) {
             $billingAddress = $quote->getBillingAddress();
             $customerAddress = $this->customerAddressFactory->create();
-            $customerAddress->setPrefix($billingAddress->getPrefix());
+            $customerAddress->setPrefix($billingAddress?->getPrefix());
             $customerAddress->setFirstname($billingAddress->getFirstname());
             $customerAddress->setMiddlename($billingAddress?->getMiddlename());
             $customerAddress->setLastname($billingAddress->getLastname());
