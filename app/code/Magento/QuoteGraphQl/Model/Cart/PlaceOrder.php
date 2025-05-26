@@ -58,6 +58,25 @@ class PlaceOrder
         $cartId = (int)$cart->getId();
         $paymentMethod = $this->paymentManagement->get($cartId);
 
+        // Get a list of available payment methods for the cart
+        $availablePaymentMethods = $this->paymentManagement->getList($cartId);
+        $paymentMethodCode = $cart->getPayment()->getMethod();
+        $isPaymentMethodAvailable = false;
+
+        // Check if the selected payment method is in the available methods list
+        if($paymentMethodCode && $availablePaymentMethods){
+            foreach ($availablePaymentMethods as $availableMethod) {
+                if ($availableMethod->getCode() === $paymentMethodCode) {
+                    $isPaymentMethodAvailable = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$isPaymentMethodAvailable) {
+            throw new LocalizedException(__('The requested Payment Method is not available.'));
+        }
+
         return (int)$this->cartManagement->placeOrder($cartId, $paymentMethod);
     }
 }
