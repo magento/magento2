@@ -54,7 +54,7 @@ class AddProductsToCart
         $cart = $this->cartRepository->get($cartId);
         $allErrors = [];
 
-        $failedCartItems = $this->addItemsToCart($cart, $cartItems);
+        $failedCartItems = $this->addItemsToCart($cart, $cartItems);//error here
         $saveCart = empty($failedCartItems);
         if (!empty($failedCartItems)) {
             /* Check if some cart items were successfully added to the cart */
