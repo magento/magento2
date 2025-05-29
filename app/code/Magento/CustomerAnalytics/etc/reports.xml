@@ -10,7 +10,10 @@
         <source name="customer_entity">
             <attribute name="entity_id"/>
             <attribute name="created_at"/>
-            <attribute name="email"/>
+            <attribute name="firstname"/>
+            <attribute name="middlename"/>
+            <attribute name="lastname"/>
+            <attribute name="email" function="sha1"/>
             <attribute name="store_id"/>
         </source>
     </report>
