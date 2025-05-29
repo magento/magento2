@@ -1579,6 +1579,7 @@
                 <item name="/schema/table/index/column" xsi:type="string">name</item>
                 <item name="/schema/table/constraint/column" xsi:type="string">name</item>
             </argument>
+            <argument name="typeAttributeName" xsi:type="string">xsi:type</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\Setup\Declaration\Schema\OperationsExecutor">

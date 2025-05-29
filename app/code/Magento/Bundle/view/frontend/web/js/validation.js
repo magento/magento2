@@ -5,9 +5,9 @@ define([
     'use strict';
     var enhancedMageValidation = {
         /**
-         * @param {*} error
-         * @param {*} element
-         */
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
         options: {
             errorPlacement: function (error, element) {
                 var errorPlacement = element,

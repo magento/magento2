@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2024 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -1242,7 +1242,7 @@ class ProductTest extends AbstractImportTestCase
             ],
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
-            ['addRowError', 'getOptionEntity'],
+            ['addRowError', 'getOptionEntity', 'getNewSku'],
             ['isRowInvalid' => true]
         );
 
@@ -1300,7 +1300,7 @@ class ProductTest extends AbstractImportTestCase
             $sku => null
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
-            ['addRowError', 'getOptionEntity'],
+            ['addRowError', 'getOptionEntity', 'getNewSku'],
             ['isRowInvalid' => true]
         );
 
@@ -1356,7 +1356,7 @@ class ProductTest extends AbstractImportTestCase
         $this->setPropertyValue($importProduct, '_productTypeModels', $_productTypeModels);
         $this->setPropertyValue($importProduct, '_attrSetNameToId', $_attrSetNameToId);
 
-        $this->skuProcessor->expects($this->once())->method('getNewSku')->willReturn(null);
+        $this->skuProcessor->expects($this->exactly(2))->method('getNewSku')->willReturn(null);
         $this->skuProcessor->expects($this->once())->method('addNewSku')->with($sku, $expectedData);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
         $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
@@ -1448,7 +1448,7 @@ class ProductTest extends AbstractImportTestCase
             ]
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
-            ['addRowError', 'getOptionEntity'],
+            ['addRowError', 'getOptionEntity', 'getNewSku'],
             ['isRowInvalid' => true]
         );
 
