@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright 2013 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 -->
@@ -22,7 +22,11 @@
             <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit" name="attribute_edit_content"/>
         </referenceContainer>
         <referenceContainer name="js">
-            <block class="Magento\Backend\Block\Template" name="attribute_edit_js" template="Magento_Catalog::catalog/product/attribute/js.phtml"/>
+            <block class="Magento\Backend\Block\Template" name="attribute_edit_js" template="Magento_Catalog::catalog/product/attribute/js.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Magento\Catalog\ViewModel\Attribute\ProductAttributeHelper</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>
