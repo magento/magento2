@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GiftMessage\Model;
 
 /**
  * Adminhtml giftmessage save model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Save extends \Magento\Framework\DataObject
 {
@@ -18,8 +17,6 @@ class Save extends \Magento\Framework\DataObject
     protected $_saved = false;
 
     /**
-     * Gift message message
-     *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;
@@ -79,6 +76,8 @@ class Save extends \Magento\Framework\DataObject
     }
 
     /**
+     * Get Saved
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      * @codeCoverageIgnore
@@ -89,6 +88,8 @@ class Save extends \Magento\Framework\DataObject
     }
 
     /**
+     * Save all order
+     *
      * @return $this
      */
     public function saveAllInOrder()
@@ -301,6 +302,8 @@ class Save extends \Magento\Framework\DataObject
     }
 
     /**
+     * Import allow quote item
+     *
      * @param mixed $items
      * @return $this
      */

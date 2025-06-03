@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42c84910fd4d281b51e61bad5976ff5b",
+    "content-hash": "09f485d5c5ab4ac84ce959b78c966bd9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10327,6 +10327,83 @@
             "time": "2023-05-30T10:55:43+00:00"
         },
         {
+            "name": "allure-framework/allure-phpunit",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/allure-framework/allure-phpunit.git",
+                "reference": "be8b5efbea8f82a2439d9bb6eacdef8736180b60"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/allure-framework/allure-phpunit/zipball/be8b5efbea8f82a2439d9bb6eacdef8736180b60",
+                "reference": "be8b5efbea8f82a2439d9bb6eacdef8736180b60",
+                "shasum": ""
+            },
+            "require": {
+                "allure-framework/allure-php-commons": "^2.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "phpunit/phpunit": "^10.0.5 || ^11 || ^12.0.1"
+            },
+            "conflict": {
+                "amphp/byte-stream": "<1.5.1",
+                "amphp/cache": "<2.0.1",
+                "amphp/dns": "<2.2.0",
+                "amphp/parser": "<1.1.1",
+                "amphp/process": "<2.0.3",
+                "amphp/socket": "<2.3.1",
+                "brianium/paratest": "<7.0.3",
+                "daverandom/libdns": "<2.1.0",
+                "ramsey/uuid": "<4.3.0",
+                "spatie/array-to-xml": "<3.3.0"
+            },
+            "require-dev": {
+                "brianium/paratest": "^7",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "squizlabs/php_codesniffer": "^3.7.2",
+                "vimeo/psalm": "^6.10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qameta\\Allure\\PHPUnit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Krutov",
+                    "email": "vania-pooh@yandex-team.ru",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Edward Surov",
+                    "email": "zoohie@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Allure PHPUnit integration",
+            "homepage": "https://allurereport.org/",
+            "keywords": [
+                "allure",
+                "attachments",
+                "cases",
+                "phpunit",
+                "report",
+                "steps",
+                "testing"
+            ],
+            "support": {
+                "email": "allure@qameta.io",
+                "issues": "https://github.com/allure-framework/allure-phpunit/issues",
+                "source": "https://github.com/allure-framework/allure-phpunit"
+            },
+            "time": "2025-04-17T19:41:49+00:00"
+        },
+        {
             "name": "behat/gherkin",
             "version": "v4.12.0",
             "source": {
@@ -11416,77 +11493,6 @@
             "time": "2024-10-14T11:59:49+00:00"
         },
         {
-            "name": "magento/magento-allure-phpunit",
-            "version": "3.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/magento/magento-allure-phpunit.git",
-                "reference": "5b98b1165f7c8a50e3118a2094ea171ba2039054"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-allure-phpunit/zipball/5b98b1165f7c8a50e3118a2094ea171ba2039054",
-                "reference": "5b98b1165f7c8a50e3118a2094ea171ba2039054",
-                "shasum": ""
-            },
-            "require": {
-                "allure-framework/allure-php-commons": "^2",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
-                "phpunit/phpunit": "^10"
-            },
-            "conflict": {
-                "amphp/byte-stream": "<1.5.1",
-                "brianium/paratest": "<7.0.3"
-            },
-            "replace": {
-                "allure-framework/allure-phpunit": "^3.0"
-            },
-            "require-dev": {
-                "brianium/paratest": "^7",
-                "psalm/plugin-phpunit": "^0.18.4",
-                "squizlabs/php_codesniffer": "^3.7.2",
-                "vimeo/psalm": "^5.15"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Qameta\\Allure\\PHPUnit\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Krutov",
-                    "email": "vania-pooh@yandex-team.ru",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Edward Surov",
-                    "email": "zoohie@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Allure PHPUnit integration",
-            "homepage": "https://allurereport.org/",
-            "keywords": [
-                "allure",
-                "attachments",
-                "cases",
-                "phpunit",
-                "report",
-                "steps",
-                "testing"
-            ],
-            "support": {
-                "email": "allure@qameta.io",
-                "source": "https://github.com/allure-framework/allure-phpunit"
-            },
-            "time": "2025-02-26T05:42:29+00:00"
-        },
-        {
             "name": "magento/magento-coding-standard",
             "version": "37",
             "source": {
@@ -11538,16 +11544,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "5.0.3",
+            "version": "5.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "4a353df8982190bcd54869dc7900098a49f1fbe2"
+                "reference": "d43d2a420e363a1fee24da21b89c4dc7d3a156e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/4a353df8982190bcd54869dc7900098a49f1fbe2",
-                "reference": "4a353df8982190bcd54869dc7900098a49f1fbe2",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/d43d2a420e363a1fee24da21b89c4dc7d3a156e9",
+                "reference": "d43d2a420e363a1fee24da21b89c4dc7d3a156e9",
                 "shasum": ""
             },
             "require": {
@@ -11621,9 +11627,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.0.3"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.0.4"
             },
-            "time": "2025-02-27T04:12:59+00:00"
+            "time": "2025-04-30T00:24:46+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",
@@ -14710,5 +14716,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }

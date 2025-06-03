@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2012 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Export;
@@ -1004,13 +1004,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             ++$page;
             $entityCollection = $this->_getEntityCollection(true);
             $entityCollection->setOrder('entity_id', 'asc');
-            $entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
             $this->_prepareEntityCollection($entityCollection);
             $this->paginateCollection($page, $this->getItemsPerPage());
-            if ($entityCollection->count() == 0) {
+
+            $exportData = $this->getExportData();
+            if ($exportData == null || count($exportData) == 0) {
                 break;
             }
-            $exportData = $this->getExportData();
             if ($page == 1) {
                 $writer->setHeaderCols($this->_getHeaderColumns());
             }
@@ -1096,10 +1096,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function loadCollection(): array
     {
         $data = [];
-        $collection = $this->_getEntityCollection();
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
+            $collection = $this->_getEntityCollection(true);
             $collection->setOrder('entity_id', 'asc');
             $collection->setStoreId($storeId);
+            $this->_prepareEntityCollection($collection);
             $collection->load();
             foreach ($collection as $itemId => $item) {
                 $data[$itemId][$storeId] = $item;
@@ -1129,6 +1130,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
          */
         foreach ($items as $itemId => $itemByStore) {
             foreach ($this->_storeIdToCode as $storeId => $storeCode) {
+                if (!key_exists($storeId, $itemByStore)) {
+                    continue;
+                }
                 $item = $itemByStore[$storeId];
                 $additionalAttributes = [];
                 $productLinkId = $item->getData($this->getProductEntityLinkField());

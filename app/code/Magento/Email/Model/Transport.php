@@ -242,11 +242,15 @@ class Transport implements TransportInterface
     private function setReturnPath(SymfonyMessage $email): void
     {
         if ($this->isSetReturnPath === 2 && $this->returnPathValue) {
-            $email->getHeaders()->addMailboxListHeader('Sender', [$this->returnPathValue]);
+            $email->getHeaders()->addMailboxHeader('Sender', $this->returnPathValue);
         } elseif ($this->isSetReturnPath === 1 &&
-            !empty($fromAddresses = $email->getHeaders()->get('From')?->getAddresses())) {
+            !empty(
+                /** @var \Symfony\Component\Mime\Address[] $fromAddresses */
+                $fromAddresses = $email->getHeaders()->get('From')?->getAddresses()
+            )
+        ) {
             reset($fromAddresses);
-            $email->getHeaders()->addMailboxListHeader('Sender', [current($fromAddresses)->getAddress()]);
+            $email->getHeaders()->addMailboxHeader('Sender', current($fromAddresses));
         }
     }
 

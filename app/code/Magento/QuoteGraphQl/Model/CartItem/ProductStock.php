@@ -9,7 +9,6 @@ namespace Magento\QuoteGraphQl\Model\CartItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\StockState;
@@ -38,14 +37,12 @@ class ProductStock
      *
      * @param ProductRepositoryInterface $productRepositoryInterface
      * @param StockState $stockState
-     * @param StockConfigurationInterface $stockConfiguration
      * @param ScopeConfigInterface $scopeConfig
      * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
         private readonly ProductRepositoryInterface $productRepositoryInterface,
         private readonly StockState $stockState,
-        private readonly StockConfigurationInterface $stockConfiguration,
         private readonly ScopeConfigInterface $scopeConfig,
         private readonly StockRegistryInterface $stockRegistry
     ) {
@@ -70,9 +67,21 @@ class ProductStock
         $variantProduct = $this->getVariantProduct($cartItem);
         $requiredItemQty =  $requestedQty + $previousQty;
         if ($variantProduct !== null) {
-            return $this->isStockQtyAvailable($variantProduct, $requestedQty, $requiredItemQty, $previousQty);
+            return $this->isStockQtyAvailable(
+                $cartItem,
+                $variantProduct,
+                $requestedQty,
+                $requiredItemQty,
+                $previousQty
+            );
         }
-        return $this->isStockQtyAvailable($cartItem->getProduct(), $requestedQty, $requiredItemQty, $previousQty);
+        return $this->isStockQtyAvailable(
+            $cartItem,
+            $cartItem->getProduct(),
+            $requestedQty,
+            $requiredItemQty,
+            $previousQty
+        );
     }
 
     /**
@@ -93,7 +102,13 @@ class ProductStock
             if ($totalRequestedQty) {
                 $requiredItemQty = $requiredItemQty * $totalRequestedQty;
             }
-            if (!$this->isStockQtyAvailable($qtyOption->getProduct(), $requestedQty, $requiredItemQty, $previousQty)) {
+            if (!$this->isStockQtyAvailable(
+                $cartItem,
+                $qtyOption->getProduct(),
+                $requestedQty,
+                $requiredItemQty,
+                $previousQty
+            )) {
                 return false;
             }
         }
@@ -147,6 +162,7 @@ class ProductStock
     /**
      * Check if product is available in stock
      *
+     * @param Item $cartItem
      * @param ProductInterface $product
      * @param float $itemQty
      * @param float $requiredQuantity
@@ -154,17 +170,19 @@ class ProductStock
      * @return bool
      */
     private function isStockQtyAvailable(
+        Item $cartItem,
         ProductInterface $product,
         float $itemQty,
         float $requiredQuantity,
         float $prevQty
     ): bool {
+        $scopeId = $cartItem->getStore()->getId();
         $stockStatus = $this->stockState->checkQuoteItemQty(
             $product->getId(),
             $itemQty,
             $requiredQuantity,
             $prevQty,
-            $this->stockConfiguration->getDefaultScopeId()
+            $scopeId
         );
 
         return ((bool) $stockStatus->getHasError()) === false;
