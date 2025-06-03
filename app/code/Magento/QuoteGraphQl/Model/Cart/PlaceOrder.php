@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class PlaceOrder
         $isPaymentMethodAvailable = false;
 
         // Check if the selected payment method is in the available methods list
-        if($paymentMethodCode && $availablePaymentMethods){
+        if ($paymentMethodCode && $availablePaymentMethods) {
             foreach ($availablePaymentMethods as $availableMethod) {
                 if ($availableMethod->getCode() === $paymentMethodCode) {
                     $isPaymentMethodAvailable = true;
