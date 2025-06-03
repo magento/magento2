@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2017 Adobe All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
@@ -86,6 +86,7 @@ class SchemaBuilder
         $tablesWithJsonTypeField = [];
         if (isset($data['table'])) {
             foreach ($data['table'] as $keyTable => $tableColumns) {
+                $tableColumns['column'] ??= [];
                 foreach ($tableColumns['column'] as $keyColumn => $columnData) {
                     if ($columnData['type'] == 'json') {
                         $tablesWithJsonTypeField[$keyTable] = $keyColumn;
