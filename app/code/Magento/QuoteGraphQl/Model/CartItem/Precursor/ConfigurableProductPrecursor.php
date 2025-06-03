@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\CartItem\Precursor;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\QuoteGraphQl\Model\CartItem\PrecursorInterface;
 
@@ -21,6 +25,20 @@ class ConfigurableProductPrecursor implements PrecursorInterface
     private array $errors = [];
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private ProductRepositoryInterface $productRepository;
+
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(
+        ProductRepositoryInterface $productRepository
+    ) {
+        $this->productRepository = $productRepository;
+    }
+
+    /**
      * Process cart item data to handle parent_sku for configurable products
      *
      * @param array $cartItemData
@@ -29,25 +47,91 @@ class ConfigurableProductPrecursor implements PrecursorInterface
      */
     public function process(array $cartItemData, ContextInterface $context): array
     {
-        $result = [];
+        $processedCartItemData = [];
 
-        foreach ($cartItemData as $key => $itemData) {
-            $result[$key] = $itemData;
+        foreach ($cartItemData as $cartItemIndex => $cartItem) {
+            if (!isset($cartItem['parent_sku'])) {
+                $processedCartItemData[$cartItemIndex] = $cartItem;
+                continue;
+            }
 
-            if (!empty($itemData['parent_sku'])) {
-                $parentItemData = [
-                    'sku' => $itemData['parent_sku'],
-                    'quantity' => $itemData['quantity'],
-                    'parent_sku' => null,
-                    'selected_options' => $itemData['selected_options'] ?? [],
-                    'entered_options' => $itemData['entered_options'] ?? [],
+            try {
+                $childProduct = $this->productRepository->get($cartItem['sku']);
+                $parentProduct = $this->productRepository->get($cartItem['parent_sku']);
+
+                if ($parentProduct->getTypeId() !== Configurable::TYPE_CODE) {
+                    $this->errors[] = [
+                        'message' => sprintf('Product %s is not a configurable product', $cartItem['parent_sku']),
+                        'code' => 'UNDEFINED'
+                    ];
+                    $processedCartItemData[$cartItemIndex] = $cartItem;
+                    continue;
+                }
+
+                $configurableOptions = $this->getConfigurableOptions($parentProduct, $childProduct);
+
+                if (empty($configurableOptions)) {
+                    $this->errors[] = [
+                        'message' => sprintf('Could not match child product %s with parent %s', $cartItem['sku'], $cartItem['parent_sku']),
+                        'code' => 'UNDEFINED'
+                    ];
+                    $processedCartItemData[$cartItemIndex] = $cartItem;
+                    continue;
+                }
+
+                $parentCartItem = [
+                    'sku' => $cartItem['parent_sku'],
+                    'quantity' => $cartItem['quantity'],
+                    'selected_options' => array_merge($configurableOptions, $cartItem['selected_options'] ?? []),
+                    'entered_options' => $cartItem['entered_options'] ?? [],
+                    'parent_sku' => null
                 ];
 
-                $result[] = $parentItemData;
+                $processedCartItemData[] = $parentCartItem;
+                unset($cartItemData[$cartItemIndex]);
+
+            } catch (NoSuchEntityException $e) {
+                $this->errors[] = [
+                    'message' => $e->getMessage(),
+                    'code' => 'UNDEFINED'
+                ];
+                $processedCartItemData[$cartItemIndex] = $cartItem;
             }
         }
 
-        return $result;
+        return $processedCartItemData;
+    }
+
+    /**
+     * Get configurable option IDs for the simple product
+     *
+     * @param ProductInterface $parentProduct
+     * @param ProductInterface $childProduct
+     * @return array
+     */
+    private function getConfigurableOptions(ProductInterface $parentProduct, ProductInterface $childProduct): array
+    {
+        $selectedOptions = [];
+
+        /** @var Configurable $configurableType */
+        $configurableType = $parentProduct->getTypeInstance();
+        $attributes = $configurableType->getConfigurableAttributes($parentProduct);
+
+        $childProductData = $childProduct->getData();
+
+        foreach ($attributes as $attribute) {
+            $attributeId = $attribute->getProductAttribute()->getAttributeId();
+            $attributeCode = $attribute->getProductAttribute()->getAttributeCode();
+
+            if (!isset($childProductData[$attributeCode])) {
+                continue;
+            }
+
+            $optionId = $childProductData[$attributeCode];
+            $selectedOptions[] = base64_encode("configurable/$attributeId/$optionId");
+        }
+
+        return $selectedOptions;
     }
 
     /**
