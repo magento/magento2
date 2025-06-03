@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EavTest extends AbstractModifierTest
+class EavTest extends AbstractModifierTestCase
 {
     /**
      * @var Config|MockObject
@@ -450,7 +450,7 @@ class EavTest extends AbstractModifierTest
         $attrValue,
         array $expected,
         bool $locked = false,
-        string $frontendInput = null,
+        ?string $frontendInput = null,
         array $expectedCustomize = []
     ) : void {
         $configPath = 'arguments/data/config';

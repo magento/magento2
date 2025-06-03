@@ -204,7 +204,7 @@ class IndexerSetStatusCommandTest extends AbstractIndexerCommandCommonSetup
         );
     }
 
-    public function executeWithIndexDataProvider(): array
+    public static function executeWithIndexDataProvider(): array
     {
         return [
             [

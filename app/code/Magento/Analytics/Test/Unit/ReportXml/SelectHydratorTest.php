@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -226,7 +226,7 @@ class SelectHydratorTest extends TestCase
 
         return [
             'Select without expressions' => [
-                'Parts' => [
+                'selectParts' => [
                     Select::COLUMNS => [
                         [
                             'table_name',
@@ -259,7 +259,7 @@ class SelectHydratorTest extends TestCase
                         ]
                     ]
                 ],
-                'expectedExpressions' => [
+                'expressionMocks' => [
                     self::$expressionMock
                 ]
             ]

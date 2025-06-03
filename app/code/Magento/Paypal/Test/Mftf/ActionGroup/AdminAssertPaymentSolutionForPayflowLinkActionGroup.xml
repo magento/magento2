@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertPaymentSolutionForPayflowLinkActionGroup" extends="AdminEnablePayPalPayFlowLinkActionGroup">
+        <annotations>
+            <description>Configuration for Payflow link with Sample PayPal credentials and Assert Paypal Credit and Express Checkout</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableSolution(countryCode)}}" userInput="No" stepKey="seeEnableThisSolutionIsSetAsNo" after="enableTestMode"/>
+        <assertElementContainsAttribute stepKey="seeEnablePaypalCreditIsDisabled" after="seeEnableThisSolutionIsSetAsNo">
+            <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <assertElementContainsAttribute stepKey="seeEnableExpressCheckoutIsDisabled" after="seeEnableThisSolutionIsSetAsNo">
+            <expectedResult selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <!-- Check that Paypal Credit and Express Checkoutis set to No and it is disabled -->
+        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit(countryCode)}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo" after="seeEnablePaypalCreditIsDisabled"/>
+        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout(countryCode)}}" userInput="No" stepKey="seeExpressCheckoutIsSetAsNo" after="seeEnableExpressCheckoutIsDisabled"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledEnableSolution(countryCode)}}" stepKey="assertGreenTickMarkPresentForEnableThisSolutionDropdown" after="enableSolution"/>
+        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enablePaypalCredit(countryCode)}}" userInput="Yes" stepKey="seePaypalCreditIsSetAsYes" before="waitForSaveConfigToBeVisible"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledPaypalCredit(countryCode)}}" stepKey="assertGreenTickMarkPresentForEnablePaypalCredit" after="assertGreenTickMarkPresentForEnableThisSolutionDropdown"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.sortOrder(countryCode)}}" stepKey="assertSortOrder" after="assertGreenTickMarkPresentForEnablePaypalCredit"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.disabledExpressCheckout(countryCode)}}" stepKey="assertGreenTickMarkPresentForEnablePaypalCheckout" before="waitForSaveConfigToBeVisible"/>
+        <seeOptionIsSelected selector="{{AdminPayPalPayFlowLinkConfigSection.enableExpressCheckout(countryCode)}}" userInput="Yes" stepKey="seeExpressCheckoutIsSetAsYes" before="waitForSaveConfigToBeVisible"/>
+    </actionGroup>
+</actionGroups>

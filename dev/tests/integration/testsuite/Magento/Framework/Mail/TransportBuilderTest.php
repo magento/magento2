@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,8 +86,8 @@ class TransportBuilderTest extends TestCase
 
         /** @var EmailMessage $emailMessage */
         $emailMessage = $this->builder->getTransport()->getMessage();
-
-        $this->assertStringContainsStringIgnoringCase($templateType, $emailMessage->getHeaders()['Content-Type']);
+        $header = 'text/' . $emailMessage->getSymfonyMessage()->getBody()->getMediaSubtype();
+        $this->assertStringContainsStringIgnoringCase($templateType, $header);
 
         $addresses = $emailMessage->getTo();
 
@@ -108,7 +108,7 @@ class TransportBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function emailDataProvider(): array
+    public static function emailDataProvider(): array
     {
         return [
             [
@@ -172,7 +172,8 @@ class TransportBuilderTest extends TestCase
 
         /** @var EmailMessage $emailMessage */
         $emailMessage = $this->builder->getTransport()->getMessage();
-        $this->assertStringContainsStringIgnoringCase($templateType, $emailMessage->getHeaders()['Content-Type']);
+        $header = 'text/' . $emailMessage->getSymfonyMessage()->getBody()->getMediaSubtype();
+        $this->assertStringContainsStringIgnoringCase($templateType, $header);
 
         $resultEmails = [];
         /** @var Address $toAddress */
@@ -186,7 +187,7 @@ class TransportBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function invalidEmailDataProvider(): array
+    public static function invalidEmailDataProvider(): array
     {
         return [
             [

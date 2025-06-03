@@ -258,7 +258,7 @@ class TransportBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function getTransportDataProvider(): array
+    public static function getTransportDataProvider(): array
     {
         return [
             [

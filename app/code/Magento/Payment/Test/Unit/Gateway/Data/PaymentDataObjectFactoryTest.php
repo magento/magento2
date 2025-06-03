@@ -56,13 +56,13 @@ class PaymentDataObjectFactoryTest extends TestCase
 
         $this->orderAdapterFactoryMock =
             $this->getMockBuilder(OrderAdapterFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
         $this->quoteAdapterFactoryMock =
             $this->getMockBuilder(QuoteAdapterFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 

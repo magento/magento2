@@ -75,7 +75,7 @@ class AddPaymentWeeeItemTest extends TestCase
         $parentItemMock = $this->createMock(Item::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCart'])
+            ->addMethods(['getCart'])
             ->getMock();
 
         $asCustomItem = $this->prepareShouldBeAddedAsCustomItem($isEnabled, $includeInSubtotal);
@@ -109,7 +109,7 @@ class AddPaymentWeeeItemTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [true, false],
@@ -129,7 +129,7 @@ class AddPaymentWeeeItemTest extends TestCase
     private function prepareShouldBeAddedAsCustomItem(bool $isEnabled, bool $includeInSubtotal): bool
     {
         $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->once())
             ->method('getId')

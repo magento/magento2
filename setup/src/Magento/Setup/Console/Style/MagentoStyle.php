@@ -97,8 +97,8 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      */
     public function block(
         $messages,
-        string $type = null,
-        string $style = null,
+        ?string $type = null,
+        ?string $style = null,
         string $prefix = ' ',
         bool $padding = false
     ) {
@@ -371,10 +371,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function askForMissingArgument(
         string $argument,
         string $question,
-        string $default = null,
-        callable $validator = null,
-        int $maxAttempts = null,
-        bool $comment = null,
+        ?string $default = null,
+        ?callable $validator = null,
+        ?int $maxAttempts = null,
+        ?bool $comment = null,
         string $commentFormat = 'Argument [%s] set to: %s'
     ) {
         try {
@@ -415,10 +415,10 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     public function askForMissingOption(
         string $option,
         string $question,
-        string $default = null,
-        callable $validator = null,
-        int $maxAttempts = null,
-        bool $comment = null,
+        ?string $default = null,
+        ?callable $validator = null,
+        ?int $maxAttempts = null,
+        ?bool $comment = null,
         string $commentFormat = 'Option [%s] set to: %s'
     ) {
         try {
@@ -558,8 +558,8 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
      */
     private function createBlock(
         array $messages,
-        string $type = null,
-        string $style = null,
+        ?string $type = null,
+        ?string $style = null,
         string $prefix = ' ',
         bool $padding = false
     ) {

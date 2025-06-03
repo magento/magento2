@@ -78,7 +78,7 @@ class LoadOptionsTest extends TestCase
         $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['representJson'])
+            ->addMethods(['representJson'])
             ->getMockForAbstractClass();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -193,7 +193,7 @@ class LoadOptionsTest extends TestCase
 
         /** @var BlockInterface|MockObject $blockMock */
         $blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->setMethods(['setWidgetType', 'setWidgetValues'])
+            ->addMethods(['setWidgetType', 'setWidgetValues'])
             ->getMockForAbstractClass();
         $blockMock->expects($this->once())
             ->method('setWidgetType')

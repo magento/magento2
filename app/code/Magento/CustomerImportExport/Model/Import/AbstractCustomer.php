@@ -6,8 +6,6 @@
 
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\Customer\Model\Config\Share;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Framework\Validator\ValidateException;
 use Magento\Framework\Validator\ValidatorChain;
@@ -90,11 +88,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $masterAttributeCode = '_email';
 
     /**
-     * @var Share
-     */
-    private $configShare;
-
-    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -106,7 +99,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param array $data
-     * @param Share|null $configShare
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -120,8 +112,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
-        array $data = [],
-        ?Share $configShare = null
+        array $data = []
     ) {
         $this->_storageFactory = $storageFactory;
         parent::__construct(
@@ -136,7 +127,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $eavConfig,
             $data
         );
-        $this->configShare = $configShare ?? ObjectManager::getInstance()->get(Share::class);
         $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Please specify a website.'));
         $this->addMessageTemplate(
             self::ERROR_EMAIL_IS_EMPTY,
@@ -183,10 +173,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected function _getCustomerId($email, $websiteCode)
     {
         $email = strtolower(trim($email));
-
-        if ($this->configShare->isGlobalScope()) {
-            return $this->_customerStorage->getCustomerIdByEmail($email);
-        }
 
         if (isset($this->_websiteCodeToId[$websiteCode])) {
             $websiteId = $this->_websiteCodeToId[$websiteCode];

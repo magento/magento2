@@ -46,7 +46,7 @@ class Factory
      * @return DriverInterface
      * @throws \InvalidArgumentException
      */
-    public function create(array $config = null)
+    public function create(?array $config = null)
     {
         $type = isset($config['type']) ? $config['type'] : $this->_defaultDriverType;
         if (class_exists($type)) {

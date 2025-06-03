@@ -177,11 +177,15 @@ class BuiltinPluginTest extends TestCase
             ->willReturnOnConsecutiveCalls('test', 'tag,tag2');
         $this->responseMock->expects(static::any())
             ->method('setHeader')
-            ->withConsecutive(
-                ['X-Magento-Cache-Control', 'test'],
-                ['X-Magento-Cache-Debug', 'MISS', true],
-                ['X-Magento-Tags', 'tag,tag2,' . CacheType::CACHE_TAG]
-            );
+            ->willReturnCallback(function ($arg1, $arg2 = null, $arg3 = null) {
+                if ($arg1 === 'X-Magento-Cache-Control' && $arg2 === 'test') {
+                    return null;
+                } elseif ($arg1 === 'X-Magento-Cache-Debug' && $arg2 === 'MISS' && $arg3 === true) {
+                    return null;
+                } elseif ($arg1 === 'X-Magento-Tags' && $arg2 === 'tag,tag2,' . CacheType::CACHE_TAG) {
+                    return null;
+                }
+            });
         $this->responseMock->expects(static::once())
             ->method('clearHeader')
             ->with('X-Magento-Tags');

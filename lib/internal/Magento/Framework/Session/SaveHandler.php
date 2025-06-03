@@ -79,8 +79,8 @@ class SaveHandler implements SaveHandlerInterface, ResetAfterRequestInterface
         LoggerInterface $logger,
         SessionMaxSizeConfig $sessionMaxSizeConfigs,
         $default = self::DEFAULT_HANDLER,
-        ManagerInterface $messageManager = null,
-        State $appState = null
+        ?ManagerInterface $messageManager = null,
+        ?State $appState = null
     ) {
         $this->saveHandlerFactory = $saveHandlerFactory;
         $this->sessionConfig = $sessionConfig;

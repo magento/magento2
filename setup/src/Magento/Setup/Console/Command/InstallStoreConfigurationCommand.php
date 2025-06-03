@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -14,8 +14,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\Locale as LocaleValidator;
 use Magento\Framework\Validator\Timezone as TimezoneValidator;
 use Magento\Framework\Validator\Currency as CurrencyValidator;
@@ -26,25 +24,16 @@ use Magento\Framework\Validator\Url as UrlValidator;
  */
 class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
+    public const NAME = 'setup:store-config:set';
     /**
      * @var InstallerFactory
      */
     private $installerFactory;
 
     /**
-     * Deployment configuration
-     *
      * @var DeploymentConfig
      */
     private $deploymentConfig;
-
-    /**
-     * Object Manager
-     *
-     * @var ObjectManagerInterface
-     * @deprecated 2.2.0
-     */
-    private $objectManager;
 
     /**
      * @var LocaleValidator
@@ -71,11 +60,12 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      *
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param LocaleValidator $localeValidator,
-     * @param TimezoneValidator $timezoneValidator,
-     * @param CurrencyValidator $currencyValidator,
+     * @param ObjectManagerProvider $objectManagerProvider Deprecated since not used anymore
+     * @param LocaleValidator $localeValidator
+     * @param TimezoneValidator $timezoneValidator
+     * @param CurrencyValidator $currencyValidator
      * @param UrlValidator $urlValidator
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         InstallerFactory $installerFactory,
@@ -88,7 +78,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     ) {
         $this->installerFactory = $installerFactory;
         $this->deploymentConfig = $deploymentConfig;
-        $this->objectManager = $objectManagerProvider->get();
         $this->localeValidator = $localeValidator;
         $this->timezoneValidator = $timezoneValidator;
         $this->currencyValidator = $currencyValidator;
@@ -97,18 +86,18 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('setup:store-config:set')
+        $this->setName(self::NAME)
             ->setDescription('Installs the store configuration. Deprecated since 2.2.0. Use config:set instead')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -310,9 +299,9 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     /**
      * Validate codes for languages, currencies or timezones
      *
-     * @param LocaleValidator|TimezoneValidator|CurrencyValidator  $lists
-     * @param string  $code
-     * @param string  $type
+     * @param LocaleValidator|TimezoneValidator|CurrencyValidator $lists
+     * @param string $code
+     * @param string $type
      * @return string
      */
     private function validateCodes($lists, $code, $type)

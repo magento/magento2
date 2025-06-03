@@ -557,8 +557,15 @@ class ConfigurableTest extends AbstractImportTestCase
         // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
         $this->_connection
             ->method('quoteIdentifier')
-            ->withConsecutive(['m.attribute_id'], ['o.attribute_id'])
-            ->willReturnOnConsecutiveCalls('a', 'b');
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'm.attribute_id') {
+                        return 'a';
+                    } elseif ($arg == 'o.attribute_id') {
+                        return 'b';
+                    }
+                }
+            );
 
         $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->willReturn(
@@ -677,7 +684,7 @@ class ConfigurableTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function getProductDataIsValidRow(): array
+    public static function getProductDataIsValidRow(): array
     {
         return [
             [

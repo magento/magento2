@@ -149,7 +149,7 @@ class ShowTest extends TestCase
     /**
      * @return array
      */
-    public function dataForExecute()
+    public static function dataForExecute()
     {
         return [
             [

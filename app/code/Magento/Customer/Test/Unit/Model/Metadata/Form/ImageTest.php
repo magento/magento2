@@ -24,6 +24,7 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\File as Driver;
 use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -122,16 +123,17 @@ class ImageTest extends AbstractFormTestCase
             ->getMock();
         $this->imageContentFactory = $this->getMockBuilder(ImageContentInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->fileProcessorFactoryMock = $this->getMockBuilder(FileProcessorFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->fileProcessorFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->fileProcessorMock);
         $this->ioFileSystemMock = $this->getMockBuilder(File::class)
+            ->onlyMethods(['getPathInfo'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -154,6 +156,15 @@ class ImageTest extends AbstractFormTestCase
         $this->mediaWriteDirectoryMock->expects($this->any())
             ->method('getDriver')
             ->willReturn($this->driverMock);
+
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                File::class,
+                $this->ioFileSystemMock
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
     }
 
     /**
@@ -192,6 +203,7 @@ class ImageTest extends AbstractFormTestCase
         $value = [
             'tmp_name' => 'tmp_file.txt',
             'name' => 'realFileName',
+            'basename' => 'tmp_file.txt',
         ];
 
         $this->attributeMetadataMock->expects($this->once())
@@ -202,6 +214,10 @@ class ImageTest extends AbstractFormTestCase
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['tmp_name'])
             ->willReturn(true);
+
+        $this->ioFileSystemMock->expects($this->once())
+            ->method('getPathInfo')
+            ->willReturn($value);
 
         $model = $this->initialize([
             'value' => $value,
@@ -221,15 +237,13 @@ class ImageTest extends AbstractFormTestCase
         $value = [
             'tmp_name' => __DIR__ . '/_files/logo.gif',
             'name' => 'logo.gif',
+            'basename' => 'logo.gif',
+            'extension' => 'gif'
         ];
 
         $this->ioFileSystemMock->expects($this->any())
             ->method('getPathInfo')
-            ->with($value['name'])
-            ->willReturn([
-                'filename' => 'logo',
-                'extension' => 'gif'
-            ]);
+            ->willReturn($value);
 
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
@@ -239,11 +253,6 @@ class ImageTest extends AbstractFormTestCase
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
-
-        $this->ioFileSystemMock->expects($this->once())
-            ->method('getPathInfo')
-            ->with($value['name'])
-            ->willReturn(['extension' => 'gif']);
 
         $model = $this->initialize([
             'value' => $value,
@@ -263,7 +272,9 @@ class ImageTest extends AbstractFormTestCase
         $value = [
             'tmp_name' => __DIR__ . '/_files/logo.gif',
             'name' => 'logo.gif',
+            'basename' => 'logo.gif',
             'size' => 2,
+            'extension' => 'gif'
         ];
 
         $maxFileSize = 1;
@@ -278,14 +289,6 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn($maxFileSize);
 
-        $this->ioFileSystemMock->expects($this->any())
-            ->method('getPathInfo')
-            ->with($value['name'])
-            ->willReturn([
-                'filename' => 'logo',
-                'extension' => 'gif'
-            ]);
-
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
@@ -298,10 +301,9 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
-        $this->ioFileSystemMock->expects($this->once())
+        $this->ioFileSystemMock->expects($this->any())
             ->method('getPathInfo')
-            ->with($value['name'])
-            ->willReturn(['extension' => 'gif']);
+            ->willReturn($value);
 
         $model = $this->initialize([
             'value' => $value,
@@ -321,7 +323,13 @@ class ImageTest extends AbstractFormTestCase
         $value = [
             'tmp_name' => __DIR__ . '/_files/logo.gif',
             'name' => 'logo.gif',
+            'basename' => 'logo.gif',
+            'extension' => 'gif'
         ];
+
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturn($value);
 
         $maxImageWidth = 1;
 
@@ -335,14 +343,6 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn($maxImageWidth);
 
-        $this->ioFileSystemMock->expects($this->any())
-            ->method('getPathInfo')
-            ->with($value['name'])
-            ->willReturn([
-                'filename' => 'logo',
-                'extension' => 'gif'
-            ]);
-
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
@@ -354,11 +354,6 @@ class ImageTest extends AbstractFormTestCase
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
-
-        $this->ioFileSystemMock->expects($this->once())
-            ->method('getPathInfo')
-            ->with($value['name'])
-            ->willReturn(['extension' => 'gif']);
 
         $model = $this->initialize([
             'value' => $value,
@@ -378,6 +373,8 @@ class ImageTest extends AbstractFormTestCase
         $value = [
             'tmp_name' => __DIR__ . '/_files/logo.gif',
             'name' => 'logo.gif',
+            'basename' => 'logo.gif',
+            'extension' => 'gif'
         ];
 
         $maxImageHeight = 1;
@@ -392,14 +389,6 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn($maxImageHeight);
 
-        $this->ioFileSystemMock->expects($this->any())
-            ->method('getPathInfo')
-            ->with($value['name'])
-            ->willReturn([
-                'filename' => 'logo',
-                'extension' => 'gif'
-            ]);
-
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
@@ -412,10 +401,9 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
-        $this->ioFileSystemMock->expects($this->once())
+        $this->ioFileSystemMock->expects($this->any())
             ->method('getPathInfo')
-            ->with($value['name'])
-            ->willReturn(['extension' => 'gif']);
+            ->willReturn($value);
 
         $model = $this->initialize([
             'value' => $value,

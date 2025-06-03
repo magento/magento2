@@ -109,7 +109,7 @@ class DeferredCacheCleanerTest extends TestCase
     /**
      * @return array[]
      */
-    public function cacheTagsDataProvider(): array
+    public static function cacheTagsDataProvider(): array
     {
         return [
             [[], false],

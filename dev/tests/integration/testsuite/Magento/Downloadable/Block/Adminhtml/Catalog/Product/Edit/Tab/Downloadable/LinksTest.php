@@ -109,7 +109,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function productLinksTitleDataProvider()
+    public static function productLinksTitleDataProvider()
     {
         return [
             ['simple', null, 'Links Title Test'],

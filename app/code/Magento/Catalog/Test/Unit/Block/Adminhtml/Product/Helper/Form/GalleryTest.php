@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class GalleryTest extends TestCase
         $this->formMock = $this->createMock(Form::class);
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $this->objectManager = new ObjectManager($this);
         $this->gallery = $this->objectManager->getObject(

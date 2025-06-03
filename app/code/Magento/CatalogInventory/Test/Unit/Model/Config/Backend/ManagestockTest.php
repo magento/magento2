@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class ManagestockTest extends TestCase
      * Data provider for testSaveAndRebuildIndex
      * @return array
      */
-    public function saveAndRebuildIndexDataProvider()
+    public static function saveAndRebuildIndexDataProvider()
     {
         return [
             [1, 1],

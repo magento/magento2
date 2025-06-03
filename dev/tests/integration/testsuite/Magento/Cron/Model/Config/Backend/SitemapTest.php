@@ -75,7 +75,7 @@ class SitemapTest extends TestCase
     /**
      * @return array
      */
-    public function frequencyDataProvider(): array
+    public static function frequencyDataProvider(): array
     {
         return [
             'daily' => [Frequency::CRON_DAILY, '0 0 * * *'],

@@ -133,7 +133,7 @@ class CreateAddressTest extends AbstractController
      *
      * @return array
      */
-    public function postDataForSuccessCreateDefaultAddressDataProvider(): array
+    public static function postDataForSuccessCreateDefaultAddressDataProvider(): array
     {
         return [
             'any_addresses_are_default' => [
@@ -208,7 +208,7 @@ class CreateAddressTest extends AbstractController
      *
      * @return array
      */
-    public function postDataForSuccessCreateAddressDataProvider(): array
+    public static function postDataForSuccessCreateAddressDataProvider(): array
     {
         return [
             'required_fields_valid_data' => [
@@ -284,7 +284,7 @@ class CreateAddressTest extends AbstractController
      *
      * @return array
      */
-    public function postDataForCreateAddressWithErrorDataProvider(): array
+    public static function postDataForCreateAddressWithErrorDataProvider(): array
     {
         return [
             'empty_post_data' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -233,11 +233,11 @@ class ForgotPasswordPostTest extends AbstractController
             $this->dispatch('customer/account/forgotPasswordPost');
             $this->assertRedirect($this->stringContains('customer/account/'));
 
-            $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+            $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString();
 
             $this->assertStringContainsString(
                 'There was recently a request to change the password for your account',
-                $sendMessage
+                quoted_printable_decode($sendMessage)
             );
 
             $this->assertSessionMessages(
@@ -473,7 +473,9 @@ class ForgotPasswordPostTest extends AbstractController
         );
 
         // Asserting mail received after forgot password
-        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = quoted_printable_decode(
+            $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString()
+        );
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
             $sendMessage
@@ -491,7 +493,8 @@ class ForgotPasswordPostTest extends AbstractController
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
-                    '//a[contains(@href, \'customer/account/createPassword/?id=%1$d&token=%2$s\')]',
+                    '//a[contains(@href, \'customer/account/createPassword/?email=%1$s&id=%2$d&token=%3$s\')]',
+                    urlencode($customerData->getEmail()),
                     $customerId,
                     $token
                 ),
@@ -548,10 +551,10 @@ class ForgotPasswordPostTest extends AbstractController
         }
 
         // Asserting mail received after forgot password
-        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString();
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
-            $sendMessage
+            quoted_printable_decode($sendMessage)
         );
 
         // Updating the limit to greater than 0
@@ -586,10 +589,10 @@ class ForgotPasswordPostTest extends AbstractController
         $this->dispatch('customer/account/forgotPasswordPost');
 
         // Asserting mail received after forgot password
-        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString();
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
-            $sendMessage
+            quoted_printable_decode($sendMessage)
         );
     }
 }

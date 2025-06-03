@@ -8,6 +8,7 @@
 /**
  * @var $block Magento\Shipping\Block\Adminhtml\Order\Tracking
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var $escaper \Magento\Framework\Escaper
  */
 ?>
 <?php $scriptString = <<<script
@@ -29,7 +30,7 @@ require(['prototype'], function(){
             $('trackingC' + this.index).disabled = false;
             $('trackingT' + this.index).disabled = false;
             $('trackingN' + this.index).disabled = false;
-            this.bindCurrierOnchange();
+            this.bindCarrierOnchange();
         },
         deleteRow : function(event) {
             var row = Event.findElement(event, 'tr');
@@ -37,17 +38,17 @@ require(['prototype'], function(){
                 row.parentNode.removeChild(row)
             }
         },
-        bindCurrierOnchange : function() {
+        bindCarrierOnchange : function() {
             var elems = $('tracking_numbers_table').select('.select');
             elems.each(function (elem) {
                 if (!elem.onchangeBound) {
                     elem.onchangeBound = true;
                     elem.valueInput = $(elem.parentNode.parentNode).select('.number-title')[0];
-                    elem.observe('change', this.currierOnchange);
+                    elem.observe('change', this.carrierOnchange);
                 }
             }.bind(this));
         },
-        currierOnchange : function(event) {
+        carrierOnchange : function(event) {
             var elem = Event.element(event);
             var option = elem.options[elem.selectedIndex];
             if (option.value && option.value != 'custom') {
@@ -76,7 +77,7 @@ script;
                     class="select admin__control-select carrier"
                     disabled="disabled">
                 <?php foreach ($block->getCarriers() as $_code => $_name): ?>
-                    <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
+                    <option value="<?= $escaper->escapeHtmlAttr($_code) ?>"><?= $escaper->escapeHtml($_name) ?></option>
                 <?php endforeach; ?>
             </select>
         </td>
@@ -101,7 +102,7 @@ script;
                 type="button"
                 class="action-default action-delete"
                 onclick="trackingControl.deleteRow(event);return false">
-                <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
             </button>
         </td>
     </tr>
@@ -111,10 +112,10 @@ script;
     <table class="data-table admin__control-table" id="tracking_numbers_table">
         <thead>
         <tr class="headings">
-            <th class="col-carrier"><?= $block->escapeHtml(__('Carrier')) ?></th>
-            <th class="col-title"><?= $block->escapeHtml(__('Title')) ?></th>
-            <th class="col-number"><?= $block->escapeHtml(__('Number')) ?></th>
-            <th class="col-delete"><?= $block->escapeHtml(__('Action')) ?></th>
+            <th class="col-carrier"><?= $escaper->escapeHtml(__('Carrier')) ?></th>
+            <th class="col-title"><?= $escaper->escapeHtml(__('Title')) ?></th>
+            <th class="col-number"><?= $escaper->escapeHtml(__('Number')) ?></th>
+            <th class="col-delete"><?= $escaper->escapeHtml(__('Action')) ?></th>
         </tr>
         </thead>
         <tfoot>

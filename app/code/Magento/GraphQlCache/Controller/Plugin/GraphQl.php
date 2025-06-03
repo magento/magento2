@@ -98,12 +98,12 @@ class GraphQl
     ): void {
         try {
             $this->requestProcessor->validateRequest($request);
+            /** @var \Magento\Framework\App\Request\Http $request */
+            $this->requestProcessor->processHeaders($request);
+            $this->request = $request;
         } catch (\Exception $error) {
             $this->logger->critical($error->getMessage());
         }
-        /** @var \Magento\Framework\App\Request\Http $request */
-        $this->requestProcessor->processHeaders($request);
-        $this->request = $request;
     }
 
     /**

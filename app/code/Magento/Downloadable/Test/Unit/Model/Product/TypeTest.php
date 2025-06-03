@@ -157,7 +157,7 @@ class TypeTest extends TestCase
 
         $this->typeHandler = $this->getMockBuilder(TypeHandler::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMock();
 
         $this->target = $this->objectManager->getObject(
@@ -205,7 +205,7 @@ class TypeTest extends TestCase
     public function testCheckProductBuyState()
     {
         $optionMock = $this->getMockBuilder(Option::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 

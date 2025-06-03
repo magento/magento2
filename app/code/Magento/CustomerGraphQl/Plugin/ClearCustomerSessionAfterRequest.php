@@ -54,7 +54,7 @@ class ClearCustomerSessionAfterRequest
         UserContextInterface $userContext,
         CustomerSession $customerSession,
         CustomerRepository $customerRepository,
-        AddUserInfoToContext $addUserInfoToContext = null
+        ?AddUserInfoToContext $addUserInfoToContext = null
     ) {
         $this->userContext = $userContext;
         $this->customerSession = $customerSession;

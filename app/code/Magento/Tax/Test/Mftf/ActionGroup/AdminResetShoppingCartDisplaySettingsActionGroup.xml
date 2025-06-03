@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetShoppingCartDisplaySettingsActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Resets 'Shopping Cart Display Settings' values to default.</description>
+        </annotations>
+        <!-- change shopping cart display setting configurations -->
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPriceCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.displayPriceCheckBox}}" visible="true" stepKey="clickDisplayPricesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displaySubtotalCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.displaySubtotalCheckBox}}" visible="true" stepKey="clickDisplaysubtotalCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayShippingAmountCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.displayShippingAmountCheckBox}}" visible="true" stepKey="clickDisplayShippingAmountCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="true" stepKey="clickIncludeTaxTotalCartCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}" visible="true" stepKey="clickDisplayTaxSummaryCartCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxCart}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxCart}}" visible="true" stepKey="clickDisplayZeroTaxCartCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" visible="true" stepKey="closeShoppingCartDisplaySettingSection"/>
+    </actionGroup>
+</actionGroups>

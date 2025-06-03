@@ -65,7 +65,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
     /**
      * @inheritDoc
      */
-    public function setExchangeRates(array $exchangeRates = null)
+    public function setExchangeRates(?array $exchangeRates = null)
     {
         return $this->setData(self::KEY_EXCHANGE_RATES, $exchangeRates);
     }

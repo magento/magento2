@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,13 +67,16 @@ class ResetPasswordTest extends TestCase
             1
         );
         $customerSecure = $this->customerRegistry->retrieveSecureData(1);
-        $mailTemplate = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $mailTemplate = quoted_printable_decode(
+            $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString()
+        );
 
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
-                    '//a[contains(@href, \'customer/account/createPassword/?id=%1$d&token=%2$s\')]',
+                    '//a[contains(@href, \'customer/account/createPassword/?email=%1$s&id=%2$d&token=%3$s\')]',
+                    urlencode($customerSecure->getEmail()),
                     $customerSecure->getId(),
                     $customerSecure->getRpToken()
                 ),
@@ -136,15 +139,15 @@ class ResetPasswordTest extends TestCase
     /**
      * @return array
      */
-    public function passwordResetErrorsProvider(): array
+    public static function passwordResetErrorsProvider(): array
     {
         return [
-            'wrong_email' => [
+            'email' => [
                 'email' => 'foo@example.com',
             ],
-            'wrong_website_id' => [
+            'websiteId' => [
                 'email' => 'customer@example.com',
-                'website_id' => 0,
+                'websiteId' => 0,
             ],
         ];
     }

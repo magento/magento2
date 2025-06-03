@@ -15,7 +15,9 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\CatalogInventory\Model\StockState;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\DataObject;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -92,12 +94,12 @@ class GridTest extends TestCase
         )->getMock();
         $sessionMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
 
         $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMock();
 
         $storeMock = $this->getMockBuilder(Store::class)
@@ -110,7 +112,7 @@ class GridTest extends TestCase
         $sessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
         $wishlistFactoryMock = $this->getMockBuilder(WishlistFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['methods'])
+            ->addMethods(['methods'])
             ->getMock();
 
         $giftMessageSave = $this->getMockBuilder(\Magento\Giftmessage\Model\Save::class)
@@ -123,7 +125,7 @@ class GridTest extends TestCase
 
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(
@@ -141,6 +143,17 @@ class GridTest extends TestCase
             ->willReturn($this->stockItemMock);
 
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->block = $this->objectManager->getObject(
             Grid::class,
             [
@@ -158,12 +171,13 @@ class GridTest extends TestCase
 
         $this->priceRenderBlock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setItem', 'toHtml'])
+            ->addMethods(['setItem'])
+            ->onlyMethods(['toHtml'])
             ->getMock();
 
         $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+            ->onlyMethods(['getBlock'])
             ->getMock();
 
         $this->itemMock = $this->getMockBuilder(Item::class)
@@ -189,7 +203,7 @@ class GridTest extends TestCase
      *
      * @return array
      */
-    public function tierPriceDataProvider()
+    public static function tierPriceDataProvider()
     {
         return [
             [
@@ -225,7 +239,7 @@ class GridTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTierPrice', 'getStatus'])
+            ->onlyMethods(['getTierPrice', 'getStatus'])
             ->getMock();
         $product->expects($this->once())->method('getTierPrice')->willReturn($tierPrices);
         $item = $this->getMockBuilder(Item::class)
@@ -431,7 +445,7 @@ class GridTest extends TestCase
     /**
      * @return array
      */
-    public function getSubtotalWithDiscountDataProvider()
+    public static function getSubtotalWithDiscountDataProvider()
     {
         $result = [];
         $result['displayTotalsIncludeTaxTrue'] = [

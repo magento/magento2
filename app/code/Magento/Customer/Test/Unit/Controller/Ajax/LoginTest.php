@@ -128,11 +128,11 @@ class LoginTest extends TestCase
             ->getMock();
         $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->cookieManager = $this->getMockBuilder(CookieManagerInterface::class)
-            ->setMethods(['getCookie', 'deleteCookie'])
+            ->onlyMethods(['getCookie', 'deleteCookie'])
             ->getMockForAbstractClass();
         $this->cookieMetadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
@@ -143,7 +143,7 @@ class LoginTest extends TestCase
             ->getMock();
         $resultRawFactory = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultRawFactory->method('create')
             ->willReturn($this->resultRaw);

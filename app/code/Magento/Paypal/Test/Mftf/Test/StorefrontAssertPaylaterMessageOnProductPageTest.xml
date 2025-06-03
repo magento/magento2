@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertPaylaterMessageOnProductPageTest" extends="AdminConfigForPaylaterProductPageTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="configuration applied for Paypal Pay Later Message on Product Page"/>
+            <description value="Paypal Pay Later Message should display on Catalog Product Page in Storefront"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5656"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer_CA"  stepKey="createCustomer" before="configPayPalExpress"/>
+            <createData entity="SimpleProduct3" stepKey="simpleProduct" after="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer" after="deleteProduct"/>
+        </after>
+        <remove keyForRemoval="verifyDefaultValuesFromDropDown"/>
+        <remove keyForRemoval="saveAdminConfiguration"/>
+        <!--Enable Pay Later in Admin Product Page -->
+        <actionGroup ref="AdminAssertValuesInProductPageForPaypalExpressCheckoutActionGroup" stepKey="verifyValuesFromDropdown"/>
+        <!--Click on Save configure Button -->
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveAdminConfig"/>
+        <!-- Reindex and cache flush -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Login to StoreFront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Open Product Page to add product in the cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnProductPage">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <!--Switching to iFrame-->
+        <switchToIFrame selector="{{AdminPaypalStandardConfigSection.payPalFrame}}" stepKey="switchToPaypalIFrame"/>
+        <waitForElementVisible selector="{{AdminPaypalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyPayLaterMessage"/>
+        <switchToIFrame stepKey="switchBackMainIframe"/>
+        <actionGroup ref="AdminConfigurePaypalPaylaterEnableActionGroup" stepKey="enablePaylaterSolution"/>
+        <waitForElementClickable selector="{{AdminPaypalProductPageConfigSection.expandCatalogProductPage('us')}}" stepKey="waitForCatalogPageClickable"/>
+        <click selector="{{AdminPaypalProductPageConfigSection.expandCatalogProductPage('us')}}" stepKey="clickCatalog"/>
+        <click selector="{{AdminPaypalProductPageConfigSection.styleLayout('us')}}"  stepKey="clickOnPosition"/>
+        <waitForText selector="{{AdminPaypalProductPageConfigSection.styleLayout('us')}}" userInput="Text" stepKey="seeTextStyleLayout"/>
+        <waitForText selector="{{AdminPaypalProductPageConfigSection.styleLayout('us')}}" userInput="Flex" stepKey="seeFlexStyleLayout"/>
+        <selectOption selector="{{AdminPaypalProductPageConfigSection.styleLayout('us')}}" userInput="Text" stepKey="setTextInStyleLayout"/>
+        <waitForPageLoad stepKey="waitForFiltersReset"/>
+        <waitForElementVisible selector="{{AdminPaypalProductPageConfigSection.logoType('us')}}"  stepKey="seeLogoType"/>
+        <waitForElementVisible selector="{{AdminPaypalProductPageConfigSection.logoPosition('us')}}"  stepKey="seeLogoPosition"/>
+        <waitForElementVisible selector="{{AdminPaypalProductPageConfigSection.textColor('us')}}"  stepKey="seeTextColor"/>
+        <waitForElementVisible selector="{{AdminPaypalProductPageConfigSection.textSize('us')}}"  stepKey="seeTextSize"/>
+        <click selector="{{AdminPaypalProductPageConfigSection.logoType('us')}}"  stepKey="ClickOnLogoType"/>
+        <waitForText selector="{{AdminPaypalProductPageConfigSection.logoType('us')}}" userInput="Primary" stepKey="seePrimaryLogoType"/>
+        <waitForText selector="{{AdminPaypalProductPageConfigSection.logoType('us')}}" userInput="Alternative" stepKey="seeAlternativeLogoType"/>
+        <waitForText selector="{{AdminPaypalProductPageConfigSection.logoType('us')}}" userInput="Inline" stepKey="seeInlineLogoType"/>
+        <waitForText selector="{{AdminPaypalProductPageConfigSection.logoType('us')}}" userInput="None" stepKey="seeLogoTypeAsNone"/>
+        <selectOption selector="{{AdminPaypalProductPageConfigSection.logoType('us')}}" userInput="Inline" stepKey="setInlineInLogoType"/>
+        <waitForElementVisible selector="{{AdminPaypalProductPageConfigSection.textColor('us')}}"  stepKey="assertTextColor"/>
+        <waitForElementVisible selector="{{AdminPaypalProductPageConfigSection.textSize('us')}}"  stepKey="assertTextSize"/>
+    </test>
+</tests>

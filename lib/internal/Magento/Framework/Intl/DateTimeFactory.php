@@ -14,7 +14,7 @@ class DateTimeFactory
      * @param \DateTimeZone $timezone
      * @return \DateTime
      */
-    public function create($time = 'now', \DateTimeZone $timezone = null)
+    public function create($time = 'now', ?\DateTimeZone $timezone = null)
     {
         return new \DateTime($time, $timezone);
     }

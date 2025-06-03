@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,9 @@ namespace Magento\EavGraphQl\Model\TypeResolver;
 
 use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\AttributeRepository;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
  * @inheritdoc
@@ -42,14 +44,20 @@ class AttributeValue implements TypeResolverInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws GraphQlNoSuchEntityException
      */
     public function resolveType(array $data): string
     {
-        /** @var Attribute $attr */
-        $attr = $this->attributeRepository->get(
-            $data['entity_type'],
-            $data['code'],
-        );
+        try {
+            /** @var Attribute $attr */
+            $attr = $this->attributeRepository->get(
+                $data['entity_type'],
+                $data['code'],
+            );
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+        }
 
         if (in_array($attr->getFrontendInput(), $this->frontendInputs)) {
             return 'AttributeSelectedOptions';

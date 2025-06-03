@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductWithOutOfStockChildOnAdditionalStockTest">
+        <annotations>
+            <stories value="Configurable Product"/>
+            <title value="Configurable Product with 'Out of Stock' Child on Additional Stock."/>
+            <description value="Admin create configurable product with size attribute and set out of stock of one of the simple products and assert it in storefront."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4359"/>
+        </annotations>
+        <after>
+            <actionGroup ref="DeleteProductAttributeActionGroup" after="clearFilters" stepKey="deleteCreatedAttribute">
+                <argument name="ProductAttribute" value="sizeAttribute"/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" after="sourceStockLink" stepKey="navigateToNewProductAttributePage"/>
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" after="navigateToNewProductAttributePage" stepKey="fillAttributeProperties">
+            <argument name="attributeName" value="{{sizeAttribute.attribute_code}}"/>
+            <argument name="attributeType" value="{{sizeAttribute.input_type}}"/>
+        </actionGroup>
+        <!--Add option S, M and L to attribute and save-->
+        <waitForElementClickable selector="{{AdminNewAttributePanel.addOption}}" stepKey="waitToClickOnAddOptionButton" after="fillAttributeProperties"/>
+        <click selector="{{AdminNewAttributePanel.addOption}}" after="waitToClickOnAddOptionButton" stepKey="clickAddOptionSSize"/>
+        <actionGroup ref="AdminAddOptionsToSizeAttributeActionGroup" stepKey="addSSizeOption" after="clickAddOptionSSize">
+            <argument name="position" value="0"/>
+            <argument name="size" value="S"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminNewAttributePanel.addOption}}" stepKey="waitToClickAddOptionForMSize" after="addSSizeOption"/>
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickAddOptionForMSize" after="waitToClickAddOptionForMSize"/>
+        <actionGroup ref="AdminAddOptionsToSizeAttributeActionGroup" stepKey="addMSizeOption" after="clickAddOptionForMSize">
+            <argument name="position" value="1"/>
+            <argument name="size" value="M"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminNewAttributePanel.addOption}}" stepKey="waitToClickAddOptionForLSize" after="addMSizeOption"/>
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickAddOptionForLSize" after="waitToClickAddOptionForLSize" />
+        <actionGroup ref="AdminAddOptionsToSizeAttributeActionGroup" stepKey="addLSizeOption" after="clickAddOptionForLSize">
+            <argument name="position" value="2"/>
+            <argument name="size" value="L"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="waitForAdvancedPropertiesFieldIsVisible" after="addLSizeOption" />
+        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="openAttributeAdvancedSection" after="waitForAdvancedPropertiesFieldIsVisible"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.Scope}}" userInput="Global" stepKey="selectScope" after="openAttributeAdvancedSection"/>
+        <click selector="{{AdminProductFormNewAttributeSection.saveAttribute}}" stepKey="saveAttribute" after="selectScope"/>
+    </test>
+</tests>

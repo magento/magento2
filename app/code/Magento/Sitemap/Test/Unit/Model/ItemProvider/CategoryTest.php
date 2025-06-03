@@ -59,7 +59,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function categoryProvider()
+    public static function categoryProvider()
     {
         return [
             [
@@ -82,7 +82,7 @@ class CategoryTest extends TestCase
     private function getCategoryFactoryMock($returnValue)
     {
         $cmsPageFactoryMock = $this->getMockBuilder(CategoryFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -99,7 +99,7 @@ class CategoryTest extends TestCase
     private function getItemFactoryMock()
     {
         $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -137,7 +137,7 @@ class CategoryTest extends TestCase
     private function getCategoryCollectionMock($returnValue)
     {
         $sitemapCmsPageMock = $this->getMockBuilder(CategoryResource::class)
-            ->setMethods(['getCollection'])
+            ->onlyMethods(['getCollection'])
             ->disableOriginalConstructor()
             ->getMock();
 

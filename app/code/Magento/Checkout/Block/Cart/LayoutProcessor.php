@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Checkout\Block\Cart;
 
@@ -43,7 +43,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
         \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection,
         \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection,
-        \Magento\Directory\Model\TopDestinationCountries $topDestinationCountries = null
+        ?\Magento\Directory\Model\TopDestinationCountries $topDestinationCountries = null
     ) {
         $this->merger = $merger;
         $this->countryCollection = $countryCollection;

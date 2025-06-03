@@ -140,7 +140,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function validateProductConditionDataProvider()
+    public static function validateProductConditionDataProvider()
     {
         $validCategoryId = 333;
         $invalidCategoryId = 2;
@@ -235,7 +235,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function conditionsDataProvider(): array
+    public static function conditionsDataProvider(): array
     {
         return [
             'If total quantity  is 1 for a subselection of items in cart matching ALL of these conditions: ' .

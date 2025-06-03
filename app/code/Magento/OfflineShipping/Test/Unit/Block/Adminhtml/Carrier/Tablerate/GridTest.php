@@ -90,7 +90,7 @@ class GridTest extends TestCase
         $websiteId = 1;
 
         $websiteMock = $this->getMockBuilder(Website::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -113,7 +113,7 @@ class GridTest extends TestCase
 
         $websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $websiteMock->expects($this->once())

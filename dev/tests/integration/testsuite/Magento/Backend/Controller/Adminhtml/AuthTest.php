@@ -216,7 +216,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertRedirect($this->stringStartsWith($url));
     }
 
-    public function incorrectLoginDataProvider()
+    public static function incorrectLoginDataProvider()
     {
         return [
             'login dummy user' => [

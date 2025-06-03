@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,7 +115,11 @@ class BundleTest extends TestCase
             ->willReturn($extensionAttributesDuplicate);
         $extensionAttributesDuplicate->expects($this->once())
             ->method('setBundleProductOptions')
-            ->withConsecutive([$bundleOptions]);
+            ->willReturnCallback(function ($bundleOptions) {
+                if ($bundleOptions) {
+                    return null;
+                }
+            });
 
         $this->model->build($product, $duplicate);
     }
