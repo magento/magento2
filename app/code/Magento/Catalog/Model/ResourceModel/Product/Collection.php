@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -2362,7 +2362,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        if (!$this->getSize()) {
+        $size = $this->isLoaded() ? $this->count() : $this->getSize();
+
+        if (!$size) {
             return $this;
         }
 

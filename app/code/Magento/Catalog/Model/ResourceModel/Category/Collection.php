@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
@@ -11,6 +11,8 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 
 /**
  * Category resource collection
@@ -370,40 +372,80 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param array $categoryIds
      * @param int $websiteId
      * @return array
+     * @throws \Zend_Db_Exception
      */
     private function getCountFromCategoryTableBulk(
         array $categoryIds,
         int $websiteId
     ) : array {
-        $subSelect = clone $this->_conn->select();
-        $subSelect->from(['ce2' => $this->getTable('catalog_category_entity')], 'ce2.entity_id')
-            ->where("ce2.path LIKE CONCAT(ce.path, '/%') OR ce2.path = ce.path");
+        $connection = $this->_conn;
+        $tempTableName = 'temp_category_descendants_' . uniqid();
+        $tempTable = $connection->newTable($tempTableName)
+            ->addColumn(
+                'category_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Category ID'
+            )
+            ->addColumn(
+                'descendant_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Descendant ID'
+            )
+            ->addIndex(
+                $connection->getIndexName($tempTableName, ['category_id', 'descendant_id']),
+                ['category_id', 'descendant_id'],
+                ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
+            );
+        $connection->createTemporaryTable($tempTable);
+        $selectDescendants = $connection->select()
+            ->from(
+                ['ce' => $this->getTable('catalog_category_entity')],
+                ['category_id' => 'ce.entity_id', 'descendant_id' => 'ce2.entity_id']
+            )
+            ->joinInner(
+                ['ce2' => $this->getTable('catalog_category_entity')],
+                'ce2.path LIKE CONCAT(ce.path, \'/%\') OR ce2.entity_id = ce.entity_id',
+                []
+            )
+            ->where('ce.entity_id IN (?)', $categoryIds);
 
-        $select = clone $this->_conn->select();
-        $select->from(
-            ['ce' => $this->getTable('catalog_category_entity')],
-            'ce.entity_id'
+        $connection->query(
+            $connection->insertFromSelect(
+                $selectDescendants,
+                $tempTableName,
+                ['category_id', 'descendant_id']
+            )
         );
-        $joinCondition =  new \Zend_Db_Expr("cp.category_id IN ({$subSelect})");
-        $select->joinLeft(
-            ['cp' => $this->getProductTable()],
-            $joinCondition,
-            'COUNT(DISTINCT cp.product_id) AS product_count'
-        );
+        $select = $connection->select()
+            ->from(
+                ['t' => $tempTableName],
+                ['category_id' => 't.category_id']
+            )
+            ->joinLeft(
+                ['cp' => $this->getTable('catalog_category_product')],
+                'cp.category_id = t.descendant_id',
+                ['product_count' => 'COUNT(DISTINCT cp.product_id)']
+            );
         if ($websiteId) {
             $select->join(
                 ['w' => $this->getProductWebsiteTable()],
                 'cp.product_id = w.product_id',
                 []
-            )->where(
-                'w.website_id = ?',
-                $websiteId
-            );
+            )->where('w.website_id = ?', $websiteId);
         }
-        $select->where('ce.entity_id IN(?)', $categoryIds);
-        $select->group('ce.entity_id');
+        $select->group('t.category_id');
+        $result = $connection->fetchPairs($select);
+        $connection->dropTemporaryTable($tempTableName);
+        $counts = array_fill_keys($categoryIds, 0);
+        foreach ($result as $categoryId => $count) {
+            $counts[$categoryId] = (int)$count;
+        }
 
-        return $this->_conn->fetchPairs($select);
+        return $counts;
     }
 
     /**

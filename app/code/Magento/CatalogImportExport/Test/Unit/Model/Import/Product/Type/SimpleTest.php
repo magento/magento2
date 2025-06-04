@@ -1,19 +1,18 @@
-<?php declare(strict_types=1);
-
+<?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
-use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType as AbstractType;
 use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
-use Magento\Eav\Model\Entity\Attribute\Set;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -24,68 +23,47 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for import product AbstractType class
- *
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTypeTest extends TestCase
+class SimpleTest extends TestCase
 {
     /**
      * @var Product|MockObject
      */
-    protected $entityModel;
+    private $entityModel;
 
     /**
      * @var Simple
      */
-    protected $simpleType;
+    private $simpleType;
 
     /**
      * @var ObjectManagerHelper
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
      * @var ResourceConnection|MockObject
      */
-    protected $resource;
+    private $resource;
 
     /**
      * @var AdapterInterface|MockObject
      */
-    protected $connection;
+    private $connection;
 
     /**
      * @var Select|MockObject
      */
-    protected $select;
-
-    /**
-     * @var AbstractType|MockObject
-     */
-    protected $abstractType;
+    private $select;
 
     protected function setUp(): void
     {
         $this->entityModel = $this->createMock(Product::class);
-        $attrSetColFactory = $this->createPartialMock(
-            AttributeSetCollectionFactory::class,
-            ['create']
-        );
-        $attrSetCollection = $this->createMock(Collection::class);
-        $attrColFactory = $this->createPartialMock(
-            AttributeCollectionFactory::class,
-            ['create']
-        );
-        $attributeSet = $this->createMock(Set::class);
-        $attrCollection = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class,
-            [
-                'addFieldToFilter',
-                'setAttributeSetFilter'
-            ]
-        );
+        $attrSetColFactory = $this->createMock(AttributeSetCollectionFactory::class);
+        $attrColFactory = $this->createMock(AttributeCollectionFactory::class);
+        $attrCollection = $this->createMock(AttributeCollection::class);
         $attribute = $this->getMockBuilder(Attribute::class)
             ->addMethods(['getFrontendLabel'])
             ->onlyMethods(
@@ -173,34 +151,14 @@ class AbstractTypeTest extends TestCase
                     return ['yes' => 1, 'no' => 0];
                 }
             });
-        $attrSetColFactory->method('create')
-            ->willReturn($attrSetCollection);
-        $attrSetCollection->method('setEntityTypeFilter')
-            ->willReturn([$attributeSet]);
         $attrColFactory->method('create')
             ->willReturn($attrCollection);
         $attrCollection->method('setAttributeSetFilter')
             ->willReturn([$attribute1, $attribute2, $attribute3]);
-        $attributeSet->method('getId')
-            ->willReturn(1);
-        $attributeSet->method('getAttributeSetName')
-            ->willReturn('attribute_set_name');
         $attrCollection->method('addFieldToFilter')
-        ->willReturnCallback(function ($field, $conditions) use ($attribute1, $attribute2, $attribute3) {
-            if ($field === ['main_table.attribute_id'] && $conditions === [['in' => ['1', '2', '3']]]) {
-                return [$attribute1, $attribute2, $attribute3];
-            } elseif ($field === ['main_table.attribute_code'] &&
-                $conditions === [['in' =>
-                    ['related_tgtr_position_behavior',
-                        'related_tgtr_position_limit',
-                        'upsell_tgtr_position_behavior',
-                        'upsell_tgtr_position_limit',
-                        'thumbnail_label',
-                        'small_image_label',
-                        'image_label']]]) {
-                return [];
-            }
-        });
+            ->willReturnSelf();
+        $attrCollection->method('getItems')
+            ->willReturnOnConsecutiveCalls([$attribute1, $attribute2, $attribute3], []);
 
         $this->connection = $this->getMockBuilder(Mysql::class)
             ->addMethods(['joinLeft'])
@@ -258,9 +216,6 @@ class AbstractTypeTest extends TestCase
                 'resource' => $this->resource,
             ]
         );
-        $this->abstractType = $this->getMockBuilder(AbstractType::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
     }
 
     /**
@@ -271,9 +226,9 @@ class AbstractTypeTest extends TestCase
      */
     protected function tearDown(): void
     {
-        AbstractType::$commonAttributesCache = [];
-        AbstractType::$invAttributesCache = [];
-        AbstractType::$attributeCodeToId = [];
+        Simple::$commonAttributesCache = [];
+        Simple::$invAttributesCache = [];
+        Simple::$attributeCodeToId = [];
     }
 
     /**
@@ -281,11 +236,11 @@ class AbstractTypeTest extends TestCase
      */
     public function testAddAttributeOption($code, $optionKey, $optionValue, $initAttributes, $resultAttributes)
     {
-        $this->setPropertyValue($this->abstractType, '_attributes', $initAttributes);
+        $this->setPropertyValue($this->simpleType, '_attributes', $initAttributes);
 
-        $this->abstractType->addAttributeOption($code, $optionKey, $optionValue);
+        $this->simpleType->addAttributeOption($code, $optionKey, $optionValue);
 
-        $this->assertEquals($resultAttributes, $this->getPropertyValue($this->abstractType, '_attributes'));
+        $this->assertEquals($resultAttributes, $this->getPropertyValue($this->simpleType, '_attributes'));
     }
 
     public function testAddAttributeOptionReturn()
@@ -294,17 +249,17 @@ class AbstractTypeTest extends TestCase
         $optionKey = 'option key';
         $optionValue = 'option value';
 
-        $result = $this->abstractType->addAttributeOption($code, $optionKey, $optionValue);
+        $result = $this->simpleType->addAttributeOption($code, $optionKey, $optionValue);
 
-        $this->assertEquals($result, $this->abstractType);
+        $this->assertEquals($result, $this->simpleType);
     }
 
     public function testGetCustomFieldsMapping()
     {
         $expectedResult = ['value'];
-        $this->setPropertyValue($this->abstractType, '_customFieldsMapping', $expectedResult);
+        $this->setPropertyValue($this->simpleType, '_customFieldsMapping', $expectedResult);
 
-        $result = $this->abstractType->getCustomFieldsMapping();
+        $result = $this->simpleType->getCustomFieldsMapping();
 
         $this->assertEquals($expectedResult, $result);
     }
@@ -331,7 +286,8 @@ class AbstractTypeTest extends TestCase
     {
         $rowData = [
             '_attribute_set' => 'attribute_set_name',
-            'sku' => 'sku'
+            'sku' => 'sku',
+            'attr_code' => 'test'
         ];
         $rowNum = 1;
         $this->entityModel->method('getRowScope')

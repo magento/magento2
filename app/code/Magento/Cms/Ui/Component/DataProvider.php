@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2016 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Cms\Ui\Component;
