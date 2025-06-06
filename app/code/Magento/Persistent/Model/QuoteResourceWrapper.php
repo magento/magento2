@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 declare(strict_types=1);
 
 namespace Magento\Persistent\Model;
@@ -12,6 +16,11 @@ class QuoteResourceWrapper
      */
     private ResourceConnection $resourceConnection;
 
+    /**
+     * Constructor
+     *
+     * @param ResourceConnection $resourceConnection
+     */
     public function __construct(
         ResourceConnection $resourceConnection
     ) {

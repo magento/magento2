@@ -7,15 +7,12 @@ namespace Magento\Persistent\Observer;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\QuoteManager;
 use Magento\Persistent\Model\QuoteResourceWrapper;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Model\Quote;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -26,14 +23,14 @@ use Magento\Framework\App\ObjectManager;
 class CheckExpirePersistentQuoteObserver implements ObserverInterface
 {
     /**
-     * Customer session
+     * Customer session instance for managing customer authentication state
      *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * Checkout session
+     * Checkout session instance for managing quote data during checkout
      *
      * @var \Magento\Checkout\Model\Session
      */
@@ -47,7 +44,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     protected $_eventManager = null;
 
     /**
-     * Persistent session
+     * Helper that provides persistent session functionality
      *
      * @var \Magento\Persistent\Helper\Session
      */
@@ -59,14 +56,14 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     protected $quoteManager;
 
     /**
-     * Persistent data
+     * Helper that provides configuration and utility methods for persistent functionality
      *
      * @var \Magento\Persistent\Helper\Data
      */
     protected $_persistentData = null;
 
     /**
-     * Request
+     * Current HTTP request object
      *
      * @var \Magento\Framework\App\RequestInterface
      */
@@ -80,21 +77,15 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private $checkoutPagePath = 'checkout';
 
     /**
-     * @var Quote
-     */
-    private $quote;
-
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
-
-    /**
+     * Resource wrapper for efficient quote operations
+     *
      * @var QuoteResourceWrapper|null
      */
     private ?QuoteResourceWrapper $quoteResourceWrapper;
 
     /**
+     * Constructor
+     *
      * @param Session $persistentSession
      * @param Data $persistentData
      * @param QuoteManager $quoteManager
@@ -102,19 +93,17 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param RequestInterface $request
-     * @param CartRepositoryInterface $quoteRepository
      * @param QuoteResourceWrapper|null $quoteResourceWrapper
      */
     public function __construct(
-        \Magento\Persistent\Helper\Session $persistentSession,
+        Session                         $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Persistent\Model\QuoteManager $quoteManager,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        QuoteManager                    $quoteManager,
+        ManagerInterface                $eventManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\App\RequestInterface $request,
-        CartRepositoryInterface $quoteRepository,
-        ?QuoteResourceWrapper $quoteResourceWrapper = null
+        RequestInterface                $request,
+        ?QuoteResourceWrapper           $quoteResourceWrapper = null
     ) {
         $this->_persistentSession = $persistentSession;
         $this->quoteManager = $quoteManager;
@@ -123,7 +112,6 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         $this->_eventManager = $eventManager;
         $this->_persistentData = $persistentData;
         $this->request = $request;
-        $this->quoteRepository = $quoteRepository;
         $this->quoteResourceWrapper = $quoteResourceWrapper ?: ObjectManager::getInstance()
             ->get(QuoteResourceWrapper::class);
     }
@@ -131,12 +119,10 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     /**
      * Check and clear session data if persistent session expired
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if (!$this->_persistentData->canProcess($observer)) {
             return;
@@ -169,8 +155,6 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * Checks if current quote marked as persistent and Persistence Functionality is disabled.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function isPersistentQuoteOutdated(): bool
     {
@@ -185,42 +169,12 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     }
 
     /**
-     * Getter for Quote with micro optimization
-     *
-     * @return Quote
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function getQuote(): Quote
-    {
-        if ($this->quote === null) {
-            $this->quote = $this->_checkoutSession->getQuote();
-        }
-        return $this->quote;
-    }
-
-    /**
-     * Check if quote is active.
-     *
-     * @return bool
-     */
-    private function isActiveQuote(): bool
-    {
-        try {
-            $this->quoteRepository->getActive($this->_checkoutSession->getQuoteId());
-            return true;
-        } catch (NoSuchEntityException $e) {
-            return false;
-        }
-    }
-
-    /**
      * Check current request is coming from onepage checkout page.
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return bool
      */
-    private function isRequestFromCheckoutPage(\Magento\Framework\App\RequestInterface $request): bool
+    private function isRequestFromCheckoutPage(RequestInterface $request): bool
     {
         $requestUri = (string)$request->getRequestUri();
         $refererUri = (string)$request->getServer('HTTP_REFERER');
