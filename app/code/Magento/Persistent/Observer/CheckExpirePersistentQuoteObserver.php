@@ -1,15 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Persistent\Observer;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Model\QuoteResourceWrapper;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Observer of expired session
@@ -83,14 +90,20 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private $quoteRepository;
 
     /**
-     * @param \Magento\Persistent\Helper\Session $persistentSession
-     * @param \Magento\Persistent\Helper\Data $persistentData
-     * @param \Magento\Persistent\Model\QuoteManager $quoteManager
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @var QuoteResourceWrapper|null
+     */
+    private ?QuoteResourceWrapper $quoteResourceWrapper;
+
+    /**
+     * @param Session $persistentSession
+     * @param Data $persistentData
+     * @param QuoteManager $quoteManager
+     * @param ManagerInterface $eventManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param CartRepositoryInterface $quoteRepository
+     * @param QuoteResourceWrapper|null $quoteResourceWrapper
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -100,7 +113,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\RequestInterface $request,
-        CartRepositoryInterface $quoteRepository
+        CartRepositoryInterface $quoteRepository,
+        ?QuoteResourceWrapper $quoteResourceWrapper = null
     ) {
         $this->_persistentSession = $persistentSession;
         $this->quoteManager = $quoteManager;
@@ -110,6 +124,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         $this->_persistentData = $persistentData;
         $this->request = $request;
         $this->quoteRepository = $quoteRepository;
+        $this->quoteResourceWrapper = $quoteResourceWrapper ?: ObjectManager::getInstance()
+            ->get(QuoteResourceWrapper::class);
     }
 
     /**
@@ -141,7 +157,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_checkoutSession->getQuoteId() &&
             // persistent session does not expire on onepage checkout page
             !$this->isRequestFromCheckoutPage($this->request) &&
-            $this->getQuote()->getIsPersistent()
+            (bool)$this->quoteResourceWrapper->isPersistent($this->_checkoutSession->getQuoteId())
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
@@ -161,9 +177,9 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         if (!($this->_persistentData->isEnabled() && $this->_persistentData->isShoppingCartPersist())
             && !$this->_customerSession->isLoggedIn()
             && $this->_checkoutSession->getQuoteId()
-            && $this->isActiveQuote()
+            && $this->quoteResourceWrapper->isActive($this->_checkoutSession->getQuoteId())
         ) {
-            return (bool)$this->getQuote()->getIsPersistent();
+            return (bool)$this->quoteResourceWrapper->isPersistent($this->_checkoutSession->getQuoteId());
         }
         return false;
     }
