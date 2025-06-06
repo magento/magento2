@@ -157,7 +157,7 @@ class Subselect extends Combine
     {
         $subSelectConditionsFlag = true;
         if (!$this->getConditions()) {
-            return false;
+            return true;
         }
         $attr = $this->getAttribute();
         $total = 0;
