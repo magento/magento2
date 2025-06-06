@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
 /**
  * Adminhtml catalog product downloadable items tab links section
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @deprecated 100.3.1 in favor of new class which adds grid links
@@ -36,8 +35,6 @@ class Links extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Downloadable::product/edit/downloadable/links.phtml';
 
     /**
-     * Downloadable file
-     *
      * @var \Magento\Downloadable\Helper\File
      */
     protected $_downloadableFile = null;
@@ -50,8 +47,6 @@ class Links extends \Magento\Backend\Block\Template
     protected $_coreFileStorageDb = null;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;

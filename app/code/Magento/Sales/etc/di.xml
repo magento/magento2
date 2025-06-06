@@ -1064,4 +1064,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Cart">
+        <plugin name="Bundle" disabled="true" />
+        <plugin name="GroupedProduct" disabled="true" />
+        <plugin name="configurable" disabled="true" />
+    </type>
 </config>
