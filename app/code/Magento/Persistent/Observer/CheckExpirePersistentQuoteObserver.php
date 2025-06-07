@@ -70,7 +70,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private $request;
 
     /**
-     * Checkout Page path
+     * Path identifier for checkout pages
      *
      * @var string
      */
