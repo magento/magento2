@@ -7,7 +7,6 @@ define([
     'jquery',
     'jquery-ui-modules/widget'
 ], function ($) {
-    'use strict';
 
     $.widget('mage.addToWishlist', {
         options: {
@@ -294,11 +293,12 @@ define([
          */
         _validateWishlistQty: function (event) {
             var element = $(this.options.qtyInfo), isValid = true;
+
             $(element).each(function () {
                 if (!($(this).validation() && $(this).validation('isValid'))) {
                     isValid = false;
                 }
-            })
+            });
 
             if (!isValid) {
                 event.preventDefault();
