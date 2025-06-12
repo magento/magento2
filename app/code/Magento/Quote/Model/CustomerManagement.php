@@ -171,6 +171,7 @@ class CustomerManagement
             $customerAddress->setTelephone($billingAddress->getTelephone());
             $customerAddress->setCountryId($billingAddress->getCountryId());
             $customerAddress->setCustomAttributes($billingAddress->getCustomAttributes());
+            $customerAddress->setPrefix($billingAddress->getPrefix());
             $addresses[] = $customerAddress;
         }
         foreach ($addresses as $address) {
