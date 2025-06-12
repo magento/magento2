@@ -60,7 +60,8 @@ class PlaceOrder
 
         // Get a list of available payment methods for the cart
         $availablePaymentMethods = $this->paymentManagement->getList($cartId);
-        $paymentMethodCode = $cart->getPayment()->getMethod();
+        $payment = $cart->getPayment();
+        $paymentMethodCode = $payment?->getMethod();
         $isPaymentMethodAvailable = false;
 
         // Check if the selected payment method is in the available methods list
