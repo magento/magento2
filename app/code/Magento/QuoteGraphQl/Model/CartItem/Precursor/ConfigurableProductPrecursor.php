@@ -42,10 +42,10 @@ class ConfigurableProductPrecursor implements PrecursorInterface
      * Process cart item data to handle parent_sku for configurable products
      *
      * @param array $cartItemData
-     * @param ContextInterface $context
+     * @param ContextInterface $_context
      * @return array
      */
-    public function process(array $cartItemData, ContextInterface $context): array
+    public function process(array $cartItemData, ContextInterface $_context): array
     {
         $processedCartItemData = [];
 
@@ -72,7 +72,8 @@ class ConfigurableProductPrecursor implements PrecursorInterface
 
                 if (empty($configurableOptions)) {
                     $this->errors[] = [
-                        'message' => sprintf('Could not match child product %s with parent %s', $cartItem['sku'], $cartItem['parent_sku']),
+                        'message' => sprintf('Could not match child product %s with parent %s',
+                            $cartItem['sku'], $cartItem['parent_sku']),
                         'code' => 'UNDEFINED'
                     ];
                     $processedCartItemData[$cartItemIndex] = $cartItem;
@@ -82,7 +83,7 @@ class ConfigurableProductPrecursor implements PrecursorInterface
                 $parentCartItem = [
                     'sku' => $cartItem['parent_sku'],
                     'quantity' => $cartItem['quantity'],
-                    'selected_options' => array_merge($configurableOptions, $cartItem['selected_options'] ?? []),
+                    'selected_options' => [...$configurableOptions, ...($cartItem['selected_options'] ?? [])],
                     'entered_options' => $cartItem['entered_options'] ?? [],
                     'parent_sku' => null
                 ];
