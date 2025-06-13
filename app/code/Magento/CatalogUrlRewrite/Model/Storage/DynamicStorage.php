@@ -165,6 +165,7 @@ class DynamicStorage extends BaseDbStorage
 
         $productUrl = $this->getBaseName($requestPath);
         $data[UrlRewrite::REQUEST_PATH] = [$productUrl];
+        $data[UrlRewrite::ENTITY_TYPE] = 'product';
 
         $productFromDb = $this->connection->fetchRow($this->prepareSelect($data));
         if ($productFromDb === false) {
