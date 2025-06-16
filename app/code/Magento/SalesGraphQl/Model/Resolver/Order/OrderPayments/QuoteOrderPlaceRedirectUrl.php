@@ -20,7 +20,7 @@ class QuoteOrderPlaceRedirectUrl implements ResolverInterface
      * @param QuoteRepository $quoteRepository
      */
     public function __construct(
-        private readonly QuoteRepository $quoteRepository,
+        private readonly QuoteRepository $quoteRepository
     ) {
     }
 
@@ -40,7 +40,7 @@ class QuoteOrderPlaceRedirectUrl implements ResolverInterface
         }
 
         /** @var ?Quote $quote */
-        $quote = $this->quoteRepository->get($order->getQuoteId())
+        $quote = $this->quoteRepository->get($order->getQuoteId());
 
         if (!$quote) {
             return;
