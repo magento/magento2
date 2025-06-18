@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09f485d5c5ab4ac84ce959b78c966bd9",
+    "content-hash": "c0a82fa4155cf2880ee2593885bab2ac",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -11494,16 +11494,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "37",
+            "version": "38",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "243690c32b92c7a11be11ad7a5c74802e8fc0285"
+                "reference": "159cb6b966e7a464a41973e4a2daec2374bf4a02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/243690c32b92c7a11be11ad7a5c74802e8fc0285",
-                "reference": "243690c32b92c7a11be11ad7a5c74802e8fc0285",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/159cb6b966e7a464a41973e4a2daec2374bf4a02",
+                "reference": "159cb6b966e7a464a41973e4a2daec2374bf4a02",
                 "shasum": ""
             },
             "require": {
@@ -11538,9 +11538,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v37"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v38"
             },
-            "time": "2025-04-15T14:29:46+00:00"
+            "time": "2025-06-09T14:09:34+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -14715,6 +14715,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
