@@ -67,6 +67,8 @@ class UpdateCouponUsages
         $updateInfo = $this->updateInfoFactory->create();
         $appliedRuleIds = explode(',', $subject->getAppliedRuleIds());
         $appliedRuleIds = array_filter(array_map('intval', array_unique($appliedRuleIds)));
+        //sorting to avoid deadlocks
+        sort($appliedRuleIds);
         $updateInfo->setAppliedRuleIds($appliedRuleIds);
         $updateInfo->setCouponCode((string)$subject->getCouponCode());
         $updateInfo->setCustomerId((int)$subject->getCustomerId());
