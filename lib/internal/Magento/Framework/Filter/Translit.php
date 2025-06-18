@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
 
@@ -248,7 +248,7 @@ class Translit implements FilterInterface
         'Ж' => 'zh',
         'З' => 'z',
         'И' => 'i',
-        'Й' => 'Y',
+        'Й' => 'y',
         'К' => 'k',
         'Л' => 'l',
         'М' => 'm',
@@ -264,13 +264,13 @@ class Translit implements FilterInterface
         'Ц' => 'c',
         'Ч' => 'ch',
         'Ш' => 'sh',
-        'Щ' => 'sch',
-        'Ъ' => 'A',
+        'Щ' => 'sht',
+        'Ъ' => 'a',
         'Ы' => 'y',
-        'Ь' => 'Y',
+        'Ь' => 'y',
         'Э' => 'je',
-        'Ю' => 'ju',
-        'Я' => 'ja',
+        'Ю' => 'yu',
+        'Я' => 'ya',
         'а' => 'a',
         'б' => 'b',
         'в' => 'v',
@@ -296,13 +296,13 @@ class Translit implements FilterInterface
         'ц' => 'c',
         'ч' => 'ch',
         'ш' => 'sh',
-        'щ' => 'sch',
+        'щ' => 'sht',
         'ъ' => 'a',
         'ы' => 'y',
         'ь' => 'y',
         'э' => 'je',
-        'ю' => 'ju',
-        'я' => 'ja',
+        'ю' => 'yu',
+        'я' => 'ya',
         'ё' => 'jo',
         'є' => 'e',
         'і' => 'i',
