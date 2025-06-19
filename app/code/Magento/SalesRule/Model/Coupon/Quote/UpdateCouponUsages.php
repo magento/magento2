@@ -67,7 +67,7 @@ class UpdateCouponUsages
         $appliedRuleIds = array_filter(array_map('intval', array_unique($appliedRuleIds)));
         //sorting to avoid deadlocks
         sort($appliedRuleIds);
-	$updateInfo->setAppliedRuleIds($appliedRuleIds);
+        $updateInfo->setAppliedRuleIds($appliedRuleIds);
         $updateInfo->setCouponCode((string)$quote->getCouponCode());
         $updateInfo->setCustomerId((int)$quote->getCustomerId());
         $updateInfo->setIsIncrement($increment);
