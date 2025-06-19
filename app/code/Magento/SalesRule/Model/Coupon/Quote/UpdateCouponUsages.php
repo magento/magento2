@@ -65,7 +65,9 @@ class UpdateCouponUsages
         $updateInfo = $this->updateInfoFactory->create();
         $appliedRuleIds = explode(',', $quote->getAppliedRuleIds());
         $appliedRuleIds = array_filter(array_map('intval', array_unique($appliedRuleIds)));
-        $updateInfo->setAppliedRuleIds($appliedRuleIds);
+        //sorting to avoid deadlocks
+        sort($appliedRuleIds);
+	$updateInfo->setAppliedRuleIds($appliedRuleIds);
         $updateInfo->setCouponCode((string)$quote->getCouponCode());
         $updateInfo->setCustomerId((int)$quote->getCustomerId());
         $updateInfo->setIsIncrement($increment);
