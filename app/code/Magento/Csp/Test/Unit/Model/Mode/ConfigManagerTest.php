@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Csp\Test\Unit\Model\Mode;
 
+use Magento\Csp\Api\Data\ModeConfiguredInterface;
 use Magento\Csp\Model\Mode\ConfigManager;
-use Magento\Csp\Model\Mode\Data\ModeConfigured;
+use Magento\Csp\Model\Mode\Data\ModeConfiguredFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
@@ -52,6 +52,16 @@ class ConfigManagerTest extends TestCase
     private $requestMock;
 
     /**
+     * @var ModeConfiguredFactory
+     */
+    private $modeConfiguredFactoryMock;
+
+    /**
+     * @var ModeConfiguredInterface
+     */
+    private $modeConfiguredInterfaceMock;
+
+    /**
      * Set Up
      */
     protected function setUp(): void
@@ -62,6 +72,8 @@ class ConfigManagerTest extends TestCase
         $this->storeMock = $this->createMock(Store::class);
         $this->stateMock = $this->createMock(State::class);
         $this->requestMock = $this->createMock(Http::class);
+        $this->modeConfiguredFactoryMock = $this->createPartialMock(ModeConfiguredFactory::class, ['create']);
+        $this->modeConfiguredInterfaceMock = $this->createMock(ModeConfiguredInterface::class);
 
         $this->model = $objectManager->getObject(
             ConfigManager::class,
@@ -70,6 +82,7 @@ class ConfigManagerTest extends TestCase
                 'storeModel' => $this->storeMock,
                 'state' => $this->stateMock,
                 'request' => $this->requestMock,
+                'modeConfiguredFactory' => $this->modeConfiguredFactoryMock
             ]
         );
     }
@@ -107,9 +120,14 @@ class ConfigManagerTest extends TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturn('testReportUri');
+        $this->modeConfiguredFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['reportOnly' => true, 'reportUri' => 'testReportUri'])
+            ->willReturn($this->modeConfiguredInterfaceMock);
+
         $result = $this->model->getConfigured();
 
-        $this->assertInstanceOf(ModeConfigured::class, $result);
+        $this->assertInstanceOf(ModeConfiguredInterface::class, $result);
     }
 
     /**
@@ -139,11 +157,14 @@ class ConfigManagerTest extends TestCase
             })
             ->willReturnOnConsecutiveCalls(true, 'testReportUri');
 
+        $this->modeConfiguredFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['reportOnly' => true, 'reportUri' => 'testReportUri'])
+            ->willReturn($this->modeConfiguredInterfaceMock);
+
         $result = $this->model->getConfigured();
 
-        $this->assertInstanceOf(ModeConfigured::class, $result);
-        $this->assertTrue($result->isReportOnly());
-        $this->assertEquals($result->getReportUri(), 'testReportUri');
+        $this->assertInstanceOf(ModeConfiguredInterface::class, $result);
     }
 
     /**
@@ -174,10 +195,13 @@ class ConfigManagerTest extends TestCase
             })
             ->willReturnOnConsecutiveCalls(null, true, null, 'testPageReportUri');
 
+        $this->modeConfiguredFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['reportOnly' => true, 'reportUri' => 'testPageReportUri'])
+            ->willReturn($this->modeConfiguredInterfaceMock);
+
         $result = $this->model->getConfigured();
 
-        $this->assertInstanceOf(ModeConfigured::class, $result);
-        $this->assertTrue($result->isReportOnly());
-        $this->assertEquals($result->getReportUri(), 'testPageReportUri');
+        $this->assertInstanceOf(ModeConfiguredInterface::class, $result);
     }
 }

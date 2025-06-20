@@ -45,7 +45,7 @@ class DatabaseTemplateCompatibilityCommand extends Command
     public function __construct(
         VariableCompatibilityChecker $compatibilityChecker,
         CollectionFactory $templateCollection,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
         $this->templateCollection = $templateCollection;

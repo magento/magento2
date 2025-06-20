@@ -31,7 +31,7 @@ class Generator
      */
     public function __construct(
         BatchIteratorFactory $iteratorFactory,
-        BatchRangeIteratorFactory $rangeIteratorFactory = null
+        ?BatchRangeIteratorFactory $rangeIteratorFactory = null
     ) {
         $this->iteratorFactory = $iteratorFactory;
         $this->rangeIteratorFactory = $rangeIteratorFactory ?: \Magento\Framework\App\ObjectManager::getInstance()

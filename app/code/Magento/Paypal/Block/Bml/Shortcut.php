@@ -103,7 +103,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $bmlMethodCode,
         $shortcutTemplate,
         array $data = [],
-        ConfigFactory $config = null
+        ?ConfigFactory $config = null
     ) {
         $this->_paymentData = $paymentData;
         $this->_mathRandom = $mathRandom;

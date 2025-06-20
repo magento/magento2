@@ -340,7 +340,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * @param \Magento\Customer\Api\Data\AddressInterface[] $addresses
      * @return $this
      */
-    public function setAddresses(array $addresses = null);
+    public function setAddresses(?array $addresses = null);
 
     /**
      * Get disable auto group change flag.

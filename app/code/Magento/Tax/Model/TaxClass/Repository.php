@@ -90,7 +90,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         ClassModelRegistry $classModelRegistry,
         \Magento\Tax\Model\ResourceModel\TaxClass $taxClassResource,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;

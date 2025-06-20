@@ -46,7 +46,7 @@ class WrappedTypeProcessor
      * @param TypeInterface $object
      * @return TypeInterface
      */
-    public function processWrappedType(FieldInterface $field, TypeInterface $object = null) : TypeInterface
+    public function processWrappedType(FieldInterface $field, ?TypeInterface $object = null) : TypeInterface
     {
         return $this->processIsNullable($field, $this->processIsList($field, $object));
     }
@@ -62,7 +62,7 @@ class WrappedTypeProcessor
      */
     public function processScalarWrappedType(
         FieldInterface $field,
-        TypeInterface $object = null
+        ?TypeInterface $object = null
     ) : \GraphQL\Type\Definition\Type {
         if (!$object) {
             $object = $this->scalarTypes->getScalarTypeInstance($field->getTypeName());
@@ -77,7 +77,7 @@ class WrappedTypeProcessor
      * @param TypeInterface $object
      * @return TypeInterface
      */
-    private function processIsNullable(FieldInterface $field, TypeInterface $object = null) : TypeInterface
+    private function processIsNullable(FieldInterface $field, ?TypeInterface $object = null) : TypeInterface
     {
         if ($field->isRequired()) {
             return $this->typeFactory->createNonNull($object);
@@ -92,7 +92,7 @@ class WrappedTypeProcessor
      * @param TypeInterface $object
      * @return TypeInterface
      */
-    private function processIsList(FieldInterface $field, TypeInterface $object = null) : TypeInterface
+    private function processIsList(FieldInterface $field, ?TypeInterface $object = null) : TypeInterface
     {
         if ($field->isList()) {
             if ($field instanceof \Magento\Framework\GraphQl\Config\Element\Argument) {
@@ -114,7 +114,7 @@ class WrappedTypeProcessor
      */
     private function processScalarIsNullable(
         FieldInterface $field,
-        \GraphQL\Type\Definition\Type $object = null
+        ?\GraphQL\Type\Definition\Type $object = null
     ) : \GraphQL\Type\Definition\Type {
         $object = $object ?: $this->scalarTypes->getScalarTypeInstance($field->getTypeName());
         if ($field->isRequired()) {
@@ -132,7 +132,7 @@ class WrappedTypeProcessor
      */
     private function processScalarIsList(
         FieldInterface $field,
-        \GraphQL\Type\Definition\Type $object = null
+        ?\GraphQL\Type\Definition\Type $object = null
     ) : \GraphQL\Type\Definition\Type {
         $object = $object ?: $this->scalarTypes->getScalarTypeInstance($field->getTypeName());
         if ($field->isList()) {

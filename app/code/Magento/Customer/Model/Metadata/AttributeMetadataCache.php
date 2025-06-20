@@ -75,7 +75,7 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
         StateInterface $state,
         SerializerInterface $serializer,
         AttributeMetadataHydrator $attributeMetadataHydrator,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->cache = $cache;
         $this->state = $state;

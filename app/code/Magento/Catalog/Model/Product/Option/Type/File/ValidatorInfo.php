@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
@@ -49,6 +49,7 @@ class ValidatorInfo extends Validator
      * @var IoFile
      */
     private $ioFile;
+
     /**
      * @var NotProtectedExtension
      */
@@ -147,12 +148,14 @@ class ValidatorInfo extends Validator
     {
         foreach ([$optionValuePath['quote_path'], $optionValuePath['order_path']] as $path) {
             $pathInfo = $this->ioFile->getPathInfo($path);
-            if (isset($pathInfo['extension'])) {
-                if (!$this->fileValidator->isValid($pathInfo['extension'])) {
-                    return false;
-                }
+
+            if (isset($pathInfo['extension'])
+                && (empty($pathInfo['extension']) || !$this->fileValidator->isValid($pathInfo['extension']))
+            ) {
+                return false;
             }
         }
+
         return true;
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Mvc\Bootstrap;
 
@@ -94,7 +94,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     /**
      * Create service. Proxy to the __invoke method
      *
-     * @deprecared use the __invoke method instead
+     * @deprecated use the __invoke method instead
      *
      * @param ServiceLocatorInterface $serviceLocator
      * @return array
@@ -108,7 +108,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     /**
      * @inheritdoc
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return $this->extractInitParameters($container->get('Application'));
     }

@@ -35,8 +35,8 @@ class Client
      * @param JsonSerializer|null $json
      */
     public function __construct(
-        \Magento\TestFramework\TestCase\HttpClient\CurlClient $curlClient = null,
-        \Magento\TestFramework\Helper\JsonSerializer $json = null
+        ?\Magento\TestFramework\TestCase\HttpClient\CurlClient $curlClient = null,
+        ?\Magento\TestFramework\Helper\JsonSerializer $json = null
     ) {
         $objectManager = Bootstrap::getObjectManager();
         $this->curlClient = $curlClient ?: $objectManager->get(CurlClient::class);

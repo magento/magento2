@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -165,11 +165,11 @@ class SearchClient implements ClientInterface
      * Performs bulk query over OpenSearch  index
      *
      * @param array $query
-     * @return void
+     * @return array
      */
     public function bulkQuery(array $query)
     {
-        $this->getOpenSearchClient()->bulk($query);
+        return $this->getOpenSearchClient()->bulk($query);
     }
 
     /**

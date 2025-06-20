@@ -45,9 +45,9 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = [],
-        ConfigInterface $config = null,
-        UrlBuilder $urlBuilder = null,
-        ItemResolverInterface $itemResolver = null
+        ?ConfigInterface $config = null,
+        ?UrlBuilder $urlBuilder = null,
+        ?ItemResolverInterface $itemResolver = null
     ) {
         parent::__construct($context, $httpContext, $data, $config, $urlBuilder);
         $this->itemResolver = $itemResolver ?? ObjectManager::getInstance()->get(ItemResolverInterface::class);

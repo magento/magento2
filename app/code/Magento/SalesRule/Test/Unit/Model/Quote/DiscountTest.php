@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -183,7 +183,7 @@ class DiscountTest extends TestCase
     /**
      * @return void
      */
-    public function testCollectItemNoDiscount()
+    public function testCollectItemNoDiscount(): void
     {
         $itemNoDiscount = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount'])
@@ -244,7 +244,7 @@ class DiscountTest extends TestCase
     /**
      * @return void
      */
-    public function testCollectItemHasParent()
+    public function testCollectItemHasParent(): void
     {
         $itemWithParentId = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount'])
@@ -303,7 +303,7 @@ class DiscountTest extends TestCase
     /**
      * @return void
      */
-    public function testCollectItemHasNoChildren()
+    public function testCollectItemHasNoChildren(): void
     {
         $itemWithChildren = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
@@ -387,7 +387,7 @@ class DiscountTest extends TestCase
      * @return void
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    public function testFetch()
+    public function testFetch(): void
     {
         $discountAmount = 100;
         $discountDescription = 100;
@@ -413,7 +413,7 @@ class DiscountTest extends TestCase
      * @return void
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    public function testCollectAddressBaseDiscountAmount(): void
+    public function testCollectAddressBaseDiscountAmountIncludingItemChildren(): void
     {
         $storeId = 1;
         $quote = $this->createMock(Quote::class);
@@ -442,7 +442,16 @@ class DiscountTest extends TestCase
             ->willReturn([$rule1, $rule2]);
         $item = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount', 'getBaseDiscountAmount'])
-            ->onlyMethods(['getParentItem', 'getId', 'getExtensionAttributes', 'getAddress'])
+            ->onlyMethods(
+                [
+                    'getParentItem',
+                    'getId',
+                    'getExtensionAttributes',
+                    'getAddress',
+                    'getChildren',
+                    'isChildrenCalculated'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $item->expects($this->any())->method('getNoDiscount')->willReturn(false);
@@ -450,8 +459,14 @@ class DiscountTest extends TestCase
         $item->expects($this->any())->method('getParentItem')->willReturn(false);
         $item->expects($this->any())->method('getExtensionAttributes')->willReturn(false);
         $item->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
+        $child = $this->getMockBuilder(Item::class)
+            ->addMethods(['getBaseDiscountAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $item->expects($this->exactly(2))->method('getChildren')->willReturn([$child]);
+        $item->expects($this->once())->method('isChildrenCalculated')->willReturn(true);
         $index = 1;
-        $item->expects($this->any())->method('getBaseDiscountAmount')->willReturnCallback(function () use (&$index) {
+        $child->expects($this->any())->method('getBaseDiscountAmount')->willReturnCallback(function () use (&$index) {
             $value = $index * 10;
             $index++;
             return $value;

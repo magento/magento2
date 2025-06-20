@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -306,6 +306,12 @@ class ValidateTest extends TestCase
             ->willReturn(
                 ['show', 'import_validation_container'],
                 ['value', Import::FIELD_IMPORT_IDS, [1, 2, 3]]
+            );
+        $resultBlock->expects($this->once())
+            ->method('addAction')
+            ->willReturn(
+                ['show', 'import_validation_container'],
+                ['value', '_import_history_id', 1]
             );
         $this->importMock->expects($this->exactly(3))
             ->method('getProcessedRowsCount')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All rights reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Payment;
 
@@ -152,7 +152,6 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             $parentId = (int)$this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
             if ($parentId && $txnType == 'authorization') {
                 $transaction->setData('parent_id', $parentId);
-                $transaction->setData('txn_type', \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE);
             }
         } else {
             $result = $this->getParentId($orderId);

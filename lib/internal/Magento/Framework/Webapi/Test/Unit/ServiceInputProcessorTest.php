@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -415,9 +415,10 @@ class ServiceInputProcessorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws Exception
      */
-    public function testDefaultPageSizeSetterIsInvoked()
+    public function testDefaultPageSizeSetterIsInvoked(): void
     {
         $this->defaultPageSizeSetter->expects(self::once())
             ->method('processSearchCriteria')

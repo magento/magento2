@@ -78,7 +78,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
         \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository,
         \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute $attributeResource,
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory $attributeCollectionFactory = null
+        ?\Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory $attributeCollectionFactory = null
     ) {
         $this->setRepository = $setRepository;
         $this->attributeCollection = $attributeCollection;

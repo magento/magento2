@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogWidget\Block\Product;
@@ -162,11 +162,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Rule $rule,
         Conditions $conditionsHelper,
         array $data = [],
-        Json $json = null,
-        LayoutFactory $layoutFactory = null,
-        EncoderInterface $urlEncoder = null,
-        CategoryRepositoryInterface $categoryRepository = null,
-        OptionsData $optionsData = null
+        ?Json $json = null,
+        ?LayoutFactory $layoutFactory = null,
+        ?EncoderInterface $urlEncoder = null,
+        ?CategoryRepositoryInterface $categoryRepository = null,
+        ?OptionsData $optionsData = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -620,5 +620,13 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private function decodeConditions(string $encodedConditions): array
     {
         return $this->conditionsHelper->decode(htmlspecialchars_decode($encodedConditions));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _afterToHtml($html)
+    {
+        return trim($html);
     }
 }

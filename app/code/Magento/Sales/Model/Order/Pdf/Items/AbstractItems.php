@@ -97,8 +97,8 @@ abstract class AbstractItems extends AbstractModel
         TaxHelper $taxData,
         Filesystem $filesystem,
         FilterManager $filterManager,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->filterManager = $filterManager;

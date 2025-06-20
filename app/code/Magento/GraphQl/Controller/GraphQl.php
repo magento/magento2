@@ -1,14 +1,15 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
+use Exception;
+use GraphQL\Error\FormattedError;
+use GraphQL\Error\SyntaxError;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\FrontControllerInterface;
@@ -19,6 +20,9 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
@@ -29,6 +33,7 @@ use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Helper\Query\Logger\LogData;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQl\Model\Query\Logger\LoggerPool;
+use Throwable;
 
 /**
  * Front controller for web API GraphQL area.
@@ -39,6 +44,8 @@ use Magento\GraphQl\Model\Query\Logger\LoggerPool;
  */
 class GraphQl implements FrontControllerInterface
 {
+    private const METHOD_OPTIONS = 'OPTIONS';
+
     /**
      * @var \Magento\Framework\Webapi\Response
      * @deprecated 100.3.2
@@ -145,13 +152,13 @@ class GraphQl implements FrontControllerInterface
         ContextInterface $resolverContext,
         HttpRequestProcessor $requestProcessor,
         QueryFields $queryFields,
-        JsonFactory $jsonFactory = null,
-        HttpResponse $httpResponse = null,
-        ContextFactoryInterface $contextFactory = null,
-        LogData $logDataHelper = null,
-        LoggerPool $loggerPool = null,
-        AreaList $areaList = null,
-        QueryParser $queryParser = null
+        ?JsonFactory $jsonFactory = null,
+        ?HttpResponse $httpResponse = null,
+        ?ContextFactoryInterface $contextFactory = null,
+        ?LogData $logDataHelper = null,
+        ?LoggerPool $loggerPool = null,
+        ?AreaList $areaList = null,
+        ?QueryParser $queryParser = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -180,43 +187,48 @@ class GraphQl implements FrontControllerInterface
     public function dispatch(RequestInterface $request): ResponseInterface
     {
         $this->areaList->getArea(Area::AREA_GRAPHQL)->load(Area::PART_TRANSLATE);
-
-        $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
-        $data = $this->getDataFromRequest($request);
-        $result = [];
-
+        $data = [];
+        $result = null;
         $schema = null;
-        $query = $data['query'] ?? '';
+
         try {
+            $data = $this->getDataFromRequest($request);
+            $query = $data['query'] ?? '';
+
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
-            $parsedQuery = $this->queryParser->parse($query);
-            $data['parsedQuery'] = $parsedQuery;
+            $statusCode = $request->getMethod() === self::METHOD_OPTIONS ? 204 : 200;
 
-            // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
-            // Temporal coupling is required for performance optimization
-            $this->queryFields->setQuery($parsedQuery, $data['variables'] ?? null);
-            $schema = $this->schemaGenerator->generate();
+            if ($request->isGet() || $request->isPost()) {
+                $parsedQuery = $this->queryParser->parse($query);
+                $data['parsedQuery'] = $parsedQuery;
 
-            $result = $this->queryProcessor->process(
-                $schema,
-                $parsedQuery,
-                $this->contextFactory->create(),
-                $data['variables'] ?? []
-            );
-        } catch (\Exception $error) {
-            $result['errors'] = isset($result['errors']) ? $result['errors'] : [];
-            $result['errors'][] = $this->graphQlError->create($error);
-            $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
+                // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
+                // Temporal coupling is required for performance optimization
+                $this->queryFields->setQuery($parsedQuery, $data['variables'] ?? null);
+                $schema = $this->schemaGenerator->generate();
+
+                $result = $this->queryProcessor->process(
+                    $schema,
+                    $parsedQuery,
+                    $this->contextFactory->create(),
+                    $data['variables'] ?? []
+                );
+                $statusCode = $this->getHttpResponseCode($result);
+            }
+        } catch (Exception $error) {
+            [$result, $statusCode] = $this->handleGraphQlException($error);
         }
 
         $jsonResult->setHttpResponseCode($statusCode);
-        $jsonResult->setData($result);
+        if ($result !== null) {
+            $jsonResult->setData($result);
+        }
         $jsonResult->renderResult($this->httpResponse);
 
         // log information about the query, unless it is an introspection query
-        if (strpos($query, 'IntrospectionQuery') === false) {
+        if (!isset($data['query']) || strpos($data['query'], 'IntrospectionQuery') === false) {
             $queryInformation = $this->logDataHelper->getLogData($request, $data, $schema, $this->httpResponse);
             $this->loggerPool->execute($queryInformation);
         }
@@ -225,24 +237,72 @@ class GraphQl implements FrontControllerInterface
     }
 
     /**
+     * Handle GraphQL Exceptions
+     *
+     * @param Exception $error
+     * @return array
+     * @throws Throwable
+     */
+    private function handleGraphQlException(Exception $error): array
+    {
+        if ($error instanceof SyntaxError || $error instanceof GraphQlInputException) {
+            return [['errors' => [FormattedError::createFromException($error)]], 400];
+        }
+        if ($error instanceof GraphQlAuthenticationException) {
+            return [['errors' => [$this->graphQlError->create($error)]], 401];
+        }
+        if ($error instanceof GraphQlAuthorizationException) {
+            return [['errors' => [$this->graphQlError->create($error)]], 403];
+        }
+        return [
+            ['errors' => [$this->graphQlError->create($error)]],
+            ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS
+        ];
+    }
+
+    /**
+     * Retrieve http response code based on the error categories
+     *
+     * @param array $result
+     * @return int
+     */
+    private function getHttpResponseCode(array $result): int
+    {
+        foreach ($result['errors'] ?? [] as $error) {
+            if (isset($error['extensions']['category'])) {
+                return match ($error['extensions']['category']) {
+                    GraphQlAuthenticationException::EXCEPTION_CATEGORY => 401,
+                    GraphQlAuthorizationException::EXCEPTION_CATEGORY => 403,
+                    default => 200,
+                };
+            }
+        }
+
+        return 200;
+    }
+
+    /**
      * Get data from request body or query string
      *
      * @param RequestInterface $request
      * @return array
+     * @throws GraphQlInputException
      */
     private function getDataFromRequest(RequestInterface $request): array
     {
-        /** @var Http $request */
-        if ($request->isPost()) {
-            $data = $this->jsonSerializer->unserialize($request->getContent());
-        } elseif ($request->isGet()) {
-            $data = $request->getParams();
-            $data['variables'] = isset($data['variables']) ?
-                $this->jsonSerializer->unserialize($data['variables']) : null;
-            $data['variables'] = is_array($data['variables']) ?
-                $data['variables'] : null;
-        } else {
-            return [];
+        $data = [];
+        try {
+            /** @var Http $request */
+            if ($request->isPost()) {
+                $data = $request->getContent() ? $this->jsonSerializer->unserialize($request->getContent()) : [];
+            } elseif ($request->isGet()) {
+                $data = $request->getParams();
+                $data['variables'] = !empty($data['variables']) && is_string($data['variables'])
+                    ? $this->jsonSerializer->unserialize($data['variables'])
+                    : null;
+            }
+        } catch (\InvalidArgumentException $e) {
+            throw new GraphQlInputException(__('Unable to parse the request.'), $e);
         }
 
         return $data;
