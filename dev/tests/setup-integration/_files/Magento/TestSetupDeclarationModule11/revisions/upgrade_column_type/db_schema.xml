@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="module11_test_main_table" resource="default" engine="innodb" comment="Main Test Table for Module11">
+        <column xsi:type="int" name="module11_email_contact_id" padding="10" unsigned="true" nullable="false"
+                identity="true" comment="Entity ID"/>
+        <column xsi:type="decimal" name="module11_guest_score" scale="4" precision="20" comment="Guest Score"/>
+        <column xsi:type="int" name="module11_guest_id" padding="10" unsigned="true" nullable="true" identity="false"
+                comment="Guest ID"/>
+        <column xsi:type="date" name="module11_created_at" comment="Created At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="module11_email_contact_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="MODULE11_INSTALL_UNIQUE_INDEX_1">
+            <column name="module11_email_contact_id"/>
+            <column name="module11_guest_id"/>
+        </constraint>
+    </table>
+</schema>

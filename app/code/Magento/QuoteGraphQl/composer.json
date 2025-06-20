@@ -16,8 +16,12 @@
         "magento/module-directory": "*",
         "magento/module-graph-ql": "*",
         "magento/module-gift-message": "*",
+        "magento/module-gift-message-graph-ql": "*",
         "magento/module-catalog-inventory": "*",
-        "magento/module-eav-graph-ql": "*"
+        "magento/module-eav-graph-ql": "*",
+        "magento/module-downloadable": "*",
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-payment": "*"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*",

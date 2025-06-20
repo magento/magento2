@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -553,8 +552,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
     {
         if (!$product->hasData($this->_usedProductIds)) {
             $usedProductIds = [];
-            foreach ($this->getUsedProducts($product) as $product) {
-                $usedProductIds[] = $product->getId();
+            foreach ($this->getUsedProducts($product) as $childProduct) {
+                $usedProductIds[] = $childProduct->getId();
             }
             $product->setData($this->_usedProductIds, $usedProductIds);
         }
@@ -1483,7 +1482,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
             'thumbnail',
             'status',
             'visibility',
-            'media_gallery'
+            'media_gallery',
+            'special_price',
         ];
 
         $usedAttributes = array_map(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller\Express;
 
@@ -91,7 +91,7 @@ abstract class AbstractExpress extends AppAction implements
     protected $_paypalSession;
 
     /**
-     * @var \Magento\Framework\Url\Helper
+     * @var \Magento\Framework\Url\Helper\Data
      */
     protected $_urlHelper;
 
@@ -151,6 +151,9 @@ abstract class AbstractExpress extends AppAction implements
     protected function _initCheckout(?CartInterface $quoteObject = null)
     {
         $quote = $quoteObject ? $quoteObject : $this->_getQuote();
+        if ($quote->getId()) {
+            $this->_getCheckoutSession()->setPayPalQuoteId($quote->getId());
+        }
         if (!$quote->hasItems() || $quote->getHasError()) {
             $this->getResponse()->setStatusHeader(403, '1.1', 'Forbidden');
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t initialize Express Checkout.'));
@@ -248,6 +251,9 @@ abstract class AbstractExpress extends AppAction implements
                 $this->_getCheckoutSession()->replaceQuote($this->_quote);
             } else {
                 $this->_quote = $this->_getCheckoutSession()->getQuote();
+                if (!$this->_quote->getId() && $this->_getCheckoutSession()->getPayPalQuoteId()) {
+                    $this->_quote = $this->quoteRepository->get($this->_getCheckoutSession()->getPayPalQuoteId());
+                }
             }
         }
         return $this->_quote;

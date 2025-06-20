@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\OrderCancellationGraphQl\Model;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\OrderCancellation\Model\Email\ConfirmationKeySender;
 use Magento\OrderCancellation\Model\GetConfirmationKey;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
+use Magento\SalesGraphQl\Model\Order\Token;
 
 class CancelOrderGuest
 {
@@ -23,12 +25,16 @@ class CancelOrderGuest
      * @param OrderRepositoryInterface $orderRepository
      * @param ConfirmationKeySender $confirmationKeySender
      * @param GetConfirmationKey $confirmationKey
+     * @param Uid $idEncoder
+     * @param Token $token
      */
     public function __construct(
         private readonly OrderFormatter           $orderFormatter,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly ConfirmationKeySender    $confirmationKeySender,
         private readonly GetConfirmationKey       $confirmationKey,
+        private readonly Uid                      $idEncoder,
+        private readonly Token                    $token
     ) {
     }
 
@@ -65,12 +71,24 @@ class CancelOrderGuest
      */
     private function sendConfirmationKeyEmail(Order $order, string $reason): void
     {
-        $confirmationKey = $this->confirmationKey->execute($order, $reason);
-        $this->confirmationKeySender->execute($order, $confirmationKey);
+        $this->confirmationKeySender->execute(
+            $order,
+            [
+                'order_id' => $this->idEncoder->encode((string)$order->getEntityId()),
+                'confirmation_key' => $this->confirmationKey->execute($order, $reason),
+                'orderRef' => $this->token->encrypt(
+                    $order->getIncrementId(),
+                    $order->getBillingAddress()->getEmail(),
+                    $order->getBillingAddress()->getLastname()
+                ),
+                'action' => 'cancel'
+            ]
+        );
 
         // add comment in order about confirmation key send
         $order->addCommentToStatusHistory(
             'Order cancellation confirmation key was sent via email.',
+            $order->getStatus(),
             true
         );
         $this->orderRepository->save($order);
