@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class PresentationTest extends TestCase
     /**
      * @return array
      */
-    public function getPresentationInputTypeDataProvider()
+    public static function getPresentationInputTypeDataProvider()
     {
         return [
             'attribute_is_textarea_and_wysiwyg_enabled' => ['textarea', true, 'texteditor'],
@@ -70,7 +70,7 @@ class PresentationTest extends TestCase
     /**
      * @return array
      */
-    public function convertPresentationDataToInputTypeDataProvider()
+    public static function convertPresentationDataToInputTypeDataProvider()
     {
         return [
             [['key' => 'value'], ['key' => 'value']],

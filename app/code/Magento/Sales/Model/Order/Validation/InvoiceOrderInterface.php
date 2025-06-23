@@ -38,7 +38,7 @@ interface InvoiceOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        InvoiceCommentCreationInterface $comment = null,
-        InvoiceCreationArgumentsInterface $arguments = null
+        ?InvoiceCommentCreationInterface $comment = null,
+        ?InvoiceCreationArgumentsInterface $arguments = null
     );
 }

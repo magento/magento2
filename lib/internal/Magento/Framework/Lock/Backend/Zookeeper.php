@@ -249,7 +249,7 @@ class Zookeeper implements LockManagerInterface
      * @return bool
      * @throws RuntimeException
      */
-    private function isAnyLock(string $fullKey, int $indexKey = null): bool
+    private function isAnyLock(string $fullKey, ?int $indexKey = null): bool
     {
         $parent = dirname($fullKey);
 

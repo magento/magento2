@@ -396,7 +396,15 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->onlyMethods(['getDbVersion', 'getDataVersion'])
                 ->setConstructorArgs(['context' => $this->contextMock])
                 ->getMock();
-            $moduleResource->method('getDbVersion')->willReturnOnConsecutiveCalls(false, '2.1.0');
+            $moduleResource->method('getDbVersion')
+                ->willReturnCallback(function () use (&$callCount) {
+                    $callCount++;
+                    if ($callCount === 1) {
+                        return false;
+                    } elseif ($callCount === 2) {
+                        return '2.1.0';
+                    }
+                });
             $moduleResource->method('getDataVersion')->willReturn(false);
             $this->object->method('getModuleResource')->willReturn($moduleResource);
 
@@ -730,7 +738,15 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->onlyMethods(['getDbVersion', 'getDataVersion'])
                 ->setConstructorArgs(['context' => $this->contextMock])
                 ->getMock();
-            $moduleResource->method('getDbVersion')->willReturnOnConsecutiveCalls(false, '2.1.0');
+            $moduleResource->method('getDbVersion')
+                ->willReturnCallback(function () use (&$callCount) {
+                    $callCount++;
+                    if ($callCount === 1) {
+                        return false;
+                    } elseif ($callCount === 2) {
+                        return '2.1.0';
+                    }
+                });
             $moduleResource->method('getDataVersion')->willReturn(false);
             $this->object->method('getModuleResource')->willReturn($moduleResource);
 

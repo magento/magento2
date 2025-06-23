@@ -41,7 +41,7 @@ class ExistingValidate
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeIsValid(Subject $subject, $value, string $originalName = null)
+    public function beforeIsValid(Subject $subject, $value, ?string $originalName = null)
     {
         return [$this->tmpFileCopier->copy($value), $originalName];
     }

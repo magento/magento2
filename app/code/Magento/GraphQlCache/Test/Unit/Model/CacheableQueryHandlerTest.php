@@ -78,7 +78,7 @@ class CacheableQueryHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function resolvedDataProvider(): array
+    public static function resolvedDataProvider(): array
     {
         return [
             [

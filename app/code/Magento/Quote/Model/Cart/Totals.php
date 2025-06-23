@@ -552,7 +552,7 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
      * @param \Magento\Quote\Api\Data\TotalsItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this->setData(self::KEY_ITEMS, $items);
     }

@@ -25,7 +25,7 @@ function posix_getpgid($pid)
  * @param array|null $output
  * @param null $return_var
  */
-function exec($command, array &$output = null, &$return_var = null)
+function exec($command, ?array &$output = null, &$return_var = null)
 {
     $output = ['PID TTY TIME CMD'];
     $return_var = 1;

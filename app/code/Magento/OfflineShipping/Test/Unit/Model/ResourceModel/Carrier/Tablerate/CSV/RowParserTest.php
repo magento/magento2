@@ -134,7 +134,7 @@ class RowParserTest extends TestCase
     /**
      * @return array
      */
-    public function parseWithExceptionDataProvider()
+    public static function parseWithExceptionDataProvider()
     {
         $rowData = ['a', 'b', 'c', 'd', 'e'];
         $conditionFullName = 'condition_full_name';

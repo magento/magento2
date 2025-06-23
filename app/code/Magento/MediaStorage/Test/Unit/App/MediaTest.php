@@ -247,7 +247,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function catchExceptionDataProvider(): array
+    public static function catchExceptionDataProvider(): array
     {
         return [
             'default mode' => [false, 0],

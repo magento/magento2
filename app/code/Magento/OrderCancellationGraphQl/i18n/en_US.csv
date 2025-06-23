@@ -1,0 +1,4 @@
+"Confirm Your %store_name Order Cancellation","Confirm Your %store_name Order Cancellation"
+"It seems that you'd like to cancel your order #%order_id. If this is correct, please <a href=""%url_to_confirm"">click here</a> to confirm your cancellation request.","It seems that you'd like to cancel your order #%order_id. If this is correct, please <a href=""%url_to_confirm"">click here</a> to confirm your cancellation request."
+"Order cancellation reason is invalid.","Order cancellation reason is invalid."
+

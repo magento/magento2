@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class ProcessManagerTest extends TestCase
     {
         return [
             'more_threads_than_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(1);
@@ -78,10 +78,10 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 4,
+                'threadsCount' => 4,
             ],
             'less_threads_than_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(1);
@@ -94,10 +94,10 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 2,
+                'threadsCount' => 2,
             ],
             'equal_threads_and_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(1);
@@ -110,7 +110,7 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 3,
+                'threadsCount' => 3,
             ],
         ];
     }
@@ -157,7 +157,7 @@ class ProcessManagerTest extends TestCase
     {
         return [
             'more_threads_than_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(0);
@@ -170,10 +170,10 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 4,
+                'threadsCount' => 4,
             ],
             'less_threads_than_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(0);
@@ -186,10 +186,10 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 2,
+                'threadsCount' => 2,
             ],
             'equal_threads_and_functions' => [
-                'user_functions' => [
+                'userFunctions' => [
                     // @codingStandardsIgnoreStart
                     function () {
                         exit(0);
@@ -202,8 +202,41 @@ class ProcessManagerTest extends TestCase
                     },
                     // @codingStandardsIgnoreEnd
                 ],
-                'threads_count' => 3,
+                'threadsCount' => 3,
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider testIsMultiThreadsExecuteDataProvider
+     * @param $threadsCount
+     * @param $expectedResult
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testIsMultiThreadsExecute($threadsCount, $expectedResult): void
+    {
+        $connectionMock = $this->createMock(ResourceConnection::class);
+        $registryMock = $this->createMock(Registry::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
+        $processManager = new ProcessManager(
+            $connectionMock,
+            $registryMock,
+            $threadsCount,
+            $loggerMock,
+            $amqpConfigPoolMock
+        );
+        $this->assertEquals($expectedResult, $processManager->isMultiThreadsExecute());
+    }
+
+    public static function testIsMultiThreadsExecuteDataProvider(): array
+    {
+        return [
+            'threadsCount is null' => [null, false],
+            'threadsCount is 0' => [0, false],
+            'threadsCount is 1' => [1, false],
+            'threadsCount is 2' => [2, true],
         ];
     }
 }

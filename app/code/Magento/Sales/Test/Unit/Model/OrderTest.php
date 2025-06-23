@@ -1006,7 +1006,7 @@ class OrderTest extends TestCase
      * Get action flags
      *
      */
-    protected function _getActionFlagsValues()
+    protected static function _getActionFlagsValues()
     {
         return [
             [],
@@ -1026,7 +1026,7 @@ class OrderTest extends TestCase
      *
      * @return array
      */
-    protected function _getOrderStatuses()
+    protected static function _getOrderStatuses()
     {
         return [
             Order::STATE_HOLDED,
@@ -1074,11 +1074,11 @@ class OrderTest extends TestCase
     /**
      * @return array
      */
-    public function canVoidPaymentDataProvider()
+    public static function canVoidPaymentDataProvider()
     {
         $data = [];
-        foreach ($this->_getActionFlagsValues() as $actionFlags) {
-            foreach ($this->_getOrderStatuses() as $status) {
+        foreach (self::_getActionFlagsValues() as $actionFlags) {
+            foreach (self::_getOrderStatuses() as $status) {
                 $data[] = [$actionFlags, $status];
             }
         }

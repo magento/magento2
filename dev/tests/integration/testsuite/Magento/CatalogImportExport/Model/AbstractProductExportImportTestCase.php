@@ -253,7 +253,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param string|null $csvFile
      * @return void
      */
-    protected function executeImportDeleteTest(array $skus, string $csvFile = null): void
+    protected function executeImportDeleteTest(array $skus, ?string $csvFile = null): void
     {
         $csvFile = $csvFile ?? $this->exportProducts();
         $this->importProducts($csvFile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
@@ -333,7 +333,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $skus,
         $skippedAttributes,
         $usePagination = false,
-        string $csvfile = null
+        ?string $csvfile = null
     ) {
         $replacedAttributes = [
             'row_id',
@@ -404,7 +404,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param Product|null $exportProduct
      * @return string Return exported file
      */
-    private function exportProducts(Product $exportProduct = null)
+    private function exportProducts(?Product $exportProduct = null)
     {
         $csvfile = uniqid('importexport_') . '.csv';
         $this->csvFile = $csvfile;

@@ -40,7 +40,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         StoreManagerInterface $storeManager,
-        UrlInterface $url = null
+        ?UrlInterface $url = null
     ) {
         $this->_storeManager = $storeManager;
         $this->url = $url ?: ObjectManager::getInstance()->get(UrlInterface::class);

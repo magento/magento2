@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -65,5 +65,10 @@
     </type>
     <type name="Magento\Customer\Model\ResourceModel\Customer">
         <plugin name="recollect_quote_on_customer_group_change" type="Magento\Checkout\Model\Plugin\RecollectQuoteOnCustomerGroupChange"/>
+    </type>
+    <type name="Magento\Checkout\Model\AddProductToCart">
+        <arguments>
+            <argument name="quoteMutex" xsi:type="object">Magento\Quote\Model\ResourceModel\LoadQuoteByIdMutex</argument>
+        </arguments>
     </type>
 </config>

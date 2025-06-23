@@ -11,7 +11,6 @@ var config = {
             'knockout': 'knockoutjs/knockout',
             'mageUtils': 'mage/utils/main',
             'rjsResolver': 'mage/requirejs/resolver',
-            'jquery-ui-modules/core': 'jquery/ui-modules/core',
             'jquery-ui-modules/accordion': 'jquery/ui-modules/widgets/accordion',
             'jquery-ui-modules/autocomplete': 'jquery/ui-modules/widgets/autocomplete',
             'jquery-ui-modules/button': 'jquery/ui-modules/widgets/button',

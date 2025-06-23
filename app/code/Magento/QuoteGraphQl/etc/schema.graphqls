@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+#  Copyright 2024 Adobe
+#  All Rights Reserved.
 
 type Query {
     """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
@@ -262,12 +262,6 @@ type ApplyCouponToCartOutput @doc(description: "Contains details about the cart 
 type PlaceOrderOutput @doc(description: "Contains the results of the request to place an order.") {
     order: Order @deprecated(reason: "Use `orderV2` instead.") @doc(description: "The ID of the order.")
     orderV2: CustomerOrder @doc(description: "Full order information.")
-    errors: [PlaceOrderError!]! @doc(description:"An array of place order errors.")
-}
-
-type PlaceOrderError @doc(description:"An error encountered while placing an order."){
-    message: String! @doc(description: "A localized error message.")
-    code: PlaceOrderErrorCodes! @doc(description: "An error code that is specific to place order.")
 }
 
 type Cart @doc(description: "Contains the contents and other details about a guest or customer cart.") {
@@ -294,6 +288,7 @@ type CartItems {
 
 interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartAddressTypeResolver") {
     uid: String! @doc(description: "The unique id of the customer address.")
+    id: Int @doc(description: "Id of the customer address.")
     firstname: String! @doc(description: "The first name of the customer or guest.")
     lastname: String! @doc(description: "The last name of the customer or guest.")
     company: String @doc(description: "The company specified for the billing or shipping address.")
@@ -317,6 +312,7 @@ type ShippingCartAddress implements CartAddressInterface @doc(description: "Cont
     items_weight: Float @deprecated(reason: "This information should not be exposed on the frontend.")
     cart_items: [CartItemQuantity] @deprecated(reason: "Use `cart_items_v2` instead.")
     cart_items_v2: [CartItemInterface] @doc(description: "An array that lists the items in the cart.")
+    same_as_billing: Boolean! @doc(description: "Indicates whether the shipping address is same as billing address.")
 }
 
 type BillingCartAddress implements CartAddressInterface @doc(description: "Contains details about the billing address.") {
@@ -396,6 +392,7 @@ type AddVirtualProductsToCartOutput @doc(description: "Contains details about th
 
 type UpdateCartItemsOutput @doc(description: "Contains details about the cart after updating items.") {
     cart: Cart! @doc(description: "The cart after updating products.")
+    errors: [CartUserInputError!]! @doc(description: "Contains errors encountered while updating an item to the cart.")
 }
 
 type RemoveItemFromCartOutput @doc(description: "Contains details about the cart after removing an item.") {
@@ -453,7 +450,10 @@ type CartItemPrices @doc(description: "Contains details about the price of the i
     row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
     total_item_discount: Money @doc(description: "The total of all discounts applied to the item.")
+    original_item_price: Money! @doc(description: "The value of the original unit price for the item, including discounts.")
     original_row_total: Money! @doc(description: "The value of the original price multiplied by the quantity of the item.")
+    catalog_discount: ProductDiscount @doc(description: "The price discount for the unit price of the item represents the difference between its regular price and final price.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CatalogDiscount")
+    row_catalog_discount: ProductDiscount @doc(description: "The price discount multiplied by the item quantity represents the total difference between the regular price and the final price for the entire quote item.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\RowCatalogDiscount")
 }
 
 type SelectedCustomizableOption @doc(description: "Identifies a customized product that has been placed in a cart.") {
@@ -485,27 +485,30 @@ type Order @doc(description: "Contains the order ID.") {
     order_id: String @deprecated(reason: "Use `order_number` instead.")
 }
 
-type CartUserInputError @doc(description:"An error encountered while adding an item to the the cart.") {
+interface Error @typeResolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartErrorTypeResolver") @doc(description:"An error encountered while adding an item to the the cart.") {
     message: String! @doc(description: "A localized error message.")
     code: CartUserInputErrorType! @doc(description: "A cart-specific error code.")
 }
 
+type CartUserInputError implements Error {
+}
+
+type InsufficientStockError implements Error {
+    quantity: Float @doc(description: "Amount of available stock")
+}
+
 type AddProductsToCartOutput @doc(description: "Contains details about the cart after adding products to it.") {
     cart: Cart! @doc(description: "The cart after products have been added.")
-    user_errors: [CartUserInputError!]! @doc(description: "Contains errors encountered while adding an item to the cart.")
+    user_errors: [Error!]! @doc(description: "Contains errors encountered while adding an item to the cart.")
 }
 
 enum CartUserInputErrorType {
     PRODUCT_NOT_FOUND
     NOT_SALABLE
     INSUFFICIENT_STOCK
-    UNDEFINED
-}
-enum PlaceOrderErrorCodes {
-    CART_NOT_FOUND
-    CART_NOT_ACTIVE
-    GUEST_EMAIL_MISSING
-    UNABLE_TO_PLACE_ORDER
+    COULD_NOT_FIND_CART_ITEM
+    REQUIRED_PARAMETER_MISSING
+    INVALID_PARAMETER_VALUE
     UNDEFINED
 }
 
@@ -519,6 +522,7 @@ type StoreConfig {
     cart_expires_in_days: Int @doc(description: "checkout/cart/delete_quote_after: quote lifetime in days.")
     grouped_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/grouped_product_image: which image to use for grouped products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
     configurable_product_image: ProductImageThumbnail! @doc(description: "checkout/cart/configurable_product_image: which image to use for configurable products.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\StoreConfig")
+    is_checkout_agreements_enabled: Boolean! @doc(description: "Configuration data from checkout/options/enable_agreements")
 }
 
 enum ProductImageThumbnail {

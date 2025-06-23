@@ -57,7 +57,7 @@ class ItemConverter
         EventManager $eventManager,
         \Magento\Quote\Api\Data\TotalsItemInterfaceFactory $totalsItemFactory,
         DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->configurationPool = $configurationPool;
         $this->eventManager = $eventManager;

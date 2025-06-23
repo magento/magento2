@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -136,7 +136,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getOutputFormatDataProvider(): array
+    public static function getOutputFormatDataProvider(): array
     {
         $ar_DZ = "\u{062C}.\u{0645}.\u{200F}\u{00A0}%s";
         if (version_compare(PHP_VERSION, '8.3', '>=')) {
@@ -203,7 +203,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getFormatTxtNumberFormatterDataProvider(): array
+    public static function getFormatTxtNumberFormatterDataProvider(): array
     {
         return [
             ['en_US', 'USD', '9999', [], '$9,999.00'],
@@ -241,6 +241,8 @@ class CurrencyTest extends TestCase
                 ['precision' => 2, 'symbol' => '#', 'display' => CurrencyData::NO_SYMBOL],
                 '9,999.99'
             ],
+            ['he_IL', 'USD', '9999', [], '9,999.00 ‏$'],
+            ['he_IL', 'USD', '9999', ['display' => CurrencyData::NO_SYMBOL], '9,999.00'],
         ];
     }
 
@@ -272,7 +274,7 @@ class CurrencyTest extends TestCase
      *
      * @return array
      */
-    public function getFormatTxtZendCurrencyDataProvider(): array
+    public static function getFormatTxtZendCurrencyDataProvider(): array
     {
         return [
             ['9999', ['display' => Currency::USE_SYMBOL, 'foo' => 'bar'], '$9,999.00'],

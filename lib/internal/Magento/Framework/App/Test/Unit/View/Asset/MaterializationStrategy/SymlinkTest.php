@@ -62,7 +62,7 @@ class SymlinkTest extends TestCase
     /**
      * @return array
      */
-    public function sourceFileDataProvider()
+    public static function sourceFileDataProvider()
     {
         return [
             ['path/to/file', true],

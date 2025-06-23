@@ -104,7 +104,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTestCase
      *
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             'No sample data found' => [

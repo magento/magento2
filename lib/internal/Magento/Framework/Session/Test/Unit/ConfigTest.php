@@ -98,7 +98,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function optionsProvider()
+    public static function optionsProvider()
     {
         return [
             ['save_path', 'getSavePath', __DIR__],
@@ -389,7 +389,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function constructorDataProvider()
+    public static function constructorDataProvider()
     {
         return [
             'all valid' => [

@@ -62,7 +62,7 @@ class CreateHandler implements AttributeInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AttributePersistor $attributePersistor,
         ScopeResolver $scopeResolver,
-        AttributeLoader $attributeLoader = null
+        ?AttributeLoader $attributeLoader = null
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -140,7 +140,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReindexRow()
+    public static function dataProviderReindexRow()
     {
         return [
             [false, false, null],
@@ -212,7 +212,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReindexList()
+    public static function dataProviderReindexList()
     {
         return [
             [false, false, null],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Event;
@@ -94,30 +94,7 @@ class Transaction
         if (!$this->_isTransactionActive) {
             $this->_getConnection()->beginTransparentTransaction();
             $this->_isTransactionActive = true;
-            try {
-                /**
-                 * Add any warning during transaction execution as a failure.
-                 */
-                set_error_handler(
-                    function ($errNo, $errStr, $errFile, $errLine) use ($test) {
-                        $errMsg = sprintf("%s: %s in %s:%s.", "Warning", $errStr, $errFile, $errLine);
-                        $test->getTestResultObject()->addError($test, new \PHPUnit\Framework\Warning($errMsg), 0);
-
-                        // Allow error to be handled by next error handler
-                        return false;
-                    },
-                    E_WARNING
-                );
-                $this->_eventManager->fireEvent('startTransaction', [$test]);
-                restore_error_handler();
-            } catch (\Exception $e) {
-                $this->_isTransactionActive = false;
-                $test->getTestResultObject()->addFailure(
-                    $test,
-                    new \PHPUnit\Framework\AssertionFailedError((string)$e),
-                    0
-                );
-            }
+            $this->_eventManager->fireEvent('startTransaction', [$test]);
         }
     }
 

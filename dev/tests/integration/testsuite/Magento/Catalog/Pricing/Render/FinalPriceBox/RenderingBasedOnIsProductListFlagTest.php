@@ -124,7 +124,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isProductListDataProvider()
+    public static function isProductListDataProvider()
     {
         return [
             'is_not_product_list' => [false],

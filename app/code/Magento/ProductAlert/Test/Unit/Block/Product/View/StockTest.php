@@ -141,7 +141,7 @@ class StockTest extends TestCase
     /**
      * @return array
      */
-    public function setTemplateStockUrlNotAllowedDataProvider()
+    public static function setTemplateStockUrlNotAllowedDataProvider()
     {
         return [
             'stock alert not allowed' => [false, false],

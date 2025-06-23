@@ -71,10 +71,10 @@ class YesNo extends AbstractBaseAttributeData
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'text_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'boolean_attribute',
                     ],
                 ],

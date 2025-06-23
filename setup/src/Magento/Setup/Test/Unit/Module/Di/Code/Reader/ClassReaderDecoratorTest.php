@@ -54,7 +54,7 @@ class ClassReaderDecoratorTest extends TestCase
     /**
      * @return array
      */
-    public function getConstructorDataProvider()
+    public static function getConstructorDataProvider()
     {
         return [
             [null, 'null', null],

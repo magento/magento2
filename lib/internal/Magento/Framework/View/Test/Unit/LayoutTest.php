@@ -832,21 +832,21 @@ class LayoutTest extends TestCase
     {
         return [
             'blockWithoutName' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<block></block></layout>',
                 'blockName' => '',
                 'hasElement' => true,
                 'cacheable' => true
             ],
             'notCacheableBlockWithoutName' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<block cacheable="false"></block></layout>',
                 'blockName' => '',
                 'hasElement' => true,
                 'cacheable' => true
             ],
             'notCacheableBlockWithMissingBlockReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceBlock name="not_existing_block">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceBlock></layout>',
@@ -855,7 +855,7 @@ class LayoutTest extends TestCase
                 'cacheable' => true
             ],
             'notCacheableBlockWithMissingContainerReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceContainer name="not_existing_container">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceContainer></layout>',
@@ -864,7 +864,7 @@ class LayoutTest extends TestCase
                 'cacheable' => true
             ],
             'notCacheableBlockWithExistingBlockReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceBlock name="existing_block">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceBlock></layout>',
@@ -873,7 +873,7 @@ class LayoutTest extends TestCase
                 'cacheable' => false
             ],
             'notCacheableBlockWithExistingContainerReference' => [
-                'xml' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
+                'xmlString' => '<?xml version="1.0"?><layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
                     . '<referenceContainer name="existing_container">'
                     . '<block name="non_cacheable_block" cacheable="false"></block>'
                     . '</referenceContainer></layout>',

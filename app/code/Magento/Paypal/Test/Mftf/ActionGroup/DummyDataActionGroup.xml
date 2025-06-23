@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DummyDataActionGroup">
+        <annotations>
+            <description>On Storefront Login To PayPal Express Checkout Payflow Edition .</description>
+        </annotations>
+        <!--Check in-context-->
+        <switchToNextTab stepKey="switchToInContentTab"/>
+        <waitForPageLoad stepKey="waitForPayPalPageToLoad"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.email}}" stepKey="waitForEmailField" />
+        <fillField selector="{{PayPalPaymentSection.email}}" userInput="orykh@adobe.com" stepKey="fillEmail"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordFieldToBeVisible" />
+        <fillField selector="{{PayPalPaymentSection.password}}" userInput="123123qQ1" stepKey="fillPassword"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.loginBtn}}" stepKey="waitForLoginField"/>
+        <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
+        <waitForPageLoad stepKey="waitForDetailsPageToOpen"/>
+    </actionGroup>
+</actionGroups>

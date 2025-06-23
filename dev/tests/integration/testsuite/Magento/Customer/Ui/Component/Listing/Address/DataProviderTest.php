@@ -100,7 +100,7 @@ class DataProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getDataByRegionDataProvider(): array
+    public static function getDataByRegionDataProvider(): array
     {
         return [
             [['condition_type' => 'fulltext', 'field' => 'fulltext', 'value' => 'アラバマ']],

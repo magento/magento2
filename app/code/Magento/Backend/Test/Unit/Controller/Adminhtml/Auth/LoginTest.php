@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -188,7 +188,7 @@ class LoginTest extends TestCase
      *
      * @return array[]
      */
-    public function isValidBackendUriDataProvider()
+    public static function isValidBackendUriDataProvider()
     {
         return [
             'Rewrites on, valid url' => ['/index.php/admin', 'http://magento2.local/', 'admin', true],

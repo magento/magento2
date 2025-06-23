@@ -81,18 +81,18 @@ class BackordersTest extends TestCase
         return [
             'set_backorders' => [
                 'value' => Stock::BACKORDERS_YES_NONOTIFY,
-                'current_value' => Stock::BACKORDERS_NO,
-                'expected_indexer_status' => StateInterface::STATUS_INVALID,
+                'currentValue' => Stock::BACKORDERS_NO,
+                'expectedIndexerStatus' => StateInterface::STATUS_INVALID,
             ],
             'unset_backorders' => [
                 'value' => Stock::BACKORDERS_NO,
-                'current_value' => Stock::BACKORDERS_YES_NONOTIFY,
-                'expected_indexer_status' => StateInterface::STATUS_INVALID,
+                'currentValue' => Stock::BACKORDERS_YES_NONOTIFY,
+                'expectedIndexerStatus' => StateInterface::STATUS_INVALID,
             ],
             'same_backorders' => [
                 'value' => Stock::BACKORDERS_YES_NONOTIFY,
-                'current_value' => Stock::BACKORDERS_YES_NONOTIFY,
-                'expected_indexer_status' => StateInterface::STATUS_VALID,
+                'currentValue' => Stock::BACKORDERS_YES_NONOTIFY,
+                'expectedIndexerStatus' => StateInterface::STATUS_VALID,
             ],
         ];
     }

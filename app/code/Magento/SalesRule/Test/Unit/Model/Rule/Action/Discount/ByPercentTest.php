@@ -205,7 +205,7 @@ class ByPercentTest extends TestCase
     /**
      * @return array
      */
-    public function calculateDataProvider()
+    public static function calculateDataProvider()
     {
         return [
             [
@@ -267,7 +267,7 @@ class ByPercentTest extends TestCase
     /**
      * @return array
      */
-    public function fixQuantityDataProvider()
+    public static function fixQuantityDataProvider()
     {
         return [
             ['step' => 0, 'qty' => 23, 'expected' => 23],

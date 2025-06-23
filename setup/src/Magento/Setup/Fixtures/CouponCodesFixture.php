@@ -54,9 +54,9 @@ class CouponCodesFixture extends Fixture
      */
     public function __construct(
         FixtureModel $fixtureModel,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory = null,
-        \Magento\SalesRule\Model\CouponFactory $couponCodeFactory = null,
-        CouponCollectionFactory $couponCollectionFactory = null
+        ?\Magento\SalesRule\Model\RuleFactory $ruleFactory = null,
+        ?\Magento\SalesRule\Model\CouponFactory $couponCodeFactory = null,
+        ?CouponCollectionFactory $couponCollectionFactory = null
     ) {
         parent::__construct($fixtureModel);
         $this->ruleFactory = $ruleFactory ?: $this->fixtureModel->getObjectManager()

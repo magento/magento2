@@ -86,7 +86,7 @@ class InterceptorTest extends TestCase
      *
      * @return array
      */
-    public function interceptorDataProvider()
+    public static function interceptorDataProvider()
     {
         return [
             [
