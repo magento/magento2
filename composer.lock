@@ -3769,16 +3769,16 @@
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "2.64.2",
+            "version": "2.64.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "771e504760448ac7af660710237ceb93be602e08"
+                "reference": "e2e6631f599a9b0db1e23adb633c09a2f0c68bed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/771e504760448ac7af660710237ceb93be602e08",
-                "reference": "771e504760448ac7af660710237ceb93be602e08",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/e2e6631f599a9b0db1e23adb633c09a2f0c68bed",
+                "reference": "e2e6631f599a9b0db1e23adb633c09a2f0c68bed",
                 "shasum": ""
             },
             "require": {
@@ -3849,7 +3849,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-11-26T21:29:17+00:00"
+            "time": "2025-06-16T14:38:00+00:00"
         },
         {
             "name": "laminas/laminas-view",

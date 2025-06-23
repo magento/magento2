@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\Escaper;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -63,6 +64,11 @@ class CategoryTest extends TestCase
      */
     private $requestMock;
 
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaper;
+
     protected function setUp(): void
     {
         $this->mockContext();
@@ -78,12 +84,16 @@ class CategoryTest extends TestCase
         $this->categoryRepository = $this->getMockBuilder(CategoryRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->categoryHelper = new Category(
             $this->context,
             $this->categoryFactory,
             $this->storeManager,
             $this->collectionFactory,
-            $this->categoryRepository
+            $this->categoryRepository,
+            $this->escaper
         );
     }
 
@@ -101,6 +111,9 @@ class CategoryTest extends TestCase
         $this->requestMock->expects($this->any())
             ->method('getParams')
             ->willReturn($params);
+        $this->escaper->expects($this->any())
+            ->method('escapeUrl')
+            ->willReturn($expectedCategoryUrl);
         $actualCategoryUrl = $this->categoryHelper->getCanonicalUrl($categoryUrl);
         $this->assertEquals($actualCategoryUrl, $expectedCategoryUrl);
     }
