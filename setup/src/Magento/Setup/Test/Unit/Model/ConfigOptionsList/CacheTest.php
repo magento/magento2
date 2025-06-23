@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\Cache;
 use Magento\Setup\Model\ConfigOptionsList\Cache as CacheConfigOptionsList;
 use Magento\Setup\Validator\RedisConnectionValidator;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +41,9 @@ class CacheTest extends TestCase
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
-        $this->configOptionsList = new CacheConfigOptionsList($this->validatorMock);
+        $this->configOptionsList = new CacheConfigOptionsList(
+            $this->validatorMock
+        );
     }
 
     /**
@@ -48,8 +51,12 @@ class CacheTest extends TestCase
      */
     public function testGetOptions()
     {
+        $this->deploymentConfigMock->method('get')
+            ->with(Cache::CONFIG_PATH_CACHE_BACKEND)
+            ->willReturn(Cache::CONFIG_VALUE_CACHE_REDIS);
+
         $options = $this->configOptionsList->getOptions();
-        $this->assertCount(11, $options);
+        $this->assertCount(19, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -89,11 +96,43 @@ class CacheTest extends TestCase
 
         $this->assertArrayHasKey(9, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[9]);
-        $this->assertEquals('cache-id-prefix', $options[9]->getName());
+        $this->assertEquals('cache-backend-valkey-server', $options[9]->getName());
 
         $this->assertArrayHasKey(10, $options);
-        $this->assertInstanceOf(FlagConfigOption::class, $options[10]);
-        $this->assertEquals('allow-parallel-generation', $options[10]->getName());
+        $this->assertInstanceOf(TextConfigOption::class, $options[10]);
+        $this->assertEquals('cache-backend-valkey-db', $options[10]->getName());
+
+        $this->assertArrayHasKey(11, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[11]);
+        $this->assertEquals('cache-backend-valkey-port', $options[11]->getName());
+
+        $this->assertArrayHasKey(12, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[12]);
+        $this->assertEquals('cache-backend-valkey-password', $options[12]->getName());
+
+        $this->assertArrayHasKey(13, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[13]);
+        $this->assertEquals('cache-backend-valkey-compress-data', $options[13]->getName());
+
+        $this->assertArrayHasKey(14, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[14]);
+        $this->assertEquals('cache-backend-valkey-compression-lib', $options[14]->getName());
+
+        $this->assertArrayHasKey(15, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[15]);
+        $this->assertEquals('cache-backend-valkey-use-lua', $options[15]->getName());
+
+        $this->assertArrayHasKey(16, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[16]);
+        $this->assertEquals('cache-backend-valkey-use-lua-on-gc', $options[16]->getName());
+
+        $this->assertArrayHasKey(17, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[17]);
+        $this->assertEquals('cache-id-prefix', $options[17]->getName());
+
+        $this->assertArrayHasKey(18, $options);
+        $this->assertInstanceOf(FlagConfigOption::class, $options[18]);
+        $this->assertEquals('allow-parallel-generation', $options[18]->getName());
     }
 
     /**
@@ -232,13 +271,39 @@ class CacheTest extends TestCase
     }
 
     /**
-     * testValidateWithValidInput
+     * testValidateWithValidRedisInput
      */
-    public function testValidateWithValidInput()
+    public function testValidateWithValidRedisInput()
     {
         $options = [
             'cache-backend' => 'redis',
             'cache-backend-redis-server' => 'localhost',
+            'page-cache' => 'redis'
+        ];
+        $this->validatorMock->expects($this->once())
+            ->method('isValidConnection')
+            ->with([
+                'host' => 'localhost',
+                'db' => '',
+                'port' => '',
+                'password' => '',
+            ])
+            ->willReturn(true);
+
+        $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);
+
+        $this->assertEmpty($errors);
+    }
+
+    /**
+     * testValidateWithValidValkyInput
+     */
+    public function testValidateWithValidValkyInput()
+    {
+        $options = [
+            'cache-backend' => 'valkey',
+            'cache-backend-valkey-server' => 'localhost',
+            'page-cache' => 'valkey'
         ];
         $this->validatorMock->expects($this->once())
             ->method('isValidConnection')
