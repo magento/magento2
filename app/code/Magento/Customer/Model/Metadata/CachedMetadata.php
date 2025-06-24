@@ -38,7 +38,7 @@ class CachedMetadata implements MetadataInterface
      */
     public function __construct(
         MetadataInterface $metadata,
-        AttributeMetadataCache $attributeMetadataCache = null
+        ?AttributeMetadataCache $attributeMetadataCache = null
     ) {
         $this->metadata = $metadata;
         $this->attributeMetadataCache = $attributeMetadataCache ?: ObjectManager::getInstance()

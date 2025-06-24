@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
@@ -27,7 +27,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         $connectionName = null,
-        Attribute $attributeResource = null
+        ?Attribute $attributeResource = null
     ) {
         parent::__construct($context, $connectionName);
         $this->attributeResource = $attributeResource ?: ObjectManager::getInstance()->get(Attribute::class);
@@ -156,12 +156,12 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function saveNewObject(AbstractModel $object)
     {
         try {
-            return parent::saveNewObject($object);
+            parent::saveNewObject($object);
         } catch (DuplicateException $e) {
             throw new AttributeGroupAlreadyExistsException(
                 __(
@@ -173,12 +173,12 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function updateObject(AbstractModel $object)
     {
         try {
-            return parent::updateObject($object);
+            parent::updateObject($object);
         } catch (DuplicateException $e) {
             throw new AttributeGroupAlreadyExistsException(
                 __(

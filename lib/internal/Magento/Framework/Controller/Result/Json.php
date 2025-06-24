@@ -40,7 +40,7 @@ class Json extends AbstractResult
      */
     public function __construct(
         InlineInterface $translateInline,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->translateInline = $translateInline;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()

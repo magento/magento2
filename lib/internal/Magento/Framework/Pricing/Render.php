@@ -110,7 +110,7 @@ class Render extends AbstractBlock
     public function renderAmount(
         AmountInterface $amount,
         PriceInterface $price,
-        SaleableInterface $saleableItem = null,
+        ?SaleableInterface $saleableItem = null,
         array $arguments = []
     ) {
         $useArguments = array_replace($this->_data, $arguments);

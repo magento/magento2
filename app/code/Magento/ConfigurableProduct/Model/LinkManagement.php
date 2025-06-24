@@ -76,10 +76,10 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
-        \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor = null,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory = null,
-        \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory = null
+        ?\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
+        ?\Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor = null,
+        ?\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory = null,
+        ?\Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;

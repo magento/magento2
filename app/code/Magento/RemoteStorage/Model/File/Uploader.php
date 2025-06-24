@@ -45,12 +45,12 @@ class Uploader extends \Magento\Framework\File\Uploader
      */
     public function __construct(
         $fileId,
-        Mime $fileMime = null,
-        DirectoryList $directoryList = null,
-        DriverPool $driverPool = null,
-        TargetDirectory $targetDirectory = null,
-        Filesystem $filesystem = null,
-        Config $config = null
+        ?Mime $fileMime = null,
+        ?DirectoryList $directoryList = null,
+        ?DriverPool $driverPool = null,
+        ?TargetDirectory $targetDirectory = null,
+        ?Filesystem $filesystem = null,
+        ?Config $config = null
     ) {
         $targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
         $filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);

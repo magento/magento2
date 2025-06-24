@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -162,7 +162,7 @@ class AsyncBulkAccountManagementTest extends WebapiAbstract
         $message = $parser->fromString($mailContent);
         $this->assertStringContainsString(
             'Bienvenue sur Le Site de Paris.',
-            $message->getMessageBody()->getParts()[0]->getRawContent()
+            quoted_printable_decode($message->getSymfonyMessage()->getBody()->bodyToString())
         );
     }
 

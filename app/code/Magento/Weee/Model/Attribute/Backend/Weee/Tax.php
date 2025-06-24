@@ -50,7 +50,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Weee\Model\ResourceModel\Attribute\Backend\Weee\Tax $attributeTax,
-        ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_directoryHelper = $directoryHelper;
         $this->_storeManager = $storeManager;

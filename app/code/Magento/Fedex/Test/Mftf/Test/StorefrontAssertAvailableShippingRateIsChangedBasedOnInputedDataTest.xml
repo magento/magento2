@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright 2024 Adobe
+  * Copyright 2025 Adobe
   * All Rights Reserved.
   */
 -->
@@ -16,6 +16,7 @@
             <description value="Testcase verifies On storefront Available shipping rate is changed on fly according to inputed data"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-9283"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct" stepKey="createProduct">

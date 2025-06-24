@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -99,7 +99,7 @@ class Product implements ResetAfterRequestInterface
      * @param null|ContextInterface $context
      * @return array
      */
-    public function getProductBySku(string $sku, ContextInterface $context = null) : array
+    public function getProductBySku(string $sku, ?ContextInterface $context = null) : array
     {
         if (isset($this->productList[$sku])) {
             return $this->productList[$sku];
@@ -119,7 +119,7 @@ class Product implements ResetAfterRequestInterface
      *
      * @param null|ContextInterface $context
      */
-    private function fetch(ContextInterface $context = null): void
+    private function fetch(?ContextInterface $context = null): void
     {
         if (empty($this->productSkus)) {
             return;

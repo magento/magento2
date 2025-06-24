@@ -18,7 +18,7 @@ class CartSearchResults extends AbstractSimpleObject implements CartSearchResult
     /**
      * @inheritdoc
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this->setData(self::KEY_ITEMS, $items);
     }

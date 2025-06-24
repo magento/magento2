@@ -68,8 +68,8 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
         ShipmentTrackInterfaceFactory $trackFactory,
         ShipmentTrackSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        CollectionFactory $shipmentCollection = null,
-        LoggerInterface $logger = null
+        ?CollectionFactory $shipmentCollection = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->trackResource = $trackResource;
         $this->trackFactory = $trackFactory;

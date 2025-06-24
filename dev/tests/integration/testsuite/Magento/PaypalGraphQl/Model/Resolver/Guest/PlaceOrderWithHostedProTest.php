@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -118,10 +118,6 @@ class PlaceOrderWithHostedProTest extends TestCase
       order {
         order_number
       }
-      errors {
-        message
-        code
-      }
     }
 }
 QUERY;
@@ -196,25 +192,21 @@ QUERY;
       order {
         order_number
       }
-      errors {
-        message
-        code
-      }
     }
 }
 QUERY;
 
         $exceptionMessage = 'Declined response message from PayPal gateway';
         $exception = new LocalizedException(__($exceptionMessage));
-        $expectedErrorCode = 'UNDEFINED';
+        $expectedErrorCode = 'UNABLE_TO_PLACE_ORDER';
 
         $this->nvpMock->method('call')->willThrowException($exception);
 
         $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
-        $this->assertArrayHasKey('errors', $responseData['data']['placeOrder']);
-        $actualError = $responseData['data']['placeOrder']['errors'][0];
-        $this->assertEquals($expectedErrorCode, $actualError['code']);
+        $this->assertArrayHasKey('errors', $responseData);
+        $actualError = $responseData['errors'][0];
+        $this->assertEquals($expectedErrorCode, $actualError['extensions']['error_code']);
     }
 
     /**

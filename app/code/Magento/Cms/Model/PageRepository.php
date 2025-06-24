@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cms\Model;
@@ -119,7 +119,7 @@ class PageRepository implements PageRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null,
+        ?CollectionProcessorInterface $collectionProcessor = null,
         ?IdentityMap $identityMap = null,
         ?HydratorInterface $hydrator = null,
         ?Config $routeConfig = null

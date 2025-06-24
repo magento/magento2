@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\ResourceModel\Entity;
@@ -74,7 +74,7 @@ class Attribute extends AbstractDb
         StoreManagerInterface $storeManager,
         Type $eavEntityType,
         $connectionName = null,
-        PoisonPillPutInterface $pillPut = null
+        ?PoisonPillPutInterface $pillPut = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavEntityType = $eavEntityType;
@@ -400,7 +400,11 @@ class Attribute extends AbstractDb
         }
 
         if ($object->getDefaultValue()) {
-            $defaultValue[] = $object->getDefaultValue();
+            $frontendInput = $object->getFrontendInput();
+            if ($frontendInput === 'multiselect') {
+                $defaultValue =
+                    array_unique(array_merge($defaultValue, explode(",", $object->getDefaultValue())));
+            }
         }
 
         $this->_saveDefaultValue($object, $defaultValue);

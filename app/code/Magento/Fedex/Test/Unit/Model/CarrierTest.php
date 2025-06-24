@@ -22,6 +22,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
+use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -49,6 +50,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\CacheInterface;
 
 /**
  * CarrierTest contains units test for Fedex carrier methods
@@ -103,11 +105,6 @@ class CarrierTest extends TestCase
     private Json $serializer;
 
     /**
-     * @var LoggerInterface|MockObject
-     */
-    private LoggerInterface $logger;
-
-    /**
      * @var CurrencyFactory|MockObject
      */
     private CurrencyFactory $currencyFactory;
@@ -133,6 +130,11 @@ class CarrierTest extends TestCase
     private DecoderInterface $decoderInterface;
 
     /**
+     * @var CacheInterface|MockObject
+     */
+    private $cacheMock;
+
+    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -142,10 +144,6 @@ class CarrierTest extends TestCase
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
-        $this->scope->expects($this->any())
-            ->method('getValue')
-            ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
         $countryFactory = $this->getCountryFactory();
         $rateFactory = $this->getRateFactory();
@@ -193,7 +191,7 @@ class CarrierTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->curlFactory = $this->getMockBuilder(CurlFactory::class)
             ->disableOriginalConstructor()
@@ -210,13 +208,16 @@ class CarrierTest extends TestCase
             ->onlyMethods(['decode'])
             ->getMock();
 
+        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
+            ->onlyMethods(['load', 'save'])
+            ->getMockForAbstractClass();
         $this->carrier = $this->getMockBuilder(Carrier::class)
             ->addMethods(['rateRequest'])
             ->setConstructorArgs(
                 [
                     'scopeConfig' => $this->scope,
                     'rateErrorFactory' => $this->errorFactory,
-                    'logger' => $this->logger,
+                    'logger' => $logger,
                     'xmlSecurity' => new Security(),
                     'xmlElFactory' => $elementFactory,
                     'rateFactory' => $rateFactory,
@@ -233,6 +234,7 @@ class CarrierTest extends TestCase
                     'productCollectionFactory' => $this->collectionFactory,
                     'curlFactory' => $this->curlFactory,
                     'decoderInterface' => $this->decoderInterface,
+                    'cache' => $this->cacheMock,
                     'data' => [],
                     'serializer' => $this->serializer,
                 ]
@@ -254,6 +256,7 @@ class CarrierTest extends TestCase
     /**
      * @return void
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testRequestToShipmentSuccess(): void
     {
@@ -293,6 +296,11 @@ class CarrierTest extends TestCase
         ];
         $storeId = 1;
         $phoneNumber = '1234567890';
+
+        $this->scope->expects($this->any())
+            ->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
+
         $request->expects($this->once())->method('getPackages')->willReturn($packages);
         $request->expects($this->exactly(3))->method('getStoreId')->willReturn($storeId);
         $request->expects($this->once())->method('setPackageId');
@@ -355,6 +363,10 @@ class CarrierTest extends TestCase
 
     public function testSetRequestWithoutCity(): void
     {
+        $this->scope->expects($this->any())
+            ->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
+
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
             ->addMethods(['getDestCity'])
@@ -367,6 +379,10 @@ class CarrierTest extends TestCase
 
     public function testSetRequestWithCity(): void
     {
+        $this->scope->expects($this->any())
+            ->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
+
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
             ->addMethods(['getDestCity'])
@@ -391,8 +407,33 @@ class CarrierTest extends TestCase
             'carriers/fedex/debug' => 1,
             'carriers/fedex/api_key' => 'TestApiKey',
             'carriers/fedex/secret_key' => 'TestSecretKey',
+            'carriers/fedex/enabled_tracking_api' => 0,
             'carriers/fedex/rest_sandbox_webservices_url' => 'https://rest.sandbox.url/',
-            'carriers/fedex/rest_production_webservices_url' => 'https://rest.production.url/',
+            'carriers/fedex/rest_production_webservices_url' => 'https://rest.production.url/'
+        ];
+
+        return $pathMap[$path] ?? null;
+    }
+
+    /**
+     * Callback function, emulates getValue function for tracking api flow
+     *
+     * @param string $path
+     * @return int|string|null
+     */
+    public function scopeConfigGetValueForTracking(string $path): int|string|null
+    {
+        $pathMap = [
+            'carriers/fedex/showmethod' => 1,
+            'carriers/fedex/allowed_methods' => 'ServiceType',
+            'carriers/fedex/debug' => 1,
+            'carriers/fedex/api_key' => 'TestApiKey',
+            'carriers/fedex/secret_key' => 'TestSecretKey',
+            'carriers/fedex/enabled_tracking_api' => 1,
+            'carriers/fedex/tracking_api_key' => 'TestTrackingApiKey',
+            'carriers/fedex/tracking_api_secret_key' => 'TestTrackingSecretKey',
+            'carriers/fedex/rest_sandbox_webservices_url' => 'https://rest.sandbox.url/',
+            'carriers/fedex/rest_production_webservices_url' => 'https://rest.production.url/'
         ];
 
         return $pathMap[$path] ?? null;
@@ -416,6 +457,10 @@ class CarrierTest extends TestCase
         $this->scope->expects($this->any())
             ->method('isSetFlag')
             ->willReturn(true);
+
+        $this->scope->expects($this->any())
+            ->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
         $accessTokenResponse = $this->getAccessToken();
         $rateResponse = $this->getRateResponse($amount, $currencyCode, $rateType);
@@ -514,6 +559,10 @@ class CarrierTest extends TestCase
         $this->scope->expects($this->once())
             ->method('isSetFlag')
             ->willReturn(false);
+
+        $this->scope->expects($this->any())
+            ->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
 
         $this->error->expects($this->once())
             ->method('setCarrier')
@@ -893,13 +942,24 @@ class CarrierTest extends TestCase
      * @param string $shipTimeStamp
      * @param string $expectedDate
      * @param string $expectedTime
+     * @param bool $trackingEnabled
      * @dataProvider shipDateDataProvider
      */
-    public function testGetTracking($tracking, $shipTimeStamp, $expectedDate, $expectedTime): void
+    public function testGetTracking($tracking, $shipTimeStamp, $expectedDate, $expectedTime, $trackingEnabled): void
     {
         $trackRequest = $this->getTrackRequest($tracking);
         $trackResponse = $this->getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime);
         $accessTokenResponse = $this->getAccessToken();
+
+        if ($trackingEnabled) {
+            $this->scope->expects($this->atLeast(1))
+                ->method('getValue')
+                ->willReturnCallback([$this, 'scopeConfigGetValueForTracking']);
+        } else {
+            $this->scope->expects($this->any())
+                ->method('getValue')
+                ->willReturnCallback([$this, 'scopeConfigGetValue']);
+        }
 
         $this->serializer->method('serialize')->willReturn(json_encode($trackRequest));
         $this->serializer->expects($this->any())
@@ -942,6 +1002,242 @@ class CarrierTest extends TestCase
     }
 
     /**
+     * Test getCode with invalid type
+     */
+    public function testGetCodeWithInvalidType(): void
+    {
+        $result = $this->carrier->getCode('invalid_type');
+        $this->assertFalse($result, 'Should return false for invalid type');
+    }
+
+    /**
+     * Test getCode with valid type and no code (returns all codes)
+     */
+    public function testGetCodeWithValidTypeNoCode(): void
+    {
+        $result = $this->carrier->getCode('method');
+        $this->assertIsArray($result, 'Should return array of all method codes');
+        $this->assertArrayHasKey('FEDEX_INTERNATIONAL_PRIORITY', $result);
+        $this->assertArrayHasKey('FEDEX_INTERNATIONAL_PRIORITY_EXPRESS', $result);
+        $this->assertEquals(__('International Priority'), $result['FEDEX_INTERNATIONAL_PRIORITY']);
+    }
+
+    /**
+     * Test getCode with valid type and valid code
+     */
+    public function testGetCodeWithValidTypeAndCode(): void
+    {
+        $result = $this->carrier->getCode('method', 'FEDEX_INTERNATIONAL_PRIORITY');
+        $this->assertInstanceOf(
+            \Magento\Framework\Phrase::class,
+            $result,
+            'Should return Phrase object for valid method code'
+        );
+        $this->assertEquals('International Priority', $result->getText());
+    }
+
+    /**
+     * Test getCode with valid type and invalid code
+     */
+    public function testGetCodeWithValidTypeAndInvalidCode(): void
+    {
+        $result = $this->carrier->getCode('method', 'INVALID_CODE');
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Test getCode with packaging type
+     */
+    public function testGetCodeWithPackagingType(): void
+    {
+        $result = $this->carrier->getCode('packaging', 'FEDEX_ENVELOPE');
+        $this->assertInstanceOf(
+            \Magento\Framework\Phrase::class,
+            $result,
+            'Should return Phrase object for valid packaging code'
+        );
+        $this->assertEquals('FedEx Envelope', $result->getText());
+    }
+
+    /**
+     * Test getCode with dropoff type and empty code
+     */
+    public function testGetCodeWithDropoffTypeNoCode(): void
+    {
+        $result = $this->carrier->getCode('dropoff');
+        $this->assertIsArray($result, 'Should return array of all dropoff codes');
+        $this->assertArrayHasKey('REGULAR_PICKUP', $result);
+        $this->assertEquals(__('Regular Pickup'), $result['REGULAR_PICKUP']);
+    }
+
+    /**
+     * Test get access token from cache
+     */
+    public function testCollectRatesWithCachedAccessToken(): void
+    {
+        $apiKey = 'TestApiKey';
+        $secretKey = 'TestSecretKey';
+        $accessToken = 'CachedTestAccessToken';
+        $cacheKey = 'fedex_access_token_' . hash('sha256', $apiKey . $secretKey);
+        $expiresAt = time() + 3600;
+        $cachedData = json_encode([
+            'access_token' => $accessToken,
+            'expires_at' => $expiresAt
+        ]);
+        $this->scope->expects($this->any())
+            ->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
+        $this->scope->expects($this->exactly(2))
+            ->method('isSetFlag')
+            ->willReturn(true);
+
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with($cacheKey)
+            ->willReturn($cachedData);
+
+        $rateResponseMock = [
+            'output' => [
+                'rateReplyDetails' => [
+                    [
+                        'serviceType' => 'FEDEX_GROUND',
+                        'ratedShipmentDetails' => [
+                            [
+                                'totalNetCharge' => '28.75',
+                                'currency' => 'USD',
+                                'ratedPackages' => [
+                                    ['packageRateDetail' => ['rateType' => 'RATED_ACCOUNT_PACKAGE']]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->willReturn(json_encode(['mocked_request' => 'data']));
+        $this->serializer->expects($this->once())
+            ->method('unserialize')
+            ->willReturn($rateResponseMock);
+        $this->curlFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->curlClient);
+        $this->curlClient->expects($this->once())
+            ->method('setHeaders')
+            ->willReturnSelf();
+        $this->curlClient->expects($this->once())
+            ->method('post')
+            ->willReturnSelf();
+        $this->curlClient->expects($this->once())
+            ->method('getBody')
+            ->willReturn(json_encode($rateResponseMock));
+        $request = $this->getMockBuilder(RateRequest::class)
+            ->addMethods(['getBaseCurrency', 'getPackageWeight'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $request->method('getPackageWeight')
+            ->willReturn(10.0);
+        $result = $this->carrier->collectRates($request);
+        $this->assertInstanceOf(RateResult::class, $result);
+        $rates = $result->getAllRates();
+        $this->assertNotEmpty($rates);
+    }
+
+    /**
+     * Test getTracking when a new access token is requested and saved to cache
+     */
+    public function testGetTrackingWithNewAccessTokenSavedToCache(): void
+    {
+        $apiKey = 'TestApiKey';
+        $secretKey = 'TestSecretKey';
+        $accessToken = 'NewTrackingTestAccessToken';
+        $cacheKey = 'fedex_access_token_' . hash('sha256', $apiKey . $secretKey);
+        $expiresIn = 3600;
+        $cacheType = 'fedex_api';
+        $tokenResponse = [
+            'access_token' => $accessToken,
+            'expires_in' => $expiresIn
+        ];
+        $trackingNumber = '123456789012';
+        $this->scope->expects($this->any())
+            ->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
+        $this->cacheMock->expects($this->once())
+            ->method('load')
+            ->with($cacheKey)
+            ->willReturn(false);
+        $this->cacheMock->expects($this->once())
+            ->method('save')
+            ->with(
+                $this->callback(function ($data) use ($accessToken, $expiresIn) {
+                    $decoded = json_decode($data, true);
+                    return $decoded['access_token'] === $accessToken &&
+                        $decoded['expires_at'] <= (time() + $expiresIn) &&
+                        $decoded['expires_at'] > time();
+                }),
+                $cacheKey,
+                [$cacheType],
+                $expiresIn
+            )
+            ->willReturn(true);
+        $curlTokenClient = $this->createMock(ClientInterface::class);
+        $this->curlFactory->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($curlTokenClient, $this->curlClient);
+        $curlTokenClient->expects($this->once())
+            ->method('setHeaders')
+            ->willReturnSelf();
+        $curlTokenClient->expects($this->once())
+            ->method('post')
+            ->willReturnSelf();
+        $curlTokenClient->expects($this->once())
+            ->method('getBody')
+            ->willReturn(json_encode($tokenResponse));
+        $trackingResponse = $this->getTrackingResponse();
+        $trackingStatusMock = $this->getMockBuilder(Status::class)
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setTracking'])
+            ->onlyMethods(['addData'])
+            ->getMock();
+        $this->statusFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($trackingStatusMock);
+        $trackingStatusMock->expects($this->once())
+            ->method('setCarrier')
+            ->with(Carrier::CODE)
+            ->willReturnSelf();
+        $trackingStatusMock->expects($this->once())
+            ->method('setCarrierTitle')
+            ->willReturnSelf();
+        $trackingStatusMock->expects($this->once())
+            ->method('setTracking')
+            ->with($trackingNumber)
+            ->willReturnSelf();
+        $trackingStatusMock->expects($this->once())
+            ->method('addData')
+            ->willReturnSelf();
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->willReturn(json_encode($this->getTrackRequest($trackingNumber)));
+        $this->serializer->expects($this->exactly(2))
+            ->method('unserialize')
+            ->willReturnOnConsecutiveCalls($tokenResponse, $trackingResponse);
+        $this->curlClient->expects($this->once())
+            ->method('setHeaders')
+            ->willReturnSelf();
+        $this->curlClient->expects($this->once())
+            ->method('post')
+            ->willReturnSelf();
+        $this->curlClient->expects($this->once())
+            ->method('getBody')
+            ->willReturn(json_encode($trackingResponse));
+        $trackings = [$trackingNumber];
+        $result = $this->carrier->getTracking($trackings);
+        $this->assertInstanceOf(Result::class, $result);
+        $trackingsResult = $result->getAllTrackings();
+        $this->assertNotEmpty($trackingsResult);
+    }
+    /**
      * Gets list of variations for testing ship date.
      *
      * @return array
@@ -954,50 +1250,67 @@ class CarrierTest extends TestCase
                 'shipTimeStamp' => '2020-08-15T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
-                0,
+                false,
+                0
             ],
             'tracking1-again' => [
                 'tracking1',
                 'shipTimeStamp' => '2014-01-09T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
-                0,
+                false,
+                0
             ],
             'tracking2' => [
                 'tracking2',
                 'shipTimeStamp' => '2014-01-09T02:06:35+03:00',
                 'expectedDate' => '2014-01-09',
                 '23:06:35',
+                false,
+                0
             ],
             'tracking3' => [
                 'tracking3',
                 'shipTimeStamp' => '2014-01-09T14:06:35',
                 'expectedDate' => '2014-01-09',
                 '18:31:00',
+                false,
+                0
             ],
             'tracking4' => [
                 'tracking4',
                 'shipTimeStamp' => '2016-08-05 14:06:35',
                 'expectedDate' => null,
-                null,
+                '',
+                false,
             ],
             'tracking5' => [
                 'tracking5',
                 'shipTimeStamp' => '2016-08-05 14:06:35+00:00',
                 'expectedDate' => null,
-                null,
+                '',
+                false,
             ],
             'tracking6' => [
                 'tracking6',
                 'shipTimeStamp' => '2016-08-05',
                 'expectedDate' => null,
-                null,
+                '',
+                false,
             ],
             'tracking7' => [
                 'tracking7',
                 'shipTimeStamp' => '2016/08/05',
                 'expectedDate' => null,
-                null
+                '',
+                false,
+            ],
+            'tracking8' => [
+                'tracking8',
+                'shipTimeStamp' => '2024-09-19T02:06:35+03:00',
+                'expectedDate' => '2024-09-21',
+                '18:31:00',
+                true
             ],
         ];
     }
@@ -1173,5 +1486,30 @@ class CarrierTest extends TestCase
                 'getPackageParams'
             ])
             ->getMock();
+    }
+
+    /**
+     * @return array
+     */
+    private function getTrackingResponse(): array
+    {
+        return  [
+                'output' => [
+                    'completeTrackResults' => [
+                        [
+                            'trackingNumber' => '123456789012',
+                            'trackResults' => [
+                                [
+                                    'trackingNumberInfo' => ['trackingNumber' => '123456789012'],
+                                    'statusDetail' => ['description' => 'Delivered'],
+                                    'dateAndTimes' => [
+                                        ['type' => 'ACTUAL_DELIVERY', 'dateTime' => '2025-05-20T10:00:00Z']
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
     }
 }

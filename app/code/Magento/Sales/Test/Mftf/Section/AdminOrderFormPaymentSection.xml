@@ -35,5 +35,8 @@
         <element name="selectPaymentMethod" type="radio" selector="//div[@id='order-billing_method_form']//input[@title='Check / Money order']"/>
         <element name="checkMoneyOrderText" type="text" selector="//div[@id='order-billing_method_form']//dl//dt//label[contains(text(),'Check / Money order')]"/>
         <element name="upsOption" type="radio" selector="//label[contains(text(),'UPS Worldwide Expedited -')]//ancestor::label[@class='admin__field-label']"/>
+        <element name="DHLShipping" type="text" selector="//dd[@class='admin__order-shipment-methods-options' and contains(text(),'{{paymentMethodName}}')]" parameterized="true"/>
+        <element name="shippingMethodName" type="text" selector="//*[contains(text(), '{{paymentMethodName}}')]" parameterized="true"/>
+        <element name="verifyCheckMoneyPayment" type="text" selector="//label[@for='p_method_checkmo']"/>
     </section>
 </sections>
