@@ -51,5 +51,6 @@
         <element name="dropDownQuantityValidation" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input/following-sibling::div[@class='mage-error']" parameterized="true"/>
         <element name="radioButtonQuantityValidation" type="input" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field qty qty-holder']//input/following-sibling::div[@class='mage-error']" parameterized="true"/>
         <element name="dropDrownOptionQuantity" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input/following-sibling::div//div//div//input" parameterized="true"/>
+        <element name="selectOptionError" type="text" selector="//div[contains(@class, 'field')]//div[contains(@class, 'mage-error')]"/>
     </section>
 </sections>
