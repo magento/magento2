@@ -60,8 +60,8 @@ class ProductReviewRatingsMetadata implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (false === $this->reviewsConfig->isEnabled()) {
             return ['items' => []];

@@ -152,12 +152,12 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\SalesRule\Model\Validator\Pool $validators,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ?CartFixedDiscount $cartFixedDiscount = null,
-        StoreManagerInterface $storeManager = null,
-        ValidateCouponCode $validateCouponCode = null
+        ?StoreManagerInterface $storeManager = null,
+        ?ValidateCouponCode $validateCouponCode = null
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_catalogData = $catalogData;
@@ -248,7 +248,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      * @return RulesCollection
      * @throws \Zend_Db_Select_Exception
      */
-    protected function _getRules(Address $address = null)
+    protected function _getRules(?Address $address = null)
     {
         return $this->getRules($address);
     }
@@ -260,7 +260,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      * @return RulesCollection
      * @throws \Zend_Db_Select_Exception
      */
-    public function getRules(Address $address = null)
+    public function getRules(?Address $address = null)
     {
         $addressId = $this->getAddressId($address);
         $key = $this->getCacheKey($addressId);
@@ -743,7 +743,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      * @return array $items
      * @throws \Zend_Db_Select_Exception
      */
-    public function sortItemsByPriority($items, Address $address = null)
+    public function sortItemsByPriority($items, ?Address $address = null)
     {
         $itemsSorted = [];
         /** @var $rule Rule */

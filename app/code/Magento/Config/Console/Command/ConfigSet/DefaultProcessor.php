@@ -61,7 +61,7 @@ class DefaultProcessor implements ConfigSetProcessorInterface
         PreparedValueFactory $preparedValueFactory,
         DeploymentConfig $deploymentConfig,
         ConfigPathResolver $configPathResolver,
-        ConfigFactory $configFactory = null
+        ?ConfigFactory $configFactory = null
     ) {
         $this->preparedValueFactory = $preparedValueFactory;
         $this->deploymentConfig = $deploymentConfig;

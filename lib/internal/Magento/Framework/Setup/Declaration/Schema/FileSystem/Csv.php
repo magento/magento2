@@ -70,7 +70,7 @@ class Csv implements \Magento\Framework\Setup\Declaration\Schema\DataSavior\Dump
         $fh = fopen($file, 'a');
 
         foreach ($data as $dataRow) {
-            fputcsv($fh, $dataRow);
+            fputcsv($fh, $dataRow,',','"','\\');
         }
 
         fclose($fh);
@@ -126,8 +126,8 @@ class Csv implements \Magento\Framework\Setup\Declaration\Schema\DataSavior\Dump
         $data = [];
         $iterator = 0;
         $fh = fopen($file, 'r');
-        $headers = fgetcsv($fh);
-        $rowData = fgetcsv($fh);
+        $headers = fgetcsv($fh, null, ',', '"', '\\');
+        $rowData = fgetcsv($fh, null, ',', '"', '\\');
 
         while ($rowData) {
             if ($iterator++ > $this->baseBatchSize) {
@@ -138,7 +138,7 @@ class Csv implements \Magento\Framework\Setup\Declaration\Schema\DataSavior\Dump
             }
 
             $data[] = $rowData;
-            $rowData = fgetcsv($fh);
+            $rowData = fgetcsv($fh, null, ',', '"', '\\');
         }
 
         fclose($fh);

@@ -44,6 +44,12 @@
             <!-- Check Use Default checkbox for Default Condition and Active -->
             <checkOption selector="{{AdminShippingMethodTableRatesSection.carriersTableRateConditionName}}" stepKey="enableUseDefaultCondition"/>
             <checkOption selector="{{AdminShippingMethodTableRatesSection.enabledUseSystemValue}}" stepKey="enableUseDefaultActive"/>
+            <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreView">
+                <argument name="website" value="_defaultWebsite"/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeTableRatesShippingMethodStatusActionGroup" stepKey="disableTableRatesShippingMethod">
+                <argument name="status" value="0"/>
+            </actionGroup>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

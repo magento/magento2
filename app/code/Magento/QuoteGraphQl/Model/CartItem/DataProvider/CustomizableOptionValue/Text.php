@@ -39,7 +39,7 @@ class Text implements CustomizableOptionValueInterface
      */
     public function __construct(
         PriceUnitLabel $priceUnitLabel,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->priceUnitLabel = $priceUnitLabel;
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()

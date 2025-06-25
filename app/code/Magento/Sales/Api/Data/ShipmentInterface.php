@@ -171,7 +171,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
      * @return $this
      */
-    public function setPackages(array $packages = null);
+    public function setPackages(?array $packages = null);
 
     /**
      * Gets the shipment status.

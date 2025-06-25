@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -157,9 +157,9 @@ class Bundle extends CatalogImportExportAbstractType implements
         AttributeCollectionFactory $prodAttrColFac,
         ResourceConnection $resource,
         array $params,
-        MetadataPool $metadataPool = null,
-        Bundle\RelationsDataSaver $relationsDataSaver = null,
-        StoreManagerInterface $storeManager = null
+        ?MetadataPool $metadataPool = null,
+        ?Bundle\RelationsDataSaver $relationsDataSaver = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params, $metadataPool);
 

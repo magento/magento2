@@ -224,7 +224,7 @@ class UpdateConfigurationsTest extends TestCase
      * @param bool $wasChanged
      * @return Product|MockObject
      */
-    protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
+    protected function getProductMock(?array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

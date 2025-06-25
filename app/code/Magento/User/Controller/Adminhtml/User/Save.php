@@ -29,7 +29,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
      *
      * @return SecurityCookie
      * @deprecated 100.1.0
-     * @see Nothing
+     * @see we don't recommend this approach anymore
      */
     private function getSecurityCookie()
     {
@@ -65,6 +65,14 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             return;
         }
         $model->setData($this->_getAdminUserData($data));
+        $errors = $model->validate();
+        if ($errors !== true && !empty($errors)) {
+            foreach ($errors as $error) {
+                $this->messageManager->addError($error);
+            }
+            $this->redirectToEdit($model, $data);
+            return $this->getResponse();
+        }
         $userRoles = $this->getRequest()->getParam('roles', []);
         if (count($userRoles)) {
             $model->setRoleId($userRoles[0]);
@@ -125,6 +133,8 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             }
             $this->redirectToEdit($model, $data);
         }
+
+        return $this->getResponse();
     }
 
     /**

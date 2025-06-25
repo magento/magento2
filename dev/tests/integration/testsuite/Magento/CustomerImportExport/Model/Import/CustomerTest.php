@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Import;
@@ -495,7 +495,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test customer indexer gets invalidated after import when Update on Schedule mode is set
      *
-     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture deleteAllCustomers
      * @return void
      */
     public function testCustomerIndexer(): void
@@ -507,6 +509,40 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
         $this->assertEquals(StateInterface::STATUS_VALID, $statusBeforeImport);
         $this->assertEquals(StateInterface::STATUS_INVALID, $statusAfterImport);
+    }
+
+    public static function deleteAllCustomers(): void
+    {
+        //Do nothing. we just need the rollback method to be called
+    }
+
+    public static function deleteAllCustomersRollback(): void
+    {
+        static::deleteAllCustomersInCsvFile(__DIR__ . '/_files/customers_with_gender_to_import.csv');
+    }
+
+    private static function deleteAllCustomersInCsvFile(string $file): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var CustomerRepositoryInterface $repository */
+        $repository = $objectManager->get(CustomerRepositoryInterface::class);
+        $rows = $objectManager->get(\Magento\Framework\File\Csv::class)->getData($file);
+        $header = array_shift($rows);
+        if ($header === false) {
+            return;
+        }
+        $emailIndex = array_search('email', $header);
+        if ($emailIndex === false) {
+            return;
+        }
+        foreach (array_column($rows, $emailIndex) as $email) {
+            try {
+                $customer = $repository->get(strtolower(trim($email)));
+                $repository->delete($customer);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+                continue;
+            }
+        }
     }
 
     /**

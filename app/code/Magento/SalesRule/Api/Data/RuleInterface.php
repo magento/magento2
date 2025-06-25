@@ -71,7 +71,7 @@ interface RuleInterface extends ExtensibleDataInterface
      * @param \Magento\SalesRule\Api\Data\RuleLabelInterface[]|null $storeLabels
      * @return $this
      */
-    public function setStoreLabels(array $storeLabels = null);
+    public function setStoreLabels(?array $storeLabels = null);
 
     /**
      * Get description
@@ -192,7 +192,7 @@ interface RuleInterface extends ExtensibleDataInterface
      * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $condition
      * @return $this
      */
-    public function setCondition(ConditionInterface $condition = null);
+    public function setCondition(?ConditionInterface $condition = null);
 
     /**
      * Get action condition
@@ -207,7 +207,7 @@ interface RuleInterface extends ExtensibleDataInterface
      * @param \Magento\SalesRule\Api\Data\ConditionInterface|null $actionCondition
      * @return $this
      */
-    public function setActionCondition(ConditionInterface $actionCondition = null);
+    public function setActionCondition(?ConditionInterface $actionCondition = null);
 
     /**
      * Whether to stop rule processing
@@ -254,7 +254,7 @@ interface RuleInterface extends ExtensibleDataInterface
      * @param int[]|null $productIds
      * @return $this
      */
-    public function setProductIds(array $productIds = null);
+    public function setProductIds(?array $productIds = null);
 
     /**
      * Get sort order

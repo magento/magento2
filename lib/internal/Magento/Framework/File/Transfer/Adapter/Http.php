@@ -40,7 +40,7 @@ class Http
     public function __construct(
         Response $response,
         Mime $mime,
-        HttpRequest $request = null
+        ?HttpRequest $request = null
     ) {
         $this->response = $response;
         $this->mime = $mime;

@@ -114,12 +114,12 @@ class Visitor extends AbstractModel
         ScopeConfigInterface $scopeConfig,
         DateTime $dateTime,
         IndexerRegistry $indexerRegistry,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $ignoredUserAgents = [],
         array $ignores = [],
         array $data = [],
-        RequestSafetyInterface $requestSafety = null
+        ?RequestSafetyInterface $requestSafety = null
     ) {
         $this->session = $session;
         $this->httpHeader = $httpHeader;

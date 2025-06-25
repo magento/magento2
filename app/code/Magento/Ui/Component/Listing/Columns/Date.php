@@ -64,8 +64,8 @@ class Date extends Column
         BooleanUtils $booleanUtils,
         array $components = [],
         array $data = [],
-        ResolverInterface $localeResolver = null,
-        DataBundle $dataBundle = null
+        ?ResolverInterface $localeResolver = null,
+        ?DataBundle $dataBundle = null
     ) {
         $this->timezone = $timezone;
         $this->booleanUtils = $booleanUtils;

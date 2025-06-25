@@ -33,9 +33,9 @@ class ProductsWithCustomOptionsSalesOrderPricesTest extends GraphQlAbstract
     private const PRODUCT_PRICE = 30;
     private const PRODUCT_SPECIAL_PRICE = 20;
     private const TAX_PERCENTAGE = 10;
-    private const POSTCODE = '36013';
 
     private const EMAIL = "guest@magento.com";
+    private const LASTNAME = "test shipLast";
 
     /**
      * @var DataFixtureStorageManager
@@ -219,7 +219,7 @@ class ProductsWithCustomOptionsSalesOrderPricesTest extends GraphQlAbstract
             $this->getQuery(
                 $order['placeOrder']['order']['order_number'],
                 self::EMAIL,
-                self::POSTCODE
+                self::LASTNAME
             )
         );
         self::assertEquals(
@@ -369,7 +369,7 @@ class ProductsWithCustomOptionsSalesOrderPricesTest extends GraphQlAbstract
             $this->getQuery(
                 $order['placeOrder']['order']['order_number'],
                 self::EMAIL,
-                self::POSTCODE
+                self::LASTNAME
             )
         );
         self::assertEquals(
@@ -390,17 +390,17 @@ class ProductsWithCustomOptionsSalesOrderPricesTest extends GraphQlAbstract
      *
      * @param string $number
      * @param string $email
-     * @param string $postcode
+     * @param string $lastname
      * @return string
      */
-    private function getQuery(string $number, string $email, string $postcode): string
+    private function getQuery(string $number, string $email, string $lastname): string
     {
         return <<<QUERY
 {
   guestOrder(input: {
       number: "{$number}",
       email: "{$email}",
-      postcode: "{$postcode}"
+      lastname: "{$lastname}"
   }) {
     items {
       prices {

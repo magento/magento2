@@ -46,8 +46,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory $quotesFactory,
-        DecoderInterface $urlDecoder = null,
-        Parameters $parameters = null,
+        ?DecoderInterface $urlDecoder = null,
+        ?Parameters $parameters = null,
         array $data = []
     ) {
         $this->_quotesFactory = $quotesFactory;

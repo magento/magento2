@@ -63,8 +63,8 @@ class Wishlist implements SectionSourceInterface
         \Magento\Wishlist\Block\Customer\Sidebar $block,
         \Magento\Catalog\Helper\ImageFactory $imageHelperFactory,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null,
-        StoreManagerInterface $storeManager = null
+        ?\Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface $itemResolver = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->imageHelperFactory = $imageHelperFactory;

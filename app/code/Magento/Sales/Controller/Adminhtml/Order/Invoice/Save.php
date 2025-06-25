@@ -78,7 +78,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         ShipmentSender $shipmentSender,
         ShipmentFactory $shipmentFactory,
         InvoiceService $invoiceService,
-        SalesData $salesData = null
+        ?SalesData $salesData = null
     ) {
         $this->registry = $registry;
         $this->invoiceSender = $invoiceSender;
