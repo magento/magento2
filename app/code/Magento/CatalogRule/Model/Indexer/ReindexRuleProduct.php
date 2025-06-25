@@ -129,6 +129,18 @@ class ReindexRuleProduct
                     continue;
                 }
 
+                if (isset($validationByWebsite['has_antecedent_rule'])) {
+                    $antecedentRuleProductList = array_keys(
+                        $connection->fetchAssoc(
+                            $connection->select()->from($indexTable)
+                                ->where('product_id = ?', $productId)
+                                ->where('rule_id NOT IN (?)', $rule->getId())
+                                ->where('sort_order = ?', $sortOrder)
+                        )
+                    );
+                    $connection->delete($indexTable, ['rule_product_id IN (?)' => $antecedentRuleProductList]);
+                }
+
                 foreach ($customerGroupIds as $customerGroupId) {
                     if (!array_key_exists($customerGroupId, $excludedWebsites)
                         || !in_array((int)$websiteId, array_values($excludedWebsites[$customerGroupId]), true)
