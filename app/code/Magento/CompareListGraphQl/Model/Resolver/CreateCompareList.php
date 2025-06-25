@@ -90,8 +90,8 @@ class CreateCompareList implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $customerId = $context->getUserId();
         $products = !empty($args['input']['products']) ? $args['input']['products'] : [];

@@ -54,7 +54,7 @@ class MaintenanceMode
     public function __construct(
         Filesystem $filesystem,
         private readonly Utility\IPAddress $ipAddress,
-        Manager $eventManager = null,
+        ?Manager $eventManager = null,
     ) {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(Manager::class);

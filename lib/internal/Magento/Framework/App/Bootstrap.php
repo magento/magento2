@@ -118,7 +118,7 @@ class Bootstrap
      * @param ObjectManagerFactory $factory
      * @return Bootstrap
      */
-    public static function create($rootDir, array $initParams, ObjectManagerFactory $factory = null)
+    public static function create($rootDir, array $initParams, ?ObjectManagerFactory $factory = null)
     {
         self::populateAutoloader($rootDir, $initParams);
         if ($factory === null) {

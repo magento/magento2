@@ -112,8 +112,6 @@ return [
         // TODO: Do we need resetState for the connection?
         Magento\Elasticsearch\SearchAdapter\ConnectionManager::class => ['client' => null],
         // TODO: Do we need resetState for the connection?
-        Magento\Elasticsearch7\Model\Client\Elasticsearch::class => ['client' => null],
-        // TODO: Do we need resetState for the connection?
         Magento\Webapi\Model\Authorization\TokenUserContext::class => ['request' => null],
         Magento\Framework\Json\Helper\Data::class => ['_request' => null],
         Magento\Directory\Helper\Data::class => ['_request' => null],

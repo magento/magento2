@@ -41,7 +41,7 @@ class Stock extends AddController implements HttpGetActionInterface
         Context $context,
         CustomerSession $customerSession,
         ProductRepositoryInterface $productRepository,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->productRepository = $productRepository;
         parent::__construct($context, $customerSession);

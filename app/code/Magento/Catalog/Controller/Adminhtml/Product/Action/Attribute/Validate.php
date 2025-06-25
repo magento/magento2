@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
@@ -10,9 +10,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute as AttributeAction;
 use Magento\Framework\App\ObjectManager;
 
-/**
- * Class Validate
- */
 class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
@@ -42,7 +39,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Eav\Model\Config $eavConfig = null
+        ?\Magento\Eav\Model\Config $eavConfig = null
     ) {
         parent::__construct($context, $attributeHelper);
         $this->resultJsonFactory = $resultJsonFactory;

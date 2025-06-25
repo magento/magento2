@@ -116,7 +116,7 @@ class AssociatedProducts
         CurrencyInterface $localeCurrency,
         JsonHelper $jsonHelper,
         ImageHelper $imageHelper,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;

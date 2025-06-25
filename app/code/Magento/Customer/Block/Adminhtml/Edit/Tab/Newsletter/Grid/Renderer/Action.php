@@ -35,7 +35,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = [],
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_coreRegistry = $registry;
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(

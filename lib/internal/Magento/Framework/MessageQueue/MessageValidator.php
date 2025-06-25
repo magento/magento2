@@ -24,7 +24,7 @@ class MessageValidator
     /**
      * @param CommunicationConfig|null $communicationConfig
      */
-    public function __construct(CommunicationConfig $communicationConfig = null)
+    public function __construct(?CommunicationConfig $communicationConfig = null)
     {
         $this->communicationConfig = $communicationConfig
             ?? ObjectManager::getInstance()->get(CommunicationConfig::class);

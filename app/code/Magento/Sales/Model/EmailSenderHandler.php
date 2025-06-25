@@ -93,8 +93,8 @@ class EmailSenderHandler
         EntityAbstract $entityResource,
         AbstractCollection $entityCollection,
         ScopeConfigInterface $globalConfig,
-        IdentityInterface $identityContainer = null,
-        StoreManagerInterface $storeManager = null,
+        ?IdentityInterface $identityContainer = null,
+        ?StoreManagerInterface $storeManager = null,
         ?ValueFactory $configValueFactory = null,
         ?string $modifyStartFromDate = null,
     ) {

@@ -39,9 +39,9 @@ class CookieScope implements CookieScopeInterface
      */
     public function __construct(
         CookieMetadataFactory $cookieMetadataFactory,
-        SensitiveCookieMetadata $sensitiveCookieMetadata = null,
-        PublicCookieMetadata $publicCookieMetadata = null,
-        CookieMetadata $deleteCookieMetadata = null
+        ?SensitiveCookieMetadata $sensitiveCookieMetadata = null,
+        ?PublicCookieMetadata $publicCookieMetadata = null,
+        ?CookieMetadata $deleteCookieMetadata = null
     ) {
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->sensitiveCookieMetadata = $sensitiveCookieMetadata;
@@ -56,7 +56,7 @@ class CookieScope implements CookieScopeInterface
      * @param SensitiveCookieMetadata|null $override
      * @return SensitiveCookieMetadata
      */
-    public function getSensitiveCookieMetadata(SensitiveCookieMetadata $override = null)
+    public function getSensitiveCookieMetadata(?SensitiveCookieMetadata $override = null)
     {
         if ($this->sensitiveCookieMetadata !== null) {
             $merged = $this->sensitiveCookieMetadata->__toArray();
@@ -77,7 +77,7 @@ class CookieScope implements CookieScopeInterface
      * @param PublicCookieMetadata|null $override
      * @return PublicCookieMetadata
      */
-    public function getPublicCookieMetadata(PublicCookieMetadata $override = null)
+    public function getPublicCookieMetadata(?PublicCookieMetadata $override = null)
     {
         if ($this->publicCookieMetadata !== null) {
             $merged = $this->publicCookieMetadata->__toArray();
@@ -98,7 +98,7 @@ class CookieScope implements CookieScopeInterface
      * @param CookieMetadata|null $override
      * @return CookieMetadata
      */
-    public function getCookieMetadata(CookieMetadata $override = null)
+    public function getCookieMetadata(?CookieMetadata $override = null)
     {
         if ($this->cookieMetadata !== null) {
             $merged = $this->cookieMetadata->__toArray();

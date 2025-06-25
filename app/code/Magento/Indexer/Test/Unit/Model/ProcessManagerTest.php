@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -204,6 +204,39 @@ class ProcessManagerTest extends TestCase
                 ],
                 'threadsCount' => 3,
             ],
+        ];
+    }
+
+    /**
+     * @dataProvider testIsMultiThreadsExecuteDataProvider
+     * @param $threadsCount
+     * @param $expectedResult
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testIsMultiThreadsExecute($threadsCount, $expectedResult): void
+    {
+        $connectionMock = $this->createMock(ResourceConnection::class);
+        $registryMock = $this->createMock(Registry::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
+        $processManager = new ProcessManager(
+            $connectionMock,
+            $registryMock,
+            $threadsCount,
+            $loggerMock,
+            $amqpConfigPoolMock
+        );
+        $this->assertEquals($expectedResult, $processManager->isMultiThreadsExecute());
+    }
+
+    public static function testIsMultiThreadsExecuteDataProvider(): array
+    {
+        return [
+            'threadsCount is null' => [null, false],
+            'threadsCount is 0' => [0, false],
+            'threadsCount is 1' => [1, false],
+            'threadsCount is 2' => [2, true],
         ];
     }
 }

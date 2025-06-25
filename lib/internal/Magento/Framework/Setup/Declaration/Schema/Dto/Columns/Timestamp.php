@@ -52,9 +52,9 @@ class Timestamp extends Column implements
         Table $table,
         string $default,
         bool $nullable = true,
-        string $onUpdate = null,
-        string $comment = null,
-        string $onCreate = null
+        ?string $onUpdate = null,
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->default = $default;

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
@@ -11,7 +10,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification implements HttpGetActionInterface
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     public function execute()
     {
@@ -23,6 +22,6 @@ class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification
             __('Messages Inbox')
         );
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Notifications'));
-        $this->_view->renderLayout();
+        return $this->_view->renderLayout();
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright 2024 Adobe
-  * All Rights Reserved.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -103,5 +103,13 @@
         <data key="storeView">Default Store View</data>
         <data key="checkboxText" unique="suffix">test_checkbox</data>
         <data key="content" unique="suffix">TestMessage</data>
+    </entity>
+    <entity name="manualHtmlTerm" type="term">
+        <data key="name" unique="suffix">Test HTML Condition</data>
+        <data key="isActive">Enabled</data>
+        <data key="isHtml">HTML</data>
+        <data key="mode">Manually</data>
+        <data key="checkboxText">&lt;mark&gt;Marked Terms and Conditions link for Additional sore View&lt;/mark&gt;</data>
+        <data key="content">&lt;ul&gt;&lt;li&gt;&lt;b&gt;bold text&lt;/b&gt;&lt;/li&gt;&lt;li&gt;&lt;i&gt;italic text&lt;/i&gt;&lt;/li&gt;&lt;/ul&gt;</data>
     </entity>
 </entities>

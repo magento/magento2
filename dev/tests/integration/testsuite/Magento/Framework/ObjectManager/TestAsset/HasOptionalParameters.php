@@ -51,8 +51,8 @@ class HasOptionalParameters
     public function __construct(
         TestAssetInterface $requiredInterfaceParameter,
         Basic $requiredObjectParameter,
-        TestAssetInterface $optionalInterfaceParameter = null,
-        Basic $optionalObjectParameter = null,
+        ?TestAssetInterface $optionalInterfaceParameter = null,
+        ?Basic $optionalObjectParameter = null,
         $optionalStringParameter = self::CONSTRUCTOR_STRING_PARAM_DEFAULT,
         $optionalIntegerParameter = self::CONSTRUCTOR_INT_PARAM_DEFAULT
     ) {

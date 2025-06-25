@@ -66,8 +66,8 @@ class CustomerManagement
         CustomerAddressRepository $customerAddressRepository,
         AccountManagement $accountManagement,
         AddressInterfaceFactory $customerAddressFactory,
-        ValidatorFactory $validatorFactory = null,
-        AddressFactory $addressFactory = null
+        ?ValidatorFactory $validatorFactory = null,
+        ?AddressFactory $addressFactory = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->customerAddressRepository = $customerAddressRepository;
@@ -163,6 +163,7 @@ class CustomerManagement
             $billingAddress = $quote->getBillingAddress();
             $customerAddress = $this->customerAddressFactory->create();
             $customerAddress->setFirstname($billingAddress->getFirstname());
+            $customerAddress->setMiddlename($billingAddress?->getMiddlename());
             $customerAddress->setLastname($billingAddress->getLastname());
             $customerAddress->setStreet($billingAddress->getStreet());
             $customerAddress->setCity($billingAddress->getCity());

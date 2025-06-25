@@ -50,7 +50,7 @@ class CouponCodeValidation implements ObserverInterface
         CodeLimitManagerInterface $codeLimitManager,
         CartRepositoryInterface $cartRepository,
         SearchCriteriaBuilder $criteriaBuilder,
-        SearchCriteriaBuilderFactory $criteriaBuilderFactory = null
+        ?SearchCriteriaBuilderFactory $criteriaBuilderFactory = null
     ) {
         $this->codeLimitManager = $codeLimitManager;
         $this->cartRepository = $cartRepository;

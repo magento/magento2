@@ -19,5 +19,5 @@ interface SectionPoolInterface
      * @param bool $forceNewTimestamp
      * @return array
      */
-    public function getSectionsData(array $sectionNames = null, $forceNewTimestamp = false);
+    public function getSectionsData(?array $sectionNames = null, $forceNewTimestamp = false);
 }

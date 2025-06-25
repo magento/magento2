@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,25 +22,13 @@ use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 class DeletePaymentToken implements ResolverInterface
 {
     /**
-     * @var PaymentTokenManagementInterface
-     */
-    private $paymentTokenManagement;
-
-    /**
-     * @var PaymentTokenRepositoryInterface
-     */
-    private $paymentTokenRepository;
-
-    /**
      * @param PaymentTokenManagementInterface $paymentTokenManagement
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      */
     public function __construct(
-        PaymentTokenManagementInterface $paymentTokenManagement,
-        PaymentTokenRepositoryInterface $paymentTokenRepository
+        private readonly PaymentTokenManagementInterface $paymentTokenManagement,
+        private readonly PaymentTokenRepositoryInterface $paymentTokenRepository
     ) {
-        $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->paymentTokenRepository = $paymentTokenRepository;
     }
 
     /**
@@ -50,8 +38,8 @@ class DeletePaymentToken implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {

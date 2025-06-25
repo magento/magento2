@@ -132,7 +132,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         UninstallCollector $collector,
         ModuleUninstaller $moduleUninstaller,
         ModuleRegistryUninstaller $moduleRegistryUninstaller,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         parent::__construct($objectManagerProvider);
         $this->composer = $composer;

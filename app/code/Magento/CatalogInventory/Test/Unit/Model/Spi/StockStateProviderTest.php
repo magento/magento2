@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -389,7 +389,7 @@ class StockStateProviderTest extends TestCase
      * @param array|null $options
      * @return array
      */
-    protected static function prepareDataForMethod($methodName, array $options = null)
+    protected static function prepareDataForMethod($methodName, ?array $options = null)
     {
         $variations = [];
         if ($options === null) {
