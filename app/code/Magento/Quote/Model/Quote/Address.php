@@ -374,11 +374,11 @@ class Address extends AbstractAddress implements
         Address\CustomAttributeListInterface $attributeList,
         TotalsCollector $totalsCollector,
         TotalsReader $totalsReader,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        StoreManagerInterface $storeManager = null,
+        ?Json $serializer = null,
+        ?StoreManagerInterface $storeManager = null,
         ?CompositeValidator $compositeValidator = null,
         ?CountryModelsCache $countryModelsCache = null,
         ?RegionModelsCache $regionModelsCache = null,
@@ -1032,7 +1032,7 @@ class Address extends AbstractAddress implements
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function requestShippingRates(AbstractItem $item = null)
+    public function requestShippingRates(?AbstractItem $item = null)
     {
         $storeId = $this->getQuote()->getStoreId() ?: $this->storeManager->getStore()->getId();
         $taxInclude = $this->_scopeConfig->getValue(

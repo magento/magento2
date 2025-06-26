@@ -30,9 +30,9 @@ class IdsContext implements ContextInterface
      * @param \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface|null $fetcher
      */
     public function __construct(
-        IdsTableBuilderInterface  $tableBuilder = null,
-        IdsSelectBuilderInterface $selectBuilder = null,
-        IdsFetcherInterface       $fetcher = null
+        ?IdsTableBuilderInterface  $tableBuilder = null,
+        ?IdsSelectBuilderInterface $selectBuilder = null,
+        ?IdsFetcherInterface       $fetcher = null
     ) {
         $this->tableBuilder = $tableBuilder ?: ObjectManager::getInstance()->get(IdsTableBuilder::class);
         $this->selectBuilder = $selectBuilder ?: ObjectManager::getInstance()->get(IdsSelectBuilder::class);

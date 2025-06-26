@@ -191,7 +191,7 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
      * @param string|null $errorMessage
      * @dataProvider updateItemDataProvider
      */
-    public function testUpdateItem(array $stockData, string $errorMessage = null)
+    public function testUpdateItem(array $stockData, ?string $errorMessage = null)
     {
         $this->updateStockData('simple_one', $stockData);
         /** @var Quote $quote */

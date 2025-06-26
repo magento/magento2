@@ -68,8 +68,8 @@ class WishlistById implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!$this->wishlistConfig->isEnabled()) {
             throw new GraphQlInputException(__('The wishlist configuration is currently disabled.'));

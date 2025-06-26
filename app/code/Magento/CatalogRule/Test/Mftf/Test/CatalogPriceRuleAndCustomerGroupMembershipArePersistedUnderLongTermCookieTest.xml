@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,6 +17,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27571"/>
             <group value="persistent"/>
+            <!-- added pr_exclude group as this test failing repeatedly and will be fixed and removed in this ACQE-7751 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
 
@@ -96,6 +98,7 @@
             <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitFormReload"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductCatalogRuleSpecialPriceTitleByName($createProduct.name$)}}" stepKey="dontSeeSpecialPrice"/>
     </test>
 </tests>

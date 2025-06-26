@@ -136,8 +136,8 @@ class Grouped extends AbstractModifier
         AttributeSetRepositoryInterface $attributeSetRepository,
         CurrencyInterface $localeCurrency,
         array $uiComponentsConfig = [],
-        GroupedProducts $groupedProducts = null,
-        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null
+        ?GroupedProducts $groupedProducts = null,
+        ?\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAsLowAsPriceNotDisplayedForDifferentWebsiteCatalogPriceScopeWebsiteTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="As low as pricing behaviour for products across multiple websites"/>
+            <title value="Customer should not see 'As low as' label for products with different website prices"/>
+            <description value="Ensure that the 'As low as' label is not shown for Product with varied pricing across websites when catalog price scope is set to website"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4270"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createFirstCategory"/>
+            <createData entity="NewRootCategory" stepKey="createRootCategory"/>
+            <createData entity="SimpleRootSubCategory" stepKey="createSecondCategory">
+                <requiredEntity createDataKey="createRootCategory"/>
+            </createData>
+            <!--Set catalog price scope to Website-->
+            <actionGroup ref="AdminSetCatalogPriceToWebsiteActionGroup" stepKey="setPriceScopeWebsite"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <field key="name">Configurable product p1</field>
+                <requiredEntity createDataKey="createFirstCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <!--Create custom store group-->
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStoreGroup">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="store" value="{{customStoreGroup.name}}"/>
+                <argument name="rootCategory" value="$$createRootCategory.name$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!-- Create text swatch attribute with 3 options: Black, White and Blue -->
+            <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addColorAttribute">
+                <argument name="attributeName" value="{{ProductColorAttribute.frontend_label}}"/>
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+                <argument name="option1" value="Red"/>
+                <argument name="option2" value="Green"/>
+                <argument name="option3" value="Blue"/>
+            </actionGroup>
+            <!-- Open configurable product edit page -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProduct">
+                <argument name="productId" value="$createConfigurableProduct.id$"/>
+            </actionGroup>
+            <!-- Generate configurations for configurable product p1 -->
+            <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createProductConfigurations">
+                <argument name="attributeCode" value="{{ProductColorAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForRed">
+                <argument name="productAttributes" value="Color: Red"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForGreen">
+                <argument name="productAttributes" value="Color: Green"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="ChangeConfigurableProductChildProductPriceActionGroup" stepKey="changePriceForBlue">
+                <argument name="productAttributes" value="Color: Blue"/>
+                <argument name="productPrice" value="10"/>
+            </actionGroup>
+            <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveConfigurableProduct"/>
+            <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsiteSecondForConfigurable">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignProductToSecondCategory">
+                <argument name="categoryName" value="$$createSecondCategory.name$$"/>
+            </actionGroup>
+            <!-- Open Red product edit page -->
+            <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForRedProduct">
+                <argument name="productName" value="red"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openRedProduct"/>
+            <waitForElement selector="{{AdminProductFormSection.visibility}}" stepKey="waitForVisibilityToBeVisibleForRed"/>
+            <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="Catalog, Search" stepKey="selectVisibilityForRed"/>
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignRedProductToSecondCategory">
+                <argument name="categoryName" value="$$createSecondCategory.name$$"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsiteSecondForRed">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!-- Open blue product edit page -->
+            <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForBlueProduct">
+                <argument name="productName" value="blue"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openBlueProduct"/>
+            <waitForElement selector="{{AdminProductFormSection.visibility}}" stepKey="waitForVisibilityToBeVisibleForBlue"/>
+            <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="Catalog, Search" stepKey="selectVisibilityForBlue"/>
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignBlueProductToSecondCategory">
+                <argument name="categoryName" value="$$createSecondCategory.name$$"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsiteSecondForBlue">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!-- Open Green product edit page -->
+            <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForGreenProduct">
+                <argument name="productName" value="Green"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openGreenProduct"/>
+            <waitForElement selector="{{AdminProductFormSection.visibility}}" stepKey="waitForVisibilityToBeVisibleForGreen"/>
+            <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="Catalog, Search" stepKey="selectVisibilityForGreen"/>
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignGreenProductToSecondCategory">
+                <argument name="categoryName" value="$$createSecondCategory.name$$"/>
+            </actionGroup>
+            <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="ProductSetWebsiteSecondForGreen">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!-- Open Red product edit page -->
+            <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForRedProductAgain">
+                <argument name="productName" value="red"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="againOpenRedProduct"/>
+            <!-- Switch to custom website store view -->
+            <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
+                <argument name="storeView" value="customStore.name"/>
+            </actionGroup>
+            <uncheckOption selector="{{AdminProductFormSection.productPriceUseDefault}}" stepKey="uncheckPriceDefaultValue"/>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="5" stepKey="fillSimpleProductPrice"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveRedProductInCustomStoreView"/>
+            <!-- Switch to the All store view -->
+            <actionGroup ref="AdminSwitchToAllStoreViewActionGroup" stepKey="switchAllStoreViewProduct"/>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="1" stepKey="fillSimpleProductPriceInAllStoreView"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductInAllStoreView"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="catalog_category_product catalog_product_category"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--set main website as default-->
+            <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setMainWebsiteAsDefault">
+                <argument name="websiteName" value="Main Website"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createFirstCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSecondCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
+            <actionGroup ref="AdminSetDefaultCatalogPriceActionGroup" stepKey="setDefaultCatalogConfigurations"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteCreatedProducts"/>
+            <!-- Delete color attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
+                <argument name="ProductAttribute" value="ProductColorAttribute"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfter">
+                <argument name="indices" value="catalog_category_product catalog_product_category"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCacheAfter">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Open created category on Storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPageOnMainWebsite">
+            <argument name="category" value="$createFirstCategory$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIsNotPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductOnMainWebsite">
+            <argument name="productName" value="Configurable product p1-Red"/>
+            <argument name="price" value="1"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategoryPageOnMainWebsite">
+            <argument name="productName" value="Configurable product p1-Red"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelProducPageOnMainWebsite"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceForRedOnMainWebsite">
+            <argument name="finalProductPrice" value="1.00"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="SetSecondaryWebsiteAsDefault">
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+        </actionGroup>
+        <!-- Clean config and full page cache-->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!-- Open created second category on second website -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPageOnSecondWebsite">
+            <argument name="category" value="$createSecondCategory$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceAndPriceLabelIsNotPresentOnCategoryPageActionGroup" stepKey="assertPriceAndPriceLabelForProductOnSecondWebsite">
+            <argument name="productName" value="Configurable product p1-Red"/>
+            <argument name="price" value="5"/>
+            <argument name="priceLabel" value="As low as"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategoryPageOnSecondWebsite">
+            <argument name="productName" value="Configurable product p1-Red"/>
+        </actionGroup>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeAsLowAsLabelForProductOnSecondWebsite"/>
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceForRedOnSecondWebsite">
+            <argument name="finalProductPrice" value="5.00"/>
+        </actionGroup>
+    </test>
+</tests>

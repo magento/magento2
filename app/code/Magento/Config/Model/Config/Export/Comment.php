@@ -44,7 +44,7 @@ class Comment implements CommentInterface
     public function __construct(
         PlaceholderFactory $placeholderFactory,
         DumpConfigSourceInterface $source,
-        TypePool $typePool = null
+        ?TypePool $typePool = null
     ) {
         $this->placeholder = $placeholderFactory->create(PlaceholderFactory::TYPE_ENVIRONMENT);
         $this->source = $source;

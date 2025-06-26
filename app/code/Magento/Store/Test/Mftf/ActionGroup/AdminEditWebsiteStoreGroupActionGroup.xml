@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /**
+     * Copyright 2024 Adobe
+     * All Rights Reserved.
+     */
+   -->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEditWebsiteStoreGroupActionGroup">
+        <annotations>
+            <description>Edit store group.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeGroupName" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <waitForElementClickable selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="waitForClearFiltersClickable" />
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
+        <waitForPageLoad stepKey="waitForResetResult"/>
+        <waitForElementVisible selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="waitForContentHeading"/>
+        <fillField userInput="{{storeGroupName}}" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" stepKey="fillStoreGroupFilter"/>
+        <waitForElementClickable selector="{{AdminStoresGridSection.searchButton}}" stepKey="waitForSearchButtonClickable" />
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForSearchResult"/>
+        <waitForElementClickable selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="waitForStoreGroupNameClickable"/>
+        <click selector="{{AdminStoresGridSection.websiteNameInFirstRow}}" stepKey="clicksStoreGroupName"/>
+        <waitForPageLoad stepKey="waitForStorePageToLoad"/>
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Model;
@@ -125,13 +125,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Directory\Model\Currency\FilterFactory $currencyFilterFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CurrencyConfig $currencyConfig = null,
-        LocalResolverInterface $localeResolver = null,
-        \Magento\Framework\NumberFormatterFactory $numberFormatterFactory = null,
-        Json $serializer = null
+        ?CurrencyConfig $currencyConfig = null,
+        ?LocalResolverInterface $localeResolver = null,
+        ?\Magento\Framework\NumberFormatterFactory $numberFormatterFactory = null,
+        ?Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -438,10 +438,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
             $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
         );
 
-        if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
-            $formattedCurrency = str_replace(' ', '', $formattedCurrency);
-        }
         if (preg_match('/^(\x{200F})/u', $formattedCurrency, $match)) {
             $formattedCurrency = preg_replace('/^' . $match[1] . '/u', '', $formattedCurrency);
         }
@@ -488,6 +484,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
         if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL) {
             $this->numberFormatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
+            $this->numberFormatter->setTextAttribute(\NumberFormatter::POSITIVE_PREFIX, '');
+            $this->numberFormatter->setTextAttribute(\NumberFormatter::POSITIVE_SUFFIX, '');
         }
         if (array_key_exists('precision', $options)) {
             $this->numberFormatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $options['precision']);

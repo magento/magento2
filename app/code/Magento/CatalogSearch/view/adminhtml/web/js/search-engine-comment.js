@@ -17,7 +17,7 @@ require([
                 'It is recommended to use OpenSearch as a search engine instead.'),
             updateCommentText = () => {
                 const engineValue = engineField.val(),
-                    newCommentText = ['elasticsearch7', 'elasticsearch8'].includes(engineValue) ?
+                    newCommentText = ['elasticsearch8'].includes(engineValue) ?
                         unsupportedText : defaultText;
 
                 if (commentContainer.text() !== newCommentText) {

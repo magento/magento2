@@ -72,7 +72,7 @@ interface OrderTaxDetailsItemInterface extends \Magento\Framework\Api\Extensible
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null);
+    public function setAppliedTaxes(?array $appliedTaxes = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

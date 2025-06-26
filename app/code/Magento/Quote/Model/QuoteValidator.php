@@ -51,9 +51,9 @@ class QuoteValidator
      * @param QuoteValidationRuleInterface|null $quoteValidationRule
      */
     public function __construct(
-        AllowedCountries $allowedCountryReader = null,
-        OrderAmountValidationMessage $minimumAmountMessage = null,
-        QuoteValidationRuleInterface $quoteValidationRule = null
+        ?AllowedCountries $allowedCountryReader = null,
+        ?OrderAmountValidationMessage $minimumAmountMessage = null,
+        ?QuoteValidationRuleInterface $quoteValidationRule = null
     ) {
         $this->allowedCountryReader = $allowedCountryReader ?: ObjectManager::getInstance()
             ->get(AllowedCountries::class);

@@ -54,8 +54,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
         \Magento\Framework\Registry $registry,
         \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory,
         \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_ratingOptionFactory = $ratingOptionFactory;

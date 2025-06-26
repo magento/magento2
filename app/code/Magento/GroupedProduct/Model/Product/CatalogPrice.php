@@ -38,7 +38,7 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
      */
     public function getCatalogPrice(
         \Magento\Catalog\Model\Product $product,
-        \Magento\Store\Api\Data\StoreInterface $store = null,
+        ?\Magento\Store\Api\Data\StoreInterface $store = null,
         $inclTax = false
     ) {
         // Workaround to avoid loading stock status by admin's website
