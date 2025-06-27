@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Newsletter subscriber grid block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml;
 
@@ -25,7 +23,7 @@ use Magento\Newsletter\Model\ResourceModel\Queue\CollectionFactory;
 class Subscriber extends Template
 {
     /**
-     * Queue collection
+     * Queue collection property
      *
      * @var Collection
      */
