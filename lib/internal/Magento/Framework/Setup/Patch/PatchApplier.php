@@ -153,6 +153,19 @@ class PatchApplier
                     new Phrase("Patch %1 should implement DataPatchInterface", [get_class($dataPatch)])
                 );
             }
+            /**
+             * If the patch was already applied before with a name from its aliases,we fix the new name as well but
+             * skip it's installation, otherwise we fix the alias name in history.
+             */
+            foreach ($dataPatch->getAliases() as $patchAlias) {
+                if ($this->patchHistory->isApplied($patchAlias)) {
+                    $this->patchHistory->fixPatch(get_class($dataPatch));
+
+                    continue 2;
+                }
+
+                $this->patchHistory->fixPatch($patchAlias);
+            }
             if ($dataPatch instanceof NonTransactionableInterface) {
                 $dataPatch->apply();
                 $this->patchHistory->fixPatch(get_class($dataPatch));
@@ -161,11 +174,6 @@ class PatchApplier
                     $this->moduleDataSetup->getConnection()->beginTransaction();
                     $dataPatch->apply();
                     $this->patchHistory->fixPatch(get_class($dataPatch));
-                    foreach ($dataPatch->getAliases() as $patchAlias) {
-                        if (!$this->patchHistory->isApplied($patchAlias)) {
-                            $this->patchHistory->fixPatch($patchAlias);
-                        }
-                    }
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
@@ -240,13 +248,23 @@ class PatchApplier
                  * @var SchemaPatchInterface $schemaPatch
                  */
                 $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
+
+                /**
+                 * If the patch was already applied before with a name from its aliases, we fix the new name as well but
+                 * skip it's installation, otherwise we fix the alias name in history.
+                 */
+                foreach ($schemaPatch->getAliases() as $patchAlias) {
+                    if ($this->patchHistory->isApplied($patchAlias)) {
+                        $this->patchHistory->fixPatch(get_class($schemaPatch));
+
+                        continue 2;
+                    }
+
+                    $this->patchHistory->fixPatch($patchAlias);
+                }
+
                 $schemaPatch->apply();
                 $this->patchHistory->fixPatch(get_class($schemaPatch));
-                foreach ($schemaPatch->getAliases() as $patchAlias) {
-                    if (!$this->patchHistory->isApplied($patchAlias)) {
-                        $this->patchHistory->fixPatch($patchAlias);
-                    }
-                }
             } catch (\Exception $e) {
                 $schemaPatchClass = is_object($schemaPatch) ? get_class($schemaPatch) : $schemaPatch;
                 throw new SetupException(
