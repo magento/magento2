@@ -1,13 +1,13 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 define([
     'jquery',
     'Magento_Ui/js/modal/modal'
 ], function ($, modal) {
-    'use strict';
+    'use strict'; // eslint-disable-line strict
 
     return function (data, element) {
 
