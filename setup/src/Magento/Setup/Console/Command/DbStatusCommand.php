@@ -82,6 +82,9 @@ class DbStatusCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $timestamp = date('Y-m-d H:i:s');
+        $output->writeln("<info>DbStatusCommand execution started at {$timestamp}</info>");
+
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln(
                 "<info>No information is available: the Magento application is not installed.</info>"
@@ -92,8 +95,31 @@ class DbStatusCommand extends AbstractSetupCommand
         $outDated = false;
 
         foreach ($this->upToDateValidators as $validator) {
-            if (!$validator->isUpToDate()) {
-                $output->writeln(sprintf('<info>%s</info>', $validator->getNotUpToDateMessage()));
+            $validatorClass = get_class($validator);
+
+            try {
+                $isUpToDate = $validator->isUpToDate();
+                $output->writeln(
+                    "<info>Validator {$validatorClass} isUpToDate: " . ($isUpToDate ? 'true' : 'false') . "</info>"
+                );
+
+                if (!$isUpToDate) {
+                    $message = $validator->getNotUpToDateMessage();
+                    $output->writeln(sprintf('<info>%s</info>', $message));
+
+                    $details = $validator->getDetails();
+                    if (!empty($details)) {
+                        $detailsJson = json_encode($details, JSON_PRETTY_PRINT);
+                        $output->writeln(sprintf('<info>Details: %s</info>', $detailsJson));
+                    }
+
+                    $outDated = true;
+                }
+            } catch (\Throwable $e) {
+                $output->writeln(
+                    "<info>Validator {$validatorClass} failed with error: " . $e->getMessage() . "</info>"
+                );
+                $output->writeln("<info>Treating as upgrade required due to validation error.</info>");
                 $outDated = true;
             }
         }
