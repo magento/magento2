@@ -4,5 +4,5 @@
   "suggest": {
     "magento/module-some-module": "Some Module:888.8.*"
   },
-  "type": "magento2-module",
+  "type": "magento2-module"
 }
