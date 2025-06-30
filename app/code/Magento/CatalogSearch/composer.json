@@ -1,9 +1,6 @@
 {
     "name": "magento/module-catalog-search",
     "description": "Catalog search",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",

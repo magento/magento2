@@ -1,9 +1,6 @@
 {
     "name": "magento/module-paypal-captcha",
     "description": "Provides CAPTCHA validation for PayPal Payflow Pro",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",

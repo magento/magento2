@@ -1,9 +1,6 @@
 {
     "name": "magento/module-cardinal-commerce",
     "description": "Provides a possibility to enable 3-D Secure 2.0 support for payment methods.",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",

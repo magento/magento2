@@ -1,9 +1,6 @@
 {
     "name": "magento/module-jwt-framework-adapter",
     "description": "JWT Manager implementation based on jwt-framework",
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": "~8.2.0||~8.3.0||~8.4.0",
         "magento/framework": "*",
