@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe.
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAbleToCreateOrderStatusAndUpdateStatusInOrderTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="CRUD status in order"/>
+            <title value="Order status is set and updated correctly when default status is used for processing"/>
+            <description value="Create a custom order status, assign it as default to processing state, then place an order, invoice it, and verify status behaviour."/>
+            <testCaseId value="AC-11877"/>
+            <severity value="AVERAGE"/>
+        </annotations>
+        <before>
+            <!-- Create product and login -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Assign status to default one -->
+            <actionGroup ref="AdminOrderStatusToStateAssignActionGroup" stepKey="resetDefaultStatusToState">
+                <argument name="orderStatus" value="Processing"/>
+                <argument name="orderState" value="{{defaultOrderStatus.label}}"/>
+            </actionGroup>
+            <!-- Unassign order status -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
+                <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+                <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
+            <waitForPageLoad stepKey="waitForGridLoad"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to new order status page -->
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
+        <!-- Fill the form and validate message -->
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{defaultOrderStatus.status}}"/>
+            <argument name="label" value="{{defaultOrderStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+        <!-- Assign created order status to state -->
+        <actionGroup ref="AdminOrderStatusToStateAssignActionGroup" stepKey="assignTestStatusToState">
+            <argument name="orderStatus" value="{{defaultOrderStatus.status}}"/>
+            <argument name="orderState" value="Processing"/>
+        </actionGroup>
+        <!-- Add product to cart and place order -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="clickToProceedToCheckout"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormData">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <!-- Place order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!-- Go to admin, create invoice and check order status -->
+        <!-- Open order -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Create Invoice for this Order-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <!-- Verify status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="verifyOrderStatusOnOrderViewPage">
+            <argument name="status" value="{{defaultOrderStatus.label}}" />
+        </actionGroup>
+        <selectOption selector="{{AdminOrderDetailsInformationSection.historyStatus}}" userInput="Processing" stepKey="selectProcessingStatus"/>
+        <click selector="{{AdminOrderDetailsInformationSection.statusUpdate}}" stepKey="clickUpdateButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="againVerifyOrderStatusOnOrderViewPage">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+    </test>
+</tests>
