@@ -126,7 +126,7 @@ class Changelog implements ChangelogInterface
                 $changelogTableName
             )->addColumn(
                 self::VERSION_ID_COLUMN_NAME,
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Version ID'
@@ -149,6 +149,7 @@ class Changelog implements ChangelogInterface
         } else {
             // change the charset to utf8mb4
             $getTableSchema = $this->connection->getCreateTable($changelogTableName) ?? '';
+            $this->changeVersionIdToBigInt($getTableSchema, $changelogTableName);
             if (preg_match('/\b('. self::OLDCHARSET .')\b/', $getTableSchema)) {
                 $charset = $this->columnConfig->getDefaultCharset();
                 $collate = $this->columnConfig->getDefaultCollation();
@@ -161,6 +162,32 @@ class Changelog implements ChangelogInterface
                     )
                 );
             }
+        }
+    }
+
+    /**
+     * Change version_id from int to bigint
+     *
+     * @param string $getTableSchema
+     * @param string $changelogTableName
+     * @return void
+     */
+    private function changeVersionIdToBigInt(string $getTableSchema, string $changelogTableName): void
+    {
+        $pattern = '/`version_id`\s+int\b/i';
+        if (preg_match($pattern, $getTableSchema)) {
+            $this->connection->modifyColumn(
+                $changelogTableName,
+                self::VERSION_ID_COLUMN_NAME,
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+                    'nullable' => false,
+                    'identity' => true,
+                    'unsigned' => true,
+                    'primary' => true,
+                    'comment' => 'Version ID'
+                ]
+            );
         }
     }
 
