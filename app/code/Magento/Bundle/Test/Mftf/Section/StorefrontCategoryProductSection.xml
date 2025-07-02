@@ -11,5 +11,6 @@
     <section name="StorefrontCategoryProductSection">
         <element name="priceToByProductId" type="text" selector="div[data-product-id='{{id}}'] .price-to" parameterized="true"/>
         <element name="priceFromByProductId" type="text" selector="div[data-product-id='{{id}}'] .price-from" parameterized="true"/>
+        <element name="priceToByProductSku" type="text" selector="//li[.//form[@data-product-sku='{{sku}}']]//p[contains(@class,'price-to')]" parameterized="true"/>
     </section>
 </sections>
