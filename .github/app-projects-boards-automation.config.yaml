@@ -231,6 +231,18 @@ automations:
       - removeFromProject: [23] #['Pull Requests Dashboard']
       - removeFromProject: [22] #['Community Dashboard']
 
+  # 19. Whenever a pull request is marked as changes requested:
+  #   a. the below labels must be removed from a pull request: "Progress: review"
+  #   b. it must be moved to the "Changes Requested" column
+  - trigger: pull_request_review.submitted
+    conditions:
+      - ['review', 'eq', 'changes_requested']
+    actions:
+      - removeLabels: ['Progress: review']
+      - addLabels: ['Progress: needs update']
+      - moveTo: [23, 'Changes Requested'] #['Pull Requests Dashboard', 'Changes Requested']
+      - moveTo: [22, 'Changes Requested'] #['Community Dashboard', 'Changes Requested']
+
 
   ############################################################################################################
   # Issues Automation                                                                                        #
@@ -401,3 +413,10 @@ automations:
       ]
     actions:
       - addLabelsToRelated: ['${modifiedLabel.name}']
+
+  - trigger: issues.closed
+    actions:
+      - removeFromProject: [18] 
+      - removeFromProject: [21]
+      - removeFromProject: [20]
+      - removeFromProject: [19]
