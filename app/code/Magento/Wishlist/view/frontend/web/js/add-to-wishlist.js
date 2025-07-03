@@ -7,6 +7,7 @@ define([
     'jquery',
     'jquery-ui-modules/widget'
 ], function ($) {
+    'use strict';
 
     $.widget('mage.addToWishlist', {
         options: {
