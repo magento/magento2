@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedSearch\Model\DataProvider;
 
@@ -11,7 +11,7 @@ use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 class Suggestions implements SuggestedQueriesInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isResultsCountEnabled()
     {
@@ -19,7 +19,7 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems(QueryInterface $query)
     {

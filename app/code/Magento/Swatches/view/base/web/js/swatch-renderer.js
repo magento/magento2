@@ -798,7 +798,7 @@ define([
 
             $widget._Rebuild();
 
-            if ($priceBox.is(':data(mage-priceBox)')) {
+            if ($priceBox.data('mage-priceBox') !== undefined) {
                 $widget._UpdatePrice();
             }
 
