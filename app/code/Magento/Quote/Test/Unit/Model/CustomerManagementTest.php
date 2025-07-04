@@ -269,8 +269,53 @@ class CustomerManagementTest extends TestCase
     {
         $this->expectException(ValidatorException::class);
         $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
+        $this->quoteAddressMock->method('getPrefix')->willReturn(null);
         $this->quoteAddressMock->method('getStreet')->willReturn(['test']);
         $this->quoteAddressMock->method('getCustomAttributes')->willReturn(['test']);
+        $this->customerAddressMock->expects($this->once())
+            ->method('setPrefix')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerAddressFactoryMock->method('create')
+            ->willReturn($this->customerAddressMock);
+        $addressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->addressFactoryMock->expects($this->exactly(1))->method('create')->willReturn($addressMock);
+        $this->quoteMock
+            ->expects($this->atMost(2))
+            ->method('getBillingAddress')
+            ->willReturn($this->quoteAddressMock);
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->quoteAddressMock);
+        $this->quoteAddressMock->expects($this->any())->method('getCustomerAddressId')->willReturn(null);
+        $validatorMock = $this->getMockBuilder(Validator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->validatorFactoryMock
+            ->expects($this->exactly(1))
+            ->method('createValidator')
+            ->with('customer_address', 'save', null)
+            ->willReturn($validatorMock);
+        $validatorMock->expects($this->exactly(1))->method('isValid')->with($addressMock)->willReturn(false);
+        $validatorMock->expects($this->exactly(1))->method('getMessages')->willReturn([]);
+        $this->customerManagement->validateAddresses($this->quoteMock);
+    }
+
+    public function testValidateAddressesNotSavedInAddressBookWithPrefix()
+    {
+        $this->expectException(ValidatorException::class);
+        $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
+        $this->quoteAddressMock->method('getPrefix')->willReturn('Mr.');
+        $this->quoteAddressMock->method('getStreet')->willReturn(['test']);
+        $this->quoteAddressMock->method('getCustomAttributes')->willReturn(['test']);
+        $this->customerAddressMock->expects($this->once())
+            ->method('setPrefix')
+            ->with('Mr.')
+            ->willReturnSelf();
+
         $this->customerAddressFactoryMock->method('create')
             ->willReturn($this->customerAddressMock);
         $addressMock = $this->getMockBuilder(Address::class)
