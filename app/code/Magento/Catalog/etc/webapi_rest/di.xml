@@ -47,4 +47,13 @@
     <type name="Magento\Catalog\Model\CategoryRepository">
         <plugin name="format_category_url_key_rest_api" type="Magento\Catalog\Plugin\Model\CategoryRepositoryPlugin" />
     </type>
+    <type name="Magento\Catalog\Model\Product\Price\SpecialPriceStorage">
+        <plugin name="vendor_special_price_rest_plugin"
+                type="Magento\Catalog\Model\Plugin\SpecialPricePluginForREST\SpecialPriceStoragePlugin" />
+    </type>
+    <!-- Essential performance optimizations for category tree operations -->
+    <type name="Magento\Catalog\Api\CategoryManagementInterface">
+        <plugin name="categoryManagementPerformanceOptimizer"
+                type="Magento\Catalog\Plugin\CategoryManagementPerformanceOptimizer" />
+    </type>
 </config>
