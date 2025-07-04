@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model;
 
@@ -33,7 +33,6 @@ use Magento\Framework\Validator\IntUtils;
  * @method string getModifiedAt()
  * @method \Magento\Newsletter\Model\Template setModifiedAt(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api

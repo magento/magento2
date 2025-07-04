@@ -14,7 +14,7 @@
         </annotations>
 
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <seeElement selector="{{StorefrontBundledSection.validationMessageBox}}" stepKey="seeErrorBox"/>
-        <seeNumberOfElements selector="{{StorefrontBundledSection.validationMessageBox}}" userInput="1" stepKey="seeOneErrorBox"/>
+        <seeElement selector="{{StorefrontBundledSection.selectOptionError}}" stepKey="seeErrorBox"/>
+        <seeNumberOfElements selector="{{StorefrontBundledSection.selectOptionError}}" userInput="1" stepKey="seeOneErrorBox"/>
     </actionGroup>
 </actionGroups>

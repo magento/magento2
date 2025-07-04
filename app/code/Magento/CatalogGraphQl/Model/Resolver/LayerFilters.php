@@ -57,7 +57,7 @@ class LayerFilters implements ResolverInterface
     private function prepareAttributesResults(array $value): ?array
     {
         $attributes = [];
-        if (!empty($value['search_result'])) {
+        if (!empty($value['search_result']) && $value['search_result']->getSearchAggregation()) {
             $buckets = $value['search_result']->getSearchAggregation()->getBuckets();
             foreach ($buckets as $bucket) {
                 if (!empty($bucket->getValues())) {
