@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Test\Unit\Model\Resolver\Products\Query;
 
+use Magento\AdvancedSearch\Model\Client\ClientException;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\FieldSelection;
@@ -17,10 +17,12 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Suggestions;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -149,5 +151,51 @@ class SearchTest extends TestCase
             ->with($context, $args['search'], 0);
 
         $this->model->getResult($args, $resolveInfo, $context);
+    }
+
+    /**
+     * @param $exception
+     * @return void
+     * @throws Exception
+     * @throws GraphQlInputException
+     * @dataProvider exceptionDataProvider
+     */
+    public function testEmptyResultException($exception): void
+    {
+        $args = ['search' => 'test', 'pageSize' => 10, 'currentPage' => 1];
+        $context = $this->createMock(ContextInterface::class);
+        $resolveInfo = $this->createMock(ResolveInfo::class);
+        $this->search->expects($this->once())
+            ->method('search')
+            ->willThrowException(new $exception('Error'));
+        $this->searchResultFactory->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'totalCount' => 0,
+                    'productsSearchResult' => [],
+                    'searchAggregation' => null,
+                    'pageSize' => $args['pageSize'],
+                    'currentPage' => $args['currentPage'],
+                    'totalPages' => 0,
+                    'suggestions' => [],
+                ]
+            );
+        $this->model->getResult($args, $resolveInfo, $context);
+    }
+
+    /**
+     * @return \class-string[][]
+     */
+    public static function exceptionDataProvider(): array
+    {
+        return [
+            'invalid_argument_exception' => [
+                'exception' => \InvalidArgumentException::class,
+            ],
+            'client_exception' => [
+                'exception' => ClientException::class,
+            ]
+        ];
     }
 }

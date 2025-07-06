@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,16 +16,20 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Checkout\Helper\Cart;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Framework\Url\Helper\Data;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -104,6 +108,11 @@ class ListProductTest extends TestCase
      */
     private $renderer;
 
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    private CollectionFactory $collectionFactory;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -145,6 +154,11 @@ class ListProductTest extends TestCase
         $store = $this->createMock(StoreInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $this->context->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
+        $inlineTranslation = $this->createMock(StateInterface::class);
+        $this->context->expects($this->any())->method('getInlineTranslation')->willReturn($inlineTranslation);
+        $this->collectionFactory = $this->createMock(CollectionFactory::class);
 
         $this->block = $objectManager->getObject(
             ListProduct::class,
@@ -155,6 +169,7 @@ class ListProductTest extends TestCase
                 'cartHelper' => $this->cartHelperMock,
                 'postDataHelper' => $this->postDataHelperMock,
                 'urlHelper' => $this->urlHelperMock,
+                'collectionFactory' => $this->collectionFactory
             ]
         );
         $this->block->setToolbarBlockName('mock');
@@ -163,6 +178,32 @@ class ListProductTest extends TestCase
     protected function tearDown(): void
     {
         $this->block = null;
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testEmptyCollection(): void
+    {
+        $this->block->setData('translate_inline', true);
+        $this->prodCollectionMock->expects($this->any())
+            ->method('getItems')
+            ->willThrowException(new \Exception('No items found.'));
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($this->prodCollectionMock);
+        $collection = $this->createMock(Collection::class);
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $collection->expects($this->once())->method('addFieldToFilter');
+        $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategory->expects($this->any())
+            ->method('getId')
+            ->willReturn('1');
+        $this->layerMock->expects($this->any())
+            ->method('getCurrentCategory')
+            ->willReturn($currentCategory);
+        $this->block->toHtml();
     }
 
     public function testGetIdentities()
