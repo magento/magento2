@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
 use Exception;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\State;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DataObject;
@@ -148,6 +149,11 @@ class LayoutTest extends TestCase
     private $serializer;
 
     /**
+     * @var ResponseHttp
+     */
+    private ResponseHttp $response;
+
+    /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -219,6 +225,7 @@ class LayoutTest extends TestCase
                     return json_decode($value, true);
                 }
             );
+        $this->response = $this->createMock(ResponseHttp::class);
 
         $this->model = (new ObjectManagerHelper($this))->getObject(
             Layout::class,
@@ -236,7 +243,8 @@ class LayoutTest extends TestCase
                 'appState' => $this->appStateMock,
                 'logger' => $this->loggerMock,
                 'cacheable' => true,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'response' => $this->response
             ]
         );
     }
@@ -1243,6 +1251,7 @@ class LayoutTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($exception);
+        $this->response->expects($this->once())->method('setNoCacheHeaders');
 
         $model = clone $this->model;
         $model->setBuilder($builderMock);
