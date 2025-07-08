@@ -8,8 +8,13 @@ var config = {
     shim: {
         'chartjs/chartjs-adapter-moment': ['moment'],
         'chartjs/es6-shim.min': {},
-        'tiny_mce_6/tinymce.min': {
-            exports: 'tinyMCE'
+        'hugerte/hugerte.min': {
+            exports: 'hugerte',
+            init: function () {
+                'use strict';
+                window.tinymce = window.hugerte;
+                return window.hugerte;
+            }
         }
     },
     paths: {
@@ -28,7 +33,7 @@ var config = {
             buttonAdapter:  'Magento_Ui/js/form/button-adapter',
             chartJs:        'chartjs/Chart.min',
             'chart.js':     'chartjs/Chart.min',
-            tinymce:        'tiny_mce_6/tinymce.min',
+            tinymce:        'hugerte/hugerte.min',
             wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter'
         }
     }
