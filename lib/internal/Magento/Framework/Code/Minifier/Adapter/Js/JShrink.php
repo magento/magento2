@@ -25,8 +25,7 @@ class JShrink implements AdapterInterface
     public function minify($content): bool|string
     {
         $minifier = new Minify\JS();
-        $minifier->add($content);
 
-        return $minifier->minify();
+        return $minifier->add($content)->minify();
     }
 }
