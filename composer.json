@@ -87,7 +87,6 @@
         "symfony/mime": "^6.4",
         "symfony/process": "^6.4",
         "symfony/string": "^6.4",
-        "tubalmartin/cssmin": "^4.1",
         "web-token/jwt-framework": "^3.4",
         "webonyx/graphql-php": "^15.0",
         "wikimedia/less.php": "^5.0"
