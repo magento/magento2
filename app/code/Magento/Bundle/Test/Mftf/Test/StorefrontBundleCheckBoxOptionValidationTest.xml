@@ -17,11 +17,7 @@
             <testCaseId value="MC-35133"/>
             <severity value="MINOR"/>
             <group value="Bundle"/>
-            <group value="pr_exclude"/>
             <group value="cloud"/>
-            <skip>
-                <issueId value="AC-10826"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simpleProduct1" before="bundleProduct"/>
