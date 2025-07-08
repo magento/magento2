@@ -12,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Encryption\Adapter\EncryptionAdapterInterface;
-use Magento\Framework\Encryption\Adapter\Mcrypt;
+use Magento\Framework\Encryption\Adapter\OpenSsl;
 use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Math\Random;
@@ -82,6 +82,13 @@ class Encryptor implements EncryptorInterface
     public const CIPHER_AEAD_CHACHA20POLY1305 = 3;
 
     public const CIPHER_LATEST = 3;
+
+    /**#@+
+     * Cipher modes
+     */
+    public const MODE_ECB = 1;
+    public const MODE_CBC = 2;
+    /**#@-*/
     /**#@-*/
 
     /**
@@ -520,7 +527,6 @@ class Encryptor implements EncryptorInterface
         ?int $cipherVersion = null,
         ?string $initVector = null
     ): ?EncryptionAdapterInterface {
-        //phpcs:disable PHPCompatibility.Constants.RemovedConstants
         if (null === $key && null === $cipherVersion) {
             $cipherVersion = $this->getCipherVersion();
         }
@@ -543,18 +549,17 @@ class Encryptor implements EncryptorInterface
         }
 
         if ($cipherVersion === self::CIPHER_RIJNDAEL_128) {
-            $cipher = MCRYPT_RIJNDAEL_128;
-            $mode = MCRYPT_MODE_ECB;
+            $cipher = Encryptor::CIPHER_RIJNDAEL_128;
+            $mode = self::MODE_ECB;
         } elseif ($cipherVersion === self::CIPHER_RIJNDAEL_256) {
-            $cipher = MCRYPT_RIJNDAEL_256;
-            $mode = MCRYPT_MODE_CBC;
+            $cipher = Encryptor::CIPHER_RIJNDAEL_256;
+            $mode = self::MODE_CBC;
         } else {
-            $cipher = MCRYPT_BLOWFISH;
-            $mode = MCRYPT_MODE_ECB;
+            $cipher = Encryptor::CIPHER_BLOWFISH;
+            $mode = self::MODE_ECB;
         }
-        //phpcs:enable PHPCompatibility.Constants.RemovedConstants
 
-        return new Mcrypt($key, $cipher, $mode, $initVector);
+        return new OpenSsl($key, $cipher, $mode, $initVector);
     }
 
     /**
