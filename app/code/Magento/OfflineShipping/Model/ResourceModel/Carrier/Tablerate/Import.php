@@ -131,6 +131,7 @@ class Import
     public function getData(ReadInterface $file, $websiteId, $conditionShortName, $conditionFullName, $bunchSize = 5000)
     {
         $this->errors = [];
+        $this->uniqueHash = [];
 
         $headers = $this->getHeaders($file);
         /** @var ColumnResolver $columnResolver */

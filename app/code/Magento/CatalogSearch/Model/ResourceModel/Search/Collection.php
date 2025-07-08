@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Search;
@@ -23,22 +23,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $indexUsageEnforcements;
 
     /**
-     * Attribute collection
-     *
      * @var array
      */
     protected $_attributesCollection;
 
     /**
-     * Search query
-     *
      * @var string
      */
     protected $_searchQuery;
 
     /**
-     * Attribute collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_attributeCollectionFactory;
@@ -90,7 +84,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         array $indexUsageEnforcements = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
@@ -117,6 +111,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection
         );
         $this->indexUsageEnforcements = $indexUsageEnforcements;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_attributesCollection = null;
+        $this->_searchQuery = null;
     }
 
     /**
@@ -240,6 +244,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param mixed $query
      * @param bool $searchOnlyInCurrentStore Search only in current store or in all stores
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _getSearchEntityIdsSql($query, $searchOnlyInCurrentStore = true)
     {

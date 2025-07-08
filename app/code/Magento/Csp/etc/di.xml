@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -111,4 +111,45 @@
             <argument name="cache" xsi:type="object">Magento\Csp\Model\BlockCache</argument>
         </arguments>
     </type>
+    <type name="Magento\Deploy\Package\Package">
+        <arguments>
+            <argument name="postProcessors" xsi:type="array">
+                <item name="integrity" xsi:type="object">Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Integrity</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\GroupedCollection">
+        <plugin name="addDefaultPropertiesToGroup" type="Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin" />
+    </type>
+    <type name="Magento\Deploy\Service\DeployStaticContent">
+        <plugin name="removeAllAssetIntegrityHashes" type="Magento\Csp\Plugin\RemoveAllAssetIntegrityHashes" />
+        <plugin name="storeAssetIntegrityHashes" type="Magento\Csp\Plugin\StoreAssetIntegrityHashes" />
+    </type>
+    <type name="Magento\RequireJs\Model\FileManager">
+        <plugin name="addResourceIntegrityAfterAssetCreate" type="Magento\Csp\Plugin\GenerateAssetIntegrity"/>
+    </type>
+    <type name="Magento\Deploy\Service\Bundle">
+        <plugin name="addResourceIntegrityAfterBundleDeploy" type="Magento\Csp\Plugin\GenerateBundleAssetIntegrity" />
+    </type>
+    <type name="Magento\Framework\View\Asset\MergeStrategy\FileExists">
+        <plugin name="addResourceIntegrityAfterMergeFile" type="Magento\Csp\Plugin\GenerateMergedAssetIntegrity" />
+    </type>
+    <preference for="Magento\Deploy\Package\Processor\PostProcessor\Map" type="Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Map" />
+    <type name="Magento\Csp\Model\Deploy\Package\Processor\PostProcessor\Map">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Csp\Model\SubresourceIntegrity\SriEnabledActions">
+        <arguments>
+            <argument name="paymentActions" xsi:type="array">
+                <item name="sales_order_create_index" xsi:type="string">sales_order_create_index</item>
+                <item name="sales_order_create_load_block" xsi:type="string">sales_order_create_loadBlock</item>
+                <item name="checkout_index_index" xsi:type="string">checkout_index_index</item>
+                <item name="checkout_onepage_success" xsi:type="string">checkout_onepage_success</item>
+                <item name="multishipping_checkout_billing" xsi:type="string">multishipping_checkout_billing</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Csp\Model\SubresourceIntegrity\StorageInterface" type="Magento\Csp\Model\SubresourceIntegrity\Storage\File" />
 </config>

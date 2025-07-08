@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Usps;
@@ -45,12 +46,12 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * Defines carrier label for "USPS" shipping method
      */
-    const CARRIER_TITLE = 'United States Postal Service';
+    public const CARRIER_TITLE = 'United States Postal Service';
 
     /**
      * Defines carrier code for "USPS" shipping method
      */
-    const CARRIER_CODE = 'usps';
+    public const CARRIER_CODE = 'usps';
 
     /**
      * @var CustomerTokenServiceInterface
@@ -117,7 +118,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethods(): array
+    public static function dataProviderShippingMethods(): array
     {
         return [
             'Library Mail Parcel' =>
@@ -190,7 +191,7 @@ class SetUspsShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
+    public static function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
         return [
             'First-Class Package International Service' =>
@@ -249,9 +250,9 @@ mutation {
           method_title
         }
       }
-    } 
+    }
   }
-}        
+}
 QUERY;
     }
 

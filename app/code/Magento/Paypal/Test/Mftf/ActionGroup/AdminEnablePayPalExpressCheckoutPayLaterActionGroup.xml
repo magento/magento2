@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnablePayPalExpressCheckoutPayLaterActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Enable pay later option.</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!-- Because of in-product messaging in Payment Services extension, Paypal config is within the Additional Payment Solutions we need to uncollapse -->
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="clickPayPalTabConfigure" dependentSelector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" visible="false"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
+        <selectOption selector="{{PayPalExpressCheckoutConfigSection.enablePayLater(countryCode)}}" userInput="Yes" stepKey="enablePayLater"/>
+        <waitForText selector="{{PayPalExpressCheckoutConfigSection.verifyPaylaterText(countryCode)}}" userInput="Advertise PayPal Pay Later" stepKey="verifyAdvertisePayPalPayLaterText"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.payLaterConfigDropDown(countryCode)}}" stepKey="clickPayLaterConfiguration" />
+        <selectOption selector="{{PayPalExpressCheckoutConfigSection.enablePayLaterIn(countryCode)}}" userInput="Yes" stepKey="enablePayLaterIn"/>
+    </actionGroup>
+</actionGroups>

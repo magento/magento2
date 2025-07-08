@@ -20,12 +20,12 @@ class Config extends TagScope implements CacheInterface
     /**
      * Cache type code unique among all cache types
      */
-    const TYPE_IDENTIFIER = 'config';
+    public const TYPE_IDENTIFIER = 'config';
 
     /**
      * Cache tag used to distinguish the cache type from all other cache
      */
-    const CACHE_TAG = 'CONFIG';
+    public const CACHE_TAG = 'CONFIG';
 
     /**
      * @var \Magento\Framework\App\Cache\Type\FrontendPool
@@ -63,5 +63,16 @@ class Config extends TagScope implements CacheInterface
     public function getTag()
     {
         return self::CACHE_TAG;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

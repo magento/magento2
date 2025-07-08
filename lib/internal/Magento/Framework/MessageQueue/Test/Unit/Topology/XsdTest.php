@@ -53,7 +53,7 @@ class XsdTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         // @codingStandardsIgnoreStart
         return [
@@ -84,7 +84,11 @@ class XsdTest extends TestCase
                         <exchange name="ex01" type="topic" connection="amqp" />
                 </config>',
                 [
-                    "Element 'exchange': Duplicate key-sequence ['ex01', 'amqp'] in unique identity-constraint 'unique-exchange-name-connection'."
+                    "Element 'exchange': Duplicate key-sequence ['ex01', 'amqp'] in unique identity-constraint 'unique-exchange-name-connection'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/topology.xsd\">\n" .
+                    "2:                        <exchange name=\"ex01\" type=\"topic\" connection=\"amqp\"/>\n" .
+                    "3:                        <exchange name=\"ex01\" type=\"topic\" connection=\"amqp\"/>\n" .
+                    "4:                </config>\n5:\n"
                 ],
             ],
             'non-unique-exchange-binding' => [
@@ -95,7 +99,12 @@ class XsdTest extends TestCase
                         </exchange>
                 </config>',
                 [
-                    "Element 'binding': Duplicate key-sequence ['bind01'] in unique identity-constraint 'unique-binding-id'."
+                    "Element 'binding': Duplicate key-sequence ['bind01'] in unique identity-constraint 'unique-binding-id'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/topology.xsd\">\n" .
+                    "2:                        <exchange name=\"ex01\" connection=\"amqp\">\n" .
+                    "3:                            <binding id=\"bind01\" destinationType=\"queue\" destination=\"queue01\" topic=\"top01\" disabled=\"true\"/>\n" .
+                    "4:                            <binding id=\"bind01\" destinationType=\"queue\" destination=\"queue01\" topic=\"top01\"/>\n" .
+                    "5:                        </exchange>\n6:                </config>\n7:\n"
                 ],
             ],
             'invalid-destination-type-binding' => [
@@ -105,7 +114,11 @@ class XsdTest extends TestCase
                     </exchange>
                 </config>',
                 [
-                    "Element 'binding', attribute 'destinationType': [facet 'enumeration'] The value 'topic' is not an element of the set {'queue'}."
+                    "Element 'binding', attribute 'destinationType': [facet 'enumeration'] The value 'topic' is not an element of the set {'queue'}.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/topology.xsd\">\n" .
+                    "2:                    <exchange name=\"ex01\" type=\"topic\" connection=\"amqp\">\n" .
+                    "3:                        <binding id=\"bind01\" destinationType=\"topic\" destination=\"queue01\" topic=\"top01\"/>\n" .
+                    "4:                    </exchange>\n5:                </config>\n6:\n"
                 ],
             ],
             'invalid-exchange-type-binding' => [
@@ -115,7 +128,11 @@ class XsdTest extends TestCase
                     </exchange>
                 </config>',
                 [
-                    "Element 'exchange', attribute 'type': [facet 'enumeration'] The value 'exchange' is not an element of the set {'topic'}."
+                    "Element 'exchange', attribute 'type': [facet 'enumeration'] The value 'exchange' is not an element of the set {'topic'}.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"urn:magento:framework-message-queue:etc/topology.xsd\">\n" .
+                    "2:                    <exchange name=\"ex01\" type=\"exchange\" connection=\"amqp\">\n" .
+                    "3:                        <binding id=\"bind01\" destinationType=\"queue\" destination=\"queue01\" topic=\"top01\"/>\n" .
+                    "4:                    </exchange>\n5:                </config>\n6:\n"
                 ],
             ],
         ];

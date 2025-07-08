@@ -30,7 +30,7 @@ class PathProcessor
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver = null
+        ?\Magento\Framework\Locale\ResolverInterface $localeResolver = null
     ) {
         $this->storeManager = $storeManager;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(

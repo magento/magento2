@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 ?>
 
 <?php
+// @codingStandardsIgnoreFile
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 /** @var \Magento\Bundle\Pricing\Render\FinalPriceBox $block */
 
@@ -22,7 +23,7 @@ $regularPriceAttributes = [
     'display_label'     => __('Regular Price'),
     'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
     'include_container' => true,
-    'skip_adjustments'  => true
+    'skip_adjustments'  => false
 ];
 $renderMinimalRegularPrice = $block->renderAmount($minimalRegularPrice, $regularPriceAttributes);
 ?>

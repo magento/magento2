@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,13 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Deferred resolver for product data.
  */
-class Product
+class Product implements ResetAfterRequestInterface
 {
     /**
      * @var ProductDataProvider
@@ -98,7 +99,7 @@ class Product
      * @param null|ContextInterface $context
      * @return array
      */
-    public function getProductBySku(string $sku, ContextInterface $context = null) : array
+    public function getProductBySku(string $sku, ?ContextInterface $context = null) : array
     {
         if (isset($this->productList[$sku])) {
             return $this->productList[$sku];
@@ -118,7 +119,7 @@ class Product
      *
      * @param null|ContextInterface $context
      */
-    private function fetch(ContextInterface $context = null): void
+    private function fetch(?ContextInterface $context = null): void
     {
         if (empty($this->productSkus)) {
             return;
@@ -143,5 +144,15 @@ class Product
         foreach ($result->getItems() as $product) {
             $this->productList[$product->getSku()] = ['model' => $product];
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->productList = [];
+        $this->productSkus = [];
+        $this->attributeCodes = [];
     }
 }

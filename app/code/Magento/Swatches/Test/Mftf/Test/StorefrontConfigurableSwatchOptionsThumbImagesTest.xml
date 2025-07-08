@@ -19,6 +19,7 @@
                 (visible and active) for each selected option for the configurable product"/>
             <severity value="MAJOR"/>
             <group value="swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Go to created attribute (attribute page) -->

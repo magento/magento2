@@ -1,7 +1,5 @@
 <?php
 /**
- * Web API request.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -15,17 +13,22 @@ use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\StringUtils;
 
+/**
+ * Web API request.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Request extends HttpRequest implements RequestInterface
 {
     /**
      * Name of query parameter to specify services for which to generate schema
      */
-    const REQUEST_PARAM_SERVICES = 'services';
+    public const REQUEST_PARAM_SERVICES = 'services';
 
     /**
      * services parameter value to indicate that a schema for all services should be generated
      */
-    const ALL_SERVICES = 'all';
+    public const ALL_SERVICES = 'all';
 
     /**
      * Modify pathInfo: strip down the front name and query parameters.
@@ -52,24 +55,6 @@ class Request extends HttpRequest implements RequestInterface
         /** Remove GET parameters from path */
         $pathInfo = preg_replace('#\?.*#', '', $pathInfo);
         $this->setPathInfo($pathInfo);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Added CGI environment support.
-     */
-    public function getHeader($header, $default = false)
-    {
-        $headerValue = parent::getHeader($header, $default);
-        if ($headerValue == false) {
-            /** Workaround for hhvm environment */
-            $header = 'REDIRECT_HTTP_' . strtoupper(str_replace('-', '_', $header));
-            if (isset($_SERVER[$header])) {
-                $headerValue = $_SERVER[$header];
-            }
-        }
-        return $headerValue;
     }
 
     /**

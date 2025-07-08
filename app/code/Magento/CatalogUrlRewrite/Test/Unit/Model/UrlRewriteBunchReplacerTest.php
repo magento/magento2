@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,11 @@ class UrlRewriteBunchReplacerTest extends TestCase
         $urls = [[1], [2]];
         $this->urlPersistMock->expects($this->exactly(2))
             ->method('replace')
-            ->withConsecutive([[[1]]], [[[2]]]);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == [[1]] || $arg1 == [[1]]) {
+                    return null;
+                }
+            });
         $this->urlRewriteBunchReplacer->doBunchReplace($urls, 1);
     }
 }

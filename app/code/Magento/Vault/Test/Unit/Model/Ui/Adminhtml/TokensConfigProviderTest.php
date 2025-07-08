@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface;
@@ -44,12 +45,12 @@ class TokensConfigProviderTest extends TestCase
     /**#@+
      * Global values
      */
-    const STORE_ID = 1;
-    const ORDER_ID = 2;
-    const ORDER_PAYMENT_ENTITY_ID = 3;
-    const ENTITY_ID = 4;
-    const VAULT_PAYMENT_CODE = 'vault_payment';
-    const VAULT_PROVIDER_CODE = 'payment';
+    public const STORE_ID = 1;
+    public const ORDER_ID = 2;
+    public const ORDER_PAYMENT_ENTITY_ID = 3;
+    public const ENTITY_ID = 4;
+    public const VAULT_PAYMENT_CODE = 'vault_payment';
+    public const VAULT_PROVIDER_CODE = 'payment';
     /**#@-*/
 
     /**
@@ -76,6 +77,11 @@ class TokensConfigProviderTest extends TestCase
      * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
+
+    /**
+     * @var WebsiteInterface|MockObject
+     */
+    private $websiteMock;
 
     /**
      * @var StoreInterface|MockObject
@@ -134,14 +140,15 @@ class TokensConfigProviderTest extends TestCase
             ->getMock();
         $this->session = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getReordered', 'getStoreId'])
+            ->addMethods(['getCustomerId', 'getStoreId', 'getReordered'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
         $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentDataHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethodInstance'])
+            ->onlyMethods(['getMethodInstance'])
             ->getMock();
         $this->paymentTokenManagement = $this->getMockBuilder(PaymentTokenManagementInterface::class)
             ->getMockForAbstractClass();
@@ -217,6 +224,19 @@ class TokensConfigProviderTest extends TestCase
             ->method('getProviderCode')
             ->willReturn(self::VAULT_PROVIDER_CODE);
 
+        $this->websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $this->storeManager->expects(static::once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
+
+        $this->websiteMock->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->session->expects(static::once())
+            ->method('getQuote')
+            ->willReturn(null);
+
         /** @var PaymentTokenInterface|MockObject $token */
         $token = $this->getMockBuilder(PaymentTokenInterface::class)
             ->getMockForAbstractClass();
@@ -281,6 +301,14 @@ class TokensConfigProviderTest extends TestCase
         $this->vaultPayment->expects(static::once())
             ->method('getProviderCode')
             ->willReturn(self::VAULT_PROVIDER_CODE);
+        $this->websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $this->storeManager->expects(static::once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
+
+        $this->websiteMock->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
 
         /** @var PaymentTokenInterface|MockObject $token */
         $token = $this->getMockBuilder(PaymentTokenInterface::class)
@@ -381,7 +409,7 @@ class TokensConfigProviderTest extends TestCase
      * Set of catching exception types
      * @return array
      */
-    public function getTokensComponentsGuestCustomerExceptionsProvider()
+    public static function getTokensComponentsGuestCustomerExceptionsProvider()
     {
         return [
             [new InputException()],
@@ -553,10 +581,12 @@ class TokensConfigProviderTest extends TestCase
             ->method('setField')
             ->with($field)
             ->willReturnSelf();
-        $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
-            ->method('setValue')
-            ->with($value)
-            ->willReturnSelf();
+        if ($value !== null) {
+            $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
+                ->method('setValue')
+                ->with($value)
+                ->willReturnSelf();
+        }
         $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
             ->method('create')
             ->willReturn($filterObject);
@@ -595,13 +625,14 @@ class TokensConfigProviderTest extends TestCase
         );
 
         $isVisibleFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, 1, 4);
+        $websiteFilter1 = $this->createExpectedFilter(PaymentTokenInterface::WEBSITE_ID, 1, 5);
+        $websiteFilter2 = $this->createExpectedFilter(PaymentTokenInterface::WEBSITE_ID, null, 6);
 
-        $this->filterBuilder->expects(static::once())
+        $this->filterBuilder->expects(self::exactly(2))
             ->method('setConditionType')
-            ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::exactly(5))
+        $this->searchCriteriaBuilder->expects(self::exactly(6))
             ->method('addFilters')
             ->willReturnMap(
                 [
@@ -610,6 +641,7 @@ class TokensConfigProviderTest extends TestCase
                     [$expiresAtFilter, $this->searchCriteriaBuilder],
                     [$isActiveFilter, $this->searchCriteriaBuilder],
                     [$isVisibleFilter, $this->searchCriteriaBuilder],
+                    [[$websiteFilter1, $websiteFilter2], $this->searchCriteriaBuilder],
                 ]
             );
 

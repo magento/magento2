@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
+
+use Magento\Store\Model\Store;
 
 /**
  * @api
@@ -119,6 +121,7 @@ class CategoryProcessor
         $category->setIsActive(true);
         $category->setIncludeInMenu(true);
         $category->setAttributeSetId($category->getDefaultAttributeSetId());
+        $category->setStoreId(Store::DEFAULT_STORE_ID);
         $category->save();
         $this->categoriesCache[$category->getId()] = $category;
         return $category->getId();

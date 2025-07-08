@@ -49,11 +49,11 @@ class ValidatorTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->templateFactory = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->template = $this->getMockBuilder(TemplateInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'emulateDesign',
                     'setForcedArea',
@@ -66,7 +66,7 @@ class ValidatorTest extends TestCase
         $this->templateFactory->expects($this->any())->method('create')->willReturn($this->template);
         $this->designConfig = $this->getMockBuilder(DesignConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes'])
+            ->onlyMethods(['getExtensionAttributes'])
             ->getMockForAbstractClass();
     }
 
@@ -92,7 +92,7 @@ class ValidatorTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDesignConfigData'])
+            ->addMethods(['getDesignConfigData'])
             ->getMockForAbstractClass();
 
         $extensionAttributes->expects($this->any())->method('getDesignConfigData')->willReturn(

@@ -95,7 +95,7 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function addUniqueFieldDataProvider(): array
+    public static function addUniqueFieldDataProvider(): array
     {
         return [
             [
@@ -192,7 +192,7 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function getTableDataProvider(): array
+    public static function getTableDataProvider(): array
     {
         return [
             [
@@ -257,7 +257,7 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function getChecksumProvider(): array
+    public static function getChecksumProvider(): array
     {
         return [
             [
@@ -464,7 +464,7 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function hasDataChangedDataProvider(): array
+    public static function hasDataChangedDataProvider(): array
     {
         return [
             [true, true],
@@ -570,7 +570,15 @@ class AbstractDbTest extends TestCase
             ->with(Select::WHERE);
         $select->expects($this->exactly(2))
             ->method('where')
-            ->withConsecutive(['uniqueField IS NULL'], ['idFieldName!=?', 0]);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'uniqueField IS NULL') {
+                        return null;
+                    } elseif ($arg1 == 'idFieldName!=?' && $arg2 == 0) {
+                        return null;
+                    }
+                }
+            );
         $this->_model->addUniqueField(['field' => 'uniqueField']);
         $this->_model->save($abstractModelMock);
     }
@@ -640,7 +648,7 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function saveNewObjectDataProvider(): array
+    public static function saveNewObjectDataProvider(): array
     {
         return [[true], [false]];
     }

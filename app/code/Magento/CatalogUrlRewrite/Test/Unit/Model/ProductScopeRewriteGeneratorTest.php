@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -114,7 +114,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->objectRegistryFactory = $this->getMockBuilder(
             ObjectRegistryFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->storeViewService = $this->getMockBuilder(StoreViewService::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -161,11 +161,15 @@ class ProductScopeRewriteGeneratorTest extends TestCase
     public function testGenerationForGlobalScope()
     {
         $this->configMock->expects($this->any())->method('getValue')
-            ->with('catalog/seo/generate_category_product_rewrites')
             ->willReturn('1');
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getStoreId')->willReturn(null);
         $product->expects($this->any())->method('getStoreIds')->willReturn([1]);
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getStoreGroupId')->willReturn(1);
+        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
         $this->storeViewService->expects($this->once())->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->willReturn(true);
         $this->initObjectRegistryFactory([]);
@@ -211,6 +215,11 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getStoreId')->willReturn(1);
         $product->expects($this->never())->method('getStoreIds');
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getStoreGroupId')->willReturn(1);
+        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
         $this->categoryMock->expects($this->any())->method('getParentIds')
             ->willReturn(['root-id', $storeRootCategoryId]);
         $this->categoryMock->expects($this->any())->method('getId')->willReturn($category_id);
@@ -230,6 +239,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
             ->willReturn([]);
 
         $this->categoryRepositoryMock->expects($this->once())->method('get')->willReturn($this->categoryMock);
+        $this->configMock->expects($this->any())->method('getValue')->willReturn('1');
 
         $this->assertEquals(
             ['category-1_1' => $canonical],
@@ -276,7 +286,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function isCategoryProperForGeneratingDataProvider()
+    public static function isCategoryProperForGeneratingDataProvider()
     {
         return [
             [['0'], false],

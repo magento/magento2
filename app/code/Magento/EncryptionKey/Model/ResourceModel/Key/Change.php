@@ -1,14 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\EncryptionKey\Model\ResourceModel\Key;
 
+use \Exception;
+use Magento\Config\Model\Config\Backend\Encrypted;
+use Magento\Config\Model\Config\Structure;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Encryption key changer resource model
@@ -18,61 +30,63 @@ use Magento\Framework\Config\File\ConfigFilePool;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @deprecated
+ * @see Extensible Reencryption Mechanism
  */
-class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Change extends AbstractDb
 {
     /**
      * Encryptor interface
      *
-     * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @var EncryptorInterface
      */
     protected $encryptor;
 
     /**
      * Filesystem directory write interface
      *
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     protected $directory;
 
     /**
      * System configuration structure
      *
-     * @var \Magento\Config\Model\Config\Structure
+     * @var Structure
      */
     protected $structure;
 
     /**
      * Configuration writer
      *
-     * @var \Magento\Framework\App\DeploymentConfig\Writer
+     * @var Writer
      */
     protected $writer;
 
     /**
-     * Random
+     * Random string generator
      *
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      * @since 100.0.4
      */
     protected $random;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Config\Model\Config\Structure $structure
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
-     * @param \Magento\Framework\Math\Random $random
+     * @param Context $context
+     * @param Filesystem $filesystem
+     * @param Structure $structure
+     * @param EncryptorInterface $encryptor
+     * @param Writer $writer
+     * @param Random $random
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Config\Model\Config\Structure $structure,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\App\DeploymentConfig\Writer $writer,
-        \Magento\Framework\Math\Random $random,
+        Context $context,
+        Filesystem $filesystem,
+        Structure $structure,
+        EncryptorInterface $encryptor,
+        Writer $writer,
+        Random $random,
         $connectionName = null
     ) {
         $this->encryptor = clone $encryptor;
@@ -98,20 +112,20 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string|null $key
      * @return null|string
-     * @throws \Exception
+     * @throws FileSystemException|LocalizedException|Exception
+     * @deprecated
+     * @see Extensible Reencryption Mechanism
      */
     public function changeEncryptionKey($key = null)
     {
         // prepare new key, encryptor and new configuration segment
         if (!$this->writer->checkIfWritable()) {
-            throw new \Exception(__('Deployment configuration file is not writable.'));
+            throw new FileSystemException(__('Deployment configuration file is not writable.'));
         }
 
         if (null === $key) {
-            // md5() here is not for cryptographic use. It used for generate encryption key itself
-            // and do not encrypt any passwords
-            // phpcs:ignore Magento2.Security.InsecureFunction
-            $key = md5($this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE));
+            $key = ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX .
+                $this->random->getRandomBytes(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
         }
         $this->encryptor->setNewKey($key);
 
@@ -128,7 +142,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->writer->saveConfig($configData);
             $this->commit();
             return $key;
-        } catch (\Exception $e) {
+        } catch (LocalizedException $e) {
             $this->rollBack();
             throw $e;
         }
@@ -138,15 +152,17 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Gather all encrypted system config values and re-encrypt them
      *
      * @return void
+     * @deprecated
+     * @see Extensible Reencryption Mechanism
      */
     protected function _reEncryptSystemConfigurationValues()
     {
         // look for encrypted node entries in all system.xml files
-        /** @var \Magento\Config\Model\Config\Structure $configStructure  */
+        /** @var Structure $configStructure  */
         $configStructure = $this->structure;
         $paths = $configStructure->getFieldPathsByAttribute(
             'backend_model',
-            \Magento\Config\Model\Config\Backend\Encrypted::class
+            Encrypted::class
         );
 
         // walk through found data and re-encrypt it
@@ -173,6 +189,8 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Gather saved credit card numbers from sales order payments and re-encrypt them
      *
      * @return void
+     * @deprecated
+     * @see Extensible Reencryption Mechanism
      */
     protected function _reEncryptCreditCardNumbers()
     {

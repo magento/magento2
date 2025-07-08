@@ -17,12 +17,14 @@ A lot of functionality in the module is on JavaScript, use [mixins](https://deve
 ### Layouts
 
 This module introduces the following layouts in the `view/frontend/layout` directory:
+
 - `checkout_cart_index`
 - `checkout_index_index`
 
 ## Additional information
 
 You can get more information about delivery method in magento at the articles:
-- [FedEx Configuration Settings](https://docs.magento.com/user-guide/shipping/fedex.html)
-- [Delivery Methods Configuration](https://docs.magento.com/user-guide/configuration/sales/delivery-methods.html)
+
+- [FedEx Configuration Settings](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/delivery/shipping-carriers/fedex.html)
+- [Delivery Methods Configuration](https://experienceleague.adobe.com/docs/commerce-admin/config/sales/delivery-methods.html)
 - [Add custom shipping carrier](https://developer.adobe.com/commerce/php/tutorials/frontend/custom-checkout/add-shipping-carrier/)

@@ -17,6 +17,7 @@
             <description value="Admin should be able to uncheck Default Value checkbox for dependent field"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-12604"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,20 +115,20 @@ class CustomerGroupTest extends TestCase
      *
      * @return array
      */
-    public function aroundSaveDataProvider()
+    public static function aroundSaveDataProvider()
     {
         return [
             'customer_group_id = 0' => [
-                'customer_group_id' => '0',
-                'create_tables_call_times' => 0
+                'customerGroupId' => '0',
+                'callTimes' => 0
             ],
             'customer_group_id = 1' => [
-                'customer_group_id' => '1',
-                'create_tables_call_times' => 0
+                'customerGroupId' => '1',
+                'callTimes' => 0
             ],
             'customer_group_id = null' => [
-                'customer_group_id' => null,
-                'create_tables_call_times' => 1
+                'customerGroupId' => null,
+                'callTimes' => 1
             ],
         ];
     }

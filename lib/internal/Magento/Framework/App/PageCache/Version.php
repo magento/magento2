@@ -1,9 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\PageCache;
+
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\App\Request\Http;
 
 /**
  * PageCache Version
@@ -15,45 +22,30 @@ class Version
     /**
      * Name of cookie that holds private content version
      */
-    const COOKIE_NAME = 'private_content_version';
+    public const COOKIE_NAME = 'private_content_version';
 
     /**
      * Ten years cookie period
      */
-    const COOKIE_PERIOD = 315360000;
+    public const COOKIE_PERIOD = 315360000;
 
     /**
-     * Cookie Manager
-     *
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * Config setting for disabling session for GraphQl
      */
-    protected $cookieManager;
+    private const XML_PATH_GRAPHQL_DISABLE_SESSION = 'graphql/session/disable';
 
     /**
-     * Request
-     *
-     * @var \Magento\Framework\App\Request\Http
-     */
-    protected $request;
-
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    protected $cookieMetadataFactory;
-
-    /**
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\App\Request\Http $request
+     * @param CookieManagerInterface $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param Http $request
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\App\Request\Http $request
+        protected readonly CookieManagerInterface $cookieManager,
+        protected readonly CookieMetadataFactory $cookieMetadataFactory,
+        protected readonly Http $request,
+        protected readonly ScopeConfigInterface $scopeConfig
     ) {
-        $this->cookieManager = $cookieManager;
-        $this->request = $request;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
     }
 
     /**
@@ -61,7 +53,7 @@ class Version
      *
      * @return string
      */
-    protected function generateValue()
+    protected function generateValue(): string
     {
         //phpcs:ignore
         return md5(rand() . time());
@@ -75,16 +67,36 @@ class Version
      *
      * @return void
      */
-    public function process()
+    public function process(): void
     {
-        if ($this->request->isPost()) {
-            $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-                ->setDuration(self::COOKIE_PERIOD)
-                ->setPath('/')
-                ->setSecure($this->request->isSecure())
-                ->setHttpOnly(false)
-                ->setSameSite('Lax');
-            $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $this->generateValue(), $publicCookieMetadata);
+        if (!$this->request->isPost()) {
+            return;
         }
+
+        $originalPathInfo = $this->request->getOriginalPathInfo();
+        if ($originalPathInfo && str_contains($originalPathInfo, '/graphql') && $this->isSessionDisabled() === true) {
+            return;
+        }
+
+        $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+            ->setDuration(self::COOKIE_PERIOD)
+            ->setPath('/')
+            ->setSecure($this->request->isSecure())
+            ->setHttpOnly(false)
+            ->setSameSite('Lax');
+        $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $this->generateValue(), $publicCookieMetadata);
+    }
+
+    /**
+     * Returns configuration setting for disable session for GraphQl
+     *
+     * @return bool
+     */
+    private function isSessionDisabled(): bool
+    {
+        return (bool)$this->scopeConfig->getValue(
+            self::XML_PATH_GRAPHQL_DISABLE_SESSION,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        );
     }
 }

@@ -18,6 +18,7 @@
             <testCaseId value="MC-5301"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

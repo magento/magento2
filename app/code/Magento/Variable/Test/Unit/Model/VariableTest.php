@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\Escaper;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager\TestProvidesServiceInterface;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
-use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Validation\ValidationException;
 
 class VariableTest extends TestCase
 {
@@ -67,6 +69,7 @@ class VariableTest extends TestCase
         $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->getServicesForObjMap();
         $this->model = $this->objectManager->getObject(
             \Magento\Variable\Model\Variable::class,
             [
@@ -77,6 +80,25 @@ class VariableTest extends TestCase
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
+    }
+
+    /**
+     * Replace Object Manager/Object Mapping
+     * @return void
+     */
+    public function getServicesForObjMap()
+    {
+        $value = $this->resourceCollectionMock;
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMockForAbstractClass();
+        $objectManagerMock->method('create')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+        $objectManagerMock->method('get')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testGetValueHtml()
@@ -182,7 +204,7 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $variable = [
             'variable_id' => 'matching_id',
@@ -197,7 +219,7 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function validateMissingInfoDataProvider()
+    public static function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],
@@ -248,7 +270,7 @@ class VariableTest extends TestCase
      *
      * @return array
      */
-    public function getWysiwygValidationCases(): array
+    public static function getWysiwygValidationCases(): array
     {
         return [
             'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -21,14 +21,18 @@
         <before>
             <!--Enable Async Configuration-->
             <magentoCLI stepKey="EnableAsyncConfig" command="setup:config:set --no-interaction --config-async 1"/>
-            <magentoCLI stepKey="ClearConfigCache" command="cache:flush"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="ClearConfigCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <!--Login to Admin-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="DisableAsyncConfig" command="setup:config:set --no-interaction --config-async 0"/>
             <magentoCLI stepKey="setBackDefaultConfigValue" command="config:set catalog/frontend/grid_per_page 12" />
-            <magentoCLI stepKey="ClearConfigCache" command="cache:clean"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="ClearConfigCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
@@ -55,8 +59,10 @@
         <see selector="{{CatalogSection.successMessage}}" userInput="Configuration changes will be applied by consumer soon." stepKey="seeCustomSuccessMessage"/>
 
         <!--Trigger the Consumer-->
-        <magentoCLI stepKey="EnableAsyncConfig" command="queue:consumers:start saveConfigProcessor --max-messages=1"/>
-
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="EnableAsyncConfig">
+            <argument name="consumerName" value="saveConfigProcessor"/>
+            <argument name="maxMessages" value="1"/>
+        </actionGroup>
         <!--Open Configuration Page Again-->
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="navigateToConfigurationPageAgain" />
         <waitForPageLoad stepKey="waitForPageLoadAgain"/>

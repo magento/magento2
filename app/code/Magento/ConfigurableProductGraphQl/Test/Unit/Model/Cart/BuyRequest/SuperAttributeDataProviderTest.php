@@ -16,6 +16,7 @@ use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollect
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Stdlib\ArrayManagerFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SuperAttributeDataProvider
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuperAttributeDataProviderTest extends TestCase
 {
@@ -66,18 +69,21 @@ class SuperAttributeDataProviderTest extends TestCase
         $this->optionCollection = $this->createMock(OptionCollection::class);
         $this->metadataPool = $this->createMock(MetadataPool::class);
         $this->stockState = $this->createMock(StockStateInterface::class);
-
+        $arrayManagerFactory = $this->createMock(ArrayManagerFactory::class);
+        $arrayManagerFactory->method('create')->willReturn($this->arrayManager);
         $this->superAttributeDataProvider = new SuperAttributeDataProvider(
             $this->arrayManager,
             $this->productRepository,
             $this->optionCollection,
             $this->metadataPool,
-            $this->stockState
+            $this->stockState,
+            $arrayManagerFactory,
         );
     }
 
     /**
      * Check that website id is correctly retrieved
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testExecute(): void
     {
@@ -92,18 +98,33 @@ class SuperAttributeDataProviderTest extends TestCase
         ];
 
         $this->arrayManager->method('get')
-            ->withConsecutive(
-                ['parent_sku', $cartItemData],
-                ['data/sku', $cartItemData],
-                ['data/quantity', $cartItemData],
-                ['model', $cartItemData],
-            )
-            ->willReturnOnConsecutiveCalls(
-                'configurable',
-                'simple1',
-                2.0,
-                $quoteMock,
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($cartItemData, $quoteMock) {
+                static $callCount = 0;
+                $callCount++;
+
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == 'parent_sku' && $arg2 == $cartItemData) {
+                            return 'configurable';
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == 'data/sku' && $arg2 == $cartItemData) {
+                            return 'simple1';
+                        }
+                        break;
+                    case 3:
+                        if ($arg1 == 'data/quantity' && $arg2 == $cartItemData) {
+                            return 2.0;
+                        }
+                        break;
+                    case 4:
+                        if ($arg1 == 'model' && $arg2 == $cartItemData) {
+                            return $quoteMock;
+                        }
+                        break;
+                }
+            });
 
         $websiteId = 1;
         $storeMock = $this->createMock(Store::class);
@@ -150,7 +171,6 @@ class SuperAttributeDataProviderTest extends TestCase
                     'values' => [['value_index' => 1]],
                 ]
             ]);
-
         $this->assertEquals(['super_attribute' => [1 => 1]], $this->superAttributeDataProvider->execute($cartItemData));
     }
 }

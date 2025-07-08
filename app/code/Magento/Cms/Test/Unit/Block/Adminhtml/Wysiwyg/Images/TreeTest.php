@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,6 +62,8 @@ class TreeTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
         $contextMock = $this->createMock(Context::class);
         $this->cmsWysiwygImagesMock = $this->createMock(Images::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);

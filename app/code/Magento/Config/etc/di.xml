@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -11,6 +11,7 @@
     <preference for="Magento\Framework\App\Config\ConfigResource\ConfigInterface" type="Magento\Config\Model\ResourceModel\Config" />
     <preference for="Magento\Framework\App\Config\CommentParserInterface" type="Magento\Config\Model\Config\Parser\Comment" />
     <preference for="Magento\Config\Model\Config\Structure\ElementVisibilityInterface" type="Magento\Config\Model\Config\Structure\ElementVisibilityComposite" />
+    <preference for="Magento\Config\Console\Command\LocaleEmulatorInterface" type="Magento\Config\Console\Command\LocaleEmulator" />
     <type name="Magento\Config\Model\Config\Structure\ElementVisibilityComposite">
         <arguments>
             <argument name="visibility" xsi:type="array">
@@ -309,6 +310,12 @@
     <type name="Magento\Config\Console\Command\ConfigShowCommand">
         <arguments>
             <argument name="configSource" xsi:type="object">configShowSourceAggregated</argument>
+            <argument name="localeEmulator" xsi:type="object">Magento\Config\Console\Command\LocaleEmulatorInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Console\Command\ConfigSetCommand">
+        <arguments>
+            <argument name="localeEmulator" xsi:type="object">Magento\Config\Console\Command\LocaleEmulatorInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Console\CommandListInterface">
@@ -378,6 +385,41 @@
     <type name="Magento\Config\Model\Config">
         <arguments>
             <argument name="configStructure" xsi:type="object">\Magento\Config\Model\Config\Structure\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\TypeList">
+        <plugin name="warm_config_cache" type="Magento\Config\Plugin\Framework\App\Cache\TypeList\WarmConfigCache"/>
+    </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_Config::config" xsi:type="object">Magento\Config\App\Config\ReloadConfig</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- TODO: Move these to Framework's di.xml after issue with array_replace_recursive in configuration are resolved.
+    -->
+    <type name="Magento\Framework\ObjectManager\Resetter\WeakMapSorter">
+        <arguments>
+            <argument name="sortOrder" xsi:type="array">
+                <item name="Magento\Framework\Session\SessionManagerInterface" xsi:type="number">1000</item>
+                <item name="Magento\Framework\App\Cache\State" xsi:type="number">10000</item>
+                <item name="Magento\Framework\DB\Logger\LoggerProxy" xsi:type="number">9999</item>
+                <item name="Magento\Framework\DB\Adapter\Pdo\Mysql" xsi:type="number">9999</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Config\Model\Data\ReEncryptorList\CoreConfigDataReEncryptor" type="Magento\EncryptionKey\Model\Data\ReEncryptorList\ReEncryptor">
+        <arguments>
+            <argument name="description" xsi:type="string">Re-encrypts 'value' column in the 'core_config_data' DB table.</argument>
+            <argument name="handler" xsi:type="object">Magento\Config\Model\Data\ReEncryptorList\CoreConfigDataReEncryptor\Handler</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\EncryptionKey\Model\Data\ReEncryptorList">
+        <arguments>
+            <argument name="reEncryptors" xsi:type="array">
+                <item name="core_config_data" xsi:type="object">Magento\Config\Model\Data\ReEncryptorList\CoreConfigDataReEncryptor</item>
+            </argument>
         </arguments>
     </type>
 </config>

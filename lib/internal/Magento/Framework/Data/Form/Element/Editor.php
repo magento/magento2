@@ -13,8 +13,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Form editor element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Editor extends Textarea
 {
@@ -49,7 +47,7 @@ class Editor extends Textarea
         CollectionFactory $factoryCollection,
         Escaper $escaper,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ?Random $random = null,
         ?SecureHtmlRenderer $secureRenderer = null
     ) {

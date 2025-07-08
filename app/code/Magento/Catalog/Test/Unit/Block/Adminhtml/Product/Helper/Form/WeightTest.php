@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,9 @@ use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Radios;
 use Magento\Framework\Locale\Format;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,6 +48,18 @@ class WeightTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->weightSwitcher = $this->getMockBuilder(Radios::class)
             ->addMethods(['setName', 'setLabel'])
             ->onlyMethods(['setId', 'setForm'])
@@ -72,7 +86,7 @@ class WeightTest extends TestCase
             ['create']
         );
 
-        $this->_model = (new ObjectManager($this))->getObject(
+        $this->_model = $objectManager->getObject(
             Weight::class,
             [
                 'factoryElement' => $this->factory,

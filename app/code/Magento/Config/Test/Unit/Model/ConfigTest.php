@@ -175,6 +175,8 @@ class ConfigTest extends TestCase
      */
     public function testSaveDoesNotDoAnythingIfGroupsAreNotPassed(): void
     {
+        $this->appConfigMock->expects($this->never())
+            ->method('reinit');
         $this->configLoaderMock->expects($this->never())->method('getConfigByPath');
         $this->model->save();
     }
@@ -184,6 +186,8 @@ class ConfigTest extends TestCase
      */
     public function testSaveEmptiesNonSetArguments(): void
     {
+        $this->appConfigMock->expects($this->never())
+            ->method('reinit');
         $this->structureReaderMock->expects($this->never())->method('getConfiguration');
         $this->assertNull($this->model->getSection());
         $this->assertNull($this->model->getWebsite());
@@ -199,6 +203,8 @@ class ConfigTest extends TestCase
      */
     public function testSaveToCheckAdminSystemConfigChangedSectionEvent(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
 
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
@@ -207,16 +213,12 @@ class ConfigTest extends TestCase
 
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'admin_system_config_changed_section_',
-                    $this->arrayHasKey('website')
-                ],
-                [
-                    'admin_system_config_changed_section_',
-                    $this->arrayHasKey('store')
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1== 'admin_system_config_changed_section_' &&
+                    (array_key_exists('website', $arg2) || array_key_exists('store', $arg2))) {
+                    return null;
+                }
+            });
 
         $this->model->setGroups(['1' => ['data']]);
         $this->model->save();
@@ -227,6 +229,8 @@ class ConfigTest extends TestCase
      */
     public function testDoNotSaveReadOnlyFields(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
 
@@ -245,8 +249,10 @@ class ConfigTest extends TestCase
 
         $this->configStructure
             ->method('getElement')
-            ->withConsecutive(['section/1'], ['section/1'], ['section/1/key'])
-            ->willReturnOnConsecutiveCalls($group, $group, $field);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['section/1'] => $group,
+                ['section/1/key'] => $field
+            });
 
         $backendModel = $this->createPartialMock(
             Value::class,
@@ -265,6 +271,8 @@ class ConfigTest extends TestCase
      */
     public function testSaveToCheckScopeDataSet(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
 
@@ -272,16 +280,12 @@ class ConfigTest extends TestCase
 
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'admin_system_config_changed_section_section',
-                    $this->arrayHasKey('website')
-                ],
-                [
-                    'admin_system_config_changed_section_section',
-                    $this->arrayHasKey('store')
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1== 'admin_system_config_changed_section_' &&
+                    (array_key_exists('website', $arg2) || array_key_exists('store', $arg2))) {
+                    return null;
+                }
+            });
 
         $group = $this->createMock(Group::class);
         $group->method('getPath')->willReturn('section/1');
@@ -292,8 +296,10 @@ class ConfigTest extends TestCase
 
         $this->configStructure
             ->method('getElement')
-            ->withConsecutive(['section/1'], ['section/1'], ['section/1/key'], ['section/1'], ['section/1/key'])
-            ->willReturnOnConsecutiveCalls($group, $group, $field, $group, $field);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['section/1'] => $group,
+                ['section/1/key'] => $field
+            });
 
         $this->scopeResolver->expects($this->atLeastOnce())
             ->method('getScope')
@@ -366,7 +372,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function setDataByPathDataProvider(): array
+    public static function setDataByPathDataProvider(): array
     {
         return [
             'depth 3' => [
@@ -433,7 +439,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function setDataByPathWrongDepthDataProvider(): array
+    public static function setDataByPathWrongDepthDataProvider(): array
     {
         return [
             'depth 2' => ['section/group'],

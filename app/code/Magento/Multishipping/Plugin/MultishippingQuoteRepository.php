@@ -144,6 +144,7 @@ class MultishippingQuoteRepository
             $quoteItem = $quote->getItemById($addressItem->getQuoteItemId());
             if ($quoteItem) {
                 $multishippingQuoteItem = clone $quoteItem;
+                $multishippingQuoteItem->setQuote($quoteItem->getQuote());
                 $qty = $addressItem->getQty();
                 $sku = $multishippingQuoteItem->getSku();
                 if (isset($quoteItems[$sku])) {

@@ -157,7 +157,6 @@ class Request extends \Magento\Framework\Webapi\Request
     public function getContentType()
     {
         $headerValue = $this->getHeader('Content-Type');
-
         if (!$headerValue) {
             throw new \Magento\Framework\Exception\InputException(new Phrase('Content-Type header is empty.'));
         }

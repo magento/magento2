@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="importExport"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

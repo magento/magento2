@@ -11,5 +11,6 @@
         <element name="stateOptions" type="button" selector="#general_region-head"/>
         <element name="countriesWithRequiredRegions" type="select" selector="#general_region_state_required"/>
         <element name="allowToChooseState" type="select" selector="general_region_display_all"/>
+        <element name="allowToChooseStateOptionalForCountry" type="select" selector="//td[@class='value']//select[@name='groups[region][fields][display_all][value]']"/>
     </section>
 </sections>

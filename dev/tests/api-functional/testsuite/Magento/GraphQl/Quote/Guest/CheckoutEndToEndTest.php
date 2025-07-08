@@ -65,6 +65,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store checkout/options/guest_checkout 1
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      */
     public function testCheckoutWorkflow()
@@ -168,7 +169,7 @@ QUERY;
     private function addProductToCart(string $cartId, float $quantity, string $sku): void
     {
         $query = <<<QUERY
-mutation {  
+mutation {
   addSimpleProductsToCart(
     input: {
       cart_id: "{$cartId}"
@@ -310,7 +311,7 @@ QUERY;
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-    cart_id: "{$cartId}", 
+    cart_id: "{$cartId}",
     shipping_methods: [
       {
          carrier_code: "{$method['carrier_code']}"

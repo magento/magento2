@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-38994"/>
             <group value="Multishipment"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -29,6 +30,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createdSimpleProduct" stepKey="deleteCreatedSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
         </after>
         <!-- Login to the Storefront as created customer -->

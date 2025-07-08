@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Media;
 
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -16,7 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  * @since 100.0.2
  */
-class Config implements ConfigInterface
+class Config implements ConfigInterface, ResetAfterRequestInterface
 {
     /**
      * @var StoreManagerInterface
@@ -29,7 +30,7 @@ class Config implements ConfigInterface
     private $attributeHelper;
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
     private $mediaAttributeCodes;
 
@@ -198,5 +199,13 @@ class Config implements ConfigInterface
                 ->get(\Magento\Eav\Model\Entity\Attribute::class);
         }
         return $this->attributeHelper;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->mediaAttributeCodes = null;
     }
 }

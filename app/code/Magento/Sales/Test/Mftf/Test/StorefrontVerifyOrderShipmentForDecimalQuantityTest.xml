@@ -18,6 +18,7 @@
             <useCaseId value="MC-39353"/>
             <severity value="MAJOR"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
@@ -36,6 +37,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
             <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
             <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -73,6 +75,7 @@
 
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontSelectCheckMoneyOrderActionGroup" stepKey="selectCheckmoIfNeeded" />
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>

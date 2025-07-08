@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
@@ -34,6 +34,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Current customer
      *
      * @deprecated 100.2.0 as unused property
+     * @see Nothing
      * @var CurrentCustomer
      */
     protected $currentCustomer;
@@ -49,7 +50,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Data $imageHelper
+     * @var \Magento\ConfigurableProduct\Helper\Data
      */
     protected $helper;
 
@@ -103,9 +104,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
         array $data = [],
-        Format $localeFormat = null,
-        Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        ?Format $localeFormat = null,
+        ?Session $customerSession = null,
+        ?\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -359,6 +360,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Replace ',' on '.' for js
      *
      * @deprecated 100.1.10 Will be removed in major release
+     * @see Nothing
      * @param float $price
      * @return string
      */

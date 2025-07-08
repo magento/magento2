@@ -23,7 +23,8 @@ To deploy sample data from the Magento composer repository using Magento CLI:
 To deploy sample data from the Magento composer repository without Magento CLI:
 
 1. Specify sample data packages in the `require` section of the root `composer.json` file, for example:
-```
+
+```json
 {
     "require": {
         ...

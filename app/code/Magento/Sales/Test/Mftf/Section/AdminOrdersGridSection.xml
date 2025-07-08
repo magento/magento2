@@ -46,5 +46,12 @@
         <element name="orderId" type="text" selector="//table[contains(@class, 'data-grid')]//div[contains(text(), '{{orderId}}')]" parameterized="true"/>
         <element name="exactOrderId" type="text" selector="//table[contains(@class, 'data-grid')]//div[text()='{{orderId}}']" parameterized="true"/>
         <element name="orderIdByIncrementId" type="text" selector="//input[@class='admin__control-checkbox' and @value={{incrId}}]/parent::label/parent::td/following-sibling::td"  parameterized="true"/>
+        <element name="orderSubtotal" type="input" selector="//tbody//tr[@class='col-0']//td[@class='label' and contains(text(),'Subtotal')]/..//td//span[@class='price']"/>
+        <element name="orderPageSearchProductBySKU" type="input" selector="#sales_order_create_search_grid_filter_sku"/>
+        <element name="searchProductButtonOrderPage" type="button" selector="//div[@class='order-details order-details-existing-customer']//button[@title='Search']" timeout="60"/>
+        <element name="selectGiftsWrappingDesign" type="select" selector="//label[@class='admin__field-label' and text()='Gift Wrapping Design']/..//select"/>
+        <element name="giftsWrappingForOrderExclTaxPrice" type="text" selector="//td[contains(text(),'Gift Wrapping for Order (Excl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
+        <element name="giftsWrappingForOrderInclTaxPrice" type="text" selector="//td[contains(text(),'Gift Wrapping for Order (Incl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
+        <element name="secondRow" type="button" selector="tr.data-row:nth-of-type(2)"/>
     </section>
 </sections>

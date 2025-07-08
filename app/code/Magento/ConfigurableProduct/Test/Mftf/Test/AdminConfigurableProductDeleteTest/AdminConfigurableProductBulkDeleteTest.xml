@@ -16,6 +16,7 @@
             <testCaseId value="MC-99"/>
             <group value="ConfigurableProduct"/>
             <severity value="BLOCKER"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -124,6 +125,8 @@
         </before>
 
         <after>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetProductFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
@@ -135,7 +138,9 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Search for prefix of the 3 products we created via api -->

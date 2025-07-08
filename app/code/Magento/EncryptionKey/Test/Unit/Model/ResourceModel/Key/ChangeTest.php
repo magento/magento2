@@ -11,6 +11,7 @@ use Magento\Config\Model\Config\Structure;
 use Magento\EncryptionKey\Model\ResourceModel\Key\Change;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -66,41 +67,35 @@ class ChangeTest extends TestCase
     {
         $this->encryptMock = $this->getMockBuilder(EncryptorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setNewKey', 'exportKeys'])
+            ->addMethods(['setNewKey', 'exportKeys'])
             ->getMockForAbstractClass();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->structureMock = $this->getMockBuilder(Structure::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->writerMock = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'where', 'update'])
+            ->addMethods(['update'])
+            ->onlyMethods(['from', 'where'])
             ->getMock();
         $translationClassName = TransactionManagerInterface::class;
         $this->transactionMock = $this->getMockBuilder($translationClassName)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $relationClassName = ObjectRelationProcessor::class;
         $this->objRelationMock = $this->getMockBuilder($relationClassName)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->randomMock = $this->createMock(Random::class);
 
@@ -148,7 +143,7 @@ class ChangeTest extends TestCase
     public function testChangeEncryptionKey()
     {
         $this->setUpChangeEncryptionKey();
-        $this->randomMock->expects($this->never())->method('getRandomString');
+        $this->randomMock->expects($this->never())->method('getRandomBytes');
         $key = 'key';
         $this->assertEquals($key, $this->model->changeEncryptionKey($key));
     }
@@ -156,8 +151,11 @@ class ChangeTest extends TestCase
     public function testChangeEncryptionKeyAutogenerate()
     {
         $this->setUpChangeEncryptionKey();
-        $this->randomMock->expects($this->once())->method('getRandomString')->willReturn('abc');
-        $this->assertEquals(hash('md5', 'abc'), $this->model->changeEncryptionKey());
+        $this->randomMock->expects($this->once())->method('getRandomBytes')->willReturn('abc');
+        $this->assertEquals(
+            ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX . 'abc',
+            $this->model->changeEncryptionKey()
+        );
     }
 
     public function testChangeEncryptionKeyThrowsException()

@@ -129,7 +129,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
+                    <link>https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html#scope-settings</link>
                     <description translate="true">If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.</description>
                 </tooltip>
                 <imports>

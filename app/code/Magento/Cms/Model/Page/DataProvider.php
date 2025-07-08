@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Cms\Api\PageRepositoryInterface;
-use Magento\Cms\Model\PageFactory;
+use Magento\Cms\Model\Page\Service\PageService;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -34,11 +33,6 @@ class DataProvider extends ModifierPoolDataProvider
     protected $loadedData;
 
     /**
-     * @var PageRepositoryInterface
-     */
-    private $pageRepository;
-
-    /**
      * @var AuthorizationInterface
      */
     private $auth;
@@ -49,14 +43,9 @@ class DataProvider extends ModifierPoolDataProvider
     private $request;
 
     /**
-     * @var CustomLayoutManagerInterface
+     * @var PageService
      */
-    private $customLayoutManager;
-
-    /**
-     * @var PageFactory
-     */
-    private $pageFactory;
+    private $pageService;
 
     /**
      * @var LoggerInterface
@@ -74,9 +63,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param PoolInterface|null $pool
      * @param AuthorizationInterface|null $auth
      * @param RequestInterface|null $request
-     * @param CustomLayoutManagerInterface|null $customLayoutManager
-     * @param PageRepositoryInterface|null $pageRepository
-     * @param PageFactory|null $pageFactory
+     * @param PageService|null $pageService
      * @param LoggerInterface|null $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,12 +75,10 @@ class DataProvider extends ModifierPoolDataProvider
         DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null,
+        ?PoolInterface $pool = null,
         ?AuthorizationInterface $auth = null,
         ?RequestInterface $request = null,
-        ?CustomLayoutManagerInterface $customLayoutManager = null,
-        ?PageRepositoryInterface $pageRepository = null,
-        ?PageFactory $pageFactory = null,
+        ?PageService $pageService = null,
         ?LoggerInterface $logger = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
@@ -102,10 +87,7 @@ class DataProvider extends ModifierPoolDataProvider
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->meta = $this->prepareMeta($this->meta);
         $this->request = $request ?? ObjectManager::getInstance()->get(RequestInterface::class);
-        $this->customLayoutManager = $customLayoutManager
-            ?? ObjectManager::getInstance()->get(CustomLayoutManagerInterface::class);
-        $this->pageRepository = $pageRepository ?? ObjectManager::getInstance()->get(PageRepositoryInterface::class);
-        $this->pageFactory = $pageFactory ?: ObjectManager::getInstance()->get(PageFactory::class);
+        $this->pageService = $pageService ?: ObjectManager::getInstance()->get(PageService::class);
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
@@ -150,22 +132,16 @@ class DataProvider extends ModifierPoolDataProvider
     {
         $pageId = $this->getPageId();
         if ($pageId) {
-            try {
-                $page = $this->pageRepository->getById($pageId);
-            } catch (LocalizedException $exception) {
-                $page = $this->pageFactory->create();
-            }
-
-            return $page;
+            return $this->pageService->getPageById($pageId);
         }
 
         $data = $this->dataPersistor->get('cms_page');
         if (empty($data)) {
-            return $this->pageFactory->create();
+            return $this->pageService->createPageFactory();
         }
         $this->dataPersistor->clear('cms_page');
 
-        return $this->pageFactory->create()
+        return $this->pageService->createPageFactory()
             ->setData($data);
     }
 
@@ -215,12 +191,15 @@ class DataProvider extends ModifierPoolDataProvider
 
         $page = null;
         try {
-            $page = $this->pageRepository->getById($this->getPageId());
-            if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
-                $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
-            }
-            foreach ($this->customLayoutManager->fetchAvailableFiles($page) as $layoutFile) {
-                $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
+            $pageId = $this->getPageId();
+            if ($pageId) {
+                $page = $this->pageService->getPageById($pageId);
+                if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
+                    $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
+                }
+                foreach ($this->pageService->fetchAvailableCustomLayouts($page) as $layoutFile) {
+                    $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
+                }
             }
         } catch (LocalizedException $e) {
             $this->logger->error($e->getMessage());

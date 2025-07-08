@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +68,8 @@ class SpecialPriceStorageTest extends TestCase
     {
         $this->specialPriceResource = $this->getMockBuilder(SpecialPriceInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'update', 'delete', 'getEntityLinkField'])->getMockForAbstractClass();
+            ->addMethods(['getEntityLinkField'])
+            ->onlyMethods(['get', 'update', 'delete'])->getMockForAbstractClass();
         $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -85,7 +86,7 @@ class SpecialPriceStorageTest extends TestCase
         $this->specialPriceFactory = $this->getMockBuilder(
             SpecialPriceInterfaceFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

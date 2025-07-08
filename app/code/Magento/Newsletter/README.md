@@ -5,15 +5,18 @@ This module allows clients to subscribe for information about new promotions and
 ## Installation
 
 Before installing this module, note that the Magento_Newsletter is dependent on the following modules:
+
 - `Magento_Store`
 - `Magento_Customer`
 - `Magento_Eav`
 - `Magento_Widget`
 
 Before disabling or uninstalling this module, note that the following modules depends on this module:
+
 - `Magento_NewsletterGraphQl`
 
 This module creates the following tables in the database:
+
 - `newsletter_subscriber`
 - `newsletter_template`
 - `newsletter_queue`
@@ -34,6 +37,7 @@ A lot of functionality in the module is on JavaScript, use [mixins](https://deve
 ### Layouts
 
 This module introduces the following layouts in the `view/frontend/layout` and `view/adminhtml/layout` directories:
+
 - `view/adminhtml/layout`:
     - `newsletter_problem_block`
     - `newsletter_problem_grid`
@@ -53,7 +57,7 @@ This module introduces the following layouts in the `view/frontend/layout` and `
     - `newsletter_template_preview`
     - `newsletter_template_preview_popup`
     - `preview`
-    
+
 - `view/frontend/layout`:
     - `customer_account`
     - `customer_account_create`
@@ -65,18 +69,19 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 ### UI components
 
 This module extends customer form ui component the configuration file located in the `view/base/ui_component` directory:
+
 - `customer_form`
 
 For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ## Additional information
 
-[Learn more about newsletter](https://docs.magento.com/user-guide/marketing/newsletters.html).
+[Learn more about newsletter](https://experienceleague.adobe.com/docs/commerce-admin/marketing/communications/newsletters/newsletters.html).
 
 ### Cron options
 
 Cron group configuration can be set at `etc/crontab.xml`:
+
 - `newsletter_send_all` - schedules newsletter sending
 
 [Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).
-

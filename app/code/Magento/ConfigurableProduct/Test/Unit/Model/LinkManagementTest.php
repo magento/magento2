@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -130,13 +130,18 @@ class LinkManagementTest extends TestCase
         $childProduct->expects($this->once())->method('getData')->with('code')->willReturn(10);
         $childProduct->expects($this->once())->method('getStoreId')->willReturn(1);
         $childProduct->expects($this->once())->method('getAttributes')->willReturn([$attribute]);
+        $childProduct->expects($this->once())->method('getMediaGalleryEntries')->willReturn([]);
 
         $productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $productMock->expects($this->once())->method('setMediaGalleryEntries')->with([])->willReturnSelf();
 
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($productMock, ['store_id' => 1, 'code' => 10], ProductInterface::class)
-            ->willReturnSelf();
+            ->with(
+                $productMock,
+                ['store_id' => 1, 'code' => 10],
+                ProductInterface::class
+            )->willReturnSelf();
 
         $this->productFactory->expects($this->once())
             ->method('create')
@@ -231,8 +236,10 @@ class LinkManagementTest extends TestCase
 
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$productSku], [$childSku])
-            ->willReturnOnConsecutiveCalls($configurable, $simple);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$productSku] => $configurable,
+                [$childSku] => $simple
+            });
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
             ->willReturn(
@@ -289,8 +296,10 @@ class LinkManagementTest extends TestCase
 
         $this->productRepository
             ->method('get')
-            ->withConsecutive([$productSku], [$childSku])
-            ->willReturnOnConsecutiveCalls($configurable, $simple);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$productSku] => $configurable,
+                [$childSku] => $simple
+            });
 
         $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
             ->willReturn(

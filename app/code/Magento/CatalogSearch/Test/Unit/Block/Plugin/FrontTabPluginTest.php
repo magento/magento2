@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,7 +82,7 @@ class FrontTabPluginTest extends TestCase
             ->getMockForAbstractClass();
         $this->childBlockMock = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldMap', 'addFieldDependence'])
+            ->addMethods(['addFieldMap', 'addFieldDependence'])
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

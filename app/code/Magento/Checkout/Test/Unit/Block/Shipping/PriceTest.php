@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
-    const SUBTOTAL = 10;
-
     /**
      * @var Price
      */
@@ -61,7 +59,7 @@ class PriceTest extends TestCase
 
         $shippingRateMock = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice'])
+            ->addMethods(['getPrice'])
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')

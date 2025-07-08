@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6631"/>
             <group value="catalog_search"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/search/engine opensearch" stepKey="setSearchEngine"/>
@@ -34,7 +35,9 @@
                 <requiredEntity createDataKey="createProduct01"/>
                 <requiredEntity createDataKey="createProduct02"/>
             </createData>
-            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

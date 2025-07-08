@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Design\Theme\CustomizationFactory;
 use Magento\Framework\View\Design\Theme\CustomizationInterface;
@@ -102,7 +103,6 @@ class ThemeTest extends TestCase
         $this->themeModelFactory = $this->createPartialMock(ThemeFactory::class, ['create']);
         $this->validator = $this->createMock(Validator::class);
         $this->appState = $this->createMock(State::class);
-
         $objectManagerHelper = new ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
             Theme::class,
@@ -118,8 +118,28 @@ class ThemeTest extends TestCase
                 'themeModelFactory' => $this->themeModelFactory
             ]
         );
-
+        $this->getServicesForObjMap();
         $this->_model = $objectManagerHelper->getObject(Theme::class, $arguments);
+
+    }
+
+    /**
+     * Replace Object Manager/Object Mapping
+     * @return void
+     */
+    public function getServicesForObjMap()
+    {
+        $value = $this->resourceCollection;
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->getMockForAbstractClass();
+        $objectManagerMock->method('create')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+        $objectManagerMock->method('get')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     /**
@@ -157,7 +177,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function isVirtualDataProvider(): array
+    public static function isVirtualDataProvider(): array
     {
         return [
             ['type' => ThemeInterface::TYPE_VIRTUAL, 'isVirtual' => true],
@@ -183,7 +203,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function isPhysicalDataProvider(): array
+    public static function isPhysicalDataProvider(): array
     {
         return [
             ['type' => ThemeInterface::TYPE_VIRTUAL, 'isPhysical' => false],
@@ -209,7 +229,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function isVisibleDataProvider(): array
+    public static function isVisibleDataProvider(): array
     {
         return [
             ['type' => ThemeInterface::TYPE_VIRTUAL, 'isVisible' => true],
@@ -242,7 +262,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function isDeletableDataProvider(): array
+    public static function isDeletableDataProvider(): array
     {
         return [
             [ThemeInterface::TYPE_VIRTUAL, true],
@@ -267,7 +287,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function getCodeDataProvider(): array
+    public static function getCodeDataProvider(): array
     {
         return [
             'string code' => ['theme/code', 'theme/code'],
@@ -319,8 +339,15 @@ class ThemeTest extends TestCase
         $this->_model->setId(1);
         $this->resourceCollection
             ->method('addFieldToFilter')
-            ->withConsecutive(['parent_id', 1], ['type', Theme::TYPE_STAGING])
-            ->willReturnOnConsecutiveCalls($this->resourceCollection, $this->resourceCollection);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'parent_id' && $arg2 == 1) {
+                        return $this->resourceCollection;
+                    } elseif ($arg1 == 'type' && $arg2 == Theme::TYPE_STAGING) {
+                        return $this->resourceCollection;
+                    }
+                }
+            );
         $this->resourceCollection->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($theme);
@@ -347,8 +374,15 @@ class ThemeTest extends TestCase
         $this->_model->setId(1);
         $this->resourceCollection
             ->method('addFieldToFilter')
-            ->withConsecutive(['parent_id', 1], ['type', Theme::TYPE_STAGING])
-            ->willReturnOnConsecutiveCalls($this->resourceCollection, $this->resourceCollection);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'parent_id' && $arg2 == 1) {
+                        return $this->resourceCollection;
+                    } elseif ($arg1 == 'type' && $arg2 == Theme::TYPE_STAGING) {
+                        return $this->resourceCollection;
+                    }
+                }
+            );
         $this->resourceCollection->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($theme);
@@ -507,27 +541,47 @@ class ThemeTest extends TestCase
      */
     public function testToArray(array $themeData, array $expected): void
     {
+        if (!empty($themeData['parent_theme'])) {
+            $themeData['parent_theme'] = $themeData['parent_theme']($this);
+        }
+        if (!empty($themeData['inherited_themes'])) {
+            $themeData['inherited_themes']['key1'] = $themeData['inherited_themes']['key1']($this);
+            $themeData['inherited_themes']['key2'] = $themeData['inherited_themes']['key2']($this);
+        }
         $this->_model->setData($themeData);
         $this->assertEquals($expected, $this->_model->toArray());
+    }
+
+    protected function getMockForParentTheme() {
+        $parentTheme = $this->getMockBuilder(Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $parentTheme->expects($this->once())
+            ->method('toArray')
+            ->willReturn('parent_theme');
+        return $parentTheme;
+    }
+
+    protected function getMockForChildTheme() {
+        $parentTheme = $this->getMockBuilder(Theme::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childTheme = clone $parentTheme;
+        $childTheme->expects($this->exactly(2))
+            ->method('toArray')
+            ->willReturn('child_theme');
+
+        return $childTheme;
     }
 
     /**
      * @return array
      */
-    public function toArrayDataProvider(): array
+    public static function toArrayDataProvider(): array
     {
-        $parentTheme = $this->getMockBuilder(Theme::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $childTheme = clone $parentTheme;
+        $parentTheme = static fn (self $testCase) => $testCase->getMockForParentTheme();
 
-        $parentTheme->expects($this->once())
-            ->method('toArray')
-            ->willReturn('parent_theme');
-
-        $childTheme->expects($this->exactly(2))
-            ->method('toArray')
-            ->willReturn('child_theme');
+        $childTheme = static fn (self $testCase) => $testCase->getMockForChildTheme();
 
         return [
             'null' => [[], []],
@@ -592,7 +646,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function populateFromArrayDataProvider(): array
+    public static function populateFromArrayDataProvider(): array
     {
         return [
             'valid data' => [
@@ -610,7 +664,7 @@ class ThemeTest extends TestCase
                     'theme_data' => 'theme_data',
                     'parent_theme' => 'theme_instance'
                 ],
-                'expected call count' => 1
+                'expectedCallCount' => 1
             ],
             'valid data with children' => [
                 'value' => [
@@ -627,7 +681,7 @@ class ThemeTest extends TestCase
                         'key2' => 'theme_instance'
                     ]
                 ],
-                'expected call count' => 2
+                'expectedCallCount' => 2
             ]
         ];
     }

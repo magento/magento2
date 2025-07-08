@@ -8,4 +8,5 @@ tests/functional/Magento/_generated
 vendor/*
 mftf.log
 /.credentials.example
+/.credentials
 /utils/

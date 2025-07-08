@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -46,7 +46,7 @@ class SeverityTest extends TestCase
         /** @var Column|MockObject $columnMock */
         $columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndex'])
+            ->addMethods(['getIndex'])
             ->getMock();
         $columnMock->expects($this->exactly(5))->method('getIndex')->willReturn('index');
         $this->sut->setColumn($columnMock);

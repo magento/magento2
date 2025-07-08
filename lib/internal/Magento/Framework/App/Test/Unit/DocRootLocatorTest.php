@@ -45,7 +45,7 @@ class DocRootLocatorTest extends TestCase
     /**
      * @return array
      */
-    public function isPubDataProvider()
+    public static function isPubDataProvider()
     {
         return [
             ['/some/path/to/root', false, false],

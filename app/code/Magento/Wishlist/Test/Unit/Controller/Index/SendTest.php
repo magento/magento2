@@ -279,8 +279,13 @@ class SendTest extends TestCase
 
         $this->request
             ->method('getPost')
-            ->withConsecutive(['emails'], ['message'])
-            ->willReturnOnConsecutiveCalls('some.email2@gmail.com');
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'emails') {
+                    return 'some.email2@gmail.com';
+                } elseif ($arg == 'message') {
+                    return null;
+                }
+            });
 
         $wishlist = $this->createMock(Wishlist::class);
         $this->wishlistProvider->expects($this->once())

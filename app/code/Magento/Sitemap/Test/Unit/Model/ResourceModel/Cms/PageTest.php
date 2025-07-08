@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Sitemap\Test\Unit\Model\ResourceModel\Cms;
@@ -25,6 +27,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * Provide tests for Cms Page resource model.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class PageTest extends TestCase
 {
@@ -104,7 +108,11 @@ class PageTest extends TestCase
         $pageId = 'testPageId';
         $url = 'testUrl';
         $updatedAt = 'testUpdatedAt';
-        $pageIdentifiers = ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies'];
+        $pageIdentifiers = [
+            'testCmsHomePage|ID' => 'testCmsHomePage',
+            'testCmsNoRoute' => 'testCmsNoRoute',
+            'testCmsNoCookies' => 'testCmsNoCookies',
+        ];
         $storeId = 1;
         $linkField = 'testLinkField';
         $expectedPage = new DataObject();
@@ -114,7 +122,7 @@ class PageTest extends TestCase
 
         $query = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetch'])
+            ->onlyMethods(['fetch'])
             ->getMockForAbstractClass();
         $query->expects($this->exactly(2))
             ->method('fetch')
@@ -145,14 +153,18 @@ class PageTest extends TestCase
             )->willReturnSelf();
         $select->expects($this->exactly(3))
             ->method('where')
-            ->withConsecutive(
-                [$this->identicalTo('main_table.is_active = 1')],
-                [$this->identicalTo('main_table.identifier NOT IN (?)'), $this->identicalTo($pageIdentifiers)],
-                [$this->identicalTo('store_table.store_id IN(?)'), $this->identicalTo([0, $storeId])]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2 = null) use ($pageIdentifiers, $storeId, $select) {
+                if ($arg1 == 'main_table.is_active = 1') {
+                    return $select;
+                } elseif ($arg1 == 'main_table.identifier NOT IN (?)' && $arg2 == array_values($pageIdentifiers)) {
+                    return $select;
+                } elseif ($arg1 == 'store_table.store_id IN(?)' && $arg2 == [0, $storeId]) {
+                    return $select;
+                }
+            });
 
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select'])
+            ->onlyMethods(['select'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $connection->expects($this->once())
@@ -164,7 +176,7 @@ class PageTest extends TestCase
             ->willReturn($query);
 
         $entityMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->setMethods(['getLinkField', 'getEntityConnection'])
+            ->onlyMethods(['getLinkField', 'getEntityConnection'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $entityMetadata->expects($this->once())
@@ -176,17 +188,17 @@ class PageTest extends TestCase
 
         $this->getUtilityPageIdentifiers->expects($this->once())
             ->method('execute')
-            ->willReturn($pageIdentifiers);
+            ->willReturn(array_keys($pageIdentifiers));
 
         $this->resource->expects($this->exactly(2))
             ->method('getTableName')
-            ->withConsecutive(
-                [$this->identicalTo('cms_page'), $this->identicalTo('default')],
-                [$this->identicalTo('cms_page_store'), $this->identicalTo('default')]
-            )->willReturnOnConsecutiveCalls(
-                'cms_page',
-                'cms_page_store'
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'cms_page' && $arg2 == 'default') {
+                    return 'cms_page';
+                } elseif ($arg1 == 'cms_page_store' && $arg2 == 'default') {
+                    return 'cms_page_store';
+                }
+            });
 
         $this->metadataPool->expects($this->exactly(3))
             ->method('getMetadata')

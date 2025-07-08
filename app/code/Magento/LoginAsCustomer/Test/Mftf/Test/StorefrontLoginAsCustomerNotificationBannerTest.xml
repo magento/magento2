@@ -17,6 +17,7 @@
                 value="Verify that Notification Banner is present on page if 'Login as customer' functionality used"/>
             <severity value="MAJOR"/>
             <group value="login_as_customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
@@ -28,6 +29,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"

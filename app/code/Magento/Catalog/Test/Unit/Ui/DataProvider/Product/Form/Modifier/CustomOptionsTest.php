@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class CustomOptionsTest extends AbstractModifierTest
+class CustomOptionsTest extends AbstractModifierTestCase
 {
     /**
      * @var ConfigInterface|MockObject
@@ -54,7 +54,7 @@ class CustomOptionsTest extends AbstractModifierTest
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getBaseCurrency'])
+            ->addMethods(['getBaseCurrency'])
             ->getMockForAbstractClass();
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
@@ -199,7 +199,7 @@ class CustomOptionsTest extends AbstractModifierTest
         /** @var ProductOption|MockObject $productOptionMock */
         $productOptionMock = $this->getMockBuilder(ProductOption::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValues'])
+            ->onlyMethods(['getValues'])
             ->getMock();
 
         $productOptionMock->setData($data);

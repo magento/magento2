@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\Data\GroupSearchResultsInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
@@ -111,8 +112,13 @@ class DynamicFieldTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getAllIds'])
             ->getMock();
+        $categoryCollection = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+        $categoryCollection->method('create')
+            ->willReturn($this->categoryCollection);
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
-
         $this->provider = new DynamicField(
             $this->fieldTypeConverter,
             $this->indexTypeConverter,
@@ -121,7 +127,8 @@ class DynamicFieldTest extends TestCase
             $this->fieldNameResolver,
             $this->attributeAdapterProvider,
             $this->categoryCollection,
-            $this->storeManager
+            $this->storeManager,
+            $categoryCollection
         );
     }
 
@@ -227,7 +234,7 @@ class DynamicFieldTest extends TestCase
     /**
      * @return array
      */
-    public function attributeProvider(): array
+    public static function attributeProvider(): array
     {
         return [
             [

@@ -17,11 +17,12 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\At
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Collection for fetching options for all configurable options pulled back in result set.
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * Option type name
@@ -66,7 +67,7 @@ class Collection
         CollectionFactory $attributeCollectionFactory,
         ProductFactory $productFactory,
         MetadataPool $metadataPool,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->productFactory = $productFactory;
@@ -102,6 +103,16 @@ class Collection
         }
 
         return $attributes[$productId];
+    }
+
+    /**
+     * Retrieve all attributes
+     *
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->fetch();
     }
 
     /**
@@ -158,5 +169,14 @@ class Collection
         }
 
         return $this->attributeMap;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->productIds = [];
+        $this->attributeMap = [];
     }
 }

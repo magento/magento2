@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
@@ -58,7 +58,7 @@ class ProductWebsiteAssignmentHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function productWebsitesDataProvider(): array
+    public static function productWebsitesDataProvider(): array
     {
         return [
             [

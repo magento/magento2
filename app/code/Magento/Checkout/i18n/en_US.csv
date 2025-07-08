@@ -176,6 +176,7 @@ Summary,Summary
 "We'll send your order confirmation here.","We'll send your order confirmation here."
 Payment,Payment
 "Not yet calculated","Not yet calculated"
+"Selected shipping method is not available. Please select another shipping method for this order.","Selected shipping method is not available. Please select another shipping method for this order."
 "The order was not successful!","The order was not successful!"
 "Thank you for your purchase!","Thank you for your purchase!"
 "Password", "Password"
@@ -191,3 +192,4 @@ Are you sure you want to leave the page?,Are you sure you want to leave the page
 Changes you made to the cart will not be saved.,Changes you made to the cart will not be saved.
 Leave,Leave
 Cancel,Cancel
+VAT,VAT

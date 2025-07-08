@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Http;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Http\Context;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,15 +29,31 @@ class ContextTest extends TestCase
     protected $object;
 
     /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var ObjectManagerInterface|MockObject
+     */
+    private $objectManagerMock;
+
+    /**
      * @var Json|MockObject
      */
     private $serializerMock;
 
     protected function setUp(): void
     {
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMockForAbstractClass();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
+
         $this->objectManager = new ObjectManager($this);
         $this->serializerMock = $this->getMockBuilder(Json::class)
-            ->setMethods(['serialize'])
+            ->onlyMethods(['serialize'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializerMock->expects($this->any())
@@ -49,6 +68,10 @@ class ContextTest extends TestCase
             [
                 'serializer' => $this->serializerMock
             ]
+        );
+        $this->deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
         );
     }
 
@@ -81,6 +104,16 @@ class ContextTest extends TestCase
 
     public function testGetVaryString()
     {
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($this->deploymentConfig);
+
+        $this->deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
+
         $this->object->setValue('key2', 'value2', 'default2');
         $this->object->setValue('key1', 'value1', 'default1');
         $data = [
@@ -88,7 +121,11 @@ class ContextTest extends TestCase
             'key1' => 'value1'
         ];
         ksort($data);
-        $this->assertEquals(sha1(json_encode($data)), $this->object->getVaryString());
+
+        $salt = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+        $cacheKey = hash('sha256', $this->serializerMock->serialize($data) . '|' . $salt);
+
+        $this->assertEquals($cacheKey, $this->object->getVaryString());
     }
 
     public function testToArray()

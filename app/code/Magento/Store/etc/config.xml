@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
+ *
+ * ************************************************************************
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -21,13 +24,13 @@
                 <merge_files>0</merge_files>
                 <minify_files>0</minify_files>
                 <minify_exclude>
-                    <tiny_mce>/tiny_mce/</tiny_mce>
+                    <tiny_mce_6>/tiny_mce_6/</tiny_mce_6>
                 </minify_exclude>
             </js>
             <css>
                 <minify_files>0</minify_files>
                 <minify_exclude>
-                    <tiny_mce>/tiny_mce/</tiny_mce>
+                    <tiny_mce_6>/tiny_mce_6/</tiny_mce_6>
                 </minify_exclude>
             </css>
             <image>

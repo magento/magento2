@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -26,14 +26,18 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <magentoCLI command="config:set customer/address/street_lines 4" stepKey="setStreetLineNo"/>
-            <magentoCLI command="cache:clean config" stepKey="cacheCleanBefore"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheBefore">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <magentoCLI command="config:set customer/address/street_lines 2" stepKey="resetStreetLineNo"/>
-            <magentoCLI command="cache:clean config" stepKey="cacheCleanAfter"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheCleanAfter">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>

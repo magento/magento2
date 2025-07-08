@@ -18,6 +18,7 @@
             <severity value="CRITICAL"/>
             <group value="security"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create customer -->
@@ -25,6 +26,7 @@
         </before>
         <after>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model\ResourceModel\Page\Grid;
 
@@ -34,6 +34,12 @@ class Collection extends PageCollection implements SearchResultInterface
      */
     protected $aggregations;
 
+    /** @var mixed */
+    private $model;
+
+    /** @var string */
+    private $resourceModel;
+
     /**
      * @param EntityFactoryInterface $entityFactory
      * @param LoggerInterface $logger
@@ -65,9 +71,11 @@ class Collection extends PageCollection implements SearchResultInterface
         $resourceModel,
         $model = \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
         $connection = null,
-        AbstractDb $resource = null,
-        TimezoneInterface $timeZone = null
+        ?AbstractDb $resource = null,
+        ?TimezoneInterface $timeZone = null
     ) {
+        $this->resourceModel = $resourceModel;
+        $this->model = $model;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -80,9 +88,18 @@ class Collection extends PageCollection implements SearchResultInterface
         );
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
+        $this->_init($this->model, $this->resourceModel);
         $this->setMainTable($mainTable);
         $this->timeZone = $timeZone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_init($this->model, $this->resourceModel);
     }
 
     /**
@@ -140,7 +157,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }
@@ -174,7 +191,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }

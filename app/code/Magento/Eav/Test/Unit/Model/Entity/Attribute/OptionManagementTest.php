@@ -80,6 +80,9 @@ class OptionManagementTest extends TestCase
             ],
             'order' => [
                 'id_new_option' => $sortOder,
+            ],
+            'is_default' => [
+                'id_new_option' => true,
             ]
         ];
         $newOptionId = 10;
@@ -127,7 +130,7 @@ class OptionManagementTest extends TestCase
     /**
      * @return array
      */
-    public function optionLabelDataProvider(): array
+    public static function optionLabelDataProvider(): array
     {
         return [
             ['optionLabel'],
@@ -196,6 +199,9 @@ class OptionManagementTest extends TestCase
             ],
             'order' => [
                 'id_new_option' => $sortOder,
+            ],
+            'is_default' => [
+                'id_new_option' => true,
             ]
         ];
 
@@ -253,6 +259,9 @@ class OptionManagementTest extends TestCase
             ],
             'order' => [
                 $optionId => $sortOder,
+            ],
+            'is_default' => [
+                $optionId => true,
             ]
         ];
 
@@ -495,7 +504,7 @@ class OptionManagementTest extends TestCase
     private function getAttributeOption()
     {
         return $this->getMockBuilder(EavAttributeOptionInterface::class)
-            ->setMethods(['getSourceLabels'])
+            ->addMethods(['getSourceLabels'])
             ->getMockForAbstractClass();
     }
 

@@ -109,7 +109,7 @@ class SaveHandlerTest extends TestCase
     {
         /** @var OptionList $optionList */
         $optionList = $this->objectManager->create(OptionList::class);
-        $product = $this->productRepository->get('bundle-product', true);
+        $product = $this->productRepository->get('bundle-product', true, 0, true);
 
         //set the first option
         $options = $this->setBundleProductOptionData();
@@ -118,7 +118,7 @@ class SaveHandlerTest extends TestCase
         $product->setExtensionAttributes($extension);
         $product->save();
 
-        $product = $this->productRepository->get('bundle-product', true);
+        $product = $this->productRepository->get('bundle-product', true, 0, true);
         $options = $optionList->getItems($product);
         $this->assertCount(1, $options);
 
@@ -138,7 +138,7 @@ class SaveHandlerTest extends TestCase
         $product->setExtensionAttributes($extension);
         $product->save();
 
-        $product = $this->productRepository->get('bundle-product', true);
+        $product = $this->productRepository->get('bundle-product', true, 0, true);
         $options = $optionList->getItems($product);
         $this->assertCount(1, $options);
     }

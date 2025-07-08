@@ -79,10 +79,7 @@
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
             <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
-
-            <actionGroup ref="AdminDeleteCartPriceRuleActionGroup" stepKey="deleteCartPriceRule">
-                <argument name="ruleName" value="CatPriceRule"/>
-            </actionGroup>
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteCartPriceRule"/>
             <!-- Revert Attribute 'sku' to it's default value (not accessible for Promo Rule Conditions) -->
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="editSkuAttribute">
                 <argument name="ProductAttribute" value="sku"/>

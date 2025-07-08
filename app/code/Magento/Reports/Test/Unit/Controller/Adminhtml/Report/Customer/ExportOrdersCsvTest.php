@@ -9,9 +9,9 @@ namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Customer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Reports\Controller\Adminhtml\Report\Customer\ExportOrdersCsv;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 
-class ExportOrdersCsvTest extends AbstractControllerTest
+class ExportOrdersCsvTest extends AbstractControllerTestCase
 {
     /**
      * @var ExportOrdersCsv

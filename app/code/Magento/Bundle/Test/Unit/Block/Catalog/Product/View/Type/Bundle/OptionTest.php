@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,8 @@ class OptionTest extends TestCase
     {
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', 'hasPreconfiguredValues', 'getPreconfiguredValues', '__wakeup'])
+            ->addMethods(['hasPreconfiguredValues'])
+            ->onlyMethods(['getPriceInfo', 'getPreconfiguredValues', '__wakeup'])
             ->getMock();
 
         $registry = $this->getMockBuilder(Registry::class)
@@ -131,7 +132,7 @@ class OptionTest extends TestCase
 
         $priceRenderBlock = $this->getMockBuilder(Render::class)
             ->disableOriginalConstructor()
-            ->setMethods(['renderAmount'])
+            ->onlyMethods(['renderAmount'])
             ->getMock();
 
         $this->product->expects($this->atLeastOnce())

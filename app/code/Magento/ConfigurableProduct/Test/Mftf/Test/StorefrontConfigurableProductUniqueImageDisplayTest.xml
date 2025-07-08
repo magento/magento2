@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductUniqueImageDisplayTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Display unique images for a configurable product on storefront"/>
+            <title value="Unique images should be displayed on storefront correctly for Configurable product"/>
+            <description value="Admin should be able to add images for configurable products and unique images should display on storefront correctly based configurable attribute options"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4825"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Admin Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Goto, Stores > Attributes > Product > Filter by attribute label 'Color' > Edit-->
+            <actionGroup ref="AdminNavigateToProductAttributeEditPageActionGroup" stepKey="navigateToColorProductAttribute1">
+                <argument name="ProductAttributeLabel" value="Color"/>
+            </actionGroup>
+            <!-- Use the action group to add the 'black' option to the Color attribute -->
+            <actionGroup ref="AdminAddOptionsToDropdownAttributeActionGroup" stepKey="addOptionBlackForColorAttribute">
+                <argument name="optionIndex" value="0"/>
+                <argument name="optionValue" value="{{ConfigurableProduct1.color_option1}}"/>
+            </actionGroup>
+            <!-- Use the action group to add the 'red' option to the Color attribute -->
+            <actionGroup ref="AdminAddOptionsToDropdownAttributeActionGroup" stepKey="addOptionRedForColorAttribute">
+                <argument name="optionIndex" value="1"/>
+                <argument name="optionValue" value="{{ConfigurableProduct1.color_option2}}"/>
+            </actionGroup>
+            <!-- Save attribute -->
+            <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveColorAttribute"/>
+
+            <!-- Create new attribute 'Size'-->
+            <actionGroup ref="CreateCustomAttributeActionGroup" stepKey="createCustomProductAttributeSize">
+                <argument name="attributeLabel" value="Size"/>
+                <argument name="attributeCode" value="size"/>
+                <argument name="valueRequired" value="No"/>
+                <argument name="adminOption1" value="{{ConfigurableProduct1.size_option1}}"/>
+                <argument name="adminOption1Value" value="{{ConfigurableProduct1.size_option1}}"/>
+                <argument name="adminOption2" value="{{ConfigurableProduct1.size_option2}}"/>
+                <argument name="adminOption2Value" value="{{ConfigurableProduct1.size_option2}}"/>
+                <argument name="attributeScope" value="Global"/>
+            </actionGroup>
+
+            <!--Crete new category-->
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
+            <actionGroup ref="CreateCategoryActionGroup" stepKey="createNewSubcategory">
+                <argument name="categoryEntity" value="CategoryB"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete category-->
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteSubcategory">
+                <argument name="categoryEntity" value="CategoryB"/>
+            </actionGroup>
+
+            <!-- Delete product -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{ConfigurableProduct1.sku}}"/>
+            </actionGroup>
+
+            <!-- Goto, Stores > Attributes > Product > Filter by attribute label 'Color' > Edit-->
+            <actionGroup ref="AdminNavigateToProductAttributeEditPageActionGroup" stepKey="navigateToColorProductAttribute2">
+                <argument name="ProductAttributeLabel" value="{{ConfigurableProduct1.color_label}}"/>
+            </actionGroup>
+            <!-- Remove color attribute options -->
+            <actionGroup ref="AdminRemoveOptionsFromColorAttributeActionGroup" stepKey="removeOptionsFromColorAttribute"/>
+
+            <!-- Goto, Stores > Attributes > Product > Filter by attribute label 'Size' > Edit  and Perform attribute deletion-->
+            <actionGroup ref="AdminNavigateToProductAttributeEditPageActionGroup" stepKey="navigateToSizeProductAttribute">
+                <argument name="ProductAttributeLabel" value="Size"/>
+            </actionGroup>
+            <!-- Delete attribute - Size -->
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeSize" />
+
+            <!-- Unassign product attribute from Default attribute set -->
+            <actionGroup ref="AdminUnassignAttributeFromDefaultSetActionGroup" stepKey="unassignColorAttributeFromDefaultAttributeSet">
+                <argument name="ProductAttributeCode" value="color"/>
+            </actionGroup>
+
+            <!-- Admin Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+
+        <!--Create a configurable product-->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToProductCreatePage">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+            <argument name="productType" value="configurable"/>
+        </actionGroup>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{ConfigurableProduct1.name}}" stepKey="fillProductName"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{ConfigurableProduct1.sku}}" stepKey="fillProductSku"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{ConfigurableProduct1.price}}" stepKey="fillProductPrice"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{CategoryB.name}}]" stepKey="selectCategory"/>
+        <!-- Setup configurations-->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
+        <!--Add attributes and select all options -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeRowByAttributeCode('color')}}" stepKey="clickOnColorAttributeCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeRowByAttributeCode('size')}}" stepKey="clickOnSizeAttributeCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute('Color')}}" stepKey="clickOnSelectAllInColorAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute('Size')}}" stepKey="clickOnSelectAllInSizeAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <!-- Add unique images to product attribute options -->
+        <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOption1">
+            <argument name="image" value="TestImageNew"/>
+            <argument name="frontend_label" value="{{ConfigurableProduct1.color_label}}"/>
+            <argument name="label" value="{{ConfigurableProduct1.color_option1}}"/>
+        </actionGroup>
+        <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOption2">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="frontend_label" value="{{ConfigurableProduct1.color_label}}"/>
+            <argument name="label" value="{{ConfigurableProduct1.color_option2}}"/>
+        </actionGroup>
+        <!-- Add unique price to product attribute options -->
+        <actionGroup ref="AddUniquePriceToConfigurableProductOptionActionGroup" stepKey="addPriceToConfigurableProductOption1">
+            <argument name="frontend_label" value="Size"/>
+            <argument name="label" value="{{ConfigurableProduct1.size_option1}}"/>
+            <argument name="price" value="4"/>
+        </actionGroup>
+        <actionGroup ref="AddUniquePriceToConfigurableProductOptionActionGroup" stepKey="addPriceToConfigurableProductOption2">
+            <argument name="frontend_label" value="Size"/>
+            <argument name="label" value="{{ConfigurableProduct1.size_option2}}"/>
+            <argument name="price" value="6"/>
+        </actionGroup>
+        <!-- Add quantity to product attribute options -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="10000" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <!-- Save product -->
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveProduct"/>
+
+        <!-- Reindex invalidated indices for the product to be visible in Storefront -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndicesPostChangingConfigurationSettings">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Verify on storefront that category and product is visible -->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage">
+            <argument name="categoryUrl" value="{{CategoryB.urlKey}}"/>
+        </actionGroup>
+        <waitForText userInput="{{CategoryB.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNameOnStorefront"/>
+        <waitForText userInput="{{ConfigurableProduct1.name}}" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="assertProductVisibleInStorefront"/>
+
+        <!-- Navigate to Product Page -->
+        <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openConfigurableProduct"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Select configurable product option on Storefront and Verify that unique images are visible for different color options -->
+        <actionGroup ref="StorefrontVerifyConfigurableProductImagesActionGroup" stepKey="storefrontVerifyUniqueImagesForConfigurableProductOption">
+            <argument name="attributeOption1" value="{{ConfigurableProduct1.color_label}}"/>
+            <argument name="attributeOption2" value="{{ConfigurableProduct1.size_label}}"/>
+        </actionGroup>
+    </test>
+</tests>

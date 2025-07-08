@@ -1,0 +1,39 @@
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+<!--@subject {{trans "Confirm Your %store_name Order Cancellation" store_name=$store.frontend_name}} @-->
+<!--@vars {
+"var customer_name":"Guest Customer Name",
+"var order_id":"Order Id",
+"var guest_order_url":"Guest order cancel confirm URL",
+"var store.frontend_name":"Store Frontend Name",
+"var store_email":"Store Email",
+"var store_phone":"Store Phone",
+"var store_hours":"Store Hours"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%name," name=$customer_name}}</p>
+            <p>
+                {{trans 'It seems that you'd like to cancel your order #%order_id. If this is correct, please <a href="%guest_order_url" target="_blank">click here</a> to confirm your cancellation request.'
+                order_id=$order_id
+                guest_order_url=$guest_order_url
+                |raw}}
+            </p>
+            <p>
+                {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
+                {{depend store_hours}}
+                    {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                {{/depend}}
+            </p>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

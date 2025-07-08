@@ -20,5 +20,16 @@
         <element name="giftMessageTextField" type="input" selector=".gift-options-content  .text  textarea"/>
         <element name="giftMessageSummary" type="text" selector=".gift-message-summary"/>
         <element name="giftMessageUpdateButton" type="button" selector="button.action-update"/>
+        <element name="giftOptionsItemLevel" type="text" selector=".gift-options-cart-item .action-gift"/>
+        <element name="giftOptionsEditAtItemLevel" type="text" selector=".actions-toolbar> .action-edit"/>
+        <element name="giftOptionsDeleteAtItemLevel" type="text" selector=".actions-toolbar> .action-delete"/>
+        <element name="giftMessageTo" type="input" selector="#gift-message-whole-to-giftOptionsCart"/>
+        <element name="giftMessageFrom" type="input" selector="#gift-message-whole-from-giftOptionsCart"/>
+        <element name="giftMessageMessage" type="input" selector="#gift-message-whole-message-giftOptionsCart"/>
+        <element name="giftMessageUpdate" type="input" selector="(//*[@class='actions-toolbar']//button[@title='Update']/span)[2]"/>
+        <element name="giftOptionsEditAtOrderLevel" type="text" selector=".cart-gift-item .content .actions-toolbar .action-edit"/>
+        <element name="giftOptionsDeleteAtOrderLevel" type="text" selector=".cart-gift-item .content .actions-toolbar .action-delete"/>
+        <element name="giftMessageOnOrderLevel" type="text" selector=".cart-gift-item .content .gift-message-summary"/>
+        <element name="giftMessageOnOrderLevelText" type="text" selector="//*[text()='This is gift message for ALL ORDERED ITEMS']"/>
     </section>
 </sections>

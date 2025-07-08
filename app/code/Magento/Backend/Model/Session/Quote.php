@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Model\Session;
 
@@ -140,6 +140,17 @@ class Quote extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_quote = null;
+        $this->_store = null;
+        $this->_order = null;
+    }
+
+    /**
      * Retrieve quote model object
      *
      * @return \Magento\Quote\Model\Quote
@@ -154,7 +165,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                     $this->_quote->setCustomerGroupId($customerGroupId);
                     $this->_quote->setIsActive(false);
                     $this->_quote->setStoreId($this->getStoreId());
-                    
+
                     $this->quoteRepository->save($this->_quote);
                     $this->setQuoteId($this->_quote->getId());
                     $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);

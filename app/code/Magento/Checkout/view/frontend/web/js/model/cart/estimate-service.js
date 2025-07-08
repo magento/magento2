@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -72,6 +72,8 @@ define([
                     cartCache.set('totals', quote.getTotals());
                 }
             }
+            // unset loader on shipping rates list
+            shippingService.isLoading(false);
         },
 
         /**

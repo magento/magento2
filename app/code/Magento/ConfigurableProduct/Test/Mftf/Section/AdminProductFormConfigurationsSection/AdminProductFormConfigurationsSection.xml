@@ -10,7 +10,7 @@
     <section name="AdminProductFormConfigurationsSection">
         <element name="sectionHeader" type="text" selector=".admin__collapsible-block-wrapper[data-index='configurable']"/>
         <element name="createdConfigurationsBlock" type="text" selector="div.admin__field.admin__field-wide"/>
-        <element name="createConfigurations" type="button" selector="button[data-index='create_configurable_products_button']" timeout="40"/>
+        <element name="createConfigurations" type="button" selector="button[data-index='create_configurable_products_button']" timeout="60"/>
         <element name="currentVariationsRows" type="button" selector=".data-row"/>
         <element name="currentVariationsNameCells" type="textarea" selector=".admin__control-fields[data-index='name_container']"/>
         <element name="currentVariationsSkuCells" type="textarea" selector=".admin__control-fields[data-index='sku_container']"/>
@@ -50,8 +50,19 @@
         <element name="variationLabel" type="text" selector="//div[@data-index='configurable-matrix']/label"/>
         <element name="stepsWizardTitle" type="text" selector="div.content:not([style='display: none;']) .steps-wizard-title"/>
         <element name="attributeEntityByName" type="text" selector="//div[@class='attribute-entity']//div[normalize-space(.)='{{attributeLabel}}']" parameterized="true"/>
-        <element name="fileUploaderInput" type="file" selector="//input[@type='file' and @class='file-uploader-input']"/>
+        <element name="fileUploaderInput" type="file" selector="//input[@type='file' and @class='uppy-Dashboard-input']"/>
         <element name="variationImageSource" type="text" selector="[data-index='configurable-matrix'] [data-index='thumbnail_image_container'] img[src*='{{imageName}}']" parameterized="true"/>
         <element name="variationProductLinkByName" type="text" selector="//div[@data-index='configurable-matrix']//*[@data-index='name_container']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
+        <element name="unAssignSource" type="button" selector="//span[text()='{{source_name}}']/../../..//button[@class='action-delete']//span[text()='Unassign']" parameterized="true"/>
+        <element name="btnAssignSources" type="button" selector="//button//span[text()='Assign Sources']/.."/>
+        <element name="chkSourceToAssign" type="checkbox" selector="//input[@id='idscheck{{source_id}}']/.." parameterized="true"/>
+        <element name="btnDoneAssignedSources" type="button" selector="//aside[@class='modal-slide product_form_product_form_sources_assign_sources_modal _show']//button[@class='action-primary']//span[text()='Done']/.." />
+        <element name="searchBySource" type="input" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//input[@placeholder='Search by keyword']"/>
+        <element name="clickSearch" type="button" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//button[@aria-label='Search']"/>
+        <element name="btnDoneAdvancedInventory" type="button" selector="//aside[@class='modal-slide product_form_product_form_advanced_inventory_modal _show']//button[@class='action-primary']//span[text()='Done']/.." />
+        <element name="paginationDropDropdown" type="button" selector="//*[@data-index='configurable-matrix'][1]//div[@class='admin__control-table-pagination']//select"/>
+        <element name="evenProduct" type="text" selector="//tr[@class='data-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
+        <element name="oddProduct" type="text" selector="//tr[@class='data-row _odd-row'][{{row}}]/td[{{column}}]//a" parameterized="true"/>
+        <element name="nextPageArrow" type="text" selector="(//*[@class='action-next'])[2]"/>
     </section>
 </sections>

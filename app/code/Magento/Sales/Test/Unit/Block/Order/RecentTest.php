@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,7 +95,7 @@ class RecentTest extends TestCase
             ->getMockForAbstractClass();
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->getMockForAbstractClass();
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->exactly(0))->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
 
         $orderCollection = $this->createPartialMock(Collection::class, [
@@ -126,11 +126,18 @@ class RecentTest extends TestCase
             ->willReturn($orderCollection);
         $orderCollection
             ->method('addAttributeToFilter')
-            ->withConsecutive(
-                [$attribute[0], $customerId],
-                [$attribute[1], $storeId],
-                [$attribute[2], ['in' => $statuses]]
-            )->willReturnOnConsecutiveCalls($orderCollection, $orderCollection, $orderCollection);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($attribute, $customerId, $storeId, $statuses, $orderCollection) {
+                if ($arg1 == $attribute[0] && $arg2 == $customerId) {
+                    return $orderCollection;
+                }
+                if ($arg1 == $attribute[1] && $arg2 == $storeId) {
+                    return $orderCollection;
+                }
+                if ($arg1 == $attribute[2] && $arg2 == ['in' => $statuses]) {
+                    return $orderCollection;
+                }
+            });
         $this->block = new Recent(
             $this->context,
             $this->orderCollectionFactory,

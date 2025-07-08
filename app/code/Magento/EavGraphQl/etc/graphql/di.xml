@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\EavGraphQl\Model\Output\GetAttributeDataInterface" type="Magento\EavGraphQl\Model\Output\GetAttributeDataComposite"/>
+    <preference for="Magento\EavGraphQl\Model\Output\Value\GetAttributeValueInterface" type="Magento\EavGraphQl\Model\Output\Value\GetAttributeValueComposite"/>
+    <preference for="Magento\EavGraphQl\Model\Output\Value\Options\GetAttributeSelectedOptionInterface" type="Magento\EavGraphQl\Model\Output\Value\Options\GetAttributeSelectedOptionComposite"/>
+    <type name="Magento\EavGraphQl\Model\Output\GetAttributeDataComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="eav_attribute_data" xsi:type="object">Magento\EavGraphQl\Model\Output\GetAttributeData</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="AttributeFrontendInputEnum" xsi:type="array">
+                    <item name="boolean" xsi:type="string">boolean</item>
+                    <item name="date" xsi:type="string">date</item>
+                    <item name="datetime" xsi:type="string">datetime</item>
+                    <item name="file" xsi:type="string">file</item>
+                    <item name="gallery" xsi:type="string">gallery</item>
+                    <item name="hidden" xsi:type="string">hidden</item>
+                    <item name="image" xsi:type="string">image</item>
+                    <item name="media_image" xsi:type="string">media_image</item>
+                    <item name="multiline" xsi:type="string">multiline</item>
+                    <item name="multiselect" xsi:type="string">multiselect</item>
+                    <item name="price" xsi:type="string">price</item>
+                    <item name="select" xsi:type="string">select</item>
+                    <item name="text" xsi:type="string">text</item>
+                    <item name="textarea" xsi:type="string">textarea</item>
+                    <item name="weight" xsi:type="string">weight</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\Output\Value\GetAttributeValueComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\EavGraphQl\Model\Output\Value\GetCustomAttributes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\Output\Value\GetCustomAttributes">
+        <arguments>
+            <argument name="frontendInputs" xsi:type="array">
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="select" xsi:type="string">select</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\Output\Value\Options\GetAttributeSelectedOptionComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\EavGraphQl\Model\Output\Value\Options\GetCustomSelectedOptionAttributes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\TypeResolver\AttributeValue">
+        <arguments>
+            <argument name="frontendInputs" xsi:type="array">
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="select" xsi:type="string">select</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

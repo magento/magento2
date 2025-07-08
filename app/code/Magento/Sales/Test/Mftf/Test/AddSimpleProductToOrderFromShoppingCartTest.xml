@@ -18,6 +18,7 @@
             <testCaseId value="MC-16007"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -25,7 +26,9 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!-- Create product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -34,6 +37,7 @@
             <!-- Customer log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>

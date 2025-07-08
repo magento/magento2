@@ -5,6 +5,7 @@
  */
 namespace Magento\PageCache\Model\App\FrontController;
 
+use Magento\Framework\App\PageCache\NotCacheableInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 
 /**
@@ -73,7 +74,7 @@ class BuiltinPlugin
         $result = $this->kernel->load();
         if ($result === false) {
             $result = $proceed($request);
-            if ($result instanceof ResponseHttp) {
+            if ($result instanceof ResponseHttp && !$result instanceof NotCacheableInterface) {
                 $this->addDebugHeaders($result);
                 $this->kernel->process($result);
             }

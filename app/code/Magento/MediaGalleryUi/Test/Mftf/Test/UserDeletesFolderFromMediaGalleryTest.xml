@@ -24,12 +24,16 @@
             <!-- Step2 Disabled Old Media Gallery and Page Builder -->
             <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="disabledOldMediaGallery"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disablePageBuilder"/>
-            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enableOldMediaGallery"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="enablePageBuilder"/>
-            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
 
         <!-- Step3 Creates folder in Media Gallery -->
@@ -55,6 +59,8 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFoldersToVerifyDeleteFolderButtonStatus">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
+        <waitForPageLoad stepKey="waitForSearchResult" time="10"/>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsDisabled"/>
 
         <!-- Step4.2 Delete Folder is enabled post selecting folder -->
@@ -68,6 +74,7 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="deselectWysiwygFolder">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny2"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNowDisabledAgain"/>
 
         <!-- Step5 Select folder to delete -->

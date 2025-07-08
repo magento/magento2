@@ -18,6 +18,7 @@
             <useCaseId value="MC-18821"/>
             <testCaseId value="MC-11531"/>
             <group value="Swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create category and configurable product with two options-->

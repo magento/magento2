@@ -7,41 +7,40 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\PageCache\Quote\Guest;
 
-use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
+use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 
 /**
  * Test cart queries are not cached
  *
  * @magentoApiDataFixture Magento/Catalog/_files/products.php
  */
-class CartCacheTest extends GraphQlAbstract
+class CartCacheTest extends GraphQLPageCacheAbstract
 {
     /**
      * @inheritdoc
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
-    protected function setUp(): void
-    {
-        $this->markTestSkipped(
-            'This test will stay skipped until DEVOPS-4924 is resolved'
-        );
-    }
-
     public function testCartIsNotCached()
     {
-        $qty = 2;
+        $quantity = 2;
         $sku = 'simple';
         $cartId = $this->createEmptyCart();
-        $this->addSimpleProductToCart($cartId, $qty, $sku);
+        $this->addSimpleProductToCart($cartId, $quantity, $sku);
 
         $getCartQuery = $this->getCartQuery($cartId);
         $responseMiss = $this->graphQlQueryWithResponseHeaders($getCartQuery);
         $this->assertArrayHasKey('cart', $responseMiss['body']);
         $this->assertArrayHasKey('items', $responseMiss['body']['cart']);
-        $this->assertEquals('MISS', $responseMiss['headers']['X-Magento-Cache-Debug']);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMiss['headers']);
+        $cacheId = $responseMiss['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify we obtain a cache MISS the first time
+        $this->assertCacheMissAndReturnResponse($getCartQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
-        /** Cache debug header value is still a MISS for any subsequent request */
-        $responseMissNext = $this->graphQlQueryWithResponseHeaders($getCartQuery);
-        $this->assertEquals('MISS', $responseMissNext['headers']['X-Magento-Cache-Debug']);
+        // Cache debug header value is still a MISS for any subsequent request
+        // Verify we obtain a cache MISS the second time
+        $this->assertCacheMissAndReturnResponse($getCartQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
     /**
@@ -68,21 +67,21 @@ QUERY;
      * Add simple product to the cart using the maskedQuoteId
      *
      * @param string $maskedCartId
-     * @param int $qty
+     * @param float $quantity
      * @param string $sku
      */
-    private function addSimpleProductToCart(string $maskedCartId, int $qty, string $sku): void
+    private function addSimpleProductToCart(string $maskedCartId, float $quantity, string $sku): void
     {
         $addProductToCartQuery =
             <<<QUERY
-        mutation {  
+        mutation {
         addSimpleProductsToCart(
           input: {
             cart_id: "{$maskedCartId}"
             cart_items: [
               {
                 data: {
-                  qty: $qty
+                  quantity: $quantity
                   sku: "$sku"
                 }
               }
@@ -91,7 +90,7 @@ QUERY;
         ) {
           cart {
             items {
-              qty
+              quantity
               product {
                 sku
               }
@@ -117,7 +116,7 @@ QUERY;
   cart(cart_id: "{$maskedQuoteId}") {
     items {
       id
-      qty
+      quantity
       product {
         sku
       }

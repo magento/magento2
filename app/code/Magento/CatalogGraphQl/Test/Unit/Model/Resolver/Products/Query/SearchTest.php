@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Test\Unit\Model\Resolver\Products\Query;
 
+use Magento\AdvancedSearch\Model\Client\ClientException;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\FieldSelection;
@@ -16,12 +17,12 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Suggestions;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
-use Magento\Search\Model\Search\PageSizeProvider;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,11 +42,6 @@ class SearchTest extends TestCase
      * @var SearchResultFactory|MockObject
      */
     private $searchResultFactory;
-
-    /**
-     * @var PageSizeProvider|MockObject
-     */
-    private $pageSizeProvider;
 
     /**
      * @var FieldSelection|MockObject
@@ -94,9 +90,6 @@ class SearchTest extends TestCase
         $this->searchResultFactory = $this->getMockBuilder(SearchResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageSizeProvider = $this->getMockBuilder(PageSizeProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->fieldSelection = $this->getMockBuilder(FieldSelection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,7 +111,6 @@ class SearchTest extends TestCase
         $this->model = new Search(
             $this->search,
             $this->searchResultFactory,
-            $this->pageSizeProvider,
             $this->fieldSelection,
             $this->productsProvider,
             $this->searchCriteriaBuilder,
@@ -130,7 +122,7 @@ class SearchTest extends TestCase
 
     public function testPopulateSearchQueryStats(): void
     {
-        $args = ['search' => 'test'];
+        $args = ['search' => 'test', 'pageSize' => 10, 'currentPage' => 1];
         $context = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -159,5 +151,51 @@ class SearchTest extends TestCase
             ->with($context, $args['search'], 0);
 
         $this->model->getResult($args, $resolveInfo, $context);
+    }
+
+    /**
+     * @param $exception
+     * @return void
+     * @throws Exception
+     * @throws GraphQlInputException
+     * @dataProvider exceptionDataProvider
+     */
+    public function testEmptyResultException($exception): void
+    {
+        $args = ['search' => 'test', 'pageSize' => 10, 'currentPage' => 1];
+        $context = $this->createMock(ContextInterface::class);
+        $resolveInfo = $this->createMock(ResolveInfo::class);
+        $this->search->expects($this->once())
+            ->method('search')
+            ->willThrowException(new $exception('Error'));
+        $this->searchResultFactory->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'totalCount' => 0,
+                    'productsSearchResult' => [],
+                    'searchAggregation' => null,
+                    'pageSize' => $args['pageSize'],
+                    'currentPage' => $args['currentPage'],
+                    'totalPages' => 0,
+                    'suggestions' => [],
+                ]
+            );
+        $this->model->getResult($args, $resolveInfo, $context);
+    }
+
+    /**
+     * @return \class-string[][]
+     */
+    public static function exceptionDataProvider(): array
+    {
+        return [
+            'invalid_argument_exception' => [
+                'exception' => \InvalidArgumentException::class,
+            ],
+            'client_exception' => [
+                'exception' => ClientException::class,
+            ]
+        ];
     }
 }

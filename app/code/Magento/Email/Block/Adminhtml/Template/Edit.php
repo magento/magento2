@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
@@ -12,7 +12,6 @@ use Magento\Email\Model\BackendTemplate;
 /**
  * Adminhtml system template edit block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @method array getTemplateOptions()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -21,6 +20,7 @@ class Edit extends Widget implements ContainerInterface
     /**
      * @var \Magento\Framework\Registry
      * @deprecated 101.0.0 since 2.3.0 in favor of stateful global objects elimination.
+     * @see Nothing
      */
     protected $_registryManager;
 
@@ -100,7 +100,7 @@ class Edit extends Widget implements ContainerInterface
         $this->_emailConfig = $emailConfig;
         $this->buttonList = $buttonList;
         $this->toolbar = $toolbar;
-        parent::__construct($context, $data);
+        parent::__construct($context, $data, $jsonHelper);
     }
 
     /**

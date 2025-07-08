@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -241,8 +241,10 @@ class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
             ->willReturn($result2);
         $this->urlRewriteBunchReplacerMock
             ->method('doBunchReplace')
-            ->withConsecutive([$result1], [$result2])
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                [$result1] => null,
+                [$result2] => null,
+            });
 
         $this->databaseMapPoolMock->expects($this->any())
             ->method('resetMap');

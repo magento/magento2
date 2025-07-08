@@ -7,17 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
+use Magento\Framework\App\Response\HttpInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Base HTTP response object
  */
-class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
+class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpInterface, ResetAfterRequestInterface
 {
     /**
      * Flag; is this response a redirect?
      *
      * @var boolean
      */
-    protected $isRedirect = false;
+    protected bool $isRedirect = false;
 
     /**
      * @inheritdoc
@@ -190,5 +193,19 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento
     public function __sleep()
     {
         return ['content', 'isRedirect', 'statusCode'];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->metadata = [];
+        $this->content = '';
+        $this->headers = null;
+        $this->contentSent = false;
+        $this->isRedirect = false;
+        $this->statusCode = 200;
+        $this->reasonPhrase = null;
     }
 }

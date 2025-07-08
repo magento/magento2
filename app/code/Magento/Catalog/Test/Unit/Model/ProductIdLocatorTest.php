@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class ProductIdLocatorTest extends TestCase
     {
         $metadataPool = $this->createMock(MetadataPool::class);
         $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->idsLimit = 4;
@@ -73,7 +73,8 @@ class ProductIdLocatorTest extends TestCase
         $skus = ['sku_1', 'sku_2'];
 
         $product = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getSku', 'getData', 'getTypeId'])
+            ->addMethods(['getData'])
+            ->onlyMethods(['getSku', 'getTypeId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $product->method('getSku')
@@ -117,7 +118,8 @@ class ProductIdLocatorTest extends TestCase
         $products = [];
         foreach ($skus as $sku) {
             $product = $this->getMockBuilder(ProductInterface::class)
-                ->setMethods(['getSku', 'getData', 'getTypeId'])
+                ->addMethods(['getData'])
+                ->onlyMethods(['getSku', 'getTypeId'])
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
             $product->method('getSku')
@@ -132,8 +134,15 @@ class ProductIdLocatorTest extends TestCase
 
         $this->collection->expects($this->atLeastOnce())
             ->method('addFieldToFilter')
-            ->withConsecutive([ProductInterface::SKU, ['in' => $skus]], [ProductInterface::SKU, ['in' => ['1']]])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($skus) {
+                    if ($arg1 == ProductInterface::SKU && $arg2 == ['in' => $skus]) {
+                        return null;
+                    } elseif ($arg1 == ProductInterface::SKU && $arg2 == ['in' => ['1']]) {
+                        return null;
+                    }
+                }
+            );
         $this->collection->expects($this->atLeastOnce())
             ->method('getItems')
             ->willReturnOnConsecutiveCalls($products, []);

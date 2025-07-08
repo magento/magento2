@@ -90,7 +90,7 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function contentForTranslateDataProvider()
+    public static function contentForTranslateDataProvider()
     {
         return [
             'i18n_js_file_error' => [

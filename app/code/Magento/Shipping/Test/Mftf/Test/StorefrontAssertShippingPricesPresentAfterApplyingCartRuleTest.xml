@@ -19,6 +19,7 @@
             <useCaseId value="MC-24379"/>
             <group value="shipping"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -81,6 +82,7 @@
         </actionGroup>
         <see selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Fixed')}}" userInput="$5.00" stepKey="assertFlatRatedMethodPrice"/>
         <see selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Table Rate')}}" userInput="$7.99" stepKey="assertTableRatedMethodPrice"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForFlatRateShippingMethod"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatRateShippingMethod"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="goToPaymentStep"/>
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">

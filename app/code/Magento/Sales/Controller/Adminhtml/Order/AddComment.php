@@ -6,7 +6,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 /**
@@ -40,12 +40,12 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
             try {
                 $data = $this->getRequest()->getPost('history');
                 if (empty($data['comment']) && $data['status'] == $order->getDataByKey('status')) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('The comment is missing. Enter and try again.')
-                    );
+                    $error = 'Please provide a comment text or ' .
+                        'update the order status to be able to submit a comment for this order.';
+                    throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
 
-                $orderStatus = $this->getOrderStatus($order->getDataByKey('status'), $data['status']);
+                $orderStatus = $this->getOrderStatus($order, $data['status']);
                 $order->setStatus($orderStatus);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
@@ -85,13 +85,21 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
     /**
      * Get order status to set
      *
-     * @param string $orderStatus
+     * @param OrderInterface $order
      * @param string $historyStatus
      * @return string
      */
-    private function getOrderStatus(string $orderStatus, string $historyStatus): string
+    private function getOrderStatus(OrderInterface $order, string $historyStatus): string
     {
-        return ($orderStatus === Order::STATE_PROCESSING || $orderStatus === Order::STATUS_FRAUD) ? $historyStatus
-            : $orderStatus;
+        $config = $order->getConfig();
+        if ($config === null) {
+            return $historyStatus;
+        }
+        $statuses = $config->getStateStatuses($order->getState());
+
+        if (!isset($statuses[$historyStatus])) {
+            return $order->getDataByKey('status');
+        }
+        return $historyStatus;
     }
 }

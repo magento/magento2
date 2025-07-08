@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,10 +13,12 @@ use Magento\Catalog\Model\ResourceModel\AbstractResource;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
@@ -57,6 +59,19 @@ class LinkTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
+
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
 
@@ -68,7 +83,7 @@ class LinkTest extends TestCase
         $this->entityResource =
             $this->createMock(AbstractResource::class);
 
-        $this->block = (new ObjectManager($this))->getObject(
+        $this->block = $objectManager->getObject(
             Link::class,
             [
                 'context' => $context,
@@ -224,6 +239,7 @@ class LinkTest extends TestCase
                     UrlRewrite::ENTITY_ID => 'entity_id',
                     UrlRewrite::ENTITY_TYPE => 'entity_type',
                     UrlRewrite::STORE_ID => $this->storeManager->getStore($storeId)->getStoreId(),
+                    UrlRewrite::REDIRECT_TYPE => 0,
                 ]
             )
             ->willReturn($rewrite);
@@ -265,7 +281,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
+    public static function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
     {
         return [
             ['/accessories.html', null, true, 'french/accessories.html'],
@@ -303,6 +319,7 @@ class LinkTest extends TestCase
                     UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                     UrlRewrite::STORE_ID => $storeId,
                     UrlRewrite::METADATA => ['category_id' => 'category_id'],
+                    UrlRewrite::REDIRECT_TYPE => 0,
                 ]
             )
             ->willReturn(false);

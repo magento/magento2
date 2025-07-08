@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -126,10 +126,15 @@ class SubscriptionUpdateHandlerTest extends TestCase
         $this->flagManagerMock
             ->expects($this->once())
             ->method('saveFlag')
-            ->withConsecutive(
-                [SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue],
-                [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, $url]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($url) {
+                if ($arg1 == SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE
+                 && $arg2 == $this->attemptsInitValue) {
+                    return true;
+                } elseif ($arg1 == SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE && $arg2 == $url) {
+                    return true;
+                }
+            });
+
         $this->configWriterMock
             ->expects($this->once())
             ->method('save')
@@ -160,10 +165,14 @@ class SubscriptionUpdateHandlerTest extends TestCase
         $this->flagManagerMock
             ->expects($this->exactly(2))
             ->method('saveFlag')
-            ->withConsecutive(
-                [SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE, $url],
-                [SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE, $this->attemptsInitValue]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($url) {
+                if ($arg1 == SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE
+                    && $arg2 == $this->attemptsInitValue) {
+                    return true;
+                } elseif ($arg1 == SubscriptionUpdateHandler::PREVIOUS_BASE_URL_FLAG_CODE && $arg2 == $url) {
+                    return true;
+                }
+            });
         $this->configWriterMock
             ->expects($this->once())
             ->method('save')

@@ -33,7 +33,7 @@ class StoreConfigurationDataMapperTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getConfigDataDataProvider()
+    public static function getConfigDataDataProvider()
     {
         return [
             'valid' => [

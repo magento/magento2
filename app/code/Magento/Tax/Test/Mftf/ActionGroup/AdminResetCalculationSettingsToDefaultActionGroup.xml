@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetCalculationSettingsToDefaultActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Resets the default data for Calculation Settings'.</description>
+        </annotations>
+        <!-- change configurations on tax calculation settings-->
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" visible="true" stepKey="clickCalculationMethodBasedCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationBasedInherit}}" visible="true" stepKey="clickTaxCalculationBasedCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationPricesInherit}}" visible="true" stepKey="clickCalculationPricesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationShippingPricesInherit}}" visible="true" stepKey="clickShippingPricesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationApplyCustomerTaxInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationApplyCustomerTaxInherit}}" visible="true" stepKey="clickApplyCustomerTaxCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationApplyDiscountOnPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationApplyDiscountOnPricesInherit}}" visible="true" stepKey="clickApplyDiscountOnPricesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}}" visible="true" stepKey="closeCalculationSettings"/>
+    </actionGroup>
+</actionGroups>

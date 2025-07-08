@@ -19,6 +19,8 @@
             <group value="instant_purchase"/>
             <group value="vault"/>
             <group value="paypal"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
@@ -78,7 +80,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Set configs to default -->
             <createData entity="DefaultPaypalPayflowProConfig" stepKey="defaultPaypalPayflowProConfig"/>

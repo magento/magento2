@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  *  All Rights Reserved.
+  */
+-->
+<tests
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerOptInCheckboxNotTranslatableTest">
+        <annotations>
+            <title value="Admin Login as Customer opt-in checkbox not translatable"/>
+            <description value="Verify Admin Login as Customer opt-in checkbox not translatable"/>
+            <features value="Login as Customer"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-13001"/>
+            <stories value="Login as Customer opt-in checkbox not translatable"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminLoginAsCustomerConfigPage.url}}" stepKey="navigateToLoginAsCustomerConfigSection"/>
+        <!--Look for fields "Title for Login as Customer opt-in checkbox" and "Login as Customer checkbox tooltip"-->
+        <waitForElementVisible selector="{{AdminCustomerConfigSection.TitleForLoginAsCustomer('Title for Login as Customer opt-in checkbox')}}" stepKey="TitleForLoginAsCustomerOptInCheckbox"/>
+        <waitForElementVisible selector="{{AdminCustomerConfigSection.LoginAsCustomerOptInCheckboxTextField}}" stepKey="LoginAsCustomerOptInCheckboxTextField"/>
+        <waitForElementVisible selector="{{AdminCustomerConfigSection.TitleForLoginAsCustomer('Login as Customer checkbox tooltip')}}" stepKey="TitleForLoginAsCustomerCheckboxToolTip"/>
+        <waitForElementVisible selector="{{AdminCustomerConfigSection.LoginAsCustomerCheckboxToolTipTextField}}" stepKey="LoginAsCustomerCheckboxToolTipTextField"/>
+        <!--Switch to Default Store view-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="selectDefaultStoreView">
+            <argument name="storeViewName" value="Default Store View"/>
+        </actionGroup>
+        <!--Look for fields "Title for Login as Customer opt-in checkbox" and "Login as Customer checkbox tooltip"-->
+        <waitForElementVisible selector="{{AdminCustomerConfigSection.TitleForLoginAsCustomer('Title for Login as Customer opt-in checkbox')}}" stepKey="TitleForLoginAsCustomerOptInCheckboxInDefaultStoreView"/>
+        <waitForElementVisible selector="{{AdminCustomerConfigSection.LoginAsCustomerOptInCheckboxTextField}}" stepKey="LoginAsCustomerOptInCheckboxTextFieldInDefaultStoreView"/>
+        <waitForElementVisible selector="{{AdminCustomerConfigSection.TitleForLoginAsCustomer('Login as Customer checkbox tooltip')}}" stepKey="TitleForLoginAsCustomerCheckboxToolTipInDefaultStoreView"/>
+        <waitForElementVisible selector="{{AdminCustomerConfigSection.LoginAsCustomerCheckboxToolTipTextField}}" stepKey="LoginAsCustomerCheckboxToolTipTextFieldInDefaultStoreView"/>
+    </test>
+</tests>

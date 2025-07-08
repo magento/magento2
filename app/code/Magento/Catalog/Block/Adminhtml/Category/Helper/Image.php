@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Category form image field helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Helper;
 
@@ -39,6 +37,8 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
     }
 
     /**
+     * Return the URL
+     *
      * @return bool|string
      */
     protected function _getUrl()

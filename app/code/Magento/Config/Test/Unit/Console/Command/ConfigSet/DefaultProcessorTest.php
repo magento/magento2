@@ -73,11 +73,11 @@ class DefaultProcessorTest extends TestCase
         $this->configPathResolverMock = $this->createMock(ConfigPathResolver::class);
         $this->resourceModelMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save'])
+            ->onlyMethods(['save'])
             ->getMockForAbstractClass();
         $this->valueMock = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResource'])
+            ->onlyMethods(['getResource'])
             ->getMock();
         $this->preparedValueFactoryMock = $this->createMock(PreparedValueFactory::class);
         $this->configFactory = $this->createMock(ConfigFactory::class);
@@ -121,7 +121,7 @@ class DefaultProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             ['test/test/test', 'value', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],

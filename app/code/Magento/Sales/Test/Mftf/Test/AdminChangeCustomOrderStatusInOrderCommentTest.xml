@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeCustomOrderStatusInOrderCommentTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Allow Admin to Modify Order Status Using Comment Section"/>
+            <title value="Change intermediate custom status in admin using add comment form"/>
+            <description value="Admin Can change the custom Order status with Comment line on Order view Page after invoice"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-12883"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!-- Precondition: Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Unassign Sent status -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
+                <argument name="statusLabel" value="{{sentStatus.label}}"/>
+                <argument name="statusCode" value="{{sentStatus.code}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
+            <!-- Unassign Ready For Pickup status -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="navigateToOrderStatus2"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGri2">
+                <argument name="statusLabel" value="{{readyForPickup.label}}"/>
+                <argument name="statusCode" value="{{readyForPickup.code}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassigningOrderStatus"/>
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
+            <!--Delete Data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Logout from admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step 1&2: Go to admin Stores => Order Status and Create two statuses "Sent" and "Ready for Pickup" and bind them to "Processing" state-->
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
+            <argument name="status" value="{{sentStatus.code}}"/>
+            <argument name="label" value="{{sentStatus.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeFormSaveSuccess"/>
+        <actionGroup ref="AdminAssignCustomStatusToStateActionGroup" stepKey="assignTestStatusToState">
+            <argument name="orderStatus" value="{{sentStatus.label}}"/>
+            <argument name="orderState" value="{{OrderState.processing}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickAgainCreateNewStatus"/>
+        <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAgainAndClickSave">
+            <argument name="status" value="{{readyForPickup.code}}"/>
+            <argument name="label" value="{{readyForPickup.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertOrderStatusFormSaveSuccess" stepKey="seeAgainFormSaveSuccess"/>
+        <!-- Assign status to state -->
+        <actionGroup ref="AdminAssignCustomStatusToStateActionGroup" stepKey="assignCustomStatusToState">
+            <argument name="orderStatus" value="{{readyForPickup.label}}"/>
+            <argument name="orderState" value="{{OrderState.processing}}"/>
+        </actionGroup>
+        <!--Step3: Create product and register customer-->
+        <createData entity="_defaultCategory" stepKey="createCategory"/>
+        <createData entity="SimpleProduct" stepKey="createProduct">
+            <requiredEntity createDataKey="createCategory"/>
+        </createData>
+        <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        <!--Step4: Place order on front using this product and customer and default shipping and payment methods-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add simple product to cart and go to checkout-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutPage"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <!-- Step5&6: Go to admin Sales => Orders and Open previously placed order -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+        <!-- Step7: Create invoice by clicking Invoice button on top -->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <!-- Step8: See order changed status to "Processing" -->
+        <waitForText selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{OrderState.processing}}" stepKey="seeOrderStatusAsProcessing"/>
+        <!-- Step9: Go to "Add Comment" form change status to "Sent" and add any comment -->
+        <selectOption selector="{{AdminCreateOrderCommentsSection.statusForOrder}}" userInput="{{sentStatus.code}}" stepKey="selectSentLabel"/>
+        <fillField selector="{{AdminSalesOrderCommentsSection.historyComment}}" userInput="{{OrderInvoiceComment.sent}}" stepKey="fillCommentForSent"/>
+        <click selector="{{AdminSalesOrderCommentsSection.submitOrderComment}}" stepKey="clickSaveCommentButton"/>
+        <!-- Step10: Reload order form and see status changed to "Sent" -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <waitForText selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{sentStatus.label}}" stepKey="seeOrderStatusAsSent"/>
+        <!-- Step11: Go to "Add Comment" form change status to "Ready For Pickup" and add any comment -->
+        <waitForElementClickable selector="{{AdminCreateOrderCommentsSection.statusForOrder}}" stepKey="waitToReadyForPickupLabel"/>
+        <click selector="{{AdminCreateOrderCommentsSection.statusForOrder}}" stepKey="clickReadyForPickupLabel"/>
+        <waitForPageLoad stepKey="waitReadyForPickup"/>
+        <selectOption selector="{{AdminCreateOrderCommentsSection.statusForOrder}}" userInput="{{readyForPickup.code}}" stepKey="selectReadyForPickupLabel"/>
+        <fillField selector="{{AdminSalesOrderCommentsSection.historyComment}}" userInput="{{OrderInvoiceComment.readyForPickup}}" stepKey="fillCommentFieldForReadyForPickup"/>
+        <click selector="{{AdminSalesOrderCommentsSection.submitOrderComment}}" stepKey="clickSaveCommentBtn"/>
+        <waitForPageLoad stepKey="waitForPageToBeLoadedSuccessfully"/>
+        <!-- Step12: Reload order form -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <waitForText selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{readyForPickup.label}}" stepKey="seeOrderStatusAsReadyForPickup"/>
+    </test>
+</tests>

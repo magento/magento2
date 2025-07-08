@@ -100,7 +100,7 @@ class UpdateTest extends TestCase
         $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPostValue'])
+            ->addMethods(['getPostValue'])
             ->getMockForAbstractClass();
 
         $this->resultFactoryMock->expects($this->any())
@@ -145,17 +145,14 @@ class UpdateTest extends TestCase
         $wishlist = $this->createMock(Wishlist::class);
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['getWishlistId', 'getName', 'getDescription', 'setDescription'])
+            ->onlyMethods(
                 [
                     'load',
                     'getId',
-                    'getWishlistId',
                     'setQty',
                     'save',
-                    'getDescription',
-                    'setDescription',
-                    'getProduct',
-                    'getName'
+                    'getProduct'
                 ]
             )->getMock();
         $dataMock = $this->createMock(Data::class);
@@ -275,7 +272,7 @@ class UpdateTest extends TestCase
      *
      * @return array
      */
-    public function getWishlistDataProvider(): array
+    public static function getWishlistDataProvider(): array
     {
         return
             [

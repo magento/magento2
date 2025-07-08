@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Customer;
 
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\EavGraphQl\Model\GetAttributeValueComposite;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\ServiceOutputProcessor;
 
 /**
  * Transform single customer data from object to in array format
@@ -24,20 +25,20 @@ class ExtractCustomerData
     private $serviceOutputProcessor;
 
     /**
-     * @var SerializerInterface
+     * @var GetAttributeValueComposite
      */
-    private $serializer;
+    private GetAttributeValueComposite $getAttributeValueComposite;
 
     /**
      * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param SerializerInterface $serializer
+     * @param GetAttributeValueComposite $getAttributeValueComposite
      */
     public function __construct(
         ServiceOutputProcessor $serviceOutputProcessor,
-        SerializerInterface $serializer
+        GetAttributeValueComposite $getAttributeValueComposite
     ) {
         $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->serializer = $serializer;
+        $this->getAttributeValueComposite = $getAttributeValueComposite;
     }
 
     /**
@@ -77,30 +78,24 @@ class ExtractCustomerData
         if (isset($customerData['extension_attributes'])) {
             $customerData = array_merge($customerData, $customerData['extension_attributes']);
         }
-        $customAttributes = [];
         if (isset($customerData['custom_attributes'])) {
-            foreach ($customerData['custom_attributes'] as $attribute) {
-                $isArray = false;
-                if (is_array($attribute['value'])) {
-                    $isArray = true;
-                    foreach ($attribute['value'] as $attributeValue) {
-                        if (is_array($attributeValue)) {
-                            $customAttributes[$attribute['attribute_code']] = $this->serializer->serialize(
-                                $attribute['value']
-                            );
-                            continue;
-                        }
-                        $customAttributes[$attribute['attribute_code']] = implode(',', $attribute['value']);
-                        continue;
-                    }
-                }
-                if ($isArray) {
-                    continue;
-                }
-                $customAttributes[$attribute['attribute_code']] = $attribute['value'];
-            }
+            $customerData['custom_attributes'] = array_map(
+                function (array $customAttribute) {
+                    return $this->getAttributeValueComposite->execute(
+                        CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                        $customAttribute
+                    );
+                },
+                $customerData['custom_attributes']
+            );
+            usort($customerData['custom_attributes'], function (array $a, array $b) {
+                $aPosition = $a['sort_order'];
+                $bPosition = $b['sort_order'];
+                return $aPosition <=> $bPosition;
+            });
+        } else {
+            $customerData['custom_attributes'] = [];
         }
-        $customerData = array_merge($customerData, $customAttributes);
         //Fields are deprecated and should not be exposed on storefront.
         $customerData['group_id'] = null;
         $customerData['id'] = null;

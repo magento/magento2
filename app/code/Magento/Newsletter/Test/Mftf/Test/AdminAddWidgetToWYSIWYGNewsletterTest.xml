@@ -16,6 +16,7 @@
             <description value="Admin should be able to add widget to WYSIWYG Editor Newsletter"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6070"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>

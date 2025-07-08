@@ -62,7 +62,7 @@ class RedirectTest extends TestCase
     /**
      * @return array
      */
-    public function getPostParamsDataProvider(): array
+    public static function getPostParamsDataProvider(): array
     {
         return [
             [

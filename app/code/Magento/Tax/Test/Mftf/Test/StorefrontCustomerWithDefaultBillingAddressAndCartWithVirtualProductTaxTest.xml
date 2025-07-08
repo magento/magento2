@@ -48,6 +48,7 @@
             <!-- Delete virtual product -->
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Logout from admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>

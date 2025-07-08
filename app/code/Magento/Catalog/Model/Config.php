@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model;
@@ -90,11 +90,6 @@ class Config extends \Magento\Eav\Model\Config
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
      */
     protected $_setCollectionFactory;
@@ -147,7 +142,7 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
-        SerializerInterface $serializer = null,
+        ?SerializerInterface $serializer = null,
         $attributesForPreload = []
     ) {
         $this->_scopeConfig = $scopeConfig;
@@ -166,7 +161,8 @@ class Config extends \Magento\Eav\Model\Config
             $universalFactory,
             $serializer,
             $scopeConfig,
-            $attributesForPreload
+            $attributesForPreload,
+            $storeManager,
         );
     }
 

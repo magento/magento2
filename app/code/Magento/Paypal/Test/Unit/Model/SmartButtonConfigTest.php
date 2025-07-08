@@ -55,7 +55,7 @@ class SmartButtonConfigTest extends TestCase
         /** @var ConfigFactory|MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $configFactoryMock->expects($this->any())->method('create')->willReturn($this->configMock);
 
@@ -124,7 +124,7 @@ class SmartButtonConfigTest extends TestCase
      *
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return include __DIR__ . '/_files/expected_style_config.php';
     }

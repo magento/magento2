@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -49,8 +49,6 @@
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <!-- set shipping as default            -->
-            <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
         <!-- Add simple product to cart and go to checkout-->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">

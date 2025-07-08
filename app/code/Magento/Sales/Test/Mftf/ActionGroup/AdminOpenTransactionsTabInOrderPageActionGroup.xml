@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenTransactionsTabInOrderPageActionGroup">
+        <annotations>
+            <description>Click the Transactions tab on the order details page</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="waitForTransactionTabToBeClicked"/>
+        <click selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="clickTransactionsButton"/>
+        <waitForElementVisible selector="{{AdminTransactionsGridSection.orderTxnTable}}" stepKey="orderTransactionsTableIsVisible"/>
+        <waitForPageLoad stepKey="waitForFilterToLoad"/>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="waitForFirstResultOfTransactionToBeClicked"/>
+        <click selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickOnFirstRowOfTransactionTab"/>
+        <waitForPageLoad stepKey="waitForTxnToLoad"/>
+    </actionGroup>
+</actionGroups>

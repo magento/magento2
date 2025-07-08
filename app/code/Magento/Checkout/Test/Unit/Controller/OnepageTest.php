@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,8 +75,10 @@ class OnepageTest extends TestCase
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
         $objectManagerMock
             ->method('get')
-            ->withConsecutive([Session::class], [\Magento\Customer\Model\Session::class])
-            ->willReturnOnConsecutiveCalls($this->checkoutSession, $this->customerSession);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                [Session::class] => $this->checkoutSession,
+                [\Magento\Customer\Model\Session::class] => $this->customerSession,
+            });
 
         $context = $this->createMock(Context::class);
         $context->expects($this->once())

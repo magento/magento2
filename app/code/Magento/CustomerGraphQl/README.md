@@ -23,12 +23,12 @@ Extension developers can interact with the Magento_CustomerGraphQl module. For m
 
 ## Additional information
 
-You can get more information about [GraphQl In Magento 2](https://devdocs.magento.com/guides/v2.4/graphql).
+You can get more information about [GraphQl In Magento 2](https://developer.adobe.com/commerce/webapi/graphql/).
 
 ### GraphQl Query
 
-- `customer` query - returns information about the logged-in customer, store credit history and customer’s wishlist
+- `customer` query - returns information about the logged-in customer, store credit history and customer's wishlist
 - `isEmailAvailable` query - checks whether the specified email has already been used to create a customer account. A value of true indicates the email address is available, and the customer can use the email address to create an account
 
 [Learn more about customer query](https://developer.adobe.com/commerce/webapi/graphql/schema/customer/queries/customer/).
-[Learn more about isEmailAvailable query](https://developer.adobe.com/commerce/webapi/graphql/usage/is-email-available.html).
+[Learn more about isEmailAvailable query](https://developer.adobe.com/commerce/webapi/graphql/schema/customer/queries/is-email-available).

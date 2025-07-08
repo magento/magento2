@@ -18,6 +18,7 @@
             <group value="tax"/>
             <group value="mtf_migrated"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>

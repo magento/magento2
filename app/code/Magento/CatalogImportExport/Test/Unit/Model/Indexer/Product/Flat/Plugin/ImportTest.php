@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,12 +40,12 @@ class ImportTest extends TestCase
     {
         $this->processorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['markIndexerAsInvalid', 'isIndexerScheduled'])
+            ->onlyMethods(['markIndexerAsInvalid', 'isIndexerScheduled'])
             ->getMock();
 
         $this->flatStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isFlatEnabled'])
+            ->onlyMethods(['isFlatEnabled'])
             ->getMock();
 
         $this->subjectMock = $this->getMockBuilder(\Magento\ImportExport\Model\Import::class)

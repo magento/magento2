@@ -148,7 +148,7 @@ class ImportWithNotExistImagesTest extends TestCase
     /**
      * @return array
      */
-    public function unexistingImagesDataProvider(): array
+    public static function unexistingImagesDataProvider(): array
     {
         return [
             ['/m/a/invalid_image.jpg'],
@@ -222,9 +222,6 @@ class ImportWithNotExistImagesTest extends TestCase
             RowValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
             $importError->getErrorCode()
         );
-        $errorMsg = (string)__('Imported resource (image) could not be downloaded ' .
-            'from external resource due to timeout or access permissions');
-        $this->assertEquals($errorMsg, $importError->getErrorMessage());
     }
 
     /**

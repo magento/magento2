@@ -10,6 +10,8 @@ namespace Magento\GraphQl\Quote;
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule;
@@ -17,16 +19,27 @@ use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory as TaxClassCollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\SalesRule\Api\Data\DiscountAppliedToInterface as DiscountAppliedTo;
 
 /**
  * Test cases for applying cart promotions to items in cart
  */
 class CartPromotionsTest extends GraphQlAbstract
 {
+    /** @var GetCustomerAuthenticationHeader */
+    private $customerAuthenticationHeader;
+
     /**
      * @var float
      */
     private const EPSILON = 0.0000000001;
+
+    protected function setUp():void
+    {
+        parent::setUp();
+        $this->customerAuthenticationHeader =
+            Bootstrap::getObjectManager()->get(GetCustomerAuthenticationHeader::class);
+    }
 
     /**
      * Test adding single cart rule to multiple products in a cart
@@ -188,7 +201,51 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
-        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 24.18);
+        $this->assertEquals(21.98, $response['cart']['prices']['discounts'][0]['amount']['value']);
+        $this->assertEquals(
+            DiscountAppliedTo::APPLIED_TO_ITEM,
+            $response['cart']['prices']['discounts'][0][DiscountAppliedTo::APPLIED_TO]
+        );
+        $this->assertEquals($response['cart']['prices']['discounts'][1]['amount']['value'], 2.2);
+        $this->assertEquals(
+            DiscountAppliedTo::APPLIED_TO_ITEM,
+            $response['cart']['prices']['discounts'][1][DiscountAppliedTo::APPLIED_TO],
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
+     * @return void
+     * @throws AuthenticationException
+     */
+    public function testShippingDiscountPresent(): void
+    {
+        $skus =['simple1', 'simple2'];
+        $qty = 2;
+        $quote = Bootstrap::getObjectManager()
+            ->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
+        $cartId = $quote->getId();
+
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = Bootstrap::getObjectManager()
+            ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)->create();
+        $quoteIdMask->load($cartId, 'quote_id');
+        //Use masked cart Id
+        $cartId = $quoteIdMask->getMaskedId();
+        $this->addMultipleProductsToCustomerCart($cartId, $qty, $skus[0], $skus[1]);
+        $this->setShippingMethodOnCustomerCart($cartId, ['carrier_code' => 'flatrate', 'method_code' => 'flatrate']);
+        $query = $this->getCartItemPricesQuery($cartId);
+        $response = $this->graphQlMutationForCustomer($query);
+        $this->assertEquals(
+            DiscountAppliedTo::APPLIED_TO_ITEM,
+            $response['cart']['prices']['discounts'][0][DiscountAppliedTo::APPLIED_TO],
+        );
+        $this->assertEquals(
+            DiscountAppliedTo::APPLIED_TO_SHIPPING,
+            $response['cart']['prices']['discounts'][1][DiscountAppliedTo::APPLIED_TO],
+        );
     }
 
     /**
@@ -198,6 +255,7 @@ class CartPromotionsTest extends GraphQlAbstract
      * Tax rate = 7.5%
      * Cart rule to apply 50% for products assigned to a specific category
      *
+     * @magentoConfigFixture default_store tax/calculation/discount_tax 1
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_price_and_cart_display_settings.php
@@ -498,6 +556,7 @@ QUERY;
     prices{
       discounts{
         amount{value}
+        applied_to
       }
     }
   }
@@ -526,10 +585,11 @@ QUERY;
      * @param int $sku1
      * @param int $qty
      * @param string $sku2
+     * @return string
      */
-    private function addMultipleSimpleProductsToCart(string $cartId, int $qty, string $sku1, string $sku2): void
+    private function addSimpleProductsToCartQuery(string $cartId, int $qty, string $sku1, string $sku2): string
     {
-        $query = <<<QUERY
+        return <<<QUERY
 mutation {
   addSimpleProductsToCart(input: {
     cart_id: "{$cartId}",
@@ -558,7 +618,17 @@ mutation {
       }
 }
 QUERY;
+    }
 
+    /**
+     * @param string $cartId
+     * @param int $sku1
+     * @param int $qty
+     * @param string $sku2
+     */
+    private function addMultipleSimpleProductsToCart(string $cartId, int $qty, string $sku1, string $sku2): void
+    {
+        $query = $this->addSimpleProductsToCartQuery($cartId, $qty, $sku1, $sku2);
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
@@ -566,6 +636,74 @@ QUERY;
         self::assertEquals($sku1, $response['addSimpleProductsToCart']['cart']['items'][0]['product']['sku']);
         self::assertEquals($qty, $response['addSimpleProductsToCart']['cart']['items'][1]['quantity']);
         self::assertEquals($sku2, $response['addSimpleProductsToCart']['cart']['items'][1]['product']['sku']);
+    }
+
+    /**
+     * Executes GraphQL mutation for a default customer
+     *
+     * @param string $query
+     * @return array
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    private function graphQlMutationForCustomer(string $query): array
+    {
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        return $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+    }
+
+    /**
+     * @param string $cartId
+     * @param int $sku1
+     * @param int $qty
+     * @param string $sku2
+     * @throws AuthenticationException
+     */
+    private function addMultipleProductsToCustomerCart(string $cartId, int $qty, string $sku1, string $sku2): void
+    {
+        $query = $this->addSimpleProductsToCartQuery($cartId, $qty, $sku1, $sku2);
+        $this->graphQlMutationForCustomer($query);
+    }
+
+    /**
+     * Set shipping method on cart with GraphQl mutation
+     *
+     * @param string $cartId
+     * @param array $method
+     * @return array
+     */
+    private function setShippingMethodOnCustomerCart(string $cartId, array $method): array
+    {
+        $query = <<<QUERY
+mutation {
+  setShippingMethodsOnCart(input:  {
+    cart_id: "{$cartId}",
+    shipping_methods: [
+      {
+         carrier_code: "{$method['carrier_code']}"
+         method_code: "{$method['method_code']}"
+      }
+    ]
+  }) {
+    cart {
+      available_payment_methods {
+        code
+        title
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlMutationForCustomer($query);
+
+        $availablePaymentMethod = current($response['setShippingMethodsOnCart']['cart']['available_payment_methods']);
+        return $availablePaymentMethod;
     }
 
     /**

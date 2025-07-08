@@ -17,6 +17,7 @@
                 value="Verify Admin can access customer's personal cabinet and change his default shipping and billing addresses using Login as Customer functionality"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
@@ -29,6 +30,7 @@
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>

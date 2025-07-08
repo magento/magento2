@@ -53,7 +53,7 @@ class ConnectionManagerTest extends TestCase
             ->getMockForAbstractClass();
         $this->clientFactory = $this->getMockBuilder(ClientFactoryInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->clientConfig = $this->getMockBuilder(ClientOptionsInterface::class)
             ->disableOriginalConstructor()

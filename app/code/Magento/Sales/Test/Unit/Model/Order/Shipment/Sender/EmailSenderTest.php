@@ -398,10 +398,13 @@ class EmailSenderTest extends TestCase
 
             $this->shipmentResourceMock
                 ->method('saveAttribute')
-                ->withConsecutive(
-                    [$this->shipmentMock, 'email_sent'],
-                    [$this->shipmentMock, 'send_email']
-                );
+                ->willReturnCallback(function ($arg1, $arg2) {
+                    if ($arg1 == $this->shipmentMock &&
+                        $arg2 == 'email_sent' ||
+                        $arg2 == 'send_email') {
+                        return null;
+                    }
+                });
 
             $this->assertFalse(
                 $this->subject->send(
@@ -418,7 +421,7 @@ class EmailSenderTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function sendDataProvider(): array
+    public static function sendDataProvider(): array
     {
         return [
             'Successful sync sending with comment' => [

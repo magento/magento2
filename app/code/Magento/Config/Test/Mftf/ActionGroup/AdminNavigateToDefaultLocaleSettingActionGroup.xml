@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminNavigateToDefaultLocaleSettingActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Locale Options'. Expands the 'Locale Options' section.</description>
+        </annotations>
+
+        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="navigateToLocaleConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick stepKey="expandLocaleOptions" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.checkIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{LocaleOptionsSection.timezone}}" stepKey="waitForLocaleTimeZone"/>
+    </actionGroup>
+</actionGroups>

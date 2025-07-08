@@ -96,6 +96,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!-- Logout customer from storefront and delete -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="signOutCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateEnabled">
                 <argument name="tags" value="translate config full_page layout block_html translate"/>
@@ -338,7 +339,7 @@
 
         <!-- Go to next step -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethodBeforeTranslate"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStepBeforeTranslate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="gotoPaymentStepBeforeTranslate"/>
 
         <!-- Check Progress Bar Review & Payments -->
         <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="waitForProgressBarReviewAndPayments"/>
@@ -570,7 +571,7 @@
 
         <!-- Go to next step -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="gotoPaymentStep"/>
 
         <!-- Check translate Progress Bar Review & Payments-->
         <see userInput="Review &amp; Payments Translated" selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="seeTranslateProgressBarReviewAndPayments"/>

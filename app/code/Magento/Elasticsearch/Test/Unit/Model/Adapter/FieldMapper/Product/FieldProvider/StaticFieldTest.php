@@ -78,7 +78,7 @@ class StaticFieldTest extends TestCase
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityAttributes'])
+            ->onlyMethods(['getEntityAttributes'])
             ->getMock();
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
@@ -88,19 +88,19 @@ class StaticFieldTest extends TestCase
             ->getMockForAbstractClass();
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getByAttributeCode'])
+            ->onlyMethods(['getByAttributeCode'])
             ->getMock();
         $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldType'])
+            ->onlyMethods(['getFieldType'])
             ->getMock();
         $this->fieldIndexResolver = $this->getMockBuilder(FieldIndexResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldIndex'])
+            ->onlyMethods(['getFieldIndex'])
             ->getMock();
         $this->fieldNameResolver = $this->getMockBuilder(FieldNameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldName'])
+            ->onlyMethods(['getFieldName'])
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
@@ -185,7 +185,7 @@ class StaticFieldTest extends TestCase
             );
 
         $productAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getAttributeCode'])
+            ->onlyMethods(['getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $productAttributeMock->expects($this->any())
@@ -196,7 +196,7 @@ class StaticFieldTest extends TestCase
 
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isComplexType', 'getAttributeCode', 'isSortable', 'isTextType'])
+            ->onlyMethods(['isComplexType', 'getAttributeCode', 'isSortable', 'isTextType'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('isComplexType')
@@ -244,7 +244,7 @@ class StaticFieldTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function attributeProvider(): array
+    public static function attributeProvider(): array
     {
         return [
             [
@@ -297,6 +297,7 @@ class StaticFieldTest extends TestCase
                             'sort_attr_code' => [
                                 'type' => 'string',
                                 'index' => 'not_analyzed',
+                                'normalizer' => 'folding',
                             ],
                         ],
                     ],
@@ -375,6 +376,7 @@ class StaticFieldTest extends TestCase
                             'sort_attr_code' => [
                                 'type' => 'string',
                                 'index' => 'not_analyzed',
+                                'normalizer' => 'folding',
                             ],
                         ],
                     ],

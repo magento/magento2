@@ -33,9 +33,40 @@ class PublisherTest extends TestCase
     {
         $source = include __DIR__ . '/../../../../_files/env_2_2.php';
         $expectedConfig = [
+            'amqp-magento-db' => [
+                'name' => 'amqp-magento-db',
+                'exchange' => 'magento-db',
+                'connection' =>'db'
+            ]
+        ];
+        $actualResult = $this->converter->convert($source['config']);
+        $this->assertEquals($expectedConfig, $actualResult[ReaderEnv::ENV_PUBLISHERS]);
+    }
+
+    public function testConvertUndefinedExchange()
+    {
+        $source = [
+            'config' => [
+                'publishers' => [
+                    'inventory.counter.updated' => [
+                        'connections' => [
+                            'amqp' => [
+                                'name' => 'db',
+                            ],
+                        ]
+                    ]
+                ],
+                'consumers' => [
+                    'inventoryQtyCounter' => [
+                        'connection' => 'db'
+                    ]
+                ]
+            ]
+        ];
+        $expectedConfig = [
             'amqp-magento' => [
                 'name' => 'amqp-magento',
-                'exchange' => 'magento-db',
+                'exchange' => 'magento',
                 'connection' =>'db'
             ]
         ];

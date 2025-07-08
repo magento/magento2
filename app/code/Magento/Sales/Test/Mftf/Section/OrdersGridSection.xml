@@ -32,5 +32,10 @@
         <element name="applyCoupon" type="input" selector="#coupons:code"/>
         <element name="submitOrder" type="button" selector="#submit_order_top_button" timeout="60"/>
         <element name="orderID" type="text" selector="|Order # (\d+)|"/>
+        <element name="selectProductNextPage" type="button" selector="//button[@title='Next page']"/>
+        <element name="selectProductPreviousPage" type="button" selector="//button[@class='action-previous']"/>
+        <element name="displayedProducts" type="text" selector="//input[@class='checkbox admin__control-checkbox']/../../..//td[contains(@class,'col-sku') and contains(text(),'test')]"/>
+        <element name="pageNumber" type="input" selector="//input[@id='sales_order_create_search_grid_page-current' and @value='{{page_index}}']" parameterized="true"/>
+        <element name="grandTotal" type="text" selector="//div[@data-role='grid-wrapper']//tr//td[contains(.,'{{value}}')]" parameterized="true"/>
     </section>
 </sections>

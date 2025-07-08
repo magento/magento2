@@ -27,7 +27,7 @@
 @btn-secondary__disabled__background-color: lighten(@btn-secondary__background-color, 0%);
 @btn-secondary__active__background-color: lighten(@btn-secondary__background-color, 2%);
 
-@triangle__base__size: @btn__height__base / 2;
+@triangle__base__size: (@btn__height__base / 2);
 
 //  Expand button
 @color-btn-expand: @base__color;
@@ -174,7 +174,7 @@
     position: relative;
 
     .btn {
-        text-indent: @triangle__base__size / 2;
+        text-indent: (@triangle__base__size / 2);
 
         &:after {
             border-color: transparent transparent transparent @btn__base__background-color;
@@ -238,7 +238,7 @@
     padding-left: @triangle__base__size - .1;
 
     .btn {
-        text-indent: -@triangle__base__size / 2;
+        text-indent: (-@triangle__base__size / 2);
 
         &:after {
             border-color: transparent @btn__base__background-color transparent transparent;
@@ -312,7 +312,7 @@
     &.expanded {
         &:after {
             border-color: transparent transparent @color-btn-expand transparent;
-            border-width: 0 @width-triangle-btn-expand / 2 @height-triangle-btn-expand @width-triangle-btn-expand / 2;
+            border-width: 0 (@width-triangle-btn-expand / 2) @height-triangle-btn-expand (@width-triangle-btn-expand / 2);
         }
 
         &:hover {
@@ -335,7 +335,7 @@
     &:after {
         border-color: @color-btn-expand transparent transparent transparent;
         border-style: solid;
-        border-width: @height-triangle-btn-expand @width-triangle-btn-expand / 2 0 @width-triangle-btn-expand / 2;
+        border-width: @height-triangle-btn-expand (@width-triangle-btn-expand / 2) 0 (@width-triangle-btn-expand / 2);
         content: '';
         height: 0;
         left: 100%;

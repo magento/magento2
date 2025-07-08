@@ -18,6 +18,7 @@
             <testCaseId value="MC-5303"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Tax Class "Customer tax class"-->

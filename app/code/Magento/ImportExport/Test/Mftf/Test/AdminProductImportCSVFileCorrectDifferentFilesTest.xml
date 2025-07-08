@@ -19,6 +19,7 @@
             <useCaseId value="MAGETWO-70803"/>
             <group value="importExport"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Login as Admin-->

@@ -1,11 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-/**
- * Implementation of the @magentoAppIsolation DocBlock annotation - isolation of global application objects in memory
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Annotation;
 
@@ -16,6 +12,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Implementation of the @magentoAppIsolation DocBlock annotation - isolation of global application objects in memory
+ */
 class AppIsolation
 {
     /**
@@ -90,10 +89,9 @@ class AppIsolation
             $values = $this->parse($test);
         } catch (\Throwable $exception) {
             ExceptionHandler::handle(
-                'Unable to parse fixtures',
-                get_class($test),
-                $test->getName(false),
-                $exception
+                'Unable to parse annotations',
+                $exception,
+                $test
             );
         }
         if ($values) {

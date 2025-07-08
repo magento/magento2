@@ -1,7 +1,5 @@
 <?php
 /**
- * Action validator, remove action
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -45,7 +43,6 @@ class RemoveAction
     public function isAllowed(AbstractModel $model)
     {
         $isAllowed = true;
-
         if ($this->registry->registry('isSecureArea')) {
             $isAllowed = true;
         } elseif (in_array($this->getBaseClassName($model), $this->protectedModels)) {
@@ -57,6 +54,7 @@ class RemoveAction
 
     /**
      * Get clean model name without Interceptor and Proxy part and slashes
+     *
      * @param object $object
      * @return mixed
      */

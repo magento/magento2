@@ -120,7 +120,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function getSaveDataProvider()
+    public static function getSaveDataProvider()
     {
         return [
             [null, true, true],

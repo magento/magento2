@@ -15,6 +15,7 @@
             <description value="Admin able see navigate head menu Marketing is active, when open page Marketing > Pending Reviews"/>
             <severity value="MAJOR"/>
             <group value="menu"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

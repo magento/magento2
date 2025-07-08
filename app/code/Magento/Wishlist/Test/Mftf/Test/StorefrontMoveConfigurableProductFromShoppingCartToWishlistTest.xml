@@ -17,6 +17,7 @@
             <testCaseId value="MC-14211"/>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Data -->
@@ -112,6 +113,7 @@
         </before>
         <after>
             <!-- Delete data -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteSimpleProduct2"/>

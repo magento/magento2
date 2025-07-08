@@ -98,8 +98,16 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         ];
         $methods[] = [
             'name' => '__clone',
-            'body' => "\$this->_subject = clone \$this->_getSubject();",
+            'body' => "if (\$this->_subject) {\n" .
+                "    \$this->_subject = clone \$this->_getSubject();\n" .
+                "}\n",
             'docblock' => ['shortDescription' => 'Clone proxied instance'],
+        ];
+
+        $methods[] = [
+            'name' => '__debugInfo',
+            'body' => "return ['i' => \$this->_subject];",
+            'docblock' => ['shortDescription' => 'Debug proxied instance'],
         ];
 
         $methods[] = [
@@ -127,10 +135,20 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 )
                 && !in_array(
                     $method->getName(),
-                    ['__sleep', '__wakeup', '__clone']
+                    ['__sleep', '__wakeup', '__clone', '__debugInfo', '_resetState']
                 )
             ) {
                 $methods[] = $this->_getMethodInfo($method);
+            }
+            if ($method->getName() === '_resetState') {
+                $methods[] = [
+                    'name' => '_resetState',
+                    'returnType' => 'void',
+                    'body' => "if (\$this->_subject) {\n" .
+                        "    \$this->_subject->_resetState(); \n" .
+                        "}\n",
+                    'docblock' => ['shortDescription' => 'Reset state of proxied instance'],
+                ];
             }
         }
 

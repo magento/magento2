@@ -44,7 +44,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function validXmlFileDataProvider()
+    public static function validXmlFileDataProvider()
     {
         return [['crontab_valid.xml'], ['crontab_valid_without_schedule.xml']];
     }
@@ -69,41 +69,101 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function invalidXmlFileDataProvider()
+    public static function invalidXmlFileDataProvider()
     {
         return [
             [
                 'crontab_invalid.xml',
                 [
-                    "Element 'job', attribute 'wrongName': The attribute 'wrongName' is not allowed.\nLine: 10\n",
-                    "Element 'job', attribute 'wrongInstance': " .
-                        "The attribute 'wrongInstance' is not allowed.\nLine: 10\n",
-                    "Element 'job', attribute 'wrongMethod': The attribute 'wrongMethod' is not allowed.\nLine: 10\n",
-                    "Element 'job': The attribute 'name' is required but missing.\nLine: 10\n",
-                    "Element 'job': The attribute 'instance' is required but missing.\nLine: 10\n",
-                    "Element 'job': The attribute 'method' is required but missing.\nLine: 10\n",
-                    "Element 'wrongSchedule': This element is not expected." .
-                        " Expected is one of ( schedule, config_path ).\nLine: 11\n"
+                    "Element 'job', attribute 'wrongName': The attribute 'wrongName' is not allowed.\nLine: 10\n" .
+                    "The xml was: \n5: */\n6:-->\n7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job wrongName=\"job1\" wrongInstance=\"Model1\" " .
+                    "wrongMethod=\"method1\">\n10:            <wrongSchedule>30 2 * * *</wrongSchedule>\n" .
+                    "11:        </job>\n12:    </group>\n13:</config>\n14:\n",
+                    "Element 'job', attribute 'wrongInstance': The attribute 'wrongInstance' is not allowed.\n" .
+                    "Line: 10\nThe xml was: \n5: */\n6:-->\n7:<config " .
+                    "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job wrongName=\"job1\" wrongInstance=\"Model1\" " .
+                    "wrongMethod=\"method1\">\n10:            <wrongSchedule>30 2 * * *</wrongSchedule>\n" .
+                    "11:        </job>\n12:    </group>\n13:</config>\n14:\n",
+                    "Element 'job', attribute 'wrongMethod': The attribute 'wrongMethod' is not allowed.\nLine: 10\n" .
+                    "The xml was: \n5: */\n6:-->\n7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job wrongName=\"job1\" wrongInstance=\"Model1\" " .
+                    "wrongMethod=\"method1\">\n10:            <wrongSchedule>30 2 * * *</wrongSchedule>\n" .
+                    "11:        </job>\n12:    </group>\n13:</config>\n14:\n",
+                    "Element 'job': The attribute 'name' is required but missing.\nLine: 10\nThe xml was: \n" .
+                    "5: */\n6:-->\n7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job wrongName=\"job1\" wrongInstance=\"Model1\" " .
+                    "wrongMethod=\"method1\">\n10:            <wrongSchedule>30 2 * * *</wrongSchedule>\n" .
+                    "11:        </job>\n12:    </group>\n13:</config>\n14:\n",
+                    "Element 'job': The attribute 'instance' is required but missing.\nLine: 10\nThe xml was: \n" .
+                    "5: */\n6:-->\n7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job wrongName=\"job1\" wrongInstance=\"Model1\" " .
+                    "wrongMethod=\"method1\">\n10:            <wrongSchedule>30 2 * * *</wrongSchedule>\n" .
+                    "11:        </job>\n12:    </group>\n13:</config>\n14:\n",
+                    "Element 'job': The attribute 'method' is required but missing.\nLine: 10\nThe xml was: \n" .
+                    "5: */\n6:-->\n7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job wrongName=\"job1\" wrongInstance=\"Model1\" " .
+                    "wrongMethod=\"method1\">\n10:            <wrongSchedule>30 2 * * *</wrongSchedule>\n" .
+                    "11:        </job>\n12:    </group>\n13:</config>\n14:\n",
+                    "Element 'wrongSchedule': This element is not expected. Expected is one of ( schedule, " .
+                    "config_path ).\nLine: 11\nThe xml was: \n6:-->\n7:<config " .
+                    "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job wrongName=\"job1\" wrongInstance=\"Model1\" " .
+                    "wrongMethod=\"method1\">\n10:            <wrongSchedule>30 2 * * *</wrongSchedule>\n" .
+                    "11:        </job>\n12:    </group>\n13:</config>\n14:\n"
                 ],
             ],
             [
                 'crontab_invalid_duplicates.xml',
                 [
-                    "Element 'job': Duplicate key-sequence ['job1'] in " .
-                        "unique identity-constraint 'uniqueJobName'.\nLine: 13\n"
+                    "Element 'job': Duplicate key-sequence ['job1'] in unique identity-constraint 'uniqueJobName'.\n" .
+                    "Line: 13\nThe xml was: \n8:    <group id=\"default\">\n9:        <job name=\"job1\" " .
+                    "instance=\"Model1\" method=\"method1\">\n10:            <schedule>30 2 * * *</schedule>\n" .
+                    "11:        </job>\n12:        <job name=\"job1\" instance=\"Model1\" method=\"method1\">\n" .
+                    "13:            <schedule>30 2 * * *</schedule>\n14:        </job>\n15:    </group>\n" .
+                    "16:</config>\n17:\n"
                 ]
             ],
             [
                 'crontab_invalid_without_name.xml',
-                ["Element 'job': The attribute 'name' is required but missing.\nLine: 10\n"]
+                [
+                    "Element 'job': The attribute 'name' is required but missing.\nLine: 10\nThe xml was: \n" .
+                    "5: */\n6:-->\n7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job instance=\"Model1\" method=\"method1\">\n" .
+                    "10:            <schedule>30 2 * * *</schedule>\n11:        </job>\n12:    </group>\n" .
+                    "13:</config>\n14:\n"
+                ]
             ],
             [
                 'crontab_invalid_without_instance.xml',
-                ["Element 'job': The attribute 'instance' is required but missing.\nLine: 10\n"]
+                [
+                    "Element 'job': The attribute 'instance' is required but missing.\nLine: 10\nThe xml was: \n" .
+                    "5: */\n6:-->\n7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job name=\"job1\" method=\"method1\">\n" .
+                    "10:            <schedule>30 2 * * *</schedule>\n11:        </job>\n12:    </group>\n" .
+                    "13:</config>\n14:\n"
+                ]
             ],
             [
                 'crontab_invalid_without_method.xml',
-                ["Element 'job': The attribute 'method' is required but missing.\nLine: 10\n"]
+                [
+                    "Element 'job': The attribute 'method' is required but missing.\nLine: 10\nThe xml was: \n" .
+                    "5: */\n6:-->\n7:<config xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " .
+                    "xsi:noNamespaceSchemaLocation=\"urn:magento:module:Magento_Cron:etc/crontab.xsd\">\n" .
+                    "8:    <group id=\"default\">\n9:        <job name=\"job1\" instance=\"Model1\">\n" .
+                    "10:            <schedule>30 2 * * *</schedule>\n11:        </job>\n12:    </group>\n" .
+                    "13:</config>\n14:\n"
+                ]
             ]
         ];
     }

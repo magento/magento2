@@ -1,17 +1,49 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 
+use Magento\Customer\Model\Config\Share;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Catalog compare item resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * @var Share
+     */
+    private $share;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * Class constructor
+     *
+     * @param Context $context
+     * @param string $connectionName
+     * @param Share|null $share
+     * @param StoreManagerInterface|null $storeManager
+     */
+    public function __construct(
+        Context $context,
+        $connectionName = null,
+        ?Share $share = null,
+        ?StoreManagerInterface $storeManager = null
+    ) {
+        $this->share = $share ?? ObjectManager::getInstance()->get(Share::class);
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        parent::__construct($context, $connectionName);
+    }
+
     /**
      * Initialize connection
      *
@@ -41,8 +73,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($object->getCustomerId()) {
             $select->where('customer_id = ?', (int)$object->getCustomerId());
+            if (!$this->share->isGlobalScope()) {
+                $select->where('store_id = ?', $this->storeManager->getStore()->getId());
+            }
         } else {
             $select->where('visitor_id = ?', (int)$object->getVisitorId());
+            $select->where('store_id = ?', $this->storeManager->getStore()->getId());
         }
 
         if ($object->getListId()) {
@@ -152,7 +188,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function updateCustomerFromVisitor($object)
     {
-        if (!$object->getCustomerId()) {
+        if (!$object->getCustomerId() || !$object->getVisitorId()) {
             return $this;
         }
 
@@ -236,10 +272,15 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($customerId) {
             $customerId = (int)$customerId;
             $where[] = $this->getConnection()->quoteInto('customer_id = ?', $customerId);
+            if (!$this->share->isGlobalScope()) {
+                $where[] = $this->getConnection()
+                    ->quoteInto('store_id = ?', $this->storeManager->getStore()->getId());
+            }
         }
         if ($visitorId) {
             $visitorId = (int)$visitorId;
             $where[] = $this->getConnection()->quoteInto('visitor_id = ?', $visitorId);
+            $where[] = $this->getConnection()->quoteInto('store_id = ?', $this->storeManager->getStore()->getId());
         }
         if (!$where) {
             return $this;

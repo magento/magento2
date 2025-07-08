@@ -21,17 +21,23 @@
         </annotations>
         <before>
             <magentoCLI command="config:set wishlist/email/text_limit 10" stepKey="changeTextLengthLimit"/>
-            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
             <magentoCLI command="config:set wishlist/email/text_limit 255" stepKey="returnDefaultValue"/>
-            <magentoCLI command="cache:clean config" stepKey="cacheClean"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>

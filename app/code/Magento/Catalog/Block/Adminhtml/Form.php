@@ -1,21 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * Base block for rendering category and product forms
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 
+/**
+ * Base block for rendering category and product forms
+ */
 class Form extends Generic
 {
     /**
+     * Prepare the layout
+     *
      * @return void
      */
     protected function _prepareLayout()

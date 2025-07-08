@@ -12,7 +12,7 @@
         <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
     </type>
     <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
-        <plugin name="cache" type="Magento\GraphQlCache\Model\Plugin\Query\Resolver"/>
+        <plugin name="cache" type="Magento\GraphQlCache\Model\Plugin\Query\Resolver" sortOrder="10"/>
     </type>
     <type name="Magento\Framework\App\PageCache\Identifier">
         <plugin name="core-app-area-design-exception-plugin"
@@ -28,5 +28,8 @@
     </type>
     <type name="Magento\Integration\Api\UserTokenRevokerInterface">
         <plugin name="set-guest-after-revoke" type="Magento\GraphQlCache\Model\Plugin\Auth\TokenRevoker"/>
+    </type>
+    <type name="Magento\Framework\View\LayoutInterface">
+        <plugin name="add_block_cache_tags_to_query_cache" type="Magento\GraphQlCache\Model\Plugin\View\Layout"/>
     </type>
 </config>

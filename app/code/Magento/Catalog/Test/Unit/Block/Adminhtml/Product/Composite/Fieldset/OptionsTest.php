@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +68,7 @@ class OptionsTest extends TestCase
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optionFactoryMock]
         );
         $dateBlock = $this->getMockBuilder(Options::class)
-            ->setMethods(['setSkipJsReloadPrice'])
+            ->addMethods(['setSkipJsReloadPrice'])
             ->setConstructorArgs(['context' => $context, 'option' => $option])
             ->disableOriginalConstructor()
             ->getMock();

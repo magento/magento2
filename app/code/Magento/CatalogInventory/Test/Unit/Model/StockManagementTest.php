@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,11 +98,11 @@ class StockManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemInterfaceMock = $this->getMockBuilder(StockItemInterface::class)
-            ->setMethods(['hasAdminArea','getWebsiteId'])
+            ->addMethods(['hasAdminArea','getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockManagement = $this->getMockBuilder(StockManagement::class)
-            ->setMethods(['getResource', 'canSubtractQty'])
+            ->onlyMethods(['getResource', 'canSubtractQty'])
             ->setConstructorArgs(
                 [
                     'stockResource' => $this->stockResourceMock,
@@ -238,7 +238,7 @@ class StockManagementTest extends TestCase
     /**
      * @return array
      */
-    public function productsWithCorrectQtyDataProvider(): array
+    public static function productsWithCorrectQtyDataProvider(): array
     {
         return [
             [
@@ -278,7 +278,7 @@ class StockManagementTest extends TestCase
     /**
      * @return array
      */
-    public function productsWithIncorrectQtyDataProvider(): array
+    public static function productsWithIncorrectQtyDataProvider(): array
     {
         return [
             [

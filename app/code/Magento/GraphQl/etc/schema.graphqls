@@ -41,6 +41,9 @@ directive @typeResolver(class: String="") on UNION
 
 directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
 
+directive @implementation(class: String="") on SCALAR
+    | OBJECT
+
 type Query {
 }
 
@@ -76,7 +79,13 @@ input FilterRangeTypeInput @doc(description: "Defines a filter that matches a ra
 }
 
 input FilterMatchTypeInput @doc(description: "Defines a filter that performs a fuzzy search.") {
-    match: String @doc(description: "Use this attribute to exactly match the specified string. For example, to filter on a specific SKU, specify a value such as `24-MB01`.")
+    match: String @doc(description: "Use this attribute to fuzzy match the specified string. For example, to filter on a specific SKU, specify a value such as `24-MB01`.")
+    match_type: FilterMatchTypeEnum @doc(description: "Filter match type for fine-tuned results. Possible values FULL or PARTIAL. If match_type is not provided, returned results will default to FULL match.")
+}
+
+enum FilterMatchTypeEnum {
+    FULL
+    PARTIAL
 }
 
 input FilterStringTypeInput @doc(description: "Defines a filter for an input string.") {

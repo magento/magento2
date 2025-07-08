@@ -6,6 +6,7 @@ to generate quote (cart) information endpoints. Also provides endpoints for modi
 ## Installation
 
 Before installing this module, note that the Magento_QuoteGraphQl is dependent on the following modules:
+
 - `Magento_CatalogGraphQl`
 
 This module does not introduce any database schema modifications or new data.
@@ -20,7 +21,7 @@ Extension developers can interact with the Magento_QuoteDownloadableLinks module
 
 ## Additional information
 
-You can get more information about [GraphQl In Magento 2](https://devdocs.magento.com/guides/v2.4/graphql).
+You can get more information about [GraphQl In Magento 2](https://developer.adobe.com/commerce/webapi/graphql/).
 
 ### GraphQl Query
 
@@ -45,37 +46,37 @@ You can get more information about [GraphQl In Magento 2](https://devdocs.magent
   [Learn more about applyCouponToCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/apply-coupon/).
 
 - `removeCouponFromCart` mutation - removes a previously-applied coupon from the cart.
-  [Learn more about removeCouponFromCart mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/remove-coupon.html).
+  [Learn more about removeCouponFromCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/remove-coupon/).
 
 - `updateCartItems` mutation - allows you to modify items in the specified cart.
-  [Learn more about updateCartItems mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/update-cart-items.html).
+  [Learn more about updateCartItems mutation]((https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/update-items/).
 
 - `removeItemFromCart` mutation - deletes the entire quantity of a specified item from the cart.
-  [Learn more about removeItemFromCart mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/remove-item.html).
+  [Learn more about removeItemFromCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/remove-item/).
 
 - `setShippingAddressesOnCart` mutation - sets one or more shipping addresses on a specific cart.
-  [Learn more about setShippingAddressesOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/set-shipping-address.html).
+  [Learn more about setShippingAddressesOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/set-shipping-address/).
 
 - `setBillingAddressOnCart` mutation - sets the billing address for a specific cart.
-  [Learn more about setBillingAddressOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/set-billing-address.html).
+  [Learn more about setBillingAddressOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/set-billing-address/).
 
 - `setShippingMethodsOnCart` mutation - sets one or more delivery methods on a cart.
-  [Learn more about setShippingMethodsOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/set-shipping-method.html).
+  [Learn more about setShippingMethodsOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/set-shipping-method/).
 
 - `setPaymentMethodOnCart` mutation - defines which payment method to apply to the cart.
-  [Learn more about setPaymentMethodOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/set-payment-method.html).
+  [Learn more about setPaymentMethodOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/set-payment-method/).
 
 - `setGuestEmailOnCart` mutation - assigns email to the guest cart.
-  [Learn more about setGuestEmailOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/set-guest-email.html).
+  [Learn more about setGuestEmailOnCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/set-guest-email/).
 
 - `setPaymentMethodAndPlaceOrder` mutation - sets the cart payment method and converts the cart into an order. **This mutation has been deprecated**. Use the `setPaymentMethodOnCart` and `placeOrder` mutations instead.
-  [Learn more about setPaymentMethodAndPlaceOrder mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/set-payment-place-order.html).
+  [Learn more about setPaymentMethodAndPlaceOrder mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/set-payment-place-order/).
 
 - `mergeCarts` mutation - transfers the contents of a guest cart into the cart of a logged-in customer.
-  [Learn more about mergeCarts mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/merge-carts.html).
+  [Learn more about mergeCarts mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/merge/).
 
 - `placeOrder` mutation - converts the cart into an order and returns an order ID.
-  [Learn more about placeOrder mutation](https://developer.adobe.com/commerce/webapi/graphql/mutations/place-order.html).
+  [Learn more about placeOrder mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/place-order/).
 
 - `addProductsToCart` mutation - adds any type of product to the shopping cart.
   [Learn more about addProductsToCart mutation](https://developer.adobe.com/commerce/webapi/graphql/schema/cart/mutations/add-products/).

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,8 @@ class VerticalTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getLabel', 'getHint', 'getElementHtml'])
+            ->addMethods(['getComment', 'getLabel', 'getHint'])
+            ->onlyMethods(['getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 

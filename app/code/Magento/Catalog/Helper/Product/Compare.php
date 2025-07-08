@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper\Product;
 
@@ -298,7 +298,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
 
             /* update compare items count */
             $count = count($this->_itemCollection);
-            $counts = $this->_catalogSession->getCatalogCompareItemsCountPerWebsite() ?: [];
             $counts[$this->_storeManager->getWebsite()->getId()] = $count;
             $this->_catalogSession->setCatalogCompareItemsCountPerWebsite($counts);
             $this->_catalogSession->setCatalogCompareItemsCount($count); //deprecated
@@ -331,7 +330,6 @@ class Compare extends \Magento\Framework\Url\Helper\Data
             ->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
 
         $count = $collection->getSize();
-        $counts = $this->_catalogSession->getCatalogCompareItemsCountPerWebsite() ?: [];
         $counts[$this->_storeManager->getWebsite()->getId()] = $count;
         $this->_catalogSession->setCatalogCompareItemsCountPerWebsite($counts);
         $this->_catalogSession->setCatalogCompareItemsCount($count); //deprecated
@@ -349,6 +347,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $counts = $this->_catalogSession->getCatalogCompareItemsCountPerWebsite() ?: [];
         if (!isset($counts[$this->_storeManager->getWebsite()->getId()])) {
             $this->calculate();
+            $counts = $this->_catalogSession->getCatalogCompareItemsCountPerWebsite() ?: [];
         }
 
         return $counts[$this->_storeManager->getWebsite()->getId()] ?? 0;

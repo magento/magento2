@@ -50,7 +50,9 @@
             </actionGroup>
 
             <!-- Perform the reindex after the synonyms manipulations -->
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindexAfterSynonyms"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindexAfterSynonyms">
+                <argument name="indices" value="catalogsearch_fulltext"/>
+            </actionGroup>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
@@ -89,7 +91,9 @@
         <waitForPageLoad stepKey="waitPageLoadAfterThirdSynonym"/>
 
         <!-- Perform the reindex after the synonyms manipulations -->
-        <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindexAfterSynonyms"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindexAfterSynonyms">
+            <argument name="indices" value="catalogsearch_fulltext"/>
+        </actionGroup>
 
         <!-- Navigate to storefront and do a quick searches for the synonyms -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>

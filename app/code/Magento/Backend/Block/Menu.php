@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block;
@@ -18,7 +18,7 @@ namespace Magento\Backend\Block;
  */
 class Menu extends \Magento\Backend\Block\Template
 {
-    const CACHE_TAGS = 'BACKEND_MAINMENU';
+    public const CACHE_TAGS = 'BACKEND_MAINMENU';
 
     /**
      * @var string
@@ -101,9 +101,9 @@ class Menu extends \Magento\Backend\Block\Template
         \Magento\Backend\Model\Menu\Config $menuConfig,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = [],
-        MenuItemChecker $menuItemChecker = null,
-        AnchorRenderer $anchorRenderer = null,
-        \Magento\Framework\App\Route\ConfigInterface $routeConfig = null
+        ?MenuItemChecker $menuItemChecker = null,
+        ?AnchorRenderer $anchorRenderer = null,
+        ?\Magento\Framework\App\Route\ConfigInterface $routeConfig = null
     ) {
         $this->_url = $url;
         $this->_iteratorFactory = $iteratorFactory;
@@ -347,6 +347,11 @@ class Menu extends \Magento\Backend\Block\Template
             }
             $result[] = ['place' => $place, 'colbrake' => $colbrake];
         }
+
+        if (isset($result[1]) && $result[1]['colbrake'] === true && isset($result[2])) {
+            $result[2]['colbrake'] = true;
+        }
+
         return $result;
     }
 

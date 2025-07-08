@@ -225,7 +225,7 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedResult, $this->_model->pageHandleExists($inputPageHandle));
     }
 
-    public function pageHandleExistsDataProvider()
+    public static function pageHandleExistsDataProvider()
     {
         return [
             'non-existing handle' => ['non_existing_handle', false],
@@ -290,8 +290,13 @@ class MergeTest extends \PHPUnit\Framework\TestCase
 
         $this->_cache
             ->method('load')
-            ->withConsecutive(['LAYOUT_area_STORE20_100c6a4ccd050e33acef0553f24ef399961_page_layout_merged'])
-            ->willReturnOnConsecutiveCalls(json_encode($cacheValue));
+            ->willReturnCallback(
+                function ($arg1) use ($cacheValue) {
+                    if ($arg1 == 'LAYOUT_area_STORE20_100c6a4ccd050e33acef0553f24ef399961_page_layout_merged') {
+                        return json_encode($cacheValue);
+                    }
+                }
+            );
 
         $this->_serializer->expects($this->once())->method('unserialize')->willReturn($cacheValue);
 

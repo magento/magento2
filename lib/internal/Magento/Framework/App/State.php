@@ -19,7 +19,7 @@ class State
     /**
      * Application run code
      */
-    const PARAM_MODE = 'MAGE_MODE';
+    public const PARAM_MODE = 'MAGE_MODE';
 
     /**
      * Application mode
@@ -50,8 +50,6 @@ class State
     protected $_configScope;
 
     /**
-     * Area code
-     *
      * @var string
      */
     protected $_areaCode;
@@ -68,16 +66,14 @@ class State
      */
     private $areaList;
 
-    /**#@+
+    /**
      * Application modes
      */
-    const MODE_DEVELOPER = 'developer';
+    public const MODE_DEVELOPER = 'developer';
 
-    const MODE_PRODUCTION = 'production';
+    public const MODE_PRODUCTION = 'production';
 
-    const MODE_DEFAULT = 'default';
-
-    /**#@-*/
+    public const MODE_DEFAULT = 'default';
 
     /**
      * @param \Magento\Framework\Config\ScopeInterface $configScope
@@ -185,13 +181,11 @@ class State
         $this->_isAreaCodeEmulated = true;
         try {
             $result = call_user_func_array($callback, $params);
-        } catch (\Exception $e) {
+        } finally {
             $this->_areaCode = $currentArea;
             $this->_isAreaCodeEmulated = false;
-            throw $e;
         }
-        $this->_areaCode = $currentArea;
-        $this->_isAreaCodeEmulated = false;
+
         return $result;
     }
 
@@ -221,6 +215,7 @@ class State
      *
      * @return AreaList
      * @deprecated 101.0.0
+     * @see Nothing
      */
     private function getAreaListInstance()
     {

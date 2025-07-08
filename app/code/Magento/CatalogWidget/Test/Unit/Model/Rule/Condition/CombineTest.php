@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class CombineTest extends TestCase
 
         $this->conditionFactory = $this->getMockBuilder(
             ProductFactory::class
-        )->setMethods(['create'])
+        )->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $arguments['conditionFactory'] = $this->conditionFactory;
@@ -66,7 +66,8 @@ class CombineTest extends TestCase
             'excluded_attribute' => 'Excluded attribute',
         ];
         $productCondition = $this->getMockBuilder(Product::class)
-            ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
+            ->addMethods(['getAttributeOption'])
+            ->onlyMethods(['loadAttributeOptions'])
             ->disableOriginalConstructor()
             ->getMock();
         $productCondition->expects($this->any())->method('loadAttributeOptions')->willReturnSelf();
@@ -85,7 +86,7 @@ class CombineTest extends TestCase
             ->getMock();
         $condition = $this->getMockBuilder(Combine::class)
             ->disableOriginalConstructor()
-            ->setMethods(['collectValidatedAttributes'])
+            ->onlyMethods(['collectValidatedAttributes'])
             ->getMock();
         $condition->expects($this->any())->method('collectValidatedAttributes')->with($collection)->willReturnSelf();
 

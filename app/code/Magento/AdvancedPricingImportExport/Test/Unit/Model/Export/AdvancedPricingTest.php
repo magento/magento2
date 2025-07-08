@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -225,13 +225,15 @@ class AdvancedPricingTest extends TestCase
             'initWebsites',
             'initCategories'
         ];
+        $mockAddMethods = [
+            '_headerColumns'
+        ];
         $mockMethods = array_merge($constructorMethods, [
             '_customHeadersMapping',
             '_prepareEntityCollection',
             '_getEntityCollection',
             'getWriter',
             'getExportData',
-            '_headerColumns',
             '_customFieldsMapping',
             'getItemsPerPage',
             'paginateCollection',
@@ -243,7 +245,8 @@ class AdvancedPricingTest extends TestCase
         $this->advancedPricing = $this->getMockBuilder(
             AdvancedPricing::class
         )
-            ->setMethods($mockMethods)
+            ->addMethods($mockAddMethods)
+            ->onlyMethods($mockMethods)
             ->disableOriginalConstructor()
             ->getMock();
         foreach ($constructorMethods as $method) {

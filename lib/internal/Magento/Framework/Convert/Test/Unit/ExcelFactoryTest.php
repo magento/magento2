@@ -28,7 +28,7 @@ class ExcelFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
 
         $this->model = new ExcelFactory(

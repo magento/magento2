@@ -62,7 +62,7 @@ class BookmarkRepositoryTest extends TestCase
             ->getMock();
         $bookmarkFactoryMock = $this->getMockBuilder(BookmarkInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         /** @var BookmarkInterfaceFactory $bookmarkFactoryMock */
         $bookmarkFactoryMock->expects($this->any())
@@ -70,7 +70,7 @@ class BookmarkRepositoryTest extends TestCase
             ->willReturn($this->bookmarkMock);
         $this->bookmarkResourceMock = $this->getMockBuilder(Bookmark::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'save', 'delete'])
+            ->onlyMethods(['load', 'save', 'delete'])
             ->getMock();
 
         $this->searchResultsMock = $this->getMockBuilder(BookmarkSearchResultsInterface::class)
@@ -79,7 +79,7 @@ class BookmarkRepositoryTest extends TestCase
         $searchResultsFactoryMock = $this->getMockBuilder(
             BookmarkSearchResultsInterfaceFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $searchResultsFactoryMock->expects($this->any())->method('create')->willReturn($this->searchResultsMock);
         $this->collectionProcessor = $this->createMock(
             CollectionProcessorInterface::class

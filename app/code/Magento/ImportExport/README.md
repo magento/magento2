@@ -1,4 +1,4 @@
-# Magento_ImportExport module 
+# Magento_ImportExport module
 
 This module provides a framework and basic functionality for importing/exporting various entities in Magento.
 It can be disabled and in such case all dependent import/export functionality (products, customers, orders etc.) will be disabled in Magento.
@@ -6,6 +6,7 @@ It can be disabled and in such case all dependent import/export functionality (p
 ## Installation
 
 The Magento_ImportExport module creates the following tables in the database:
+
 - `importexport_importdata`
 - `import_history`
 
@@ -44,7 +45,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 
 You can extend an export updates using the configuration files located in the `view/adminhtml/ui_component` directory:
 
-- `export_grid` 
+- `export_grid`
 
 For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
@@ -80,6 +81,7 @@ For information about a public API in Magento 2, see [Public interfaces & APIs](
 2. Create an export model
 
 You can get more information about import/export processes in magento at the articles:
+
 - [Create custom import entity](https://developer.adobe.com/commerce/php/tutorials/backend/create-custom-import-entity/)
-- [Import](https://docs.magento.com/user-guide/system/data-import.html)
-- [Export](https://docs.magento.com/user-guide/system/data-export.html)
+- [Import](https://experienceleague.adobe.com/docs/commerce-admin/systems/data-transfer/import/data-import.html)
+- [Export](https://experienceleague.adobe.com/docs/commerce-admin/systems/data-transfer/data-export.html)

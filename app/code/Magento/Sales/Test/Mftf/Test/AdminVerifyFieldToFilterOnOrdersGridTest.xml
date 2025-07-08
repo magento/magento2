@@ -15,6 +15,7 @@
             <title value="Verify field to filter"/>
             <description value="Verify not appear fields to filter on Orders grid if it disables in columns dropdown."/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

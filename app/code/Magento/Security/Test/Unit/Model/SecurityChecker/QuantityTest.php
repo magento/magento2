@@ -48,7 +48,7 @@ class QuantityTest extends TestCase
      */
     protected $objectManager;
 
-    /*
+    /**
      * @var RemoteAddress
      */
     protected $remoteAddressMock;
@@ -62,7 +62,7 @@ class QuantityTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScopeByEventType'])
+            ->addMethods(['getScopeByEventType'])
             ->getMockForAbstractClass();
         $this->securityConfigMock->expects($this->any())
             ->method('getScopeByEventType')
@@ -142,7 +142,7 @@ class QuantityTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderSecurityEventTypeWithRequestsMethod()
+    public static function dataProviderSecurityEventTypeWithRequestsMethod()
     {
         return [
             [

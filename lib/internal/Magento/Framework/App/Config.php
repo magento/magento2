@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Config\ConfigTypeInterface;
@@ -44,12 +45,7 @@ class Config implements ScopeConfigInterface
     }
 
     /**
-     * Retrieve config value by path and scope
-     *
-     * @param string $path
-     * @param string $scope
-     * @param null|int|string $scopeCode
-     * @return mixed
+     * @inheritDoc
      */
     public function getValue(
         $path = null,
@@ -79,12 +75,7 @@ class Config implements ScopeConfigInterface
     }
 
     /**
-     * Retrieve config flag
-     *
-     * @param string $path
-     * @param string $scope
-     * @param null|int|string $scopeCode
-     * @return bool
+     * @inheritDoc
      */
     public function isSetFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
@@ -125,12 +116,22 @@ class Config implements ScopeConfigInterface
      */
     public function get($configType, $path = '', $default = null)
     {
-        $path = strtolower($path);
         $result = null;
         if (isset($this->types[$configType])) {
             $result = $this->types[$configType]->get($path);
         }
 
         return $result !== null ? $result : $default;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

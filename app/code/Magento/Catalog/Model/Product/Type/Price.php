@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,13 @@ namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Catalog\Model\Pricing\SpecialPriceService;
 
 /**
  * Product type price model
@@ -23,7 +25,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
-class Price
+class Price implements ResetAfterRequestInterface
 {
     /**
      * Product price cache tag
@@ -88,6 +90,11 @@ class Price
     private $tierPriceExtensionFactory;
 
     /**
+     * @var SpecialPriceService|null
+     */
+    private ?SpecialPriceService $specialPriceService;
+
+    /**
      * Constructor
      *
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
@@ -100,6 +107,7 @@ class Price
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
+     * @param SpecialPriceService|null $specialPriceService
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -112,7 +120,8 @@ class Price
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
+        ?ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null,
+        ?SpecialPriceService $specialPriceService = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
@@ -125,6 +134,18 @@ class Price
         $this->config = $config;
         $this->tierPriceExtensionFactory = $tierPriceExtensionFactory ?: ObjectManager::getInstance()
             ->get(ProductTierPriceExtensionFactory::class);
+        $this->specialPriceService = $specialPriceService ?: ObjectManager::getInstance()
+            ->get(SpecialPriceService::class);
+    }
+
+    /**
+     * Returns the SpecialPriceService instance
+     *
+     * @return SpecialPriceService|null
+     */
+    protected function getSpecialPriceService(): ?SpecialPriceService
+    {
+        return $this->specialPriceService;
     }
 
     /**
@@ -394,7 +415,7 @@ class Price
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
      * @return $this
      */
-    public function setTierPrices($product, array $tierPrices = null)
+    public function setTierPrices($product, ?array $tierPrices = null)
     {
         // null array means leave everything as is
         if ($tierPrices === null) {
@@ -641,6 +662,9 @@ class Price
         $store = null
     ) {
         if ($specialPrice !== null && $specialPrice != false) {
+
+            $specialPriceTo = $this->specialPriceService->execute($specialPriceTo);
+
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
                 $finalPrice = min($finalPrice, (float) $specialPrice);
             }
@@ -656,5 +680,13 @@ class Price
     public function isTierPriceFixed()
     {
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$attributeCache = [];
     }
 }

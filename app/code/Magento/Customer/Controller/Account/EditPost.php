@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Model\Metadata\Form\File;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -136,6 +137,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param SessionCleanerInterface|null $sessionCleaner
      * @param AccountConfirmation|null $accountConfirmation
      * @param Url|null $customerUrl
+     * @param Mapper|null $customerMapper
      */
     public function __construct(
         Context $context,
@@ -149,7 +151,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         ?Filesystem $filesystem = null,
         ?SessionCleanerInterface $sessionCleaner = null,
         ?AccountConfirmation $accountConfirmation = null,
-        ?Url $customerUrl = null
+        ?Url $customerUrl = null,
+        ?Mapper $customerMapper = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -164,6 +167,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
         $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
+        $this->customerMapper = $customerMapper ?: ObjectManager::getInstance()->get(Mapper::class);
     }
 
     /**
@@ -232,11 +236,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         if ($validFormKey && $this->getRequest()->isPost()) {
             $customer = $this->getCustomerDataObject($this->session->getCustomerId());
             $customerCandidate = $this->populateNewCustomerDataObject($this->_request, $customer);
-
-            $attributeToDelete = $this->_request->getParam('delete_attribute_value');
-            if ($attributeToDelete !== null) {
-                $this->deleteCustomerFileAttribute($customerCandidate, $attributeToDelete);
-            }
 
             try {
                 // whether a customer enabled change email option
@@ -452,44 +451,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         foreach ($customer->getAddresses() as $address) {
             $addressModel = $this->addressRegistry->retrieve($address->getId());
             $addressModel->setShouldIgnoreValidation(true);
-        }
-    }
-
-    /**
-     * Removes file attribute from customer entity and file from filesystem
-     *
-     * @param CustomerInterface $customerCandidateDataObject
-     * @param string $attributeToDelete
-     * @return void
-     * @throws FileSystemException
-     */
-    private function deleteCustomerFileAttribute(
-        CustomerInterface $customerCandidateDataObject,
-        string $attributeToDelete
-    ) : void {
-        if ($attributeToDelete !== '') {
-            if (strpos($attributeToDelete, ',') !== false) {
-                $attributes = explode(',', $attributeToDelete);
-            } else {
-                $attributes[] = $attributeToDelete;
-            }
-            foreach ($attributes as $attr) {
-                $attributeValue = $customerCandidateDataObject->getCustomAttribute($attr);
-                if ($attributeValue!== null) {
-                    if ($attributeValue->getValue() !== '') {
-                        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-                        $fileName = $attributeValue->getValue();
-                        $path = $mediaDirectory->getAbsolutePath('customer' . $fileName);
-                        if ($fileName && $mediaDirectory->isFile($path)) {
-                            $mediaDirectory->delete($path);
-                        }
-                        $customerCandidateDataObject->setCustomAttribute(
-                            $attr,
-                            ''
-                        );
-                    }
-                }
-            }
         }
     }
 }

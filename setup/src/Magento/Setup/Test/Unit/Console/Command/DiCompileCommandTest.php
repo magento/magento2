@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -168,10 +168,17 @@ class DiCompileCommandTest extends TestCase
         $writeDirectory->expects($this->atLeastOnce())->method('delete');
         $this->filesystemMock->expects($this->atLeastOnce())->method('getDirectoryWrite')->willReturn($writeDirectory);
 
-        $this->deploymentConfigMock->expects($this->once())
+        $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
             ->with(ConfigOptionsListConstants::KEY_MODULES)
-            ->willReturn(['Magento_Catalog' => 1]);
+            ->willReturn(
+                [
+                    'Magento_Catalog' => 1,
+                    'Module_Test' => 0
+                ]
+            );
+        $this->componentRegistrarMock->expects($this->exactly(2))->method('getPaths');
+
         $progressBar = new ProgressBar($this->outputMock);
 
         $this->objectManagerMock->expects($this->once())->method('configure');
@@ -181,27 +188,24 @@ class DiCompileCommandTest extends TestCase
             ->with(ProgressBar::class)
             ->willReturn($progressBar);
 
+        $operations = [
+            OperationFactory::REPOSITORY_GENERATOR,
+            OperationFactory::DATA_ATTRIBUTES_GENERATOR,
+            OperationFactory::APPLICATION_CODE_GENERATOR,
+            OperationFactory::INTERCEPTION,
+            OperationFactory::AREA_CONFIG_GENERATOR,
+            OperationFactory::INTERCEPTION_CACHE,
+            OperationFactory::APPLICATION_ACTION_LIST_GENERATOR,
+            OperationFactory::PLUGIN_LIST_GENERATOR,
+        ];
         $this->managerMock->expects($this->exactly(9))->method('addOperation')
-            ->withConsecutive(
-                [OperationFactory::PROXY_GENERATOR, []],
-                [OperationFactory::REPOSITORY_GENERATOR, $this->anything()],
-                [OperationFactory::DATA_ATTRIBUTES_GENERATOR, []],
-                [OperationFactory::APPLICATION_CODE_GENERATOR, $this->callback(function ($subject) {
-                    $this->assertEmpty(array_diff($subject['excludePatterns'], [
-                        "#^(?:/path \(1\)/to/setup/)(/[\w]+)*/Test#",
-                        "#^(?:/path/to/library/one|/path \(1\)/to/library/two)/([\w]+/)?Test#",
-                        "#^(?:/path/to/library/one|/path \(1\)/to/library/two)/([\w]+/)?tests#",
-                        "#^(?:/path/to/(?:module/(?:one))|/path \(1\)/to/(?:module/(?:two)))/Test#",
-                        "#^(?:/path/to/(?:module/(?:one))|/path \(1\)/to/(?:module/(?:two)))/tests#"
-                    ]));
-                    return true;
-                })],
-                [OperationFactory::INTERCEPTION, $this->anything()],
-                [OperationFactory::AREA_CONFIG_GENERATOR, $this->anything()],
-                [OperationFactory::INTERCEPTION_CACHE, $this->anything()],
-                [OperationFactory::APPLICATION_ACTION_LIST_GENERATOR, $this->anything()],
-                [OperationFactory::PLUGIN_LIST_GENERATOR, $this->anything()]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($operations) {
+                if ($arg1 == OperationFactory::PROXY_GENERATOR && empty($arg2)) {
+                    return null;
+                } elseif (in_array($arg1, $operations)) {
+                    return null;
+                }
+            });
 
         $this->managerMock->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);

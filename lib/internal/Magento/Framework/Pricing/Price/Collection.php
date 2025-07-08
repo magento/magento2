@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Pricing\Price;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
@@ -14,7 +15,7 @@ use Magento\Framework\Pricing\SaleableInterface;
  * @api
  * @since 100.0.2
  */
-class Collection implements \Iterator
+class Collection implements \Iterator, ResetAfterRequestInterface
 {
     /**
      * @var Pool
@@ -71,6 +72,14 @@ class Collection implements \Iterator
         $this->priceFactory = $priceFactory;
         $this->pool = $pool;
         $this->quantity = $quantity;
+        $this->priceModels = [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState() : void
+    {
         $this->priceModels = [];
     }
 

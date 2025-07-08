@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -31,9 +32,12 @@
         </after>
 
         <!--Create new customer on storefront and signup news letter-->
-        <actionGroup ref="StorefrontCreateCustomerSignedUpNewsletterActionGroup" stepKey="createCustomer">
-            <argument name="customer" value="CustomerEntityOne" />
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="createCustomer">
+            <argument name="customer" value="CustomerEntityOne"/>
         </actionGroup>
+        <actionGroup ref="StorefrontSignUpForNewsLetterActionGroup" stepKey="clickOnSignUpButton"/>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
 
         <!--Assert verify created new customer in grid-->
         <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomers"/>

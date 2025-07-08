@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -107,8 +107,10 @@ class ProductDataMapperTest extends TestCase
 
         $this->builderMock->expects($this->any())
             ->method('addFields')
-            ->withConsecutive([$additionalFields])
-            ->willReturnSelf();
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$additionalFields] => $this->builderMock,
+            });
+
         $this->builderMock->expects($this->any())
             ->method('build')
             ->willReturn([]);
@@ -373,6 +375,57 @@ class ProductDataMapperTest extends TestCase
                 [10 => '44', 11 => '45'],
                 ['color' => [44, 45], 'color_value' => ['red', 'black']],
             ],
+            'select with options with sort by and filterable' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'is_filterable_in_grid' => true,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                [10 => '44', 11 => '45'],
+                ['color' => [44, 45], 'color_value' => ['red', 'black']],
+            ],
+            'unsearchable select with options with sort by and filterable' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => false,
+                    'used_for_sort_by' => false,
+                    'is_filterable_in_grid' => false,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                '44',
+                ['color' => 44],
+            ],
+            'select with options with sort by only' => [
+                10,
+                [
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
+                    'is_searchable' => false,
+                    'used_for_sort_by' => true,
+                    'is_filterable_in_grid' => false,
+                    'options' => [
+                        ['value' => '44', 'label' => 'red'],
+                        ['value' => '45', 'label' => 'black'],
+                    ],
+                ],
+                [10 => '44', 11 => '45'],
+                ['color' => [44, 45], 'color_value' => ['red', 'black']],
+            ],
             'multiselect without options' => [
                 10,
                 [
@@ -442,6 +495,32 @@ class ProductDataMapperTest extends TestCase
                 ],
                 15,
                 [],
+            ],
+            'sortable multiple values' => [
+                10,
+                [
+                    'attribute_code' => 'name',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'text',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'options' => [],
+                ],
+                [10 => 'one', 11 => 'two', 12 => 'three'],
+                ['name' => implode("\n", ['one', 'two', 'three'])],
+            ],
+            'sortable too many multiple values' => [
+                10,
+                [
+                    'attribute_code' => 'name',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'text',
+                    'is_searchable' => true,
+                    'used_for_sort_by' => true,
+                    'options' => [],
+                ],
+                array_fill(0, 4682, '123456'),
+                ['name' => implode("\n", array_fill(0, 4681, '123456'))],
             ],
         ];
     }

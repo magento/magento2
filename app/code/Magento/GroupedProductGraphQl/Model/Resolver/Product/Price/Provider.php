@@ -9,6 +9,7 @@ namespace Magento\GroupedProductGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -17,12 +18,12 @@ use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 /**
  * Provides product prices for configurable products
  */
-class Provider implements ProviderInterface
+class Provider implements ProviderInterface, ResetAfterRequestInterface
 {
     /**
      * Cache product prices so only fetch once
      *
-     * @var AmountInterface[]
+     * @var AmountInterface[]|null
      */
     private $minimalProductAmounts;
 
@@ -92,5 +93,13 @@ class Provider implements ProviderInterface
         }
 
         return $this->minimalProductAmounts[$product->getId()][$priceType];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->minimalProductAmounts = null;
     }
 }

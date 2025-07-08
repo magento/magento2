@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,7 +20,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * URL for store switcher hint
      */
-    public const HINT_URL = 'https://docs.magento.com/user-guide/configuration/scope.html';
+    public const HINT_URL = 'https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html#scope-settings'; // @codingStandardsIgnoreLine
 
     /**
      * Name of website variable

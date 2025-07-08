@@ -17,6 +17,6 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 This module is a part of Login As Customer feature.
 
-[Learn more about Login As Customer feature](https://docs.magento.com/user-guide/customers/login-as-customer.html).
+[Learn more about Login As Customer feature](https://experienceleague.adobe.com/docs/commerce-admin/customers/customer-accounts/manage/login-as-customer.html).
 
-You can get more information about [GraphQl In Magento 2](https://devdocs.magento.com/guides/v2.4/graphql).
+You can get more information about [GraphQl In Magento 2](https://developer.adobe.com/commerce/webapi/graphql/).

@@ -67,7 +67,7 @@ class MethodList
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return \Magento\Payment\Model\MethodInterface[]
      */
-    public function getAvailableMethods(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function getAvailableMethods(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         $store = $quote ? $quote->getStoreId() : null;
         $availableMethods = [];

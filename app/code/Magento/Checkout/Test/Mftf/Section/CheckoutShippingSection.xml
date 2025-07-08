@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -28,6 +28,7 @@
         <element name="city" type="input" selector="input[name=city]"/>
         <element name="region" type="select" selector="select[name=region_id]"/>
         <element name="postcode" type="input" selector="input[name=postcode]"/>
+        <element name="invalidPostcodeJSError" type="text" selector="//span[@data-bind='text: element.warn']"/>
         <element name="country" type="select" selector="select[name=country_id]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
         <element name="saveAddress" type="button" selector=".action-save-address"/>
@@ -36,13 +37,14 @@
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
         <element name="defaultShipping" type="button" selector=".billing-address-details"/>
+        <element name="billingAddressDetails" type="text" selector=".billing-address-details"/>
         <element name="state" type="button" selector="//*[text()='Alabama']"/>
         <element name="stateInput" type="input" selector="input[name=region]"/>
         <element name="regionOptions" type="select" selector="select[name=region_id] option"/>
         <element name="editActiveAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
         <element name="loginButton" type="button" selector="//button[@data-action='checkout-method-login']" timeout="30"/>
         <element name="editActiveAddressButton" type="button" selector="//div[contains(@class,'payment-method _active')]//button[contains(@class,'action action-edit-address')]" timeout="30"/>
-        <element name="emailAddress" type="input" selector="fieldset input[type='email']"/>
+        <element name="emailAddress" type="input" selector="fieldset input[type='email']" timeout="30"/>
         <element name="shipHereButton" type="button" selector="//div[text()='{{street}}']/button[@class='action action-select-shipping-item']" parameterized="true" timeout="30"/>
         <element name="addressFieldValidationError" type="text" selector="div.address div.field .field-error"/>
         <element name="textFieldAttrRequireMessage" type="text" selector="//input[@name='custom_attributes[{{attribute}}]']/ancestor::div[contains(@class, 'control')]/div/span" parameterized="true" timeout="30"/>
@@ -52,5 +54,8 @@
         <element name="stateProvinceWithoutAsterisk" type="text" selector="//div[@class='field' and @name='shippingAddress.region_id']" timeout="30"/>
         <element name="stateProvinceWithAsterisk" type="text" selector="//div[@class='field _required' and @name='shippingAddress.region_id']" timeout="30"/>
         <element name="selectCountry" type="select" selector="//div[@class='billing-address-form']//select[@name='country_id']"/>
+        <element name="customerAddressAttribute" type="input" selector="[id*='{{attribute}}']" parameterized="true"/>
+        <element name="savedAddress" type="text" selector="div[class='shipping-address-item selected-item']"/>
+        <element name="shippingAddressBox" type="text" selector="//div[@class='shipping-address-item selected-item']" timeout="30"/>
     </section>
 </sections>

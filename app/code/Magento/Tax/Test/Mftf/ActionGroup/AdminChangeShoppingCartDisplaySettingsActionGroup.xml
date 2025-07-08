@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeShoppingCartDisplaySettingsActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Change the values for 'Shopping Cart Display Settings'.</description>
+        </annotations>
+        <!-- change shopping cart display setting configurations -->
+        <scrollTo selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" stepKey="scrollToShoppingCartDisplaySettingsSection"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" dependentSelector="{{AdminConfigureTaxSection.shoppingCartDisplay}}" visible="true" stepKey="openPriceShoppingCartDisplaySettings"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPriceCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.displayPriceCheckBox}}" visible="true" stepKey="clickDisplayPricesCheckBox"/>
+        <selectOption userInput="Including and Excluding Tax" selector="{{AdminConfigureTaxSection.displayPrice}}" stepKey="selectOptionForDisplayPricesValue"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displaySubtotalCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.displaySubtotalCheckBox}}" visible="true" stepKey="clickDisplaySubtotalCheckBox"/>
+        <selectOption userInput="Including and Excluding Tax" selector="{{AdminConfigureTaxSection.displaySubtotal}}" stepKey="selectOptionForDisplayPrices"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayShippingAmountCheckBox}}" dependentSelector="{{AdminConfigureTaxSection.displayShippingAmountCheckBox}}" visible="true" stepKey="clickDisplayShippingAmountCheckBox"/>
+        <selectOption userInput="Including and Excluding Tax" selector="{{AdminConfigureTaxSection.displayShippingAmount}}" stepKey="selectOptionForShippingAmount"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" dependentSelector="{{AdminConfigureTaxSection.systemValueIncludeTaxTotalCart}}" visible="true" stepKey="clickIncludeTaxTotalCartCheckBox"/>
+        <selectOption userInput="Yes" selector="{{AdminConfigureTaxSection.dropdownIncludeTaxTotalCart}}" stepKey="selectOptionForIncludeTaxTotalCart"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayTaxSummaryCart}}" visible="true" stepKey="clickDisplayTaxSummaryCartCheckBox"/>
+        <selectOption userInput="Yes" selector="{{AdminConfigureTaxSection.dropdownDisplayTaxSummaryCart}}" stepKey="selectOptionForDisplayTaxSummaryCart"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxCart}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayZeroTaxCart}}" visible="true" stepKey="clickDisplayZeroTaxCartCheckBox"/>
+        <selectOption userInput="Yes" selector="{{AdminConfigureTaxSection.dropdownDisplayZeroTaxCart}}" stepKey="selectOptionForDisplayZeroTaxCart"/>
+    </actionGroup>
+</actionGroups>

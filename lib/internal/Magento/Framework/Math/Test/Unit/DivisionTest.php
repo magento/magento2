@@ -13,19 +13,24 @@ use PHPUnit\Framework\TestCase;
 class DivisionTest extends TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @dataProvider getExactDivisionDataProvider
      */
     public function testGetExactDivision($dividend, $divisor, $expected)
     {
         $mathDivision = new Division();
         $remainder = $mathDivision->getExactDivision($dividend, $divisor);
-        $this->assertEquals($expected, $remainder);
+        $this->assertEqualsWithDelta($expected, $remainder, self::EPSILON);
     }
 
     /**
      * @return array
      */
-    public function getExactDivisionDataProvider()
+    public static function getExactDivisionDataProvider()
     {
         return [
             [17, 3 , 2],

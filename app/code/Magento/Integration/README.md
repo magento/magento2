@@ -10,11 +10,13 @@ model for request and access token management.
 The Magento_Integration module is one of the base Magento 2 modules. You cannot disable or uninstall this module.
 
 This module is dependent on the following modules:
+
 - `Magento_Store`
 - `Magento_User`
 - `Magento_Security`
 
 The Magento_Integration module creates the following tables in the database:
+
 - `oauth_consumer`
 - `oauth_token`
 - `oauth_nonce`
@@ -34,6 +36,7 @@ Extension developers can interact with the Magento_Integration module. For more 
 The module dispatches the following events:
 
 #### Model
+
 - `customer_login` event in the `\Magento\Integration\Model\CustomerTokenService::createCustomerAccessToken` method. Parameters:
     - `customer` is an object (`\Magento\Customer\Api\Data\CustomerInterface` class)
 
@@ -42,6 +45,7 @@ For information about an event in Magento 2, see [Events and observers](https://
 ### Layouts
 
 This module introduces the following layout handles in the `view/adminhtml/layout` directory:
+
 - `adminhtml_integration_edit`
 - `adminhtml_integration_grid`
 - `adminhtml_integration_grid_block`
@@ -82,7 +86,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
     - create a new consumer account
     - create access token for provided consumer
     - retrieve access token assigned to the consumer
-    - load consumer by its ID 
+    - load consumer by its ID
     - load consumer by its key
     - execute post to integration (consumer) HTTP Post URL. Generate and return oauth_verifier
     - delete the consumer data associated with the integration including its token and nonce
@@ -95,11 +99,13 @@ For information about a public API in Magento 2, see [Public interfaces & APIs](
 ### Cron options
 
 Cron group configuration can be set at `etc/crontab.xml`:
+
 - `outdated_authentication_failures_cleanup` - clearing log of outdated token request authentication failures
 - `expired_tokens_cleanups` - delete expired customer and admin tokens
 
 [Learn how to configure and run cron in Magento.](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/configure-cron-jobs.html).
 
 More information can get at articles:
-- [Learn more about an Integration](https://docs.magento.com/user-guide/system/integrations.html)
+
+- [Learn more about an Integration](https://experienceleague.adobe.com/docs/commerce-admin/systems/integrations.html)
 - [Lear how to create an Integration](https://developer.adobe.com/commerce/webapi/get-started/create-integration/)

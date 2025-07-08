@@ -18,6 +18,7 @@
             <useCaseId value="MAGETWO-99691"/>
             <group value="sales"/>
             <group value="catalogRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -64,6 +65,9 @@
         <!--Verify order item row-->
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" stepKey="waitOrderItemPriceToBeVisible"/>
         <see selector="{{AdminOrderItemsOrderedSection.productPrice('2')}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.subtotal}}" stepKey="seeOrderItemPrice"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache1">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Verify totals on Order page-->
         <scrollTo selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="scrollToOrderGrandTotal"/>
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" stepKey="waitOrderSubtotalToBeVisible"/>
@@ -71,6 +75,6 @@
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Shipping')}}" stepKey="waitOrderShippingToBeVisible"/>
         <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.shipping}}" stepKey="seeOrderShipping"/>
         <waitForElementVisible selector="{{AdminOrderFormTotalSection.grandTotal}}" stepKey="waitOrderGrandTotalToBeVisible"/>
-        <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.grandTotal}}" stepKey="seeCorrectGrandTotal"/>
+        <waitForText selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="{{AdminOrderSimpleProductWithCatalogRule.grandTotal}}" stepKey="seeCorrectGrandTotal"/>
     </test>
 </tests>

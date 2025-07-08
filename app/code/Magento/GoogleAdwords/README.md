@@ -17,10 +17,11 @@ Extension developers can interact with the Magento_GoogleAdwords module. For mor
 ### Layouts
 
 This module introduces the following layouts in the `view/frontend/layout` directory:
+
 - `checkout_onepage_success`
 
 For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ## Additional information
 
-[Learn how to configure Google AdWords](https://docs.magento.com/user-guide/marketing/google-adwords.html).
+[Learn how to configure Google AdWords](https://experienceleague.adobe.com/docs/commerce-admin/marketing/google-tools/google-adwords.html).
