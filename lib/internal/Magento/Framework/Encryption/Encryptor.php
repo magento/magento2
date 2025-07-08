@@ -45,9 +45,9 @@ class Encryptor implements EncryptorInterface
     public const HASH_VERSION_ARGON2ID13_AGNOSTIC = 3;
 
     /**
-     * Key of latest used algorithm
+     * Key of the latest used algorithm
      *
-     * @deprecated Latest version is dynamic based on current setup.
+     * @deprecated The latest version is dynamic based on current setup.
      * @see \Magento\Framework\Encryption\Encryptor::getLatestHashVersion
      */
     public const HASH_VERSION_LATEST = 3;
@@ -66,7 +66,7 @@ class Encryptor implements EncryptorInterface
     /**#@-*/
 
     /**
-     * Array key of encryption key in deployment config
+     * Array key of an encryption key in deployment config
      */
     public const PARAM_CRYPT_KEY = 'crypt/key';
 
@@ -101,7 +101,7 @@ class Encryptor implements EncryptorInterface
      *
      * @var array
      */
-    private $hashVersionMap = [
+    private array $hashVersionMap = [
         self::HASH_VERSION_MD5 => 'md5',
         self::HASH_VERSION_SHA256 => 'sha256'
     ];
@@ -111,31 +111,31 @@ class Encryptor implements EncryptorInterface
      *
      * @var int
      */
-    protected $cipher = self::CIPHER_LATEST;
+    protected int $cipher = self::CIPHER_LATEST;
 
     /**
      * Version of encryption key
      *
      * @var int
      */
-    protected $keyVersion;
+    protected int $keyVersion;
 
     /**
      * Array of encryption keys
      *
      * @var string[]
      */
-    protected $keys = [];
+    protected array|false $keys = [];
 
     /**
      * @var Random
      */
-    private $random;
+    private Random $random;
 
     /**
      * @var KeyValidator
      */
-    private $keyValidator;
+    private mixed $keyValidator;
 
     /**
      * Encryptor constructor.
@@ -143,6 +143,8 @@ class Encryptor implements EncryptorInterface
      * @param Random $random
      * @param DeploymentConfig $deploymentConfig
      * @param KeyValidator|null $keyValidator
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function __construct(
         Random $random,
@@ -158,7 +160,7 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Gets latest hash algorithm version.
+     * Gets a latest hash algorithm version.
      *
      * @return int
      */
@@ -168,15 +170,15 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Check whether specified cipher version is supported
+     * Check whether a specified cipher version is supported
      *
-     * Returns matched supported version or throws exception
+     * Returns matched the supported version or throws exception
      *
      * @param int $version
      * @return int
      * @throws \Exception
      */
-    public function validateCipher($version)
+    public function validateCipher($version): int
     {
         $types = [
             self::CIPHER_BLOWFISH,
@@ -190,6 +192,7 @@ class Encryptor implements EncryptorInterface
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception((string)new \Magento\Framework\Phrase('Not supported cipher version'));
         }
+
         return $version;
     }
 
@@ -197,8 +200,9 @@ class Encryptor implements EncryptorInterface
      * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Magento\Framework\Exception\LocalizedException|\SodiumException
      */
-    public function getHash($password, $salt = false, $version = self::HASH_VERSION_LATEST)
+    public function getHash($password, $salt = false, $version = self::HASH_VERSION_LATEST): string
     {
         if ($version < 0 || $version > $this->getLatestHashVersion()) {
             $version = $this->getLatestHashVersion();
@@ -264,7 +268,7 @@ class Encryptor implements EncryptorInterface
     /**
      * @inheritdoc
      */
-    public function hash($data, $version = self::HASH_VERSION_SHA256)
+    public function hash($data, $version = self::HASH_VERSION_SHA256): string
     {
         if (empty($this->keys[$this->keyVersion])) {
             throw new \RuntimeException('No key available');
@@ -284,7 +288,7 @@ class Encryptor implements EncryptorInterface
     /**
      * @inheritdoc
      */
-    public function validateHash($password, $hash)
+    public function validateHash($password, $hash): bool
     {
         return $this->isValidHash($password, $hash);
     }
@@ -292,7 +296,7 @@ class Encryptor implements EncryptorInterface
     /**
      * @inheritdoc
      */
-    public function isValidHash($password, $hash)
+    public function isValidHash($password, $hash): bool
     {
         $agnosticArgonRegEx = '/^' . self::HASH_VERSION_ARGON2ID13_AGNOSTIC
             . '\_(?<seed>\d+)\_(?<ops>\d+)\_(?<mem>\d+)$/';
@@ -336,7 +340,7 @@ class Encryptor implements EncryptorInterface
     /**
      * @inheritdoc
      */
-    public function validateHashVersion($hash, $validateCount = false)
+    public function validateHashVersion($hash, $validateCount = false): bool
     {
         try {
             $hashVersions = $this->explodePasswordHash($hash)[2];
@@ -364,7 +368,7 @@ class Encryptor implements EncryptorInterface
      * @return array
      * @throws \RuntimeException When given hash cannot be processed.
      */
-    private function explodePasswordHash($hash)
+    private function explodePasswordHash($hash): array
     {
         $explodedPassword = $hash !== null ? explode(self::DELIMITER, $hash, 3) : [];
         if (count($explodedPassword) !== 3) {
@@ -385,8 +389,9 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $data
      * @return string
+     * @throws \SodiumException
      */
-    public function encrypt($data)
+    public function encrypt($data): string
     {
         $crypt = new SodiumChachaIetf($this->decodeKey($this->keys[$this->keyVersion]));
 
@@ -400,6 +405,7 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $data
      * @return string
+     * @throws \Exception
      */
     public function encryptWithFastestAvailableAlgorithm($data)
     {
@@ -423,7 +429,7 @@ class Encryptor implements EncryptorInterface
      * @return string
      * @throws \Exception
      */
-    public function decrypt($data)
+    public function decrypt($data): string
     {
         if ($data) {
             $parts = explode(':', $data, 4);
@@ -473,7 +479,7 @@ class Encryptor implements EncryptorInterface
      * @param string|null $key NULL value means usage of the default key specified on constructor
      * @throws \Exception
      */
-    public function validateKey($key)
+    public function validateKey($key): void
     {
         // @phpstan-ignore-next-line
         if (!$this->keyValidator->isValid($key)) {
@@ -487,13 +493,13 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Attempt to append new key & version
+     * Attempt to append a new key & version
      *
      * @param string $key
      * @return $this
      * @throws \Exception
      */
-    public function setNewKey($key)
+    public function setNewKey($key): static
     {
         $this->validateKey($key);
         $this->keys[] = $key;
@@ -506,19 +512,19 @@ class Encryptor implements EncryptorInterface
      *
      * @return string
      */
-    public function exportKeys()
+    public function exportKeys(): string
     {
         return implode("\n", $this->keys);
     }
 
     /**
-     * Initialize crypt module if needed
+     * Initialize the crypt module if needed
      *
-     * By default initializes with latest key and crypt versions
+     * By default, initializes with the latest key and crypt versions
      *
-     * @param string $key
-     * @param int $cipherVersion
-     * @param string $initVector
+     * @param string|null $key
+     * @param int|null $cipherVersion
+     * @param string|null $initVector
      * @return EncryptionAdapterInterface|null
      * @throws \Exception
      */
@@ -563,11 +569,11 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Get cipher version
+     * Get a cipher version
      *
      * @return int
      */
-    private function getCipherVersion()
+    private function getCipherVersion(): int
     {
         return $this->cipher;
     }
@@ -609,7 +615,7 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Find out actual decode key
+     * Find out an actual decode key
      *
      * @param string $key
      * @return false|string
