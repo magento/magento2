@@ -1,0 +1,17 @@
+Index: app/code/Magento/Bundle/Model/ResourceModel/Indexer/Price.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/code/Magento/Bundle/Model/ResourceModel/Indexer/Price.php b/app/code/Magento/Bundle/Model/ResourceModel/Indexer/Price.php
+--- a/app/code/Magento/Bundle/Model/ResourceModel/Indexer/Price.php
++++ b/app/code/Magento/Bundle/Model/ResourceModel/Indexer/Price.php	(date 1752070121653)
+@@ -378,7 +378,7 @@
+             );
+             $tierPrice = $connection->getCheckSql(
+                 $tierExpr . ' IS NOT NULL',
+-                'ROUND((1 - ' . $tierExpr . ' / 100) * ' . $price . ', 4)',
++                $tierExpr,
+                 'NULL'
+             );
+             $finalPrice = $connection->getLeastSql(

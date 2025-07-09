@@ -378,7 +378,7 @@ class Price implements DimensionalIndexerInterface
             );
             $tierPrice = $connection->getCheckSql(
                 $tierExpr . ' IS NOT NULL',
-                'ROUND((1 - ' . $tierExpr . ' / 100) * ' . $price . ', 4)',
+                $tierExpr,
                 'NULL'
             );
             $finalPrice = $connection->getLeastSql(
