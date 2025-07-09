@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -75,7 +75,10 @@
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterTranslateDisabled">
             <argument name="tags" value=""/>
         </actionGroup>
-
+        <!-- Clear browser locale storage for magento site -->
+        <executeJS function="localStorage.clear();" stepKey="clearStorage"/>
+        <resetCookie userInput="mage-translation-storage" stepKey="resetTranslationStorage"/>
+        <resetCookie userInput="mage-translation-file-version" stepKey="resetTranslationFileVersion"/>
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
         <actionGroup ref="AssertStorefrontCustomWelcomeMessageActionGroup" stepKey="verifyTranslatedWelcomeMessage"/>
         <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeProductInMiniCartAgain">
