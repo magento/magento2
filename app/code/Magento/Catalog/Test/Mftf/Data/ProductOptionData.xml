@@ -447,4 +447,7 @@
         <requiredEntity type="product_option_value">ProductValueCheckbox1</requiredEntity>
         <requiredEntity type="product_option_value">ProductValueCheckbox2</requiredEntity>
     </entity>
+    <entity name="ProductRadioButtonType" type="product_option">
+        <data key="type">Radio Buttons</data>
+    </entity>
 </entities>

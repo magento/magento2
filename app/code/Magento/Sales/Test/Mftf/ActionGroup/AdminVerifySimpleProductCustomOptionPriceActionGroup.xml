@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifySimpleProductCustomOptionPriceActionGroup" extends="AddSimpleProductToOrderActionGroup">
+        <annotations>
+            <description>Adds the provided Simple Product to an Order. Verify custom option price.</description>
+        </annotations>
+        <arguments>
+            <argument name="priceAmount" defaultValue="$1,500.00" type="string"/>
+        </arguments>
+        <remove keyForRemoval="fillProductQty"/>
+        <remove keyForRemoval="scrollToAddSelectedButton"/>
+        <remove keyForRemoval="clickAddSelectedProducts"/>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.optionPrice(priceAmount)}}" stepKey="assertOptionPrice"/>
+    </actionGroup>
+</actionGroups>
