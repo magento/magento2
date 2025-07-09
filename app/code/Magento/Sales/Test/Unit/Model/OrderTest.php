@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\Api\SearchCriteria;
@@ -211,6 +213,49 @@ class OrderTest extends TestCase
                 'scopeConfig' => $this->scopeConfigMock
             ]
         );
+    }
+
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testCanShipBundleWithToghetherShipment(): void
+    {
+        $this->order->setActionFlag($this->order::ACTION_FLAG_UNHOLD, false);
+        $this->order->setActionFlag($this->order::ACTION_FLAG_SHIP, true);
+
+        $bundleItem = $this->createMock(Item::class);
+        $bundleItem->expects($this->any())->method('getParentItem')->willReturn(null);
+        $bundleItem->expects($this->exactly(2))->method('getQtyToShip')->willReturn(0);
+        $bundleItem->expects($this->any())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
+
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getShipmentType'])
+            ->getMock();
+        $product->expects($this->any())
+            ->method('getShipmentType')
+            ->willReturn(Type\AbstractType::SHIPMENT_TOGETHER);
+        $bundleItem->expects($this->any())->method('getProduct')->willReturn($product);
+
+        $childProduct = $this->createMock(Item::class);
+        $childProduct->expects($this->any())->method('getParentItem')->willReturn($bundleItem);
+
+        $orderItems = [$bundleItem, $childProduct];
+        $this->searchCriteriaBuilder->expects($this->once())->method('addFilter')->willReturnSelf();
+
+        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($searchCriteria);
+        $itemsCollection = $this->getMockBuilder(OrderItemSearchResultInterface::class)
+            ->onlyMethods(['getItems'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $itemsCollection->expects($this->once())->method('getItems')->willReturn($orderItems);
+        $this->itemRepository->expects($this->once())->method('getList')->willReturn($itemsCollection);
+
+        $this->assertFalse($this->order->canShip());
     }
 
     /**

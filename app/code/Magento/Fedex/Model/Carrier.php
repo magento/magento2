@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Framework\App\CacheInterface;
 
 /**
  * Fedex shipping implementation
@@ -175,6 +176,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private $decoderInterface;
 
     /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -194,6 +200,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Framework\HTTP\Client\CurlFactory $curlFactory
      * @param \Magento\Framework\Url\DecoderInterface $decoderInterface
+     * @param CacheInterface $cache
      * @param array $data
      * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -218,6 +225,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         CurlFactory $curlFactory,
         DecoderInterface $decoderInterface,
+        CacheInterface $cache,
         array $data = [],
         ?Json $serializer = null
     ) {
@@ -244,6 +252,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->curlFactory = $curlFactory;
         $this->decoderInterface = $decoderInterface;
+        $this->cache = $cache;
     }
 
     /**
@@ -962,11 +971,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     private function retrieveAccessToken(?string $apiKey, ?string $secretKey): string|null
     {
-        if (!$apiKey || !$secretKey) {
-            $this->_debug(__('Authentication keys are missing.'));
+        if (!$this->areAuthKeysValid($apiKey, $secretKey)) {
             return null;
         }
-
+        $cacheKey = 'fedex_access_token_' . hash('sha256', $apiKey . $secretKey);
+        $cacheType = 'fedex_api';
+        if ($cachedToken = $this->getCachedAccessToken($cacheKey)) {
+            return $cachedToken;
+        }
         $requestArray = [
             'grant_type' => self::AUTHENTICATION_GRANT_TYPE,
             'client_id' => $apiKey,
@@ -980,11 +992,55 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!empty($response['errors'])) {
             $debugData = ['request_type' => 'Access Token Request', 'result' => $response];
             $this->_debug($debugData);
-        } elseif (!empty($response['access_token'])) {
+        } elseif (!empty($response['access_token']) && isset($response['expires_in'])) {
             $accessToken = $response['access_token'];
+            $expiresAt = time() + (int)$response['expires_in'];
+            $cacheData = [
+                'access_token' => $accessToken,
+                'expires_at' => $expiresAt
+            ];
+            $this->cache->save(json_encode($cacheData), $cacheKey, [$cacheType], (int)$response['expires_in']);
         }
 
         return $accessToken;
+    }
+
+    /**
+     * Validate apiKey and secretKey
+     *
+     * @param string|null $apiKey
+     * @param string|null $secretKey
+     * @return bool
+     */
+    private function areAuthKeysValid(?string $apiKey, ?string $secretKey): bool
+    {
+        if (!$apiKey || !$secretKey) {
+            $this->_debug(__('Authentication keys are missing.'));
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Retrieve access token from cache
+     *
+     * @param string $cacheKey
+     * @return string|null
+     */
+    private function getCachedAccessToken(string $cacheKey): ?string
+    {
+        $cachedData = $this->cache->load($cacheKey);
+        if (!$cachedData) {
+            return null;
+        }
+
+        $cachedData = json_decode($cachedData, true);
+        $currentTime = time();
+        if (isset($cachedData['access_token'], $cachedData['expires_at']) && $currentTime < $cachedData['expires_at']) {
+            return $cachedData['access_token'];
+        }
+
+        return null;
     }
 
     /**
