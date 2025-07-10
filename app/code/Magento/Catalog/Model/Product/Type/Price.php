@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -15,6 +15,7 @@ use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Catalog\Model\Pricing\SpecialPriceService;
 
 /**
  * Product type price model
@@ -89,6 +90,11 @@ class Price implements ResetAfterRequestInterface
     private $tierPriceExtensionFactory;
 
     /**
+     * @var SpecialPriceService|null
+     */
+    private ?SpecialPriceService $specialPriceService;
+
+    /**
      * Constructor
      *
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
@@ -101,6 +107,7 @@ class Price implements ResetAfterRequestInterface
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
+     * @param SpecialPriceService|null $specialPriceService
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -113,7 +120,8 @@ class Price implements ResetAfterRequestInterface
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        ?ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
+        ?ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null,
+        ?SpecialPriceService $specialPriceService = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
@@ -126,6 +134,18 @@ class Price implements ResetAfterRequestInterface
         $this->config = $config;
         $this->tierPriceExtensionFactory = $tierPriceExtensionFactory ?: ObjectManager::getInstance()
             ->get(ProductTierPriceExtensionFactory::class);
+        $this->specialPriceService = $specialPriceService ?: ObjectManager::getInstance()
+            ->get(SpecialPriceService::class);
+    }
+
+    /**
+     * Returns the SpecialPriceService instance
+     *
+     * @return SpecialPriceService|null
+     */
+    protected function getSpecialPriceService(): ?SpecialPriceService
+    {
+        return $this->specialPriceService;
     }
 
     /**
@@ -642,6 +662,9 @@ class Price implements ResetAfterRequestInterface
         $store = null
     ) {
         if ($specialPrice !== null && $specialPrice != false) {
+
+            $specialPriceTo = $this->specialPriceService->execute($specialPriceTo);
+
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
                 $finalPrice = min($finalPrice, (float) $specialPrice);
             }

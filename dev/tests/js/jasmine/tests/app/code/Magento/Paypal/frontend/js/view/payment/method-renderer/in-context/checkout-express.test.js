@@ -36,7 +36,7 @@ define([
             window.checkoutConfig = {
                 quoteData: {
                     /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-                    entity_Id: 1
+                    entity_id: 1
                 },
                 formKey: 'formKey'
             };
@@ -59,7 +59,7 @@ define([
                     done();
                 });
         });
-
+        /*eslint-disable no-unused-vars*/
         afterEach(function () {
             try {
                 injector.clean();

@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ProductAlert\Model\ResourceModel\Stock\Customer;
 
 /**
  * ProductAlert Stock Customer collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collection
 {
     /**
-     * join productalert stock data to customer collection
+     * Join productalert stock data to customer collection
      *
      * @param int $productId
      * @param int $websiteId

@@ -10,6 +10,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
@@ -745,6 +746,43 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $reinitiableConfig->setValue('catalog/price/scope', \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL);
         $switchPriceScope->execute($observer);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     *
+     * @return void
+     */
+    public function testFilterForNonDefaultStore(): void
+    {
+        $secondStoreCode = 'fixture_second_store';
+
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+        $secondStore = $store->load($secondStoreCode);
+
+        /** @var \Magento\Catalog\Model\Product\Action $productAction */
+        $productAction = $this->objectManager->create(\Magento\Catalog\Model\Product\Action::class);
+
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+
+        $product = $this->productRepository->get('simple');
+        $productId = $product->getId();
+        $productAction->updateWebsites([$productId], [$secondStore->getWebsiteId()], 'add');
+        $product->setStoreId($secondStore->getId());
+        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
+        $product->setName($product->getName() . ' ' . $secondStoreCode);
+        $this->productRepository->save($product);
+
+        $exportData = $this->doExport(['visibility' => Visibility::VISIBILITY_BOTH]);
+        $this->assertStringNotContainsString($product->getName(), $exportData);
     }
 
     /**

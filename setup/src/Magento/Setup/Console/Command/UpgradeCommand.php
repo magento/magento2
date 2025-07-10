@@ -175,8 +175,16 @@ class UpgradeCommand extends AbstractSetupCommand
             $output->writeln(
                 '<info>Please refer to Developer Guide for more details.</info>'
             );
+
+            // Add standardized success message for deployment script parsing
+            $output->writeln('<info>Upgrade completed successfully.</info>');
+
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+
+            // Add standardized failure message for deployment script parsing
+            $output->writeln('<error>Upgrade failed: ' . $e->getMessage() . '</error>');
+
             return Cli::RETURN_FAILURE;
         }
 

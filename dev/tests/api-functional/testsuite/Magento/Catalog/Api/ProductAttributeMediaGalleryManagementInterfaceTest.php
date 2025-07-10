@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -894,5 +893,42 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertArrayHasKey('content', $response);
+    }
+
+    /**
+     * Test update() method when existing image gets overwritten and name is not changed
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testUpdateExistingImage()
+    {
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $productRepository->get('simple');
+        $imageId = (int)$product->getMediaGalleryImages()->getFirstItem()->getValueId();
+        $requestData = [
+            'sku' => 'simple',
+            'entry' => [
+                'id' => $this->getTargetGalleryEntryId(),
+                'label' => 'Updated Image Text',
+                'position' => 10,
+                'types' => ['thumbnail'],
+                'disabled' => true,
+                'media_type' => 'image',
+                'content' => [
+                    'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
+                    'type' => 'image/jpeg',
+                    'name' => 'magento_image.jpg',
+                ]
+            ]
+        ];
+
+        $this->updateServiceInfo['rest']['resourcePath'] = $this->updateServiceInfo['rest']['resourcePath']
+            . '/' . $this->getTargetGalleryEntryId();
+
+        $this->assertTrue($this->_webApiCall($this->updateServiceInfo, $requestData, null, 'all'));
+        $updatedImage = $this->assertMediaGalleryData($imageId, '/m/a/magento_image.jpg', 'Updated Image Text');
+        $this->assertEquals(10, $updatedImage['position_default']);
+        $this->assertEquals(1, $updatedImage['disabled_default']);
     }
 }
