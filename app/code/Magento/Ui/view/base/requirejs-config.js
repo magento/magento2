@@ -13,6 +13,7 @@ var config = {
             init: function () {
                 'use strict';
                 window.tinymce = window.hugerte;
+                window.tinyMCE = window.hugerte;
                 return window.hugerte;
             }
         }
