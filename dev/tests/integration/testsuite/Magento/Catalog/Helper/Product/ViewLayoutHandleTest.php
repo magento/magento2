@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 
 declare(strict_types=1);
 
@@ -16,8 +20,13 @@ use PHPUnit\Framework\TestCase;
  */
 class ViewLayoutHandleTest extends TestCase
 {
+    /** @var View */
     private View $viewHelper;
+
+    /** @var ProductRepositoryInterface */
     private ProductRepositoryInterface $productRepository;
+
+    /** @var PageFactory */
     private PageFactory $pageFactory;
 
     protected function setUp(): void
