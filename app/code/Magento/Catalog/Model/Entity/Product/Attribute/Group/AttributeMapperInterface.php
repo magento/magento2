@@ -1,9 +1,7 @@
 <?php
 /**
- * Attribute mapper that is used to build frontend representation of attribute
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Entity\Product\Attribute\Group;
 

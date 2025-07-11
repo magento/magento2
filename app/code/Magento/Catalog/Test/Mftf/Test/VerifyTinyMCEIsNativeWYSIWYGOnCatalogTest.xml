@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -31,7 +31,7 @@
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
         <seeElement selector="{{TinyMCESection.ShowHideBtn}}" stepKey="seeShowHideBtn" />
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
-        <executeJS function="tinyMCE.get('category_form_description').setContent('Hello World!');" stepKey="executeJSFillContent"/>
+        <executeJS function="hugerte.get('category_form_description').setContent('Hello World!');" stepKey="executeJSFillContent"/>
         <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
         <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage" />
         <seeElement selector="{{TinyMCESection.InsertImageBtn}}" stepKey="insertImage"/>
