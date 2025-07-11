@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 
 use Magento\Customer\Model\Config\Share;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog compare item resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -190,7 +188,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function updateCustomerFromVisitor($object)
     {
-        if (!$object->getCustomerId()) {
+        if (!$object->getCustomerId() || !$object->getVisitorId()) {
             return $this;
         }
 

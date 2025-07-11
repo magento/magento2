@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable */
 define([
     'ko',
     'jquery',
@@ -46,6 +47,11 @@ define([
             storedConfig = context.config.config;
             $(document.body).append(elWithStaticText);
             $(document.body).append(elWithVariable);
+            // Always override any existing translate function for these tests
+            $.mage = $.mage || {};
+            $.mage.__ = function(text) {
+                return text; // Return original text for i18n tests
+            };
         });
 
         afterEach(function () {

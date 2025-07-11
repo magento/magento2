@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Data\Tree;
 
@@ -12,8 +12,6 @@ use Magento\Framework\DB\Select;
  *
  * Data model:
  * id  |  path  |  order
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Dbp extends \Magento\Framework\Data\Tree
 {
