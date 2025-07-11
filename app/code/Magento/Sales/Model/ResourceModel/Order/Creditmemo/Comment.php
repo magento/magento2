@@ -21,7 +21,6 @@ use Magento\SalesSequence\Model\Manager;
 
 /**
  * Flat sales order creditmemo comment resource
- *
  */
 class Comment extends EntityAbstract implements CreditmemoCommentResourceInterface
 {
@@ -33,8 +32,6 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
     protected $_eventPrefix = 'sales_order_creditmemo_comment_resource';
 
     /**
-     * Class Validator
-     *
      * @var Validator
      */
     protected $validator;

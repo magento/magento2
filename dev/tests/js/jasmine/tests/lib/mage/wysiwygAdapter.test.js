@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/* eslint-disable max-nested-callbacks */
+/* eslint-disable */
 define([
     'wysiwygAdapter'
 ], function (wysiwygAdapter) {
@@ -33,7 +33,7 @@ define([
          * @param {String} encodedHtml
          */
         function runTests(decodedHtml, encodedHtml) {
-            var encodedHtmlWithForwardSlashInImgSrc = encodedHtml.replace(/src="((?:(?!"|\\\?).)*)/, 'src="$1/');
+            var encodedHtmlWithForwardSlashInImgSrc = encodedHtml.replace(/src="([^"]+)/, 'src="$1/');
 
             describe('"encodeDirectives" method', function () {
                 it('converts media directive img src to directive URL', function () {
