@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyProductReorderWithCustomOptionTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Reorder product with custom option"/>
+            <title value="Customer should be able to reorder product with a selected custom checkbox option"/>
+            <description value="Verifies that a customer can reorder a product where one custom checkbox option was selected during the original purchase."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-13538"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Precondition: Create customer -->
+            <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
+            <!-- Step1&2&3: Create product with checkbox two custom options -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <updateData entity="productWithCheckboxCustomOptions" createDataKey="createSimpleProduct" stepKey="addCustomOptions">
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </updateData>
+        </before>
+        <after>
+            <!-- Customer logout -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+        <!-- Step4: Login as a customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <!-- Step5: Open Product Page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <!-- Add Product to Cart from product detail page -->
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+        <!-- see custom option validation message -->
+        <waitForText userInput="{{ProductWarningMessage.require_Message}}" stepKey="seeRequiredField"/>
+        <!-- Choose checkbox value1 -->
+        <actionGroup ref="StorefrontAddSimpleProductCustomOptionCheckBoxActionGroup" stepKey="selectCustomOptionCheckBoxForValue1"/>
+        <!-- Step6: place order -->
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="clickToProceedToCheckout"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <!-- Step7: Go to order page -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
+            <argument name="menu" value="{{sidebarTabMenu.my_orders}}"/>
+        </actionGroup>
+        <!-- Clicking View Order from My Orders Grid -->
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <waitForElementClickable selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="waitForReorderButtonToBeClickable"/>
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+        <actionGroup ref="StorefrontCheckoutCheckProductActionGroup" stepKey="checkProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="cartItem" value="SimpleCartItem"/>
+        </actionGroup>
+    </test>
+</tests>
