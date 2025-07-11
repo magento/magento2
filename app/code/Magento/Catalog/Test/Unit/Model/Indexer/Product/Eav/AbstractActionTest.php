@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -237,7 +237,7 @@ class AbstractActionTest extends TestCase
     /**
      * @return array
      */
-    public function reindexEntitiesDataProvider() : array
+    public static function reindexEntitiesDataProvider() : array
     {
         return [
             [[4], [], [1, 2, 3]],

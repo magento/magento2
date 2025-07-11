@@ -15,5 +15,8 @@
         <element name="giftMessageFromName" type="input" selector=".giftmessage-whole-order-container .admin__field:nth-of-type(1) input"/>
         <element name="giftMessageToName" type="input" selector=".giftmessage-whole-order-container .admin__field:nth-of-type(2) input"/>
         <element name="giftMessageMessage" type="input" selector=".giftmessage-whole-order-container .admin__field textarea"/>
+        <element name="giftMessageFromNameAtItemLevel" type="input" selector="#current_item_giftmessage_sender"/>
+        <element name="giftMessageToNameAtItemLevel" type="input" selector="#current_item_giftmessage_recipient"/>
+        <element name="giftMessageAtItemLevel" type="input" selector="#current_item_giftmessage_message"/>
     </section>
 </sections>

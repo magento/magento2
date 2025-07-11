@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -151,7 +151,7 @@ class ConfigTest extends TestCase
                     'galleryConfigProvider' => ['default' => WysiwygDefaultConfig::class],
                 ]
             )
-            ->setMethods(['processVariableConfig', 'processWidgetConfig'])
+            ->onlyMethods(['processVariableConfig', 'processWidgetConfig'])
             ->getMock();
 
         $this->wysiwygConfig = $objectManager->getObject(
@@ -222,7 +222,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return [
             'add_variables IS FALSE, add_widgets IS FALSE, isAuthorizationAllowed IS FALSE' => [
@@ -294,7 +294,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [
             ['wysiwygState' => 'enabled', 'expectedResult' => true],
@@ -323,7 +323,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function isHiddenDataProvider()
+    public static function isHiddenDataProvider()
     {
         return [
             ['status' => 'hidden', 'expectedResult' => true],

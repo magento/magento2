@@ -17,6 +17,8 @@ use Psr\Log\LoggerInterface;
  * @api
  * @since 100.1.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInterface, QueryAwareInterface
 {
@@ -127,8 +129,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver,
         $indexerId,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        QueryContainer $queryContainer = null,
-        LoggerInterface $logger = null,
+        ?QueryContainer $queryContainer = null,
+        ?LoggerInterface $logger = null,
         ?string $aggregationFieldName = null
     ) {
         $this->connectionManager = $connectionManager;

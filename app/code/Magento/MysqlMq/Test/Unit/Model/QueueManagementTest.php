@@ -67,7 +67,7 @@ class QueueManagementTest extends TestCase
             ->getMock();
         $this->messageStatusCollectionFactory = $this
             ->getMockBuilder(MessageStatusCollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -138,40 +138,23 @@ class QueueManagementTest extends TestCase
             ->getMock();
         $this->messageStatusCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->scopeConfig->expects($this->exactly(8))->method('getValue')
-            ->withConsecutive(
-                [
-                    QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME,
-                    ScopeInterface::SCOPE_STORE,
-                ],
-                [
-                    QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER,
-                    ScopeInterface::SCOPE_STORE,
-                ]
-            )->willReturn(1);
+            ->willReturnCallback(
+                function ($path, $scope) {
+                    if ($path == QueueManagement::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME &&
+                        $scope == ScopeInterface::SCOPE_STORE) {
+                        return 1;
+                    } elseif ($path == QueueManagement::XML_PATH_FAILED_MESSAGES_LIFETIME &&
+                        $scope == ScopeInterface::SCOPE_STORE) {
+                        return 1;
+                    } elseif ($path == QueueManagement::XML_PATH_NEW_MESSAGES_LIFETIME &&
+                        $scope == ScopeInterface::SCOPE_STORE) {
+                        return 1;
+                    } elseif ($path == QueueManagement::XML_PATH_RETRY_IN_PROGRESS_AFTER &&
+                        $scope == ScopeInterface::SCOPE_STORE) {
+                        return 1;
+                    }
+                }
+            );
         $collection->expects($this->once())->method('addFieldToFilter')
             ->with(
                 'status',
@@ -228,7 +211,8 @@ class QueueManagementTest extends TestCase
     private function getMessageStatusMock()
     {
         $messageStatus = $this->getMockBuilder(MessageStatus::class)
-            ->setMethods(['getStatus', 'setStatus', 'save', 'getId', 'getUpdatedAt'])
+            ->addMethods(['getStatus', 'setStatus', 'getUpdatedAt'])
+            ->onlyMethods(['save', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $messageStatus->expects($this->once())->method('getUpdatedAt')->willReturn('2010-01-01 00:00:00');

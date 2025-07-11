@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyBundleAndDownloadableProductPageLayoutTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Page Layout"/>
+            <title value="Verify Bundle and Downloadable product pages layout"/>
+            <description value="To verify Bundle and Downloadable product pages layout"/>
+            <testCaseId value="AC-13423"/>
+            <severity value="AVERAGE"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AddDownloadableDomainActionGroup" stepKey="addDownloadableDomain"/>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create customer on Storefront and bundle, downloadable product-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="CustomerEntityOne" stepKey="createCustomerViaTheStorefront"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="bundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiDownloadableProduct" stepKey="downloadableProduct"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="downloadableProduct"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="downloadableProduct"/>
+            </createData>
+            <!-- Create Attribute -->
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="bundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink1">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createBundleLink2">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct2"/>
+            </createData>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$bundleProduct.id$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <actionGroup ref="RemoveDownloadableDomainActionGroup" stepKey="removeDownloadableDomain"/>
+            <createData entity="SimpleSubCategory" stepKey="deleteCreateCategory"/>
+            <deleteData createDataKey="createCustomerViaTheStorefront" stepKey="deleteCustomerViaTheStorefront"/>
+            <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="downloadableProduct" stepKey="deleteDownloadableProduct"/>
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Pre-condition 1: Login to the storefront as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerViaTheStorefront$$"/>
+        </actionGroup>
+        <!-- Step 1: Open the bundle product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$bundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <!-- Step 2: Add bundle product page to the wishlist -->
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
+            <argument name="productVar" value="$$bundleProduct$$"/>
+        </actionGroup>
+        <!-- Click on the bundle product edit icon, and check the bundle product page layout -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem">
+            <argument name="productName" value="$$bundleProduct.name$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <!-- Verify if bundle product page layout is not getting break with some element present on page -->
+        <waitForElementVisible selector="{{StorefrontBundledSection.bundleProductName}}" stepKey="LookingForNameOfProduct" />
+        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.updateWishList}}" stepKey="waitForProductUpdateWishlistBtnVisible"/>
+        <waitForElementVisible selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="LookingFoPriceOfProduct" />
+        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
+        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.skuField}}" stepKey="LookingFoSkuOfProduct"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.fixedFinalPrice}}" stepKey="seeBundleProductPrice"/>
+        <!-- Step 3: Open the downloadable product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$downloadableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadAgain"/>
+        <!-- Step 3.1: Add downloadable product page to the wishlist -->
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToDownloadableWishlistProduct">
+            <argument name="productVar" value="$$downloadableProduct$$"/>
+        </actionGroup>
+        <!-- Click on the downloadable product edit icon, and check the downloadable product page layout -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditDownloadableWishlistItem">
+            <argument name="productName" value="$downloadableProduct.name$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadAgain2"/>
+        <scrollToTopOfPage stepKey="scrollToTopAgain"/>
+        <!-- Verify if downloadable product page layout is not getting break with some element present on page -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeStorefrontDownloadableProductsProductName"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="seeStorefrontDownloadableProductsProductSku"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.fixedFinalPrice}}" stepKey="seeDownloadableProductPrice"/>
+        <!-- Check for Downloadable Links -->
+        <actionGroup ref="AssertStorefrontLinkOnDownloadableProductPageActionGroup" stepKey="seeFirstLink">
+            <argument name="linkTitle" value="{{ApiDownloadableLink.title}}"/>
+        </actionGroup>
+    </test>
+</tests>

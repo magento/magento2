@@ -82,7 +82,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
      *
      * @return array
      */
-    public function postValuesForRequest(): array
+    public static function postValuesForRequest(): array
     {
         return [
             'start_at_value_is_integer_zero' => [

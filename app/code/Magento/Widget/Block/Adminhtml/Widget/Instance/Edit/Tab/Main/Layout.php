@@ -49,7 +49,7 @@ class Layout extends Template implements RendererInterface
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Catalog\Model\Product\Type $productType,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_productType = $productType;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

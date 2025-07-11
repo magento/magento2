@@ -301,7 +301,7 @@ class EditTest extends TestCase
      *
      * @return array
      */
-    public function prepareLayoutDataProvider(): array
+    public static function prepareLayoutDataProvider(): array
     {
         /** @var $urlRewrite UrlRewrite */
         $urlRewrite = Bootstrap::getObjectManager()->create(

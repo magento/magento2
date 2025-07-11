@@ -11,10 +11,10 @@ namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 use Magento\Backend\Model\Menu;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Theme\Block\Html\Title;
-use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTestCase;
 use Psr\Log\LoggerInterface;
 
-class IndexTest extends ThemeTest
+class IndexTest extends ThemeTestCase
 {
     /**
      * @var string

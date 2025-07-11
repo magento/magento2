@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,7 +76,7 @@ class StatusTest extends TestCase
 
         $this->entity = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLinkField'])
+            ->onlyMethods(['getLinkField'])
             ->getMockForAbstractClass();
     }
 
@@ -141,7 +141,7 @@ class StatusTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionTextDataProvider()
+    public static function getOptionTextDataProvider()
     {
         return [
             [

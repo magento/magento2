@@ -185,12 +185,12 @@ abstract class AbstractAttributeTest extends TestCase
      *
      * @return array
      */
-    abstract public function productProvider(): array;
+    abstract public static function productProvider(): array;
 
     /**
      * Provider for unique attribute tests
      *
      * @return array
      */
-    abstract public function uniqueAttributeValueProvider(): array;
+    abstract public static function uniqueAttributeValueProvider(): array;
 }

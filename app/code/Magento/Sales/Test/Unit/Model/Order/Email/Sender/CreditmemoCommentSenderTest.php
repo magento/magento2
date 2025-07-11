@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class CreditmemoCommentSenderTest extends AbstractSenderTest
+class CreditmemoCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var CreditmemoCommentSender

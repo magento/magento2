@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
@@ -18,7 +18,7 @@ class ImageEntryConverter implements EntryConverterInterface
     /**
      * Media Entry type code
      */
-    const MEDIA_TYPE_CODE = 'image';
+    public const MEDIA_TYPE_CODE = 'image';
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
@@ -43,7 +43,7 @@ class ImageEntryConverter implements EntryConverterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMediaEntryType()
     {
@@ -51,6 +51,8 @@ class ImageEntryConverter implements EntryConverterInterface
     }
 
     /**
+     * Method for media converter
+     *
      * @param Product $product
      * @param array $rowData
      * @return ProductAttributeMediaGalleryEntryInterface $entry
@@ -75,6 +77,8 @@ class ImageEntryConverter implements EntryConverterInterface
     }
 
     /**
+     * Method to convert media from
+     *
      * @param ProductAttributeMediaGalleryEntryInterface $entry
      * @return array
      */
@@ -94,11 +98,13 @@ class ImageEntryConverter implements EntryConverterInterface
     }
 
     /**
+     * Method for media gallery content interface
+     *
      * @param ImageContentInterface $content
      * @return array
      */
     protected function convertFromMediaGalleryEntryContentInterface(
-        ImageContentInterface $content = null
+        ?ImageContentInterface $content = null
     ) {
         if ($content === null) {
             return null;

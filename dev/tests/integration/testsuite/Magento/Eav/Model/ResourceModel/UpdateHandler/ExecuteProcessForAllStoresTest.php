@@ -55,7 +55,7 @@ class ExecuteProcessForAllStoresTest extends UpdateHandlerAbstract
     /**
      * @return array
      */
-    public function getAllStoresDataProvider()
+    public static function getAllStoresDataProvider()
     {
         return [
             ['description', '', 'not_empty_value', 'not_empty_value'],                  //0

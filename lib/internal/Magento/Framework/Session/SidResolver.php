@@ -78,7 +78,7 @@ class SidResolver implements SidResolverInterface
         \Magento\Framework\App\RequestInterface $request,
         $scopeType,
         array $sidNameMap = [],
-        State $appState = null
+        ?State $appState = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->urlBuilder = $urlBuilder;

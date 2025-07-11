@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /** @var $block Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <div class="attribute-set">
 
@@ -33,12 +34,12 @@ script;
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?= $block->escapeHtml(__('Groups')) ?></span>
+            <span class="title"><?= $escaper->escapeHtml(__('Groups')) ?></span>
         </div>
         <?php if (!$block->getIsReadOnly()):?>
             <?= /* @noEscape */ $block->getAddGroupButton() ?>&nbsp;
             <?= /* @noEscape */ $block->getDeleteGroupButton() ?>
-            <p class="note-block"><?= $block->escapeHtml(__('Double click on a group to rename it.')) ?></p>
+            <p class="note-block"><?= $escaper->escapeHtml(__('Double click on a group to rename it.')) ?></p>
         <?php endif; ?>
 
         <?= $block->getSetsFilterHtml() ?>
@@ -46,462 +47,109 @@ script;
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?= $block->escapeHtml(__('Unassigned Attributes')) ?></span>
+            <span class="title"><?= $escaper->escapeHtml(__('Unassigned Attributes')) ?></span>
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
-        <?php $readOnly = ($block->getIsReadOnly() ? 'false' : 'true');
+        <?php
+        $readOnly = $block->getIsReadOnly() ? 'true' : 'false';
+        $saveUrl = $escaper->escapeJs($block->getMoveUrl());
         $groupTree = /* @noEscape */ $block->getGroupTreeJson();
         $attributeTreeJson = /* @noEscape */ $block->getAttributeTreeJson();
-        $systemAttributeWarning = $block->escapeJs(
+        $newGroupModalTitle = $escaper->escapeJs($escaper->escapeHtml(__('Add New Group')));
+        $newGroupModalContent = $escaper->escapeJs($escaper->escapeHtml(__('Please enter a new group name.')));
+        $cannotSaveAlert = $escaper->escapeJs(__('Sorry, we\'re unable to complete this request.'));
+        $cannotUnassignAttributeAlert = $escaper->escapeJs(__('You can\'t remove attributes from this attribute set.'));
+        $cannotDeleteGroupAlert =  $escaper->escapeJs(
             __('This group contains system attributes. Please move system attributes to another group and try again.')
         );
-        $scriptString = <<<script
-            define('tree-panel',
-                [
-                    'jquery',
-                    'Magento_Ui/js/modal/prompt',
-                    'Magento_Ui/js/modal/alert',
-                    'jquery/jstree/jquery.jstree',
-                    'prototype'
-                ], function(jQuery, prompt, alert){
-
-                //<![CDATA[
-                var allowDragAndDrop = {$readOnly};
-                var canEditGroups = {$readOnly};
-                var treeDiv1 = jQuery('#tree-div1');
-                var treeDiv2 = jQuery('#tree-div2');
-
-                var TreePanels = function() {
-
-                    return {
-                        init: function() {
-
-                            var treeRoot = [{
-                                text: 'ROOT',
-                                id: '#',
-                                allowDrag: false,
-                                allowDrop: true,
-                                state: { opened: true, loaded: true, selected: false },
-                                li_attr: { class: '' }
-                            }];
-
-                            /**
-                            * Initialize the jstree with tree root
-                            */
-                            treeDiv1.jstree({
-                                core: {
-                                    animation: false,
-                                    check_callback: checkCallback,
-                                    data: treeRoot
-                                },
-                                plugins : [ 'dnd' ],
-                            });
-
-                            var root = treeDiv1.jstree(true).get_node('#');
-                            buildCategoryTree(treeDiv1, root, {$groupTree});
-
-                            //-------------------------------------------------------------
-
-                            var treeRoot2 = [
-                                {
-                                    text: 'ROOT_2',
-                                    id: '#',
-                                    allowDrag: true,
-                                    allowDrop: true,
-                                    state: { opened: true, loaded: true }
-                                }
-                            ];
-
-                            /**
-                            * Initialize the jstree with tree root 2
-                            */
-                            treeDiv2.jstree({
-                                core: {
-                                    data: treeRoot2,
-                                    check_callback: checkCallback,
-                                    themes: {
-                                        dots: false
-                                    }
-                                },
-                                plugins : [ 'dnd' ]
-                            });
-
-                            var root2 = treeDiv2.jstree(true).get_node('#');
-                            buildCategoryTree(treeDiv2, root2, {$attributeTreeJson});
-                        },
-
-                        rebuildTrees: function () {
-                            editSet.req.attributes = [];
-                            rootNode = treeDiv1.jstree(true).get_node('#');
-                            gIterator = 0;
-
-                            rootNode.children.forEach(function (groupNodeId) {
-                                let groupNode = treeDiv1.jstree(true).get_node(groupNodeId);
-                                let newGroupNodeId = groupNode.id.replace(groupNode.parent+'_', '');
-                                editSet.req.groups[gIterator] =
-                                    [newGroupNodeId, groupNode.text.trim(), (gIterator + 1)];
-                                let iterator = 0;
-                                groupNode.children.forEach(function (childNodeId) {
-                                    iterator++;
-                                    childNode = treeDiv1.jstree(true).get_node(childNodeId);
-                                    if(!childNode.id.startsWith(childNode.parent) ) {
-                                        childNode.id = childNode.parent +
-                                            childNode.id.substring(childNode.id.lastIndexOf('_'));
-                                        childNode.li_attr.id = childNode.id;
-                                        childNode.a_attr.id = childNode.id + "_anchor";
-                                    }
-                                    generatedNodeId = childNode.original.attribute_id;
-                                    if( generatedNodeId > 0 ) {
-                                        editSet.req.attributes[generatedNodeId] = new Array(generatedNodeId,
-                                        newGroupNodeId, iterator, childNode.original.entity_id);
-                                    }
-                                });
-
-                                iterator = 0;
-                                gIterator++;
-                            });
-
-                            editSet.req.not_attributes = [];
-                            rootNode = treeDiv2.jstree(true).get_node('#');
-
-                            let iterator = 0;
-                            rootNode.children.forEach(function (childId) {
-                                childNode = treeDiv2.jstree(true).get_node(childId);
-                                generatedNodeId = childNode.original.attribute_id;
-                                if( generatedNodeId > 0 ) {
-                                    editSet.req.not_attributes[iterator] =
-                                     childNode.original.entity_id;
-                                }
-                                iterator ++;
-                            });
-                       }
-                    };
-                }();
-
-                function buildCategoryTree(treeDiv, parent, config) {
-                    if (!config) return;
-                    const treeInstance = treeDiv.jstree(true);
-
-                    for (var i = 0; i < config.length; i++) {
-                        var nodeConfig = config[i];
-
-                        // Create a new node in the jsTree
-                        let newNode = {
-                            text: nodeConfig.text,
-                            id: parent.id+'_'+nodeConfig.id,
-                            attribute_id: nodeConfig.id,
-                            allowDrag: nodeConfig.allowDrag,
-                            allowDrop: nodeConfig.allowDrop,
-                            cls: nodeConfig.cls,
-                            entity_id: nodeConfig.entity_id,
-                            is_user_defined: nodeConfig.is_user_defined,
-                            li_attr: { class: nodeConfig.cls }
-                        };
-                        const parentTree = treeInstance.create_node(parent, newNode, 'last');
-
-                        if (nodeConfig.children) {
-                            for (var j = 0; j < nodeConfig.children.length; j++) {
-                                let newChildNode = nodeConfig.children[j];
-                                newChildNode.attribute_id = nodeConfig.children[j].id;
-                                newChildNode.id = parentTree+'_'+nodeConfig.children[j].id;
-                                newChildNode.li_attr = {
-                                    'class': nodeConfig.children[j].cls
-                                };
-                                treeInstance.create_node(parentTree, newChildNode, 'last');
-                            }
-                        }
-                    }
-
-                    treeDiv.on('select_node.jstree', function (e, data) {
-                        editSet.register(data.node);
-                    });
-
-                    treeDiv.on('copy_node.jstree', function (e, data) {
-                        let originalNode = data.original.original;
-                        let copiedNode = data.node.original;
-
-                        // Assign properties from the original node to the copied node
-                        Object.assign(copiedNode, {
-                            cls: originalNode.cls,
-                            is_user_defined: originalNode.is_user_defined,
-                            allowDrag: originalNode.allowDrag,
-                            allowDrop: originalNode.allowDrop,
-                            entity_id: originalNode.entity_id,
-                            attribute_id: originalNode.attribute_id
-                        });
-
-                        treeDiv1.jstree(true).redraw(copiedNode);
-                        treeInstance.open_node(data.node.parent);
-
-                        let treeIns = treeDiv2.jstree(true);
-                        let rootNode = treeIns.get_node('#');
-
-                        if (rootNode.children.length === 1) {
-                            editSet.rightAppend(treeIns);
-                        } else if(rootNode.children.length > 1) {
-                            editSet.rightRemove(treeIns);
-                        }
-                    });
-
-                    treeDiv.on('dblclick.jstree', function (event) {
-                        const selectedNode = treeInstance.get_selected(true)[0];
-                        if (selectedNode && selectedNode.original.cls === 'folder') {
-                            editSet.validateGroupName(selectedNode.text, selectedNode.id);
-                            treeInstance.edit(selectedNode);
-                        }
-                        treeInstance.open_all();
-                    });
-
-                    treeInstance.open_all();
+        $groupNotSelectedAlert = $escaper->escapeJs(__('Please select a node.'));
+        $groupNameAlreadyExistsAlert = $escaper->escapeJs(__('An attribute group named "/name/" already exists.'));
+        $emptyText = $escaper->escapeJs(__('Empty'));
+        $configJson = <<<JSON
+{
+    "saveUrl": "$saveUrl",
+    "readOnly": $readOnly,
+    "tree": {
+        "assigned": {
+            "selector": "#tree-div1",
+            "placeholder": false,
+            "data": $groupTree
+        },
+        "unassigned": {
+            "selector": "#tree-div2",
+            "placeholder": {
+                "text": "$emptyText"
+            },
+            "data": $attributeTreeJson
+        }
+    },
+    "newGroupModal": {
+        "title": "$newGroupModalTitle",
+        "content": "$newGroupModalContent"
+    },
+    "errors": {
+        "save": {
+            "message": "$cannotSaveAlert"
+        },
+        "unassign": {
+            "message": "$cannotUnassignAttributeAlert"
+        },
+        "delete_group": {
+            "message": "$cannotDeleteGroupAlert"
+        },
+        "group_not_selected": {
+            "message": "$groupNotSelectedAlert"
+        },
+        "validation": {
+            "isUnique": {
+                "message": "$groupNameAlreadyExistsAlert",
+                "bindings": {
+                    "/name/": "value"
                 }
+            }
+        }
+    }
+}
+JSON;
 
-                function checkCallback(operation, node, parent, position) {
-                    if (operation === 'move_node') {
-                        if(parent.original && !parent.original.allowDrop) {
-                            return false;
-                        }
+        $scriptString = <<<JS
+define(
+    'tree-panel',
+    ['jquery', 'Magento_Catalog/js/product/set/editor', 'prototype', 'domReady!'],
+    function(jQuery, Editor) {
+        window.editSet = new Editor($configJson);
 
-                        if((node.original.cls === 'system-leaf' || node.original.cls === 'leaf')
-                            && parent.text === 'ROOT') {
-                            return false;
-                        }
+        window.editSet.beforeSave = window.editSet.beforeSave.wrap(function(_super) {
+            if ($('messages')) {
+                $('messages').update();
+            } else {
+                jQuery('.page-main-actions').after(jQuery('<div/>').attr('id', 'messages'));
+            }
+            if(!jQuery('#set-prop-form').valid()) {
+                return;
+            }
+            this.req.attribute_set_name = $('attribute_set_name').value;
+            if (!this.req.form_key && window.FORM_KEY) {
+                this.req.form_key = window.FORM_KEY;
+            }
+            _super();
+        });
 
-                        if (node.original.cls === 'folder' && parent.original.cls === 'folder'
-                            && parent.id !== '#') {
-                            return false;
-                        }
-                        return true;
-                    }
-                    if (operation === 'copy_node' && (node.original.is_unassignable == 0
-                        && node.original.is_user_defined == 0)) {
-                        alert({
-                            content: '{$block->escapeJs(
-            __('You can\'t remove attributes from this attribute set.')
-        )}'
-                        });
-                        return false;
-                    }
-                    if (operation === 'rename_node') {
-                        return editSet.validateGroupName(position, node.id);
-                    }
+        window.editSet.afterSave = window.editSet.afterSave.wrap(function(_super, response) {
+            if (response.error || response.message) {
+                jQuery('#messages').html(response.message);
+            } else {
+                _super(response);
+            }
+        });
 
-                    return true;
-                }
+        jQuery("[data-role='spinner']").hide();
 
-                editSet = function () {
-                    return {
-                        register: function (node) {
-                            editSet.currentNode = node;
-                        },
-
-                        submit: function () {
-                            var i, child, newNode;
-                            var rootNode = treeDiv1.jstree(true).get_node('#');
-                            if (rootNode.children.length === 0) {
-                                return;
-                            }
-
-                            if (editSet.SystemNodesExists(editSet.currentNode)) {
-                                alert({
-                                    content: '{$systemAttributeWarning}'
-                                });
-                                return;
-                            }
-
-                            if (editSet.currentNode && editSet.currentNode.original.cls === "folder") {
-                                let currentChild = editSet.currentNode.children;
-                                for (i = 0; i < currentChild.length; i++) {
-                                    let child = treeDiv1.jstree(true).get_node(currentChild[i]);
-                                    if (child.original.is_user_defined == 1) {
-                                        newNode = child.original;
-                                        treeDiv2.jstree(true).create_node('#', newNode, 'last');
-                                    }
-                                }
-
-                                let currentNodeId = editSet.currentNode.id.replace(editSet.currentNode.parent+'_', '');
-                                editSet.req.removeGroups[currentNodeId] = currentNodeId;
-                                treeDiv1.jstree(true).delete_node(editSet.currentNode);
-                                editSet.currentNode = false;
-                            }
-                        },
-
-                        SystemNodesExists: function (currentNode) {
-                            if (!currentNode) {
-                                alert({
-                                    content: '{$block->escapeJs(__('Please select a node.'))}'
-                                });
-                                return;
-                            }
-
-                            let children = currentNode.children;
-                            for (let i = 0; i < children.length; i++) {
-                                let child = treeDiv1.jstree(true).get_node(children[i]);
-                                if (child.original.is_unassignable != 1) {
-                                    return true;
-                                }
-                            }
-                        },
-
-                        addGroup: function () {
-                            prompt({
-                                title: "{$block->escapeJs($block->escapeHtml(__('Add New Group')))}",
-                                content: "{$block->escapeJs($block->escapeHtml(__('Please enter a new group name.')))}",
-                                value: "",
-                                validation: true,
-                                validationRules: ['required-entry'],
-                                attributesForm: {
-                                    novalidate: 'novalidate',
-                                    action: ''
-                                },
-                                attributesField: {
-                                    name: 'name',
-                                    'data-validate': '{required:true}',
-                                    maxlength: '255'
-                                },
-                                actions: {
-                                    confirm: function (group_name) {
-                                        group_name = group_name.strip();
-
-                                        if (!editSet.validateGroupName(group_name, 0)) {
-                                            return;
-                                        }
-
-                                        var newNodeData = {
-                                            text: group_name,
-                                            icon: 'jstree-folder',
-                                            cls: 'folder',
-                                            allowDrop: true,
-                                            allowDrag: true
-                                        };
-
-                                        let rootNode = treeDiv1.jstree(true).get_node('#');
-                                        treeDiv1.jstree(true).create_node(rootNode, newNodeData, 'last');
-                                    }
-                                }
-                            });
-                        },
-
-                        validateGroupName : function(name, exceptNodeId) {
-                            name = name.trim();
-                            var result = true;
-                            if (name === '') {
-                                result = false;
-                            }
-                            var rootNode = treeDiv1.jstree(true).get_node('#');
-                            for (var i = 0; i < rootNode.children.length; i++) {
-                                var childNode = treeDiv1.jstree(true).get_node(rootNode.children[i]);
-                                if (childNode.text.toLowerCase() === name.toLowerCase()
-                                    && childNode.id !== exceptNodeId) {
-                                    errorText = '{$block->escapeJs(
-            __('An attribute group named "/name/" already exists.')
-        )}';
-                                    alert({
-                                        content: errorText.replace("/name/",name)
-                                    });
-                                    result = false;
-                                }
-                            }
-                            return result;
-                        },
-
-                        save: function () {
-                            var block;
-
-                            if ($('messages')) {
-                                $('messages').update();
-                            } else {
-                                block = jQuery('<div/>').attr('id', 'messages');
-                                jQuery('.page-main-actions').after(block);
-                            }
-                            TreePanels.rebuildTrees();
-                            if(!jQuery('#set-prop-form').valid()) {
-                                return;
-                            }
-                            editSet.req.attribute_set_name = $('attribute_set_name').value;
-                            if (!editSet.req.form_key) {
-                                editSet.req.form_key = FORM_KEY;
-                            }
-
-                            for (var key in editSet.req) {
-                                if (Array.isArray(editSet.req[key])) {
-                                    editSet.req[key] = editSet.req[key].filter(item => item !== null);
-                                }
-                            }
-
-                            var reqData = { data: JSON.stringify(editSet.req) };
-                            jQuery.ajax({
-                                url: '{$block->escapeJs($block->getMoveUrl())}',
-                                type: 'POST',
-                                data: reqData,
-                                success: editSet.success,
-                                error: editSet.failure
-                            });
-                        },
-
-                        success: function (response) {
-                            if (response.error || response.message) {
-                                jQuery("#messages").html(response.message);
-                            } else if (response.ajaxExpired && response.ajaxRedirect) {
-                                setLocation(response.ajaxRedirect);
-                            } else if (response.url) {
-                                setLocation(response.url);
-                            }
-                        },
-
-                        failure: function(o) {
-                            alert({
-                                content: '{$block->escapeJs(__('Sorry, we\'re unable to complete this request.'))}'
-                            });
-                        },
-
-                        rightAppend: function(treeInstance) {
-                            let newNode = {
-                                text: 'Empty',
-                                id: '#_empty',
-                                cls: 'folder',
-                                is_user_defined: 1,
-                                allowDrop: false,
-                                allowDrag: false
-                            };
-                            treeInstance.create_node('#', newNode, 'last');
-                        },
-
-                        rightRemove: function(treeInstance) {
-                            var emptyNode = treeInstance.get_node('#_empty');
-
-                            if (emptyNode) {
-                                treeInstance.delete_node(emptyNode);
-                            }
-                        },
-
-                        rightBeforeAppend: function(tree, nodeThis, node, newParent) {
-                            return original(tree, nodeThis, node, newParent);
-                        },
-
-                        rightBeforeInsert: function(tree, nodeThis, node, newParent) {
-                            return original(tree, nodeThis, node, newParent);
-                        }
-                    }
-                }();
-
-                function initVars() {
-                    editSet.req = {};
-                    editSet.req.attributes = false;
-                    editSet.req.groups = new Array();
-                    editSet.req.not_attributes = false;
-                    editSet.req.attribute_set_name = false;
-                    editSet.req.removeGroups = new Array();
-                }
-
-                jQuery(function() {
-                    initVars();
-                    TreePanels.init();
-                    jQuery("[data-role='spinner']").hide();
-                });
-
-            });
-            require(['tree-panel']);
-script;
+        return window.editSet;
+    }
+);
+require(['tree-panel']);
+JS;
         ?>
         <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     </div>

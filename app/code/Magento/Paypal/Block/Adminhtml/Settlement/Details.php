@@ -1,20 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Block\Adminhtml\Settlement;
 
 /**
  * Settlement reports transaction details
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Details extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Block construction
-     * Initialize titles, buttons
+     * Block construction Initialize titles, buttons
      *
      * @return void
      */

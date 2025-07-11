@@ -50,7 +50,7 @@ class PrimaryTest extends TestCase
     /**
      * @return array
      */
-    public function getMethodDataProvider()
+    public static function getMethodDataProvider()
     {
         return [[['config/di.xml', 'config/some_config/di.xml'], 'primary', 'di.xml']];
     }

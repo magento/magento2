@@ -380,6 +380,6 @@ class ObjectManager
 
         $reflectionProperty = new \ReflectionProperty(AppObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($objectManagerMock);
+        $reflectionProperty->setValue($objectManagerMock, $objectManagerMock);
     }
 }

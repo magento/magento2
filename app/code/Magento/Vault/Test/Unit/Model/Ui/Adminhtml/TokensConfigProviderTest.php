@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -140,14 +140,15 @@ class TokensConfigProviderTest extends TestCase
             ->getMock();
         $this->session = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getReordered', 'getStoreId','getQuote'])
+            ->addMethods(['getCustomerId', 'getStoreId', 'getReordered'])
+            ->onlyMethods(['getQuote'])
             ->getMock();
         $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentDataHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethodInstance'])
+            ->onlyMethods(['getMethodInstance'])
             ->getMock();
         $this->paymentTokenManagement = $this->getMockBuilder(PaymentTokenManagementInterface::class)
             ->getMockForAbstractClass();
@@ -408,7 +409,7 @@ class TokensConfigProviderTest extends TestCase
      * Set of catching exception types
      * @return array
      */
-    public function getTokensComponentsGuestCustomerExceptionsProvider()
+    public static function getTokensComponentsGuestCustomerExceptionsProvider()
     {
         return [
             [new InputException()],
@@ -580,10 +581,12 @@ class TokensConfigProviderTest extends TestCase
             ->method('setField')
             ->with($field)
             ->willReturnSelf();
-        $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
-            ->method('setValue')
-            ->with($value)
-            ->willReturnSelf();
+        if ($value !== null) {
+            $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
+                ->method('setValue')
+                ->with($value)
+                ->willReturnSelf();
+        }
         $this->filterBuilder->expects(new MethodInvokedAtIndex($atIndex))
             ->method('create')
             ->willReturn($filterObject);
@@ -622,11 +625,11 @@ class TokensConfigProviderTest extends TestCase
         );
 
         $isVisibleFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, 1, 4);
-        $websiteFilter = $this->createExpectedFilter(PaymentTokenInterface::WEBSITE_ID, 1, 5);
+        $websiteFilter1 = $this->createExpectedFilter(PaymentTokenInterface::WEBSITE_ID, 1, 5);
+        $websiteFilter2 = $this->createExpectedFilter(PaymentTokenInterface::WEBSITE_ID, null, 6);
 
-        $this->filterBuilder->expects(static::once())
+        $this->filterBuilder->expects(self::exactly(2))
             ->method('setConditionType')
-            ->with('gt')
             ->willReturnSelf();
 
         $this->searchCriteriaBuilder->expects(self::exactly(6))
@@ -638,7 +641,7 @@ class TokensConfigProviderTest extends TestCase
                     [$expiresAtFilter, $this->searchCriteriaBuilder],
                     [$isActiveFilter, $this->searchCriteriaBuilder],
                     [$isVisibleFilter, $this->searchCriteriaBuilder],
-                    [$websiteFilter, $this->searchCriteriaBuilder],
+                    [[$websiteFilter1, $websiteFilter2], $this->searchCriteriaBuilder],
                 ]
             );
 

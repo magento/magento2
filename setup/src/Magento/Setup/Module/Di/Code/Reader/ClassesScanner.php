@@ -36,7 +36,7 @@ class ClassesScanner implements ClassesScannerInterface
      * @param DirectoryList|null $directoryList
      * @throws FileSystemException
      */
-    public function __construct(array $excludePatterns = [], DirectoryList $directoryList = null)
+    public function __construct(array $excludePatterns = [], ?DirectoryList $directoryList = null)
     {
         $this->excludePatterns = $excludePatterns;
         if ($directoryList === null) {

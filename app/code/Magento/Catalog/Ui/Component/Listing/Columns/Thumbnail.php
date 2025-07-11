@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
 
@@ -87,6 +87,9 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     protected function getAlt($row)
     {
         $altField = $this->getData('config/altField') ?: self::ALT_FIELD;
+        if (!isset($row[$altField])) {
+            return null;
+        }
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         return html_entity_decode($row[$altField], ENT_QUOTES, "UTF-8") ?? null;
     }

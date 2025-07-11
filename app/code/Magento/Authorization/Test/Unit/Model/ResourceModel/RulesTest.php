@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -103,7 +103,6 @@ class RulesTest extends TestCase
 
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->resourceConnectionMock->expects($this->once())
@@ -122,17 +121,14 @@ class RulesTest extends TestCase
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->rootResourceMock = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMock();
 
         $this->aclDataCacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods([])
             ->getMockForAbstractClass();
 
         $this->aclBuilderMock->method('getConfigCache')

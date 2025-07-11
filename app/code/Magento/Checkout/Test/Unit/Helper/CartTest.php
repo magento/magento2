@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -265,7 +265,7 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function deletePostJsonDataProvider()
+    public static function deletePostJsonDataProvider()
     {
         $url = 'http://localhost.com/dev/checkout/cart/delete/';
         $uenc = strtr(base64_encode($url), '+/=', '-_,');

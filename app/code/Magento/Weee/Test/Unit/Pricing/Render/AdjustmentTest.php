@@ -115,7 +115,7 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
+            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getDisplayValue')
@@ -124,7 +124,7 @@ class AdjustmentTest extends TestCase
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getAmount')
@@ -146,7 +146,7 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
+            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
@@ -155,7 +155,7 @@ class AdjustmentTest extends TestCase
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
 
         $baseAmount->expects($this->any())
@@ -189,7 +189,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function showInclDescrDataProvider()
+    public static function showInclDescrDataProvider()
     {
         return [
             [Tax::DISPLAY_INCL, 1.23, false],
@@ -218,17 +218,17 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
+            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
+            ->onlyMethods(['__wakeup'])
             ->getMock();
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $baseAmount->expects($this->any())
             ->method('getValue')
@@ -260,7 +260,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function showExclDescrInclDataProvider()
+    public static function showExclDescrInclDataProvider()
     {
         return [
             [Tax::DISPLAY_INCL, 1.23, false],
@@ -289,7 +289,7 @@ class AdjustmentTest extends TestCase
         /** @var Amount $amountRender */
         $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
+            ->onlyMethods(['getSaleableItem', 'getDisplayValue', 'getAmount'])
             ->getMock();
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
@@ -298,7 +298,7 @@ class AdjustmentTest extends TestCase
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getAmount')
@@ -327,7 +327,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function getWeeeTaxAttributesDataProvider()
+    public static function getWeeeTaxAttributesDataProvider()
     {
         return [
             [Tax::DISPLAY_INCL, [1, 2, 3], []],
@@ -358,7 +358,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function renderWeeeTaxAttributeAmountDataProvider()
+    public static function renderWeeeTaxAttributeAmountDataProvider()
     {
         return [
             [new DataObject(['amount' => 51]), 51],
@@ -386,7 +386,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function renderWeeeTaxAttributeNameDataProvider()
+    public static function renderWeeeTaxAttributeNameDataProvider()
     {
         return [
             [new DataObject(['name' => 51]), 51],
@@ -414,7 +414,7 @@ class AdjustmentTest extends TestCase
      *
      * @return array
      */
-    public function renderWeeeTaxAttributeAmountWithTaxDataProvider()
+    public static function renderWeeeTaxAttributeAmountWithTaxDataProvider()
     {
         return [
             [new DataObject(['amount_excl_tax' => 50, 'tax_amount' => 5]), 55],

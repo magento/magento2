@@ -74,14 +74,14 @@ class DataConverterTest extends TestCase
         /** @var InQueryModifier $queryModifier */
         $this->queryModifierMock = $this->getMockBuilder(QueryModifierInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['modify'])
+            ->onlyMethods(['modify'])
             ->getMockForAbstractClass();
 
         $this->dataConverter = $this->objectManager->get(SerializedToJson::class);
 
         $this->iteratorMock = $this->getMockBuilder(BatchIterator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['current', 'valid', 'next'])
+            ->onlyMethods(['current', 'valid', 'next'])
             ->getMock();
 
         $iterationComplete = false;
@@ -102,12 +102,12 @@ class DataConverterTest extends TestCase
 
         $this->queryGeneratorMock = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate'])
+            ->onlyMethods(['generate'])
             ->getMock();
 
         $this->selectByRangeMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods([])
             ->getMock();
 
         $this->queryGeneratorMock->expects($this->any())
@@ -121,7 +121,7 @@ class DataConverterTest extends TestCase
 
         $this->adapterMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetchPairs', 'fetchAll', 'quoteInto', 'update', 'prepareSqlCondition'])
+            ->onlyMethods(['fetchPairs', 'fetchAll', 'quoteInto', 'update', 'prepareSqlCondition'])
             ->getMock();
 
         $this->adapterMock->expects($this->any())

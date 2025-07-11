@@ -102,9 +102,9 @@ class ShippingMethodManagement implements
         Cart\ShippingMethodConverter $converter,
         AddressRepositoryInterface $addressRepository,
         TotalsCollector $totalsCollector,
-        AddressInterfaceFactory $addressFactory = null,
-        QuoteAddressResource $quoteAddressResource = null,
-        CustomerSession $customerSession = null
+        ?AddressInterfaceFactory $addressFactory = null,
+        ?QuoteAddressResource $quoteAddressResource = null,
+        ?CustomerSession $customerSession = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;

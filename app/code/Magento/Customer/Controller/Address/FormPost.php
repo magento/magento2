@@ -86,7 +86,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         PageFactory $resultPageFactory,
         RegionFactory $regionFactory,
         HelperData $helperData,
-        Filesystem $filesystem = null
+        ?Filesystem $filesystem = null
     ) {
         $this->regionFactory = $regionFactory;
         $this->helperData = $helperData;

@@ -69,7 +69,8 @@ class CalculatorTest extends TestCase
 
         $productMock = $this->getMockBuilder(SaleableInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getPriceInfo'])
             ->getMockForAbstractClass();
 
         $weeeAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
@@ -136,7 +137,8 @@ class CalculatorTest extends TestCase
 
         $productMock = $this->getMockBuilder(SaleableInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getPriceInfo'])
             ->getMockForAbstractClass();
 
         $taxAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)

@@ -29,7 +29,8 @@ return [
             'isGuestCheckoutAllowed' => true,
             'sdkUrl' => 'http://mock.url',
             'dataAttributes' => [
-                'data-partner-attribution-id' => ''
+                'data-partner-attribution-id' => '',
+                'data-csp-nonce' => ''
             ]
         ]
     ],
@@ -56,7 +57,8 @@ return [
             'isGuestCheckoutAllowed' => true,
             'sdkUrl' => 'http://mock.url',
             'dataAttributes' => [
-                'data-partner-attribution-id' => ''
+                'data-partner-attribution-id' => '',
+                'data-csp-nonce' => ''
             ]
         ]
     ],
@@ -82,7 +84,8 @@ return [
             'isGuestCheckoutAllowed' => true,
             'sdkUrl' => 'http://mock.url',
             'dataAttributes' => [
-                'data-partner-attribution-id' => ''
+                'data-partner-attribution-id' => '',
+                'data-csp-nonce' => ''
             ]
         ]
     ],
@@ -108,7 +111,8 @@ return [
             'isGuestCheckoutAllowed' => true,
             'sdkUrl' => 'http://mock.url',
             'dataAttributes' => [
-                'data-partner-attribution-id' => ''
+                'data-partner-attribution-id' => '',
+                'data-csp-nonce' => ''
             ]
         ]
     ],

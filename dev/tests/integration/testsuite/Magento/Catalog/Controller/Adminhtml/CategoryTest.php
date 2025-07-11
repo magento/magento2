@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -153,7 +153,6 @@ class CategoryTest extends AbstractBackendController
         $categoryId = 3;
         $category = $this->categoryRepository->get($categoryId);
         $newUrlPath = 'test_url_path';
-        $defaultUrlPath = $category->getData('url_path');
 
         // update url_path and check it
         $category->setStoreId(1);
@@ -178,7 +177,7 @@ class CategoryTest extends AbstractBackendController
             MessageInterface::TYPE_SUCCESS
         );
         $category = $this->categoryRepository->get($categoryId);
-        $this->assertEquals($defaultUrlPath, $category->getData('url_key'));
+        $this->assertEquals($newUrlPath, $category->getData('url_key'));
     }
 
     /**
@@ -304,7 +303,7 @@ class CategoryTest extends AbstractBackendController
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function saveActionDataProvider(): array
+    public static function saveActionDataProvider(): array
     {
         $result = [
             'default values' => [
@@ -549,7 +548,7 @@ class CategoryTest extends AbstractBackendController
      *
      * @return array
      */
-    public function moveActionDataProvider(): array
+    public static function moveActionDataProvider(): array
     {
         return [
             [400, 401, 'first_url_key', 402, 'second_url_key', false],
@@ -596,7 +595,7 @@ class CategoryTest extends AbstractBackendController
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function saveActionWithDifferentWebsitesDataProvider(): array
+    public static function saveActionWithDifferentWebsitesDataProvider(): array
     {
         return [
             'default_values' => [

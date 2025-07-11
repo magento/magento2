@@ -25,4 +25,7 @@
     <event name="admin_system_config_changed_section_newrelicreporting">
         <observer name="newrelicreporting_observer_check_config" instance="Magento\NewRelicReporting\Model\Observer\CheckConfig"/>
     </event>
+    <event name="controller_front_send_response_before">
+        <observer name="newrelicreporting_observer_controller_front_send_response_before" instance="Magento\NewRelicReporting\Observer\DisableBrowserMonitoringAutomaticInjection" />
+    </event>
 </config>

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -284,5 +284,11 @@
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="updateStockChangedAuto" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler">
+        <plugin name="tier_price_update_handler_plugin" type="Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandlerPlugin" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
+        <plugin name="storeSpecificConfigurableProductFromParentId" type="Magento\ConfigurableProduct\Plugin\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider\GetProductChildIds"/>
     </type>
 </config>

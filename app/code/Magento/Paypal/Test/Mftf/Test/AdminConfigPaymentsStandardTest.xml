@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigPaymentsStandardTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Configuration for paypal pay later on Category Page"/>
+            <description value="Paypal Pay Later Message should display on Admin Category Page configuration"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5639"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!--Config PayPal Standard-->
+            <actionGroup ref="AdminPayPalStandardEnableActionGroup" stepKey="ConfigPayPalStandard"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminEnablePaypalStandardPaylaterActionGroup" stepKey="enablePaypalStandard"/>
+        <actionGroup ref="AssertAdminPaypalStandardPaylaterDefaultValuesCartPageActionGroup" stepKey="verifyPaylaterDropdownValues"/>
+        <!-- Reindex and cache flush -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanMagentoCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!--Navigate to Storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="goToStoreFront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontPaypalPaylaterActionGroup" stepKey="verifyPaylaterInStorefrontCategoryPage"/>
+        <!--Disable Paypal Standard-->
+        <magentoCLI command="config:set {{DisablePaypalPayStandard.path}} {{DisablePaypalPayStandard.value}}" stepKey="disablePayPalStandard"/>
+        <!-- Reindex and cache flush -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex1">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanMagentoCache1">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!--Validate Paylater Message On Storefront Category Page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontPage"/>
+        <waitForPageLoad stepKey="waitForItemPage"/>
+        <waitForElementClickable selector="{{AdminPaypalStandardConfigSection.categoryClick}}" stepKey="waitForCategoryToBeClickable"/>
+        <click selector ="{{AdminPaypalStandardConfigSection.categoryClick}}" stepKey="clickCatagoryTab"/>
+        <waitForPageLoad stepKey="waitForCategoryPageTobeLoaded"/>
+        <waitForElementNotVisible selector="{{AdminPaypalStandardConfigSection.paypalPaylaterMessage}}"  stepKey="verifyPaylaterMessageToBeDisappeared"/>
+    </test>
+</tests>

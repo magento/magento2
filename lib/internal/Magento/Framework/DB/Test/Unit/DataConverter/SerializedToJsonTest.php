@@ -44,7 +44,7 @@ class SerializedToJsonTest extends TestCase
      * @case #2 - Serialized 2.203 with serialize_precision = 17 (default for PHP version < 7.1.0 )
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             1 => ['serializedData' => 'a:1:{i:0;d:0.12345678901234568;}', 'expectedJson' => '[0.12345678901234568]'],

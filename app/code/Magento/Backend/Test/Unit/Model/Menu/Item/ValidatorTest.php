@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,7 +88,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function requiredParamsProvider()
+    public static function requiredParamsProvider()
     {
         return [['id'], ['title'], ['resource']];
     }
@@ -114,7 +114,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function invalidParamsProvider()
+    public static function invalidParamsProvider()
     {
         return [
             ['id', 'ab'],
@@ -161,7 +161,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function duplicateIdsProvider()
+    public static function duplicateIdsProvider()
     {
         return [
             [

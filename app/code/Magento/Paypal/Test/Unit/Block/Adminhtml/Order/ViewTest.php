@@ -113,7 +113,7 @@ class ViewTest extends TestCase
      *
      * @return array
      */
-    public function orderDataProvider(): array
+    public static function orderDataProvider(): array
     {
         return [
             [true, false, false, true, Order::STATE_PROCESSING, false],

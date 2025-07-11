@@ -157,11 +157,11 @@ class Payment extends Info implements OrderPaymentInterface
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Sales\Model\Order\Payment\Processor $paymentProcessor,
         OrderRepositoryInterface $orderRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CreditmemoManager $creditmemoManager = null,
-        SaleOperation $saleOperation = null
+        ?CreditmemoManager $creditmemoManager = null,
+        ?SaleOperation $saleOperation = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->creditmemoFactory = $creditmemoFactory;

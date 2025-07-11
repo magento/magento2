@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -241,7 +241,7 @@ class Filter extends Template
         $variables = [],
         array $directiveProcessors = [],
         ?StoreInformation $storeInformation = null,
-        StateInterface $inlineTranslationState = null
+        ?StateInterface $inlineTranslationState = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -430,6 +430,10 @@ class Filter extends Template
                 continue;
             }
             $block->setDataUsingMethod($k, $v);
+        }
+
+        if (!$block->hasData('cache_key')) {
+            $block->setDataUsingMethod('cache_key', $block->getCacheKey());
         }
 
         if (isset($blockParameters['output'])) {

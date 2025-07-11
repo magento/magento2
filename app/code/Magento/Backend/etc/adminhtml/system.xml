@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="general" translate="label" sortOrder="100">
             <label>General</label>
+        </tab>
+        <tab id="security" translate="label" sortOrder="200">
+            <label>Security</label>
         </tab>
         <tab id="service" translate="label" sortOrder="99999">
             <label>Services</label>

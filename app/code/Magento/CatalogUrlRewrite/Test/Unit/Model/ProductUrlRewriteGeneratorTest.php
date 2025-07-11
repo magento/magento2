@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -180,8 +180,15 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ->getMock();
         $productCategoriesMock->expects($this->exactly(2))
             ->method('addAttributeToSelect')
-            ->withConsecutive(['url_key'], ['url_path'])
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg) use ($productCategoriesMock) {
+                    if ($arg == 'url_key') {
+                        return $productCategoriesMock;
+                    } elseif ($arg == 'url_path') {
+                        return $productCategoriesMock;
+                    }
+                }
+            );
         $productMock->expects($this->once())
             ->method('getCategoryCollection')
             ->willReturn($productCategoriesMock);

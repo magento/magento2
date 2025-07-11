@@ -127,20 +127,20 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function aroundSaveDataProvider(): array
+    public static function aroundSaveDataProvider(): array
     {
         return [
             'with_new_name' => [
                 'destination' => 'destination/',
-                'new_destination' => 'destination/new_name.file',
-                'new_name' => 'new_name.file',
-                'old_name' => null
+                'newDestination' => 'destination/new_name.file',
+                'newName' => 'new_name.file',
+                'oldName' => null
             ],
             'with_old_name' => [
                 'destination' => 'destination/',
-                'new_destination' => 'destination/old_name.file',
-                'new_name' => null,
-                'old_name' => 'old_name.file'
+                'newDestination' => 'destination/old_name.file',
+                'newName' => null,
+                'oldName' => 'old_name.file'
             ]
         ];
     }

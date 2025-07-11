@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,9 @@ namespace Magento\Customer\Test\Unit\Model\ResourceModel\Db\VersionControl;
 
 use Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata;
+use Magento\Framework\Serialize\SerializerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,22 +20,30 @@ class AddressSnapshotTest extends TestCase
     /**
      * @var AddressSnapshot
      */
-    private $model;
+    private AddressSnapshot $model;
 
     /**
      * @var Metadata|MockObject
      */
-    private $metadataMock;
+    private Metadata $metadataMock;
 
+    /**
+     * @var SerializerInterface|MockObject
+     */
+    private SerializerInterface $serializer;
+
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     protected function setUp(): void
     {
-        $this->metadataMock = $this->getMockBuilder(
-            Metadata::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataMock = $this->createMock(Metadata::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
 
         $this->model = new AddressSnapshot(
-            $this->metadataMock
+            $this->metadataMock,
+            $this->serializer
         );
     }
 
@@ -43,13 +53,10 @@ class AddressSnapshotTest extends TestCase
      * @param int $isDefaultShipping
      * @param bool $expected
      * @dataProvider dataProviderIsModified
+     * @throws LocalizedException
      */
-    public function testIsModified(
-        $isCustomerSaveTransaction,
-        $isDefaultBilling,
-        $isDefaultShipping,
-        $expected
-    ) {
+    public function testIsModified($isCustomerSaveTransaction, $isDefaultBilling, $isDefaultShipping, $expected): void
+    {
         $entityId = 1;
 
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
@@ -96,7 +103,7 @@ class AddressSnapshotTest extends TestCase
     /**
      * @return array
      */
-    public static function dataProviderIsModified()
+    public static function dataProviderIsModified(): array
     {
         return [
             [false, 1, 1, true],
@@ -106,7 +113,11 @@ class AddressSnapshotTest extends TestCase
         ];
     }
 
-    public function testIsModifiedBypass()
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testIsModifiedBypass(): void
     {
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()

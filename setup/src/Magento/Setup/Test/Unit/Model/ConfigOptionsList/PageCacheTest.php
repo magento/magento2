@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class PageCacheTest extends TestCase
     public function testGetOptions()
     {
         $options = $this->configList->getOptions();
-        $this->assertCount(8, $options);
+        $this->assertCount(14, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -78,6 +78,30 @@ class PageCacheTest extends TestCase
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
         $this->assertEquals('page-cache-id-prefix', $options[7]->getName());
+
+        $this->assertArrayHasKey(8, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[8]);
+        $this->assertEquals('page-cache-valkey-server', $options[8]->getName());
+
+        $this->assertArrayHasKey(9, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[9]);
+        $this->assertEquals('page-cache-valkey-db', $options[9]->getName());
+
+        $this->assertArrayHasKey(10, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[10]);
+        $this->assertEquals('page-cache-valkey-port', $options[10]->getName());
+
+        $this->assertArrayHasKey(11, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[11]);
+        $this->assertEquals('page-cache-valkey-password', $options[11]->getName());
+
+        $this->assertArrayHasKey(12, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[12]);
+        $this->assertEquals('page-cache-valkey-compress-data', $options[12]->getName());
+
+        $this->assertArrayHasKey(13, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[13]);
+        $this->assertEquals('page-cache-valkey-compression-lib', $options[13]->getName());
     }
 
     /**
@@ -113,26 +137,29 @@ class PageCacheTest extends TestCase
 
     /**
      * testCreateConfigWithRedisConfiguration
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testCreateConfigWithRedisConfiguration()
     {
-        $this->deploymentConfigMock->method('get')->withConsecutive(
-            [PageCache::CONFIG_PATH_PAGE_CACHE_ID_PREFIX],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER, '127.0.0.1'],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE, '1'],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT, '6379'],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD, ''],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA, '0'],
-            [PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB, '']
-        )->willReturnOnConsecutiveCalls(
-            'XXX_',
-            '127.0.0.1',
-            '1',
-            '6379',
-            '',
-            '0',
-            ''
-        );
+        $this->deploymentConfigMock->method('get')
+            ->willReturnCallback(function ($arg1, $arg2 = null) {
+                if ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_ID_PREFIX) {
+                    return 'XXX_';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER && $arg2 == '127.0.0.1') {
+                    return '127.0.0.1';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_DATABASE && $arg2 == '1') {
+                    return '1';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT && $arg2 == '6379') {
+                    return '6379';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD && $arg2 == '') {
+                    return '';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA && $arg2 == '0') {
+                    return '0';
+                } elseif ($arg1 == PageCache::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB && $arg2 == '') {
+                    return '';
+                }
+            });
 
         $expectedConfigData = [
             'cache' => [
@@ -225,7 +252,8 @@ class PageCacheTest extends TestCase
 
         $options = [
             'page-cache' => 'redis',
-            'page-cache-redis-db' => '2'
+            'page-cache-redis-db' => '2',
+            'cache-backend' => 'redis'
         ];
 
         $errors = $this->configList->validate($options, $this->deploymentConfigMock);

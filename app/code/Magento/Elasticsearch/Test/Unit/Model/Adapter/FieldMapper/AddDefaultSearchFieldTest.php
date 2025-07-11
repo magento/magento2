@@ -33,7 +33,7 @@ class AddDefaultSearchFieldTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             '_search field should be prepended if not exist' => [

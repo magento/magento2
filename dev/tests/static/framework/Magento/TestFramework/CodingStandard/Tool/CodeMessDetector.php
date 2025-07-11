@@ -52,7 +52,7 @@ class CodeMessDetector implements ToolInterface
     public function run(array $whiteList)
     {
         if (empty($whiteList)) {
-            return \PHPMD\TextUI\Command::EXIT_SUCCESS;
+            return \PHPMD\TextUI\ExitCode::Success;
         }
 
         $commandLineArguments = [

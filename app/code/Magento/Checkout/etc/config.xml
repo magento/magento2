@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -56,5 +56,20 @@
                 </shown_to_logged_in_user>
             </captcha>
         </customer>
+        <csp>
+            <mode>
+                <storefront_checkout_index_index>
+                    <report_only>0</report_only>
+                </storefront_checkout_index_index>
+            </mode>
+            <policies>
+                <storefront_checkout_index_index>
+                    <scripts>
+                        <inline>0</inline>
+                        <event_handlers>1</event_handlers>
+                    </scripts>
+                </storefront_checkout_index_index>
+            </policies>
+        </csp>
     </default>
 </config>

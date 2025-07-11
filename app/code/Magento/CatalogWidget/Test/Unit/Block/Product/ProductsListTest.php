@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,7 +29,6 @@ use Magento\Rule\Model\Condition\Combine;
 use Magento\Rule\Model\Condition\Sql\Builder;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-
 use Magento\Widget\Helper\Conditions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -137,7 +136,7 @@ class ProductsListTest extends TestCase
                 'conditionsHelper' => $this->widgetConditionsHelper,
                 'storeManager' => $this->storeManager,
                 'design' => $this->design,
-                'json' => $this->serializer
+                'json' => $this->serializer,
             ]
         );
         $this->request = $arguments['context']->getRequest();
@@ -165,11 +164,13 @@ class ProductsListTest extends TestCase
 
         $this->httpContext->expects($this->exactly(2))
             ->method('getValue')
-            ->withConsecutive(
-                [$this->equalTo(\Magento\Customer\Model\Context::CONTEXT_GROUP)],
-                [$this->equalTo('tax_rates')]
-            )
-            ->willReturnOnConsecutiveCalls('context_group', [10]);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == \Magento\Customer\Model\Context::CONTEXT_GROUP) {
+                    return 'context_group';
+                } elseif ($arg == 'tax_rates') {
+                    return [10];
+                }
+            });
 
         $this->productsList->setData('conditions', 'some_serialized_conditions');
 

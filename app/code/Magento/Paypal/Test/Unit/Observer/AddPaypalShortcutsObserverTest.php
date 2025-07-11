@@ -183,7 +183,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
     {
         return [
             [
-                'blocks1' => [
+                'blocks' => [
                     MinicartButton::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => true,
@@ -207,7 +207,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
                 ]
             ],
             [
-                'blocks2' => [
+                'blocks' => [
                     MinicartButton::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => false,
