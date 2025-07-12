@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\Indexer;
@@ -123,8 +123,8 @@ class Fulltext implements
         IndexSwitcherInterface $indexSwitcher,
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
-        array $data,
-        ProcessManager $processManager = null,
+        array $data = [],
+        ?ProcessManager $processManager = null,
         ?int $batchSize = null,
         ?DeploymentConfig $deploymentConfig = null
     ) {
@@ -160,7 +160,7 @@ class Fulltext implements
      * @throws \InvalidArgumentException|\Exception
      * @since 101.0.0
      */
-    public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
+    public function executeByDimensions(array $dimensions, ?\Traversable $entityIds = null)
     {
         if (count($dimensions) > 1 || !isset($dimensions[StoreDimensionProvider::DIMENSION_NAME])) {
             throw new \InvalidArgumentException('Indexer "' . self::INDEXER_ID . '" support only Store dimension');

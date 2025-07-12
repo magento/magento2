@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All rights reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -60,5 +60,10 @@
                 <item name="default" xsi:type="string">Magento\Ui\Model\UrlInput\Url</item>
             </argument>
         </arguments>
+    </type>
+
+    <!-- Plugin to automatically convert row1/row2/row3 format to numerically indexed arrays -->
+    <type name="Magento\Config\Model\Config\Backend\Serialized\ArraySerialized">
+        <plugin name="ui_array_serialized_plugin" type="Magento\Ui\Plugin\Config\Backend\ArraySerializedPlugin" />
     </type>
 </config>

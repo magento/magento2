@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedSearch\Model\Adapter\DataMapper;
 
@@ -25,7 +25,7 @@ class AdditionalFieldsProvider implements AdditionalFieldsProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getFields(array $productIds, $storeId)
     {

@@ -75,9 +75,9 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        Json $serializer = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?Json $serializer = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
@@ -175,7 +175,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         $customerGroupId,
         $couponCode = '',
         $now = null,
-        Address $address = null,
+        ?Address $address = null,
         array $couponCodes = []
     ) {
         if ($this->getFlag('validation_filter')) {

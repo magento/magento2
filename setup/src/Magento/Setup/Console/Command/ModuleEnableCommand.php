@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Console\Command;
 
@@ -10,12 +10,14 @@ namespace Magento\Setup\Console\Command;
  */
 class ModuleEnableCommand extends AbstractModuleManageCommand
 {
+    public const NAME = 'module:enable';
+
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('module:enable')
+        $this->setName(self::NAME)
             ->setDescription('Enables specified modules');
         parent::configure();
     }

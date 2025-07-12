@@ -57,9 +57,9 @@ class Render extends AbstractAction
         Context $context,
         UiComponentFactory $factory,
         UiComponentTypeResolver $contentTypeResolver,
-        JsonFactory $resultJsonFactory = null,
-        Escaper $escaper = null,
-        LoggerInterface $logger = null
+        ?JsonFactory $resultJsonFactory = null,
+        ?Escaper $escaper = null,
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($context, $factory);
         $this->contentTypeResolver = $contentTypeResolver;

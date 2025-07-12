@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -82,6 +82,7 @@
             <argument name="discountCode" value="{{CatPriceRule.coupon_code}}"/>
         </actionGroup>
         <!--  Assert order cannot be placed and error message will shown. -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectDefaultPaymentMethod"/>
         <actionGroup ref="AssertStorefrontOrderIsNotPlacedActionGroup" stepKey="seeShippingMethodError">
             <argument name="error" value="The shipping method is missing. Select the shipping method and try again."/>
         </actionGroup>

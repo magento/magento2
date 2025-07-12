@@ -56,7 +56,7 @@ class DataProviderFactory
      */
     public function create(
         DataProviderInterface $dataProvider,
-        QueryContainer $query = null,
+        ?QueryContainer $query = null,
         ?string $aggregationFieldName = null
     ) {
         $result = $dataProvider;

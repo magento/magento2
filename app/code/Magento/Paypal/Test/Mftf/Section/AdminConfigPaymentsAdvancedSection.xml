@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigPaymentsAdvancedSection">
+        <element name="paymentsAdvanced" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced-head" parameterized="true"/>
+        <element name="paymentsPro" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wpp_usuk-head" parameterized="true"/>
+        <element name="paymentsStandard" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_wps_express-head" parameterized="true"/>
+        <element name="email" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_business_account" parameterized="true"/>
+        <element name="partner" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_partner" parameterized="true"/>
+        <element name="user" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_user" parameterized="true"/>
+        <element name="vendor" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_vendor" parameterized="true"/>
+        <element name="password" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_pwd" parameterized="true"/>
+        <element name="testMode" type="select" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_payments_advanced_sandbox_flag" parameterized="true" />
+        <element name="paypalAllInOne" type="input" selector="//*[contains(@id, 'payment_{{countryCode}}_paypal_group_all_in_one-head')]" parameterized="true" />
+        <element name="paypalPaymentGatewayLink" type="button" selector="//*[contains(@id, 'payment_{{countryCode}}_paypal_payment_gateways-head')]" parameterized="true" />
+        <element name="enableSolution" type="select" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_payflow_advanced" parameterized="true"/>
+        <element name="greenCheckMrk" type="select" selector="//*[contains(@id,'payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_payflow_advanced')]//label[@class='enabled']" parameterized="true"/>
+        <element name="enablePaypalCredit" type="select" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_express_checkout_bml" parameterized="true"/>
+        <element name="disabledPaypalCredit" type="select" selector="//select[contains(@id,'payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_express_checkout_bml')]//label[@class='enabled']" parameterized="true"/>
+        <element name="enabledSolution" type="select" selector="//select[contains(@id,'payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_payflow_advanced')]//label[@class='enabled']" parameterized="true"/>
+        <element name="enabledPaypalCredit" type="select" selector="//select[contains(@id,'payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_express_checkout_bml')]//label[@class='enabled']" parameterized="true"/>
+        <element name="solution" type="select" selector="//select[contains(@id,'payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_payflow_advanced')]//label[@class='disabled']" parameterized="true"/>
+        <element name="paypalCredit" type="select" selector="//select[contains(@id,'payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_enable_express_checkout_bml')]//label[@class='disabled']" parameterized="true"/>
+        <element name="payFlowEdition" type="button" selector="//span[contains(text(), 'PayPal Express Checkout Payflow Edition')]"/>
+        <element name="payFlowExpress" type="button" selector="//span[contains(text(), 'PayPal Credit (Payflow Express Bml)')]"/>
+        <element name="creditCardPayflowAdvanced" type="button" selector="//span[contains(text(), 'Credit Card (Payflow Advanced)')]"/>
+        <element name="sortOrder" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_express_checkout_bml_sort_order" parameterized="true"/>
+        <element name="closeButton" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced-head span[class='state-opened']" parameterized="true"/>
+    </section>
+</sections>

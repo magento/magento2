@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -171,10 +171,12 @@ class QueueTest extends TestCase
 
     /**
      * Test for getMessages method.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @return void
      */
-    public function testGetMessages()
+    public function testGetMessages(): void
     {
         $limit = 100;
         $queueName = 'queueName0';
@@ -261,7 +263,6 @@ class QueueTest extends TestCase
      */
     public function testDeleteMarkedMessages()
     {
-        $messageIds = [1, 2];
         $tableNames = ['queue_message_status', 'queue_message'];
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
@@ -284,13 +285,24 @@ class QueueTest extends TestCase
         $connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())
             ->method('from')->with(['queue_message_status' => $tableNames[0]], ['message_id'])->willReturnSelf();
-        $select->expects($this->once())->method('where')
-            ->with('status <> ?', QueueManagement::MESSAGE_STATUS_TO_BE_DELETED)
+        $select->expects($this->once())->method('joinLeft')
+            ->with(
+                ['message_status2' => 'queue_message_status'],
+                'queue_message_status.message_id = message_status2.message_id AND message_status2.status <> ' .
+                QueueManagement::MESSAGE_STATUS_TO_BE_DELETED,
+                []
+            )
+            ->willReturnSelf();
+        $select->expects($this->exactly(2))->method('where')
             ->willReturnSelf();
         $select->expects($this->once())->method('distinct')->willReturnSelf();
-        $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($messageIds);
+        $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn([1, 2]);
+
         $connection->expects($this->once())->method('delete')
-            ->with($tableNames[1], ['id NOT IN (?)' => $messageIds])->willReturn(2);
+            ->with(
+                $tableNames[1],
+                ['id IN (?)' => [1,2]]
+            )->willReturn(2);
         $this->queue->deleteMarkedMessages();
     }
 

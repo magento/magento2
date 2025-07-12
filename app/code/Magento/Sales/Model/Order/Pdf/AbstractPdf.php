@@ -177,7 +177,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = [],
-        Database $fileStorageDatabase = null,
+        ?Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
         ?Image $image = null,
         ?TaxHelper $taxHelper = null

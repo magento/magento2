@@ -34,7 +34,7 @@ class ReportException
     public function beforeCheck(
         ExceptionFormatter $subject,
         \Throwable $exception,
-        string $internalErrorMessage = null
+        ?string $internalErrorMessage = null
     ) {
         $this->newRelicWrapper->reportError($exception);
         return null;

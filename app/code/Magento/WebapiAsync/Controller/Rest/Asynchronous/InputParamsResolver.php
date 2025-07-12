@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Controller\Rest\Asynchronous;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\ServiceInputProcessor;
@@ -24,6 +26,8 @@ use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
  * This class is responsible for retrieving resolved input data
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InputParamsResolver
 {
@@ -62,6 +66,16 @@ class InputParamsResolver
     private $inputArraySizeLimitValue;
 
     /**
+     * @var MethodsMap
+     */
+    private $methodsMap;
+
+    /**
+     * @var array
+     */
+    private array $inputData = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param RestRequest $request
@@ -72,6 +86,7 @@ class InputParamsResolver
      * @param WebapiInputParamsResolver $inputParamsResolver
      * @param bool $isBulk
      * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
+     * @param MethodsMap|null $methodsMap
      */
     public function __construct(
         RestRequest $request,
@@ -81,7 +96,8 @@ class InputParamsResolver
         RequestValidator $requestValidator,
         WebapiInputParamsResolver $inputParamsResolver,
         bool $isBulk = false,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null,
+        ?MethodsMap $methodsMap = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -92,6 +108,8 @@ class InputParamsResolver
         $this->isBulk = $isBulk;
         $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
                 ->get(InputArraySizeLimitValue::class);
+        $this->methodsMap = $methodsMap ?? ObjectManager::getInstance()
+            ->get(MethodsMap::class);
     }
 
     /**
@@ -119,7 +137,19 @@ class InputParamsResolver
         $routeServiceMethod = $route->getServiceMethod();
         $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
 
+        if (!array_is_list($inputData)) {
+            throw new Exception(
+                __('Request body must be an array'),
+            );
+        }
+
+        $this->validateParameters($routeServiceClass, $routeServiceMethod, array_keys($route->getParameters()));
+
         foreach ($inputData as $key => $singleEntityParams) {
+            if (!is_array($singleEntityParams)) {
+                continue;
+            }
+
             $webapiResolvedParams[$key] = $this->resolveBulkItemParams(
                 $singleEntityParams,
                 $routeServiceClass,
@@ -137,17 +167,36 @@ class InputParamsResolver
      */
     public function getInputData()
     {
+        if (!empty($this->inputData)) {
+            return $this->inputData;
+        }
+
         if ($this->isBulk === false) {
-            return [$this->inputParamsResolver->getInputData()];
+            $this->inputData = [$this->inputParamsResolver->getInputData()];
+
+            return $this->inputData;
         }
         $inputData = $this->request->getRequestData();
 
         $httpMethod = $this->request->getHttpMethod();
-        if ($httpMethod == RestRequest::HTTP_METHOD_DELETE) {
+        if ($httpMethod === RestRequest::HTTP_METHOD_DELETE) {
             $requestBodyParams = $this->request->getBodyParams();
             $inputData = array_merge($requestBodyParams, $inputData);
         }
-        return $inputData;
+
+        $this->inputData = array_map(function ($singleEntityParams) {
+            if (is_array($singleEntityParams)) {
+                $singleEntityParams = $this->filterInputData($singleEntityParams);
+                $singleEntityParams = $this->paramsOverrider->override(
+                    $singleEntityParams,
+                    $this->getRoute()->getParameters()
+                );
+            }
+
+            return $singleEntityParams;
+        }, $inputData);
+
+        return $this->inputData;
     }
 
     /**
@@ -179,5 +228,65 @@ class InputParamsResolver
     private function resolveBulkItemParams(array $inputData, string $serviceClass, string $serviceMethod): array
     {
         return $this->serviceInputProcessor->process($serviceClass, $serviceMethod, $inputData);
+    }
+
+    /**
+     * Validates InputData
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterInputData(array $inputData): array
+    {
+        $result = [];
+
+        $data = array_filter($inputData, function ($k) use (&$result) {
+            $key = is_string($k) ? strtolower(str_replace('_', "", $k)) : $k;
+            return !isset($result[$key]) && ($result[$key] = true);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return array_map(function ($value) {
+            return is_array($value) ? $this->filterInputData($value) : $value;
+        }, $data);
+    }
+
+    /**
+     * Validate that parameters are really used in the current request.
+     *
+     * @param string $serviceClassName
+     * @param string $serviceMethodName
+     * @param array $paramOverriders
+     */
+    private function validateParameters(
+        string $serviceClassName,
+        string $serviceMethodName,
+        array $paramOverriders
+    ): void {
+        $methodParams = $this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName);
+        foreach ($paramOverriders as $key => $param) {
+            $arrayKeys = explode('.', $param ?? '');
+            $value = array_shift($arrayKeys);
+
+            foreach ($methodParams as $serviceMethodParam) {
+                $serviceMethodParamName = $serviceMethodParam[MethodsMap::METHOD_META_NAME];
+                $serviceMethodType = $serviceMethodParam[MethodsMap::METHOD_META_TYPE];
+
+                $camelCaseValue = SimpleDataObjectConverter::snakeCaseToCamelCase($value);
+                if ($serviceMethodParamName === $value || $serviceMethodParamName === $camelCaseValue) {
+                    if (count($arrayKeys) > 0) {
+                        $camelCaseKey = SimpleDataObjectConverter::snakeCaseToCamelCase('set_' . $arrayKeys[0]);
+                        $this->validateParameters($serviceMethodType, $camelCaseKey, [implode('.', $arrayKeys)]);
+                    }
+                    unset($paramOverriders[$key]);
+                    break;
+                }
+            }
+        }
+
+        if (!empty($paramOverriders)) {
+             $message = 'The current request does not expect the next parameters: '
+                 . implode(', ', $paramOverriders);
+             throw new \UnexpectedValueException(__($message)->__toString());
+        }
     }
 }

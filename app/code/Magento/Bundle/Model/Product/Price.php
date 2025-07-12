@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Model\Product;
 
@@ -9,6 +9,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+use Magento\Catalog\Model\Pricing\SpecialPriceService;
 
 /**
  * Bundle product type price model
@@ -23,12 +24,12 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     /**
      * Fixed bundle price type
      */
-    const PRICE_TYPE_FIXED = 1;
+    public const PRICE_TYPE_FIXED = 1;
 
     /**
      * Dynamic bundle price type
      */
-    const PRICE_TYPE_DYNAMIC = 0;
+    public const PRICE_TYPE_DYNAMIC = 0;
 
     /**
      * Flag which indicates - is min/max prices have been calculated by index
@@ -38,7 +39,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     protected $_isPricesCalculatedByIndex;
 
     /**
-     * Catalog data
+     * Catalog data variable
      *
      * @var \Magento\Catalog\Helper\Data
      */
@@ -66,6 +67,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
+     * @param SpecialPriceService|null $specialPriceService
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -79,8 +81,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null,
+        ?SpecialPriceService $specialPriceService = null
     ) {
         $this->_catalogData = $catalogData;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
@@ -95,7 +98,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             $groupManagement,
             $tierPriceFactory,
             $config,
-            $tierPriceExtensionFactory
+            $tierPriceExtensionFactory,
+            $specialPriceService
         );
     }
 
@@ -342,7 +346,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
                             $prices[] = $valuePrice;
                         }
-                        if (empty($prices)) {
+                        if (count($prices) === 0) {
                             continue;
                         }
 
@@ -629,6 +633,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         $store = null
     ) {
         if ($specialPrice !== null && $specialPrice != false) {
+
+            $specialPriceTo = $this->getSpecialPriceService()->execute($specialPriceTo);
+
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
                 $specialPrice = $finalPrice * ($specialPrice / 100);
                 $finalPrice = min($finalPrice, $specialPrice);

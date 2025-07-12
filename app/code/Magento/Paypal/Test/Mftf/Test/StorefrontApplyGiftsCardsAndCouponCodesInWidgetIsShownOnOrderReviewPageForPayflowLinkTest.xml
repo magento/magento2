@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyGiftsCardsAndCouponCodesInWidgetIsShownOnOrderReviewPageForPayflowLinkTest">
+        <annotations>
+            <features value="Payments"/>
+            <stories value="Payflow link"/>
+            <title value="Apply gift cards or promo codes widget is shown on Order review page for Payflow link"/>
+            <description value="As a guest, apply coupon and gift card while placing an order through paypal payflow link"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4378"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminEnablePayPalPayFlowLinkActionGroup" stepKey="ConfigPayPalPayFlowLink" after="createCartPriceRule">
+                <argument name="credentials" value="SamplePaypalPaymentsFlowLinkConfig"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminDisablePayPalPayFlowLinkActionGroup" stepKey="disablePayPalPayFlow" after="deleteCustomer"/>
+        </after>
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="LoginToPayPal" after="clickPayPalBtn"/>
+        <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod" after="waitForPageLoad"/>
+        <waitForElementClickable selector="{{StorefrontPayPalOrderReviewSection.applyDiscountCodeHeader}}" stepKey="waitForDiscountHeaderToBeClickable" after="selectShippingMethod"/>
+        <click selector="{{StorefrontPayPalOrderReviewSection.applyDiscountCodeHeader}}" stepKey="clickDiscountHeader" after="waitForDiscountHeaderToBeClickable"/>
+        <waitForElementVisible selector="{{StorefrontPayPalOrderReviewSection.discountCodeField}}" stepKey="waitForDiscountCodeFieldToBeVisible" after="clickDiscountHeader"/>
+        <fillField selector="{{StorefrontPayPalOrderReviewSection.discountCodeField}}" userInput="{{CatPriceRule.coupon_code}}" stepKey="fillDiscountCodeField" after="waitForDiscountCodeFieldToBeVisible"/>
+        <waitForElementClickable selector="{{StorefrontPayPalOrderReviewSection.applyDiscount}}" stepKey="waitForApplyDiscountToBeClickable" after="fillDiscountCodeField"/>
+        <click selector="{{StorefrontPayPalOrderReviewSection.applyDiscount}}" stepKey="clickApplyDiscount" after="waitForApplyDiscountToBeClickable"/>
+        <waitForPageLoad stepKey="waitForCouponToBeApplied" after="clickApplyDiscount"/>
+        <waitForElement selector="{{StorefrontPayPalOrderReviewSection.grandTotal('$95.00')}}" stepKey="assertTotalAfterDiscountApplied" after="waitForCouponToBeApplied"/>
+    </test>
+</tests>

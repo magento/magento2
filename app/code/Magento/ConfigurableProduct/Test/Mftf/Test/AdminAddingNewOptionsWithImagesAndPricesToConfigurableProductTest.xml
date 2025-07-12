@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -73,17 +73,17 @@
 
         <!-- Add images to configurable product attribute options -->
         <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionOne">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="TestImageNew"/>
             <argument name="frontend_label" value="$$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$"/>
             <argument name="label" value="$$getConfigAttributeOption1CreateConfigurableProduct.label$$"/>
         </actionGroup>
         <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionTwo">
-            <argument name="image" value="ImageUpload_1"/>
+            <argument name="image" value="TestImageAdobe"/>
             <argument name="frontend_label" value="$$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$"/>
             <argument name="label" value="$$getConfigAttributeOption2CreateConfigurableProduct.label$$"/>
         </actionGroup>
         <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionThree">
-            <argument name="image" value="ImageUpload3"/>
+            <argument name="image" value="MagentoLogo"/>
             <argument name="frontend_label" value="$$createConfigProductAttributeCreateConfigurableProduct.default_frontend_label$$"/>
             <argument name="label" value="{{colorDefaultProductAttribute1.name}}"/>
         </actionGroup>
@@ -114,24 +114,28 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
             <argument name="indices" value=""/>
         </actionGroup>
+        <!--Clean cache-->
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Go to frontend and check image and price-->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
 
         <actionGroup ref="AssertOptionImageAndPriceInStorefrontProductActionGroup" stepKey="assertFirstOptionImageAndPriceInStorefrontProductPage">
             <argument name="label" value="$$getConfigAttributeOption1CreateConfigurableProduct.label$$"/>
-            <argument name="image" value="{{ImageUpload.filename}}"/>
+            <argument name="image" value="{{TestImageNew.filename}}"/>
             <argument name="price" value="10"/>
         </actionGroup>
 
         <actionGroup ref="AssertOptionImageAndPriceInStorefrontProductActionGroup" stepKey="assertSecondOptionImageAndPriceInStorefrontProductPage">
             <argument name="label" value="$$getConfigAttributeOption2CreateConfigurableProduct.label$$"/>
-            <argument name="image" value="{{ImageUpload_1.filename}}"/>
+            <argument name="image" value="{{TestImageAdobe.filename}}"/>
             <argument name="price" value="20"/>
         </actionGroup>
 
         <actionGroup ref="AssertOptionImageAndPriceInStorefrontProductActionGroup" stepKey="assertThirdOptionImageAndPriceInStorefrontProductPage">
             <argument name="label" value="{{colorDefaultProductAttribute1.name}}"/>
-            <argument name="image" value="{{ImageUpload3.filename}}"/>
+            <argument name="image" value="{{MagentoLogo.filename}}"/>
             <argument name="price" value="30"/>
         </actionGroup>
     </test>

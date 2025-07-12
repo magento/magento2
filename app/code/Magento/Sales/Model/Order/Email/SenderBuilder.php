@@ -42,7 +42,7 @@ class SenderBuilder
         Template $templateContainer,
         IdentityInterface $identityContainer,
         TransportBuilder $transportBuilder,
-        TransportBuilderByStore $transportBuilderByStore = null
+        ?TransportBuilderByStore $transportBuilderByStore = null
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;

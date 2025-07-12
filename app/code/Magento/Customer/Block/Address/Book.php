@@ -60,13 +60,13 @@ class Book extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository = null,
+        ?\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Customer\Model\Address\Config $addressConfig,
         Mapper $addressMapper,
         array $data = [],
-        Grid $addressesGrid = null
+        ?Grid $addressesGrid = null
     ) {
         $this->currentCustomer = $currentCustomer;
         $this->addressRepository = $addressRepository;
@@ -177,7 +177,7 @@ class Book extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
      */
-    public function getAddressHtml(\Magento\Customer\Api\Data\AddressInterface $address = null)
+    public function getAddressHtml(?\Magento\Customer\Api\Data\AddressInterface $address = null)
     {
         if ($address !== null) {
             /** @var \Magento\Customer\Block\Address\Renderer\RendererInterface $renderer */

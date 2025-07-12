@@ -133,7 +133,7 @@ class UpdateItemQtyTest extends \Magento\TestFramework\TestCase\AbstractControll
                 'requestQuantity' => ['qty' => 230],
                 'expectedResponse' => [
                     'success' => false,
-                    'error_message' => '[{"error":"The requested qty is not available","itemId":3}]']
+                    'error_message' => '[{"error":"Not enough items for sale","itemId":3}]']
             ],
         ];
     }

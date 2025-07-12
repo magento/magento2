@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Checkout\CustomerData;
@@ -65,8 +65,8 @@ class DefaultItem extends AbstractItem
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Catalog\Helper\Product\ConfigurationPool $configurationPool,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Framework\Escaper $escaper = null,
-        ItemResolverInterface $itemResolver = null
+        ?\Magento\Framework\Escaper $escaper = null,
+        ?ItemResolverInterface $itemResolver = null
     ) {
         $this->configurationPool = $configurationPool;
         $this->imageHelper = $imageHelper;
@@ -84,7 +84,7 @@ class DefaultItem extends AbstractItem
     {
         $imageHelper = $this->imageHelper->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail');
         $productName = $this->escaper->escapeHtml($this->item->getProduct()->getName());
-
+        $this->item->setConvertedPrice($this->item->getPrice());
         return [
             'options' => $this->getOptionList(),
             'qty' => $this->item->getQty() * 1,

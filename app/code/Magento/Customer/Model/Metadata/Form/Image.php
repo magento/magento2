@@ -92,9 +92,9 @@ class Image extends File
         NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
         UploaderFactory $uploaderFactory,
-        FileProcessorFactory $fileProcessorFactory = null,
-        ImageContentInterfaceFactory $imageContentInterfaceFactory = null,
-        IoFileSystem $ioFileSystem = null,
+        ?FileProcessorFactory $fileProcessorFactory = null,
+        ?ImageContentInterfaceFactory $imageContentInterfaceFactory = null,
+        ?IoFileSystem $ioFileSystem = null,
         ?DirectoryList $directoryList = null,
         ?WriteFactory $writeFactory = null
     ) {

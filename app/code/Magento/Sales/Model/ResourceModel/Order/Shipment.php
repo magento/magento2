@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
 
@@ -13,14 +13,10 @@ use Magento\Sales\Model\Spi\ShipmentResourceInterface;
 
 /**
  * Flat sales order shipment resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipment extends SalesResource implements ShipmentResourceInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_shipment_resource';
