@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    /**
-     * Copyright 2024 Adobe
-     * All Rights Reserved.
-     */
-   -->
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
+-->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="ProductOptionField" type="product_option">
@@ -446,5 +446,8 @@
         <data key="is_require">true</data>
         <requiredEntity type="product_option_value">ProductValueCheckbox1</requiredEntity>
         <requiredEntity type="product_option_value">ProductValueCheckbox2</requiredEntity>
+    </entity>
+    <entity name="ProductRadioButtonType" type="product_option">
+        <data key="type">Radio Buttons</data>
     </entity>
 </entities>

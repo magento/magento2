@@ -1,16 +1,16 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\DataObject;
 
 /**
  * Object Cache
  *
  * Stores objects for reuse, cleanup and to avoid circular references
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Cache
 {
@@ -94,6 +94,7 @@ class Cache
         if (!self::$_instance) {
             self::$_instance = new self();
         }
+
         return self::$_instance;
     }
 
@@ -102,6 +103,7 @@ class Cache
      *
      * @param string|object $idx
      * @param object $default
+     *
      * @return object
      */
     public function load($idx, $default = null)
@@ -109,9 +111,11 @@ class Cache
         if (isset($this->_references[$idx])) {
             $idx = $this->_references[$idx];
         }
+
         if (isset($this->_objects[$idx])) {
             return $this->_objects[$idx];
         }
+
         return $default;
     }
 
@@ -121,6 +125,7 @@ class Cache
      * @param object $object
      * @param string $idx
      * @param array|string $tags
+     *
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -128,7 +133,6 @@ class Cache
      */
     public function save($object, $idx = null, $tags = null)
     {
-        //\Magento\Framework\Profiler::start('OBJECT_SAVE');
         if (!is_object($object)) {
             return false;
         }
@@ -137,16 +141,17 @@ class Cache
         if ($idx !== null && strpos($idx, '{') !== false) {
             $idx = str_replace('{hash}', $hash, $idx);
         }
+
         if (isset($this->_hashes[$hash])) {
-            //throw new \Exception('test');
             if ($idx !== null) {
                 $this->_references[$idx] = $this->_hashes[$hash];
             }
+
             return $this->_hashes[$hash];
         }
 
         if ($idx === null) {
-            $idx = '#' . ++$this->_idx;
+            $idx = '#' . (++$this->_idx);
         }
 
         if (isset($this->_objects[$idx])) {
@@ -172,7 +177,6 @@ class Cache
                 $this->_objectTags[$idx][$t] = true;
             }
         }
-        //\Magento\Framework\Profiler::stop('OBJECT_SAVE');
 
         return $idx;
     }
@@ -182,6 +186,7 @@ class Cache
      *
      * @param string|array $refName
      * @param string $idx
+     *
      * @return bool|void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -191,6 +196,7 @@ class Cache
             foreach ($refName as $ref) {
                 $this->reference($ref, $idx);
             }
+
             return;
         }
 
@@ -202,6 +208,7 @@ class Cache
                 )
             );
         }
+
         $this->_references[$refName] = $idx;
         $this->_objectReferences[$idx][$refName] = true;
 
@@ -212,22 +219,20 @@ class Cache
      * Delete an object from registry
      *
      * @param string|object $idx
+     *
      * @return boolean
      */
     public function delete($idx)
     {
-        //\Magento\Framework\Profiler::start("OBJECT_DELETE");
         if (is_object($idx)) {
             $idx = $this->find($idx);
             if (false === $idx) {
-                //\Magento\Framework\Profiler::stop("OBJECT_DELETE");
                 return false;
             }
+
             unset($this->_objects[$idx]);
-            //\Magento\Framework\Profiler::stop("OBJECT_DELETE");
             return false;
         } elseif (!isset($this->_objects[$idx])) {
-            //\Magento\Framework\Profiler::stop("OBJECT_DELETE");
             return false;
         }
 
@@ -239,6 +244,7 @@ class Cache
             foreach ($this->_objectTags[$idx] as $t => $dummy) {
                 unset($this->_tags[$t][$idx]);
             }
+
             unset($this->_objectTags[$idx]);
         }
 
@@ -246,9 +252,9 @@ class Cache
             foreach ($this->_references as $r => $dummy) {
                 unset($this->_references[$r]);
             }
+
             unset($this->_objectReferences[$idx]);
         }
-        //\Magento\Framework\Profiler::stop("OBJECT_DELETE");
 
         return true;
     }
@@ -257,6 +263,7 @@ class Cache
      * Cleanup by class name for objects of subclasses too
      *
      * @param string $class
+     *
      * @return void
      */
     public function deleteByClass($class)
@@ -272,6 +279,7 @@ class Cache
      * Cleanup objects by tags
      *
      * @param array|string $tags
+     *
      * @return true
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -280,11 +288,13 @@ class Cache
         if (is_string($tags)) {
             $tags = [$tags];
         }
+
         foreach ($tags as $t) {
             foreach ($this->_tags[$t] as $idx => $dummy) {
                 $this->delete($idx);
             }
         }
+
         return true;
     }
 
@@ -292,6 +302,7 @@ class Cache
      * Check whether object id exists in registry
      *
      * @param string $idx
+     *
      * @return boolean
      */
     public function has($idx)
@@ -303,6 +314,7 @@ class Cache
      * Find an object id
      *
      * @param object $object
+     *
      * @return string|boolean
      */
     public function find($object)
@@ -312,6 +324,7 @@ class Cache
                 return $idx;
             }
         }
+
         return false;
     }
 
@@ -319,6 +332,7 @@ class Cache
      * Find objects by ids
      *
      * @param string[] $ids
+     *
      * @return array
      */
     public function findByIds($ids)
@@ -329,6 +343,7 @@ class Cache
                 $objects[$idx] = $obj;
             }
         }
+
         return $objects;
     }
 
@@ -336,6 +351,7 @@ class Cache
      * Find object by hash
      *
      * @param string $hash
+     *
      * @return object
      */
     public function findByHash($hash)
@@ -347,6 +363,7 @@ class Cache
      * Find objects by tags
      *
      * @param array|string $tags
+     *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -355,15 +372,18 @@ class Cache
         if (is_string($tags)) {
             $tags = [$tags];
         }
+
         $objects = [];
         foreach ($tags as $t) {
             foreach ($this->_tags[$t] as $idx => $dummy) {
                 if (isset($objects[$idx])) {
                     continue;
                 }
+
                 $objects[$idx] = $this->load($idx);
             }
         }
+
         return $objects;
     }
 
@@ -371,6 +391,7 @@ class Cache
      * Find by class name for objects of subclasses too
      *
      * @param string $class
+     *
      * @return array
      */
     public function findByClass($class)
@@ -381,6 +402,7 @@ class Cache
                 $objects[$idx] = $object;
             }
         }
+
         return $objects;
     }
 
@@ -389,6 +411,7 @@ class Cache
      *
      * @param string $idx
      * @param object|null $object
+     *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -403,6 +426,7 @@ class Cache
                 'function' => isset($step['function']) ? $step['function'] : null,
             ];
         }
+
         $this->_debug[$idx] = $debug;
     }
 
@@ -410,6 +434,7 @@ class Cache
      * Return debug information by ids
      *
      * @param array|string $ids
+     *
      * @return array
      */
     public function debugByIds($ids)
@@ -417,10 +442,12 @@ class Cache
         if (is_string($ids)) {
             $ids = [$ids];
         }
+
         $debug = [];
         foreach ($ids as $idx) {
             $debug[$idx] = $this->_debug[$idx];
         }
+
         return $debug;
     }
 
