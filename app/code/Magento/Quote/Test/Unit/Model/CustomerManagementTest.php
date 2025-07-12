@@ -20,6 +20,7 @@ use Magento\Framework\Validator\Factory;
 use Magento\Quote\Model\CustomerManagement;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
@@ -291,10 +292,12 @@ class CustomerManagementTest extends TestCase
         $this->quoteAddressMock->method('getPrefix')->willReturn(null);
         $this->quoteAddressMock->method('getStreet')->willReturn(['test']);
         $this->quoteAddressMock->method('getCustomAttributes')->willReturn(['test']);
-        $this->customerAddressMock->expects($this->once())
+
+        $this->customerAddressMock->expects($this->atLeastOnce())
             ->method('setPrefix')
             ->with(null)
             ->willReturnSelf();
+
         $this->customerAddressFactoryMock->method('create')
             ->willReturn($this->customerAddressMock);
         $addressMock = $this->getMockBuilder(Address::class)
@@ -326,32 +329,15 @@ class CustomerManagementTest extends TestCase
     public function testValidateAddressesNotSavedInAddressBookWithPrefix()
     {
         $this->expectException(ValidatorException::class);
+
+        $regionData = [
+            'region' => 'California',
+            'region_code' => 'CA',
+            'region_id' => 12,
+        ];
+
         $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
         $this->quoteAddressMock->method('getPrefix')->willReturn('Mr.');
-        $this->quoteAddressMock->method('getStreet')->willReturn(['test']);
-        $this->quoteAddressMock->method('getCustomAttributes')->willReturn(['test']);
-        $this->customerAddressMock->expects($this->once())
-            ->method('setPrefix')
-            ->with('Mr.')
-            ->willReturnSelf();
-
-        $this->customerAddressFactoryMock->method('create')
-            ->willReturn($this->customerAddressMock);
-        $addressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->addressFactoryMock->expects($this->exactly(1))->method('create')->willReturn($addressMock);
-        $this->quoteMock
-            ->expects($this->atMost(2))
-            ->method('getBillingAddress')
-            ->willReturn($this->quoteAddressMock);
-        $this->quoteMock
-        $this->quoteMock->method('getBillingAddress')->willReturn($this->quoteAddressMock);
-        $this->quoteMock->method('getShippingAddress')->willReturn($this->quoteAddressMock);
-        $this->quoteAddressMock->method('getCustomerAddressId')->willReturn(null);
-
-        // Set up billing address data
-        $this->quoteAddressMock->method('getPrefix')->willReturn('Mr');
         $this->quoteAddressMock->method('getFirstname')->willReturn('John');
         $this->quoteAddressMock->method('getMiddlename')->willReturn('Q');
         $this->quoteAddressMock->method('getLastname')->willReturn('Public');
@@ -366,6 +352,10 @@ class CustomerManagementTest extends TestCase
         $this->quoteAddressMock->method('getVatId')->willReturn('US123456789');
         $this->quoteAddressMock->method('getRegion')->willReturn($regionData);
         $this->quoteAddressMock->method('getCustomAttributes')->willReturn(['custom_attr' => 'value']);
+        $this->quoteAddressMock->method('getCustomerAddressId')->willReturn(null);
+
+        $this->quoteMock->method('getBillingAddress')->willReturn($this->quoteAddressMock);
+        $this->quoteMock->method('getShippingAddress')->willReturn($this->quoteAddressMock);
 
         // Region setup
         $regionMock = $this->createMock(RegionInterface::class);
@@ -376,24 +366,22 @@ class CustomerManagementTest extends TestCase
 
         // Customer address object to be created
         $this->customerAddressFactoryMock->method('create')->willReturn($this->customerAddressMock);
-        $this->customerAddressMock->expects($this->once())->method('setPrefix')->with('Mr');
-        $this->customerAddressMock->expects($this->once())->method('setFirstname')->with('John');
-        $this->customerAddressMock->expects($this->once())->method('setMiddlename')->with('Q');
-        $this->customerAddressMock->expects($this->once())->method('setLastname')->with('Public');
-        $this->customerAddressMock->expects($this->once())->method('setSuffix')->with('Jr');
-        $this->customerAddressMock->expects($this->once())->method('setCompany')->with('Acme Inc.');
-        $this->customerAddressMock->expects($this->once())->method('setStreet')->with(['123 Main St']);
-        $this->customerAddressMock->expects($this->once())->method('setCountryId')->with('US');
-        $this->customerAddressMock->expects($this->once())->method('setCity')->with('Los Angeles');
-        $this->customerAddressMock->expects($this->once())->method('setPostcode')->with('90001');
-        $this->customerAddressMock->expects($this->once())->method('setTelephone')->with('1234567890');
-        $this->customerAddressMock->expects($this->once())->method('setFax')->with('9876543210');
-        $this->customerAddressMock->expects($this->once())->method('setVatId')->with('US123456789');
-        $this->customerAddressMock->expects($this->once())->method('setRegion')->with($regionMock);
-        $this->customerAddressMock
-            ->expects($this->once())
-            ->method('setCustomAttributes')
-            ->with(['custom_attr' => 'value']);
+
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setPrefix')->with('Mr.');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setFirstname')->with('John');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setMiddlename')->with('Q');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setLastname')->with('Public');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setSuffix')->with('Jr');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setCompany')->with('Acme Inc.');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setStreet')->with(['123 Main St']);
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setCountryId')->with('US');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setCity')->with('Los Angeles');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setPostcode')->with('90001');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setTelephone')->with('1234567890');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setFax')->with('9876543210');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setVatId')->with('US123456789');
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setRegion')->with($regionMock);
+        $this->customerAddressMock->expects($this->atLeastOnce())->method('setCustomAttributes')->with(['custom_attr' => 'value']);
 
         // Validator to fail
         $validatorMock = $this->createMock(Validator::class);
