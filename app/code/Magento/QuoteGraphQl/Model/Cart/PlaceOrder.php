@@ -62,16 +62,12 @@ class PlaceOrder
         $availablePaymentMethods = $this->paymentManagement->getList($cartId);
         $payment = $cart->getPayment();
         $paymentMethodCode = $payment?->getMethod();
-        $isPaymentMethodAvailable = false;
-
         // Check if the selected payment method is in the available methods list
         if ($paymentMethodCode && $availablePaymentMethods) {
-            foreach ($availablePaymentMethods as $availableMethod) {
-                if ($availableMethod->getCode() === $paymentMethodCode) {
-                    $isPaymentMethodAvailable = true;
-                    break;
-                }
-            }
+            $availableCodes = array_map(fn($method) => $method->getCode(), $availablePaymentMethods);
+            $isPaymentMethodAvailable = in_array($paymentMethodCode, $availableCodes);
+        } else {
+            $isPaymentMethodAvailable = false;
         }
 
         if (!$isPaymentMethodAvailable) {
