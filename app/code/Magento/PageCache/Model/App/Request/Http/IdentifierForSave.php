@@ -52,7 +52,8 @@ class IdentifierForSave implements IdentifierInterface
             $this->request->isSecure(),
             $baseUrl,
             $query,
-            $this->context->getVaryString()
+            $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
+                ?: $this->context->getVaryString()
         ];
 
         $data = $this->identifierStoreReader->getPageTagsWithStoreCacheTags($data);

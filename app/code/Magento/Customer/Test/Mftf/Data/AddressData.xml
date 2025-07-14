@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,6 +16,32 @@
         <data key="country_id">US</data>
         <array key="street">
             <item>7700 W Parmer Ln</item>
+            <item>Bld D</item>
+        </array>
+        <data key="company">Magento</data>
+        <data key="telephone">1234568910</data>
+        <data key="fax">1234568910</data>
+        <data key="postcode">78729</data>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="middlename">string</data>
+        <data key="prefix">Mr</data>
+        <data key="suffix">Sr</data>
+        <data key="vat_id">vatData</data>
+        <data key="default_shipping">true</data>
+        <data key="default_billing">true</data>
+        <data key="region_qty">66</data>
+    </entity>
+    <entity name="CustomerAddressSimpleWithSmallStreetAddress" type="address">
+        <data key="id">0</data>
+        <data key="customer_id">12</data>
+        <requiredEntity type="region">CustomerRegionOne</requiredEntity>
+        <data key="region_id">0</data>
+        <data key="country_id">US</data>
+        <array key="street">
+            <item>7700 W</item>
             <item>Bld D</item>
         </array>
         <data key="company">Magento</data>
