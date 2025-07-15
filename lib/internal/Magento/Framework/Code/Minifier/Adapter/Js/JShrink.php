@@ -20,9 +20,9 @@ class JShrink implements AdapterInterface
      *
      * @param string $content The raw JavaScript to be minified
      * @throws \Exception
-     * @return bool|string
+     * @return string
      */
-    public function minify($content): bool|string
+    public function minify($content): string
     {
         $minifier = new Minify\JS();
 

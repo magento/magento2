@@ -6,7 +6,7 @@
 namespace Magento\Framework\Code\Minifier\Adapter\Css;
 
 use Magento\Framework\Code\Minifier\AdapterInterface;
-use MatthiasMullie\Minify\CSS;
+use MatthiasMullie\Minify;
 
 /**
  * Adapter for CSSmin library
@@ -21,7 +21,7 @@ class CSSmin implements AdapterInterface
      */
     public function minify($content): string
     {
-        $cssMinifier = new CSS();
+        $cssMinifier = new Minify\CSS();
 
         return $cssMinifier->add($content)->minify();
     }
