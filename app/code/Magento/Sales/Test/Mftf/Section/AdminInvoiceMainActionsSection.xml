@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright 2024 Adobe
+  * Copyright 2017 Adobe
   * All Rights Reserved.
   */
 -->
@@ -12,6 +12,7 @@
         <element name="submitInvoice" type="button" selector=".action-default.scalable.save.submit-button.primary" timeout="60"/>
         <element name="openNewCreditMemoFromInvoice" type="button" selector=".action-default.scalable.credit-memo"/>
         <element name="submitNewRefundFromInvoice" type="button" selector=".action-default.scalable.save.submit-button.refund.primary"/>
+        <element name="cancel" type="button" selector=".action-default.scalable.delete"/>
         <element name="selectModeOfAmount" type="select" selector=".admin__control-select"/>
     </section>
 </sections>
