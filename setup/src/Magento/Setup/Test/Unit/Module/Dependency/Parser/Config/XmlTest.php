@@ -38,7 +38,7 @@ class XmlTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionFilesForParse()
+    public static function dataProviderWrongOptionFilesForParse()
     {
         return [
             [['files_for_parse' => []]],

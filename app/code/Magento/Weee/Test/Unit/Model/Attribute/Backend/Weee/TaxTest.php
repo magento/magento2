@@ -93,7 +93,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderValidate()
+    public static function dataProviderValidate()
     {
         return [
             'withDuplicate' => [
@@ -215,7 +215,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterSaveWithRegion()
+    public static function dataProviderAfterSaveWithRegion()
     {
         return [
             'withRegion' => [

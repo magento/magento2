@@ -145,7 +145,7 @@ class ThemeUninstallCommand extends Command
         ThemePackageInfo $themePackageInfo,
         ThemeUninstaller $themeUninstaller,
         ThemeDependencyChecker $themeDependencyChecker,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;

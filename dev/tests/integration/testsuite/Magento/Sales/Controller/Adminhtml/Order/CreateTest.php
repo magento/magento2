@@ -150,7 +150,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @return array
      */
-    public function loadBlockActionsDataProvider()
+    public static function loadBlockActionsDataProvider()
     {
         return [
             'shipping_method' => ['shipping_method', 'id=\"shipping-method-overlay\"'],
@@ -265,7 +265,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @return array
      */
-    public function getAclResourceDataProvider()
+    public static function getAclResourceDataProvider()
     {
         return [
             ['index', false, 'Magento_Sales::create'],

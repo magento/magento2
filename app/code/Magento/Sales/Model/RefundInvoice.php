@@ -142,8 +142,8 @@ class RefundInvoice implements RefundInvoiceInterface
         $isOnline = false,
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $invoice = $this->invoiceRepository->get($invoiceId);
         $order = $this->orderRepository->get($invoice->getOrderId());
@@ -184,8 +184,8 @@ class RefundInvoice implements RefundInvoiceInterface
         bool $isOnline = false,
         bool $notify = false,
         bool $appendComment = false,
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $invoice = $this->invoiceRepository->get($invoiceId);
         $order = $this->orderRepository->get($invoice->getOrderId());

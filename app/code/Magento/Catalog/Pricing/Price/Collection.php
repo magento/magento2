@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 
@@ -35,7 +35,7 @@ class Collection extends \Magento\Framework\Pricing\Price\Collection
         Factory $priceFactory,
         Pool $pool,
         $quantity,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($saleableItem, $priceFactory, $pool, $quantity);
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);

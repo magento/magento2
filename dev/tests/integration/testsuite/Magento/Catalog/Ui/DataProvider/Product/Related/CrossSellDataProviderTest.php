@@ -37,16 +37,16 @@ class CrossSellDataProviderTest extends AbstractRelationsDataProviderTest
     /**
      * @return array
      */
-    public function productDataProvider(): array
+    public static function productDataProvider(): array
     {
         return [
             'without_store_code' => [
-                'store_code' => 'default',
-                'product_price' => 20,
+                'storeCode' => 'default',
+                'price' => 20,
             ],
             'with_store_code' => [
-                'store_code' => 'fixture_second_store',
-                'product_price' => 10,
+                'storeCode' => 'fixture_second_store',
+                'price' => 10,
             ],
         ];
     }

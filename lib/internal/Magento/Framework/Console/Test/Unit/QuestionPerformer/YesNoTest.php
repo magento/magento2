@@ -101,7 +101,7 @@ class YesNoTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             ['yes', true],

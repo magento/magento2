@@ -94,7 +94,7 @@ class CategoryTest extends AbstractController
     /**
      * @return array
      */
-    public function getViewActionDataProvider(): array
+    public static function getViewActionDataProvider(): array
     {
         return [
             'category without children' => [

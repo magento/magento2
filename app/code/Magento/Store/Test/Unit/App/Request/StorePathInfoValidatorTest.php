@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\App\Request;
@@ -152,7 +153,7 @@ class StorePathInfoValidatorTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function getValidStoreCodeExceptionDataProvider(): array
+    public static function getValidStoreCodeExceptionDataProvider(): array
     {
         return [
             [new NoSuchEntityException()],
@@ -183,7 +184,37 @@ class StorePathInfoValidatorTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function getValidStoreCodeDataProvider(): array
+    /**
+     * @dataProvider getValidStoreCodeDataProvider
+     * @param string $pathInfo
+     * @param bool $isStoreCodeValid
+     * @param string|null $expectedResult
+     */
+    public function testGetValidStoreCodeResultIsCached(
+        string $pathInfo,
+        bool $isStoreCodeValid,
+        ?string $expectedResult
+    ): void {
+        $this->configMock->method('getValue')
+            ->with(Store::XML_PATH_STORE_IN_URL)
+            ->willReturn(true);
+        $this->pathInfoMock->method('getPathInfo')
+            ->willReturn('/store2/path2/');
+        $this->storeCodeValidatorMock->method('isValid')
+            ->willReturn($isStoreCodeValid);
+        $store = $this->createMock(Store::class);
+        $this->storeRepositoryMock
+            ->expects($expectedResult ? $this->once() : $this->never())
+            ->method('getActiveStoreByCode')
+            ->willReturn($store);
+
+        $result1 = $this->storePathInfoValidator->getValidStoreCode($this->requestMock, $pathInfo);
+        $result2 = $this->storePathInfoValidator->getValidStoreCode($this->requestMock, $pathInfo);
+        $this->assertEquals($expectedResult, $result1);
+        $this->assertEquals($result1, $result2);
+    }
+
+    public static function getValidStoreCodeDataProvider(): array
     {
         return [
             ['store1', true, 'store1'],

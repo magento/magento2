@@ -176,7 +176,7 @@ class AddressRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             [null, null],
@@ -416,7 +416,7 @@ class AddressRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function dataMultiAttribute(): array
+    public static function dataMultiAttribute(): array
     {
         $data = [
             'multiselect' => [

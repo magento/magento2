@@ -60,7 +60,7 @@ class RelativePathConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithInvalidArgumentsDataProvider()
+    public static function convertWithInvalidArgumentsDataProvider()
     {
         return [['', ''], ['some/node', ''], ['', 'some/node']];
     }
@@ -68,7 +68,7 @@ class RelativePathConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             ['currentNode', 'relativeNode', 'relativeNode'],

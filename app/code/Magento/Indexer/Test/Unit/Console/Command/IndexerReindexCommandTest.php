@@ -266,7 +266,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      *
      * @return MockObject|StateInterface
      */
-    private function getStateMock(array $methods = null, array $data = [])
+    private function getStateMock(?array $methods = null, array $data = [])
     {
         /** @var MockObject|StateInterface $state */
         $state = $this->getMockBuilder(StateInterface::class)
@@ -310,7 +310,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                         'dependencies' => [],
                     ],
                 ],
-                'indexer_states' => [
+                'states' => [
                     'indexer_2' => [
                         'status' => StateInterface::STATUS_VALID,
                     ],
@@ -318,13 +318,13 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                         'status' => StateInterface::STATUS_VALID,
                     ],
                 ],
-                'expected_reindex_all_calls' => [
+                'reindexAllCallMatchers' => [
                     'indexer_1' => self::once(),
                     'indexer_2' => self::never(),
                     'indexer_3' => self::never(),
                 ],
-                'executed_indexers' => ['indexer_1'],
-                'executed_shared_indexers' => [],
+                'executedIndexers' => ['indexer_1'],
+                'executedSharedIndexers' => [],
             ],
             'With dependencies and some indexers is invalid' => [
                 'inputIndexers' => [
@@ -362,7 +362,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                         'dependencies' => ['indexer_1'],
                     ],
                 ],
-                'indexer_states' => [
+                'states' => [
                     'indexer_2' => [
                         'status' => StateInterface::STATUS_VALID,
                     ],
@@ -376,15 +376,15 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                         'status' => StateInterface::STATUS_VALID,
                     ],
                 ],
-                'expected_reindex_all_calls' => [
+                'reindexAllCallMatchers' => [
                     'indexer_1' => self::once(),
                     'indexer_2' => self::never(),
                     'indexer_3' => self::once(),
                     'indexer_4' => self::never(),
                     'indexer_5' => self::once(),
                 ],
-                'executed_indexers' => ['indexer_3', 'indexer_1', 'indexer_5'],
-                'executed_shared_indexers' => [['indexer_2'], ['indexer_3']],
+                'executedIndexers' => ['indexer_3', 'indexer_1', 'indexer_5'],
+                'executedSharedIndexers' => [['indexer_2'], ['indexer_3']],
             ],
             'With dependencies and multiple indexers in request' => [
                 'inputIndexers' => [
@@ -423,7 +423,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                         'dependencies' => ['indexer_1'],
                     ],
                 ],
-                'indexer_states' => [
+                'states' => [
                     'indexer_2' => [
                         'status' => StateInterface::STATUS_VALID,
                     ],
@@ -434,15 +434,15 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
                         'status' => StateInterface::STATUS_VALID,
                     ],
                 ],
-                'expected_reindex_all_calls' => [
+                'reindexAllCallMatchers' => [
                     'indexer_1' => self::once(),
                     'indexer_2' => self::never(),
                     'indexer_3' => self::once(),
                     'indexer_4' => self::once(),
                     'indexer_5' => self::once(),
                 ],
-                'executed_indexers' => ['indexer_1', 'indexer_4', 'indexer_3', 'indexer_5'],
-                'executed_shared_indexers' => [],
+                'executedIndexers' => ['indexer_1', 'indexer_4', 'indexer_3', 'indexer_5'],
+                'executedSharedIndexers' => [],
             ],
         ];
     }

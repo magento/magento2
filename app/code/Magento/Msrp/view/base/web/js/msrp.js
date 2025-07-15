@@ -57,7 +57,9 @@ define([
             closeOnMouseLeave: false,
             autoPosition: true,
             closeOnClickOutside: false,
-            'dialogClass': 'popup map-popup-wrapper',
+            classes: {
+                'ui-dialog': 'popup map-popup-wrapper'
+            },
             position: {
                 my: 'left top',
                 collision: 'fit none',

@@ -124,7 +124,7 @@ class SmartButtonConfigTest extends TestCase
      *
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return include __DIR__ . '/_files/expected_style_config.php';
     }

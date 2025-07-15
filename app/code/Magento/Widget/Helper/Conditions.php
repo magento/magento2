@@ -29,8 +29,8 @@ class Conditions
      * @param Normalizer $normalizer
      */
     public function __construct(
-        Json $serializer = null,
-        Normalizer $normalizer = null
+        ?Json $serializer = null,
+        ?Normalizer $normalizer = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->normalizer = $normalizer ?: ObjectManager::getInstance()->get(Normalizer::class);

@@ -72,7 +72,7 @@ class ScopeResolverTest extends TestCase
      *
      * @return array[]
      */
-    public function testIsBelongsToScopeDataProvider()
+    public static function testIsBelongsToScopeDataProvider()
     {
         return [
             'All scopes belongs to Default' => [

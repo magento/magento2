@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,8 +51,8 @@ class PriceRange implements ResolverInterface
     public function __construct(
         PriceProviderPool $priceProviderPool,
         Discount $discount,
-        ProductDataProvider $productDataProvider = null,
-        PriceRangeDataProvider $priceRangeDataProvider = null
+        ?ProductDataProvider $productDataProvider = null,
+        ?PriceRangeDataProvider $priceRangeDataProvider = null
     ) {
         $this->priceProviderPool = $priceProviderPool;
         $this->discount = $discount;
@@ -69,8 +69,8 @@ class PriceRange implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $this->productDataProvider->addProductSku($value['sku']);
         $productData = $this->productDataProvider->getProductBySku($value['sku'], $context);

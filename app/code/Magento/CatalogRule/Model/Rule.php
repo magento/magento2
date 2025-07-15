@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -226,15 +226,15 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
         TypeListInterface $cacheTypesList,
         DateTime $dateTime,
         RuleProductProcessor $ruleProductProcessor,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = [],
-        ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null,
-        Json $serializer = null,
-        RuleResourceModel $ruleResourceModel = null,
-        ConditionsToCollectionApplier $conditionsToCollectionApplier = null
+        ?ExtensionAttributesFactory $extensionFactory = null,
+        ?AttributeValueFactory $customAttributeFactory = null,
+        ?Json $serializer = null,
+        ?RuleResourceModel $ruleResourceModel = null,
+        ?ConditionsToCollectionApplier $conditionsToCollectionApplier = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;

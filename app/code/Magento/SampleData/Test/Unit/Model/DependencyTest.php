@@ -173,7 +173,7 @@ class DependencyTest extends TestCase
                         ],
                     ];
                 },
-                'suggestions' => [
+                'suggestionsFromLockFile' => [
                     'magento/foo-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . ' 100.0.0',
                     'thirdparty/bar-sample-data' => Dependency::SAMPLE_DATA_SUGGEST . ' 1.2.3',
                     'thirdparty/something-else' => 'Just a suggested package',

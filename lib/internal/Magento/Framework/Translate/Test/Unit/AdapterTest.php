@@ -42,7 +42,7 @@ class AdapterTest extends TestCase
     /**
      * @return array
      */
-    public function translateDataProvider()
+    public static function translateDataProvider()
     {
         return [['Translate me!', 'Translated string']];
     }

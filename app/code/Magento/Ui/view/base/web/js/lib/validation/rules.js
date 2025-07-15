@@ -2,7 +2,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/* eslint-disable no-useless-escape */
+// jscs:disable no-useless-escape
 /**
  * @api
  */
@@ -626,6 +627,13 @@ define([
             },
             $.mage.__('Please enter a number greater than 0, without comma in this field.')
         ],
+        'validate-nonempty-number-greater-than-zero': [
+            function (value) {
+                return !isNaN(utils.parseNumber(value))
+                    && value > 0 && (/^\s*-?\d+([,.]\d+)*\s*%?\s*$/).test(value);
+            },
+            $.mage.__('Please enter a number greater than 0, without comma in this field.')
+        ],
         'validate-css-length': [
             function (value) {
                 if (value !== '') {
@@ -652,10 +660,16 @@ define([
         ],
         'validate-number-range': [
             function (value, param) {
-                var numValue, dataAttrRange, result, range, m;
+                var numValue, isNumeric, dataAttrRange, result, range, m;
 
                 if (utils.isEmptyNoTrim(value)) {
                     return true;
+                }
+
+                isNumeric = /^(?:\d+\.?\d*|\.\d+)$/.test(value);
+
+                if (!isNumeric) {
+                    return false;
                 }
 
                 numValue = utils.parseNumber(value);

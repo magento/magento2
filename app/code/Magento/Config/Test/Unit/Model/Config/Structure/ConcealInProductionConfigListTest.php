@@ -68,7 +68,7 @@ class ConcealInProductionConfigListTest extends TestCase
      *
      * @deprecated
      */
-    public function disabledDataProvider()
+    public static function disabledDataProvider()
     {
         return [
             ['first/path', State::MODE_PRODUCTION, true],
@@ -107,7 +107,7 @@ class ConcealInProductionConfigListTest extends TestCase
      *
      * @deprecated
      */
-    public function hiddenDataProvider()
+    public static function hiddenDataProvider()
     {
         return [
             ['first/path', State::MODE_PRODUCTION, false],

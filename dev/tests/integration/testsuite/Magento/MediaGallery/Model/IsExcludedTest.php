@@ -46,7 +46,7 @@ class IsExcludedTest extends TestCase
      *
      * @return array
      */
-    public function pathsProvider(): array
+    public static function pathsProvider(): array
     {
         return [
             ['theme', true],

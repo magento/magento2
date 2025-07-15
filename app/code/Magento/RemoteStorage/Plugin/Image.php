@@ -237,8 +237,8 @@ class Image
      */
     private function prepareDestination(
         AbstractAdapter $image,
-        string $destination = null,
-        string $newName = null
+        ?string $destination = null,
+        ?string $newName = null
     ): string {
         if (empty($destination)) {
             $destination = $image->getFileSrcPath();

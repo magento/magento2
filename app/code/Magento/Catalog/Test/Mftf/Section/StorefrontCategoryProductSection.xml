@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -41,5 +41,6 @@
         <element name="filterOptionCurrencySymbol" type="text" selector="//div[@class='filter-options-content']//a//span[@class='price' and contains(text(),'{{currencySymbol}}')]" parameterized="true"/>
         <element name="priceDropdown" type="button" selector="//div[@class='filter-options-title']"/>
         <element name="priceBlockShoppingOptions" type="block" selector="//div[@class='filter-options-content']"/>
+        <element name="widgetProduct" type="text" selector="//main//ol[@class='product-items widget-product-grid']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
     </section>
 </sections>

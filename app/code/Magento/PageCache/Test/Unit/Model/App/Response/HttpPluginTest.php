@@ -70,7 +70,7 @@ class HttpPluginTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSendResponseDataProvider(): array
+    public static function beforeSendResponseDataProvider(): array
     {
         return [
             'http_response_headers_not_sent' => [HttpResponse::class, false, 1],

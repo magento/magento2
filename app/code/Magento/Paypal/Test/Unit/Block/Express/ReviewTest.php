@@ -107,7 +107,7 @@ class ReviewTest extends TestCase
     /**
      * @return array
      */
-    public function getViewFileUrlDataProvider()
+    public static function getViewFileUrlDataProvider()
     {
         return [[true], [false]];
     }

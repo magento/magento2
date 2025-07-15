@@ -92,7 +92,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getIsLoggedInDataProvider(): array
+    public static function getIsLoggedInDataProvider(): array
     {
         return [
             ['expectedResult' => true, 'isCustomerIdValid' => true, 'isCustomerEmulated' => false],

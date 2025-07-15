@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -341,21 +341,21 @@ class ViewTest extends TestCase
     {
         return [
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
                     [['displaymode' => 'products'], null, false]
                 ]
             ],
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default_without_children'], null, false],
                     [['displaymode' => 'page'], null, false]
                 ]
             ],
             [
-                'layoutHandles' => [
+                'expectedData' => [
                     [['type' => 'default'], null, false],
                     [['type' => 'default'], null, false],
                     [['displaymode' => 'poducts_and_page'], null, false]

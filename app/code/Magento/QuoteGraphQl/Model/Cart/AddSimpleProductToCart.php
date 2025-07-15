@@ -64,6 +64,11 @@ class AddSimpleProductToCart
         try {
             $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
         } catch (Exception $e) {
+
+            if (str_contains($e->getMessage(), 'The requested qty is not available')) {
+                throw new GraphQlInputException(__('The requested qty. is not available'));
+            }
+
             throw new GraphQlInputException(
                 __(
                     'Could not add the product with SKU %sku to the shopping cart: %message',

@@ -82,11 +82,11 @@ class Generate extends Quote implements HttpPostActionInterface
         Registry $coreRegistry,
         FileFactory $fileFactory,
         Date $dateFilter,
-        CouponGenerator $couponGenerator = null,
-        PublisherInterface $publisher = null,
-        CouponGenerationSpecInterfaceFactory $generationSpecFactory = null,
-        GetCouponCodeLengthInterface $getCouponCodeLength = null,
-        ScopeConfigInterface $scopeConfig = null
+        ?CouponGenerator $couponGenerator = null,
+        ?PublisherInterface $publisher = null,
+        ?CouponGenerationSpecInterfaceFactory $generationSpecFactory = null,
+        ?GetCouponCodeLengthInterface $getCouponCodeLength = null,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter);
         $this->couponGenerator = $couponGenerator ?:

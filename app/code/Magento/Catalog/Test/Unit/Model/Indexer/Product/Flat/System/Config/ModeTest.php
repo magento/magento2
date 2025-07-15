@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class ModeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderProcessValueEqual()
+    public static function dataProviderProcessValueEqual()
     {
         return [['0', '0'], ['', '0'], ['0', ''], ['1', '1']];
     }
@@ -101,7 +101,7 @@ class ModeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderProcessValueOn()
+    public static function dataProviderProcessValueOn()
     {
         return [['0', '1'], ['', '1']];
     }
@@ -150,7 +150,7 @@ class ModeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderProcessValueOff()
+    public static function dataProviderProcessValueOff()
     {
         return [['1', '0'], ['1', '']];
     }

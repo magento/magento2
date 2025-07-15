@@ -30,9 +30,9 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         $sourceClassName .= 'Extension';
         parent::__construct(

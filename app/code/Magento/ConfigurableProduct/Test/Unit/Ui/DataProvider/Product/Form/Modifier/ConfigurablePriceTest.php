@@ -39,7 +39,7 @@ class ConfigurablePriceTest extends AbstractModifierTestCase
     /**
      * @return array
      */
-    public function metaDataProvider()
+    public static function metaDataProvider()
     {
         $priceComponentConfig = [
             'arguments' => [

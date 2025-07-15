@@ -72,8 +72,8 @@ class RequestCustomerToken implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $isAllowedLogin = $this->authorization->isAllowed('Magento_LoginAsCustomer::login');
         $isAlllowedShoppingAssistance =

@@ -40,5 +40,5 @@ interface GuestCartManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
-    public function placeOrder($cartId, PaymentInterface $paymentMethod = null);
+    public function placeOrder($cartId, ?PaymentInterface $paymentMethod = null);
 }

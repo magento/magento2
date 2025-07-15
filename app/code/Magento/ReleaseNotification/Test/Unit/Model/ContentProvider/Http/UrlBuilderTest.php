@@ -64,7 +64,7 @@ class UrlBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function getUrlDataProvider()
+    public static function getUrlDataProvider()
     {
         return [
             'all' => [

@@ -162,7 +162,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getExpressionToQuoteDataProvider()
+    public static function getExpressionToQuoteDataProvider()
     {
         return [
             ['string', null, 'string'],
@@ -175,7 +175,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getSelectToQuoteDataProvider()
+    public static function getSelectToQuoteDataProvider()
     {
         return [
             ['string', null, '(string)'],
@@ -188,7 +188,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getStringArrayToQuoteDataProvider()
+    public static function getStringArrayToQuoteDataProvider()
     {
         return [
             ['some string', null, '`some string`'],
@@ -202,9 +202,9 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function getStringArrayToQuoteWithAliasDataProvider()
+    public static function getStringArrayToQuoteWithAliasDataProvider()
     {
-        $variations = $this->getStringArrayToQuoteDataProvider();
+        $variations = self::getStringArrayToQuoteDataProvider();
         return array_merge($variations, [
             ['string', 'alias', '`string` ' . Select::SQL_AS . ' `alias`'],
             ['alias.string', 'alias', '`alias`.`string` ' . Select::SQL_AS . ' `alias`'],

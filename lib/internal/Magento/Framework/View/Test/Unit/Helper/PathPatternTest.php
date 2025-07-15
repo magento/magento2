@@ -45,7 +45,7 @@ class PathPatternTest extends TestCase
     /**
      * @return array
      */
-    public function translatePatternFromGlobDataProvider()
+    public static function translatePatternFromGlobDataProvider()
     {
         return [
             [

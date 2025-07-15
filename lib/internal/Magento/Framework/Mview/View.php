@@ -88,7 +88,7 @@ class View extends DataObject implements ViewInterface, ViewSubscriptionInterfac
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
         array $changelogBatchSize = [],
-        ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null
+        ?ChangelogBatchWalkerFactory $changelogBatchWalkerFactory = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;

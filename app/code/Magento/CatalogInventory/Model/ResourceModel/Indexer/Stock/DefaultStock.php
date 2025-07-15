@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
@@ -90,9 +90,9 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         Config $eavConfig,
         ScopeConfigInterface $scopeConfig,
         $connectionName = null,
-        GetStatusExpression $getStatusExpression = null,
-        StockConfigurationInterface $stockConfiguration = null,
-        QueryProcessorComposite $queryProcessorComposite = null
+        ?GetStatusExpression $getStatusExpression = null,
+        ?StockConfigurationInterface $stockConfiguration = null,
+        ?QueryProcessorComposite $queryProcessorComposite = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
