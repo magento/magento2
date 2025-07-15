@@ -173,6 +173,13 @@ class BundleTest extends TestCase
             ->method('setBundleOptionsData')
             ->with($this->bundleOptionsCleaned);
         $this->productMock->expects($this->never())->method('setBundleSelectionsData');
+        $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setBundleProductOptions'])
+            ->getMockForAbstractClass();
+        $extensionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
+        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttribute);
+        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extensionAttribute);
         $this->productMock->expects($this->once())->method('getPriceType')->willReturn(2);
         $this->productMock->expects($this->any())->method('getOptionsReadonly')->willReturn(true);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);

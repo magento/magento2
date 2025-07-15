@@ -988,6 +988,43 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Create disable image details
+     *
+     * @param mixed $rowSku
+     * @param mixed $column
+     * @param mixed $rowExistingImages
+     * @param int $storeId
+     * @return array|null
+     */
+    private function disableExistingProductImage(
+        mixed $rowSku,
+        mixed $column,
+        mixed $rowExistingImages,
+        int $storeId
+    ): ?array {
+        try {
+            $product = $this->productRepository->get($rowSku);
+            if ($imagePath = $product->getData($column)) {
+                foreach ($rowExistingImages as $existingImage) {
+                    if ($existingImage['value'] == $imagePath) {
+                        $existingImage['store_id'] = $storeId;
+
+                        return [
+                            'disabled' => 1,
+                            'imageData' => $existingImage,
+                            'exists' => true
+                        ];
+                    }
+                }
+            }
+        } catch (NoSuchEntityException) {
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
      * Multiple value separator getter.
      *
      * @return string
@@ -1918,6 +1955,14 @@ class Product extends AbstractEntity
         $imagesByHash = [];
         foreach ($rowImages as $column => $columnImages) {
             foreach ($columnImages as $columnImageKey => $columnImage) {
+                if ($columnImage == $this->getEmptyAttributeValueConstant()) {
+                    if ($disabledImageDetails =
+                        $this->disableExistingProductImage($rowSku, $column, $rowExistingImages, $storeId)
+                    ) {
+                        $imagesForChangeVisibility[] = $disabledImageDetails;
+                    }
+                    continue;
+                }
                 $uploadedFile = $this->findImageByColumnImage(
                     $productMediaPath,
                     $rowExistingImages,
