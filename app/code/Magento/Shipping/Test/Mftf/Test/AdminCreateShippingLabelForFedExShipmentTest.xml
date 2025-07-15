@@ -117,6 +117,8 @@
             <!-- Go to Checkout Page -->
             <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSelectFedexShippingMethod"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.fedexExpressServerShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.fedexExpressServerShippingMethod}}" visible="true" stepKey="selectFedexShippingExpressServer"/>
+            <conditionalClick selector="{{CheckoutShippingMethodsSection.fedex2dayShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.fedex2dayShippingMethod}}" visible="true" stepKey="selectFedexShipping2Day"/>
             <conditionalClick selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" visible="true" stepKey="selectFedexShippingMethod"/>
             <conditionalClick selector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" dependentSelector="{{CheckoutShippingMethodsSection.groundShippingMethod}}" visible="true" stepKey="selectFedexShippingMethodGround"/>
             <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>

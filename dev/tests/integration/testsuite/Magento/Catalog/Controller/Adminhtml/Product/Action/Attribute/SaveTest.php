@@ -1,33 +1,36 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
-namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
+declare(strict_types=1);
+
+namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\Backend\Model\Session;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Helper\Product\Edit\Action\Attribute;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Framework\Message\MessageInterface;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\UrlInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
+ * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeTest extends AbstractBackendController
+class SaveTest extends AbstractBackendController
 {
     /** @var PublisherConsumerController */
     private $publisherConsumerController;
+
     /**
      * @var string[]
      */
@@ -39,22 +42,14 @@ class AttributeTest extends AbstractBackendController
 
         $this->publisherConsumerController = $this->_objectManager->create(
             PublisherConsumerController::class,
-            [
-                'consumers' => $this->consumers,
-                'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
-                'maxMessages' => null,
-                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
-            ]
+            ['consumers' => $this->consumers]
         );
-
         try {
             $this->publisherConsumerController->startConsumers();
         } catch (EnvironmentPreconditionException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (PreconditionFailedException $e) {
-            $this->fail(
-                $e->getMessage()
-            );
+            $this->fail($e->getMessage());
         }
     }
 
@@ -65,12 +60,10 @@ class AttributeTest extends AbstractBackendController
     }
 
     /**
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
-     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      */
-    public function testSaveActionRedirectsSuccessfully()
+    public function testSaveActionRedirectsSuccessfully(): void
     {
         /** @var $session Session */
         $session = $this->_objectManager->get(Session::class);
@@ -100,14 +93,12 @@ class AttributeTest extends AbstractBackendController
     }
 
     /**
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
-     *
      * @dataProvider saveActionVisibilityAttrDataProvider
      * @param array $attributes
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation disabled
      */
-    public function testSaveActionChangeVisibility($attributes)
+    public function testSaveActionChangeVisibility(array $attributes): void
     {
         /** @var ProductRepository $repository */
         $repository = $this->_objectManager->create(ProductRepository::class);
@@ -129,18 +120,9 @@ class AttributeTest extends AbstractBackendController
         /** @var ListProduct $listProduct */
         $listProduct = $this->_objectManager->get(ListProduct::class);
 
-        sleep(30); // timeout to processing queue
         $this->publisherConsumerController->waitForAsynchronousResult(
-            function () use ($repository) {
-                sleep(10); // Should be refactored in the scope of MC-22947
-                return $repository->get(
-                    'simple',
-                    false,
-                    null,
-                    true
-                )->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE;
-            },
-            []
+            fn () => (int) $repository->get('simple', forceReload: true)->getVisibility()
+                !== Visibility::VISIBILITY_NOT_VISIBLE
         );
 
         $category = $categoryFactory->create()->load(2);
@@ -148,61 +130,8 @@ class AttributeTest extends AbstractBackendController
         $layer->setCurrentCategory($category);
         $productCollection = $layer->getProductCollection();
         $productItem = $productCollection->getFirstItem();
-        $this->assertEquals($session->getProductIds(), [$productItem->getId()]);
-    }
-
-    /**
-     * @param array $attributes Request parameter.
-     *
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::execute
-     *
-     * @dataProvider validateActionDataProvider
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
-     * @magentoDbIsolation disabled
-     */
-    public function testValidateActionWithMassUpdate($attributes)
-    {
-        /** @var $session Session */
-        $session = $this->_objectManager->get(Session::class);
-        $session->setProductIds([1, 2]);
-
-        $this->getRequest()->setParam('attributes', $attributes);
-
-        $this->dispatch('backend/catalog/product_action_attribute/validate/store/0');
-
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-
-        $response = $this->getResponse()->getBody();
-        $this->assertJson($response);
-        $data = json_decode($response, true);
-        $this->assertArrayHasKey('error', $data);
-        $this->assertFalse($data['error']);
-        $this->assertCount(1, $data);
-    }
-
-    /**
-     * Data Provider for validation
-     *
-     * @return array
-     */
-    public static function validateActionDataProvider()
-    {
-        return [
-            [
-                'attributes' => [
-                    'name'              => 'Name',
-                    'description'       => 'Description',
-                    'short_description' => 'Short Description',
-                    'price'             => '512',
-                    'weight'            => '16',
-                    'meta_title'        => 'Meta Title',
-                    'meta_keyword'      => 'Meta Keywords',
-                    'meta_description'  => 'Meta Description',
-                ],
-            ]
-        ];
+        $this->assertEquals([$product->getId()], [$productItem->getId()]);
+        $this->assertEmpty($session->getProductIds());
     }
 
     /**
@@ -210,7 +139,7 @@ class AttributeTest extends AbstractBackendController
      *
      * @return array
      */
-    public static function saveActionVisibilityAttrDataProvider()
+    public static function saveActionVisibilityAttrDataProvider(): array
     {
         return [
             ['attributes' => ['visibility' => Visibility::VISIBILITY_BOTH]],
