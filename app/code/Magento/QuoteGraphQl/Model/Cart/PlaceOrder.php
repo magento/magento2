@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
+use Psr\Log\LoggerInterface;
 
 /**
  * Place an order
@@ -29,15 +30,23 @@ class PlaceOrder
     private $cartManagement;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param PaymentMethodManagementInterface $paymentManagement
      * @param CartManagementInterface $cartManagement
+     * @param LoggerInterface $logger
      */
     public function __construct(
         PaymentMethodManagementInterface $paymentManagement,
-        CartManagementInterface $cartManagement
+        CartManagementInterface $cartManagement,
+        LoggerInterface $logger
     ) {
         $this->paymentManagement = $paymentManagement;
         $this->cartManagement = $cartManagement;
+        $this->logger = $logger;
     }
 
     /**
@@ -71,7 +80,21 @@ class PlaceOrder
         }
 
         if (!$isPaymentMethodAvailable) {
-            throw new LocalizedException(__('The requested Payment Method is not available.'));
+            // Log the attempt to use a disabled payment method
+            $this->logger->debug(
+                'Attempt to place order with disabled payment method',
+                [
+                    'payment_method' => $paymentMethodCode,
+                    'cart_id' => $cartId,
+                    'user_id' => $userId,
+                    'available_methods' => $availablePaymentMethods ?
+                        array_map(fn($method) => $method->getCode(), $availablePaymentMethods) : []
+                ]
+            );
+
+            throw new LocalizedException(
+                __('The requested Payment Method \'%1\' is not available.', $paymentMethodCode ?: 'unknown')
+            );
         }
 
         return (int)$this->cartManagement->placeOrder($cartId, $paymentMethod);

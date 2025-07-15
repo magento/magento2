@@ -18,6 +18,7 @@ use Magento\Quote\Model\Quote\Payment;
 use Magento\QuoteGraphQl\Model\Cart\PlaceOrder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for PlaceOrder
@@ -27,7 +28,7 @@ class PlaceOrderTest extends TestCase
     /**
      * @var PlaceOrder
      */
-    private  $placeOrder;
+    private $placeOrder;
 
     /**
      * @var PaymentMethodManagementInterface|MockObject
@@ -55,6 +56,11 @@ class PlaceOrderTest extends TestCase
     private $paymentInterfaceMock;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
+    /**
      * Set up test environment
      */
     protected function setUp(): void
@@ -64,10 +70,12 @@ class PlaceOrderTest extends TestCase
         $this->quoteMock = $this->createMock(Quote::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentInterfaceMock = $this->createMock(PaymentInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->placeOrder = new PlaceOrder(
             $this->paymentManagementMock,
-            $this->cartManagementMock
+            $this->cartManagementMock,
+            $this->loggerMock
         );
     }
 
@@ -146,8 +154,20 @@ class PlaceOrderTest extends TestCase
             ->with($cartId)
             ->willReturn($availablePaymentMethods);
 
+        $this->loggerMock->expects($this->once())
+            ->method('debug')
+            ->with(
+                'Attempt to place order with disabled payment method',
+                [
+                    'payment_method' => $paymentMethodCode,
+                    'cart_id' => $cartId,
+                    'user_id' => $userId,
+                    'available_methods' => ['paypal', 'stripe']
+                ]
+            );
+
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->expectExceptionMessage("The requested Payment Method 'unavailable_method' is not available.");
 
         $this->placeOrder->execute($this->quoteMock, $maskedCartId, $userId);
     }
@@ -178,8 +198,20 @@ class PlaceOrderTest extends TestCase
             ->with($cartId)
             ->willReturn($availablePaymentMethods);
 
+        $this->loggerMock->expects($this->once())
+            ->method('debug')
+            ->with(
+                'Attempt to place order with disabled payment method',
+                [
+                    'payment_method' => null,
+                    'cart_id' => $cartId,
+                    'user_id' => $userId,
+                    'available_methods' => ['checkmo']
+                ]
+            );
+
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->expectExceptionMessage("The requested Payment Method 'unknown' is not available.");
 
         $this->placeOrder->execute($this->quoteMock, $maskedCartId, $userId);
     }
@@ -207,8 +239,20 @@ class PlaceOrderTest extends TestCase
             ->with($cartId)
             ->willReturn([]);
 
+        $this->loggerMock->expects($this->once())
+            ->method('debug')
+            ->with(
+                'Attempt to place order with disabled payment method',
+                [
+                    'payment_method' => $paymentMethodCode,
+                    'cart_id' => $cartId,
+                    'user_id' => $userId,
+                    'available_methods' => []
+                ]
+            );
+
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->expectExceptionMessage("The requested Payment Method 'checkmo' is not available.");
 
         $this->placeOrder->execute($this->quoteMock, $maskedCartId, $userId);
     }
@@ -236,8 +280,20 @@ class PlaceOrderTest extends TestCase
             ->with($cartId)
             ->willReturn(null);
 
+        $this->loggerMock->expects($this->once())
+            ->method('debug')
+            ->with(
+                'Attempt to place order with disabled payment method',
+                [
+                    'payment_method' => $paymentMethodCode,
+                    'cart_id' => $cartId,
+                    'user_id' => $userId,
+                    'available_methods' => []
+                ]
+            );
+
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->expectExceptionMessage("The requested Payment Method 'checkmo' is not available.");
 
         $this->placeOrder->execute($this->quoteMock, $maskedCartId, $userId);
     }
@@ -266,8 +322,20 @@ class PlaceOrderTest extends TestCase
             ->with($cartId)
             ->willReturn($availablePaymentMethods);
 
+        $this->loggerMock->expects($this->once())
+            ->method('debug')
+            ->with(
+                'Attempt to place order with disabled payment method',
+                [
+                    'payment_method' => null,
+                    'cart_id' => $cartId,
+                    'user_id' => $userId,
+                    'available_methods' => ['checkmo']
+                ]
+            );
+
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->expectExceptionMessage("The requested Payment Method 'unknown' is not available.");
 
         $this->placeOrder->execute($this->quoteMock, $maskedCartId, $userId);
     }
@@ -336,8 +404,20 @@ class PlaceOrderTest extends TestCase
             ->with($cartId)
             ->willReturn($availablePaymentMethods);
 
+        $this->loggerMock->expects($this->once())
+            ->method('debug')
+            ->with(
+                'Attempt to place order with disabled payment method',
+                [
+                    'payment_method' => '',
+                    'cart_id' => $cartId,
+                    'user_id' => $userId,
+                    'available_methods' => ['checkmo']
+                ]
+            );
+
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->expectExceptionMessage("The requested Payment Method 'unknown' is not available.");
 
         $this->placeOrder->execute($this->quoteMock, $maskedCartId, $userId);
     }
@@ -351,7 +431,6 @@ class PlaceOrderTest extends TestCase
         $maskedCartId = 'masked123';
         $userId = 456;
         $paymentMethodCode = 'CheckMo'; // Different case
-        $orderId = 789;
 
         $this->quoteMock->method('getId')->willReturn($cartId);
         $this->quoteMock->method('getPayment')->willReturn($this->paymentMock);
@@ -370,8 +449,20 @@ class PlaceOrderTest extends TestCase
             ->with($cartId)
             ->willReturn($availablePaymentMethods);
 
+        $this->loggerMock->expects($this->once())
+            ->method('debug')
+            ->with(
+                'Attempt to place order with disabled payment method',
+                [
+                    'payment_method' => $paymentMethodCode,
+                    'cart_id' => $cartId,
+                    'user_id' => $userId,
+                    'available_methods' => ['checkmo']
+                ]
+            );
+
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('The requested Payment Method is not available.');
+        $this->expectExceptionMessage("The requested Payment Method 'CheckMo' is not available.");
 
         $this->placeOrder->execute($this->quoteMock, $maskedCartId, $userId);
     }
