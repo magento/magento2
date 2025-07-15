@@ -16,4 +16,12 @@
         <data key="path">web/seo/use_rewrites</data>
         <data key="value">0</data>
     </entity>
+    <entity name="AdminEnableReportConfigData">
+        <data key="path">reports/options/enabled</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableReportConfigData">
+        <data key="path">reports/options/enabled</data>
+        <data key="value">0</data>
+    </entity>
 </entities>
