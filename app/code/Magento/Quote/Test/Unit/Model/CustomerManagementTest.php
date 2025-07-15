@@ -282,12 +282,6 @@ class CustomerManagementTest extends TestCase
     {
         $this->expectException(ValidatorException::class);
 
-        $regionData = [
-            'region' => 'California',
-            'region_code' => 'CA',
-            'region_id' => 12,
-        ];
-
         $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
         $this->quoteAddressMock->method('getPrefix')->willReturn(null);
         $this->quoteAddressMock->method('getStreet')->willReturn(['test']);
@@ -381,7 +375,9 @@ class CustomerManagementTest extends TestCase
         $this->customerAddressMock->expects($this->atLeastOnce())->method('setFax')->with('9876543210');
         $this->customerAddressMock->expects($this->atLeastOnce())->method('setVatId')->with('US123456789');
         $this->customerAddressMock->expects($this->atLeastOnce())->method('setRegion')->with($regionMock);
-        $this->customerAddressMock->expects($this->atLeastOnce())->method('setCustomAttributes')->with(['custom_attr' => 'value']);
+        $this->customerAddressMock->expects($this->atLeastOnce())
+            ->method('setCustomAttributes')
+            ->with(['custom_attr' => 'value']);
 
         // Validator to fail
         $validatorMock = $this->createMock(Validator::class);
