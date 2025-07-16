@@ -70,8 +70,7 @@ class PlaceOrder implements ResolverInterface
         } catch (LocalizedException $exception) {
             $exception = $this->errorMessageFormatter->getFormatted(
                 $exception,
-                __('Unable to place order: A server error stopped your order from being placed. ' .
-                    'Please try to place your order again'),
+                __('A server error stopped your order from being placed. Please try to place your order again'),
                 'Unable to place order',
                 $field,
                 $context,
@@ -79,7 +78,7 @@ class PlaceOrder implements ResolverInterface
             );
             $exceptionCode = $exception->getCode();
             if (!$exceptionCode) {
-                $exceptionCode = $this->errorMapper->getErrorMessageId($exception->getMessage());
+                $exceptionCode = $this->errorMapper->getErrorMessageId($exception->getRawMessage());
             }
 
             throw new QuoteException(__($exception->getMessage()), $exception, $exceptionCode);
