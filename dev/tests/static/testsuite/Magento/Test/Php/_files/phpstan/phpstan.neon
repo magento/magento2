@@ -12,6 +12,7 @@ parameters:
     scanDirectories:
         - %rootDir%/../../../dev/tests/static/framework/tests/unit/testsuite/Magento
         - %rootDir%/../../../dev/tests/integration/framework/tests/unit/testsuite/Magento
+        - %rootDir%/../../../dev/tests/integration/_files/Magento
         - %rootDir%/../../../dev/tests/api-functional/_files/Magento
     bootstrapFiles:
             - %rootDir%/../../../dev/tests/static/framework/autoload.php

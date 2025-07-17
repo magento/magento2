@@ -263,34 +263,27 @@ class Session extends \Magento\Framework\Session\SessionManager
                         $quote = $this->quoteRepository->getActive($this->getQuoteId());
                     }
 
-                    $customerId = $this->_customer
-                        ? $this->_customer->getId()
-                        : $this->_customerSession->getCustomerId();
-
-                    if ($quote->getData('customer_id') && (int)$quote->getData('customer_id') !== (int)$customerId) {
+                    $customerId = $this->_customer?->getId() ?? $this->_customerSession->getCustomerId();
+                    if ($quote->getCustomerId() && (int)$quote->getCustomerId() !== (int)$customerId) {
                         $quote = $this->quoteFactory->create();
                         $this->setQuoteId(null);
                     }
 
                     /**
                      * If current currency code of quote is not equal current currency code of store,
-                     * need recalculate totals of quote. It is possible if customer use currency switcher or
+                     * need recalculate totals of quote. It is possible if a customer uses currency switcher or
                      * store switcher.
                      */
-                    if ($quote->getQuoteCurrencyCode() != $this->_storeManager->getStore()->getCurrentCurrencyCode()) {
+                    if ($quote->getQuoteCurrencyCode() !== $this->_storeManager->getStore()->getCurrentCurrencyCode()) {
                         $quote->setStore($this->_storeManager->getStore());
-                        $this->quoteRepository->save($quote->collectTotals());
-                        /*
-                         * We mast to create new quote object, because collectTotals()
-                         * can to create links with other objects.
-                         */
-                        $quote = $this->quoteRepository->get($this->getQuoteId());
+                        $quote->setTriggerRecollect(1);
+                        $this->quoteRepository->save($quote);
+                        $quote = $this->quoteRepository->get($quote->getId());
                     }
-
-                    if ($quote->getTotalsCollectedFlag() === false) {
-                        $quote->collectTotals();
-                    }
-                } catch (NoSuchEntityException $e) {
+                    // Totals may have already been collected here if needed: `\Magento\Quote\Model\Quote::_afterLoad`
+                    // The collectTotals method already check for the internal flag `getTotalsCollectedFlag`
+                    $quote->collectTotals();
+                } catch (NoSuchEntityException) {
                     $this->setQuoteId(null);
                 }
             }
@@ -305,6 +298,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                 } else {
                     $quote->setIsCheckoutCart(true);
                     $quote->setCustomerIsGuest(1);
+                    $quote->setCustomerId(null);
                     $this->_eventManager->dispatch('checkout_quote_init', ['quote' => $quote]);
                 }
             }
@@ -354,7 +348,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Set the current session's quote id
      *
-     * @param int $quoteId
+     * @param int|null $quoteId
      * @return void
      * @codeCoverageIgnore
      */
@@ -399,13 +393,9 @@ class Session extends \Magento\Framework\Session\SessionManager
                 $quote = $this->getQuote();
                 $quote->setCustomerIsGuest(0);
                 $this->quoteRepository->save(
-                    $customerQuote->merge($quote)->collectTotals()
+                    $customerQuote->merge($quote)->setTotalsCollectedFlag(false)->collectTotals()
                 );
-                $newQuote = $this->quoteRepository->get($customerQuote->getId());
-                $this->quoteRepository->save(
-                    $newQuote->collectTotals()
-                );
-                $customerQuote = $newQuote;
+                $customerQuote = $this->quoteRepository->get($customerQuote->getId());
             }
 
             $this->setQuoteId($customerQuote->getId());
@@ -415,13 +405,14 @@ class Session extends \Magento\Framework\Session\SessionManager
             }
             $this->_quote = $customerQuote;
         } else {
-            $this->getQuote()->getBillingAddress();
-            $this->getQuote()->getShippingAddress();
-            $this->getQuote()->setCustomer($this->_customerSession->getCustomerDataObject())
+            $quote = $this->getQuote();
+            $quote->getBillingAddress();
+            $quote->getShippingAddress();
+            $quote->setCustomer($this->_customerSession->getCustomerDataObject())
                 ->setCustomerIsGuest(0)
                 ->setTotalsCollectedFlag(false)
                 ->collectTotals();
-            $this->quoteRepository->save($this->getQuote());
+            $this->quoteRepository->save($quote);
         }
         return $this;
     }
@@ -611,13 +602,11 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     private function getQuoteByCustomer(): ?CartInterface
     {
-        $customerId = $this->_customer
-            ? $this->_customer->getId()
-            : $this->_customerSession->getCustomerId();
+        $customerId = $this->_customer?->getId() ?? $this->_customerSession->getCustomerId();
 
         try {
             $quote = $this->quoteRepository->getActiveForCustomer($customerId);
-        } catch (NoSuchEntityException $e) {
+        } catch (NoSuchEntityException) {
             $quote = null;
         }
 
