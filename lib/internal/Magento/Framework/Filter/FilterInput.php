@@ -139,7 +139,7 @@ class FilterInput
      * @param array|null $data
      * @param array|null $options
      */
-    public function __construct($filterRules, $validatorRules, array $data = null, array $options = null)
+    public function __construct($filterRules, $validatorRules, ?array $data = null, ?array $options = null)
     {
         if ($options) {
             $this->setOptions($options);

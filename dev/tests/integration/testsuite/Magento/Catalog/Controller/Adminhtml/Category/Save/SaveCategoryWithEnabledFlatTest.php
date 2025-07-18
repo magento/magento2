@@ -173,7 +173,7 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
      *
      * @return array
      */
-    public function enableCategoryDataProvider(): array
+    public static function enableCategoryDataProvider(): array
     {
         return [
             'category_is_enabled' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -162,7 +162,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function getByPeriodDataProvider(): array
+    public static function getByPeriodDataProvider(): array
     {
         $dateStart = new \DateTime();
         $expectedYear = $dateStart->format('Y');

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminResetPriceDisplaySettingsActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Reset 'Price Display Settings' values to default.</description>
+        </annotations>
+        <!-- change display setting configurations -->
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayProductPricesInherit}}" visible="true" stepKey="clickDisplayProductPricesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxDisplayShippingPricesInherit}}" dependentSelector="{{AdminConfigureTaxSection.taxDisplayShippingPricesInherit}}" visible="true" stepKey="clickDisplayShippingPricesCheckBox"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" dependentSelector="{{AdminConfigureTaxSection.taxPriceDisplaySettings}}" visible="true" stepKey="close"/>
+    </actionGroup>
+</actionGroups>

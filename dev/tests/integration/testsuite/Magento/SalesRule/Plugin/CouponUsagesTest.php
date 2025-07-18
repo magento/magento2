@@ -166,6 +166,15 @@ class CouponUsagesTest extends TestCase
      */
     public function testQuoteSubmitFailure(array $mockObjects)
     {
+        if(!empty($mockObjects['orderManagement']))
+        {
+            $mockObjects['orderManagement'] = $mockObjects['orderManagement']($this);
+        }
+        else if(!empty($mockObjects['submitQuoteValidator']))
+        {
+            $mockObjects['submitQuoteValidator'] = $mockObjects['submitQuoteValidator']($this);
+        }
+
         $customerId = 1;
         $couponCode = 'one_usage';
         $reservedOrderId = 'test01';
@@ -200,22 +209,36 @@ class CouponUsagesTest extends TestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function quoteSubmitFailureDataProvider(): array
+    private function getMockForOrderManageClass()
     {
-        /** @var OrderManagementInterface|MockObject $orderManagement */
         $orderManagement = $this->createMock(OrderManagementInterface::class);
         $orderManagement->expects($this->once())
             ->method('place')
             ->willThrowException(new \Exception());
 
-        /** @var OrderManagementInterface|MockObject $orderManagement */
+        return $orderManagement;
+    }
+
+    private function getSubmitQuoteValidatorClass()
+    {
         $submitQuoteValidator = $this->createMock(SubmitQuoteValidator::class);
         $submitQuoteValidator->expects($this->once())
             ->method('validateQuote')
             ->willThrowException(new \Exception());
+
+        return $submitQuoteValidator;
+    }
+
+    /**
+     * @return array
+     */
+    public static function quoteSubmitFailureDataProvider(): array
+    {
+        /** @var OrderManagementInterface|MockObject $orderManagement */
+        $orderManagement = static fn (self $testCase) => $testCase->getMockForOrderManageClass();
+
+        /** @var OrderManagementInterface|MockObject $orderManagement */
+        $submitQuoteValidator = static fn (self $testCase) => $testCase->getSubmitQuoteValidatorClass();
 
         return [
             'order placing failure' => [

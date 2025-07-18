@@ -28,7 +28,7 @@ class TypeTest extends TestCase
     {
         $this->block = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__'])
+            ->addMethods(['__'])
             ->getMock();
     }
 

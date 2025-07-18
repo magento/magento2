@@ -109,7 +109,7 @@ class Write extends Read implements WriteInterface
      * @throws FileSystemException
      * @throws ValidatorException
      */
-    public function renameFile($path, $newPath, WriteInterface $targetDirectory = null)
+    public function renameFile($path, $newPath, WriteInterface|null $targetDirectory = null)
     {
         $this->validatePath($path);
         $this->validatePath($newPath);
@@ -128,12 +128,12 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @param string $destination
-     * @param WriteInterface $targetDirectory
+     * @param WriteInterface|null $targetDirectory
      * @return bool
      * @throws FileSystemException
      * @throws ValidatorException
      */
-    public function copyFile($path, $destination, WriteInterface $targetDirectory = null)
+    public function copyFile($path, $destination, WriteInterface|null $targetDirectory = null)
     {
         $this->validatePath($path);
         $this->validatePath($destination);
@@ -154,12 +154,12 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @param string $destination
-     * @param WriteInterface $targetDirectory [optional]
+     * @param WriteInterface|null $targetDirectory [optional]
      * @return bool
      * @throws FileSystemException
      * @throws ValidatorException
      */
-    public function createSymlink($path, $destination, WriteInterface $targetDirectory = null)
+    public function createSymlink($path, $destination, WriteInterface|null $targetDirectory = null)
     {
         $this->validatePath($path);
         $this->validatePath($destination);

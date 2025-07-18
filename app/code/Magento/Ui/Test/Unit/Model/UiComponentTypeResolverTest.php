@@ -49,7 +49,7 @@ class UiComponentTypeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider(): array
+    public static function resolveDataProvider(): array
     {
         return [
             ['json', 'application/json'],

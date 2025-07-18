@@ -99,7 +99,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function setLocaleWithParameterDataProvider(): array
+    public static function setLocaleWithParameterDataProvider(): array
     {
         return [
             ['ko_KR', 'ja_JP', 'ja_JP'],

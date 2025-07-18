@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare (strict_types = 1);
 
@@ -13,7 +13,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistItemCollection;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory as WishlistItemCollectionFactory;
 use Magento\Wishlist\Model\Wishlist;
@@ -26,12 +25,12 @@ class WishlistItems implements ResolverInterface
     /**
      * @var WishlistItemCollectionFactory
      */
-    private $wishlistItemCollectionFactory;
+    private WishlistItemCollectionFactory $wishlistItemCollectionFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * @param WishlistItemCollectionFactory $wishlistItemCollectionFactory
@@ -52,14 +51,18 @@ class WishlistItems implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('Missing key "model" in Wishlist value data'));
         }
         /** @var Wishlist $wishlist */
         $wishlist = $value['model'];
+
+        if ($context->getExtensionAttributes()->getStore() instanceof StoreInterface) {
+            $args['website_id'] = $context->getExtensionAttributes()->getStore()->getWebsiteId();
+        }
 
         /** @var WishlistItemCollection $wishlistItemCollection */
         $wishlistItemsCollection = $this->getWishListItems($wishlist, $args);
@@ -92,6 +95,7 @@ class WishlistItems implements ResolverInterface
      * @param Wishlist $wishlist
      * @param array $args
      * @return WishlistItemCollection
+     * @throws LocalizedException
      */
     private function getWishListItems(Wishlist $wishlist, array $args): WishlistItemCollection
     {
@@ -100,12 +104,22 @@ class WishlistItems implements ResolverInterface
 
         /** @var WishlistItemCollection $wishlistItemCollection */
         $wishlistItemCollection = $this->wishlistItemCollectionFactory->create();
-        $wishlistItemCollection
-            ->addWishlistFilter($wishlist)
-            ->addStoreFilter(array_map(function (StoreInterface $store) {
+        $wishlistItemCollection->addWishlistFilter($wishlist);
+        if (isset($args['website_id']) && $args['website_id']) {
+            $website = $this->storeManager->getWebsite($args['website_id']);
+            $stores = [];
+            foreach ($website->getStores() as $store) {
+                $stores[] = $store->getId();
+            }
+            if ($stores) {
+                $wishlistItemCollection->addStoreFilter($stores);
+            }
+        } else {
+            $wishlistItemCollection->addStoreFilter(array_map(function (StoreInterface $store) {
                 return $store->getId();
-            }, $this->storeManager->getStores()))
-            ->setVisibilityFilter();
+            }, $this->storeManager->getStores()));
+        }
+        $wishlistItemCollection->setVisibilityFilter();
         if ($currentPage > 0) {
             $wishlistItemCollection->setCurPage($currentPage);
         }

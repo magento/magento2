@@ -52,7 +52,7 @@ class LayoutTest extends TestCase
             ->willReturn(false);
         $layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $layoutFactory->expects($this->once())
             ->method('create')

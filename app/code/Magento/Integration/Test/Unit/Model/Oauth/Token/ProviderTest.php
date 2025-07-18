@@ -49,12 +49,12 @@ class ProviderTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->consumerFactoryMock = $this->getMockBuilder(ConsumerFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->tokenFactoryMock = $this->getMockBuilder(TokenFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -63,10 +63,12 @@ class ProviderTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->consumerMock = $this->getMockBuilder(ConsumerInterface::class)
-            ->setMethods(
+            ->addMethods([
+                'load',
+                'loadByKey'
+            ])
+            ->onlyMethods(
                 [
-                    'load',
-                    'loadByKey',
                     'validate',
                     'getId',
                     'getKey',
@@ -80,15 +82,17 @@ class ProviderTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->requestTokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
+            ->addMethods([
+                'getConsumerId',
+                'getType',
+                'getSecret',
+                'getToken',
+            ])
+            ->onlyMethods(
                 [
                     'loadByConsumerIdAndUserType',
                     'load',
                     'getId',
-                    'getConsumerId',
-                    'getType',
-                    'getSecret',
-                    'getToken',
                     'getVerifier',
                     'createRequestToken',
                     'convertToAccess'
@@ -98,12 +102,14 @@ class ProviderTest extends TestCase
             ->getMock();
 
         $this->accessTokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
+            ->onlyMethods([
+                'load',
+                'getId',
+            ])
+            ->addMethods(
                 [
                     'getToken',
                     'getSecret',
-                    'load',
-                    'getId',
                     'getConsumerId',
                     'getType',
                     'getRevoked'
@@ -177,11 +183,11 @@ class ProviderTest extends TestCase
         $secret = 'secret';
 
         $tokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
+            ->addMethods(['getType'])
+            ->onlyMethods(
                 [
                     'loadByConsumerIdAndUserType',
                     'getId',
-                    'getType',
                     'createRequestToken'
                 ]
             )
@@ -220,11 +226,13 @@ class ProviderTest extends TestCase
         $tokenId = 1;
 
         $tokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
+            ->addMethods([
+                'getType',
+            ])
+            ->onlyMethods(
                 [
                     'loadByConsumerIdAndUserType',
                     'getId',
-                    'getType',
                     'createRequestToken'
                 ]
             )

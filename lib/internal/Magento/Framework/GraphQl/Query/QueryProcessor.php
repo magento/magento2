@@ -53,7 +53,7 @@ class QueryProcessor
         ExceptionFormatter $exceptionFormatter,
         QueryComplexityLimiter $queryComplexityLimiter,
         ErrorHandlerInterface $errorHandler,
-        QueryParser $queryParser = null
+        ?QueryParser $queryParser = null
     ) {
         $this->exceptionFormatter = $exceptionFormatter;
         $this->queryComplexityLimiter = $queryComplexityLimiter;
@@ -75,9 +75,9 @@ class QueryProcessor
     public function process(
         Schema $schema,
         DocumentNode|string $source,
-        ContextInterface $contextValue = null,
-        array $variableValues = null,
-        string $operationName = null
+        ?ContextInterface $contextValue = null,
+        ?array $variableValues = null,
+        ?string $operationName = null
     ): array {
         if (is_string($source)) {
             $source = $this->queryParser->parse($source);

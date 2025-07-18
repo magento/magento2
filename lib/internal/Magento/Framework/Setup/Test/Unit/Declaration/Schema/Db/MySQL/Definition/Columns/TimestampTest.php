@@ -137,7 +137,7 @@ class TimestampTest extends TestCase
     /**
      * @return array
      */
-    public function toDefinitionProvider()
+    public static function toDefinitionProvider()
     {
         return [
             [

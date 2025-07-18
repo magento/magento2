@@ -51,7 +51,7 @@ class DesignExceptions
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $exceptionConfigPath,
         $scopeType,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->exceptionConfigPath = $exceptionConfigPath;

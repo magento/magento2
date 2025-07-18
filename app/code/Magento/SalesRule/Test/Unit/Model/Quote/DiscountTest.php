@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,6 +90,10 @@ class DiscountTest extends TestCase
      */
     private $rulesApplierMock;
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
@@ -176,7 +180,10 @@ class DiscountTest extends TestCase
             ->willReturn($discountData);
     }
 
-    public function testCollectItemNoDiscount()
+    /**
+     * @return void
+     */
+    public function testCollectItemNoDiscount(): void
     {
         $itemNoDiscount = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount'])
@@ -234,7 +241,10 @@ class DiscountTest extends TestCase
         );
     }
 
-    public function testCollectItemHasParent()
+    /**
+     * @return void
+     */
+    public function testCollectItemHasParent(): void
     {
         $itemWithParentId = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount'])
@@ -290,7 +300,10 @@ class DiscountTest extends TestCase
         );
     }
 
-    public function testCollectItemHasNoChildren()
+    /**
+     * @return void
+     */
+    public function testCollectItemHasNoChildren(): void
     {
         $itemWithChildren = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
@@ -339,7 +352,7 @@ class DiscountTest extends TestCase
 
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->getMock();
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
@@ -370,7 +383,11 @@ class DiscountTest extends TestCase
         );
     }
 
-    public function testFetch()
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testFetch(): void
     {
         $discountAmount = 100;
         $discountDescription = 100;
@@ -390,5 +407,87 @@ class DiscountTest extends TestCase
         $totalMock->expects($this->once())->method('getDiscountAmount')->willReturn($discountAmount);
         $totalMock->expects($this->once())->method('getDiscountDescription')->willReturn($discountDescription);
         $this->assertEquals($expectedResult, $this->discount->fetch($quoteMock, $totalMock));
+    }
+
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testCollectAddressBaseDiscountAmountIncludingItemChildren(): void
+    {
+        $storeId = 1;
+        $quote = $this->createMock(Quote::class);
+        $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $total = $this->getMockBuilder(Total::class)
+            ->addMethods(
+                [
+                    'getBaseDiscountAmount'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $total->expects($this->any())->method('getBaseDiscountAmount')->willReturn(20.00);
+
+        $store = $this->createMock(Store::class);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)->willReturn($store);
+
+        $rule1 = $this->createMock(Rule::class);
+        $rule1->expects($this->any())->method('getSimpleAction')
+            ->willReturn(null);
+        $rule2 = $this->createMock(Rule::class);
+        $rule2->expects($this->any())->method('getSimpleAction')
+            ->willReturn(null);
+        $this->validatorMock->expects($this->once())->method('getRules')
+            ->with($this->addressMock)
+            ->willReturn([$rule1, $rule2]);
+        $item = $this->getMockBuilder(Item::class)
+            ->addMethods(['getNoDiscount', 'getBaseDiscountAmount'])
+            ->onlyMethods(
+                [
+                    'getParentItem',
+                    'getId',
+                    'getExtensionAttributes',
+                    'getAddress',
+                    'getChildren',
+                    'isChildrenCalculated'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $item->expects($this->any())->method('getNoDiscount')->willReturn(false);
+        $item->expects($this->any())->method('getId')->willReturn(1);
+        $item->expects($this->any())->method('getParentItem')->willReturn(false);
+        $item->expects($this->any())->method('getExtensionAttributes')->willReturn(false);
+        $item->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
+        $child = $this->getMockBuilder(Item::class)
+            ->addMethods(['getBaseDiscountAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $item->expects($this->exactly(2))->method('getChildren')->willReturn([$child]);
+        $item->expects($this->once())->method('isChildrenCalculated')->willReturn(true);
+        $index = 1;
+        $child->expects($this->any())->method('getBaseDiscountAmount')->willReturnCallback(function () use (&$index) {
+            $value = $index * 10;
+            $index++;
+            return $value;
+        });
+        $this->addressMock->expects($this->any())->method('getAllItems')->willReturn([$item]);
+        $this->shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn([$item]);
+        $quote->expects($this->any())->method('getAllAddresses')->willReturn([$this->addressMock]);
+        $this->validatorMock->expects($this->any())->method('sortItemsByPriority')
+            ->with([$item], $this->addressMock)
+            ->willReturnArgument(0);
+
+        $this->addressMock->expects($this->exactly(5))
+            ->method('setBaseDiscountAmount')
+            ->with($this->logicalOr(
+                $this->equalTo(0),
+                $this->equalTo(10),
+                $this->equalTo(20),
+                $this->equalTo(20),
+                $this->equalTo(20.00)
+            ));
+
+        $this->discount->collect($quote, $this->shippingAssignmentMock, $total);
     }
 }

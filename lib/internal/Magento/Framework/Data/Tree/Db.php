@@ -1,8 +1,10 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\Data\Tree;
 
 /**
@@ -10,18 +12,13 @@ namespace Magento\Framework\Data\Tree;
  *
  * Data model:
  * id  |  pid  |  level | order
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Db extends \Magento\Framework\Data\Tree
 {
-    const ID_FIELD = 'id';
-
-    const PARENT_FIELD = 'parent';
-
-    const LEVEL_FIELD = 'level';
-
-    const ORDER_FIELD = 'order';
+    public const ID_FIELD = 'id';
+    public const PARENT_FIELD = 'parent';
+    public const LEVEL_FIELD = 'level';
+    public const ORDER_FIELD = 'order';
 
     /**
      * DB connection
@@ -73,8 +70,6 @@ class Db extends \Magento\Framework\Data\Tree
     protected $_orderField;
 
     /**
-     * Db tree constructor
-     *
      * $fields = array(
      *      \Magento\Framework\Data\Tree\Db::ID_FIELD       => string,
      *      \Magento\Framework\Data\Tree\Db::PARENT_FIELD   => string,
@@ -85,6 +80,7 @@ class Db extends \Magento\Framework\Data\Tree
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $table
      * @param array $fields
+     *
      * @throws \Exception
      */
     public function __construct(\Magento\Framework\DB\Adapter\AdapterInterface $connection, $table, $fields)
@@ -92,7 +88,7 @@ class Db extends \Magento\Framework\Data\Tree
         parent::__construct();
 
         if (!$connection) {
-            throw new \Exception('Wrong "$connection" parametr');
+            throw new \Exception('Wrong "$connection" parametr'); // phpcs:ignore
         }
 
         $this->_conn = $connection;
@@ -108,7 +104,7 @@ class Db extends \Magento\Framework\Data\Tree
             $fields[self::ORDER_FIELD]
         )
         ) {
-            throw new \Exception('"$fields" tree configuratin array');
+            throw new \Exception('"$fields" tree configuratin array'); // phpcs:ignore
         }
 
         $this->_idField = $fields[self::ID_FIELD];
@@ -121,6 +117,8 @@ class Db extends \Magento\Framework\Data\Tree
     }
 
     /**
+     * Get database select
+     *
      * @return \Magento\Framework\DB\Select
      */
     public function getDbSelect()
@@ -129,7 +127,10 @@ class Db extends \Magento\Framework\Data\Tree
     }
 
     /**
+     * Set database select
+     *
      * @param \Magento\Framework\DB\Select $select
+     *
      * @return void
      */
     public function setDbSelect($select)
@@ -140,9 +141,10 @@ class Db extends \Magento\Framework\Data\Tree
     /**
      * Load tree
      *
-     * @param   int|Node $parentNode
-     * @param   int $recursionLevel recursion level
-     * @return  $this
+     * @param int|Node $parentNode
+     * @param int $recursionLevel
+     *
+     * @return $this
      * @throws \Exception
      */
     public function load($parentNode = null, $recursionLevel = 100)
@@ -156,7 +158,7 @@ class Db extends \Magento\Framework\Data\Tree
             $parentId = $parentNode;
             $parentNode = null;
         } else {
-            throw new \Exception('root node id is not defined');
+            throw new \Exception('root node id is not defined'); // phpcs:ignore
         }
 
         $select = clone $this->_select;
@@ -172,11 +174,15 @@ class Db extends \Magento\Framework\Data\Tree
                 $node->loadChildren($recursionLevel - 1);
             }
         }
+
         return $this;
     }
 
     /**
+     * Load node
+     *
      * @param mixed $nodeId
+     *
      * @return Node
      */
     public function loadNode($nodeId)
@@ -190,9 +196,12 @@ class Db extends \Magento\Framework\Data\Tree
     }
 
     /**
+     * Append child
+     *
      * @param Node $data
      * @param Node $parentNode
      * @param Node $prevNode
+     *
      * @return Node
      */
     public function appendChild($data, $parentNode, $prevNode = null)
@@ -222,6 +231,7 @@ class Db extends \Magento\Framework\Data\Tree
      * @param Node $node
      * @param Node $parentNode
      * @param Node $prevNode
+     *
      * @return void
      * @throws \Exception
      */
@@ -236,6 +246,7 @@ class Db extends \Magento\Framework\Data\Tree
         } else {
             $data[$this->_orderField] = $prevNode->getData($this->_orderField) + 1;
         }
+
         $condition = $this->_conn->quoteInto("{$this->_idField}=?", $node->getId());
 
         // For reorder new node branch
@@ -274,13 +285,16 @@ class Db extends \Magento\Framework\Data\Tree
             $this->_conn->commit();
         } catch (\Exception $e) {
             $this->_conn->rollBack();
-            throw new \Exception('Can\'t move tree node');
+            throw new \Exception('Can\'t move tree node'); // phpcs:ignore
         }
     }
 
     /**
+     * Update child levels
+     *
      * @param mixed $parentId
      * @param int $parentLevel
+     *
      * @return $this
      */
     protected function _updateChildLevels($parentId, $parentLevel)
@@ -304,10 +318,13 @@ class Db extends \Magento\Framework\Data\Tree
                 $this->_updateChildLevels($id, $parentLevel + 1);
             }
         }
+
         return $this;
     }
 
     /**
+     * Load full tree
+     *
      * @return $this
      */
     protected function _loadFullTree()
@@ -327,7 +344,10 @@ class Db extends \Magento\Framework\Data\Tree
     }
 
     /**
+     * Remove node
+     *
      * @param Node $node
+     *
      * @return $this
      * @throws \Exception
      */
@@ -356,8 +376,9 @@ class Db extends \Magento\Framework\Data\Tree
             $this->_conn->commit();
         } catch (\Exception $e) {
             $this->_conn->rollBack();
-            throw new \Exception('Can\'t remove tree node');
+            throw new \Exception('Can\'t remove tree node'); // phpcs:ignore
         }
+
         parent::removeNode($node);
         return $this;
     }

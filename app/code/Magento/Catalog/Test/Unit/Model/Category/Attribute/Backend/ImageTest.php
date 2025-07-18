@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -75,7 +75,7 @@ class ImageTest extends TestCase
         $this->attribute = $this->getMockForAbstractClass(
             AbstractAttribute::class,
             [],
-            'TestAttribute',
+            '',
             false,
             false,
             true,
@@ -85,7 +85,7 @@ class ImageTest extends TestCase
         $this->logger = $this->getMockForAbstractClass(
             LoggerInterface::class,
             [],
-            'TestLogger',
+            '',
             false,
             false,
             true,
@@ -115,7 +115,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function deletedValueDataProvider()
+    public static function deletedValueDataProvider()
     {
         return [
             [false],
@@ -147,7 +147,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function invalidValueDataProvider()
+    public static function invalidValueDataProvider()
     {
         $closure = function () {
             return false;
@@ -375,7 +375,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function attributeValueDataProvider()
+    public static function attributeValueDataProvider()
     {
         return [
             [[['name' => 'test1234.jpg']]],

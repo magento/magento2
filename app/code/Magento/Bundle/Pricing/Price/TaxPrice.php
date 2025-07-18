@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -123,10 +123,10 @@ class TaxPrice
     public function getTaxPrice(
         Product               $product,
         float                 $price,
-        bool                  $includingTax = null,
-        int                   $ctc = null,
-        Store|bool|int|string $store = null,
-        bool                  $priceIncludesTax = null
+        ?bool                  $includingTax = null,
+        ?int                   $ctc = null,
+        Store|bool|int|string|null $store = null,
+        ?bool                  $priceIncludesTax = null
     ): float {
         if (!$price) {
             return $price;
@@ -194,7 +194,7 @@ class TaxPrice
      * @param StoreInterface|null $store
      * @return bool
      */
-    public function displayCartPricesBoth(StoreInterface $store = null): bool
+    public function displayCartPricesBoth(?StoreInterface $store = null): bool
     {
         return $this->taxConfig->displayCartPricesBoth($store);
     }

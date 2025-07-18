@@ -51,7 +51,7 @@ class XsdTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         // @codingStandardsIgnoreStart
         return [

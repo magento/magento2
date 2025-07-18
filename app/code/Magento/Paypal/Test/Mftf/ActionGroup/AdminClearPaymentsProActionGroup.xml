@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClearPaymentsProActionGroup">
+        <annotations>
+            <description>Admin goes to payments pro configuration and clears provided Sample PayPal credentials</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
+        <waitForElementClickable selector="{{PayPalPaymentsProConfigSection.configureBtn(countryCode)}}" stepKey="waitForPayPalPaymentsProConfigureBtn"/>
+        <click selector ="{{PayPalPaymentsProConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalPaymentsProConfigureBtn"/>
+        <waitForPageLoad stepKey="waitForPaymethodConfigPageLoad"/>
+        <clearField selector="{{PayPalPaymentsProConfigSection.partner(countryCode)}}" stepKey="clearInputPartnerField"/>
+        <clearField selector="{{PayPalPaymentsProConfigSection.vendor(countryCode)}}" stepKey="clearInputVendorField"/>
+        <clearField selector="{{PayPalPaymentsProConfigSection.user(countryCode)}}" stepKey="clearInputUsereField"/>
+        <clearField selector="{{PayPalPaymentsProConfigSection.password(countryCode)}}" stepKey="clearInputPasswordField"/>
+        <selectOption selector="{{PayPalPaymentsProConfigSection.testMode(countryCode)}}" userInput="No" stepKey="disableTestMode"/>
+        <assertElementContainsAttribute stepKey="seeEnablePaymentsProSolutionIsDisabled">
+            <expectedResult selector="{{PayPalPaymentsProConfigSection.enableSolution(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <seeOptionIsSelected selector="{{PayPalPaymentsProConfigSection.enableSolution(countryCode)}}" userInput="No" stepKey="seeEnableThisSolutionIsSetAsNo"/>
+        <assertElementContainsAttribute stepKey="seeEnablePaypalCreditIsDisabled">
+            <expectedResult selector="{{PayPalPaymentsProConfigSection.enablePaypalCredit(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <seeOptionIsSelected selector="{{PayPalPaymentsProConfigSection.enablePaypalCredit(countryCode)}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo" after="seeEnablePaypalCreditIsDisabled"/>
+        <assertElementContainsAttribute stepKey="seeEnableVaultIsDisabled">
+            <expectedResult selector="{{PayPalPaymentsProConfigSection.enableVault(countryCode)}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <seeOptionIsSelected selector="{{PayPalPaymentsProConfigSection.enableVault(countryCode)}}" userInput="No" stepKey="seeValultIsSetAsNo" after="seeEnableVaultIsDisabled"/>
+    </actionGroup>
+</actionGroups>

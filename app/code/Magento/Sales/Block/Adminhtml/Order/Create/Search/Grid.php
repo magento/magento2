@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
 
@@ -12,36 +12,27 @@ use Magento\Framework\App\ObjectManager;
  * Adminhtml sales order create search products block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Sales config
-     *
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
 
     /**
-     * Session quote
-     *
      * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
 
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Product factory
-     *
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $_productFactory;
@@ -69,7 +60,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\Config $salesConfig,
         array $data = [],
-        ProductCollection $productCollectionProvider = null
+        ?ProductCollection $productCollectionProvider = null
     ) {
         $this->_productFactory = $productFactory;
         $this->_catalogConfig = $catalogConfig;

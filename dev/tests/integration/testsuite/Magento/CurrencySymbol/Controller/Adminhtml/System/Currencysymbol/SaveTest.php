@@ -55,7 +55,7 @@ class SaveTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     /**
      * @return array
      */
-    public function currencySymbolDataProvider()
+    public static function currencySymbolDataProvider()
     {
         return [
             ['USD', 'customSymbolUSD', 'customSymbolUSD'],

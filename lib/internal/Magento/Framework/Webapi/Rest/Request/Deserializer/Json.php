@@ -37,7 +37,7 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
     public function __construct(
         \Magento\Framework\Json\Decoder $decoder,
         State $appState,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->decoder = $decoder;
         $this->_appState = $appState;

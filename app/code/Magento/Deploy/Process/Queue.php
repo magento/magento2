@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,12 +24,12 @@ class Queue
     /**
      * Default max amount of processes
      */
-    const DEFAULT_MAX_PROCESSES_AMOUNT = 4;
+    public const DEFAULT_MAX_PROCESSES_AMOUNT = 4;
 
     /**
      * Default max execution time
      */
-    const DEFAULT_MAX_EXEC_TIME = 900;
+    public const DEFAULT_MAX_EXEC_TIME = 900;
 
     /**
      * @var array
@@ -263,6 +263,15 @@ class Queue
             && !$this->isDeployed($package)
             && ($this->maxProcesses < 2 || (count($this->inProgress) < $this->maxProcesses))
         ) {
+            //Prevents duplicate execution of a theme package by checking if it has already been scheduled.
+            if (!isset($packages[$name])) {
+                $this->logger->debug(sprintf(
+                    'Preventing duplicate execution of package as it is in progress: %s (pid: %s)',
+                    $package->getPath(),
+                    $this->getPid($package)
+                ));
+                return;
+            }
             unset($packages[$name]);
             $this->execute($package);
         }

@@ -43,7 +43,7 @@ class ThemePackageInfo
     public function __construct(
         ComponentRegistrar $componentRegistrar,
         ReadFactory $readDirFactory,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->componentRegistrar = $componentRegistrar;
         $this->readDirFactory = $readDirFactory;

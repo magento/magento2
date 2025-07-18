@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,6 @@ class QuickSearchTest extends AbstractController
      *
      * @magentoAppArea frontend
      * @magentoDbIsolation disabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch7_minimum_should_match 100%
      * @magentoConfigFixture current_store catalog/search/elasticsearch8_minimum_should_match 100%
      * @magentoConfigFixture current_store catalog/search/opensearch_minimum_should_match 100%
      * @magentoDataFixture Magento/Elasticsearch/_files/products_for_search.php

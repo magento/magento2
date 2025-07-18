@@ -42,10 +42,10 @@ class IoTest extends TestCase
     protected $_filesystemDriverMock;
 
     /** @var string */
-    protected $existingFile = '/Magento/Class/Exists.php';
+    protected static $existingFile = '/Magento/Class/Exists.php';
 
     /** @var string */
-    protected $nonExistingFile = '/Magento/Class/Does/Not/Exists.php';
+    protected static $nonExistingFile = '/Magento/Class/Does/Not/Exists.php';
 
     protected function setUp(): void
     {
@@ -119,24 +119,24 @@ class IoTest extends TestCase
     /**
      * @return array
      */
-    public function testWriteResultFileAlreadyExistsDataProvider()
+    public static function testWriteResultFileAlreadyExistsDataProvider()
     {
         return [
             'Writing file succeeds: writeResultFile succeeds' => [
-                'resultFileName' => $this->nonExistingFile,
+                'resultFileName' => self::$nonExistingFile,
                 'fileExists' => false,
                 'exceptionDuringRename' => false,
                 'success' => true
 
             ],
             'Writing file fails because class already exists on disc: writeResultFile succeeds' => [
-                'resultFileName' => $this->existingFile,
+                'resultFileName' => self::$existingFile,
                 'fileExists' => true,
                 'exceptionDuringRename' => true,
                 'success' => true
             ],
             'Error renaming file, btu class does not exist on disc: writeResultFile throws exception and fails' => [
-                'resultFileName' => $this->nonExistingFile,
+                'resultFileName' => self::$nonExistingFile,
                 'fileExists' => false,
                 'exceptionDuringRename' => true,
                 'success' => false
@@ -213,11 +213,11 @@ class IoTest extends TestCase
     /**
      * @return array
      */
-    public function fileExistsDataProvider()
+    public static function fileExistsDataProvider()
     {
         return [
-            ['fileName' => $this->existingFile, 'exists' => true],
-            ['fileName' => $this->nonExistingFile, 'exists' => false]
+            ['fileName' => self::$existingFile, 'exists' => true],
+            ['fileName' => self::$nonExistingFile, 'exists' => false]
         ];
     }
 }

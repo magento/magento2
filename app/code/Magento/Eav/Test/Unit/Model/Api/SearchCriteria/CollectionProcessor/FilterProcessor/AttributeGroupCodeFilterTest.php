@@ -37,7 +37,7 @@ class AttributeGroupCodeFilterTest extends TestCase
 
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter'])
+            ->onlyMethods(['addFilter'])
             ->getMockForAbstractClass();
         $collectionMock->expects($this->once())
             ->method('addFilter')

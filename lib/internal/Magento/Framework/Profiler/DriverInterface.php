@@ -22,7 +22,7 @@ interface DriverInterface
      * @param array|null $tags
      * @return void
      */
-    public function start($timerId, array $tags = null);
+    public function start($timerId, ?array $tags = null);
 
     /**
      * Stop timer

@@ -136,7 +136,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider()
     {
         return [
             [null, ''],
@@ -147,7 +147,7 @@ class ThemeTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider()
+    public static function afterSaveDataProvider()
     {
         return [
             [0, 'some_value'],

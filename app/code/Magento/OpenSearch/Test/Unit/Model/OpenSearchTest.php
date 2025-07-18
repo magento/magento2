@@ -56,7 +56,7 @@ class OpenSearchTest extends TestCase
     protected function setUp(): void
     {
         $this->opensearchV2ClientMock = $this->getMockBuilder(Client::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'indices',
                     'search'
@@ -66,7 +66,7 @@ class OpenSearchTest extends TestCase
             ->getMock();
 
         $this->indicesMock = $this->getMockBuilder(IndicesNamespace::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'putMapping'
                 ]

@@ -52,14 +52,14 @@ class ConverterTest extends TestCase
             TaxRateInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->taxRateTitleDataObjectFactory = $this->getMockBuilder(
             TaxRateTitleInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->format = $this->getMockBuilder(FormatInterface::class)

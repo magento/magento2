@@ -65,7 +65,7 @@ class WebapiRoleLocatorTest extends TestCase
 
         $this->userContext = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])
+            ->onlyMethods(['getUserId', 'getUserType'])
             ->getMock();
         $this->userContext->expects($this->once())
             ->method('getUserId')
@@ -77,11 +77,11 @@ class WebapiRoleLocatorTest extends TestCase
         $this->roleCollectionFactory = $this->getMockBuilder(
             \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
 
         $this->roleCollection = $this->getMockBuilder(\Magento\Authorization\Model\ResourceModel\Role\Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setUserFilter', 'getFirstItem'])
+            ->onlyMethods(['setUserFilter', 'getFirstItem'])
             ->getMock();
         $this->roleCollectionFactory->expects($this->once())
             ->method('create')
@@ -93,7 +93,7 @@ class WebapiRoleLocatorTest extends TestCase
 
         $this->role = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
 
         $this->roleCollection->expects($this->once())

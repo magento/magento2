@@ -45,12 +45,12 @@ class ShortcutTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setMethod'])
+            ->onlyMethods(['setMethod'])
             ->getMock();
         $configFactoryMock->expects($this->any())->method('create')->willReturn($configMock);
 
@@ -103,8 +103,7 @@ class ShortcutTest extends TestCase
         $bmlMethodCode = '';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
         $expressMethod = $this->getMockBuilder(Express::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->disableOriginalConstructor()->getMock();
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('validate')
             ->with($paymentMethodCode, $isInCatalog)->willReturn(true);
@@ -123,8 +122,7 @@ class ShortcutTest extends TestCase
         $hash = 'hash';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
         $expressMethod = $this->getMockBuilder(Express::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->disableOriginalConstructor()->getMock();
         $expectedData = [
             'is_in_catalog_product' => $isInCatalog,
             'module_name' => 'Magento_Paypal',

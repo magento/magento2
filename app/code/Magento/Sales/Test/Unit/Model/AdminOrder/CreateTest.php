@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,9 @@ use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -44,57 +47,67 @@ class CreateTest extends TestCase
     /**
      * @var Create
      */
-    private $adminOrderCreate;
+    private Create $adminOrderCreate;
 
     /**
      * @var CartRepositoryInterface|MockObject
      */
-    private $quoteRepository;
+    private CartRepositoryInterface $quoteRepository;
 
     /**
      * @var QuoteFactory|MockObject
      */
-    private $quoteFactory;
+    private QuoteFactory $quoteFactory;
 
     /**
      * @var SessionQuote|MockObject
      */
-    private $sessionQuote;
+    private SessionQuote $sessionQuote;
 
     /**
      * @var FormFactory|MockObject
      */
-    private $formFactory;
+    private FormFactory $formFactory;
 
     /**
      * @var CustomerInterfaceFactory|MockObject
      */
-    private $customerFactory;
+    private CustomerInterfaceFactory $customerFactory;
 
     /**
      * @var Updater|MockObject
      */
-    private $itemUpdater;
+    private Updater $itemUpdater;
 
     /**
      * @var Mapper|MockObject
      */
-    private $customerMapper;
+    private Mapper $customerMapper;
 
     /**
      * @var GroupRepositoryInterface|MockObject
      */
-    private $groupRepository;
+    private GroupRepositoryInterface $groupRepository;
 
     /**
      * @var DataObjectHelper|MockObject
      */
-    private $dataObjectHelper;
+    private DataObjectHelper $dataObjectHelper;
 
     /**
      * @var Order|MockObject
      */
-    private $orderMock;
+    private Order $orderMock;
+
+    /**
+     * @var ObjectManagerInterface|ObjectManagerInterface&MockObject|MockObject
+     */
+    private ObjectManagerInterface $objectManager;
+
+    /**
+     * @var ManagerInterface|ManagerInterface&MockObject|MockObject
+     */
+    private ManagerInterface $messageManager;
 
     /**
      * @inheritdoc
@@ -151,7 +164,6 @@ class CreateTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->addMethods(['setReordered', 'getReordered'])
             ->onlyMethods(
                 [
                     'getEntityId',
@@ -166,10 +178,14 @@ class CreateTest extends TestCase
             )
             ->getMock();
 
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->adminOrderCreate = $objectManagerHelper->getObject(
             Create::class,
             [
+                '_objectManager' => $this->objectManager,
+                'messageManager' => $this->messageManager,
                 'quoteSession' => $this->sessionQuote,
                 'metadataFormFactory' => $this->formFactory,
                 'customerFactory' => $this->customerFactory,
@@ -181,6 +197,46 @@ class CreateTest extends TestCase
                 'quoteFactory' => $this->quoteFactory,
             ]
         );
+    }
+
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception|LocalizedException
+     */
+    public function testInitFromOrderItemNoExceptionThrownOnAddProduct(): void
+    {
+        $orderItemId = $productId = 1;
+        $exceptionMessage = 'Exception message';
+
+        $buyRequest = $this->createMock(\Magento\Framework\DataObject::class);
+
+        $orderItem = $this->createMock(\Magento\Sales\Model\Order\Item::class);
+        $orderItem->expects($this->once())->method('getId')->willReturn($orderItemId);
+        $orderItem->expects($this->once())->method('getProductId')->willReturn($productId);
+        $orderItem->expects($this->once())->method('getBuyRequest')->willReturn($buyRequest);
+        $orderItem->expects($this->once())->method('getProductOptions')->willReturn(null);
+
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $product->expects($this->once())->method('setStoreId')->willReturnSelf();
+        $product->expects($this->once())->method('load')->willReturnSelf();
+        $product->expects($this->once())->method('getId')->willReturn($productId);
+        $this->objectManager->expects($this->once())->method('create')->willReturn($product);
+
+        $exception = new LocalizedException(__($exceptionMessage));
+        $quote = $this->createMock(Quote::class);
+        $quote->expects($this->once())
+            ->method('addProduct')
+            ->with($product, $buyRequest)
+            ->willThrowException($exception);
+        $this->sessionQuote->method('getQuote')
+            ->willReturn($quote);
+
+        $this->messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with(__($exceptionMessage))
+            ->willReturnSelf();
+
+        $this->adminOrderCreate->initFromOrderItem($orderItem);
     }
 
     public function testSetAccountData()
@@ -448,8 +504,6 @@ class CreateTest extends TestCase
 
         $this->orderMock->method('getItemsCollection')
             ->willReturn($itemCollectionMock);
-        $this->orderMock->method('getReordered')
-            ->willReturn(false);
         $this->orderMock->method('getShippingAddress')
             ->willReturn($address);
         $this->orderMock->method('getBillingAddress')

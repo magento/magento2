@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
@@ -20,6 +20,16 @@
 
     <entity name="specialProductPrice3" type="catalogSpecialPrice">
         <data key="price">90</data>
+        <data key="store_id">0</data>
+        <var key="sku" entityType="product" entityKey="sku" />
+    </entity>
+    <entity name="specialProductPriceForProduct" type="catalogSpecialPrice">
+        <data key="price">18.77</data>
+        <data key="store_id">0</data>
+        <var key="sku" entityType="product" entityKey="sku" />
+    </entity>
+    <entity name="specialProductPriceForSimpleProduct" type="catalogSpecialPrice">
+        <data key="price">19.99</data>
         <data key="store_id">0</data>
         <var key="sku" entityType="product" entityKey="sku" />
     </entity>

@@ -31,9 +31,9 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
         \Magento\Framework\Api\ExtensionAttribute\Config $config,
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        \Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?\Magento\Framework\Code\Generator\CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         if (!$classGenerator) {
             $classGenerator = new \Magento\Framework\Code\Generator\InterfaceGenerator();

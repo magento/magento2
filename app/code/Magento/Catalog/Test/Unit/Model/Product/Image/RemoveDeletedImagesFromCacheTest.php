@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -171,10 +171,6 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
             ->method('convertImageMiscParamsToReadableFormat')
             ->willReturn($data['convertImageParamsToReadableFormat']);
 
-        $this->encryptor->expects($this->once())
-            ->method('hash')
-            ->willReturn('85b0304775df23c13f08dd2c1f9c4c28');
-
         $this->mediaConfig->expects($this->once())
             ->method('getBaseMediaPath')
             ->willReturn('catalog/product');
@@ -183,17 +179,17 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         return [
-            $this->getTestDataWithAttributes()
+            self::getTestDataWithAttributes()
         ];
     }
 
     /**
      * @return array
      */
-    private function getTestDataWithAttributes(): array
+    private static function getTestDataWithAttributes(): array
     {
         return [
             'data' => [

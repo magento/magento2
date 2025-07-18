@@ -31,7 +31,7 @@ interface InvoiceOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
     );
 }

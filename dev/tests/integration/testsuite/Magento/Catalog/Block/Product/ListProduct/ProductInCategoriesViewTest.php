@@ -77,7 +77,7 @@ class ProductInCategoriesViewTest extends TestCase
     /**
      * @return array
      */
-    public function productDataProvider(): array
+    public static function productDataProvider(): array
     {
         return [
             'simple_product_enabled_disabled' => [
@@ -130,7 +130,7 @@ class ProductInCategoriesViewTest extends TestCase
     /**
      * @return array
      */
-    public function productVisibilityProvider(): array
+    public static function productVisibilityProvider(): array
     {
         return [
             'not_visible' => [

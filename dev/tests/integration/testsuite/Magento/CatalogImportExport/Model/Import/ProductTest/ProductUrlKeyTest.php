@@ -102,7 +102,7 @@ class ProductUrlKeyTest extends ProductTestBase
     /**
      * @return array
      */
-    public function validateUrlKeysDataProvider()
+    public static function validateUrlKeysDataProvider()
     {
         return [
             [

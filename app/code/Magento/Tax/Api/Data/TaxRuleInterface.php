@@ -88,7 +88,7 @@ interface TaxRuleInterface extends ExtensibleDataInterface
      * @param int[] $customerTaxClassIds
      * @return $this
      */
-    public function setCustomerTaxClassIds(array $customerTaxClassIds = null);
+    public function setCustomerTaxClassIds(?array $customerTaxClassIds = null);
 
     /**
      * Get product tax class id
@@ -103,7 +103,7 @@ interface TaxRuleInterface extends ExtensibleDataInterface
      * @param int[] $productTaxClassIds
      * @return $this
      */
-    public function setProductTaxClassIds(array $productTaxClassIds = null);
+    public function setProductTaxClassIds(?array $productTaxClassIds = null);
 
     /**
      * Get tax rate ids
@@ -118,7 +118,7 @@ interface TaxRuleInterface extends ExtensibleDataInterface
      * @param int[] $taxRateIds
      * @return $this
      */
-    public function setTaxRateIds(array $taxRateIds = null);
+    public function setTaxRateIds(?array $taxRateIds = null);
 
     /**
      * Get calculate subtotal.

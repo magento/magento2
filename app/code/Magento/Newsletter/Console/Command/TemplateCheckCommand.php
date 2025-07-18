@@ -37,7 +37,7 @@ class TemplateCheckCommand extends DatabaseTemplateCompatibilityCommand
         VariableCompatibilityChecker $compatibilityChecker,
         EmailCollectionFactory $templateCollection,
         CollectionFactory $newsletterCollectionFactory,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($compatibilityChecker, $templateCollection, $name);
 

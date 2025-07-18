@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,12 +52,12 @@ class DataProviderTest extends TestCase
 
         $this->suggestCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIterator'])
+            ->onlyMethods(['getIterator'])
             ->getMock();
 
         $this->query = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQueryText', 'getSuggestCollection'])
+            ->onlyMethods(['getQueryText', 'getSuggestCollection'])
             ->getMock();
         $this->query->expects($this->any())
             ->method('getSuggestCollection')
@@ -65,7 +65,7 @@ class DataProviderTest extends TestCase
 
         $queryFactory = $this->getMockBuilder(QueryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
         $queryFactory->expects($this->any())
             ->method('get')
@@ -73,11 +73,11 @@ class DataProviderTest extends TestCase
 
         $this->itemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $scopeConfig->expects($this->any())
@@ -112,7 +112,7 @@ class DataProviderTest extends TestCase
 
         $itemMock =  $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTitle', 'toArray'])
+            ->onlyMethods(['getTitle', 'toArray'])
             ->getMock();
         $itemMock->expects($this->any())
             ->method('getTitle')

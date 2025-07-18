@@ -42,7 +42,7 @@ class NullableTest extends TestCase
         /** @var BooleanColumnDto|MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNullable'])
+            ->onlyMethods(['isNullable'])
             ->getMock();
         $column->expects($this->any())
             ->method('isNullable')
@@ -61,7 +61,7 @@ class NullableTest extends TestCase
         /** @var BooleanColumnDto|MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNullable'])
+            ->onlyMethods(['isNullable'])
             ->getMock();
         $column->expects($this->any())
             ->method('isNullable')

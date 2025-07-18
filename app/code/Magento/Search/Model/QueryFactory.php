@@ -64,7 +64,7 @@ class QueryFactory implements QueryFactoryInterface
         Context $context,
         ObjectManagerInterface $objectManager,
         StdlibString $string,
-        Data $queryHelper = null
+        ?Data $queryHelper = null
     ) {
         $this->request = $context->getRequest();
         $this->objectManager = $objectManager;

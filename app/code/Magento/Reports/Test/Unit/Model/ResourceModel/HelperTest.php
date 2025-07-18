@@ -125,7 +125,7 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function typesDataProvider()
+    public static function typesDataProvider()
     {
         $mResult = ['period', 'store_id', 'product_id', 'product_name', 'product_price', 'column', 'rating_pos'];
         $dResult = ['period', 'store_id', 'product_id', 'product_name', 'product_price', 'id', 'column', 'rating_pos'];

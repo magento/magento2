@@ -77,10 +77,10 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_localeDate = $localeDate;
         $this->_dateTime = $dateTime;

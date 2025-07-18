@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\DB\Adapter\Pdo;
@@ -32,6 +32,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
 use Zend_Db_Adapter_Exception;
 use Zend_Db_Statement_Exception;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 
 // @codingStandardsIgnoreStart
 
@@ -144,6 +145,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private $isMysql8Engine;
 
+    /***
+     * const for column type
+     */
+    private const COLUMN_TYPE = ['varchar', 'char', 'text', 'mediumtext', 'longtext'];
+
     /**
      * MySQL column - Table DDL type pairs
      *
@@ -251,6 +257,18 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private $parentConnections = [];
 
+    /***
+     * Get exact version of MySQL
+     *
+     * @var string
+     */
+    private $mysqlversion;
+
+    /***
+     * @var DtoFactoriesTable
+     */
+    private $columnConfig;
+
     /**
      * Constructor
      *
@@ -260,6 +278,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      * @param SelectFactory $selectFactory
      * @param array $config
      * @param SerializerInterface|null $serializer
+     * @param DtoFactoriesTable|null $dtoFactoriesTable
      */
     public function __construct(
         StringUtils $string,
@@ -267,13 +286,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         LoggerInterface $logger,
         SelectFactory $selectFactory,
         array $config = [],
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null,
+        ?DtoFactoriesTable $dtoFactoriesTable = null
     ) {
         $this->pid = getmypid();
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
         $this->selectFactory = $selectFactory;
+        $this->columnConfig = $dtoFactoriesTable ?: ObjectManager::getInstance()->get(DtoFactoriesTable::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->exceptionMap = [
             // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
@@ -432,6 +453,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             $this->parentConnections[] = $this->_connection;
             $this->_connection = null;
             $this->pid = getmypid();
+
+            // Reset config host to avoid issue with multiple connections
+            if (!empty($this->_config['port']) && strpos($this->_config['host'], ':') === false) {
+                $this->_config['host'] = implode(':', [$this->_config['host'], $this->_config['port']]);
+                unset($this->_config['port']);
+            }
         }
     }
 
@@ -631,6 +658,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2013,  // SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query
+            4031, // SQLSTATE[HY000]: General error: 4031 The client was disconnected by server because of inactivity.
         ];
         $triesCount = 0;
         do {
@@ -1240,7 +1268,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         if (is_array($definition)) {
             $definition = $this->_getColumnDefinition($definition);
         }
-
+        // Set default collation to utf8mb4 for MySQL
+        if (!empty($definition)) {
+            $type = explode(' ', trim($definition));
+            $definition = $this->setDefaultCharsetAndCollation($type[0], $definition, 1);
+        }
         $sql = sprintf(
             'ALTER TABLE %s MODIFY COLUMN %s %s',
             $this->quoteIdentifier($tableName),
@@ -1812,13 +1844,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             }
         }
 
-        /**
-         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
-         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
-         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
-         */
         foreach ($ddl as $key => $columnData) {
-            $ddl[$key]['DATA_TYPE'] = str_replace(' /* mariadb-5.3 */', '', $columnData['DATA_TYPE']);
+            $ddl[$key]['DATA_TYPE'] = $this->sanitizeColumnDataType($columnData['DATA_TYPE']);
         }
 
         return $ddl;
@@ -1975,7 +2002,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     protected function _getColumnTypeByDdl($column)
     {
         // phpstan:ignore
-        switch ($column['DATA_TYPE']) {
+        switch ($this->sanitizeColumnDataType($column['DATA_TYPE'])) {
             case 'bool':
                 return Table::TYPE_BOOLEAN;
             case 'tinytext':
@@ -2010,6 +2037,22 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
                 return Table::TYPE_DECIMAL;
         }
         return null;
+    }
+
+    /**
+     * Remove old temporal format comment from column data type
+     *
+     * @param string $columnType
+     * @return string
+     */
+    private function sanitizeColumnDataType(string $columnType): string
+    {
+        /**
+         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
+         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
+         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
+         */
+        return str_replace(' /* mariadb-5.3 */', '', $columnType);
     }
 
     /**
@@ -2404,7 +2447,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
                 $columnDefinition
             );
         }
-
+        // Set default collation to utf8mb4 for MySQL
+        if (count($definition)) {
+            foreach ($definition as $index => $columnDefinition) {
+                $type = explode(' ', trim($columnDefinition));
+                $definition[$index] = $this->setDefaultCharsetAndCollation($type[1], $columnDefinition, 2);
+            }
+        }
         // PRIMARY KEY
         if (!empty($primary)) {
             asort($primary, SORT_NUMERIC);
@@ -2584,6 +2633,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         // detect and validate column type
         if ($ddlType === null) {
             $ddlType = $this->_getDdlType($options);
+        } else {
+            $ddlType = $this->sanitizeColumnDataType($ddlType);
         }
 
         if (empty($ddlType) || !isset($this->_ddlColumnTypes[$ddlType])) {
@@ -3056,7 +3107,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $this->rawQuery("SET SQL_MODE=''");
         $this->rawQuery("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
         $this->rawQuery("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'");
-
+        $this->mysqlversion = $this->fetchPairs("SHOW variables LIKE 'version'")['version'] ?? '';
+        if ($this->isMysql8EngineUsed() && str_contains($this->mysqlversion, '8.4')) {
+            $this->rawQuery("SET @OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=@@RESTRICT_FK_ON_NON_STANDARD_KEY");
+            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=0");
+        }
         return $this;
     }
 
@@ -3069,7 +3124,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     {
         $this->rawQuery("SET SQL_MODE=IFNULL(@OLD_SQL_MODE,'')");
         $this->rawQuery("SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS=0, 0, 1)");
-
+        if ($this->isMysql8EngineUsed() && str_contains($this->mysqlversion, '8.4')) {
+            $this->rawQuery("SET RESTRICT_FK_ON_NON_STANDARD_KEY=IF(@OLD_RESTRICT_FK_ON_NON_STANDARD_KEY=0, 0, 1)");
+        }
         return $this;
     }
 
@@ -3224,6 +3281,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         if ($value instanceof Parameter) {
             return $value;
         }
+
+        $column['DATA_TYPE'] = $this->sanitizeColumnDataType($column['DATA_TYPE']);
 
         // return original value if invalid column describe data
         if (!isset($column['DATA_TYPE'])) {
@@ -3994,7 +4053,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             $ddlType = $options['COLUMN_TYPE'];
         }
 
-        return $ddlType;
+        return $this->sanitizeColumnDataType($ddlType);
     }
 
     /**
@@ -4166,7 +4225,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     public function __destruct()
     {
         if ($this->_transactionLevel > 0) {
-            trigger_error('Some transactions have not been committed or rolled back', E_USER_ERROR);
+            while ($this->_transactionLevel) {
+                $this->rollBack();
+            }
+            $this->logger->log('Some transactions have not been committed or rolled back');
         }
     }
 
@@ -4248,5 +4310,27 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     public function __debugInfo()
     {
         return [];
+    }
+
+    /***
+     * Set default collation & charset (e.g.utf8mb4_general_ci and utf8mb4) for tables
+     *
+     * @param string $columnType
+     * @param string $definition
+     * @param int $position
+     * @return string
+     */
+    private function setDefaultCharsetAndCollation($columnType, $definition, $position) : string
+    {
+        $pattern = '/\b(' . implode('|', array_map('preg_quote', self::COLUMN_TYPE)) . ')\b/i';
+        if (preg_match($pattern, $columnType) === 1) {
+            $charset = $this->columnConfig->getDefaultCharset();
+            $collate = $this->columnConfig->getDefaultCollation();
+            $charsets = 'CHARACTER SET ' . $charset. ' COLLATE ' . $collate;
+            $columnsAttribute = explode(' ', trim($definition));
+            array_splice($columnsAttribute, $position, 0, $charsets);
+            return implode(' ', $columnsAttribute);
+        }
+        return $definition;
     }
 }

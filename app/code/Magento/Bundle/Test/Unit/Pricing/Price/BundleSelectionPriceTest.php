@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -106,12 +106,12 @@ class BundleSelectionPriceTest extends TestCase
         $this->productMock->expects($this->atLeastOnce())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
-        
+
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
         ->disableOriginalConstructor()
         ->addMethods(['roundPrice'])
         ->getMockForAbstractClass();
-        
+
         $this->quantity = 1;
 
         $this->setupSelectionPrice();
@@ -356,7 +356,7 @@ class BundleSelectionPriceTest extends TestCase
     /**
      * @return array
      */
-    public function useRegularPriceDataProvider()
+    public static function useRegularPriceDataProvider()
     {
         return [
             'useRegularPrice' => [

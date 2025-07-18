@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
@@ -107,7 +107,7 @@ class ProductUrlRewriteGenerator
         ObjectRegistryFactory         $objectRegistryFactory,
         StoreViewService              $storeViewService,
         StoreManagerInterface         $storeManager,
-        GetVisibleForStores           $visibleForStores = null
+        ?GetVisibleForStores           $visibleForStores = null
     ) {
         $this->canonicalUrlRewriteGenerator = $canonicalUrlRewriteGenerator;
         $this->currentUrlRewritesRegenerator = $currentUrlRewritesRegenerator;

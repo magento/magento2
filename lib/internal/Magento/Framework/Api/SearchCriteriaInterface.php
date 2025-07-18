@@ -27,7 +27,7 @@ interface SearchCriteriaInterface
      * @param \Magento\Framework\Api\Search\FilterGroup[] $filterGroups
      * @return $this
      */
-    public function setFilterGroups(array $filterGroups = null);
+    public function setFilterGroups(?array $filterGroups = null);
 
     /**
      * Get sort order.
@@ -42,7 +42,7 @@ interface SearchCriteriaInterface
      * @param \Magento\Framework\Api\SortOrder[] $sortOrders
      * @return $this
      */
-    public function setSortOrders(array $sortOrders = null);
+    public function setSortOrders(?array $sortOrders = null);
 
     /**
      * Get page size.

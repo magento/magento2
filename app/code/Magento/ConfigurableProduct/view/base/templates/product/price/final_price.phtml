@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox$block */
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox $block */
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
@@ -27,21 +28,21 @@ $block->renderAmount($finalPriceModel->getAmount(), [
 ?>
 </span>
 
-<?php if (!$block->isProductList() && $block->hasSpecialPrice()): ?>
+<?php if ($block->hasSpecialPrice()): ?>
     <span class="old-price sly-old-price no-display">
         <?= /* @noEscape */ $block->renderAmount($priceModel->getAmount(), [
             'display_label'     => __('Regular Price'),
             'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
             'price_type'        => 'oldPrice',
             'include_container' => true,
-            'skip_adjustments'  => true
+            'skip_adjustments'  => false
         ]); ?>
     </span>
 <?php endif; ?>
 
 <?php if ($block->showMinimalPrice()): ?>
     <?php if ($block->getUseLinkForAsLowAs()):?>
-        <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
+        <a href="<?= $escaper->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </a>
     <?php else:?>

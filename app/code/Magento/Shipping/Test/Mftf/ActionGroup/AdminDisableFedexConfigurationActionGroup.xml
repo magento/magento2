@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDisableFedexConfigurationActionGroup">
+        <annotations>
+            <description>Admin Disbale fedex delivery method on configuration papge.</description>
+        </annotations>
+        <magentoCLI command="config:set {{AdminFedexDisableForCheckoutConfigData.path}} {{AdminFedexDisableForCheckoutConfigData.value}}" stepKey="disableCheckout"/>
+        <magentoCLI command="config:set {{AdminFedexDisableSandboxModeConfigData.path}} {{AdminFedexDisableSandboxModeConfigData.value}}" stepKey="disableSandbox"/>
+        <magentoCLI command="config:set {{AdminFedexDisableDebugConfigData.path}} {{AdminFedexDisableDebugConfigData.value}}" stepKey="disableDebug"/>
+        <magentoCLI command="config:set {{AdminFedexDisableShowMethodConfigData.path}} {{AdminFedexDisableShowMethodConfigData.value}}" stepKey="disableShowMethod"/>
+        <magentoCLI command="config:set {{AdminFedexAccount.path}} ''" stepKey="accountSetting"/>
+        <magentoCLI command="config:set {{AdminFedexHubId.path}} ''" stepKey="accountHub"/>
+        <magentoCLI command="config:set {{AdminFedexApiKey.path}} ''" stepKey="accountApiKey"/>
+        <magentoCLI command="config:set {{AdminFedexSecretKey.path}} ''" stepKey="accountSecretKey"/>
+    </actionGroup>
+</actionGroups>

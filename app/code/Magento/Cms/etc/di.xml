@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -316,4 +316,13 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Theme\Model\LayoutCacheTagResolverFactory">
+        <arguments>
+            <argument name="cacheTagsResolvers" xsi:type="array">
+                <item name="Magento\Cms\Model\Page" xsi:type="object">
+                    Magento\Cms\Model\Page\LayoutCacheTagResolver
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

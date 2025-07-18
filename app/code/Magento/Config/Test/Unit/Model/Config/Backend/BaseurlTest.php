@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,9 +17,17 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\MergeService;
+use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test Class BaseurlTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BaseurlTest extends TestCase
 {
     public function testSaveMergedJsCssMustBeCleaned()
@@ -38,7 +46,7 @@ class BaseurlTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $model = $this->getMockBuilder(Baseurl::class)
-            ->setMethods(['getOldValue'])
+            ->onlyMethods(['getOldValue'])
             ->setConstructorArgs(
                 [
                     $context,
@@ -60,5 +68,52 @@ class BaseurlTest extends TestCase
 
         $model->setValue('http://example.com/')->setPath(Store::XML_PATH_UNSECURE_BASE_URL);
         $model->afterSave();
+    }
+
+    /**
+     * Test beforeSave method to ensure URL is converted to lower case.
+     *
+     * @dataProvider beforeSaveDataProvider
+     * @param string $value
+     * @param string $expectedValue
+     * @return void
+     */
+    public function testBeforeSaveConvertLowerCase(string $value, string $expectedValue): void
+    {
+        $model = (new ObjectManager($this))->getObject(Baseurl::class);
+
+        $urlValidatorMock = $this->getMockBuilder(UrlValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManagerInterface = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerInterface->expects($this->exactly(1))
+            ->method('get')
+            ->with(UrlValidator::class)
+            ->willReturn($urlValidatorMock);
+        AppObjectManager::setInstance($objectManagerInterface);
+
+        $urlValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($expectedValue, ['http', 'https'])
+            ->willReturn(true);
+
+        $model->setValue($value);
+        $model->beforeSave();
+        $this->assertEquals($expectedValue, $model->getValue());
+    }
+
+    /**
+     * Data provider for testBeforeSaveConvertLowerCase.
+     *
+     * @return array
+     */
+    public static function beforeSaveDataProvider(): array
+    {
+        return [
+            ['https://Example1.com/', 'https://example1.com/'],
+            ['https://EXAMPLE2.COM/', 'https://example2.com/'],
+            ['HTtpS://ExamPLe3.COM/', 'https://example3.com/'],
+        ];
     }
 }

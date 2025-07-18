@@ -20,7 +20,7 @@ class CouponSearchResult extends SearchResults implements CouponSearchResultInte
     /**
      * @inheritdoc
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return parent::setItems($items);
     }

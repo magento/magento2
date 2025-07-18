@@ -43,11 +43,11 @@ class LogoTest extends TestCase
     {
         $helper = new ObjectManager($this);
         $this->uploaderFactoryMock = $this->getMockBuilder(UploaderFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->uploaderMock = $this->getMockBuilder(Uploader::class)
-            ->setMethods(['setAllowedExtensions', 'save'])
+            ->onlyMethods(['setAllowedExtensions', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->uploaderFactoryMock
@@ -56,14 +56,14 @@ class LogoTest extends TestCase
             ->willReturn($this->uploaderMock);
         $this->requestDataMock = $this
             ->getMockBuilder(RequestDataInterface::class)
-            ->setMethods(['getTmpName'])
+            ->onlyMethods(['getTmpName'])
             ->getMockForAbstractClass();
         $mediaDirectoryMock = $this->getMockBuilder(WriteInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getDirectoryWrite'])
+            ->onlyMethods(['getDirectoryWrite'])
             ->getMock();
         $filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')

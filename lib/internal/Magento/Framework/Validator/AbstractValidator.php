@@ -47,7 +47,7 @@ abstract class AbstractValidator implements ValidatorInterface, ResetAfterReques
      * @param TranslatorInterface|null $translator
      * @return void
      */
-    public static function setDefaultTranslator(TranslatorInterface $translator = null)
+    public static function setDefaultTranslator(?TranslatorInterface $translator = null)
     {
         self::$_defaultTranslator = $translator;
     }

@@ -70,7 +70,7 @@ class ConfigsApplyFixtureTest extends TestCase
     public function testNoFixtureConfigValue()
     {
         $configMock = $this->getMockBuilder(ValueInterface::class)
-            ->setMethods(['save'])
+            ->addMethods(['save'])
             ->getMockForAbstractClass();
         $configMock->expects($this->never())->method('save');
 

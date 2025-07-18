@@ -10,7 +10,9 @@ namespace Magento\Framework\Test\Unit\Data\Form\Element;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Hidden;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,6 +28,17 @@ class HiddenTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $escaper = $objectManager->getObject(
             Escaper::class
         );
@@ -61,11 +74,11 @@ class HiddenTest extends TestCase
     /**
      * @return array
      */
-    public function getElementHtmlDataProvider()
+    public static function getElementHtmlDataProvider()
     {
         return [
             ['some_value'],
-            ['store_ids[]' => ['1', '2']],
+            ['value' => ['1', '2']],
         ];
     }
 }

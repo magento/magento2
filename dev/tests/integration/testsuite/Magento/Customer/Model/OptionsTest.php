@@ -97,7 +97,7 @@ class OptionsTest extends TestCase
      *
      * @return array
      */
-    public function optionsDataProvider(): array
+    public static function optionsDataProvider(): array
     {
         $optionPrefixName = 'prefix';
         $optionSuffixName = 'suffix';

@@ -42,7 +42,7 @@ abstract class AbstractAggregateException extends LocalizedException implements 
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
+    public function __construct(Phrase $phrase, ?\Exception $cause = null, $code = 0)
     {
         $this->originalPhrase = $phrase;
         parent::__construct($phrase, $cause, $code);

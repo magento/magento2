@@ -82,10 +82,10 @@ class ActionList
         $actionInterface = ActionInterface::class,
         $cacheKey = 'app_action_list',
         $reservedWords = [],
-        SerializerInterface $serializer = null,
-        State $state = null,
-        DirectoryList $directoryList = null,
-        ReflectionClassFactory $reflectionClassFactory = null
+        ?SerializerInterface $serializer = null,
+        ?State $state = null,
+        ?DirectoryList $directoryList = null,
+        ?ReflectionClassFactory $reflectionClassFactory = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;

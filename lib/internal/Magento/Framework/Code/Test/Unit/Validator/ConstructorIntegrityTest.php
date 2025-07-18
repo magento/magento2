@@ -5,20 +5,20 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
-use Magento\SomeModule\Model\NamedArguments\NamedParametersTest;
-use Magento\SomeModule\Model\NamedArguments\MixedParametersTest;
+use Magento\SomeModule\Model\NamedArguments\TestNamedParameters;
+use Magento\SomeModule\Model\NamedArguments\TestMixedParameters;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Code\Validator\ConstructorIntegrity;
 use Magento\Framework\Exception\ValidatorException;
 
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Three/Test.php';
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Two/Test.php';
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/One/Test.php';
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Four/Test.php';
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/Test.php';
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/Test.php';
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/NamedArguments/NamedParametersTest.php';
-require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/NamedArguments/MixedParametersTest.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Three/TestThree.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Two/TestTwo.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/One/TestOne.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Four/TestFour.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/TestFive.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/TestSix.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/NamedArguments/TestNamedParameters.php';
+require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/NamedArguments/TestMixedParameters.php';
 require_once __DIR__ . '/_files/ClassesForConstructorIntegrity.php';
 class ConstructorIntegrityTest extends TestCase
 {
@@ -34,48 +34,48 @@ class ConstructorIntegrityTest extends TestCase
 
     public function testValidateIfParentClassExist()
     {
-        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\One\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\One\TestOne::class));
     }
 
     public function testValidateIfClassHasParentConstructCall()
     {
-        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Two\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Two\TestTwo::class));
     }
 
     public function testValidateIfClassHasParentConstructCallWithNamedArguments()
     {
-        $this->assertTrue($this->_model->validate(NamedParametersTest::class));
+        $this->assertTrue($this->_model->validate(TestNamedParameters::class));
     }
 
     public function testValidateIfClassHasParentConstructCallWithMixedArguments()
     {
-        $this->assertTrue($this->_model->validate(MixedParametersTest::class));
+        $this->assertTrue($this->_model->validate(TestMixedParameters::class));
     }
 
     public function testValidateIfClassHasArgumentsQtyEqualToParentClass()
     {
-        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Three\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Three\TestThree::class));
     }
 
     public function testValidateIfClassHasExtraArgumentInTheParentConstructor()
     {
-        $this->_model->validate(\Magento\SomeModule\Model\Four\Test::class);
+        $this->_model->validate(\Magento\SomeModule\Model\Four\TestFour::class);
     }
 
     public function testValidateIfClassHasMissingRequiredArguments()
     {
-        $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/Test.php');
+        $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/TestFive.php');
         $fileName = str_replace('\\', '/', $fileName);
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage(
             'Missed required argument factory in parent::__construct call. File: ' . $fileName
         );
-        $this->_model->validate(\Magento\SomeModule\Model\Five\Test::class);
+        $this->_model->validate(\Magento\SomeModule\Model\Five\TestFive::class);
     }
 
     public function testValidateIfClassHasIncompatibleArguments()
     {
-        $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/Test.php');
+        $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/TestSix.php');
         $fileName = str_replace('\\', '/', $fileName);
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage(
@@ -84,7 +84,7 @@ class ConstructorIntegrityTest extends TestCase
             PHP_EOL .
             $fileName
         );
-        $this->_model->validate(\Magento\SomeModule\Model\Six\Test::class);
+        $this->_model->validate(\Magento\SomeModule\Model\Six\TestSix::class);
     }
 
     public function testValidateWrongOrderForParentArguments()
