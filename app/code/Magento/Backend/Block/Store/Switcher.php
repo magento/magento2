@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -457,6 +457,15 @@ class Switcher extends \Magento\Backend\Block\Template
         if ($this->getCurrentWebsiteName() !== '') {
             return $this->getCurrentWebsiteName();
         }
+
+        if (!$this->hasDefaultOption()) {
+            $websites = $this->getWebsites();
+            if (!empty($websites)) {
+                $websiteArray = array_values($websites);
+                return $websiteArray[0]->getName();
+            }
+        }
+
         return $this->getDefaultSelectionName();
     }
 

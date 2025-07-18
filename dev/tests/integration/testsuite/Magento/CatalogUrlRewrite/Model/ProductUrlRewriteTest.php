@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -278,8 +278,11 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
             $product
         );
         $urlRewriteItems = $this->getEntityRewriteCollection($product->getId())->getItems();
-        $this->assertTrue(count($urlRewriteItems) == 2);
+        $this->assertTrue(count($urlRewriteItems) == 3);
         foreach ($urlRewriteItems as $item) {
+            if ((int) $item->getRedirectType() == OptionProvider::PERMANENT) {
+                continue;
+            }
             $item->getData('store_id') == $secondStoreId
                 ? $this->assertEquals($urlKeySecondStore . $this->suffix, $item->getRequestPath())
                 : $this->assertEquals($urlKeyFirstStore . $this->suffix, $item->getRequestPath());

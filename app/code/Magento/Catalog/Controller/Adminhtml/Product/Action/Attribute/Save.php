@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
@@ -143,6 +143,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             $this->validateProductAttributes($attributesData);
             $this->publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds);
             $this->messageManager->addSuccessMessage(__('Message is added to queue'));
+            $this->attributeHelper->setProductIds([]);
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
