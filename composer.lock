@@ -11544,16 +11544,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "5.0.4",
+            "version": "5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "d43d2a420e363a1fee24da21b89c4dc7d3a156e9"
+                "reference": "7670d653f726a0a122fa6a0d3fc4639825c65c83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/d43d2a420e363a1fee24da21b89c4dc7d3a156e9",
-                "reference": "d43d2a420e363a1fee24da21b89c4dc7d3a156e9",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/7670d653f726a0a122fa6a0d3fc4639825c65c83",
+                "reference": "7670d653f726a0a122fa6a0d3fc4639825c65c83",
                 "shasum": ""
             },
             "require": {
@@ -11627,9 +11627,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.0.4"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.0.5"
             },
-            "time": "2025-04-30T00:24:46+00:00"
+            "time": "2025-06-19T01:37:42+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",
@@ -14715,6 +14715,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }

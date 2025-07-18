@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDisableViewProductReportActionGroup">
+        <annotations>
+            <description>Admin disables most view products report in configuration</description>
+        </annotations>
+        <magentoCLI command="config:set {{AdminDisableReportConfigData.path}} {{AdminDisableReportConfigData.value}}" stepKey="setReportAsDisable"/>
+    </actionGroup>
+</actionGroups>
