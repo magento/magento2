@@ -54,10 +54,10 @@
             <argument name="email" value="@example.com"/>
         </actionGroup>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.customerEmail}}" stepKey="generatedCustomerEmail"/>
-        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
-            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
             <argument name="email" value="$generatedCustomerEmail"/>
         </actionGroup>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <comment userInput="Adding the comment to replace customer logout action for preserving Backward Compatibility" stepKey="logoutCustomer"/>
     </test>
 </tests>

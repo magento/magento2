@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class DiscountTest extends TestCase
      *
      * @return array
      */
-    public function priceDataProvider()
+    public static function priceDataProvider()
     {
         return [
             [100, 50, 50, 50],

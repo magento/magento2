@@ -75,38 +75,39 @@ class ReportCountsTest extends TestCase
     {
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->productManagementMock = $this->getMockBuilder(ProductManagementInterface::class)
-            ->setMethods(['getCount'])
+            ->onlyMethods(['getCount'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->configurableManagementMock = $this
             ->getMockBuilder(ConfigurableProductManagementInterface::class)
-            ->setMethods(['getCount'])
+            ->onlyMethods(['getCount'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->categoryManagementMock = $this->getMockBuilder(CategoryManagementInterface::class)
-            ->setMethods(['getCount'])
+            ->onlyMethods(['getCount'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->countsFactoryMock = $this->getMockBuilder(CountsFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->countsModelMock = $this->getMockBuilder(Counts::class)
-            ->setMethods(['getCount', 'load', 'setEntityId', 'setType', 'setCount', 'setUpdatedAt', 'save'])
+            ->addMethods(['getCount', 'setType', 'setCount', 'setUpdatedAt'])
+            ->onlyMethods(['load', 'setEntityId', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->countsCollectionFactoryMock = $this
             ->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $collectionClassName = Collection::class;
         $this->countsCollectionMock = $this->getMockBuilder($collectionClassName)
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'addOrder', 'setPageSize', 'getFirstItem'])
+            ->onlyMethods(['addFieldToFilter', 'addOrder', 'setPageSize', 'getFirstItem'])
             ->getMock();
 
         $this->countsFactoryMock->expects($this->any())

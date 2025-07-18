@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
@@ -116,7 +116,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implement
         \Magento\Catalog\Model\Category $catalogCategory,
         \Psr\Log\LoggerInterface $logger,
         $connectionName = null,
-        TableMaintainer $tableMaintainer = null
+        ?TableMaintainer $tableMaintainer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
@@ -412,7 +412,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implement
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
         }
-        $isActiveExpr = $connection->getCheckSql('c.value_id > 0', 'c.value', 'c.value');
+        $isActiveExpr = $connection->getCheckSql('c.value_id IS NOT NULL', 'c.value', 'd.value');
         $select = $connection->select()->from(
             ['main_table' => $this->getTable('catalog_category_entity')],
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -114,7 +114,7 @@ class BackupTest extends TestCase
     /**
      * @return array
      */
-    public function outputDataProvider()
+    public static function outputDataProvider()
     {
         return [
             ['isFile' => true, 'result' => 'test_result'],

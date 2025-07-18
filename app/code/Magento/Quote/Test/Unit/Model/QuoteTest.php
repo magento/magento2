@@ -356,6 +356,11 @@ class QuoteTest extends TestCase
      */
     public function testIsMultipleShippingAddresses($addresses, $expected): void
     {
+        $finalAddress = [];
+        foreach ($addresses as $address) {
+            $finalAddress[] = $address($this);
+        }
+
         $this->quoteAddressCollectionMock->expects(
             $this->any()
         )->method(
@@ -368,7 +373,7 @@ class QuoteTest extends TestCase
         )->method(
             'getIterator'
         )->willReturn(
-            new \ArrayIterator($addresses)
+            new \ArrayIterator($finalAddress)
         );
 
         $this->assertEquals($expected, $this->quote->isMultipleShippingAddresses());
@@ -406,15 +411,15 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function isMultipleShippingAddressesDataProvider(): array
+    public static function isMultipleShippingAddressesDataProvider(): array
     {
         return [
             [
-                [$this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_SHIPPING)],
+                [static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING), static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING)],
                 true,
             ],
             [
-                [$this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_BILLING)],
+                [static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_SHIPPING), static fn (self $testCase) => $testCase->getAddressMock(Address::TYPE_BILLING)],
                 false
             ]
         ];
@@ -711,10 +716,14 @@ class QuoteTest extends TestCase
 
         $this->groupRepositoryMock
             ->method('getById')
-            ->withConsecutive([$nonExistentGroupId], [$groupId])
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new NoSuchEntityException(new Phrase('Entity Id does not exist'))),
-                $groupMock
+            ->willReturnCallback(
+                function ($id) use ($nonExistentGroupId, $groupId, $groupMock) {
+                    if ($id === $nonExistentGroupId) {
+                        throw new NoSuchEntityException(new Phrase('Entity Id does not exist'));
+                    } elseif ($id === $groupId) {
+                        return $groupMock;
+                    }
+                }
             );
 
         $groupMock->expects($this->once())
@@ -1164,7 +1173,7 @@ class QuoteTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderForTestAddProductItem(): array
+    public static function dataProviderForTestAddProductItem(): array
     {
         return [
             'not_invalid_product_add' => [null, false],
@@ -1414,7 +1423,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestBeforeSaveIsVirtualQuote(): array
+    public static function dataProviderForTestBeforeSaveIsVirtualQuote(): array
     {
         return [
             [[true], 1],
@@ -1505,7 +1514,7 @@ class QuoteTest extends TestCase
     /**
      * @return array
      */
-    public function reservedOrderIdDataProvider(): array
+    public static function reservedOrderIdDataProvider(): array
     {
         return [
             'id_already_in_use' => [true, 100002],

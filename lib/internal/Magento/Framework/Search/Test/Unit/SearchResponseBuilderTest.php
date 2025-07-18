@@ -75,7 +75,7 @@ class SearchResponseBuilderTest extends TestCase
 
         /** @var QueryResponse|MockObject $response */
         $response = $this->getMockBuilder(QueryResponse::class)
-            ->setMethods(['getIterator', 'getAggregations', 'getTotal'])
+            ->onlyMethods(['getIterator', 'getAggregations', 'getTotal'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $response->expects($this->any())

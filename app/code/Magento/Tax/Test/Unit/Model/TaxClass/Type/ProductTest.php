@@ -18,7 +18,8 @@ class ProductTest extends TestCase
     {
         $collectionClassName = AbstractCollection::class;
         $collectionMock = $this->getMockBuilder($collectionClassName)
-            ->setMethods(['addAttributeToFilter', 'getSize'])->disableOriginalConstructor()
+            ->addMethods(['addAttributeToFilter'])
+            ->onlyMethods(['getSize'])->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())->method('addAttributeToFilter')
             ->with('tax_class_id', 1)->willReturnSelf();
@@ -26,7 +27,7 @@ class ProductTest extends TestCase
             ->willReturn(1);
 
         $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(['getCollection', '__wakeup', 'getEntityId'])
+            ->onlyMethods(['getCollection', '__wakeup', 'getEntityId'])
             ->disableOriginalConstructor()
             ->getMock();
         $productMock->expects($this->once())->method('getCollection')->willReturn($collectionMock);

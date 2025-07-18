@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
@@ -58,6 +58,7 @@
                             <item name="modal" xsi:type="string">configurableModal</item>
                             <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                         </argument>
+                        <argument name="view_model" xsi:type="object">Magento\ConfigurableProduct\ViewModel\UploadResizeConfigValue</argument>
                     </arguments>
                 </block>
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml">

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -115,6 +115,25 @@ class EditTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                \Magento\Store\Model\StoreManagerInterface::class,
+                $this->createMock(\Magento\Store\Model\StoreManagerInterface::class)
+            ],
+            [
+                \Magento\Framework\Registry::class,
+                $this->createMock(\Magento\Framework\Registry::class)
+            ],
+            [
+                \Magento\Cms\Model\Wysiwyg\Config::class,
+                $this->createMock(\Magento\Cms\Model\Wysiwyg\Config::class)
+            ],
+            [
+                \Magento\Backend\Model\Auth\Session::class,
+                $this->createMock(\Magento\Backend\Model\Auth\Session::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
 
         $this->categoryMock = $this->createPartialMock(
             Category::class,
@@ -290,7 +309,7 @@ class EditTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderExecute()
+    public static function dataProviderExecute()
     {
         return [
             [

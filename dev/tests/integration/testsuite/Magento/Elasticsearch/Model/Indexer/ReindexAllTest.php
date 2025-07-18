@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
@@ -22,7 +22,7 @@ use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
  * Important: Please make sure that each integration test file works with unique search index. In order to
  * achieve this, use @magentoConfigFixture to pass unique value for index_prefix for every test
  * method.
- * E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch7_index_prefix indexerhandlertest_configurable'
+ * E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch8_index_prefix indexerhandlertest_configurable'
  *
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
@@ -212,7 +212,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         self::assertEquals($specificProduct->getId(), $result[0]['_id']);
     }
 
-    public function searchSpecificProductDataProvider(): array
+    public static function searchSpecificProductDataProvider(): array
     {
         return [
             'search by numeric name' => ['12345', 'configurable_12345', 1],

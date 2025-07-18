@@ -50,8 +50,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         Delete $deleteRates,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
     ) {
         parent::__construct(
             $entityFactory,
@@ -131,9 +131,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         $itemsToDelete = [];
         $itemsToSave = [];
         /** @var Rate $item */
-        foreach ($this->getItems() as $item) {
+        foreach ($this->getItems() as $key => $item) {
             if ($item->isDeleted()) {
                 $itemsToDelete[] = $item;
+                $this->removeItemByKey($key);
             } else {
                 $itemsToSave[] = $item;
             }

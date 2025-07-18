@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -104,11 +104,11 @@ class StockItemCheckerTest extends TestCase
      *
      * @return array
      */
-    public function stockItemModelDataProvider(): array
+    public static function stockItemModelDataProvider(): array
     {
         return [
             'Model is modified' => [
-                'stockItemFromRepository' => [
+                'itemFromRepository' => [
                     'id' => 1,
                     'low_stock_date' => '01.01.2020',
                     'qty' => 100,
@@ -121,7 +121,7 @@ class StockItemCheckerTest extends TestCase
                 'expectedResult' => true,
             ],
             'Model is not modified' => [
-                'stockItemFromRepository' => [
+                'itemFromRepository' => [
                     'id' => 1,
                     'low_stock_date' => '01.01.2020',
                     'qty' => 100,

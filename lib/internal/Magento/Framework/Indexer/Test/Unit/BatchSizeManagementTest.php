@@ -69,17 +69,28 @@ class BatchSizeManagementTest extends TestCase
 
         $adapterMock
             ->method('fetchOne')
-            ->withConsecutive(
-                ['SELECT @@max_heap_table_size;', []],
-                ['SELECT @@tmp_table_size;', []],
-                ['SELECT @@innodb_buffer_pool_size;', []]
-            )
-            ->willReturnOnConsecutiveCalls($maxHeapTableSize, $tmpTableSize, $innodbPollSize);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($maxHeapTableSize, $tmpTableSize, $innodbPollSize) {
+                    if ($arg1 == 'SELECT @@max_heap_table_size;' && empty($arg2)) {
+                        return $maxHeapTableSize;
+                    } elseif ($arg1 == 'SELECT @@tmp_table_size;' && empty($arg2)) {
+                        return $tmpTableSize;
+                    } elseif ($arg1 == 'SELECT @@innodb_buffer_pool_size;' && empty($arg2)) {
+                        return $innodbPollSize;
+                    }
+                }
+            );
+
         $adapterMock
             ->method('query')
-            ->withConsecutive(
-                ['SET SESSION tmp_table_size = ' . $size . ';', []],
-                ['SET SESSION max_heap_table_size = ' . $size . ';', []]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($size) {
+                    if ($arg1 == 'SET SESSION tmp_table_size = ' . $size . ';' && empty($arg2)) {
+                        return null;
+                    } elseif ($arg1 == 'SET SESSION max_heap_table_size = ' . $size . ';' && empty($arg2)) {
+                        return null;
+                    }
+                }
             );
 
         $this->model->ensureBatchSize($adapterMock, $batchSize);

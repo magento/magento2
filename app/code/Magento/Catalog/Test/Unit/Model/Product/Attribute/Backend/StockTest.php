@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class StockTest extends TestCase
 {
-    const ATTRIBUTE_NAME = 'quantity_and_stock_status';
+    private const ATTRIBUTE_NAME = 'quantity_and_stock_status';
 
     /**
      * @var Stock
@@ -43,7 +43,7 @@ class StockTest extends TestCase
         $this->objectHelper = new ObjectManager($this);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(

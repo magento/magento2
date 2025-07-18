@@ -223,7 +223,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function test($id)
     {
-        return $this->local->test($id) ?? $this->remote->test($id);
+        return $this->_options['use_stale_cache'] ?
+            ($this->local->test($id) ?? $this->remote->test($id))
+            : $this->remote->test($id);
     }
 
     /**

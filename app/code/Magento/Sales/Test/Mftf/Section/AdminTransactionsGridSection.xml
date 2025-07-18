@@ -16,5 +16,7 @@
         <element name="orderTxnTableTypeFilter" type="button" selector="#order_transactions_filter_txn_type"/>
         <element name="orderTxnTableSearchBtn" type="button"  selector="#container button[title='Search']" />
         <element name="transactionData" type="text" selector="//th[text()='{{transactionData}}']/following-sibling::td" parameterized="true"/>
+        <element name="transitionStatus" type="text" selector="//div[@class='admin__data-grid-wrap admin__data-grid-wrap-static']" />
+        <element name="transitionsStatus" type="text" selector="//tr[@data-role='row']//td[@data-column='{{transactionStatus}}']" parameterized="true" />
     </section>
 </sections>

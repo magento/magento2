@@ -43,8 +43,8 @@ class FedexUrl extends Value
         Registry $registry,
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource,
+        ?AbstractDb $resourceCollection,
         Url $url,
         array $data = []
     ) {

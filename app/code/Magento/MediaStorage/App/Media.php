@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\MediaStorage\App;
@@ -24,7 +24,6 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
-use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Service\ImageResize;
 
@@ -136,7 +135,7 @@ class Media implements AppInterface
         State $state,
         ImageResize $imageResize,
         File $file,
-        CatalogMediaConfig $catalogMediaConfig = null
+        ?CatalogMediaConfig $catalogMediaConfig = null
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;
@@ -220,11 +219,23 @@ class Media implements AppInterface
         }
 
         if ($this->mediaUrlFormat === CatalogMediaConfig::HASH) {
-            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName), true);
             if (!$this->directoryPub->isReadable($this->relativeFileName)) {
                 $synchronizer->synchronize($this->relativeFileName);
             }
         }
+    }
+
+    /**
+     * Create local vopy for the placeholder
+     *
+     * @param ?string $relativeFileName
+     * @return void
+     */
+    private function createPlaceholderLocalCopy(?string $relativeFileName): void
+    {
+        $synchronizer = $this->syncFactory->create(['directory' => $this->directoryMedia]);
+        $synchronizer->synchronize($relativeFileName);
     }
 
     /**
@@ -248,6 +259,7 @@ class Media implements AppInterface
     private function setPlaceholderImage(): void
     {
         $placeholder = $this->placeholderFactory->create(['type' => 'image']);
+        $this->createPlaceholderLocalCopy($placeholder->getRelativePath());
         $this->response->setFilePath($placeholder->getPath());
     }
 

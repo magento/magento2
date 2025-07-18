@@ -137,12 +137,12 @@ class System implements ConfigTypeInterface
         PreProcessorInterface $preProcessor,
         $cachingNestedLevel = 1,
         $configType = self::CONFIG_TYPE,
-        Reader $reader = null,
-        Encryptor $encryptor = null,
-        LockManagerInterface $locker = null,
-        LockGuardedCacheLoader $lockQuery = null,
-        StateInterface $cacheState = null,
-        LoggerInterface $logger = null
+        ?Reader $reader = null,
+        ?Encryptor $encryptor = null,
+        ?LockManagerInterface $locker = null,
+        ?LockGuardedCacheLoader $lockQuery = null,
+        ?StateInterface $cacheState = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->postProcessor = $postProcessor;
         $this->cache = $cache;

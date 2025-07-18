@@ -75,7 +75,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
             \Magento\Customer\Api\AccountManagementInterface::class
         );
 
-        $this->customerHelper = new CustomerHelper();
+        $this->customerHelper = new CustomerHelper($this->name());
 
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
             \Magento\Framework\Reflection\DataObjectProcessor::class

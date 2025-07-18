@@ -76,7 +76,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         PriceResolverInterface $priceResolver,
         ConfigurableMaxPriceCalculator $configurableMaxPriceCalculator,
-        LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
+        ?LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->priceResolver = $priceResolver;

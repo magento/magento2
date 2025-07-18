@@ -55,6 +55,12 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
+                    <field id="export_button_version7" type="button" sortOrder="40" showInDefault="1">
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish7</frontend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
                     <depends>
                         <field id="caching_application">2</field>
                     </depends>

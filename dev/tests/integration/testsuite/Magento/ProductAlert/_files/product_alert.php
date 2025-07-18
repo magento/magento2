@@ -29,6 +29,8 @@ $price->setCustomerId(
     $product->getPrice()+1
 )->setWebsiteId(
     1
+)->setStoreId(
+    1
 );
 $price->save();
 
@@ -38,6 +40,8 @@ $stock->setCustomerId(
 )->setProductId(
     $product->getId()
 )->setWebsiteId(
+    1
+)->setStoreId(
     1
 );
 $stock->save();

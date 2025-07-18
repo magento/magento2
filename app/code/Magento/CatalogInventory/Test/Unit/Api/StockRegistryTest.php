@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,7 +80,7 @@ class StockRegistryTest extends TestCase
         $this->product->expects($this->any())
             ->method('getIdBySku')
             ->willReturn(self::PRODUCT_ID);
-
+        //getIdBySku
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->productFactory->expects($this->any())
             ->method('create')

@@ -87,7 +87,7 @@ class AbstractGridTest extends TestCase
      *
      * @return array
      */
-    public function getCurrentCurrencyCodeDataProvider()
+    public static function getCurrentCurrencyCodeDataProvider()
     {
         return [
             [[]],

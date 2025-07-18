@@ -219,7 +219,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function getMethodPriceProvider(): array
+    public static function getMethodPriceProvider(): array
     {
         return [
             [3, self::FREE_METHOD_NAME, true, 6, 0],
@@ -294,7 +294,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function countryDataProvider(): array
+    public static function countryDataProvider(): array
     {
         return [
             [
@@ -391,7 +391,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function requestToShipmentDataProvider(): array
+    public static function requestToShipmentDataProvider(): array
     {
         return [
             [
@@ -519,7 +519,7 @@ class CarrierTest extends TestCase
     /**
      * @return array
      */
-    public function allowedMethodsDataProvider(): array
+    public static function allowedMethodsDataProvider(): array
     {
         return [
             [

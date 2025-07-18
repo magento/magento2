@@ -1,14 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Widget;
 
 /**
  * CMS page chooser for Wysiwyg CMS widget
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -65,7 +64,6 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _construct()
     {
         parent::_construct();
-        //$this->setDefaultSort('name');
         $this->setUseAjax(true);
         $this->setDefaultFilter(['chooser_is_active' => '1']);
     }
@@ -113,7 +111,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowClickCallback()
     {
-        $chooserJsObject = $this->getId();
+        $chooserJsObject = $this->_escaper->escapeJs($this->getId());
         $js = '
             function (grid, event) {
                 var trElement = Event.findElement(event, "tr");

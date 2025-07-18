@@ -45,11 +45,11 @@ class AbstractActionTest extends TestCase
         $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
 
         $this->redirect = $this->getMockBuilder(Redirect::class)
-            ->setMethods(['setRefererOrBaseUrl'])
+            ->onlyMethods(['setRefererOrBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->redirectFactory = $this->getMockBuilder(RedirectFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->redirectFactory->expects($this->any())

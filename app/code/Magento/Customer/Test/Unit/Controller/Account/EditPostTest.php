@@ -12,6 +12,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Controller\Account\EditPost;
+use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Form\File;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\AddressRegistry;
@@ -29,6 +30,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -114,6 +116,14 @@ class EditPostTest extends TestCase
 
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                EmailNotificationInterface::class,
+                $this->createMock(EmailNotificationInterface::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -230,16 +240,18 @@ class EditPostTest extends TestCase
             ->willReturn($customer);
 
         $attr = 'attr1';
-        $this->request->expects($this->exactly(5))
+        $this->request->expects($this->exactly(3))
             ->method('getParam')
-            ->withConsecutive(
-                ['change_email'],
-                [ 'delete_attribute_value'],
-                [$attr . File::UPLOADED_FILE_SUFFIX]
-            )->willReturnOnConsecutiveCalls(
-                false,
-                $attr,
-                'uploadedFileName'
+            ->willReturnCallback(
+                function ($arg) use ($attr) {
+                    if ($arg == 'change_email') {
+                        return false;
+                    } elseif ($arg == 'delete_attribute_value') {
+                        return $attr;
+                    } elseif ($arg == $attr . File::UPLOADED_FILE_SUFFIX) {
+                        return 'uploadedFileName';
+                    }
+                }
             );
 
         $this->editPost->execute();

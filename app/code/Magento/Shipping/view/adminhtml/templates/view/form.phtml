@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 /**
  * @var \Magento\Shipping\Block\Adminhtml\View\Form $block
@@ -183,3 +183,5 @@ script;
         </div>
     </div>
 </section>
+<?php $scriptString = '{ "*" : {"Magento_Sales/js/comment" : {}}}';?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/x-magento-init'], $scriptString, false) ?>

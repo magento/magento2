@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,7 +95,7 @@ class RecentTest extends TestCase
             ->getMockForAbstractClass();
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->getMockForAbstractClass();
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->exactly(0))->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
 
         $orderCollection = $this->createPartialMock(Collection::class, [

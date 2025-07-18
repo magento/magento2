@@ -38,7 +38,8 @@ class EavValidationRulesTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->attributeMock =
             $this->getMockBuilder(AbstractAttribute::class)
-                ->setMethods(['getFrontendInput', 'getValidateRules'])
+                ->addMethods(['getValidateRules'])
+                ->onlyMethods(['getFrontendInput'])
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
 
@@ -63,7 +64,7 @@ class EavValidationRulesTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider()
+    public static function buildDataProvider()
     {
         return [
             ['', '', [], []],

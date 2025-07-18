@@ -183,8 +183,8 @@ class Config implements ResetAfterRequestInterface
         \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        SerializerInterface $serializer = null,
-        ScopeConfigInterface $scopeConfig = null,
+        ?SerializerInterface $serializer = null,
+        ?ScopeConfigInterface $scopeConfig = null,
         $attributesForPreload = [],
         ?StoreManagerInterface $storeManager = null,
     ) {

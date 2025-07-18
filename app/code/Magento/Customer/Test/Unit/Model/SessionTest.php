@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Customer\Model\Session\Storage;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Url;
 use Magento\Framework\UrlFactory;
@@ -96,6 +97,13 @@ class SessionTest extends TestCase
             ->getMock();
         $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $helper = new ObjectManagerHelper($this);
+        $objects = [
+            [
+                SessionStartChecker::class,
+                $this->createMock(SessionStartChecker::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->responseMock = $this->createMock(Http::class);
         $this->_model = $helper->getObject(
             Session::class,
@@ -128,9 +136,14 @@ class SessionTest extends TestCase
 
         $this->_eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                ['customer_login', ['customer' => $customer]],
-                ['customer_data_object_login', ['customer' => $customerDto]]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customer, $customerDto) {
+                    if ($arg1 == 'customer_login' && $arg2 == ['customer' => $customer]) {
+                        return null;
+                    } elseif ($arg1 == 'customer_data_object_login' && $arg2 == ['customer' => $customerDto]) {
+                        return null;
+                    }
+                }
             );
 
         $this->_httpContextMock->expects($this->once())
@@ -160,9 +173,14 @@ class SessionTest extends TestCase
 
         $this->_eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                ['customer_login', ['customer' => $customer]],
-                ['customer_data_object_login', ['customer' => $customerDto]]
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($customer, $customerDto) {
+                    if ($arg1 == 'customer_login' && $arg2 == ['customer' => $customer]) {
+                        return null;
+                    } elseif ($arg1 == 'customer_data_object_login' && $arg2 == ['customer' => $customerDto]) {
+                        return null;
+                    }
+                }
             );
 
         $this->_model->setCustomerDataAsLoggedIn($customerDto);
@@ -298,7 +316,7 @@ class SessionTest extends TestCase
             ->willReturn($customerMock);
 
         $this->_storageMock
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(2))
             ->method('getData')
             ->with('customer_id')
             ->willReturn($customerId);

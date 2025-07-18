@@ -60,7 +60,7 @@ class AssociatedProductsTest extends TestCase
         $this->registry->register('current_store', $store);
         /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject $localeResolver */
         $localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
-            ->setMethods(['getLocale'])
+            ->onlyMethods(['getLocale'])
             ->getMockForAbstractClass();
         $localeResolver->expects($this->any())->method('getLocale')->willReturn($interfaceLocale);
         $localeCurrency = $this->objectManager->create(
@@ -168,7 +168,7 @@ class AssociatedProductsTest extends TestCase
     /**
      * @return array
      */
-    public function getProductMatrixDataProvider()
+    public static function getProductMatrixDataProvider()
     {
         return [
             ['en_US'],

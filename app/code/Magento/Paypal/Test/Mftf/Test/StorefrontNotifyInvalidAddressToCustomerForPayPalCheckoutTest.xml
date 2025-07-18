@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontNotifyInvalidAddressToCustomerForPayPalCheckoutTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Notify invalid address for PayPal checkout"/>
+            <title value="Customer is notified if address is invalid for PayPal through Checkout flow"/>
+            <description value="Verify that customer is notified with error message about wrong address for PayPal on all Magento Storefront pages"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3995"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create product-->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!--Delete product-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--Logout as Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <!--Navigate to storefront home page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontHomePage"/>
+        <!--Open product page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openCreatedProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!--Add product to cart-->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!--Navigate to shopping cart-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <!--Navigate to Shipping details page-->
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToShippingPage"/>
+        <!--Enter static shipping details with invalid data-->
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="johndoe@example.com" stepKey="setInvalidCustomerEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="johndoe@example.com" stepKey="SetInvalidCustomerFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="johndoe@example.com" stepKey="SetInvalidCustomerLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="johndoe@example.com" stepKey="SetInvalidStreetAddress"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.country}}" stepKey="waitToSelectCountry"/>
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="United States" stepKey="selectCountryInStorefrontAddressBook"/>
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customer" value="CustomerEntityOne" />
+            <argument name="address" value="CustomerInvalidAddress" />
+        </actionGroup>
+        <!--Select Flat Rate shipping method-->
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForFlatRateShippingMethod"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <!--Navigate to Review and Payments page-->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToPaymentPage"/>
+        <!-- click on PayPal payment radio button -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPayPalExpressButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="clickPayPalExpressButton"/>
+        <!--Switch to paypal group and click on paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalButtonFromCheckoutPage"/>
+        <!--Assert invalid address error from checkout page-->
+        <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertInvalidAddressErrorFromCheckoutPage">
+            <argument name="invalidAddressError" value="{{CheckoutPaymentSection.invalidAddressError}}"/>
+        </actionGroup>
+        <!--Navigate to shopping cart-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPageForAssertion"/>
+        <!-- Click on Paypal paypal button on cart page-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtnFromCartPage">
+            <argument name="elementNumber" value="1"/>
+        </actionGroup>
+        <!--Assert invalid address error from cart page-->
+        <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertErrorMessageFromCartPage">
+            <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError('PayPal gateway has rejected request. A match of the Shipping Address City, State, and Postal Code failed (#10736: Shipping Address Invalid City State Postal Code)')}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openShoppingCart"/>
+        <!--Click Paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn">
+            <argument name="elementNumber" value="1"/>
+        </actionGroup>
+        <!--Assert invalid address error from mini cart page-->
+        <actionGroup ref="StorefrontAssertInvalidAddressErrorActionGroup" stepKey="assertErrorMessageFromMiniCartPage">
+            <argument name="invalidAddressError" value="{{CheckoutCartMessageSection.invalidAddressError('PayPal gateway has rejected request. A match of the Shipping Address City, State, and Postal Code failed (#10736: Shipping Address Invalid City State Postal Code)')}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -119,14 +119,22 @@ class ProfileTest extends TestCase
             ->willReturn($profileId);
         $this->select
             ->method('from')
-            ->withConsecutive(
-                [$profileTableName, [$profileIdFieldName]],
-                [$profileTableName, '*', null]
-            )->willReturnOnConsecutiveCalls($this->select, $this->select);
+            ->willReturnCallback(function ($arg1, $arg2) use ($profileTableName, $profileIdFieldName) {
+                if ($arg1 === $profileTableName && $arg2 === [$profileIdFieldName]) {
+                    return $this->select;
+                } elseif ($arg1 === $profileTableName && $arg2 == '*') {
+                    return $this->select;
+                }
+            });
         $this->select
             ->method('where')
-            ->withConsecutive(['meta_id = :meta_id'], ['is_active = 1'])
-            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'meta_id = :meta_id') {
+                    return $this->select;
+                } elseif ($arg1 == 'is_active = 1') {
+                    return $this->select;
+                }
+            });
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($profileData);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -130,7 +130,7 @@ class DataProviderTest extends TestCase
 
         $this->categoryCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->categoryCollectionFactory->method('create')
             ->willReturn($this->collection);
@@ -178,7 +178,7 @@ class DataProviderTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
-            ->setMethods(['flatten'])
+            ->onlyMethods(['flatten'])
             ->disableOriginalConstructor()
             ->getMock();
 

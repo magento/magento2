@@ -67,7 +67,7 @@ class MergedXsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to acl.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidMergedAclXmlArray.php';
     }

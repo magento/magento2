@@ -37,7 +37,7 @@ class CollectionTest extends TestCase
         $resourceMock = $this->createMock(FlagResource::class);
         $resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['getPart', 'setPart', 'from', 'columns'])
+            ->onlyMethods(['getPart', 'setPart', 'from', 'columns'])
             ->setConstructorArgs([$connectionMock, $selectRendererMock])
             ->getMock();
         $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);

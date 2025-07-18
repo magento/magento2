@@ -1,8 +1,10 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Model\Storage;
@@ -49,7 +51,7 @@ class DynamicStorage extends BaseDbStorage
         ResourceConnection $resource,
         ScopeConfigInterface $config,
         ProductFactory $productFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($urlRewriteFactory, $dataObjectHelper, $resource, $logger);
         $this->config = $config;
@@ -170,7 +172,7 @@ class DynamicStorage extends BaseDbStorage
         }
         $categorySuffix = $this->getCategoryUrlSuffix($data[UrlRewrite::STORE_ID]);
         $productResource = $this->productFactory->create();
-        $categoryPath = str_replace('/' . $productUrl, '', $requestPath);
+        $categoryPath = substr($requestPath, 0, -1 * strlen('/' . $productUrl));
         if ($productFromDb[UrlRewrite::REDIRECT_TYPE]) {
             $productUrl = $productFromDb[UrlRewrite::TARGET_PATH];
         }

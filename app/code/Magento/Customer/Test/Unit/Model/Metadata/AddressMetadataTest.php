@@ -123,7 +123,7 @@ class AddressMetadataTest extends TestCase
         /** @var AbstractAttribute|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->attributeProviderMock->expects($this->once())
@@ -258,7 +258,7 @@ class AddressMetadataTest extends TestCase
         /** @var AbstractAttribute|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->attributeProviderMock->expects($this->once())
@@ -305,7 +305,7 @@ class AddressMetadataTest extends TestCase
         /** @var AbstractAttribute|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->attributeProviderMock->expects($this->once())

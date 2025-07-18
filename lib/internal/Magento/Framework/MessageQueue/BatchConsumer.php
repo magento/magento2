@@ -89,7 +89,7 @@ class BatchConsumer implements ConsumerInterface
         ConsumerConfigurationInterface $configuration,
         $interval = 5,
         $batchSize = 0,
-        MessageProcessorLoader $messageProcessorLoader = null
+        ?MessageProcessorLoader $messageProcessorLoader = null
     ) {
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;

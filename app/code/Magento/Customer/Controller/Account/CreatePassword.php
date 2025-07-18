@@ -68,9 +68,9 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
         Session $customerSession,
         PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement,
-        ConfirmCustomerByToken $confirmByToken = null,
-        GetCustomerByToken $getByToken = null,
-        CustomerRepositoryInterface $customerRepository = null
+        ?ConfirmCustomerByToken $confirmByToken = null,
+        ?GetCustomerByToken $getByToken = null,
+        ?CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->session = $customerSession;
         $this->resultPageFactory = $resultPageFactory;

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,7 +82,7 @@ class CategoriesJsonTest extends TestCase
         $helper = new ObjectManager($this);
 
         $context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
             ->setConstructorArgs(
                 $helper->getConstructArguments(
                     Context::class,
@@ -102,7 +101,7 @@ class CategoriesJsonTest extends TestCase
             ->getMock();
         $resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultJsonFactory->expects($this->atLeastOnce())
             ->method('create')
@@ -112,7 +111,7 @@ class CategoriesJsonTest extends TestCase
 
         $layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $layoutFactory->expects($this->any())
             ->method('create')

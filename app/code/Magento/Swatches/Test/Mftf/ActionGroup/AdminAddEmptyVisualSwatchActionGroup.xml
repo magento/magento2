@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddEmptyVisualSwatchActionGroup">
+        <annotations>
+            <description>Add empty visual swatch to attribute.</description>
+        </annotations>
+        <arguments>
+            <argument name="swatchType" type="string"/>
+            <argument name="adminInputByIndex" type="string"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="waitForAddSwatchButton"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatchButtonForOption1"/>
+        <fillField selector="{{AdminManageSwatchSection.adminInputByIndex(adminInputByIndex)}}" userInput="{{swatchType}}" stepKey="fillAdminTextForEmpty"/>
+    </actionGroup>
+</actionGroups>
