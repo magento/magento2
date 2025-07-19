@@ -13,6 +13,7 @@ use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\Quote;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Place an order
@@ -37,16 +38,17 @@ class PlaceOrder
     /**
      * @param PaymentMethodManagementInterface $paymentManagement
      * @param CartManagementInterface $cartManagement
-     * @param LoggerInterface $logger
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         PaymentMethodManagementInterface $paymentManagement,
         CartManagementInterface $cartManagement,
-        LoggerInterface $logger
+        ?LoggerInterface $logger = null
     ) {
         $this->paymentManagement = $paymentManagement;
         $this->cartManagement = $cartManagement;
-        $this->logger = $logger;
+        $this->logger = $logger ?: ObjectManager::getInstance()
+            ->get(LoggerInterface::class);
     }
 
     /**
