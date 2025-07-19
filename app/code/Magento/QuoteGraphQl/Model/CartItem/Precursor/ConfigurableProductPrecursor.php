@@ -36,10 +36,11 @@ class ConfigurableProductPrecursor implements PrecursorInterface
      * Process cart item data to handle parent_sku for configurable products
      *
      * @param array $cartItemData
-     * @param ContextInterface $_context
+     * @param ContextInterface $context Parameter required by interface but not used
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function process(array $cartItemData, ContextInterface $_context): array
+    public function process(array $cartItemData, ContextInterface $context): array
     {
         $processedCartItemData = [];
 
