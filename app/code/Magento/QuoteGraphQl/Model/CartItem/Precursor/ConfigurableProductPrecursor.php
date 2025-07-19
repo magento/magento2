@@ -25,17 +25,11 @@ class ConfigurableProductPrecursor implements PrecursorInterface
     private array $errors = [];
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private ProductRepositoryInterface $productRepository;
-
-    /**
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository
+        private readonly ProductRepositoryInterface $productRepository
     ) {
-        $this->productRepository = $productRepository;
     }
 
     /**
@@ -72,8 +66,11 @@ class ConfigurableProductPrecursor implements PrecursorInterface
 
                 if (empty($configurableOptions)) {
                     $this->errors[] = [
-                        'message' => sprintf('Could not match child product %s with parent %s',
-                            $cartItem['sku'], $cartItem['parent_sku']),
+                        'message' => sprintf(
+                            'Could not match child product %s with parent %s',
+                            $cartItem['sku'],
+                            $cartItem['parent_sku']
+                        ),
                         'code' => 'UNDEFINED'
                     ];
                     $processedCartItemData[$cartItemIndex] = $cartItem;
