@@ -183,6 +183,10 @@
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertLocalImage2IsDeleted3">
             <argument name="filePath">pub/media/catalog/product/{$firstCharacterImage2FileName}/{$secondCharacterImage2FileName}/$createProductImage2.entry[content][name]$</argument>
         </helper>
+
+        <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPageBeforeAssertion"/>
+        <actionGroup ref="AdminClickFlushCatalogImagesCacheActionGroup" stepKey="clearCatalogImageCacheBeforeAssertion"/>
+
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryDoesNotExist" stepKey="assertLocalCacheDirectoryGone">
             <argument name="path">pub/media/catalog/product/cache/</argument>
         </helper>
