@@ -11,6 +11,12 @@
 $width = (int)$block->getWidth();
 $height = (int)$block->getHeight();
 $paddingBottom = $block->getRatio() * 100;
+
+if (!isset($_GET['cat_image'])) {
+    $_GET['cat_image'] = 0;
+}
+$_GET['cat_image']++;
+$isProductPage = ($block->getRequest()->getFullActionName() === 'catalog_product_view');
 ?>
 <span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
     <span class="product-image-wrapper">
@@ -19,7 +25,10 @@ $paddingBottom = $block->getRatio() * 100;
                 <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
             <?php endforeach; ?>
             src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+            <?php if ($_GET['cat_image'] > 1 || $isProductPage) { ?>
             loading="lazy"
+            fetchpriority="low"
+            <?php }?>
             width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
             height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
