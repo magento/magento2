@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Class to work with HTTP protocol using sockets
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\HTTP\Client;
 
@@ -419,8 +417,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
 
         $line = explode(" ", $responseLine, 3);
         if (count($line) != 3) {
-            // phpstan:ignore "Result of method Magento\Framework\HTTP\Client\Socket::doError() (void) is used."
-            return $this->doError("Invalid response line returned from server: " . $responseLine);
+            $this->doError("Invalid response line returned from server: " . $responseLine);
         }
         $this->_responseStatus = (int)$line[1];
         $this->processResponseHeaders();
@@ -466,8 +463,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
         $errno = $errstr = '';
         $this->_sock = @fsockopen($this->_host, $this->_port, $errno, $errstr, $this->_timeout);
         if (!$this->_sock) {
-            // phpstan:ignore "Result of method Magento\Framework\HTTP\Client\Socket::doError() (void) is used."
-            return $this->doError(sprintf("[errno: %d] %s", $errno, $errstr));
+            $this->doError(sprintf("[errno: %d] %s", $errno, $errstr));
         }
 
         $crlf = "\r\n";

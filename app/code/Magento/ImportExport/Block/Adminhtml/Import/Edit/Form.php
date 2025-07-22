@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import\Edit;
 
@@ -261,6 +261,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => Import::FIELD_IMPORT_IDS,
                 'label' => __('Import id'),
                 'title' => __('Import id'),
+                'value' => '',
+            ]
+        );
+        $fieldset->addField(
+            '_import_history_id',
+            'hidden',
+            [
+                'name' => '_import_history_id',
+                'label' => __('Import History id'),
+                'title' => __('Import History id'),
                 'value' => '',
             ]
         );

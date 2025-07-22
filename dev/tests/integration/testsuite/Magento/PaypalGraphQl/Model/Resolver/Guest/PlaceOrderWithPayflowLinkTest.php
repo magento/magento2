@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -136,10 +136,6 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       order {
         order_number
       }
-      errors {
-        message
-        code
-      }
     }
 }
 QUERY;
@@ -245,10 +241,6 @@ QUERY;
       order {
         order_number
       }
-      errors {
-        message
-        code
-      }
     }
 }
 QUERY;
@@ -256,7 +248,7 @@ QUERY;
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
         $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
-        $expectedErrorCode = 'UNDEFINED';
+        $expectedErrorCode = 'UNABLE_TO_PLACE_ORDER';
 
         $this->payflowRequest->method('setData')
             ->with(
@@ -278,11 +270,11 @@ QUERY;
 
         $response = $this->graphQlRequest->send($query);
         $responseData = $this->json->unserialize($response->getContent());
-        $this->assertArrayHasKey('errors', $responseData['data']['placeOrder']);
-        $actualError = $responseData['data']['placeOrder']['errors'][0];
+        $this->assertArrayHasKey('errors', $responseData);
+        $actualError = $responseData['errors'][0];
         $this->assertEquals(
             $expectedErrorCode,
-            $actualError['code']
+            $actualError['extensions']['error_code']
         );
     }
 }

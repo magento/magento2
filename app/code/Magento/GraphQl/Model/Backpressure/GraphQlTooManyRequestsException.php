@@ -30,7 +30,7 @@ class GraphQlTooManyRequestsException extends LocalizedException implements Clie
      * @param int $code
      * @param bool $isSafe
      */
-    public function __construct(Phrase $phrase, Exception $cause = null, int $code = 0, bool $isSafe = true)
+    public function __construct(Phrase $phrase, ?Exception $cause = null, int $code = 0, bool $isSafe = true)
     {
         $this->isSafe = $isSafe;
         parent::__construct($phrase, $cause, $code);

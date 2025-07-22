@@ -38,8 +38,8 @@ class AvailableStoresResolver implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $storeGroupId = !empty($args['useCurrentGroup']) ?
             (int)$context->getExtensionAttributes()->getStore()->getStoreGroupId() :

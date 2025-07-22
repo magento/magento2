@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Collection of events
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Event;
 
@@ -37,7 +35,7 @@ class Collection
      * @param array $events
      * @param Observer\Collection $observerCollection
      */
-    public function __construct(array $events = [], Observer\Collection $observerCollection = null)
+    public function __construct(array $events = [], ?Observer\Collection $observerCollection = null)
     {
         $this->events = $events;
         $this->globalObservers = !$observerCollection ? new Observer\Collection() : $observerCollection;

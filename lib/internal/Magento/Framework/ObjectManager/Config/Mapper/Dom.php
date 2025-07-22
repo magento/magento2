@@ -32,8 +32,8 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
      */
     public function __construct(
         InterpreterInterface $argumentInterpreter,
-        BooleanUtils $booleanUtils = null,
-        ArgumentParser $argumentParser = null
+        ?BooleanUtils $booleanUtils = null,
+        ?ArgumentParser $argumentParser = null
     ) {
         $this->argumentInterpreter = $argumentInterpreter;
         $this->booleanUtils = $booleanUtils ?: new BooleanUtils();

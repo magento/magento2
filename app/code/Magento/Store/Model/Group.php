@@ -138,12 +138,12 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        PoisonPillPutInterface $pillPut = null,
-        StoreValidator $modelValidator = null
+        ?\Magento\Framework\Event\ManagerInterface $eventManager = null,
+        ?PoisonPillPutInterface $pillPut = null,
+        ?StoreValidator $modelValidator = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;

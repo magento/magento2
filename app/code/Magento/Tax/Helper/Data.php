@@ -125,7 +125,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Helper\Data $catalogHelper,
         OrderTaxManagementInterface $orderTaxManagement,
         PriceCurrencyInterface $priceCurrency,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         parent::__construct($context);
         $this->priceCurrency = $priceCurrency;

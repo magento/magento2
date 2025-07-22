@@ -40,7 +40,7 @@ class ParamsOverrider
      */
     public function __construct(
         array $paramOverriders = [],
-        SimpleDataObjectConverter $dataObjectConverter = null
+        ?SimpleDataObjectConverter $dataObjectConverter = null
     ) {
         $this->paramOverriders = $paramOverriders;
         $this->dataObjectConverter = $dataObjectConverter

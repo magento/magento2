@@ -41,7 +41,7 @@ class CleanExpiredOrders
     public function __construct(
         StoresConfig $storesConfig,
         CollectionFactory $collectionFactory,
-        OrderManagementInterface $orderManagement = null
+        ?OrderManagementInterface $orderManagement = null
     ) {
         $this->storesConfig = $storesConfig;
         $this->orderCollectionFactory = $collectionFactory;

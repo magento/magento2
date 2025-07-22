@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @see AwsS3
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AwsS3Test extends TestCase
 {
@@ -221,7 +222,7 @@ class AwsS3Test extends TestCase
         array $metadata,
         bool $expected,
         iterable $listContents,
-        \Throwable $listContentsException = null
+        ?\Throwable $listContentsException = null
     ): void {
         if (!empty($metadata)) {
             $this->metadataProviderMock->method('getMetadata')
@@ -495,6 +496,23 @@ class AwsS3Test extends TestCase
             ->with('test/test2');
 
         self::assertTrue($this->driver->createDirectory(self::URL . 'test/test2/'));
+    }
+
+    /**
+     * This test ensures that the method does not loop infinitely in case of an exception
+     *
+     * @return void
+     * @throws FileSystemException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testShouldFailSafelyIfUnableToCreateDirectory(): void
+    {
+        $this->adapterMock->expects(self::once())
+            ->method('createDirectory')
+            ->willThrowException($this->createMock(\League\Flysystem\FilesystemException::class))
+            ->with('test');
+
+        self::assertFalse($this->driver->createDirectory(self::URL . 'test/test2/'));
     }
 
     public function testRename(): void

@@ -63,7 +63,6 @@ define(['magnifier/magnify', 'mage/gallery/gallery', 'jquery'], function (Magnif
                 mainDiv.setAttribute('data-gallery-role', 'gallery-placeholder');
 
                 img = document.createElement('img');
-                img.alt = 'main product photo';
                 img.id = 'main_product_photo';
                 img.className = 'gallery-placeholder__image';
                 img.src = 'dev/tests/acceptance/tests/_data/adobe-base.jpg';
@@ -85,6 +84,11 @@ define(['magnifier/magnify', 'mage/gallery/gallery', 'jquery'], function (Magnif
                 imageEvents = $._data($('.fotorama__img--full')[0], 'events');
                 expect(imageEvents).toBeInstanceOf(Object);
                 expect(Object.getOwnPropertyNames(imageEvents)).toContain('touchend');
+                expect(Object.getOwnPropertyNames(imageEvents)).toContain('pointerdown');
+                expect(Object.getOwnPropertyNames(imageEvents)).toContain('pointermove');
+                expect(Object.getOwnPropertyNames(imageEvents)).toContain('pointerup');
+                expect(Object.getOwnPropertyNames(imageEvents)).toContain('pointercancel');
+                expect(Object.getOwnPropertyNames(imageEvents)).toContain('pointerout');
             });
         });
     });

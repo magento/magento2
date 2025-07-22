@@ -64,7 +64,7 @@ class DbStorage extends AbstractStorage
         UrlRewriteFactory $urlRewriteFactory,
         DataObjectHelper $dataObjectHelper,
         ResourceConnection $resource,
-        LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null,
         int $maxRetryCount = 5
     ) {
         $this->connection = $resource->getConnection();

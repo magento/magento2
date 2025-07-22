@@ -54,7 +54,7 @@ class GeneratorPool
         ScheduledStructure\Helper $helper,
         ConditionFactory $conditionFactory,
         LoggerInterface $logger,
-        array $generators = null,
+        ?array $generators = null,
         ?State $state = null
     ) {
         $this->helper = $helper;

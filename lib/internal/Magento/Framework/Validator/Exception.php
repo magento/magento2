@@ -34,8 +34,8 @@ class Exception extends InputException
      * @param int $code
      */
     public function __construct(
-        Phrase $phrase = null,
-        \Exception $cause = null,
+        ?Phrase $phrase = null,
+        ?\Exception $cause = null,
         array $messages = [],
         $code = 0
     ) {

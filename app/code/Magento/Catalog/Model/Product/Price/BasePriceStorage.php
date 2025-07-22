@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Price;
@@ -111,7 +111,7 @@ class BasePriceStorage implements BasePriceStorageInterface
         Result $validationResult,
         InvalidSkuProcessor $invalidSkuProcessor,
         array $allowedProductTypes = [],
-        ProductAttributeRepositoryInterface $productAttributeRepository = null
+        ?ProductAttributeRepositoryInterface $productAttributeRepository = null
     ) {
         $this->pricePersistenceFactory = $pricePersistenceFactory;
         $this->basePriceInterfaceFactory = $basePriceInterfaceFactory;

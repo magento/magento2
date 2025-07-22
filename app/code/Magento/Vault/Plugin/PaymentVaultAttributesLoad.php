@@ -49,7 +49,7 @@ class PaymentVaultAttributesLoad
      */
     public function afterGetExtensionAttributes(
         OrderPaymentInterface $payment,
-        OrderPaymentExtensionInterface $paymentExtension = null
+        ?OrderPaymentExtensionInterface $paymentExtension = null
     ) {
         if ($paymentExtension === null) {
             $paymentExtension = $this->paymentExtensionFactory->create();

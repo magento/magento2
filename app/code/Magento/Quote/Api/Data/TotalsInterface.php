@@ -459,7 +459,7 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Quote\Api\Data\TotalsItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 
     /**
      * Get dynamically calculated totals

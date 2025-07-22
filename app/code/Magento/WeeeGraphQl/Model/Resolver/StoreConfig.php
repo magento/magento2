@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,16 +38,6 @@ class StoreConfig implements ResolverInterface, ResetAfterRequestInterface
     ];
 
     /**
-     * @var Data
-     */
-    private $weeeHelper;
-
-    /**
-     * @var TaxHelper
-     */
-    private $taxHelper;
-
-    /**
      * @var array
      */
     private $computedFptSettings = [];
@@ -56,10 +46,10 @@ class StoreConfig implements ResolverInterface, ResetAfterRequestInterface
      * @param Data $weeeHelper
      * @param TaxHelper $taxHelper
      */
-    public function __construct(Data $weeeHelper, TaxHelper $taxHelper)
-    {
-        $this->weeeHelper = $weeeHelper;
-        $this->taxHelper = $taxHelper;
+    public function __construct(
+        private readonly Data $weeeHelper,
+        private readonly TaxHelper $taxHelper
+    ) {
     }
 
     /**
@@ -77,8 +67,8 @@ class StoreConfig implements ResolverInterface, ResetAfterRequestInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (empty($this->computedFptSettings)) {
             /** @var StoreInterface $store */

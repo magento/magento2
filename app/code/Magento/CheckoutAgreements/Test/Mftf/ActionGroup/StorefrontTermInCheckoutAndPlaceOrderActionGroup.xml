@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontTermInCheckoutAndPlaceOrderActionGroup">
+        <arguments>
+            <argument name="termCheckboxText" type="string"/>
+        </arguments>
+        <!--Check if agreement is present on checkout and select it-->
+        <scrollTo selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementBlock}}" stepKey="scrollToCheckoutAgreementBlock"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementBlock}}" stepKey="waitForCheckoutAgreementBlockToBeClickable"/>
+        <click selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementBlock}}" stepKey="clickCheckoutAgreementBlock"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="waitForCheckAgreementToBeClickable"/>
+        <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckboxInput}}" userInput="{{termCheckboxText}}" stepKey="checkAgreement"/>
+        <!--Checkout select Check/Money Order payment-->
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonClickable"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForPageLoad stepKey="waitForOrderPlaced"/>
+    </actionGroup>
+</actionGroups>

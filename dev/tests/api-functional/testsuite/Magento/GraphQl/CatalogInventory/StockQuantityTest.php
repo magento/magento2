@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,12 @@ use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
 use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Catalog\Test\Fixture\ProductStock as ProductStockFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
 use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
@@ -139,6 +145,41 @@ class StockQuantityTest extends GraphQlAbstract
     public function testStockQuantityEmpty(): void
     {
         $this->assertProductStockQuantity(null);
+    }
+
+    #[
+        Config('cataloginventory/options/not_available_message', 1),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 10]),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 2]),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 8])
+    ]
+    public function testSaleableQuantitySimpleProductAfterStockUpdate(): void
+    {
+        $this->assertProductStockQuantity(8);
+    }
+
+    #[
+        Config('cataloginventory/options/not_available_message', 1),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 10]),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$', 'qty' => 1]),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(GuestCartFixture::class, as: 'cart2'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart2.id$', 'product_id' => '$product.id$', 'qty' => 5]),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart2.id$'], 'order')
+    ]
+    public function testSaleableQuantitySimpleProductAfterPlaceOrder(): void
+    {
+        $this->assertProductStockQuantity(5);
     }
 
     /**

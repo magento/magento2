@@ -67,7 +67,7 @@ class Download extends ImportController implements HttpGetActionInterface
         RawFactory $resultRawFactory,
         ReadFactory $readFactory,
         ComponentRegistrar $componentRegistrar,
-        SampleFileProvider $sampleFileProvider = null
+        ?SampleFileProvider $sampleFileProvider = null
     ) {
         parent::__construct(
             $context

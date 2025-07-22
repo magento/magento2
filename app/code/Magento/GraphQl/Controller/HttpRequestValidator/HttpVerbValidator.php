@@ -31,7 +31,7 @@ class HttpVerbValidator implements HttpRequestValidatorInterface
     /**
      * @param QueryParser|null $queryParser
      */
-    public function __construct(QueryParser $queryParser = null)
+    public function __construct(?QueryParser $queryParser = null)
     {
         $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
     }

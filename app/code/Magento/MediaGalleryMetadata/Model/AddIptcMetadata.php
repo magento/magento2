@@ -59,8 +59,8 @@ class AddIptcMetadata
         FileInterfaceFactory $fileFactory,
         DriverInterface $driver,
         ReadFile $fileReader,
-        Filesystem $filesystem = null,
-        IptcEmbed $iptcEmbed = null
+        ?Filesystem $filesystem = null,
+        ?IptcEmbed $iptcEmbed = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->fileReader = $fileReader;

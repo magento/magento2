@@ -25,5 +25,5 @@ interface CouponSearchResultInterface extends \Magento\Framework\Api\SearchResul
      * @param \Magento\SalesRule\Api\Data\CouponInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 }

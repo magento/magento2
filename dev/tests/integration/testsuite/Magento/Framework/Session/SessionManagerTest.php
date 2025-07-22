@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All rights reserved.
  */
 // @codingStandardsIgnoreStart
 namespace {
@@ -122,7 +122,6 @@ namespace Magento\Framework\Session {
         {
             $this->sessionName = 'frontEndSession';
 
-            ini_set('session.use_only_cookies', '0');
             ini_set('session.name', $this->sessionName);
 
             $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -295,6 +294,12 @@ namespace Magento\Framework\Session {
             global $mockPHPFunctions;
             $mockPHPFunctions = true;
 
+            if ($this->isComposerBaseInstallation()) {
+                $this->markTestSkipped(
+                    'Skipping: Composer-based installation, php_ini global method does not invoke the session value.'
+                );
+            }
+
             $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
             $deploymentConfigMock->method('get')
                 ->willReturnCallback(function ($configPath) use ($saveMethod) {
@@ -357,6 +362,12 @@ namespace Magento\Framework\Session {
                     'sidResolver' => $this->sidResolver
                 ]
             );
+        }
+
+        private function isComposerBaseInstallation(): bool
+        {
+            $isComposerBased = file_exists(BP . '/vendor/magento/magento2-base');
+            return (bool)$isComposerBased;
         }
     }
 }

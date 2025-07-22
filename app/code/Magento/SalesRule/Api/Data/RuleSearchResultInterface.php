@@ -25,5 +25,5 @@ interface RuleSearchResultInterface extends \Magento\Framework\Api\SearchResults
      * @param \Magento\SalesRule\Api\Data\RuleInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 }
