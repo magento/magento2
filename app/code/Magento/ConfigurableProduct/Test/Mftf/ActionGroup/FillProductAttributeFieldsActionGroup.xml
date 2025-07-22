@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FillProductAttributeFieldsActionGroup">
+        <annotations>
+            <description>Fill custom attribute form fields.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeLabel" type="string" defaultValue="Test Attribute"/>
+            <argument name="attributeCode" type="string" defaultValue="test_attribute"/>
+            <argument name="inputType" type="string" defaultValue="Dropdown"/>
+            <argument name="scope" type="string" defaultValue="Store View"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="waitForAddNewButton"/>
+        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="clickAddNewAttributeButton"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{attributeLabel}}" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="{{inputType}}" stepKey="selectDropdown"/>
+        <scrollTo selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="scrollToSection"/>
+        <conditionalClick selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" dependentSelector="{{AdvancedAttributePropertiesSection.AttributeCode}}" visible="false" stepKey="openSection"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" stepKey="waitForSlideOutSection"/>
+        <fillField selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{attributeCode}}" stepKey="fillAttributeCode"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.Scope}}" userInput="{{scope}}" stepKey="selectScope"/>
+    </actionGroup>
+</actionGroups>
