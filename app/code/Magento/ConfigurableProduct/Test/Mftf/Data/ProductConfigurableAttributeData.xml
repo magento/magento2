@@ -80,4 +80,18 @@
         <data key="input_type">Dropdown</data>
         <data key="attribute_code" unique="suffix">size</data>
     </entity>
+    <entity name="colorProductAttributeWithOptions" extends="colorProductAttribute" type="ProductAttribute">
+        <data key="input_type">Text Swatch</data>
+        <data key="scope">Global</data>
+        <data key="option1">Black</data>
+        <data key="option2">Blue</data>
+        <data key="option3">White</data>
+    </entity>
+    <entity name="sizeProductAttributeWithOptions" extends="sizeAttribute" type="ProductAttribute">
+        <data key="input_type">Text Swatch</data>
+        <data key="scope">Global</data>
+        <data key="option1">Small</data>
+        <data key="option2">Medium</data>
+        <data key="option3">Large</data>
+    </entity>
 </entities>
