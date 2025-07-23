@@ -13,6 +13,7 @@ use Magento\Eav\Api\Data\AttributeInterface as EavAttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -33,16 +34,24 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     protected $resourceModel;
 
     /**
+     * @var Attribute\Option
+     */
+    protected Attribute\Option $optionResource;
+
+    /**
      * @param AttributeRepository $attributeRepository
      * @param Attribute $resourceModel
+     * @param Option $optionResource
      * @codeCoverageIgnore
      */
     public function __construct(
         AttributeRepository $attributeRepository,
-        Attribute $resourceModel
+        Attribute $resourceModel,
+        Attribute\Option $optionResource
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->resourceModel = $resourceModel;
+        $this->optionResource = $optionResource;
     }
 
     /**
@@ -140,6 +149,11 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         $options['value'][$optionId][0] = $optionLabel;
         $options['order'][$optionId] = $option->getSortOrder();
         $options['is_default'][$optionId] = $option->getIsDefault();
+
+        $existingLabels = $this->optionResource->getStoreLabelsByOptionId((int)$optionId);
+        foreach ($existingLabels as $storeId => $labelText) {
+            $options['value'][$optionId][$storeId] = $labelText;
+        }
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
                 $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
@@ -148,7 +162,6 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if ($option->getIsDefault()) {
             $attribute->setDefault([$optionId]);
         }
-
         $attribute->setOption($options);
         try {
             $this->resourceModel->save($attribute);

@@ -161,4 +161,22 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $select;
     }
+
+    /**
+     * Get all store labels for a given option ID
+     *
+     * @param int $optionId
+     * @return array<int, string> [store_id => label]
+     */
+    public function getStoreLabelsByOptionId(int $optionId): array
+    {
+        $connection = $this->getConnection();
+        $table = $this->getTable('eav_attribute_option_value');
+
+        $select = $connection->select()
+            ->from($table, ['store_id', 'value'])
+            ->where('option_id = ?', $optionId);
+
+        return $connection->fetchPairs($select);
+    }
 }
