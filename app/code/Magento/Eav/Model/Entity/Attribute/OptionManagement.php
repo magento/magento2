@@ -154,6 +154,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         foreach ($existingLabels as $storeId => $labelText) {
             $options['value'][$optionId][$storeId] = $labelText;
         }
+
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
                 $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
@@ -162,6 +163,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if ($option->getIsDefault()) {
             $attribute->setDefault([$optionId]);
         }
+
         $attribute->setOption($options);
         try {
             $this->resourceModel->save($attribute);
