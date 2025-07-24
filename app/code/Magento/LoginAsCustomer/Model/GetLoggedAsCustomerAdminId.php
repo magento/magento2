@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,6 +35,10 @@ class GetLoggedAsCustomerAdminId implements GetLoggedAsCustomerAdminIdInterface
      */
     public function execute(): int
     {
-        return (int)$this->session->getLoggedAsCustomerAdmindId();
+        return (int)(
+            $this->session->getLoggedAsCustomerAdminId()
+                // This typo is kept for backward compatibility. Should be removed on Magento 2.5
+                ?? $this->session->getLoggedAsCustomerAdmindId()
+        );
     }
 }

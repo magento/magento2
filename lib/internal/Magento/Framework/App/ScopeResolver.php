@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
 
@@ -10,7 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 class ScopeResolver implements ScopeResolverInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -30,8 +30,7 @@ class ScopeResolver implements ScopeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @return ScopeDefault
+     * @inheritdoc
      */
     public function getScope($scopeId = null)
     {
