@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Pricing\SpecialPriceService;
 use Magento\CatalogRule\Model\ResourceModel\RuleFactory;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Session;
@@ -132,9 +133,20 @@ class PriceTest extends TestCase
                 }
             );
         $tierPriceExtensionFactoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $specialPriceService = $this->getMockBuilder(SpecialPriceService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $specialPriceService->expects($this->any())
+            ->method('execute')
+            ->willReturnCallback(function ($value) {
+                return $value;
+            });
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             Price::class,
@@ -150,7 +162,8 @@ class PriceTest extends TestCase
                 'config' => $scopeConfig,
                 'catalogData' => $this->catalogHelperMock,
                 'serializer' => $this->serializer,
-                'tierPriceExtensionFactory' => $tierPriceExtensionFactoryMock
+                'tierPriceExtensionFactory' => $tierPriceExtensionFactoryMock,
+                'specialPriceService' => $specialPriceService
             ]
         );
     }
@@ -191,7 +204,7 @@ class PriceTest extends TestCase
      *
      * @return array
      */
-    public function calculateSpecialPrice()
+    public static function calculateSpecialPrice()
     {
         return [
             [10, null, 0, true, 10],
@@ -231,7 +244,7 @@ class PriceTest extends TestCase
     public function testGetTotalBundleItemsPriceWithEmptyOptions($value)
     {
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -258,7 +271,7 @@ class PriceTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderWithEmptyOptions()
+    public static function dataProviderWithEmptyOptions()
     {
         return [
             ['{}'],
@@ -277,7 +290,7 @@ class PriceTest extends TestCase
         $storeId = 1;
 
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getValue'])
+            ->addMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 

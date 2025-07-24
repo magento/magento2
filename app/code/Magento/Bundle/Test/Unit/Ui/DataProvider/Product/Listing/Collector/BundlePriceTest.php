@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class BundlePriceTest extends TestCase
             ->getMockForAbstractClass();
         $this->priceInfoFactory = $this->getMockBuilder(PriceInfoInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->formattedPriceInfoBuilder = $this->getMockBuilder(FormattedPriceInfoBuilder::class)
             ->disableOriginalConstructor()
@@ -83,9 +83,9 @@ class BundlePriceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $priceInfo = $this->getMockBuilder(PriceInfoInterface::class)
-            ->setMethods(
+            ->addMethods(['getPrice'])
+            ->onlyMethods(
                 [
-                    'getPrice',
                     'setMaxPrice',
                     'setMaxRegularPrice',
                     'setMinimalPrice',

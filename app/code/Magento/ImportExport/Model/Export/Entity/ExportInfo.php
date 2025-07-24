@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Export\Entity;
 
-use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
+use Magento\ImportExport\Api\Data\FieldsEnclosureAwareExportInfoInterface;
 
 /**
  * Class ExportInfo implementation for ExportInfoInterface.
  */
-class ExportInfo implements LocalizedExportInfoInterface
+class ExportInfo implements FieldsEnclosureAwareExportInfoInterface
 {
     /**
      * @var string
@@ -48,6 +48,11 @@ class ExportInfo implements LocalizedExportInfoInterface
      * @var string
      */
     private $locale;
+
+    /**
+     * @var bool
+     */
+    private $fieldsEnclosure;
 
     /**
      * @inheritdoc
@@ -162,5 +167,21 @@ class ExportInfo implements LocalizedExportInfoInterface
     public function setLocale(string $locale): void
     {
         $this->locale = $locale;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFieldsEnclosure(): ?bool
+    {
+        return $this->fieldsEnclosure;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setFieldsEnclosure(bool $fieldsEnclosure): void
+    {
+        $this->fieldsEnclosure = $fieldsEnclosure;
     }
 }

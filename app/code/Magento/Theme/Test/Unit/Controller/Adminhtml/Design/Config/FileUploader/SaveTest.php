@@ -41,7 +41,7 @@ class SaveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultPage = $this->getMockBuilder(ResultInterface::class)
-            ->setMethods(['setData'])
+            ->addMethods(['setData'])
             ->getMockForAbstractClass();
         $this->fileProcessor = $this->getMockBuilder(
             FileProcessor::class

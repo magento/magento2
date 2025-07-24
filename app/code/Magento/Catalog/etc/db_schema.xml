@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -69,7 +69,7 @@
     </table>
     <table name="catalog_product_entity_decimal" resource="default" engine="innodb"
            comment="Catalog Product Decimal Attribute Backend Table">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Attribute ID"/>
@@ -134,6 +134,10 @@
         </constraint>
         <index referenceId="CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
+        </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_ENTITY_ID" indexType="btree">
+            <column name="attribute_id"/>
+            <column name="entity_id"/>
         </index>
         <index referenceId="CATALOG_PRODUCT_ENTITY_INT_STORE_ID" indexType="btree">
             <column name="store_id"/>
@@ -281,6 +285,12 @@
         <index referenceId="CATALOG_CATEGORY_ENTITY_PATH" indexType="btree">
             <column name="path"/>
         </index>
+        <!-- Performance optimization index for efficient tree traversal -->
+        <index referenceId="CATALOG_CATEGORY_ENTITY_PARENT_ID_LEVEL_POSITION" indexType="btree">
+            <column name="parent_id"/>
+            <column name="level"/>
+            <column name="position"/>
+        </index>
     </table>
     <table name="catalog_category_entity_datetime" resource="default" engine="innodb"
            comment="Catalog Category Datetime Attribute Backend Table">
@@ -397,6 +407,11 @@
         <index referenceId="CATALOG_CATEGORY_ENTITY_INT_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+        <!-- Performance optimization index for is_active attribute filtering -->
+        <index referenceId="CATALOG_CATEGORY_ENTITY_INT_STORE_ID_VALUE" indexType="btree">
+            <column name="store_id"/>
+            <column name="value"/>
+        </index>
     </table>
     <table name="catalog_category_entity_text" resource="default" engine="innodb"
            comment="Catalog Category Text Attribute Backend Table">
@@ -501,6 +516,12 @@
         </constraint>
         <index referenceId="CATALOG_CATEGORY_PRODUCT_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
+        </index>
+        <!-- Performance optimization index for product count queries -->
+        <index referenceId="CATALOG_CATEGORY_PRODUCT_CATEGORY_ID_PRODUCT_ID_POSITION" indexType="btree">
+            <column name="category_id"/>
+            <column name="product_id"/>
+            <column name="position"/>
         </index>
     </table>
     <table name="catalog_category_product_index" resource="default" engine="innodb"
@@ -1645,6 +1666,11 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
+        <index referenceId="CAT_PRD_IDX_PRICE_TMP_ENTT_ID_CSTR_GROUP_ID_WS_ID" indexType="btree">
+            <column name="entity_id"/>
+            <column name="customer_group_id"/>
+            <column name="website_id"/>
+        </index>
     </table>
     <table name="catalog_category_product_index_tmp" resource="default" engine="innodb"
            comment="Catalog Category Product Indexer temporary table">

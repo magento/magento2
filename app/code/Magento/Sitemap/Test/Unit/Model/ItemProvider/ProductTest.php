@@ -59,7 +59,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function productProvider()
+    public static function productProvider()
     {
         $storeBaseMediaUrl = 'http://store.com/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
         return [
@@ -106,7 +106,7 @@ class ProductTest extends TestCase
     private function getProductFactoryMock($returnValue)
     {
         $cmsPageFactoryMock = $this->getMockBuilder(ProductFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -123,7 +123,7 @@ class ProductTest extends TestCase
     private function getItemFactoryMock()
     {
         $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -161,7 +161,7 @@ class ProductTest extends TestCase
     private function getProductCollectionMock($returnValue)
     {
         $sitemapCmsPageMock = $this->getMockBuilder(ProductResource::class)
-            ->setMethods(['getCollection'])
+            ->onlyMethods(['getCollection'])
             ->disableOriginalConstructor()
             ->getMock();
 

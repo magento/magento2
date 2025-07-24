@@ -6,6 +6,7 @@
 namespace Magento\Setup\Module\I18n;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  *  Service Locator (instead DI container)
@@ -28,14 +29,14 @@ class ServiceLocator
     private static $_context;
 
     /**
-     * Dictionary generator
+     * I18n Dictionary generator
      *
      * @var \Magento\Setup\Module\I18n\Dictionary\Generator
      */
     private static $_dictionaryGenerator;
 
     /**
-     * Pack generator
+     * I18n Pack generator
      *
      * @var \Magento\Setup\Module\I18n\Pack\Generator
      */
@@ -52,10 +53,11 @@ class ServiceLocator
             $filesCollector = new FilesCollector();
 
             $phraseCollector = new Parser\Adapter\Php\Tokenizer\PhraseCollector(new Parser\Adapter\Php\Tokenizer());
+            $fileSystem = new File;
             $adapters = [
                 'php' => new Parser\Adapter\Php($phraseCollector),
                 'html' => new Parser\Adapter\Html(),
-                'js' => new Parser\Adapter\Js(),
+                'js' => new Parser\Adapter\Js($fileSystem),
                 'xml' => new Parser\Adapter\Xml(),
             ];
 

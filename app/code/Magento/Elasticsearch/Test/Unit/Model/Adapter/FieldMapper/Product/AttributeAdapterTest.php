@@ -37,7 +37,7 @@ class AttributeAdapterTest extends TestCase
     {
         $this->attribute = $this->getMockBuilder(CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->addMethods([
                 'getIsFilterable',
                 'getIsFilterableInSearch',
                 'getIsSearchable',
@@ -236,7 +236,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isEavAttributeProvider()
+    public static function isEavAttributeProvider()
     {
         return [
             [false],
@@ -246,7 +246,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isComplexTypeProvider()
+    public static function isComplexTypeProvider()
     {
         return [
             ['select', true, true],
@@ -261,7 +261,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isBooleanTypeProvider()
+    public static function isBooleanTypeProvider()
     {
         return [
             ['select', 'int', true],
@@ -276,7 +276,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isIntegerTypeProvider()
+    public static function isIntegerTypeProvider()
     {
         return [
             ['smallint', true],
@@ -288,7 +288,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isFloatTypeProvider()
+    public static function isFloatTypeProvider()
     {
         return [
             ['decimal', true],
@@ -299,7 +299,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isDateTimeTypeProvider()
+    public static function isDateTimeTypeProvider()
     {
         return [
             ['timestamp', true],
@@ -311,7 +311,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isAlwaysIndexableProvider()
+    public static function isAlwaysIndexableProvider()
     {
         return [
             [false]
@@ -321,7 +321,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isSearchableProvider()
+    public static function isSearchableProvider()
     {
         return [
             [true, false, false, false, true],
@@ -336,7 +336,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isFilterableProvider()
+    public static function isFilterableProvider()
     {
         return [
             [true, false, true],
@@ -348,7 +348,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function isStringServiceFieldTypeProvider()
+    public static function isStringServiceFieldTypeProvider()
     {
         return [
             ['string', 'text', false],
@@ -359,7 +359,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['name', [], 'name']
@@ -369,7 +369,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldTypeProvider()
+    public static function getFieldTypeProvider()
     {
         return [
             ['type', 'type']
@@ -379,7 +379,7 @@ class AttributeAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldIndexProvider()
+    public static function getFieldIndexProvider()
     {
         return [
             ['type', 'no', 'no']

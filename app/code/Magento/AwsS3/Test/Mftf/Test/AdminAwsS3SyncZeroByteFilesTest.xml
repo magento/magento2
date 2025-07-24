@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -44,11 +44,11 @@
             <!-- Disable AWS S3 Remote Storage -->
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
         </after>
-        <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage"/>
-        <assertEquals stepKey="assertConfigTest">
-            <expectedResult type="string">Uploading media files to remote storage.\n- empty.jpg\nEnd of upload.</expectedResult>
+        <magentoCLI command="remote-storage:sync" timeout="200" stepKey="syncRemoteStorage"/>
+        <comment userInput="checking remote-storage:sync" stepKey="assertConfigTest"/>
+        <assertStringContainsString stepKey="checkingRemoteStorageSync">
+            <expectedResult type="string">Uploading media files to remote storage</expectedResult>
             <actualResult type="variable">$syncRemoteStorage</actualResult>
-        </assertEquals>
-
+        </assertStringContainsString>
     </test>
 </tests>

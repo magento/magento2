@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,7 +25,10 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\TemplateEngineInterface;
 use Magento\Framework\View\TemplateEnginePool;
 use Magento\Rule\Model\Condition\Combine;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Model\Widget\Instance;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -84,7 +87,7 @@ class ConditionsTest extends TestCase
             ->getMock();
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->setMethods(['getWidgetValues'])
+            ->addMethods(['getWidgetValues'])
             ->getMockForAbstractClass();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -112,6 +115,7 @@ class ConditionsTest extends TestCase
         $this->ruleMock->expects($this->never())
             ->method('loadPost');
 
+        $this->objectManagerHelper->prepareObjectManager();
         $this->objectManagerHelper->getObject(
             Conditions::class,
             [
@@ -195,9 +199,9 @@ class ConditionsTest extends TestCase
 
     /**
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws Exception
      */
-    public function testRender()
+    public function testRender(): void
     {
         $data = ['area' => 'backend'];
         $abstractElementMock = $this->getMockBuilder(AbstractElement::class)
@@ -225,6 +229,10 @@ class ConditionsTest extends TestCase
         $templateEngineMock->expects($this->once())->method('render')->willReturn('html');
         $resolverMock->method('getTemplateFileName')->willReturn('');
 
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->contextMock->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
         $this->widgetConditions = $this->objectManagerHelper->getObject(
             Conditions::class,
             [

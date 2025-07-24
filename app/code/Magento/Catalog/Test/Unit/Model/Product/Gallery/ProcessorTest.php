@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -150,7 +150,7 @@ class ProcessorTest extends TestCase
             ['getAttributeCode', 'getIsRequired', 'isValueEmpty', 'getIsUnique', 'getEntity']
         );
         $attributeEntity = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['checkAttributeUniqueValue'])
+            ->addMethods(['checkAttributeUniqueValue'])
             ->getMockForAbstractClass();
 
         $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
@@ -172,7 +172,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             [true],
@@ -206,7 +206,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function clearMediaAttributeDataProvider()
+    public static function clearMediaAttributeDataProvider()
     {
         return [
             [

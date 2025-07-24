@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -47,7 +47,7 @@
         <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('$$createProductAttribute.attribute_code$$')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
         <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
-        <seeElement selector=".message-success" stepKey="assertSuccess"/>
+        <waitForElementVisible selector=".message-success" stepKey="assertSuccess"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goProductPageOnStorefront1"/>
         <!-- View Simple Product 1 -->

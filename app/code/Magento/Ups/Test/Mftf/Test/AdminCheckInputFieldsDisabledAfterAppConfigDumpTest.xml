@@ -19,12 +19,17 @@
 			<actualResult type="const">$grabUPSActiveDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
         </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSTypeSystem}}" userInput="disabled" stepKey="grabUPSTypeDisabled"/>
+        <assertEquals stepKey="assertUPSTypeDisabled">
+            <actualResult type="const">$grabUPSTypeDisabled</actualResult>
+            <expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSAccountLive}}" userInput="disabled" stepKey="grabUPSAccountLiveDisabled"/>
         <assertEquals stepKey="assertUPSAccountLiveDisabled">
 			<actualResult type="const">$grabUPSAccountLiveDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
         </assertEquals>
-        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSGatewayUrl}}" userInput="disabled" stepKey="grabUPSGatewayUrlDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSGatewayXMLUrl}}" userInput="disabled" stepKey="grabUPSGatewayUrlDisabled"/>
         <assertEquals stepKey="assertUPSGatewayUrlDisabled">
 			<actualResult type="const">$grabUPSGatewayUrlDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>

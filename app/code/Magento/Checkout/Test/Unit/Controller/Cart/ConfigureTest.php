@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -151,8 +151,10 @@ class ConfigureTest extends TestCase
         //expects
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['id'], ['product_id'])
-            ->willReturnOnConsecutiveCalls($quoteId, $actualProductId);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['id'] => $quoteId,
+                ['product_id'] => $actualProductId,
+            });
         $this->cartMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
 
         $quoteItemMock->expects($this->exactly(1))->method('getBuyRequest')->willReturn($buyRequestMock);

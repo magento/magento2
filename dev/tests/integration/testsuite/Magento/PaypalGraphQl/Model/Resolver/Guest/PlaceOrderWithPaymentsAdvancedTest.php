@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,17 +54,17 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->gateway = $this->getMockBuilder(Gateway::class)
             ->disableOriginalConstructor()
-            ->setMethods(['postRequest'])
+            ->onlyMethods(['postRequest'])
             ->getMock();
 
         $requestFactory = $this->getMockBuilder(RequestFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->paymentRequest = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__call','setData'])
+            ->onlyMethods(['__call','setData'])
             ->getMock();
         $this->paymentRequest->method('__call')
             ->willReturnCallback(
@@ -128,15 +128,17 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
             ->willReturnMap(
                 [
                     [
-                        'user' => null,
-                        'vendor' => null,
-                        'partner' => null,
-                        'pwd' => null,
-                        'verbosity' => null,
-                        'BUTTONSOURCE' => $button,
-                        'tender' => 'C',
-                    ],
-                    $this->returnSelf()
+                        [
+                            'user' => null,
+                            'vendor' => null,
+                            'partner' => null,
+                            'pwd' => null,
+                            'verbosity' => null,
+                            'BUTTONSOURCE' => $button,
+                            'tender' => 'C',
+                        ],
+                        $this->returnSelf()
+                    ]
                 ],
                 ['USER1', 1, $this->returnSelf()],
                 ['USER2', 'USER2SilentPostHash', $this->returnSelf()]
@@ -206,8 +208,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
         $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
-        $expectedExceptionMessage =
-            "Unable to place order: Payment Gateway is unreachable at the moment. Please use another payment option.";
+        $expectedErrorCode = 'UNABLE_TO_PLACE_ORDER';
 
         $this->paymentRequest->method('setData')
             ->with(
@@ -230,8 +231,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $responseData = $this->setPaymentMethodAndPlaceOrder($cartId, $paymentMethod);
         $this->assertArrayHasKey('errors', $responseData);
         $actualError = $responseData['errors'][0];
-        $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
+        $this->assertEquals($expectedErrorCode, $actualError['extensions']['error_code']);
     }
 
     /**

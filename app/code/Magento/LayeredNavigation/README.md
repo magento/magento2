@@ -55,5 +55,5 @@ This module modifies the following page_layout in the `view/frontend.page_layout
 
 More information can be found in:
 
-- [Learn more about Layered Navigation](https://docs.magento.com/user-guide/catalog/navigation-layered.html)
-- [Learn how to Configuring Layered Navigation](https://docs.magento.com/user-guide/catalog/navigation-layered-configuration.html)
+- [Learn more about Layered Navigation](https://experienceleague.adobe.com/docs/commerce-admin/catalog/catalog/navigation/navigation-layered.html)
+- [Learn how to Configuring Layered Navigation](https://experienceleague.adobe.com/docs/commerce-admin/catalog/catalog/navigation/navigation-layered.html#configure-layered-navigation)

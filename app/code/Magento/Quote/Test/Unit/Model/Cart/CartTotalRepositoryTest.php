@@ -256,7 +256,7 @@ class CartTotalRepositoryTest extends TestCase
      * @param void
      * @return array
      */
-    public function getDataProvider(): array
+    public static function getDataProvider(): array
     {
         return [
             'Virtual Quote' => [

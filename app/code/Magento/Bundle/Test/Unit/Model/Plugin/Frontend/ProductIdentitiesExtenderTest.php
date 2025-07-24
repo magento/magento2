@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,12 +34,12 @@ class ProductIdentitiesExtenderTest extends TestCase
     {
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId', 'getTypeId'])
+            ->onlyMethods(['getEntityId', 'getTypeId'])
             ->getMock();
 
         $this->type = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getChildrenIds'])
+            ->onlyMethods(['getChildrenIds'])
             ->getMock();
 
         $this->plugin = new ProductPlugin($this->type);

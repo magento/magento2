@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -226,15 +226,15 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
         TypeListInterface $cacheTypesList,
         DateTime $dateTime,
         RuleProductProcessor $ruleProductProcessor,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = [],
-        ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null,
-        Json $serializer = null,
-        RuleResourceModel $ruleResourceModel = null,
-        ConditionsToCollectionApplier $conditionsToCollectionApplier = null
+        ?ExtensionAttributesFactory $extensionFactory = null,
+        ?AttributeValueFactory $customAttributeFactory = null,
+        ?Json $serializer = null,
+        ?RuleResourceModel $ruleResourceModel = null,
+        ?ConditionsToCollectionApplier $conditionsToCollectionApplier = null
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_storeManager = $storeManager;
@@ -605,13 +605,8 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
             return parent::afterSave();
         }
 
-        if ($this->isObjectNew() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
-            $productIds = $this->getMatchingProductIds();
-            if (!empty($productIds) && is_array($productIds)) {
-                $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
-            }
-        } else {
-            $this->_ruleProductProcessor->getIndexer()->invalidate();
+        if (!$this->_ruleProductProcessor->isIndexerScheduled()) {
+            $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
         }
 
         return parent::afterSave();
@@ -624,15 +619,7 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
      */
     public function reindex()
     {
-        $productIds = $this->_productIds ? array_keys(
-            array_filter(
-                $this->_productIds,
-                function (array $data) {
-                    return array_filter($data);
-                }
-            )
-        ) : [];
-        $this->_ruleProductProcessor->reindexList($productIds);
+        $this->_ruleProductProcessor->reindexRow($this->getRuleId());
     }
 
     /**
@@ -642,7 +629,9 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
      */
     public function afterDelete()
     {
-        $this->_ruleProductProcessor->getIndexer()->invalidate();
+        if ($this->getIsActive() && !$this->_ruleProductProcessor->isIndexerScheduled()) {
+            $this->ruleResourceModel->addCommitCallback([$this, 'reindex']);
+        }
         return parent::afterDelete();
     }
 

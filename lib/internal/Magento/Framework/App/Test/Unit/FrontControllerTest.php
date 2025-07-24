@@ -167,8 +167,13 @@ class FrontControllerTest extends TestCase
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $this->areaMock
             ->method('load')
-            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
-            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == Area::PART_DESIGN || $arg == Area::PART_TRANSLATE) {
+                        return $this->areaMock;
+                    }
+                }
+            );
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->routerList->expects($this->any())
             ->method('valid')
@@ -184,8 +189,18 @@ class FrontControllerTest extends TestCase
             ->willReturn($response);
         $this->router
             ->method('match')
-            ->withConsecutive([$this->request], [$this->request])
-            ->willReturnOnConsecutiveCalls(false, $controllerInstance);
+            ->willReturnCallback(
+                function ($arg1) use ($controllerInstance) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == $this->request) {
+                        $callCount++;
+                        return false;
+                    } elseif ($callCount == 1 && $arg1 == $this->request) {
+                        $callCount++;
+                        return $controllerInstance;
+                    }
+                }
+            );
 
         $this->routerList->expects($this->any())
             ->method('current')
@@ -196,7 +211,11 @@ class FrontControllerTest extends TestCase
             ->willReturnOnConsecutiveCalls(false, true);
         $this->request
             ->method('setDispatched')
-            ->withConsecutive([true]);
+            ->willReturnCallback(
+                function ($arg1) {
+                        return null;
+                }
+            );
 
         $this->requestValidator->expects($this->once())
             ->method('validate')->with($this->request, $controllerInstance)->willThrowException($exception);
@@ -228,8 +247,18 @@ class FrontControllerTest extends TestCase
             ->willReturn($response);
         $this->router
             ->method('match')
-            ->withConsecutive([$this->request], [$this->request])
-            ->willReturnOnConsecutiveCalls(false, $controllerInstance);
+            ->willReturnCallback(
+                function ($arg1) use ($controllerInstance) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == $this->request) {
+                        $callCount++;
+                        return false;
+                    } elseif ($callCount == 1 && $arg1 == $this->request) {
+                        $callCount++;
+                        return $controllerInstance;
+                    }
+                }
+            );
 
         $this->routerList->expects($this->any())
             ->method('current')
@@ -237,8 +266,15 @@ class FrontControllerTest extends TestCase
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $this->areaMock
             ->method('load')
-            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
-            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == Area::PART_DESIGN) {
+                        return $this->areaMock;
+                    } elseif ($arg1 == Area::PART_TRANSLATE) {
+                        return $this->areaMock;
+                    }
+                }
+            );
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->request
             ->method('isDispatched')
@@ -269,10 +305,17 @@ class FrontControllerTest extends TestCase
             ->willReturn($response);
         $this->router
             ->method('match')
-            ->withConsecutive([$this->request], [$this->request])
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new NotFoundException(new Phrase('Page not found.'))),
-                $controllerInstance
+            ->willReturnCallback(
+                function ($arg1) use ($controllerInstance) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == $this->request) {
+                        $callCount++;
+                        throw new NotFoundException(new Phrase('Page not found.'));
+                    } elseif ($callCount == 1 && $arg1 == $this->request) {
+                        $callCount++;
+                        return $controllerInstance;
+                    }
+                }
             );
 
         $this->routerList->expects($this->any())
@@ -282,15 +325,28 @@ class FrontControllerTest extends TestCase
         $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $this->areaMock
             ->method('load')
-            ->withConsecutive([Area::PART_DESIGN], [Area::PART_TRANSLATE])
-            ->willReturnOnConsecutiveCalls($this->areaMock, $this->areaMock);
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == Area::PART_DESIGN) {
+                        return $this->areaMock;
+                    } elseif ($arg1 == Area::PART_TRANSLATE) {
+                        return $this->areaMock;
+                    }
+                }
+            );
         $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
         $this->request
             ->method('isDispatched')
             ->willReturnOnConsecutiveCalls(false, false, true);
         $this->request
             ->method('setDispatched')
-            ->withConsecutive([false], [true]);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == false || $arg == true) {
+                        return null;
+                    }
+                }
+            );
         $this->request
             ->method('setActionName')
             ->with('noroute');

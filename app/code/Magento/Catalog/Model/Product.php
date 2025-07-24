@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -421,8 +421,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = [],
-        \Magento\Eav\Model\Config $config = null,
-        FilterProductCustomAttribute $filterCustomAttribute = null
+        ?\Magento\Eav\Model\Config $config = null,
+        ?FilterProductCustomAttribute $filterCustomAttribute = null
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -1162,7 +1162,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
      * @return $this
      */
-    public function setTierPrices(array $tierPrices = null)
+    public function setTierPrices(?array $tierPrices = null)
     {
         $this->getPriceModel()->setTierPrices($this, $tierPrices);
         return $this;
@@ -1492,7 +1492,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
      * @return $this
      */
-    public function setProductLinks(array $links = null)
+    public function setProductLinks(?array $links = null)
     {
         if ($links === null) {
             $this->setData('ignore_links_flag', true);
@@ -1877,8 +1877,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $data = parent::toArray($arrAttributes);
         $stock = $this->getStockItem();
-        if ($stock) {
+        if (is_object($stock) && method_exists($stock, 'toArray')) {
             $data['stock_item'] = $stock->toArray();
+        } elseif (is_array($stock)) {
+            $data['stock_item'] = $stock;
         }
         unset($data['stock_item']['product']);
         return $data;
@@ -2045,7 +2047,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null)
+    public function setOptions(?array $options = null)
     {
         $this->setData('options', $options);
         return $this;
@@ -2380,6 +2382,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get identities
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getIdentities()
     {
@@ -2404,6 +2407,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $identities[] = self::CACHE_TAG;
+        }
+
+        $isProductNew = $this->getOrigData('news_from_date') != $this->getData('news_from_date')
+            || $this->isObjectNew();
+        if ($isProductNew && ($isStatusChanged || $this->getStatus() == Status::STATUS_ENABLED)) {
+            $identities[] = \Magento\Catalog\Block\Product\NewProduct::CACHE_TAG;
+            $identities[] = \Magento\Catalog\Block\Rss\Product\NewProducts::CACHE_TAG;
         }
 
         return array_unique($identities);
@@ -2686,7 +2696,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function setMediaGalleryEntries(array $mediaGalleryEntries = null)
+    public function setMediaGalleryEntries(?array $mediaGalleryEntries = null)
     {
         if ($mediaGalleryEntries !== null) {
             $images = [];

@@ -16,18 +16,18 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
     /**#@+
      * Attributes used in test assertions
      */
-    const ATTRIBUTE_CODE_FIRST_NAME = 'firstname';
+    public const ATTRIBUTE_CODE_FIRST_NAME = 'firstname';
 
-    const ATTRIBUTE_CODE_LAST_NAME = 'lastname';
+    public const ATTRIBUTE_CODE_LAST_NAME = 'lastname';
 
     /**#@-*/
 
     /**#@+
      * Source *.csv file names for different behaviors
      */
-    const UPDATE_FILE_NAME = 'customer_composite_update.csv';
+    public const UPDATE_FILE_NAME = 'customer_composite_update.csv';
 
-    const DELETE_FILE_NAME = 'customer_composite_delete.csv';
+    public const DELETE_FILE_NAME = 'customer_composite_delete.csv';
 
     /**#@-*/
 
@@ -57,7 +57,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_beforeImport = [
+    protected static $_beforeImport = [
         'betsyparker@example.com' => [
             'addresses' => ['19107', '72701'],
             'data' => [self::ATTRIBUTE_CODE_FIRST_NAME => 'Betsy', self::ATTRIBUTE_CODE_LAST_NAME => 'Parker'],
@@ -69,7 +69,7 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @var array
      */
-    protected $_afterImport = [
+    protected static $_afterImport = [
         'betsyparker@example.com' => [
             'addresses' => ['19107', '72701', '19108'],
             'data' => [
@@ -200,31 +200,46 @@ class CustomerCompositeTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function importDataDataProvider()
+    public static function importDataDataProvider()
     {
         $filesDirectory = __DIR__ . '/_files/';
-        $sourceData = [
-            'delete_behavior' => [
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-                '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
-                '$dataBefore' => $this->_beforeImport,
-                '$dataAfter' => [],
-                '$updatedItemsCount' => 0,
-                '$createdItemsCount' => 0,
-                '$deletedItemsCount' => 1,
-                '$errors' => [],
+        $beforeImport = [
+            'betsyparker@example.com' => [
+                'addresses' => ['19107', '72701'],
+                'data' => ['firstname' => 'Betsy', 'lastname' => 'Parker'],
             ],
         ];
+        $afterImport = [
+            'betsyparker@example.com' => [
+                'addresses' => ['19107', '72701', '19108'],
+                'data' => ['firstname' => 'NotBetsy', 'lastname' => 'NotParker'],
+            ],
+            'anthonyanealy@magento.com' => ['addresses' => ['72701', '92664']],
+            'loribbanks@magento.com' => ['addresses' => ['98801']],
+            'kellynilson@magento.com' => ['addresses' => []],
+        ];
 
-        $sourceData['add_update_behavior'] = [
-            '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
-            '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
-            '$dataBefore' => $this->_beforeImport,
-            '$dataAfter' => $this->_afterImport,
-            '$updatedItemsCount' => 1,
-            '$createdItemsCount' => 3,
-            '$deletedItemsCount' => 0,
-            '$errors' => [],
+        $sourceData = [
+            'delete_behavior' => [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+                'sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
+                'dataBefore' => $beforeImport,
+                'dataAfter' => [],
+                'updatedItemsCount' => 0,
+                'createdItemsCount' => 0,
+                'deletedItemsCount' => 1,
+                'errors' => [],
+            ],
+            'add_update_behavior' => [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
+                'sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
+                'dataBefore' => $beforeImport,
+                'dataAfter' => $afterImport,
+                'updatedItemsCount' => 1,
+                'createdItemsCount' => 3,
+                'deletedItemsCount' => 0,
+                'errors' => [],
+            ]
         ];
 
         return $sourceData;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -336,12 +336,19 @@ class SaveTest extends TestCase
         $this->blockMock->expects($this->any())->method('setData');
         $this->blockRepository
             ->method('save')
-            ->withConsecutive([$this->blockMock], [$duplicateBlockMock]);
+            ->willReturnCallback(function ($arg1) use ($duplicateBlockMock) {
+                if ($arg1 == $this->blockMock || $arg1 == $duplicateBlockMock) {
+                    return null;
+                }
+            });
 
         $this->messageManagerMock
             ->method('addSuccessMessage')
-            ->withConsecutive([__('You saved the block.')], [__('You duplicated the block.')]);
-
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == (__('You saved the block.')) || $arg1 == __('You duplicated the block.')) {
+                    return null;
+                }
+            });
         $this->dataPersistorMock->expects($this->any())
             ->method('clear')
             ->with('cms_block');

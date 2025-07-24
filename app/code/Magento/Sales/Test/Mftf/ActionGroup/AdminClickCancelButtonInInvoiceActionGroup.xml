@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickCancelButtonInInvoiceActionGroup">
+        <annotations>
+            <description>Admin clicks cancel button from top menu on invoice page.</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminInvoiceMainActionsSection.cancel}}" stepKey="waitForHoldButtonToBeClickable"/>
+        <click selector="{{AdminInvoiceMainActionsSection.cancel}}" stepKey="clickCancelButton"/>
+        <waitForPageLoad stepKey="waitForLoadPage"/>
+        <waitForText userInput="You canceled the invoice." stepKey="seeMessageInvoiceCanceled"/>
+    </actionGroup>
+</actionGroups>

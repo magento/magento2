@@ -21,5 +21,15 @@
         <element name="taxRule1" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Canada-GST-5% (5%)']/following-sibling::td//span[@class='price']"/>
         <element name="taxRule2" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Canada-GST-PST-5% (5%)']/following-sibling::td//span[@class='price']"/>
         <element name="subTotal1" type="text" selector=".//*[@class='col-subtotal col-price']"/>
+        <element name="orderTotalPrices" type="text" selector="//strong[text()='{{GrandTotal}}']//ancestor::tr//span[@class = 'price' and text()='{{price}}']" parameterized="true"/>
+        <element name="subTotalAndShipping" type="text" selector="//td[@class='label' and contains(text(),'{{SubTotal}}')]//parent::tr//span[@class='price' and text()='{{price}}']" parameterized="true"/>
+        <element name="catalogTotalPriceExclTax" type="text" selector="//tbody//tr[@class='col-catalog_price_excl_tax']//span[@class='price' and contains(text(),'{{value}}')]" parameterized="true"/>
+        <element name="catalogTotalPriceInclTax" type="text" selector="//tbody//tr[@class='col-catalog_price_incl_tax']//span[@class='price' and contains(text(),'{{value}}')]" parameterized="true"/>
+        <element name="negotiatedDiscount" type="text" selector="//tbody//tr[@class='col-negotiated_discount']//span[@class='price' and contains(text(),'{{value}}')]" parameterized="true"/>
+        <element name="subTotalInclTax" type="text" selector="//tbody//tr[@class='col-subtotal_incl']//span[@class='price' and contains(text(),'{{value}}')]" parameterized="true"/>
+        <element name="subTotalExclTax" type="text" selector="//tbody//tr[@class='col-subtotal_excl']//span[@class='price' and contains(text(),'{{value}}')]" parameterized="true"/>
+        <element name="fieldsInOrderTotals" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='{{fieldsInOrderTotals}}']/following-sibling::td//span[@class='price']" parameterized="true"/>
+        <element name="totalTaxWithTaxRate" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Total Tax']/parent::tr/following-sibling::tr//span[@class='price']"/>
+        <element name="totalTaxDropdown" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Total Tax']"/>
     </section>
 </sections>

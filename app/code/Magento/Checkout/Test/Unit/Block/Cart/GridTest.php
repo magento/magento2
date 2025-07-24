@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -148,11 +148,10 @@ class GridTest extends TestCase
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn($itemsCount);
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER, ScopeInterface::SCOPE_STORE, null],
-                [Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER, ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturnOnConsecutiveCalls(20, $availableLimit);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                [Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER] => 20,
+                [Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER] => $availableLimit
+            });
         $this->layoutMock
             ->expects($this->once())
             ->method('createBlock')

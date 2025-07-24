@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,7 +79,7 @@ class GenericTest extends TestCase
          */
         $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIsVirtual'])
+            ->addMethods(['getIsVirtual'])
             ->getMock();
 
         $itemMock->expects($this->once())

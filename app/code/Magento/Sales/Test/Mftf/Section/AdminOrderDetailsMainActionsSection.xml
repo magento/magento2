@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,6 +17,7 @@
         <element name="hold" type="button" selector="#order-view-hold-button" timeout="30"/>
         <element name="invoice" type="button" selector="#order_invoice" timeout="30"/>
         <element name="invoiceTab" type="button" selector="#sales_order_view_tabs_order_invoices" timeout="30"/>
+        <element name="invoiceTabContent" type="text" selector="#sales_order_view_tabs_order_invoices_content > div > div.admin__data-grid-wrap > table > tbody > tr > td" timeout="30"/>
         <element name="ship" type="button" selector="#order_ship" timeout="30"/>
         <element name="reorder" type="button" selector="#order_reorder" timeout="30"/>
         <element name="edit" type="button" selector="#order_edit" timeout="30"/>
@@ -27,5 +28,8 @@
         <element name="shipmentsTab" type="button" selector="#sales_order_view_tabs_order_shipments"/>
         <element name="authorize" type="button" selector="#order_authorize"/>
         <element name="ok" type="button" selector=".//*[@data-role='action']"/>
+        <element name="void" type="button" selector="#void_payment span"/>
+        <element name="invoiceTabContent1" type="text" selector="#sales_order_view_tabs_order_invoices_content > div > div.admin__data-grid-wrap > table > tbody > tr > td"/>
+        <element name="creditMemoWarning" type="text" selector="//div[@class='modal-content']//div[text()='This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?']"/>
     </section>
 </sections>

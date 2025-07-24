@@ -17,12 +17,12 @@ class TotalMinMaxTest extends TestCase
     /**
      * Payment min total value
      */
-    const PAYMENT_MIN_TOTAL = 2;
+    public const PAYMENT_MIN_TOTAL = 2;
 
     /**
      * Payment max total value
      */
-    const PAYMENT_MAX_TOTAL = 5;
+    public const PAYMENT_MAX_TOTAL = 5;
 
     /**
      * @dataProvider paymentMethodDataProvider
@@ -37,8 +37,10 @@ class TotalMinMaxTest extends TestCase
             ->addMethods([])->getMock();
         $paymentMethod
             ->method('getConfigData')
-            ->withConsecutive([TotalMinMax::MIN_ORDER_TOTAL], [TotalMinMax::MAX_ORDER_TOTAL])
-            ->willReturnOnConsecutiveCalls(self::PAYMENT_MIN_TOTAL, self::PAYMENT_MAX_TOTAL);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [TotalMinMax::MIN_ORDER_TOTAL] => self::PAYMENT_MIN_TOTAL,
+                [TotalMinMax::MAX_ORDER_TOTAL] => self::PAYMENT_MAX_TOTAL
+            });
 
         $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
             ->onlyMethods(['__wakeup'])
@@ -52,7 +54,7 @@ class TotalMinMaxTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider(): array
+    public static function paymentMethodDataProvider(): array
     {
         return [[1, false], [6, false], [3, true]];
     }

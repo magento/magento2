@@ -10,6 +10,9 @@ namespace Magento\Framework\Setup;
  * Interface to Log Message in Setup
  *
  * @api
+ * @deprecated Replaced with ConsoleLogger
+ * @see Magento\Framework\Setup\ConsoleLogger
+ *
  * @since 100.0.2
  */
 interface LoggerInterface

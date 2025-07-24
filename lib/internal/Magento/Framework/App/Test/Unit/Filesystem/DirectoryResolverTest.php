@@ -65,10 +65,10 @@ class DirectoryResolverTest extends TestCase
         $rootPath = '/path/root';
         $directoryConfig = 'directory_config';
         $directory = $this->getMockBuilder(WriteInterface::class)
-            ->setMethods(['getDriver'])
+            ->onlyMethods(['getDriver'])
             ->getMockForAbstractClass();
         $driver = $this->getMockBuilder(DriverInterface::class)
-            ->setMethods(['getRealPathSafety'])
+            ->onlyMethods(['getRealPathSafety'])
             ->getMockForAbstractClass();
         $directory->expects($this->atLeastOnce())->method('getDriver')->willReturn($driver);
         $driver->expects($this->atLeastOnce())->method('getRealPathSafety')->with($path)
@@ -82,7 +82,7 @@ class DirectoryResolverTest extends TestCase
     /**
      * @return array
      */
-    public function validatePathDataProvider()
+    public static function validatePathDataProvider()
     {
         return [
             ['/path/root/for/validation', true],

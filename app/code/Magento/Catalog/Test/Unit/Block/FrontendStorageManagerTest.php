@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -63,8 +63,10 @@ class FrontendStorageManagerTest extends TestCase
         $this->model->setData('configuration', $configuration);
         $this->frontendStorageConfigurationPoolMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['first_key'], ['second_key'])
-            ->willReturnOnConsecutiveCalls($dynamicStorage, null);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['first_key'] => $dynamicStorage,
+                ['second_key'] => null
+            });
         $dynamicStorage->expects($this->once())
             ->method('get')
             ->willReturn(['second' => 'data']);

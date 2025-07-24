@@ -65,7 +65,7 @@ class CssTest extends TestCase
         );
 
         $this->_model = $this->getMockBuilder(Css::class)
-            ->setMethods(['_getCurrentTheme'])
+            ->onlyMethods(['_getCurrentTheme'])
             ->setConstructorArgs($constructArguments)
             ->getMock();
     }

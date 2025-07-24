@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Pricing\Price;
 
@@ -140,7 +140,7 @@ class BundleSelectionPrice extends AbstractPrice
         if (!$this->useRegularPrice) {
             $value = $this->discountCalculator->calculateDiscount($this->bundleProduct, $value);
         }
-        $this->value = $this->priceCurrency->round($value);
+        $this->value = $this->priceCurrency->roundPrice($value, 4);
         $product->setData($bundleSelectionKey, $this->value);
 
         return $this->value;

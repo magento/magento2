@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,8 +52,11 @@ class DoneButtonTest extends TestCase
         $uuid = 'some standard uuid string';
         $this->requestMock->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(['uuid'], ['buttons'])
-            ->willReturnOnConsecutiveCalls($uuid, $buttonsParam);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['uuid'] => $uuid,
+                ['buttons'] => $buttonsParam,
+            });
+
         $this->bulkStatusMock->expects($this->once())
             ->method('getOperationsCountByBulkIdAndStatus')
             ->with($uuid, OperationInterface::STATUS_TYPE_RETRIABLY_FAILED)
@@ -65,7 +68,7 @@ class DoneButtonTest extends TestCase
     /**
      * @return array
      */
-    public function getButtonDataProvider()
+    public static function getButtonDataProvider()
     {
         return [
             [1, 0, []],

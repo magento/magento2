@@ -111,11 +111,11 @@ class ProductTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function saveNewProductDataProvider(): array
+    public static function saveNewProductDataProvider(): array
     {
         return [
             'with_different_prices_and_qty' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_1' => [
                         'name' => 'simple_1',
                         'sku' => 'simple_1',
@@ -135,7 +135,7 @@ class ProductTest extends AbstractBackendController
                 ],
             ],
             'without_weight' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_1' => [
                         'name' => 'simple_1',
                         'sku' => 'simple_1',
@@ -180,11 +180,11 @@ class ProductTest extends AbstractBackendController
     /**
      * @return array
      */
-    public function saveExistProductDataProvider(): array
+    public static function saveExistProductDataProvider(): array
     {
         return [
             'added_new_option' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
@@ -194,10 +194,10 @@ class ProductTest extends AbstractBackendController
                         'attributes' => ['test_configurable' => 'Option 2'],
                     ],
                 ],
-                'associated_products' => ['simple_1'],
+                'associatedProducts' => ['simple_1'],
             ],
             'added_new_option_and_delete_old' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
@@ -206,14 +206,14 @@ class ProductTest extends AbstractBackendController
                         'attributes' => ['test_configurable' => 'Option 2'],
                     ],
                 ],
-                'associated_products' => [],
+                'associatedProducts' => [],
             ],
             'delete_all_options' => [
-                'child_products' => [],
-                'associated_products' => [],
+                'childProducts' => [],
+                'associatedProducts' => [],
             ],
             'added_new_attribute' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_1_1' => [
                         'name' => 'simple_1_1',
                         'sku' => 'simple_1_1',
@@ -237,10 +237,10 @@ class ProductTest extends AbstractBackendController
                         ],
                     ],
                 ],
-                'associated_products' => [],
+                'associatedProducts' => [],
             ],
             'added_new_attribute_and_delete_old' => [
-                'child_products' => [
+                'childProducts' => [
                     'simple_2_1' => [
                         'name' => 'simple_2_1',
                         'sku' => 'simple_2_1',
@@ -256,7 +256,7 @@ class ProductTest extends AbstractBackendController
                         'attributes' => ['test_configurable_2' => 'Option 2'],
                     ],
                 ],
-                'associated_products' => [],
+                'associatedProducts' => [],
             ],
         ];
     }

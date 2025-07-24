@@ -46,7 +46,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderForTestGetAbsolutePath(): array
+    public static function dataProviderForTestGetAbsolutePath(): array
     {
         return [
             ['/root/path/', 'sub', '/root/path/sub'],
@@ -77,7 +77,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderForTestGetRelativePath(): array
+    public static function dataProviderForTestGetRelativePath(): array
     {
         return [
             ['/root/path/', 'sub', 'sub'],
@@ -107,7 +107,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderForTestGetRealPathSafety(): array
+    public static function dataProviderForTestGetRealPathSafety(): array
     {
         return [
             ['/1/2/3', '/1/2/3'],

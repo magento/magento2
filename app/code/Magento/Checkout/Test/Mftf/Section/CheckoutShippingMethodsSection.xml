@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,5 +26,35 @@
         <element name="showShippingVatNumber" type="text" selector="div.shipping-address-item"/>
         <element name="showBillingVatNumber" type="text" selector="div.billing-address-details"/>
         <element name="showShippingInfoVatNumber" type="text" selector="div.shipping-information-content"/>
+        <element name="shippingMethodDhlLabel" type="text" selector="#label_carrier_null_dhl"/>
+        <element name="shippingMethodFlatRateLabel" type="text" selector="#label_carrier_flatrate_flatrate"/>
+        <element name="shippingMethodDhlWorldWideExpressLabel" type="text" selector="#label_method_P_dhl"/>
+        <element name="shippingMethodDhlWorldWideExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_P']"/>
+        <element name="shippingMethodDhlExpressTwelveLabel" type="text" selector="#label_method_Y_dhl"/>
+        <element name="shippingMethodDhlExpressTwelve" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Y']"/>
+        <element name="shippingMethodDhlMedicalExpressLabel" type="text" selector="#label_method_Q_dhl"/>
+        <element name="shippingMethodDhlMedicalExpress" type="radio" selector="#checkout-shipping-method-load input[value='dhl_Q']"/>
+        <element name="shippingMethodFreeShippingLabel" type="text" selector="#label_carrier_freeshipping_freeshipping"/>
+        <element name="shippingDHLErrorMessage" type="text" selector="#checkout-shipping-method-load .table-checkout-shipping-method tr.row-error .error div"/>
+        <element name="smartPostShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_SMART_POST']"/>
+        <element name="groundShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_GROUND']"/>
+        <element name="fedexExpressServerShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_EXPRESS_SAVER']"/>
+        <element name="fedex2dayShippingMethod" type="radio" selector="#checkout-shipping-method-load input[value='fedex_FEDEX_2_DAY']"/>
+        <element name="shippingMethodDhlExpressEasyLabel" type="text" selector="#label_method_8_dhl"/>
+        <element name="shippingMethodFedexLabel" type="text" selector="#label_carrier_null_fedex"/>
+        <element name="smartPostFedexPrice" type="text" selector="//tr[td[@id='label_carrier_SMART_POST_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="groundFedexPrice" type="text" selector="//tr[td[@id='label_method_FEDEX_GROUND_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="expressSaverFedexPrice" type="text" selector="//tr[td[@id='label_method_FEDEX_EXPRESS_SAVER_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="twoDayFedexPrice" type="text" selector="//tr[td[@id='label_method_FEDEX_2_DAY_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="twoDayAMFedexPrice" type="text" selector="//tr[td[@id='label_method_FEDEX_2_DAY_AM_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="standardOvernightFedexPrice" type="text" selector="//tr[td[@id='label_method_STANDARD_OVERNIGHT_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="priorityOvernightFedexPrice" type="text" selector="//tr[td[@id='label_method_PRIORITY_OVERNIGHT_fedex']]//td[contains(@class, 'col-price')]//span[contains(@class, 'price') and contains(@data-bind, 'price_excl_tax')]"/>
+        <element name="smartPostFedexMethod" type="text" selector="//tr[td[@id='label_carrier_SMART_POST_fedex']]//td[contains(@class, 'col-method') and contains(text(), 'Smart Post')]"/>
+        <element name="groundFedexMethod" type="text" selector="//tr[td[@id='label_method_FEDEX_GROUND_fedex']]//td[contains(@class, 'col-method') and contains(text(), 'Ground')]"/>
+        <element name="expressSaverFedexMethod" type="text" selector="//tr[td[@id='label_method_FEDEX_EXPRESS_SAVER_fedex']]//td[contains(@class, 'col-method') and contains(text(), 'Express Saver')]"/>
+        <element name="twoDayFedexMethod" type="text" selector="//tr[td[@id='label_method_FEDEX_2_DAY_fedex']]//td[contains(@class, 'col-method') and contains(text(), '2 Day')]"/>
+        <element name="twoDayAMFedexMethod" type="text" selector="//tr[td[@id='label_method_FEDEX_2_DAY_AM_fedex']]//td[contains(@class, 'col-method') and contains(text(), '2 Day AM')]"/>
+        <element name="standardOvernightFedexMethod" type="text" selector="//tr[td[@id='label_method_STANDARD_OVERNIGHT_fedex']]//td[contains(@class, 'col-method') and contains(text(), 'Standard Overnight')]"/>
+        <element name="priorityOvernightFedexMethod" type="text" selector="//tr[td[@id='label_method_PRIORITY_OVERNIGHT_fedex']]//td[contains(@class, 'col-method') and contains(text(), 'Priority Overnight')]"/>
     </section>
 </sections>

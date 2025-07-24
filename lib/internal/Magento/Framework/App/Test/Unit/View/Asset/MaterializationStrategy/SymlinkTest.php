@@ -52,7 +52,6 @@ class SymlinkTest extends TestCase
     public function testIsSupported($path, $expectation)
     {
         $asset = $this->getMockBuilder(LocalInterface::class)
-            ->setMethods([])
             ->getMockForAbstractClass();
         $asset->expects($this->once())
             ->method('getSourceFile')
@@ -63,7 +62,7 @@ class SymlinkTest extends TestCase
     /**
      * @return array
      */
-    public function sourceFileDataProvider()
+    public static function sourceFileDataProvider()
     {
         return [
             ['path/to/file', true],

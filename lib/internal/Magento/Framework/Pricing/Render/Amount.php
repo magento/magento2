@@ -77,8 +77,8 @@ class Amount extends Template implements AmountRenderInterface
         AmountInterface $amount,
         PriceCurrencyInterface $priceCurrency,
         RendererPool $rendererPool,
-        SaleableInterface $saleableItem = null,
-        PriceInterface $price = null,
+        ?SaleableInterface $saleableItem = null,
+        ?PriceInterface $price = null,
         array $data = []
     ) {
         parent::__construct($context, $data);

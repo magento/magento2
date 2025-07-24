@@ -113,7 +113,7 @@ class MassAssignGroupTest extends TestCase
         $this->customerCollectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
         $redirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -174,7 +174,7 @@ class MassAssignGroupTest extends TestCase
     {
         $customersIds = [10, 11, 12];
         $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->setMethods(['setData'])
+            ->addMethods(['setData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->customerCollectionMock->expects($this->any())

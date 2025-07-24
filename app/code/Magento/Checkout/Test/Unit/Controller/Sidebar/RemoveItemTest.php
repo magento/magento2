@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -201,8 +201,7 @@ class RemoveItemTest extends TestCase
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception)
-            ->willReturn(null);
+            ->with($exception);
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')

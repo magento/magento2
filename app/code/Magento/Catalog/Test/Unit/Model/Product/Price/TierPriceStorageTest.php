@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -141,12 +141,17 @@ class TierPriceStorageTest extends TestCase
         $this->tierPriceFactory
             ->expects($this->exactly(3))
             ->method('create')
-            ->withConsecutive(
-                [$rawPricesData[0], 'simple'],
-                [$rawPricesData[1] + ['customer_group_code' => 'General'], 'virtual'],
-                [$rawPricesData[2] + ['customer_group_code' => 'Wholesale'], 'virtual'],
-            )
-            ->willReturn($price);
+            ->willReturnCallback(function (...$args) use ($rawPricesData, $price) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$rawPricesData[0], 'simple'],
+                    [$rawPricesData[1] + ['customer_group_code' => 'General'], 'virtual'],
+                    [$rawPricesData[2] + ['customer_group_code' => 'Wholesale'], 'virtual']
+                ];
+                $returnValue = $price;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
         $prices = $this->tierPriceStorage->get($skus);
         $this->assertNotEmpty($prices);
         $this->assertCount(3, $prices);

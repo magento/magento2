@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -49,7 +49,7 @@
         <element name="ruleParameterSelect" type="select" selector="rule[conditions][{{arg}}][operator]" parameterized="true"/>
         <element name="ruleParameterInput" type="input" selector="rule[conditions][{{arg}}][value]" parameterized="true"/>
         <element name="openChooser" type="button" selector="//label[@for='conditions__{{arg}}__value']" parameterized="true"/>
-        <element name="categoryCheckbox" type="checkbox" selector="//span[contains(text(), '{{arg}}')]/parent::a/preceding-sibling::input[@type='checkbox']" parameterized="true"/>
+        <element name="categoryCheckbox" type="checkbox" selector="//a[contains(text(), '{{arg}}')]" parameterized="true"/>
         <element name="newCondition" type="button" selector=".rule-param.rule-param-new-child" timeout="30"/>
         <element name="conditionSelect" type="select" selector="select[name='rule[conditions][1][new_child]']"/>
         <element name="targetEllipsis" type="input" selector="//ul[contains(@id, 'conditions')]//a[.='...']"/>
@@ -57,6 +57,7 @@
         <element name="addNewCondition" type="button" selector="//ul[@id = 'conditions__{{nestedIndex}}__children']/li/span[contains(@class, 'rule-param-new-child')]" parameterized="true" timeout="30"/>
         <element name="conditionSelectDropdown" type="select" selector="select[name='rule[conditions][{{nestedIndex}}][new_child]']" parameterized="true"/>
         <element name="selectCountryDropdown" type="select" selector="(//*[contains(@value,'country_id')]/..//select)[last()]"/>
+        <element name="removeCondition" type="select" selector="//input[@id='conditions__{{index}}__type']/following-sibling::span//a[@class='rule-param-remove']" parameterized="true"/>
 
         <!--Conditions checker -->
         <element name="openList" type="button" selector="a.rule-chooser-trigger>img.v-middle.rule-chooser-trigger"/>

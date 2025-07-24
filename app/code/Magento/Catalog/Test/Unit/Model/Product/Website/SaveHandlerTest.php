@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class SaveHandlerTest extends TestCase
             ->willReturn(false);
         $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
+            ->addMethods(['getWebsiteIds', 'setWebsiteIds'])
             ->getMockForAbstractClass();
         $extensionAttributes->expects($this->once())
             ->method('getWebsiteIds')
@@ -68,7 +68,7 @@ class SaveHandlerTest extends TestCase
     {
         $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
+            ->addMethods(['getWebsiteIds', 'setWebsiteIds'])
             ->getMockForAbstractClass();
         $this->product->expects($this->once())
             ->method('getExtensionAttributes')

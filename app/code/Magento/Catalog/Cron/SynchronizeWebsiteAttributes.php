@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Cron;
@@ -9,8 +9,8 @@ namespace Magento\Catalog\Cron;
 use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
 
 /**
- * Class SynchronizeWebsiteAttributes
- * @package Magento\Catalog\Cron
+ * @deprecated
+ * @see \Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\ValueSynchronizer
  */
 class SynchronizeWebsiteAttributes
 {
@@ -20,7 +20,6 @@ class SynchronizeWebsiteAttributes
     private $synchronizer;
 
     /**
-     * SynchronizeWebsiteAttributes constructor.
      * @param WebsiteAttributesSynchronizer $synchronizer
      */
     public function __construct(WebsiteAttributesSynchronizer $synchronizer)
@@ -30,6 +29,7 @@ class SynchronizeWebsiteAttributes
 
     /**
      * Synchronizes website attribute values if needed
+     *
      * @return void
      */
     public function execute()

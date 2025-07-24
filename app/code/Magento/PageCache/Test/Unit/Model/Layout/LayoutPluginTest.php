@@ -102,7 +102,7 @@ class LayoutPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterGenerateElementsDataProvider(): array
+    public static function afterGenerateElementsDataProvider(): array
     {
         return [
             'Full_cache state is true, Layout is cache-able' => [true, true, false],
@@ -149,7 +149,7 @@ class LayoutPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterGetOutputDataProvider(): array
+    public static function afterGetOutputDataProvider(): array
     {
         $tags = 'identity1,identity2';
         return [

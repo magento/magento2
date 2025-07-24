@@ -1,17 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Catalog\Pricing\Render\FinalPriceBox;
+use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
+use Magento\Framework\App\Area;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -41,6 +46,10 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
+        /** @var  \Magento\Framework\App\Cache\StateInterface $cacheState */
+        $cacheState = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER, true);
+
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->product = $productRepository->get('configurable');
         $this->finalPrice = Bootstrap::getObjectManager()->create(FinalPrice::class, [
@@ -60,7 +69,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
         $this->finalPriceBox = Bootstrap::getObjectManager()->create(FinalPriceBox::class, [
             'saleableItem' => $this->product,
             'price' => $this->finalPrice,
-            'rendererPool' => $this->rendererPool,
+            'rendererPool' => $this->rendererPool
         ]);
         $this->finalPriceBox->setTemplate('Magento_ConfigurableProduct::product/price/final_price.phtml');
 
@@ -97,13 +106,31 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    #[
+        DataFixture('Magento/ConfigurableProduct/_files/product_configurable.php'),
+        AppArea(Area::AREA_FRONTEND),
+        DbIsolation(false),
+    ]
+    public function testHasSpecialPrice(): void
+    {
+        $productAttributeRepository = Bootstrap::getObjectManager()->get(ProductAttributeRepositoryInterface::class);
+        $specialPrice = $productAttributeRepository->get('special_price');
+        $specialPrice->setUsedInProductListing(false);
+        $productAttributeRepository->save($specialPrice);
+
+        try {
+            self::assertTrue($this->finalPriceBox->hasSpecialPrice());
+        } finally {
+            $specialPrice->setUsedInProductListing(true);
+            $productAttributeRepository->save($specialPrice);
+        }
+    }
+
     /**
      * Test when is_product_list flag is specified
      *
      * Special price should be valid
-     * FinalPriceBox::hasSpecialPrice should not be call
-     * Regular price for Configurable product should be rendered for is_product_list = false (product page), but not be
-     * for for is_product_list = true (list of products)
+     * Regular price for Configurable product should be rendered for is_product_list = false (product page)
      *
      * @param bool $flag
      * @param int|bool $count
@@ -116,6 +143,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     {
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
+
         self::assertStringContainsString('5.99', $html);
         $this->assertEquals(
             1,
@@ -136,7 +164,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isProductListDataProvider()
+    public static function isProductListDataProvider()
     {
         return [
             'is_not_product_list' => [false, 1],

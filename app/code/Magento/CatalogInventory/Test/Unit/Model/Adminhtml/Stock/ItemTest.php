@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,11 +35,11 @@ class ItemTest extends TestCase
         $objectHelper = new ObjectManager($this);
 
         $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
-            ->setMethods(['getAllCustomersGroup'])
+            ->onlyMethods(['getAllCustomersGroup'])
             ->getMockForAbstractClass();
 
         $allGroup = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $allGroup->expects($this->any())

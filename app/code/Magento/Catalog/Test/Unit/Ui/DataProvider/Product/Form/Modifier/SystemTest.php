@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 /**
  * @method System getModel
  */
-class SystemTest extends AbstractModifierTest
+class SystemTest extends AbstractModifierTestCase
 {
     /**
      * @var UrlInterface|MockObject
@@ -26,7 +26,7 @@ class SystemTest extends AbstractModifierTest
     {
         parent::setUp();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl'])
+            ->onlyMethods(['getUrl'])
             ->getMockForAbstractClass();
     }
 

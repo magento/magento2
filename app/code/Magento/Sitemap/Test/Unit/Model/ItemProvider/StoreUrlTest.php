@@ -40,7 +40,7 @@ class StoreUrlTest extends TestCase
     private function getItemFactoryMock()
     {
         $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

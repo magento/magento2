@@ -63,8 +63,10 @@ class PricesTest extends TestCase
 
         $this->localeFormatMock->expects($this->atLeastOnce())
             ->method('getNumber')
-            ->withConsecutive([1000], [500], [1000], [500])
-            ->will($this->onConsecutiveCalls(1000, 500, 1000, 500));
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [1000] => 1000,
+                [500] => 500
+            });
 
         $this->assertEquals($expected, $this->model->getFormattedPrices($priceInfoMock));
     }

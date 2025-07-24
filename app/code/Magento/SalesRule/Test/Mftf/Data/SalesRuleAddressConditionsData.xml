@@ -13,6 +13,7 @@
         <data key="base_subtotal_total_incl_tax">Magento\SalesRule\Model\Rule\Condition\Address|base_subtotal_total_incl_tax</data>
         <data key="totalItemsQty">Magento\SalesRule\Model\Rule\Condition\Address|total_qty</data>
         <data key="totalWeight">Magento\SalesRule\Model\Rule\Condition\Address|weight</data>
+        <data key="paymentMethod">Magento\SalesRule\Model\Rule\Condition\Address|payment_method</data>
         <data key="shippingMethod">Magento\SalesRule\Model\Rule\Condition\Address|shipping_method</data>
         <data key="shippingPostCode">Magento\SalesRule\Model\Rule\Condition\Address|postcode</data>
         <data key="shippingRegion">Magento\SalesRule\Model\Rule\Condition\Address|region</data>

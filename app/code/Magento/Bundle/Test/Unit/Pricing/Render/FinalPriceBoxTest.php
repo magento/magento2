@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,8 +77,12 @@ class FinalPriceBoxTest extends TestCase
         }
         $priceInfo
             ->method('getPrice')
-            ->withConsecutive(...$priceWithArgs)
-            ->willReturnOnConsecutiveCalls(...$priceWillReturnArgs);
+            ->willReturnCallback(function ($priceWithArgs) use ($priceWillReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $priceWillReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $bundlePrice->expects($this->once())
             ->method('getMinimalPrice')
@@ -99,7 +103,7 @@ class FinalPriceBoxTest extends TestCase
     /**
      * @return array
      */
-    public function showRangePriceDataProvider(): array
+    public static function showRangePriceDataProvider(): array
     {
         return [
             'bundle options different, custom options noop' => [

@@ -102,7 +102,7 @@ class EditTest extends TestCase
 
         $resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultRedirectFactory->expects($this->any())
             ->method('create')

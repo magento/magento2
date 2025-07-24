@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,7 +98,7 @@ class UrlBuilderTest extends TestCase
      *
      * @return array
      */
-    public function nonScopedUrlsDataProvider(): array
+    public static function nonScopedUrlsDataProvider(): array
     {
         return [
             [
@@ -137,8 +137,13 @@ class UrlBuilderTest extends TestCase
             ->willReturn($storeMock);
         $this->getTargetUrlMock->expects($this->any())
             ->method('process')
-            ->withConsecutive([$routePaths[0], 'en'], [$routePaths[1], 'en'])
-            ->willReturnOnConsecutiveCalls($routePaths[0], $routePaths[1]);
+            ->willReturnCallback(function ($routePath, $locale) use ($routePaths) {
+                if ($routePath == $routePaths[0] && $locale == 'en') {
+                    return $routePaths[0];
+                } elseif ($routePath == $routePaths[1] && $locale == 'en') {
+                    return $routePaths[1];
+                }
+            });
         $this->frontendUrlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturnOnConsecutiveCalls($expectedUrls[0], $expectedUrls[1]);
@@ -153,7 +158,7 @@ class UrlBuilderTest extends TestCase
      *
      * @return array
      */
-    public function scopedUrlsDataProvider(): array
+    public static function scopedUrlsDataProvider(): array
     {
         return [
             [

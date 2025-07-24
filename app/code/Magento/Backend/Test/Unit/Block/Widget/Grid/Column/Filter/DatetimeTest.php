@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,28 +66,26 @@ class DatetimeTest extends TestCase
     {
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUniqueHash'])
+            ->onlyMethods(['getUniqueHash'])
             ->getMock();
 
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->dateTimeFormatterMock = $this
             ->getMockBuilder(DateTimeFormatterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTimezone', 'getHtmlId', 'getId', 'getFilterTime'])
+            ->addMethods(['getTimezone','getFilterTime'])
+            ->onlyMethods(['getHtmlId', 'getId'])
             ->getMock();
 
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
@@ -111,7 +109,7 @@ class DatetimeTest extends TestCase
 
         $this->repositoryMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrlWithParams'])
+            ->onlyMethods(['getUrlWithParams'])
             ->getMock();
 
         $this->contextMock->expects($this->once())

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,38 +72,37 @@ class UpdateUrlPathTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->categoryUrlPathGenerator = $this->getMockBuilder(CategoryUrlPathGenerator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUrlPath'])
+            ->onlyMethods(['getUrlPath'])
             ->getMock();
         $this->categoryUrlRewriteGenerator = $this->getMockBuilder(CategoryUrlRewriteGenerator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate'])
+            ->onlyMethods(['generate'])
             ->getMock();
         $this->categoryResource = $this->getMockBuilder(CategoryResource::class)
             ->disableOriginalConstructor()
-            ->setMethods(['saveAttribute'])
+            ->onlyMethods(['saveAttribute'])
             ->getMock();
         $this->category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['unsUrlPath', 'setUrlPath'])
+            ->onlyMethods(
                 [
                     'getStoreId',
                     'getParentId',
                     'isObjectNew',
                     'isInRootCategoryList',
                     'getStoreIds',
-                    'setStoreId',
-                    'unsUrlPath',
-                    'setUrlPath',
+                    'setStoreId'
                 ]
             )
             ->getMock();
         $this->storeViewService = $this->getMockBuilder(StoreViewService::class)
             ->disableOriginalConstructor()
-            ->setMethods(['doesEntityHaveOverriddenUrlPathForStore'])
+            ->onlyMethods(['doesEntityHaveOverriddenUrlPathForStore'])
             ->getMock();
         $this->urlPersist = $this->getMockBuilder(UrlPersistInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['replace'])
+            ->onlyMethods(['replace'])
             ->getMockForAbstractClass();
 
         $this->updateUrlPathPlugin = $this->objectManager->getObject(

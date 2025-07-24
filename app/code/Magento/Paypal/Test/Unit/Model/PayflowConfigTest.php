@@ -73,7 +73,7 @@ class PayflowConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getTrxTypeDataProvider(): array
+    public static function getTrxTypeDataProvider(): array
     {
         return [
             [PayflowConfig::PAYMENT_ACTION_AUTH, PayflowConfig::TRXTYPE_AUTH_ONLY],
@@ -101,7 +101,7 @@ class PayflowConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getPaymentActionDataProvider(): array
+    public static function getPaymentActionDataProvider(): array
     {
         return [
             [PayflowConfig::PAYMENT_ACTION_AUTH, AbstractMethod::ACTION_AUTHORIZE],
@@ -205,8 +205,12 @@ class PayflowConfigTest extends TestCase
         }
         $this->scopeConfigMock
             ->method('isSetFlag')
-            ->withConsecutive(...$withArgs)
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $willReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $this->assertEquals($result, $this->config->isMethodActive($currentMethod));
     }
@@ -214,7 +218,7 @@ class PayflowConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsMethodActive(): array
+    public static function dataProviderForTestIsMethodActive(): array
     {
         return [
             [

@@ -67,7 +67,7 @@ class Merged implements \Iterator
         MergeStrategyInterface $mergeStrategy,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         array $assets,
-        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage = null
+        ?\Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage = null
     ) {
         $this->logger = $logger;
         $this->mergeStrategy = $mergeStrategy;

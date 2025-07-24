@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
@@ -98,9 +97,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Magento\Authorization\Model\UserContextInterface $userContext,
         int $bulkSize = 100,
-        TimezoneInterface $timezone = null,
-        Config $eavConfig = null,
-        ProductFactory $productFactory = null,
+        ?TimezoneInterface $timezone = null,
+        ?Config $eavConfig = null,
+        ?ProductFactory $productFactory = null,
         ?DateTimeFilter $dateTimeFilter = null
     ) {
         parent::__construct($context, $attributeHelper);
@@ -144,6 +143,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             $this->validateProductAttributes($attributesData);
             $this->publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds);
             $this->messageManager->addSuccessMessage(__('Message is added to queue'));
+            $this->attributeHelper->setProductIds([]);
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {

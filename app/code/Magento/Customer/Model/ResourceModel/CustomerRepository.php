@@ -1,8 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -27,6 +30,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
@@ -162,7 +166,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         NotificationStorage $notificationStorage,
-        DelegatedStorage $delegatedStorage = null,
+        ?DelegatedStorage $delegatedStorage = null,
         ?GroupRepositoryInterface $groupRepository = null
     ) {
         $this->customerFactory = $customerFactory;
@@ -195,6 +199,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
@@ -204,6 +209,13 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
+            $customer->setCreatedAt($prevCustomerData->getCreatedAt());
+        }
+        if ($customer->getDefaultBilling()) {
+            $this->validateDefaultAddress($customer, $prevCustomerData, CustomerInterface::DEFAULT_BILLING);
+        }
+        if ($customer->getDefaultShipping()) {
+            $this->validateDefaultAddress($customer, $prevCustomerData, CustomerInterface::DEFAULT_SHIPPING);
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
@@ -219,7 +231,6 @@ class CustomerRepository implements CustomerRepositoryInterface
         /** @var CustomerModel $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         $this->populateWithOrigData($customerModel, $prevCustomerDataArr);
-
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
         $storeId = $customerModel->getStoreId();
@@ -228,7 +239,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
             );
         }
-        $this->validateGroupId($customer->getGroupId());
+        $this->validateGroupId((int)$customer->getGroupId());
         $this->setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr);
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
@@ -552,5 +563,36 @@ class CustomerRepository implements CustomerRepositoryInterface
             unset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES]);
         }
         return $customerData;
+    }
+
+    /**
+     * To validate default address
+     *
+     * @param CustomerInterface $customer
+     * @param CustomerInterface|null $prevCustomerData
+     * @param string $defaultAddressType
+     * @return void
+     * @throws InputException
+     */
+    private function validateDefaultAddress(
+        CustomerInterface $customer,
+        ?CustomerInterface $prevCustomerData,
+        string $defaultAddressType
+    ): void {
+        $defaultAddressId = $defaultAddressType === CustomerInterface::DEFAULT_BILLING ?
+            (int) $customer->getDefaultBilling() : (int) $customer->getDefaultShipping();
+        if ($prevCustomerData && $prevCustomerData->getAddresses()) {
+            foreach ($prevCustomerData->getAddresses() as $address) {
+                if ($defaultAddressId === (int) $address->getId()) {
+                    return;
+                }
+            }
+            throw new InputException(
+                __(
+                    'The %fieldName value is invalid. Set the correct value and try again.',
+                    ['fieldName' => $defaultAddressType]
+                )
+            );
+        }
     }
 }

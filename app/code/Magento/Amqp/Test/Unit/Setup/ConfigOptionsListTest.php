@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,12 +58,10 @@ class ConfigOptionsListTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->connectionValidatorMock = $this->getMockBuilder(ConnectionValidator::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
@@ -171,7 +169,7 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @return array
      */
-    public function getCreateConfigDataProvider()
+    public static function getCreateConfigDataProvider()
     {
         return [
             [

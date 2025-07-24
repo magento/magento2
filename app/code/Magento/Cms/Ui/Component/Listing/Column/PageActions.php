@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Ui\Component\Listing\Column;
 
@@ -65,7 +65,7 @@ class PageActions extends Column
         array $components = [],
         array $data = [],
         $editUrl = self::CMS_URL_PATH_EDIT,
-        \Magento\Cms\ViewModel\Page\Grid\UrlBuilder $scopeUrlBuilder = null
+        ?\Magento\Cms\ViewModel\Page\Grid\UrlBuilder $scopeUrlBuilder = null
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->actionUrlBuilder = $actionUrlBuilder;

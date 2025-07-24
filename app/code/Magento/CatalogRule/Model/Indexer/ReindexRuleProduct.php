@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -129,6 +129,18 @@ class ReindexRuleProduct
                     continue;
                 }
 
+                if (isset($validationByWebsite['has_antecedent_rule'])) {
+                    $antecedentRuleProductList = array_keys(
+                        $connection->fetchAssoc(
+                            $connection->select()->from($indexTable)
+                                ->where('product_id = ?', $productId)
+                                ->where('rule_id NOT IN (?)', $rule->getId())
+                                ->where('sort_order = ?', $sortOrder)
+                        )
+                    );
+                    $connection->delete($indexTable, ['rule_product_id IN (?)' => $antecedentRuleProductList]);
+                }
+
                 foreach ($customerGroupIds as $customerGroupId) {
                     if (!array_key_exists($customerGroupId, $excludedWebsites)
                         || !in_array((int)$websiteId, array_values($excludedWebsites[$customerGroupId]), true)
@@ -146,7 +158,7 @@ class ReindexRuleProduct
                             'sort_order' => $sortOrder,
                         ];
 
-                        if (count($rows) === $batchCount) {
+                        if (count($rows) === (int) $batchCount) {
                             $connection->insertMultiple($indexTable, $rows);
                             $rows = [];
                         }

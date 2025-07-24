@@ -24,7 +24,7 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         $connectionName = null,
-        Encryptor $encryptor = null
+        ?Encryptor $encryptor = null
     ) {
         parent::__construct($context, $connectionName);
         $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(Encryptor::class);

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminEnableUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminUserIDUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/userid</data>
+        <data key="value">{{_CREDS.magento/carriers_usps_userid}}</data>
+    </entity>
+    <entity name="AdminPasswordUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/password</data>
+        <data key="value">{{_CREDS.magento/carriers_usps_password}}</data>
+    </entity>
+    <entity name="AdminEnableDebugUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/debug</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableDebugUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/debug</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminEnableShowMethodUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/showmethod</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableShowMethodUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/showmethod</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+</entities>

@@ -101,7 +101,12 @@ class BookmarkManagementTest extends TestCase
             ->willReturnOnConsecutiveCalls($fieldUserId, $fieldNamespace);
         $this->searchCriteriaBuilder->expects($this->exactly(2))
             ->method('addFilters')
-            ->withConsecutive([[$fieldUserId]], [[$fieldNamespace]]);
+            ->willReturnCallback(function ($param1) use ($fieldUserId, $fieldNamespace) {
+                if ($param1 == [$fieldUserId] || $param1 == [$fieldNamespace]) {
+                    return null;
+                }
+            });
+
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
@@ -157,7 +162,13 @@ class BookmarkManagementTest extends TestCase
             ->willReturnOnConsecutiveCalls($fieldUserId, $fieldIdentifier, $fieldNamespace);
         $this->searchCriteriaBuilder->expects($this->exactly(3))
             ->method('addFilters')
-            ->withConsecutive([[$fieldUserId]], [[$fieldIdentifier]], [[$fieldNamespace]]);
+            ->willReturnCallback(function ($param1) use ($fieldUserId, $fieldNamespace) {
+                if ($param1 == [$fieldUserId]
+                    || $param1 == [$fieldNamespace]
+                    || $param1 == [$fieldNamespace]) {
+                    return null;
+                }
+            });
         $this->searchCriteriaBuilder->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);

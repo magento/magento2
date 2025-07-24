@@ -245,8 +245,13 @@ class ComplexTypeStrategyTest extends TestCase
         $this->wsdl->expects($this->any())->method('getSchema')->willReturn($schemaMock);
         $this->typeProcessor
             ->method('getTypeData')
-            ->withConsecutive([$type], [$parameterType])
-            ->willReturnOnConsecutiveCalls($typeData, $parameterData);
+            ->willReturnCallback(function ($arg1) use ($type, $typeData, $parameterType, $parameterData) {
+                if ($arg1 == $type) {
+                    return $typeData;
+                } elseif ($arg1 == $parameterType) {
+                    return $parameterData;
+                }
+            });
 
         $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->strategy->addComplexType($type));
     }

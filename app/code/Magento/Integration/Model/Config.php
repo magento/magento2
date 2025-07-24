@@ -49,7 +49,7 @@ class Config
     public function __construct(
         Cache\Type $configCacheType,
         Config\Reader $configReader,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;

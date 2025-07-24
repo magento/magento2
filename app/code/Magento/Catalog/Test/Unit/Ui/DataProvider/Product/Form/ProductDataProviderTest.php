@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,7 @@ class ProductDataProviderTest extends TestCase
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
@@ -65,7 +65,7 @@ class ProductDataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->modifierMockOne = $this->getMockBuilder(ModifierInterface::class)
-            ->setMethods(['getData', 'getMeta'])
+            ->addMethods(['getData', 'getMeta'])
             ->getMockForAbstractClass();
 
         $this->model = $this->objectManager->getObject(ProductDataProvider::class, [

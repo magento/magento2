@@ -85,7 +85,7 @@ class DesignThemeTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getDumpConfigDataProvider()
+    public static function getDumpConfigDataProvider()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Stdlib\DateTime;
@@ -162,7 +162,7 @@ class Timezone implements TimezoneInterface
             (int)$type
         );
 
-        return $formatter->getPattern();
+        return str_replace(' ', ' ', $formatter->getPattern());
     }
 
     /**
@@ -325,8 +325,7 @@ class Timezone implements TimezoneInterface
         if ($pattern) {
             $formatter->setPattern($pattern);
         }
-
-        return $formatter->format($date);
+        return str_replace(' ', ' ', $formatter->format($date));
     }
 
     /**

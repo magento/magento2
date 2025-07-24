@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductActionSection">
         <element name="quantity" type="input" selector="#qty"/>
-        <element name="addToCart" type="button" selector="#product-addtocart-button" timeout="60"/>
+        <element name="addToCart" type="button" selector=".box-tocart .fieldset .actions #product-addtocart-button" timeout="60"/>
         <element name="addToCartDisabled" type="button" selector="#product-addtocart-button[disabled]" timeout="60"/>
         <element name="addToCartEnabledWithTranslation" type="button" selector="button#product-addtocart-button[data-translate]:enabled" timeout="60"/>
         <element name="addToCartButtonTitleIsAdding" type="text" selector="//button/span[text()='Adding...']"/>

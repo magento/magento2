@@ -10,6 +10,10 @@
         <section id="carriers">
             <group id="ups" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>UPS</label>
+                <field id="access_license_number" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1">
+                    <label>Access License Number</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enabled for Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -49,6 +53,14 @@
                 </field>
                 <field id="gateway_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Gateway URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
+                </field>
+                <field id="gateway_xml_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Gateway XML URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
+                </field>
+                <field id="gateway_rest_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Gateway REST URL</label>
                     <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>
                 <field id="handling_type" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" canRestore="1">
@@ -91,8 +103,16 @@
                     <label>Title</label>
                 </field>
                 <field id="tracking_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
-                    <label>Tracking URL</label>
+                    <label>Tracking XML URL</label>
                     <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
+                </field>
+                <field id="tracking_rest_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Tracking REST URL</label>
+                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
+                </field>
+                <field id="type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>UPS Type</label>
+                    <source_model>Magento\Ups\Model\Config\Source\Type</source_model>
                 </field>
                 <field id="is_account_live" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Live Account</label>

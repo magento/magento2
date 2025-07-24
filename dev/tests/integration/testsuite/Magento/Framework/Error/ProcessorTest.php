@@ -74,7 +74,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dataProviderSaveAndLoadReport(): array
+    public static function dataProviderSaveAndLoadReport(): array
     {
         return [
             [

@@ -50,7 +50,7 @@ class RelationPersisterTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->linkFactory = $this->getMockBuilder(LinkFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -59,7 +59,7 @@ class RelationPersisterTest extends TestCase
             ->getMock();
 
         $this->link = $this->getMockBuilder(Link::class)
-            ->setMethods(['getLinkTypeId', 'getProductId', 'getLinkedProductId'])
+            ->addMethods(['getLinkTypeId', 'getProductId', 'getLinkedProductId'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertPaymentGatewaySolutionActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Validate Payment Solutions available in Payment Gateways Solution</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab1(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="clickOtherPayPalPaymentsSection"/>
+        <conditionalClick selector ="{{OtherPayPalPaymentsConfigSection.expandTabNew(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTabNew(countryCode)}}" visible="false" stepKey="expandPaypalPaymentGatewaysConfigButton"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.paypalAllInOnePaymentSolutions(countryCode)}}" stepKey="assertPayinAllLink"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.paymentGateway(countryCode)}}" stepKey="assertPaypalPaymentGateway"/>
+        <scrollTo selector="{{AdminPayPalPayFlowLinkConfigSection.paymentGateway(countryCode)}}" stepKey="scrollToConfigure"/>
+        <waitForElementVisible selector="{{AdminPayPalPayFlowLinkConfigSection.configureBtn(countryCode)}}" stepKey="assertPayflowLink"/>
+        <waitForElementVisible selector="{{PayPalPayflowProConfigSection.configureBtn(countryCode)}}" stepKey="assertPayflowPro"/>
+    </actionGroup>
+</actionGroups>

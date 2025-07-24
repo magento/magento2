@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,7 +66,8 @@ class MediaGalleryTest extends TestCase
     {
         $existingEntryMock = $this->getMockBuilder(Entry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName', 'getData', 'getExtensionAttributes'])
+            ->addMethods(['getName'])
+            ->onlyMethods(['getData', 'getExtensionAttributes'])
             ->getMock();
         $existingEntryMock->expects($this->any())->method('getData')->willReturn($expected);
         $existingEntryMock->expects($this->any())->method(
@@ -91,7 +92,7 @@ class MediaGalleryTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForResolve(): array
+    public static function dataProviderForResolve(): array
     {
         return [
             [

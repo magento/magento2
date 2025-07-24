@@ -48,9 +48,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         PriceCurrencyInterface $priceCurrency,
         ConfigurableAttributeData $configurableAttributeData,
         array $data = [],
-        Format $localeFormat = null,
-        Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        ?Format $localeFormat = null,
+        ?Session $customerSession = null,
+        ?\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
     ) {
         $data['productHelper'] = $catalogProduct;
         parent::__construct(

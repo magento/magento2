@@ -95,4 +95,4 @@ For information about a public API in Magento 2, see [Public interfaces & APIs](
 
 ## Additional information
 
-For more information about creating grouped product, see [Creating Grouped Product](https://docs.magento.com/user-guide/catalog/product-create-grouped.html).
+For more information about creating grouped product, see [Creating Grouped Product](https://experienceleague.adobe.com/docs/commerce-admin/catalog/products/types/product-create-grouped.html).

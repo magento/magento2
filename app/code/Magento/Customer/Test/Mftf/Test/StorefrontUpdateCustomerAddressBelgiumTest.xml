@@ -20,6 +20,9 @@
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="UnselectStatesForStatesOptionsActionGroup" stepKey="unselectStatesForStatesOptionsActionGroup">
+                <argument name="countries" value="WesternEurope"/>
+            </actionGroup>
             <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
             <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
                 <argument name="customer" value="CustomerEntityOne"/>
@@ -58,6 +61,7 @@
         <!-- Verify country Belgium can be saved without state as state not required -->
         <actionGroup ref="StoreFrontClickEditDefaultShippingAddressActionGroup" stepKey="clickOnDefaultShippingAddress"/>
         <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="Belgium" stepKey="selectCountry"/>
+        <waitForAjaxLoad stepKey="waitForCountryDataToApply" />
         <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Please select a region, state or province." stepKey="selectState"/>
         <actionGroup ref="AdminSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
         <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="Belgium" stepKey="seeAssertCustomerDefaultShippingAddressCountry"/>

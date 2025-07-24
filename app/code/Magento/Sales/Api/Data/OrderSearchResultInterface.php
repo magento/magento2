@@ -29,5 +29,5 @@ interface OrderSearchResultInterface extends \Magento\Framework\Api\SearchResult
      * @param \Magento\Sales\Api\Data\OrderInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 }

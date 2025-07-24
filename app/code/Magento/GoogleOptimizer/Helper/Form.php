@@ -24,7 +24,7 @@ class Form extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $formName
      * @return void
      */
-    public function addGoogleoptimizerFields(DataForm $form, ModelCode $experimentCodeModel = null, $formName = '')
+    public function addGoogleoptimizerFields(DataForm $form, ?ModelCode $experimentCodeModel = null, $formName = '')
     {
         $fieldset = $form->addFieldset(
             'googleoptimizer_fields',

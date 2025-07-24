@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -165,7 +165,7 @@ class ParamsBuilderTest extends TestCase
      *
      * @return array
      */
-    public function buildDataProvider()
+    public static function buildDataProvider()
     {
         return [
             'watermark config' => [

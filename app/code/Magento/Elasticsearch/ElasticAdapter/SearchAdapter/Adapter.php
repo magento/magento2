@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\ElasticAdapter\SearchAdapter;
 
+use Magento\AdvancedSearch\Model\Client\ClientException;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
@@ -16,6 +17,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch Search Adapter
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Adapter implements AdapterInterface
 {
@@ -45,23 +48,6 @@ class Adapter implements AdapterInterface
      * @var QueryContainerFactory
      */
     private $queryContainerFactory;
-
-    /**
-     * Empty response from Elasticsearch.
-     *
-     * @var array
-     */
-    private static $emptyRawResponse = [
-        'hits' => [
-            'hits' => []
-        ],
-        'aggregations' => [
-            'price_bucket' => [],
-            'category_bucket' => [
-                'buckets' => []
-            ]
-        ]
-    ];
 
     /**
      * @var LoggerInterface
@@ -97,6 +83,7 @@ class Adapter implements AdapterInterface
      *
      * @param RequestInterface $request
      * @return QueryResponse
+     * @throws ClientException
      */
     public function query(RequestInterface $request)
     {
@@ -109,8 +96,7 @@ class Adapter implements AdapterInterface
             $rawResponse = $client->query($query);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            // return empty search result in case an exception is thrown from Elasticsearch
-            $rawResponse = self::$emptyRawResponse;
+            throw new ClientException("Could not perform search query.", $e->getCode(), $e);
         }
 
         $rawDocuments = isset($rawResponse['hits']['hits']) ? $rawResponse['hits']['hits'] : [];

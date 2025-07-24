@@ -123,8 +123,11 @@ class MetaTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['entity_type = :entity_type AND store_id = :store_id'])
-            ->willReturn($this->select);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 === 'entity_type = :entity_type AND store_id = :store_id') {
+                    return $this->select;
+                }
+            });
         $this->connectionMock->expects($this->once())
             ->method('fetchOne')
             ->with($this->select, ['entity_type' => $entityType, 'store_id' => $storeId])
@@ -133,8 +136,13 @@ class MetaTest extends TestCase
 
         $this->select
             ->method('from')
-            ->withConsecutive([$metaTableName, [$metaIdFieldName]], ['sequence_meta', '*', null])
-            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($metaTableName, $metaIdFieldName) {
+                if ($arg1 == $metaTableName && $arg2 == [$metaIdFieldName]) {
+                    return $this->select;
+                } elseif ($arg1 == 'sequence_meta' && $arg2 == '*' && $arg3 === null) {
+                    return $this->select;
+                }
+            });
 
         // Check Save with Active Profile
         $this->connectionMock->expects($this->any())

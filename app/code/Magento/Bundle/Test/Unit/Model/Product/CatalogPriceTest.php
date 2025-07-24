@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -144,7 +144,11 @@ class CatalogPriceTest extends TestCase
             ->willReturn($currentStoreMock);
         $this->storeManagerMock
             ->method('setCurrentStore')
-            ->withConsecutive(['store_id'], ['current_store_id']);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'store_id' || $arg == 'current_store_id') {
+                    return null;
+                }
+            });
 
         $this->assertEquals(15, $this->catalogPrice->getCatalogPrice($this->productMock, $storeMock, true));
     }

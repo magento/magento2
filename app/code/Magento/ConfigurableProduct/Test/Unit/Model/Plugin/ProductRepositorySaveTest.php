@@ -78,19 +78,19 @@ class ProductRepositorySaveTest extends TestCase
 
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getExtensionAttributes'])
+            ->onlyMethods(['getTypeId', 'getExtensionAttributes'])
             ->getMock();
 
         $this->result = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes'])
+            ->onlyMethods(['getExtensionAttributes'])
             ->getMock();
 
         $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
 
         $this->extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
+            ->addMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->getMockForAbstractClass();
 
         $this->eavAttribute = $this->getMockForAbstractClass(ProductAttributeInterface::class);
@@ -192,7 +192,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->productRepository->expects(static::once())
@@ -248,7 +248,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->productRepository->expects(static::exactly(2))

@@ -381,7 +381,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function searchAddressDataProvider()
+    public static function searchAddressDataProvider()
     {
         /**
          * @var \Magento\Framework\Api\FilterBuilder $filterBuilder

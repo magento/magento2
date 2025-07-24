@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -22,6 +22,8 @@
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetProductFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
@@ -216,7 +218,7 @@
         <comment userInput="Admin creates category." stepKey="adminCreatesCategoryComment" before="navigateToCategoryPage"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
         <!--Create category under Default Category-->
-        <click selector="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}" stepKey="clickDefaultCategory"/>
+        <click selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" stepKey="clickDefaultCategory"/>
         <actionGroup ref="CheckCategoryNameIsRequiredFieldActionGroup" stepKey="checkCategoryNameIsRequired"/>
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>
@@ -232,7 +234,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToMoveCategory"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
-                     selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
+                     selector2="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}"
                      stepKey="dragAndDropCategory"/>
         <waitForPageLoad time="30" stepKey="waitForMoveConfirmation"/>
         <see selector="{{AdminCategoryModalSection.title}}" userInput="Warning Message" stepKey="seeMoveConfirmationModal"/>

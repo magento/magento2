@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -122,12 +122,12 @@ class EditTest extends TestCase
 
         $this->resultPage = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb', 'addHandle', 'getLayout'])
+            ->onlyMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb', 'addHandle', 'getLayout'])
             ->getMock();
 
         $this->resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultLayout = $this->getMockBuilder(Layout::class)
@@ -154,7 +154,7 @@ class EditTest extends TestCase
             ->getMock();
 
         $this->blockTemplate = $this->getMockBuilder(Template::class)
-            ->setMethods(['setIsPopup'])
+            ->addMethods(['setIsPopup'])
             ->disableOriginalConstructor()
             ->getMock();
 

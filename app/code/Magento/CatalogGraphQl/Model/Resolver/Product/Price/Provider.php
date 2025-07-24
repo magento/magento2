@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,13 +9,14 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Provides product prices
  */
-class Provider implements ProviderInterface
+class Provider implements ProviderInterface, ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -32,6 +33,38 @@ class Provider implements ProviderInterface
         FinalPrice::PRICE_CODE => [],
         RegularPrice::PRICE_CODE => []
     ];
+
+    /**
+     * @var array|array[]
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly array $minimalPriceConstructed;
+
+    /**
+     * @var array|array[]
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly array $maximalPriceConstructed;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->minimalPriceConstructed = $this->minimalPrice;
+        $this->maximalPriceConstructed = $this->maximalPrice;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->minimalPrice = $this->minimalPriceConstructed;
+        $this->maximalPrice = $this->maximalPriceConstructed;
+    }
 
     /**
      * @inheritdoc

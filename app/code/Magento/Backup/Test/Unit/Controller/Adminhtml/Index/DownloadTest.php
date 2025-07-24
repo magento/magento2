@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ImportExport\Model\ResourceModel\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -101,6 +102,11 @@ class DownloadTest extends TestCase
      */
     protected $resultRedirectMock;
 
+    /**
+     * @var Helper
+     */
+    protected $resourceHelper;
+
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
@@ -111,11 +117,12 @@ class DownloadTest extends TestCase
             ->getMock();
         $this->backupModelFactoryMock = $this->getMockBuilder(BackupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->backupModelMock = $this->getMockBuilder(Backup::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTime', 'exists', 'getSize', 'output', 'getPath', 'getFileName'])
+            ->addMethods(['getTime', 'getPath'])
+            ->onlyMethods(['exists', 'getSize', 'output', 'getFileName'])
             ->getMock();
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -125,17 +132,21 @@ class DownloadTest extends TestCase
             ->getMock();
         $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRawMock = $this->getMockBuilder(Raw::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resourceHelper = $this->getMockBuilder(Helper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -149,9 +160,19 @@ class DownloadTest extends TestCase
                 'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
+
+        $objects = [
+            [
+                Data::class,
+                $this->dataHelperMock
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->downloadController = $this->objectManager->getObject(
             Download::class,
             [
+                'helper' => $this->resourceHelper,
                 'context' => $this->context,
                 'backupModelFactory' => $this->backupModelFactoryMock,
                 'fileFactory' => $this->fileFactoryMock,
@@ -260,7 +281,7 @@ class DownloadTest extends TestCase
     /**
      * @return array
      */
-    public function executeBackupNotFoundDataProvider()
+    public static function executeBackupNotFoundDataProvider()
     {
         return [
             [1, false, 1],

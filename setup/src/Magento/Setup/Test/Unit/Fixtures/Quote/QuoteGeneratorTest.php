@@ -106,7 +106,7 @@ class QuoteGeneratorTest extends TestCase
             \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->linkManagement = $this->getMockBuilder(LinkManagementInterface::class)
             ->disableOriginalConstructor()
@@ -116,7 +116,7 @@ class QuoteGeneratorTest extends TestCase
             ->getMockForAbstractClass();
         $this->config = $this->getMockBuilder(QuoteConfiguration::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'getSimpleCountTo',
                     'getSimpleCountFrom',
@@ -206,18 +206,37 @@ class QuoteGeneratorTest extends TestCase
         $productCollection->expects($this->atLeastOnce())->method('getSelect')->willReturn($select);
         $select->expects($this->atLeastOnce())
             ->method('where')
-            ->withConsecutive(
-                [' type_id = \'simple\' '],
-                [' sku NOT LIKE \'Big%\' '],
-                [' type_id = \'configurable\' '],
-                [' sku NOT LIKE \'Big%\' '],
-                [' type_id = \'configurable\' '],
-                [' sku LIKE \'Big%\' ']
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg) use ($select) {
+                if ($arg == 'type_id = \'simple\' ') {
+                    return $select;
+                } elseif ($arg == 'sku NOT LIKE \'Big%\' ') {
+                    return $select;
+                } elseif ($arg == 'type_id = \'configurable\' ') {
+                    return $select;
+                } elseif ($arg == 'sku LIKE \'Big%\' ') {
+                    return $select;
+                }
+            });
         $productCollection->expects($this->atLeastOnce())
             ->method('getAllIds')
-            ->withConsecutive([2], [1], [1])
-            ->willReturnOnConsecutiveCalls($simpleProductIds, $configurableProductId, $bigConfigurableProductId);
+            ->willReturnCallback(function ($arg) use (
+                $simpleProductIds,
+                $configurableProductId,
+                $bigConfigurableProductId
+            ) {
+                static $callCount = 0;
+                if ($callCount == 0 && $arg == 2) {
+                    $callCount++;
+                    return $simpleProductIds;
+                } elseif ($callCount == 1 && $arg == 1) {
+                    $callCount++;
+                    return $configurableProductId;
+                } elseif ($callCount == 2 && $arg == 1) {
+                    $callCount++;
+                    return $bigConfigurableProductId;
+                }
+            });
+
         $this->prepareProducts();
         $this->mockConnection();
         $this->fixture->generateQuotes();
@@ -247,8 +266,11 @@ class QuoteGeneratorTest extends TestCase
             ->getMockForAbstractClass();
         $this->productRepository->expects($this->atLeastOnce())
             ->method('getById')
-            ->withConsecutive([1], [2], [3], [4])
-            ->willReturn($product);
+            ->willReturnCallback(function ($arg) use ($product) {
+                if ($arg == 1 || $arg == 2 || $arg == 3 || $arg ==4) {
+                    return $product;
+                }
+            });
         $product->expects($this->atLeastOnce())
             ->method('getSku')->willReturnOnConsecutiveCalls('sku1', 'sku2', 'sku3', 'sku3', 'sku4', 'sku4');
         $product->expects($this->atLeastOnce())
@@ -258,19 +280,28 @@ class QuoteGeneratorTest extends TestCase
             ->willReturn('a:1:{i:10;i:1;}');
         $this->optionRepository->expects($this->atLeastOnce())
             ->method('getList')
-            ->withConsecutive(['sku3'], ['sku4'])
-            ->willReturn([$option]);
+            ->willReturnCallback(function ($arg) use ($option) {
+                if ($arg == 'sku3' || $arg == 'sku4') {
+                    return [$option];
+                }
+            });
         $this->linkManagement->expects($this->atLeastOnce())
             ->method('getChildren')
-            ->withConsecutive(['sku3'], ['sku4'])
-            ->willReturn([$configurableChild]);
+            ->willReturnCallback(function ($arg) use ($configurableChild) {
+                if ($arg == 'sku3' || $arg == 'sku4') {
+                    return [$configurableChild];
+                }
+            });
         $configurableChild->expects($this->atLeastOnce())
             ->method('getSku')
             ->willReturnOnConsecutiveCalls('childSku3', 'childSku3', 'childSku4', 'childSku4');
         $this->productRepository->expects($this->atLeastOnce())
             ->method('get')
-            ->withConsecutive(['childSku3'], ['childSku4'])
-            ->willReturn($childProduct);
+            ->willReturnCallback(function ($arg) use ($childProduct) {
+                if ($arg == 'childSku3' || $arg == 'childSku4') {
+                    return $childProduct;
+                }
+            });
         $childProduct->expects($this->atLeastOnce())->method('getId')->willReturnOnConsecutiveCalls(10, 11);
         $option->expects($this->atLeastOnce())->method('getLabel')->willReturnOnConsecutiveCalls('label3', 'label4');
         $option->expects($this->atLeastOnce())

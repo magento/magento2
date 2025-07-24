@@ -58,7 +58,7 @@ class AddressAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function streetLine1DataProvider()
+    public static function streetLine1DataProvider()
     {
         return [
             [['Street Line 1'], 'Street Line 1'], //$street, $expected
@@ -80,7 +80,7 @@ class AddressAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function streetLine2DataProvider()
+    public static function streetLine2DataProvider()
     {
         return [
             [['Street Line 1', 'Street Line 2'], 'Street Line 2'], //$street, $expected

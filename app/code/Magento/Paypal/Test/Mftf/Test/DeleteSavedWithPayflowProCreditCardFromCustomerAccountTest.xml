@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -26,9 +26,15 @@
             <actionGroup ref="AdminPayPalPayflowProWithValutActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
             </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -60,6 +66,8 @@
             <argument name="cardData" value="VisaDefaultCard"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFillCardData"/>
+        <!--Save credit card for the registered user-->
+        <checkOption selector="{{StorefrontOnePageCheckoutPaymentSection.saveForLaterUse}}" stepKey="checkSaveForLaterUse"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <!-- 2nd time order-->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct1.custom_attributes[url_key]$$)}}" stepKey="goToStorefront2"/>

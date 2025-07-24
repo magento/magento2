@@ -61,7 +61,7 @@ class InvoiceDocumentFactoryTest extends TestCase
 
         $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addComment'])
+            ->addMethods(['addComment'])
             ->getMockForAbstractClass();
 
         $this->itemMock = $this->getMockBuilder(InvoiceItemCreationInterface::class)

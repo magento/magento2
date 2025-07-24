@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CacheInvalidate\Model;
 
@@ -37,10 +37,10 @@ class PurgeCache
     /**
      * Batch size of the purge request.
      *
-     * Based on default Varnish 4 http_req_hdr_len size minus a 512 bytes margin for method,
+     * Based on default Varnish 6 http_req_hdr_len size minus a 512 bytes margin for method,
      * header name, line feeds etc.
      *
-     * @see https://varnish-cache.org/docs/4.1/reference/varnishd.html
+     * @see https://varnish-cache.org/docs/6.0/reference/varnishd.html
      *
      * @var int
      */

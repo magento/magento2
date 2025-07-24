@@ -29,6 +29,7 @@ use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -170,6 +171,11 @@ class FormPostTest extends TestCase
     private $customerAddressMapper;
 
     /**
+     * @var Filesystem|MockObject
+     */
+    private $fileSystemMock;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
@@ -178,10 +184,8 @@ class FormPostTest extends TestCase
 
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'setAddressFormData',
-                'getCustomerId',
-            ])
+            ->addMethods(['setAddressFormData'])
+            ->onlyMethods(['getCustomerId'])
             ->getMock();
 
         $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
@@ -216,6 +220,10 @@ class FormPostTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new FormPost(
             $this->context,
             $this->session,
@@ -229,7 +237,8 @@ class FormPostTest extends TestCase
             $this->resultForwardFactory,
             $this->resultPageFactory,
             $this->regionFactory,
-            $this->helperData
+            $this->helperData,
+            $this->fileSystemMock
         );
 
         $objectManager = new ObjectManager($this);
@@ -250,11 +259,8 @@ class FormPostTest extends TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods([
-                'isPost',
-                'getPostValue',
-                'getParam',
-            ])
+            ->addMethods(['isPost', 'getPostValue'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
 
         $this->context->expects($this->any())
@@ -311,7 +317,7 @@ class FormPostTest extends TestCase
 
         $this->addressDataFactory = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'create',
             ])
             ->getMock();
@@ -327,11 +333,8 @@ class FormPostTest extends TestCase
     {
         $this->region = $this->getMockBuilder(Region::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'load',
-                'getCode',
-                'getDefaultName',
-            ])
+            ->addMethods(['getCode', 'getDefaultName',])
+            ->onlyMethods(['load'])
             ->getMock();
 
         $this->regionFactory = $this->getMockBuilder(RegionFactory::class)
@@ -346,7 +349,7 @@ class FormPostTest extends TestCase
 
         $this->regionDataFactory = $this->getMockBuilder(RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'create',
             ])
             ->getMock();
@@ -618,7 +621,7 @@ class FormPostTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderTestExecute(): array
+    public static function dataProviderTestExecute(): array
     {
         return [
             [1, 1, 1, null, '', null, '', null, ''],

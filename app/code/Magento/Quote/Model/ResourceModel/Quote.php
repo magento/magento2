@@ -35,6 +35,7 @@ class Quote extends AbstractDb
         Manager $sequenceManager,
         $connectionName = null
     ) {
+        $this->_uniqueFields = [];
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
         $this->sequenceManager = $sequenceManager;
     }

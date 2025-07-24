@@ -56,27 +56,27 @@ class PaymentVaultConfigurationProcessTest extends TestCase
         $this->storeManager = $this
             ->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->store = $this
             ->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->vaultList = $this
             ->getMockBuilder(PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getActiveList'])
+            ->onlyMethods(['getActiveList'])
             ->getMockForAbstractClass();
         $this->paymentMethodList = $this
             ->getMockBuilder(\Magento\Payment\Api\PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getActiveList'])
+            ->onlyMethods(['getActiveList'])
             ->getMockForAbstractClass();
         $this->layoutProcessor =  $this
             ->getMockBuilder(LayoutProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['process'])
+            ->onlyMethods(['process'])
             ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
@@ -99,6 +99,14 @@ class PaymentVaultConfigurationProcessTest extends TestCase
      */
     public function testBeforeProcess($jsLayout, $activeVaultList, $activePaymentList, $expectedResult)
     {
+        if (!empty($activeVaultList)) {
+            $activeVaultList[0] = $activeVaultList[0]($this);
+        }
+
+        if (!empty($activePaymentList)) {
+            $activePaymentList[0] = $activePaymentList[0]($this);
+        }
+
         $this->store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($this->store);
         $this->vaultList->expects($this->once())->method('getActiveList')->with(1)->willReturn($activeVaultList);
@@ -110,12 +118,25 @@ class PaymentVaultConfigurationProcessTest extends TestCase
         $this->assertEquals($result[0], $expectedResult);
     }
 
+    protected function getMockForVaultPayment() {
+        $vaultPaymentMethod = $this
+            ->getMockBuilder(PaymentMethodListInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getCode', 'getProviderCode'])
+            ->getMockForAbstractClass();
+
+        $vaultPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflowpro_cc_vault');
+        $vaultPaymentMethod->expects($this->any())->method('getProviderCode')->willReturn('payflowpro');
+
+        return $vaultPaymentMethod;
+    }
+
     /**
      * Data provider for BeforeProcess.
      *
      * @return array
      */
-    public function beforeProcessDataProvider()
+    public static function beforeProcessDataProvider()
     {
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment']['children']['renders']['children'] = [
@@ -143,14 +164,7 @@ class PaymentVaultConfigurationProcessTest extends TestCase
             ]
         ];
 
-        $vaultPaymentMethod = $this
-            ->getMockBuilder(PaymentMethodListInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode', 'getProviderCode'])
-            ->getMockForAbstractClass();
-
-        $vaultPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflowpro_cc_vault');
-        $vaultPaymentMethod->expects($this->any())->method('getProviderCode')->willReturn('payflowpro');
+        $vaultPaymentMethod = static fn (self $testCase) => $testCase->getMockForVaultPayment();
 
         return [
             [$jsLayout, [], [], $result1],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -94,7 +94,7 @@ class AlertProcessorTest extends TestCase
         $customerName = $this->fixtures->get('customer')->getName();
         $this->processAlerts($customerId);
 
-        $messageContent = $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $messageContent = quoted_printable_decode($this->transportBuilder->getSentMessage()->getBody()->bodyToString());
         /** Checking is the email was sent */
         $this->assertStringContainsString(
             $customerName,
@@ -165,14 +165,14 @@ class AlertProcessorTest extends TestCase
         // Check email from main website
         $this->processAlerts($customer1Id);
         $message = $this->transportBuilder->getSentMessage();
-        $messageContent = $message->getBody()->getParts()[0]->getRawContent();
+        $messageContent = quoted_printable_decode($message->getBody()->bodyToString());
         $this->assertStringContainsString('/frontend/Magento/luma/fr_FR/', $messageContent);
         $this->assertStringContainsString($frTxt, $messageContent);
 
         // Check email from second website
         $this->processAlerts($customer2Id, $website2Id);
         $message = $this->transportBuilder->getSentMessage();
-        $messageContent = $message->getBody()->getParts()[0]->getRawContent();
+        $messageContent = quoted_printable_decode($message->getBody()->bodyToString());
         $this->assertStringContainsString('/frontend/Magento/luma/pt_BR/', $messageContent);
         $this->assertStringContainsString($ptTxt, $messageContent);
     }
@@ -194,10 +194,10 @@ class AlertProcessorTest extends TestCase
         $customerId = (int) $this->fixtures->get('customer')->getId();
         $productId = (int) $this->fixtures->get('product')->getId();
         $this->processAlerts($customerId);
-
+        $messageContent = quoted_printable_decode($this->transportBuilder->getSentMessage()->getBody()->bodyToString());
         $this->assertStringContainsString(
             '$10.00',
-            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+            $messageContent
         );
 
         // Intentional: update product without using ProductRepository
@@ -210,10 +210,10 @@ class AlertProcessorTest extends TestCase
         $productResource->save($product);
 
         $this->processAlerts($customerId);
-
+        $messageContent = quoted_printable_decode($this->transportBuilder->getSentMessage()->getBody()->bodyToString());
         $this->assertStringContainsString(
             '$5.00',
-            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
+            $messageContent
         );
     }
 
@@ -243,6 +243,78 @@ class AlertProcessorTest extends TestCase
         );
     }
 
+    #[
+        DbIsolation(false),
+        DataFixture(StoreFixture::class, ['code' => 'pt_br_store'], 'store2'),
+        DataFixture(CustomerFixture::class, as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(
+            PriceAlertFixture::class,
+            [
+                'customer_id' => '$customer.id$',
+                'product_id' => '$product.id$',
+                'store_id' => '1',
+            ]
+        ),
+        DataFixture(
+            PriceAlertFixture::class,
+            [
+                'customer_id' => '$customer.id$',
+                'product_id' => '$product.id$',
+                'store_id' => '$store2.id$',
+            ]
+        ),
+        DataFixture(
+            TranslationFixture::class,
+            [
+                'string' => 'Price change alert! We wanted you to know that prices have changed for these products:',
+                'translate' => 'Alerte changement de prix! Nous voulions que vous sachiez' .
+                    ' que les prix ont changé pour ces produits:',
+                'locale' => 'fr_FR',
+            ],
+            'frTxt'
+        ),
+        DataFixture(
+            TranslationFixture::class,
+            [
+                'string' => 'Price change alert! We wanted you to know that prices have changed for these products:',
+                'translate' => 'Alerta de mudanca de preco! Queriamos que voce soubesse' .
+                    ' que os precos mudaram para esses produtos:',
+                'locale' => 'pt_BR',
+            ],
+            'ptTxt'
+        ),
+        Config('catalog/productalert/allow_price', 1),
+        Config('general/locale/code', 'fr_FR', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('general/locale/code', 'pt_BR', ScopeInterface::SCOPE_STORE, 'pt_br_store'),
+    ]
+    public function testEmailShouldBeTranslatedToStoreViewLanguage()
+    {
+        $customerId = (int)$this->fixtures->get('customer')->getId();
+
+        $frMailSent = false;
+        $ptMailSent = false;
+        $this->transportBuilder->setOnMessageSentCallback(
+            function ($message) use (&$frMailSent, &$ptMailSent) {
+                $messageContent = quoted_printable_decode($message->getBody()->bodyToString());
+                $frTxt = $this->fixtures->get('frTxt')->getTranslate();
+                $ptTxt = $this->fixtures->get('ptTxt')->getTranslate();
+
+                if (str_contains($messageContent, $frTxt)) {
+                    $frMailSent = true;
+                }
+
+                if (str_contains($messageContent, $ptTxt)) {
+                    $ptMailSent = true;
+                }
+            }
+        );
+
+        $this->processAlerts($customerId);
+        $this->assertTrue($frMailSent);
+        $this->assertTrue($ptMailSent);
+    }
+
     /**
      * @param int $customerId
      * @param int $websiteId
@@ -266,7 +338,6 @@ class AlertProcessorTest extends TestCase
      */
     private function getMessageRawContent(EmailMessage $message): string
     {
-        $emailParts = $message->getBody()->getParts();
-        return current($emailParts)->getRawContent();
+        return quoted_printable_decode($message->getBody()->bodyToString());
     }
 }

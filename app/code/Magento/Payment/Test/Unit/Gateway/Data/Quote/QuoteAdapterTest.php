@@ -39,7 +39,7 @@ class QuoteAdapterTest extends TestCase
 
         $this->addressAdapterFactoryMock =
             $this->getMockBuilder(AddressAdapterFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 

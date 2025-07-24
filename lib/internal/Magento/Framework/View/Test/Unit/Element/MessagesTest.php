@@ -139,7 +139,13 @@ class MessagesTest extends TestCase
 
         $collection
             ->method('addMessage')
-            ->withConsecutive([$messageOne], [$messageTwo]);
+            ->willReturnCallback(
+                function ($arg) use ($messageOne, $messageTwo) {
+                    if ($arg == $messageOne || $arg == $messageTwo) {
+                        return null;
+                    }
+                }
+            );
 
         $collectionForAdd = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()

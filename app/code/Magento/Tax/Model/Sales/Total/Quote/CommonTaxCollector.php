@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -10,23 +11,24 @@ use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
-use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
 use Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
+use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Api\Data\TaxDetailsInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\Data\QuoteDetailsInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Framework\App\ObjectManager;
-use Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterfaceFactory;
+use Magento\Tax\Model\Config;
 
 /**
  * Tax totals calculation model
@@ -155,11 +157,11 @@ class CommonTaxCollector extends AbstractTotal
     /**
      * Class constructor
      *
-     * @param \Magento\Tax\Model\Config $taxConfig
-     * @param \Magento\Tax\Api\TaxCalculationInterface $taxCalculationService
+     * @param Config $taxConfig
+     * @param TaxCalculationInterface $taxCalculationService
      * @param QuoteDetailsInterfaceFactory $quoteDetailsDataObjectFactory
-     * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory $quoteDetailsItemDataObjectFactory
-     * @param \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory
+     * @param QuoteDetailsItemInterfaceFactory $quoteDetailsItemDataObjectFactory
+     * @param TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory
      * @param CustomerAddressFactory $customerAddressFactory
      * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param TaxHelper|null $taxHelper
@@ -175,8 +177,8 @@ class CommonTaxCollector extends AbstractTotal
         \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyDataObjectFactory,
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
-        TaxHelper $taxHelper = null,
-        QuoteDetailsItemExtensionInterfaceFactory $quoteDetailsItemExtensionInterfaceFactory = null,
+        ?TaxHelper $taxHelper = null,
+        ?QuoteDetailsItemExtensionInterfaceFactory $quoteDetailsItemExtensionInterfaceFactory = null,
         ?CustomerAccountManagement $customerAccountManagement = null
     ) {
         $this->taxCalculationService = $taxCalculationService;
@@ -194,6 +196,15 @@ class CommonTaxCollector extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->counter = 0;
+    }
+
+    /**
      * Map quote address to customer address
      *
      * @param QuoteAddress $address
@@ -201,16 +212,27 @@ class CommonTaxCollector extends AbstractTotal
      */
     public function mapAddress(QuoteAddress $address)
     {
-        $customerAddress = $this->customerAddressFactory->create();
-        $customerAddress->setCountryId($address->getCountryId());
-        $customerAddress->setRegion(
-            $this->customerAddressRegionFactory->create()->setRegionId($address->getRegionId())
+        $region = $this->customerAddressRegionFactory->create(
+            [
+                'data' => [
+                    'region_id' => $address->getRegionId(),
+                    'region_code' => $address->getRegionCode(),
+                    'region' => $address->getRegion()
+                ]
+            ]
         );
-        $customerAddress->setPostcode($address->getPostcode());
-        $customerAddress->setCity($address->getCity());
-        $customerAddress->setStreet($address->getStreet());
 
-        return $customerAddress;
+        return $this->customerAddressFactory->create(
+            [
+                'data' => [
+                    'country_id' => $address->getCountryId(),
+                    'region' => $region,
+                    'postcode' => $address->getPostcode(),
+                    'city' => $address->getCity(),
+                    'street' => $address->getStreet()
+                ]
+            ]
+        );
     }
 
     /**
@@ -724,8 +746,7 @@ class CommonTaxCollector extends AbstractTotal
      */
     public function updateItemTaxInfo($quoteItem, $itemTaxDetails, $baseItemTaxDetails, $store)
     {
-        //The price should be base price
-        $quoteItem->setPrice($baseItemTaxDetails->getPrice());
+        $quoteItem->setPrice($itemTaxDetails->getPrice());
         if ($quoteItem->getCustomPrice() && $this->taxHelper->applyTaxOnCustomPrice()) {
             $quoteItem->setCustomPrice($itemTaxDetails->getPrice());
         }

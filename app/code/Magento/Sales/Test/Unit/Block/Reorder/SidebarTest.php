@@ -222,8 +222,15 @@ class SidebarTest extends TestCase
             ->willReturn($statuses);
 
         $this->orderCollection->method('addAttributeToFilter')
-            ->withConsecutive([$attribute[0], $customerId], [$attribute[1], ['in' => $statuses]])
-            ->willReturnOnConsecutiveCalls($this->orderCollection, $this->orderCollection);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($attribute, $customerId, $statuses) {
+                    if ($arg1 === $attribute[0] && $arg2 === $customerId) {
+                        return $this->orderCollection;
+                    } elseif ($arg1 === $attribute[1] && $arg2 === ['in' => $statuses]) {
+                        return $this->orderCollection;
+                    }
+                }
+            );
         $this->orderCollection->method('setPage')
             ->with(1, 1)
             ->willReturn($this->orderCollection);

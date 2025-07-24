@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
 
 namespace Magento\Fedex\Model;
@@ -31,6 +20,7 @@ use Magento\Sales\Model\Order;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Framework\App\CacheInterface;
 
 /**
  * Fedex shipping implementation
@@ -186,6 +176,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private $decoderInterface;
 
     /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -205,6 +200,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Framework\HTTP\Client\CurlFactory $curlFactory
      * @param \Magento\Framework\Url\DecoderInterface $decoderInterface
+     * @param CacheInterface $cache
      * @param array $data
      * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -229,8 +225,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         CurlFactory $curlFactory,
         DecoderInterface $decoderInterface,
+        CacheInterface $cache,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -255,6 +252,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->curlFactory = $curlFactory;
         $this->decoderInterface = $decoderInterface;
+        $this->cache = $cache;
     }
 
     /**
@@ -428,7 +426,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         ]
                     ]
                 ],
-                'rateRequestType' => ['LIST']
+                'rateRequestType' => ['LIST', 'ACCOUNT']
             ]
         ];
 
@@ -728,7 +726,14 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INTERNATIONAL_ECONOMY_FREIGHT' => __('Intl Economy Freight'),
                 'INTERNATIONAL_FIRST' => __('International First'),
                 'INTERNATIONAL_GROUND' => __('International Ground'),
-                'INTERNATIONAL_PRIORITY' => __('International Priority'),
+                'FEDEX_INTERNATIONAL_PRIORITY' => __('International Priority'),
+                'FEDEX_INTERNATIONAL_PRIORITY_EXPRESS' => __('International Priority Express'),
+                'FEDEX_FIRST' => __('First'),
+                'FEDEX_PRIORITY' => __('Priority'),
+                'FEDEX_PRIORITY_EXPRESS' => __('Priority Express'),
+                'FEDEX_PRIORITY_EXPRESS_FREIGHT' => __('Priority Express Freight'),
+                'FEDEX_PRIORITY_FREIGHT' => __('Priority Freight'),
+                'FEDEX_ECONOMY_SELECT' => __('Economy Select'),
                 'INTERNATIONAL_PRIORITY_FREIGHT' => __('Intl Priority Freight'),
                 'PRIORITY_OVERNIGHT' => __('Priority Overnight'),
                 'SMART_POST' => __('Smart Post'),
@@ -767,7 +772,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             ],
                         ],
                         'from_us' => [
-                            'method' => ['INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY'],
+                            'method' => [
+                                'INTERNATIONAL_FIRST',
+                                'INTERNATIONAL_ECONOMY',
+                                'FEDEX_INTERNATIONAL_PRIORITY'
+                            ],
                         ],
                     ],
                 ],
@@ -789,7 +798,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             ],
                         ],
                         'from_us' => [
-                            'method' => ['INTERNATIONAL_FIRST', 'INTERNATIONAL_ECONOMY', 'INTERNATIONAL_PRIORITY'],
+                            'method' => [
+                                'INTERNATIONAL_FIRST',
+                                'INTERNATIONAL_ECONOMY',
+                                'FEDEX_INTERNATIONAL_PRIORITY'
+                            ],
                         ],
                     ],
                 ],
@@ -797,7 +810,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'containers' => ['FEDEX_10KG_BOX', 'FEDEX_25KG_BOX'],
                     'filters' => [
                         'within_us' => [],
-                        'from_us' => ['method' => ['INTERNATIONAL_PRIORITY']],
+                        'from_us' => ['method' => ['FEDEX_INTERNATIONAL_PRIORITY']],
                     ],
                 ],
                 [
@@ -825,7 +838,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             'method' => [
                                 'INTERNATIONAL_FIRST',
                                 'INTERNATIONAL_ECONOMY',
-                                'INTERNATIONAL_PRIORITY',
+                                'FEDEX_INTERNATIONAL_PRIORITY',
+                                'FEDEX_INTERNATIONAL_PRIORITY_EXPRESS',
                                 'INTERNATIONAL_GROUND',
                                 'FEDEX_FREIGHT',
                                 'FEDEX_1_DAY_FREIGHT',
@@ -945,11 +959,26 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $apiKey = $this->getConfigData('api_key') ?? null;
         $secretKey = $this->getConfigData('secret_key') ?? null;
 
-        if (!$apiKey || !$secretKey) {
-            $this->_debug(__('Authentication keys are missing.'));
+        return $this->retrieveAccessToken($apiKey, $secretKey);
+    }
+
+    /**
+     * Make the call to get the access token
+     *
+     * @param string|null $apiKey
+     * @param string|null $secretKey
+     * @return string|null
+     */
+    private function retrieveAccessToken(?string $apiKey, ?string $secretKey): string|null
+    {
+        if (!$this->areAuthKeysValid($apiKey, $secretKey)) {
             return null;
         }
-
+        $cacheKey = 'fedex_access_token_' . hash('sha256', $apiKey . $secretKey);
+        $cacheType = 'fedex_api';
+        if ($cachedToken = $this->getCachedAccessToken($cacheKey)) {
+            return $cachedToken;
+        }
         $requestArray = [
             'grant_type' => self::AUTHENTICATION_GRANT_TYPE,
             'client_id' => $apiKey,
@@ -963,10 +992,68 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!empty($response['errors'])) {
             $debugData = ['request_type' => 'Access Token Request', 'result' => $response];
             $this->_debug($debugData);
-        } elseif (!empty($response['access_token'])) {
+        } elseif (!empty($response['access_token']) && isset($response['expires_in'])) {
             $accessToken = $response['access_token'];
+            $expiresAt = time() + (int)$response['expires_in'];
+            $cacheData = [
+                'access_token' => $accessToken,
+                'expires_at' => $expiresAt
+            ];
+            $this->cache->save(json_encode($cacheData), $cacheKey, [$cacheType], (int)$response['expires_in']);
         }
+
         return $accessToken;
+    }
+
+    /**
+     * Validate apiKey and secretKey
+     *
+     * @param string|null $apiKey
+     * @param string|null $secretKey
+     * @return bool
+     */
+    private function areAuthKeysValid(?string $apiKey, ?string $secretKey): bool
+    {
+        if (!$apiKey || !$secretKey) {
+            $this->_debug(__('Authentication keys are missing.'));
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Retrieve access token from cache
+     *
+     * @param string $cacheKey
+     * @return string|null
+     */
+    private function getCachedAccessToken(string $cacheKey): ?string
+    {
+        $cachedData = $this->cache->load($cacheKey);
+        if (!$cachedData) {
+            return null;
+        }
+
+        $cachedData = json_decode($cachedData, true);
+        $currentTime = time();
+        if (isset($cachedData['access_token'], $cachedData['expires_at']) && $currentTime < $cachedData['expires_at']) {
+            return $cachedData['access_token'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get Access Token for Tracking Rest API
+     *
+     * @return string|null
+     */
+    private function getTrackingApiAccessToken(): string|null
+    {
+        $trackingApiKey = $this->getConfigData('tracking_api_key') ?? null;
+        $trackingSecretKey = $this->getConfigData('tracking_api_secret_key') ?? null;
+
+        return $this->retrieveAccessToken($trackingApiKey, $trackingSecretKey);
     }
 
     /**
@@ -1018,7 +1105,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _getTrackingInformation($tracking): void
     {
-        $accessToken = $this->_getAccessToken();
+        if ($this->getConfigData('enabled_tracking_api')) {
+            $accessToken = $this->getTrackingApiAccessToken();
+        } else {
+            $accessToken = $this->_getAccessToken();
+        }
+
         if (!empty($accessToken)) {
 
             $trackRequest = [
@@ -1447,7 +1539,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getContainerTypes(\Magento\Framework\DataObject $params = null)
+    public function getContainerTypes(?\Magento\Framework\DataObject $params = null)
     {
         if ($params == null) {
             return $this->_getAllowedContainers($params);
@@ -1515,7 +1607,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
+    public function getDeliveryConfirmationTypes(?\Magento\Framework\DataObject $params = null)
     {
         return $this->getCode('delivery_confirmation_types');
     }

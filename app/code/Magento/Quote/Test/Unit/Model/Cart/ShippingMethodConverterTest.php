@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +67,7 @@ class ShippingMethodConverterTest extends TestCase
     protected $taxHelper;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -116,6 +115,7 @@ class ShippingMethodConverterTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testModelToDataObject(): void
     {
@@ -134,8 +134,15 @@ class ShippingMethodConverterTest extends TestCase
         $this->rateModelMock->expects($this->any())->method('getPrice')->willReturn($price);
         $this->currencyMock
             ->method('convert')
-            ->withConsecutive([$price, 'USD'], [$shippingPriceExclTax, 'USD'], [$shippingPriceInclTax, 'USD'])
-            ->willReturnOnConsecutiveCalls(100.12, $shippingPriceExclTax, $shippingPriceInclTax);
+            ->willReturnCallback(function ($arg1, $arg2) use ($price, $shippingPriceExclTax, $shippingPriceInclTax) {
+                if ($arg1 == $price && $arg2 == 'USD') {
+                    return 100.12;
+                } elseif ($arg1 == $shippingPriceExclTax && $arg2 == 'USD') {
+                    return $shippingPriceExclTax;
+                } elseif ($arg1 == $shippingPriceInclTax && $arg2 == 'USD') {
+                    return $shippingPriceInclTax;
+                }
+            });
 
         $this->rateModelMock->expects($this->once())
             ->method('getCarrierTitle')->willReturn('CARRIER_TITLE');
@@ -192,12 +199,15 @@ class ShippingMethodConverterTest extends TestCase
 
         $this->taxHelper
             ->method('getShippingPrice')
-            ->withConsecutive(
-                [$price, false, $addressMock, $customerTaxClassId],
-                [$price, true, $addressMock, $customerTaxClassId]
-            )
-            ->willReturnOnConsecutiveCalls($shippingPriceExclTax, $shippingPriceInclTax);
-
+            ->willReturnCallback(function ($arg1, $arg2, $arg3, $arg4)
+ use ($price, $addressMock, $customerTaxClassId, $shippingPriceExclTax, $shippingPriceInclTax) {
+                if ($arg1 == $price && $arg2 == false && $arg3 == $addressMock && $arg4 == $customerTaxClassId) {
+                    return $shippingPriceExclTax;
+                } elseif ($arg1 == $price && $arg2 == true && $arg3 == $addressMock &&
+                        $arg4 == $customerTaxClassId) {
+                    return $shippingPriceInclTax;
+                }
+            });
         $this->assertEquals(
             $this->shippingMethodMock,
             $this->converter->modelToDataObject($this->rateModelMock, 'USD')

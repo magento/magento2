@@ -132,7 +132,7 @@ class SlidingWindowEnforcerTest extends TestCase
      *
      * @return array
      */
-    public function getSlidingCases(): array
+    public static function getSlidingCases(): array
     {
         return [
             'prev-lt-50%' => [999, false],

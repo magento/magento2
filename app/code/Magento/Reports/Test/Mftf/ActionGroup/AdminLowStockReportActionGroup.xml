@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminLowStockReportActionGroup">
+        <annotations>
+            <description>Navigate to Low stock Product and search for Product</description>
+        </annotations>
+        <amOnPage url="{{LowStockReportPage.url}}" stepKey="navigateToLowStockReportPageWithZeroQuantity"/>
+        <fillField selector="{{LowStockReportFilterSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="fillProductName"/>
+        <waitForElementClickable selector="{{LowStockReportFilterSection.searchButton($$createSimpleProduct.name$$)}}" stepKey="waitForSearchProduct"/>
+        <click selector="{{LowStockReportFilterSection.searchButton($$createSimpleProduct.name$$)}}" stepKey="searchForProduct"/>
+    </actionGroup>
+</actionGroups>

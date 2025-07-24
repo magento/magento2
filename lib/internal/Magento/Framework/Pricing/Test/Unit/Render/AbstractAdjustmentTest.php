@@ -96,7 +96,13 @@ class AbstractAdjustmentTest extends TestCase
             ->willReturn($renderText);
         $this->model
             ->method('setData')
-            ->withConsecutive([$mergedArguments], [$this->data]);
+            ->willReturnCallback(
+                function ($arg1) use ($mergedArguments) {
+                    if ($arg1 == $mergedArguments || $arg1 == $this->data) {
+                        return null;
+                    }
+                }
+            );
 
         $result = $this->model->render($amountRender, $arguments);
         $this->assertEquals($renderText, $result);

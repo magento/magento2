@@ -80,9 +80,9 @@ class ConfigGenerator
     public function __construct(
         Random $random,
         DeploymentConfig $deploymentConfig,
-        ConfigDataFactory $configDataFactory = null,
-        CryptKeyGeneratorInterface $cryptKeyGenerator = null,
-        DriverOptions $driverOptions = null
+        ?ConfigDataFactory $configDataFactory = null,
+        ?CryptKeyGeneratorInterface $cryptKeyGenerator = null,
+        ?DriverOptions $driverOptions = null
     ) {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;

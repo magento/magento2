@@ -203,21 +203,22 @@ class TemporaryStorageTest extends TestCase
         }
         $table
             ->method('addColumn')
-            ->withConsecutive(
-                [
-                    TemporaryStorage::FIELD_ENTITY_ID,
-                    Table::TYPE_INTEGER,
-                    10,
-                    ['unsigned' => true, 'nullable' => false, 'primary' => true],
-                    'Entity ID'
-                ],
-                [
-                    'score',
-                    Table::TYPE_DECIMAL,
-                    [32, 16],
-                    ['unsigned' => true, 'nullable' => true],
-                    'Score'
-                ]
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3, $arg4, $arg5) {
+                    if ($arg1 === TemporaryStorage::FIELD_ENTITY_ID &&
+                        $arg2 === Table::TYPE_INTEGER &&
+                        $arg3 === 10 &&
+                        $arg4 === ['unsigned' => true, 'nullable' => false, 'primary' => true] &&
+                        $arg5 === 'Entity ID') {
+                        return null;
+                    } elseif ($arg1 === 'score' &&
+                        $arg2 === Table::TYPE_DECIMAL &&
+                        $arg3 === [32, 16] &&
+                        $arg4 === ['unsigned' => true, 'nullable' => true] &&
+                        $arg5 === 'Score') {
+                        return null;
+                    }
+                }
             );
         $table->expects($this->once())
             ->method('setOption')

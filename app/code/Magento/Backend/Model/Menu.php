@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Model;
 
@@ -52,8 +52,8 @@ class Menu extends \ArrayObject
     public function __construct(
         LoggerInterface $logger,
         $pathInMenuStructure = '',
-        Factory $menuItemFactory = null,
-        SerializerInterface $serializer = null
+        ?Factory $menuItemFactory = null,
+        ?SerializerInterface $serializer = null
     ) {
         if ($pathInMenuStructure) {
             $this->_path = $pathInMenuStructure . '/';
@@ -86,7 +86,7 @@ class Menu extends \ArrayObject
             $index = (int) $index;
             if (!isset($this[$index])) {
                 $this->offsetSet($index, $item);
-                $this->_logger->info(
+                $this->_logger->debug(
                     sprintf('Add of item with id %s was processed', $item->getId())
                 );
             } else {
@@ -151,7 +151,7 @@ class Menu extends \ArrayObject
             if ($item->getId() == $itemId) {
                 unset($this[$key]);
                 $result = true;
-                $this->_logger->info(
+                $this->_logger->debug(
                     sprintf('Remove on item with id %s was processed', $item->getId())
                 );
                 break;

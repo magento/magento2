@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Shipping table rates
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier;
@@ -295,7 +293,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return Tablerate
      * @throws LocalizedException
      * @todo: this method should be refactored as soon as updated design will be provided
-     * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
      */
     public function uploadAndImport(DataObject $object)
     {

@@ -33,7 +33,7 @@ class LocalizedException extends \Exception
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
+    public function __construct(Phrase $phrase, ?\Exception $cause = null, $code = 0)
     {
         $this->phrase = $phrase;
         parent::__construct($phrase->render(), (int)$code, $cause);

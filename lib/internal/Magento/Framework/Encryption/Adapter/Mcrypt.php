@@ -47,7 +47,7 @@ class Mcrypt implements EncryptionAdapterInterface
         string $key,
         string $cipher = MCRYPT_BLOWFISH,
         string $mode = MCRYPT_MODE_ECB,
-        string $initVector = null
+        ?string $initVector = null
     ) {
         $this->cipher = $cipher;
         $this->mode = $mode;

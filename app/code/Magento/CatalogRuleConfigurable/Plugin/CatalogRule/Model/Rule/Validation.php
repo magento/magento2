@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule;
 
@@ -49,15 +48,19 @@ class Validation
     {
         if (!$validateResult && ($configurableProducts = $this->configurable->getParentIdsByChild($product->getId()))) {
             foreach ($configurableProducts as $configurableProductId) {
-                $configurableProduct = $this->productRepository->getById(
-                    $configurableProductId,
-                    false,
-                    $product->getStoreId()
-                );
-                $validateResult = $rule->getConditions()->validate($configurableProduct);
-                // If any of configurable product is valid for current rule, then their sub-product must be valid too
-                if ($validateResult) {
-                    break;
+                try {
+                    $configurableProduct = $this->productRepository->getById(
+                        $configurableProductId,
+                        false,
+                        $product->getStoreId()
+                    );
+                    $validateResult = $rule->getConditions()->validate($configurableProduct);
+                    //If any of configurable product is valid for current rule, then their sub-product must be valid too
+                    if ($validateResult) {
+                        break;
+                    }
+                } catch (\Exception $e) {
+                    continue;
                 }
             }
         }

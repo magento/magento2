@@ -66,16 +66,22 @@ class ContextPluginTest extends TestCase
             ->willReturn(true);
         $this->httpContextMock->expects($this->atLeastOnce())
             ->method('setValue')
-            ->withConsecutive(
-                [Context::CONTEXT_GROUP, self::callback(fn($value): bool => $value === '1'), 0],
-                [Context::CONTEXT_AUTH, true, self::STUB_CUSTOMER_NOT_LOGGED_IN]
-            )
-            ->willReturnMap(
-                [
-                    [Context::CONTEXT_GROUP, self::STUB_CUSTOMER_GROUP, $this->httpContextMock],
-                    [Context::CONTEXT_AUTH, self::STUB_CUSTOMER_NOT_LOGGED_IN, $this->httpContextMock],
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use (&$callCount) {
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 === Context::CONTEXT_GROUP && $arg3 === 0) {
+                             return $this->httpContextMock;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 === Context::CONTEXT_AUTH && $arg2 === true &&
+                            $arg3 === self::STUB_CUSTOMER_NOT_LOGGED_IN) {
+                             return $this->httpContextMock;
+                        }
+                        break;
+                }
+            });
         $this->plugin->beforeExecute($this->subjectMock);
     }
 }

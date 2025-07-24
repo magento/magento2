@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,7 +29,6 @@ use Magento\Rule\Model\Condition\Combine;
 use Magento\Rule\Model\Condition\Sql\Builder;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-
 use Magento\Widget\Helper\Conditions;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -108,11 +107,11 @@ class ProductsListTest extends TestCase
     {
         $this->collectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->visibility = $this->getMockBuilder(Visibility::class)
-            ->setMethods(['getVisibleInCatalogIds'])
+            ->onlyMethods(['getVisibleInCatalogIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->httpContext = $this->createMock(Context::class);
@@ -137,7 +136,7 @@ class ProductsListTest extends TestCase
                 'conditionsHelper' => $this->widgetConditionsHelper,
                 'storeManager' => $this->storeManager,
                 'design' => $this->design,
-                'json' => $this->serializer
+                'json' => $this->serializer,
             ]
         );
         $this->request = $arguments['context']->getRequest();
@@ -155,7 +154,7 @@ class ProductsListTest extends TestCase
     {
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])->getMock();
+            ->onlyMethods(['getId'])->getMock();
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
@@ -165,11 +164,13 @@ class ProductsListTest extends TestCase
 
         $this->httpContext->expects($this->exactly(2))
             ->method('getValue')
-            ->withConsecutive(
-                [$this->equalTo(\Magento\Customer\Model\Context::CONTEXT_GROUP)],
-                [$this->equalTo('tax_rates')]
-            )
-            ->willReturnOnConsecutiveCalls('context_group', [10]);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == \Magento\Customer\Model\Context::CONTEXT_GROUP) {
+                    return 'context_group';
+                } elseif ($arg == 'tax_rates') {
+                    return [10];
+                }
+            });
 
         $this->productsList->setData('conditions', 'some_serialized_conditions');
 
@@ -210,13 +211,13 @@ class ProductsListTest extends TestCase
     public function testGetProductPriceHtml()
     {
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('getId')->willReturn(1);
 
         $priceRenderer = $this->getMockBuilder(Render::class)
-            ->setMethods(['render'])
+            ->onlyMethods(['render'])
             ->disableOriginalConstructor()
             ->getMock();
         $priceRenderer->expects($this->once())
@@ -249,7 +250,7 @@ class ProductsListTest extends TestCase
     public function testGetPagerHtml()
     {
         $collection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getSize'])
+            ->onlyMethods(['getSize'])
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())->method('getSize')->willReturn(3);
@@ -259,14 +260,12 @@ class ProductsListTest extends TestCase
         $this->productsList->setData('product_collection', $collection);
 
         $pagerBlock = $this->getMockBuilder(Pager::class)
-            ->setMethods([
+            ->addMethods(['setUseContainer', 'setShowAmounts', 'setTotalLimit'])
+            ->onlyMethods([
                 'toHtml',
-                'setUseContainer',
-                'setShowAmounts',
                 'setShowPerPage',
                 'setPageVarName',
                 'setLimit',
-                'setTotalLimit',
                 'setCollection',
             ])->disableOriginalConstructor()
             ->getMock();
@@ -299,7 +298,7 @@ class ProductsListTest extends TestCase
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
             ->willReturn([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
         $collection = $this->getMockBuilder(Collection::class)
-            ->setMethods([
+            ->onlyMethods([
                 'setVisibility',
                 'addMinimalPrice',
                 'addFinalPrice',
@@ -354,7 +353,7 @@ class ProductsListTest extends TestCase
     /**
      * @return array
      */
-    public function createCollectionDataProvider()
+    public static function createCollectionDataProvider()
     {
         return [
             [true, 1, null, 5],
@@ -400,20 +399,16 @@ class ProductsListTest extends TestCase
     public function testGetIdentities()
     {
         $collection = $this->getMockBuilder(Collection::class)
-            ->setMethods([
+            ->onlyMethods([
                 'addAttributeToSelect',
                 'getIterator',
             ])->disableOriginalConstructor()
             ->getMock();
 
         $product = $this->createPartialMock(IdentityInterface::class, ['getIdentities']);
-        $notProduct = $this->getMockBuilder('NotProduct')
-            ->setMethods(['getIdentities'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $product->expects($this->once())->method('getIdentities')->willReturn(['product_identity']);
         $collection->expects($this->once())->method('getIterator')->willReturn(
-            new \ArrayIterator([$product, $notProduct])
+            new \ArrayIterator([$product])
         );
         $this->productsList->setData('product_collection', $collection);
 
@@ -431,7 +426,7 @@ class ProductsListTest extends TestCase
     private function getConditionsForCollection($collection)
     {
         $conditions = $this->getMockBuilder(Combine::class)
-            ->setMethods(['collectValidatedAttributes'])
+            ->addMethods(['collectValidatedAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $conditions->expects($this->once())->method('collectValidatedAttributes')

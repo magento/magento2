@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -135,7 +135,7 @@ class LinkProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function diConfigDataProvider()
+    public static function diConfigDataProvider()
     {
         return [
             [3, [

@@ -36,5 +36,5 @@ if ($storeId) {
     $reflectionClass = new \ReflectionClass(CurrencyResource::class);
     $staticProperty = $reflectionClass->getProperty('_rateCache');
     $staticProperty->setAccessible(true);
-    $staticProperty->setValue(null);
+    $staticProperty->setValue(null, null);
 }
