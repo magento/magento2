@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\ResourceModel\Quote;
 
@@ -9,8 +9,6 @@ use Magento\Framework\Model\ResourceModel\Db\VersionControl\AbstractDb;
 
 /**
  * Quote address resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Address extends AbstractDb
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Address;
 
@@ -32,7 +32,6 @@ use Magento\Framework\Model\AbstractModel;
  * @method string getMethodTitle()
  * @method \Magento\Quote\Model\Quote\Address\Rate setMethodTitle(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Rate extends AbstractModel

@@ -1,24 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\OpenSearch\SearchAdapter;
 
+use Magento\AdvancedSearch\Model\Client\ClientException;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
 use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
 use Magento\Framework\Search\AdapterInterface;
+use Magento\Framework\Search\Request\EmptyRequestDataException;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Search\Model\Search\PageSizeProvider;
+use OpenSearch\Common\Exceptions\BadRequest400Exception;
+use OpenSearch\Common\Exceptions\Missing404Exception;
 use Psr\Log\LoggerInterface;
 
 /**
  * OpenSearch Search Adapter
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Adapter implements AdapterInterface
 {
@@ -27,54 +32,37 @@ class Adapter implements AdapterInterface
      *
      * @var Mapper
      */
-    private $mapper;
+    private Mapper $mapper;
 
     /**
      * @var ResponseFactory
      */
-    private $responseFactory;
+    private ResponseFactory $responseFactory;
 
     /**
      * @var ConnectionManager
      */
-    private $connectionManager;
+    private ConnectionManager $connectionManager;
 
     /**
      * @var AggregationBuilder
      */
-    private $aggregationBuilder;
+    private AggregationBuilder $aggregationBuilder;
 
     /**
      * @var QueryContainerFactory
      */
-    private $queryContainerFactory;
-
-    /**
-     * Empty response from OpenSearch
-     *
-     * @var array
-     */
-    private static $emptyRawResponse = [
-        'hits' => [
-            'hits' => []
-        ],
-        'aggregations' => [
-            'price_bucket' => [],
-            'category_bucket' => [
-                'buckets' => []
-            ]
-        ]
-    ];
+    private QueryContainerFactory $queryContainerFactory;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var PageSizeProvider
      */
-    private $pageSizeProvider;
+    private PageSizeProvider $pageSizeProvider;
 
     /**
      * @param ConnectionManager $connectionManager
@@ -108,11 +96,11 @@ class Adapter implements AdapterInterface
      *
      * @param RequestInterface $request
      * @return QueryResponse
+     * @throws ClientException
      */
     public function query(RequestInterface $request) : QueryResponse
     {
         $client = $this->connectionManager->getConnection();
-
         $query = $this->mapper->buildQuery($request);
         try {
             $maxPageSize = $this->pageSizeProvider->getMaxPageSize();
@@ -142,10 +130,12 @@ class Adapter implements AdapterInterface
             }
 
             $rawResponse = $client->query($query);
+        } catch (Missing404Exception|BadRequest400Exception $e) {
+            $this->logger->critical($e);
+            throw new EmptyRequestDataException("Could not perform search query.");
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            // return empty search result in case an exception is thrown from OpenSearch
-            $rawResponse = self::$emptyRawResponse;
+            throw new ClientException("Could not perform search query.", $e->getCode(), $e);
         } finally {
             if (isset($pitId)) {
                 $client->closePointInTime(['body' => ['pit_id' => [$pitId]]]);

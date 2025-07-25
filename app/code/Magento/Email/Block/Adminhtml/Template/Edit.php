@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
@@ -100,7 +100,7 @@ class Edit extends Widget implements ContainerInterface
         $this->_emailConfig = $emailConfig;
         $this->buttonList = $buttonList;
         $this->toolbar = $toolbar;
-        parent::__construct($context, $data);
+        parent::__construct($context, $data, $jsonHelper);
     }
 
     /**
