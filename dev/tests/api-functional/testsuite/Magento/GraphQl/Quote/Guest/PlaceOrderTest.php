@@ -245,6 +245,7 @@ class PlaceOrderTest extends GraphQlAbstract
         DataFixture(GuestCartFixture::class, ['reserved_order_id' => 'test_quote'], as: 'cart'),
         DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
     ]
     public function testPlaceOrderWithNoShippingAddress()
     {
@@ -275,6 +276,7 @@ class PlaceOrderTest extends GraphQlAbstract
         DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
     ]
     public function testPlaceOrderWithNoShippingMethod()
     {
@@ -308,6 +310,7 @@ class PlaceOrderTest extends GraphQlAbstract
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$'])
     ]
     public function testPlaceOrderWithNoBillingAddress()
     {
@@ -359,7 +362,7 @@ class PlaceOrderTest extends GraphQlAbstract
             $exceptionData = $exception->getResponseData();
             self::assertEquals(1, count($exceptionData['errors']));
             self::assertEquals(
-                'Unable to place order: Enter a valid payment method and try again.',
+                'Unable to place order: A server error stopped your order from being placed. Please try to place your order again',
                 $exceptionData['errors'][0]['message']
             );
             self::assertEquals(
@@ -382,6 +385,7 @@ class PlaceOrderTest extends GraphQlAbstract
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(
             ProductStockFixture::class,
             [
@@ -425,6 +429,7 @@ class PlaceOrderTest extends GraphQlAbstract
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(
             ProductStockFixture::class,
