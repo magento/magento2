@@ -130,6 +130,17 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_one_simple_with_category.php
+     *
+     * @return void
+     */
+    public function testCheckConfigurablePriceOnOneSimple(): void
+    {
+        $this->resetPageLayout();
+        $this->assertProductPrice('configurable', '$10.00');
+    }
+
+    /**
      * @param string $sku
      * @param string $priceString
      * @return void

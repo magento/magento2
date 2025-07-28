@@ -196,7 +196,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements
     }
 
     /**
-     * Check whether Configurable Product have more than one children products
+     * Check whether Configurable options do not have price difference
      *
      * @param SaleableInterface $product
      * @return bool
@@ -204,18 +204,17 @@ class ConfigurableRegularPrice extends AbstractPrice implements
     public function isChildProductsOfEqualPrices(SaleableInterface $product): bool
     {
         $minPrice = $this->getMinRegularAmount()->getValue();
-        $final_price = $product->getFinalPrice();
-        $productId = $product->getId();
-        if ($final_price < $minPrice) {
+        $finalPrice = $product->getFinalPrice();
+        $productId = (int)$product->getId();
+        if ($finalPrice < $minPrice) {
             return false;
         }
-        $attributes = $product->getTypeInstance()->getConfigurableAttributes($product);
-        $items = $attributes->getItems();
-        $options = reset($items);
+
         $maxPrice = $this->configurableMaxPriceCalculator->getMaxPriceForConfigurableProduct($productId);
-        if ($maxPrice == 0) {
+        if ($maxPrice === 0.0) {
             $maxPrice = $this->getMaxRegularAmount()->getValue();
         }
-        return (count($options->getOptions()) > 1) && $minPrice == $maxPrice;
+
+        return $minPrice === $maxPrice;
     }
 }

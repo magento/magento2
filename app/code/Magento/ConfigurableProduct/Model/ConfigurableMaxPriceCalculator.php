@@ -49,7 +49,7 @@ class ConfigurableMaxPriceCalculator
      * @param int $productId
      * @return float
      */
-    public function getMaxPriceForConfigurableProduct($productId)
+    public function getMaxPriceForConfigurableProduct(int $productId): float
     {
         $connection = $this->resourceConnection->getConnection();
         $superLinkTable = $this->resourceConnection->getTableName('catalog_product_super_link');
@@ -63,7 +63,7 @@ class ConfigurableMaxPriceCalculator
         $result = $connection->fetchRow($select);
 
         if ($result && isset($result['max_price'])) {
-            return $result['max_price'];
+            return (float)$result['max_price'];
         }
 
         // Return a default value or handle the case where there's no max price
