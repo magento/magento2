@@ -10,16 +10,6 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');
 }
 
-// PHP 8 compatibility. Define constants that are not present in PHP < 8.0
-if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80000) {
-    if (!defined('T_NAME_QUALIFIED')) {
-        define('T_NAME_QUALIFIED', 24001);
-    }
-    if (!defined('T_NAME_FULLY_QUALIFIED')) {
-        define('T_NAME_FULLY_QUALIFIED', 24002);
-    }
-}
-
 require_once __DIR__ . '/autoload.php';
 
 setCustomErrorHandler();
@@ -59,7 +49,7 @@ function setCustomErrorHandler()
                     E_USER_DEPRECATED => 'User Deprecated',
                 ];
 
-                $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
+                $errName = $errorNames[$errNo] ?? "";
 
                 throw new \PHPUnit\Framework\Exception(
                     sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),

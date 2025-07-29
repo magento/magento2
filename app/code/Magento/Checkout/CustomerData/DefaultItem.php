@@ -84,7 +84,7 @@ class DefaultItem extends AbstractItem
     {
         $imageHelper = $this->imageHelper->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail');
         $productName = $this->escaper->escapeHtml($this->item->getProduct()->getName());
-
+        $this->item->setConvertedPrice($this->item->getPrice());
         return [
             'options' => $this->getOptionList(),
             'qty' => $this->item->getQty() * 1,

@@ -38,6 +38,11 @@ class Changelog implements ChangelogInterface
     public const VERSION_ID_COLUMN_NAME = 'version_id';
 
     /**
+     * Batch size for changelog cleaning operation
+     */
+    private const CHANGELOG_CLEAR_BATCH_SIZE = 10000;
+
+    /**
      * Database connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -126,7 +131,7 @@ class Changelog implements ChangelogInterface
                 $changelogTableName
             )->addColumn(
                 self::VERSION_ID_COLUMN_NAME,
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Version ID'
@@ -149,6 +154,7 @@ class Changelog implements ChangelogInterface
         } else {
             // change the charset to utf8mb4
             $getTableSchema = $this->connection->getCreateTable($changelogTableName) ?? '';
+            $this->changeVersionIdToBigInt($getTableSchema, $changelogTableName);
             if (preg_match('/\b('. self::OLDCHARSET .')\b/', $getTableSchema)) {
                 $charset = $this->columnConfig->getDefaultCharset();
                 $collate = $this->columnConfig->getDefaultCollation();
@@ -161,6 +167,32 @@ class Changelog implements ChangelogInterface
                     )
                 );
             }
+        }
+    }
+
+    /**
+     * Change version_id from int to bigint
+     *
+     * @param string $getTableSchema
+     * @param string $changelogTableName
+     * @return void
+     */
+    private function changeVersionIdToBigInt(string $getTableSchema, string $changelogTableName): void
+    {
+        $pattern = '/`version_id`\s+int\b/i';
+        if (preg_match($pattern, $getTableSchema)) {
+            $this->connection->modifyColumn(
+                $changelogTableName,
+                self::VERSION_ID_COLUMN_NAME,
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+                    'nullable' => false,
+                    'identity' => true,
+                    'unsigned' => true,
+                    'primary' => true,
+                    'comment' => 'Version ID'
+                ]
+            );
         }
     }
 
@@ -222,7 +254,14 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id < ?' => (int)$versionId]);
+        $this->connection->query(
+            sprintf(
+                'DELETE FROM `%s` WHERE %s LIMIT %d',
+                $changelogTableName,
+                'version_id < ' . (int) $versionId,
+                self::CHANGELOG_CLEAR_BATCH_SIZE
+            )
+        );
 
         return true;
     }

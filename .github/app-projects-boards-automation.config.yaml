@@ -1,3 +1,6 @@
+# Copyright 2025 Adobe
+# All Rights Reserved.
+
 automations:
 
   ############################################################################################################
@@ -401,3 +404,10 @@ automations:
       ]
     actions:
       - addLabelsToRelated: ['${modifiedLabel.name}']
+
+  - trigger: issues.closed
+    actions:
+      - removeFromProject: [18] 
+      - removeFromProject: [21]
+      - removeFromProject: [20]
+      - removeFromProject: [19]

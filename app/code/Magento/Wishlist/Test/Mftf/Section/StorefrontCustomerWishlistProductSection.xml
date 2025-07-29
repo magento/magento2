@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 -->
-
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerWishlistProductSection">
@@ -26,7 +25,7 @@
         <element name="pager" type="block" selector=".toolbar .pager"/>
         <element name="wishlistEmpty" type="block" selector=".form-wishlist-items .message.info.empty"/>
         <element name="removeProduct" type="button" selector=".products-grid a.btn-remove" timeout="30"/>
-        <element name="editProduct" type="button" selector=".products-grid a.action.edit" timeout="30"/>
+        <element name="editProduct" type="button" selector="//main//li[.//a[contains(@title, '{{productName}}')]]//div[@class='product-item-actions']//a[@class='action-edit' or (contains(@class, 'action') and contains(@class, 'edit'))]" parameterized="true"/>
         <element name="productSeeDetailsByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]" parameterized="true"/>
         <element name="productSeeDetailsLabelByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]//dt[@class='label']" parameterized="true"/>
         <element name="productSeeDetailsValueByName" type="block" selector="//a[contains(text(), '{{productName}}')]/ancestor::div/div[contains(@class, 'product-item-tooltip')]//dd[@class='values']" parameterized="true"/>
