@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 
 /** @var $escaper \Magento\Framework\Escaper */
@@ -14,12 +14,11 @@ $finalPriceModel = $block->getPriceType('final_price');
 $regularPriceModel = $block->getPriceType('regular_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
-$product = $regularPriceModel->getProduct();
 ?>
     <span class="normal-price">
 <?= /* @noEscape */
 $block->renderAmount($finalPriceModel->getAmount(), [
-    'display_label' => $regularPriceModel->isChildProductsOfEqualPrices($product) ? '' : __('As low as'),
+    'display_label' => $regularPriceModel->isPriceEqualAcrossChildProducts() ? '' : __('As low as'),
     'price_id' => $block->getPriceId('product-price-' . $idSuffix),
     'price_type' => 'finalPrice',
     'include_container' => true,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
@@ -196,6 +196,9 @@ class ConfigurableRegularPrice extends AbstractPrice implements
     }
 
     /**
+     * @deprecated
+     * @see isPriceEqualAcrossChildProducts
+     *
      * Check whether Configurable options do not have price difference
      *
      * @param SaleableInterface $product
@@ -203,14 +206,24 @@ class ConfigurableRegularPrice extends AbstractPrice implements
      */
     public function isChildProductsOfEqualPrices(SaleableInterface $product): bool
     {
+        return $this->isPriceEqualAcrossChildProducts();
+    }
+
+    /**
+     * Check whether Configurable options do not have price difference
+     *
+     * @return bool
+     */
+    public function isPriceEqualAcrossChildProducts(): bool
+    {
         $minPrice = $this->getMinRegularAmount()->getValue();
-        $finalPrice = $product->getFinalPrice();
-        $productId = (int)$product->getId();
-        if ($finalPrice < $minPrice) {
+
+        if ($this->product instanceof Product && $this->product->getFinalPrice() < $minPrice) {
             return false;
         }
 
-        $maxPrice = $this->configurableMaxPriceCalculator->getMaxPriceForConfigurableProduct($productId);
+        $maxPrice = $this->configurableMaxPriceCalculator
+            ->getMaxPriceForConfigurableProduct((int)$this->product->getId());
         if ($maxPrice === 0.0) {
             $maxPrice = $this->getMaxRegularAmount()->getValue();
         }

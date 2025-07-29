@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,21 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Test\Fixture\AssignProducts as AssignProductsFixture;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
 use PHPUnit\Framework\TestCase;
@@ -129,15 +138,46 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
         $this->assertProductPrice('configurable', '$150.00');
     }
 
-    /**
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_one_simple_with_category.php
-     *
-     * @return void
-     */
+    #[
+        AppIsolation(true),
+        DataFixture(CategoryFixture::class, [], 'category'),
+        DataFixture(ProductFixture::class, [
+            'sku' => 'simple_1',
+            'price' => 10.0,
+            'visibility' => Visibility::VISIBILITY_NOT_VISIBLE
+        ], 'p1'),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            [
+                'sku' => 'configurable',
+                '_options' => ['$attr$'],
+                '_links' => ['$p1$']
+            ],
+            'configurable'
+        ),
+        DataFixture(
+            AssignProductsFixture::class,
+            ['products' => ['$configurable$', '$p1$'], 'category' => '$category$'],
+            as: 'assignProducts'
+        )
+    ]
     public function testCheckConfigurablePriceOnOneSimple(): void
     {
         $this->resetPageLayout();
-        $this->assertProductPrice('configurable', '$10.00');
+        $fixtures = DataFixtureStorageManager::getStorage();
+
+        $this->registry->unregister('current_category');
+        $this->registry->register(
+            'current_category',
+            $fixtures->get('category')
+        );
+        $this->page->addHandle(['default', 'catalog_category_view']);
+        $this->page->getLayout()->generateXml();
+
+        $this->assertCollectionSize(1, $this->getListingBlock()->getLoadedProductCollection());
+        $priceHtml = $this->getListingBlock()->getProductPrice($this->getProduct('configurable'));
+        $this->assertStringContainsString('$10.00', $this->clearPriceHtml($priceHtml));
     }
 
     /**
