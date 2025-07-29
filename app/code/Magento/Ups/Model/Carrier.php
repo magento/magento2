@@ -1200,10 +1200,10 @@ XMLRequest;
                             $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                             $this->_logger->critical($e);
                         }
-                        if ($responseResult) {
-                            $jsonResponse = $responseResult->getStatusCode() >= 400 ? '' : $responseResult->getBody();
+                        if ($responseResult && ($responseResult->getStatusCode() < 400)) {
+                            $jsonResponse = $responseResult->getBody();
+                            $debugData['result'] = $jsonResponse;
                         }
-                        $debugData['result'] = $jsonResponse;
                         $this->_debug($debugData);
 
                         return $this->_parseRestResponse($jsonResponse);
