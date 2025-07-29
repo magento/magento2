@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -10,6 +10,11 @@
     <preference for="Magento\Sitemap\Model\ItemProvider\ItemProviderInterface" type="Magento\Sitemap\Model\ItemProvider\Composite" />
     <preference for="Magento\Sitemap\Model\SitemapConfigReaderInterface" type="Magento\Sitemap\Model\SitemapConfigReader" />
 
+    <type name="Magento\Sitemap\Model\ItemProvider\Batch\Product">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemProvider\ProductConfigReader</argument>
+        </arguments>
+    </type>
     <type name="Magento\Sitemap\Model\Sitemap">
         <arguments>
             <argument name="resource" xsi:type="object">Magento\Sitemap\Model\ResourceModel\Sitemap</argument>
@@ -62,6 +67,16 @@
                     </item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\Batch\Observer">
+        <arguments>
+            <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface</argument>
+            <argument name="collectionFactory" xsi:type="object">Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory</argument>
+            <argument name="batchSitemapFactory" xsi:type="object">Magento\Sitemap\Model\Batch\SitemapFactory</argument>
+            <argument name="emailNotification" xsi:type="object">Magento\Sitemap\Model\EmailNotification</argument>
+            <argument name="appEmulation" xsi:type="object">Magento\Store\Model\App\Emulation</argument>
+            <argument name="logger" xsi:type="object">Psr\Log\LoggerInterface</argument>
         </arguments>
     </type>
 </config>
