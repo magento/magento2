@@ -63,7 +63,7 @@ class ConfigurableMaxPriceCalculator
         $result = $connection->fetchRow($select);
 
         if ($result && isset($result['max_price'])) {
-            return (float)$result['max_price'];
+            return (float) $result['max_price'];
         }
 
         // Return a default value or handle the case where there's no max price

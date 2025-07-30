@@ -223,7 +223,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements
         }
 
         $maxPrice = $this->configurableMaxPriceCalculator
-            ->getMaxPriceForConfigurableProduct((int)$this->product->getId());
+            ->getMaxPriceForConfigurableProduct((int) $this->product->getId());
         if ($maxPrice === 0.0) {
             $maxPrice = $this->getMaxRegularAmount()->getValue();
         }
