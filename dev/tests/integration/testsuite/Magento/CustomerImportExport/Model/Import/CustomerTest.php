@@ -9,12 +9,14 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Indexer\Processor;
+use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
 use Magento\Framework\Filesystem\File\WriteFactory;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\CsvFactory;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -96,6 +98,24 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $registry = $this->objectManager->get(Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+        try {
+            $customerCollection = $this->objectManager->create(CustomerCollection::class);
+            $customerCollection->delete();
+        } finally {
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', false);
+        }
+        parent::tearDown();
+    }
+
+    /**
      * Test importData() method
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customer.php
@@ -113,9 +133,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
 
         $existingCustomer = $this->getCustomer('CharlesTAlston@teleworm.us', 1);
 
-        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var $customersCollection CustomerCollection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
+            CustomerCollection::class
         );
         $customersCollection->addAttributeToSelect('firstname', 'inner')->addAttributeToSelect('lastname', 'inner');
 
@@ -276,9 +296,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $existingCustomer->setWebsiteId(1);
         $existingCustomer = $existingCustomer->loadByEmail('CharlesTAlston@teleworm.us');
 
-        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var $customersCollection CustomerCollection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
+            CustomerCollection::class
         );
         $customersCollection->resetData();
         $customersCollection->clear();
@@ -346,9 +366,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $this->directoryWrite
         );
 
-        /** @var $customerCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var $customerCollection CustomerCollection */
         $customerCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Customer\Collection::class
+            CustomerCollection::class
         );
         $this->assertEquals(3, $customerCollection->count(), 'Count of existing customers are invalid');
 
