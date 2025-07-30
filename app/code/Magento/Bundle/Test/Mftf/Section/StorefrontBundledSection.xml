@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -51,5 +51,8 @@
         <element name="dropDownQuantityValidation" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input/following-sibling::div[@class='mage-error']" parameterized="true"/>
         <element name="radioButtonQuantityValidation" type="input" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field qty qty-holder']//input/following-sibling::div[@class='mage-error']" parameterized="true"/>
         <element name="dropDrownOptionQuantity" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input/following-sibling::div//div//div//input" parameterized="true"/>
+        <element name="selectOptionError" type="text" selector="//div[contains(@class, 'field')]//div[contains(@class, 'mage-error')]"/>
+        <element name="radioButton" type="select" selector="//label//span[contains(text(), '{{productName}}')]/ancestor::div//div[@class='control']//div[@class='field choice'][{{productNumber}}]/input" parameterized="true"/>
+        <element name="radioOptionQty" type="input" selector="//div[@class='control']//div[@class='field qty qty-holder']//input"/>
     </section>
 </sections>

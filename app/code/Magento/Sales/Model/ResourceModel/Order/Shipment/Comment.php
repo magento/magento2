@@ -21,7 +21,6 @@ use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Flat sales order shipment comment resource
- *
  */
 class Comment extends EntityAbstract implements ShipmentCommentResourceInterface
 {
