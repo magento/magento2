@@ -1688,10 +1688,11 @@ class Product extends AbstractEntity
                     }
                     $rowScope = $this->getRowScope($rowData);
                     $urlKey = $this->getUrlKey($rowData);
+                    $rowSku = $rowData[self::COL_SKU];
                     if (!empty($rowData[self::URL_KEY])) {
                         // If url_key column and its value were in the CSV file
                         $rowData[self::URL_KEY] = $urlKey;
-                    } elseif ($this->isNeedToChangeUrlKey($rowData)) {
+                    } elseif ($this->isNeedToChangeUrlKey($rowData, isset($entityRowsIn[strtolower($rowSku)]))) {
                         // If url_key column was empty or even not declared in the CSV file but by the rules it needs
                         // to be settled. In case when url_key is generating from name column we have to ensure that
                         // the bunch of products will pass for the event with url_key column.
@@ -1701,7 +1702,6 @@ class Product extends AbstractEntity
                         // remove null byte character
                         $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
                     }
-                    $rowSku = $rowData[self::COL_SKU];
                     if (null === $rowSku) {
                         $this->getErrorAggregator()->addRowToSkip($rowNum);
                         continue;
@@ -3275,15 +3275,16 @@ class Product extends AbstractEntity
      * Whether a url key needs to change.
      *
      * @param array $rowData
+     * @param bool $hasParentRow
      * @return bool
      */
-    private function isNeedToChangeUrlKey(array $rowData): bool
+    private function isNeedToChangeUrlKey(array $rowData, bool $hasParentRow = false): bool
     {
         $urlKey = $this->getUrlKey($rowData);
         $productExists = $this->isSkuExist($rowData[self::COL_SKU]);
         $markedToEraseUrlKey = isset($rowData[self::URL_KEY]);
         // The product isn't new and the url key index wasn't marked for change.
-        if (!$urlKey && $productExists && !$markedToEraseUrlKey) {
+        if ($hasParentRow && empty($rowData[self::URL_KEY]) || !$urlKey && $productExists && !$markedToEraseUrlKey) {
             // Seems there is no need to change the url key
             return false;
         }

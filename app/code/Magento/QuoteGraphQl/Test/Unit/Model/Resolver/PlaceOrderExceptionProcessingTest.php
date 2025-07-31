@@ -10,13 +10,12 @@ namespace Magento\QuoteGraphQl\Test\Unit\Model\Resolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Helper\Error\AggregateExceptionMessageFormatter;
 use Magento\GraphQl\Model\Query\Context;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForCheckout;
 use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
-use Magento\QuoteGraphQl\Model\ErrorMapper;
+use Magento\QuoteGraphQl\Model\OrderErrorProcessor;
 use Magento\QuoteGraphQl\Model\QuoteException;
 use Magento\QuoteGraphQl\Model\Resolver\PlaceOrder;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -28,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PlaceOrderTranslationTest extends TestCase
+class PlaceOrderExceptionProcessingTest extends TestCase
 {
     /**
      * @var GetCartForCheckout|MockObject
@@ -41,14 +40,9 @@ class PlaceOrderTranslationTest extends TestCase
     private $placeOrderModelMock;
 
     /**
-     * @var AggregateExceptionMessageFormatter|MockObject
+     * @var OrderErrorProcessor|MockObject
      */
-    private $errorMessageFormatterMock;
-
-    /**
-     * @var ErrorMapper|MockObject
-     */
-    private $errorMapperMock;
+    private $orderErrorProcessor;
 
     /**
      * @var PlaceOrder
@@ -59,42 +53,27 @@ class PlaceOrderTranslationTest extends TestCase
     {
         $this->getCartForCheckoutMock = $this->createMock(GetCartForCheckout::class);
         $this->placeOrderModelMock = $this->createMock(PlaceOrderModel::class);
-        $this->errorMessageFormatterMock = $this->createMock(AggregateExceptionMessageFormatter::class);
-        $this->errorMapperMock = $this->createMock(ErrorMapper::class);
+        $this->orderErrorProcessor = $this->createMock(OrderErrorProcessor::class);
 
         $this->placeOrderResolver = new PlaceOrder(
             $this->getCartForCheckoutMock,
             $this->placeOrderModelMock,
             $this->createMock(OrderRepositoryInterface::class),
             $this->createMock(OrderFormatter::class),
-            $this->errorMessageFormatterMock,
-            $this->errorMapperMock
+            $this->orderErrorProcessor
         );
     }
 
     /**
-     * Test that getRawMessage() is called on GraphQlInputException to map the error message properly.
+     * Test that OrderErrorProcessor::execute method is being triggered on thrown LocalizedException
      */
-    public function testGetRawMessageIsCalledForErrorMapping(): void
+    public function testExceptionProcessing(): void
     {
-        $exception = $this->getMockBuilder(GraphQlInputException::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getRawMessage'])
-            ->getMock();
-        $exception->method('getRawMessage')->willReturn('Raw error message');
-        $exception->expects($this->once())->method('getRawMessage');
-
-        $this->errorMapperMock->expects($this->once())
-            ->method('getErrorMessageId')
-            ->with('Raw error message')
-            ->willReturn(1);
-
+        $exception = $this->createMock(GraphQlInputException::class);
         $this->getCartForCheckoutMock->method('execute')->willReturn($this->createMock(Quote::class));
         $this->placeOrderModelMock->method('execute')->willThrowException($exception);
-        $this->errorMessageFormatterMock->method('getFormatted')->willReturn($exception);
 
         $contextMock = $this->createMock(Context::class);
-
         $extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->disableOriginalConstructor()
             ->addMethods(
@@ -106,11 +85,18 @@ class PlaceOrderTranslationTest extends TestCase
         $extensionAttributesMock->method('getStore')->willReturn($this->createMock(StoreInterface::class));
         $contextMock->method('getExtensionAttributes')->willReturn($extensionAttributesMock);
 
+        $field = $this->createMock(Field::class);
+        $info = $this->createMock(ResolveInfo::class);
+        $this->orderErrorProcessor->expects($this->once())
+            ->method('execute')
+            ->with($exception, $field, $contextMock)
+            ->willThrowException($this->createMock(QuoteException::class));
+
         $this->expectException(QuoteException::class);
         $this->placeOrderResolver->resolve(
             $this->createMock(Field::class),
             $contextMock,
-            $this->createMock(ResolveInfo::class),
+            $info,
             null,
             ['input' => ['cart_id' => 'masked_cart_id']]
         );
