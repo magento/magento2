@@ -197,15 +197,10 @@
                     <label>Require email confirmation if email has been changed</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="graphql_share_all_customer_groups" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Share all customer groups via GraphQl</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Option to disable providing all customer group details via GraphQl</comment>
-                </field>
                 <field id="graphql_share_customer_group" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Share the customer group via GraphQl for a customer</label>
+                    <label>Allow to retrieve applied customer group details via GraphQL API</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Option to disable providing customer group details via GraphQl for a customer</comment>
+                    <comment>Option to disable providing customer group details via GraphQl</comment>
                 </field>
             </group>
             <group id="address" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
