@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -47,12 +47,19 @@ define([
         _saveHandler: function (form) {
             var formData = {},
                 requestData = {},
+                counts = {},
                 options = $.data(form, 'validator').settings;
 
             if ($(form).validation('isValid')) {
                 $.each($(form).serializeArray(), function () {
+                    counts[this.name] = (counts[this.name] || 0) + 1;
+
+                    if (formData[this.name]) {
+                        this.name = this.name.replace(new RegExp(/\[\]$/g), '[' + (counts[this.name] - 1) + ']');
+                    }
                     formData[this.name] = this.value || '';
                 });
+
                 requestData = {
                     action: $(form).attr('action'),
                     data: formData

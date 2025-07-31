@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -37,11 +37,11 @@
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
         <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEDescription" />
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductDescriptionWysiwyg"/>
-        <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
+        <executeJS function="hugerte.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
         <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForShortDescription" />
         <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEShortDescription" />
         <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductShortDescriptionWysiwyg"/>
-        <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
+        <executeJS function="hugerte.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
         <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn1" />
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage1" />

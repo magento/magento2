@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch8\SearchAdapter;
 
+use Magento\AdvancedSearch\Model\Client\ClientException;
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\QueryContainerFactory;
@@ -51,21 +52,6 @@ class Adapter implements AdapterInterface
     private QueryContainerFactory $queryContainerFactory;
 
     /**
-     * Empty response from Elasticsearch
-     *
-     * @var array
-     */
-    private static array $emptyRawResponse = [
-        "hits" => [
-            "hits" => []
-        ],
-        "aggregations" => [
-            "price_bucket" => [],
-            "category_bucket" => ["buckets" => []],
-        ]
-    ];
-
-    /**
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
@@ -99,8 +85,9 @@ class Adapter implements AdapterInterface
      *
      * @param RequestInterface $request
      * @return QueryResponse
+     * @throws ClientException
      */
-    public function query(RequestInterface $request) : QueryResponse
+    public function query(RequestInterface $request): QueryResponse
     {
         $client = $this->connectionManager->getConnection();
         $query = $this->mapper->buildQuery($request);
@@ -111,8 +98,7 @@ class Adapter implements AdapterInterface
             $rawResponse = $client->query($query);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            // return empty search result in case an exception is thrown from Elasticsearch
-            $rawResponse = self::$emptyRawResponse;
+            throw new ClientException("Could not perform search query.", $e->getCode(), $e);
         }
 
         $rawDocuments = $rawResponse['hits']['hits'] ?? [];

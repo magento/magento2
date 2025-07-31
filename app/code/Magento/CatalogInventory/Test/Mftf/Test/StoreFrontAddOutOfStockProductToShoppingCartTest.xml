@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
-* Copyright 2024 Adobe
-* All Rights Reserved.
-*/
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,10 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5262"/>
             <group value="cloud"/>
-            <!-- Will be fixed in scope of ACQE-7385 -->
-            <group value="pr_exclude"/>
         </annotations>
-
         <before>
             <!-- Set Enable Inventory Check On Cart Load = No -->
             <magentoCLI command="config:set {{DisableInventoryCheckOnCartLoad.path}} {{DisableInventoryCheckOnCartLoad.value}}" stepKey="disableCartLoad"/>
@@ -46,6 +43,8 @@
             <magentoCLI command="config:set {{EnableInventoryCheckOnCartLoad.path}} {{EnableInventoryCheckOnCartLoad.value}}" stepKey="enableCartLoad"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
+        <!-- Mouse Hover Product On Category Page initial check-->
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProductInitial"/>
         <!-- Open New tab-->
         <openNewTab stepKey="openNewTab"/>
         <!-- Open Product From AdminPage-->
@@ -66,9 +65,9 @@
         <!-- Select Add to cart-->
         <waitForElementClickable selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="toCategory"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="wait"/>
+        <waitForPageLoad stepKey="waitForPage"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsgText}}" stepKey="wait"/>
         <!-- Assert the Error Message-->
-        <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Product that you are trying to add is not available." stepKey="seeErrorMessage"/>
+        <waitForText userInput="Product that you are trying to add is not available." selector="{{StorefrontProductPageSection.errorMsgText}}" stepKey="seeErrorMessage"/>
     </test>
-
 </tests>

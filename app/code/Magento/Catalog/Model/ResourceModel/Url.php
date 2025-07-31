@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel;
@@ -412,7 +412,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implement
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
         }
-        $isActiveExpr = $connection->getCheckSql('c.value_id > 0', 'c.value', 'c.value');
+        $isActiveExpr = $connection->getCheckSql('c.value_id IS NOT NULL', 'c.value', 'd.value');
         $select = $connection->select()->from(
             ['main_table' => $this->getTable('catalog_category_entity')],
             [
