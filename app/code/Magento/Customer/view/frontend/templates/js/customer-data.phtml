@@ -3,6 +3,7 @@
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
+use Magento\Customer\ViewModel\Customer\Data;
 use Magento\Customer\ViewModel\CookieSettings;
 
 /**
@@ -22,7 +23,7 @@ $cookieSettings = $block->getCookieSettings();
 ?>
 <script type="text/x-magento-init">
     {
-        "header": {
+        "*": {
             "Magento_Customer/js/customer-data": {
                 "sectionLoadUrl": "<?= $escaper->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
