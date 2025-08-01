@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\SalesRule;
 
-use Exception;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart;
 use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteMaskFixture;
@@ -24,46 +23,40 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class GetAppliedCartRulesTest extends GraphQlAbstract
 {
-    private const COUPON_1 = 'COUPON1';
-    private const COUPON_2 = 'COUPON2';
-    private const COUPON_3 = 'COUPON3';
-
     /**
      * @var DataFixtureStorage
      */
     private $fixtures;
 
     /**
-     * @return void
-     * @throws LocalizedException
+     * @var Uid
      */
+    private $idEncoder;
+
     protected function setUp(): void
     {
         $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $this->idEncoder = Bootstrap::getObjectManager()->get(Uid::class);
     }
 
     /**
-     * Test to retrieve applied cart rules when promo/graphql/share_applied_sales_rule is enabled.
-     *
-     * @throws Exception
+     * Test to retrieve applied cart rules when promo/graphql/share_applied_cart_rule is enabled.
      */
     #[
-        Config('promo/graphql/share_applied_sales_rule', 1),
-        Config('sales/multicoupon/maximum_number_of_coupons_per_order', 2),
+        Config('promo/graphql/share_applied_cart_rule', true),
+        Config('sales/multicoupon/maximum_number_of_coupons_per_order', '2'),
         DataFixture(SalesRuleFixture::class, [
             'coupon_type' => SalesRule::COUPON_TYPE_SPECIFIC,
-            'coupon_code' => self::COUPON_1,
-            'stop_rules_processing' => false,
+            'coupon_code' => 'COUPON_1',
+            'sort_order' => 10,
+            'stop_rules_processing' => false
         ], as: 'rule1'),
         DataFixture(SalesRuleFixture::class, [
             'coupon_type' => SalesRule::COUPON_TYPE_NO_COUPON,
-            'stop_rules_processing' => false,
+            'sort_order' => 20,
+            'stop_rules_processing' => false
         ], as: 'rule2'),
-        DataFixture(SalesRuleFixture::class, [
-            'coupon_type' => SalesRule::COUPON_TYPE_SPECIFIC,
-            'coupon_code' => self::COUPON_3,
-        ], as: 'rule3'),
-        DataFixture(SalesRuleFixture::class, ['is_active' => 0], as: 'rule4'),
+        DataFixture(SalesRuleFixture::class, ['is_active' => 0, 'sort_order' => 30], as: 'rule3'),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(GuestCart::class, as: 'cart'),
         DataFixture(AddProductToCartFixture::class, [
@@ -77,7 +70,7 @@ class GetAppliedCartRulesTest extends GraphQlAbstract
     {
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
 
-        $this->graphQlMutation($this->getApplyCouponMutation($maskedQuoteId, self::COUPON_1));
+        $this->graphQlMutation($this->getApplyCouponMutation($maskedQuoteId, 'COUPON_1'));
 
         $this->assertEquals(
             $this->fetchAppliedSalesRules(),
@@ -86,17 +79,15 @@ class GetAppliedCartRulesTest extends GraphQlAbstract
     }
 
     /**
-     *  Test to retrieve applied sales rules when promo/graphql/share_applied_sales_rule is disabled.
-     *
-     * @throws Exception
+     * Test to retrieve applied cart rules when promo/graphql/share_applied_cart_rule is disabled.
      */
     #[
-        Config('promo/graphql/share_applied_sales_rule', 0),
+        Config('promo/graphql/share_applied_cart_rule', false),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(GuestCart::class, as: 'cart'),
         DataFixture(AddProductToCartFixture::class, [
             'cart_id' => '$cart.id$',
-            'product_id' => '$product.id$',
+            'product_id' => '$product.id$'
         ]),
         DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask')
     ]
@@ -105,15 +96,40 @@ class GetAppliedCartRulesTest extends GraphQlAbstract
         $this->assertEquals(
             [
                 'cart' => [
-                    'rules' => null,
-                ],
+                    'rules' => null
+                ]
             ],
             $this->graphQlQuery($this->getCartQuery($this->fixtures->get('quoteIdMask')->getMaskedId()))
         );
     }
 
     /**
-     * Get applied sales rules
+     * Test to retrieve applied cart rules when configuration is enabled but no cart rules are applied to the cart.
+     */
+    #[
+        Config('promo/graphql/share_applied_cart_rule', true),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(GuestCart::class, as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, [
+            'cart_id' => '$cart.id$',
+            'product_id' => '$product.id$'
+        ]),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask')
+    ]
+    public function testGetAllCartRulesWhenConfigEnabledButRulesNotApplied(): void
+    {
+        $this->assertEquals(
+            [
+                'cart' => [
+                    'rules' => []
+                ]
+            ],
+            $this->graphQlQuery($this->getCartQuery($this->fixtures->get('quoteIdMask')->getMaskedId()))
+        );
+    }
+
+    /**
+     * Get applied cart rules
      *
      * @return array[]
      */
@@ -123,10 +139,10 @@ class GetAppliedCartRulesTest extends GraphQlAbstract
             'cart' => [
                 'rules' => [
                     [
-                        'name' => $this->fixtures->get('rule1')->getName()
+                        'uid' => $this->idEncoder->encode($this->fixtures->get('rule1')->getId())
                     ],
                     [
-                        'name' => $this->fixtures->get('rule2')->getName()
+                        'uid' => $this->idEncoder->encode($this->fixtures->get('rule2')->getId())
                     ]
                 ]
             ]
@@ -157,7 +173,7 @@ class GetAppliedCartRulesTest extends GraphQlAbstract
     }
 
     /**
-     * Get all sales rules query
+     * Get applied cart rules query
      *
      * @param string $cartId
      * @return string
@@ -168,7 +184,7 @@ class GetAppliedCartRulesTest extends GraphQlAbstract
             query Cart {
                 cart(cart_id: "{$cartId}") {
                     rules {
-                        name
+                        uid
                     }
                 }
             }

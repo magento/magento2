@@ -82,6 +82,7 @@ type WishlistCartUserInputError @doc(description: "Contains details about errors
 
 enum WishlistCartUserInputErrorType @doc(description: "A list of possible error types.") {
     PRODUCT_NOT_FOUND
+    REQUIRED_PARAMETER_MISSING
     NOT_SALABLE
     INSUFFICIENT_STOCK
     UNDEFINED

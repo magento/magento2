@@ -39,5 +39,7 @@
         <element name="totalColumn" type="text" selector=".edit-order-table .col-total .price"/>
         <element name="customOption" type="text" selector=". //dl[@class='item-options']/dt[text()='{{optionValue1}}']/../dd[{{optionValue2}}]" parameterized="true"/>
         <element name="nameOfProduct" type="text" selector="//div[@class='product-title' and contains(text(), '{{productName}}')]" parameterized="true"/>
+        <element name="itemsOrderedStatus" type="text" selector="//table[contains(@class, 'edit-order-table')]//tr[td[contains(@class, 'col-product') and contains(., '{{productSku}}')]]/td[contains(@class, 'col-status')]" parameterized="true"/>
+        <element name="backOrdered" type="text" selector="//table[contains(@class, 'edit-order-table')]//tr[td[contains(@class, 'col-product') and contains(., '{{productSku}}')] ]//td[contains(@class, 'col-ordered-qty')]//tr[th[contains(., 'Backordered')]]/td" parameterized="true"/>
     </section>
 </sections>

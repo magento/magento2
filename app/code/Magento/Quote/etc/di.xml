@@ -181,6 +181,7 @@
                 <item name="The requested qty is not available" xsi:type="string">INSUFFICIENT_STOCK</item>
                 <item name="Not enough items for sale" xsi:type="string">INSUFFICIENT_STOCK</item>
                 <item name="Only %s of %s available" xsi:type="string">INSUFFICIENT_STOCK</item>
+                <item name="You need to choose options for your item." xsi:type="string">REQUIRED_PARAMETER_MISSING</item>
             </argument>
         </arguments>
     </type>

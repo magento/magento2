@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,9 +17,8 @@
         </arguments>
         <waitForElementClickable selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="waitForChangeShippingAddressButton"/>
         <click selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="clickChangeShippingAddressButton"/>
-        <waitForElementVisible selector="{{PayPalPaymentSection.shippingAddressDropdown}}" stepKey="waitForAddressDropdown"/>
-        <selectOption selector ="{{PayPalPaymentSection.shippingAddressDropdown}}" userInput="{{address.shippingCustomerName}} - {{address.ShippingAddress}}" stepKey="selectShippingAddress"/>
-        <waitForElementVisible selector="{{PayPalPaymentSection.selectedShippingAddress(address.ShippingAddress)}}" stepKey="verifyAddressIsSelected"/>
+        <waitForElementClickable selector ="{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}" stepKey="waitForAddressDropdown"/>
+        <executeJS function="document.evaluate(&quot;{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();" stepKey="selectShippingAddress"/>
     </actionGroup>
 </actionGroups>
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,13 +17,11 @@
             <argument name="totalAmount" type="string" defaultValue="$15.00"/>
             <argument name="shippingAddress" type="string" defaultValue="4145 Madison Ave, Culver City, CA 90232"/>
         </arguments>
-        <waitForElementClickable selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" stepKey="waitForAmountButtonToBeClickable"/>
-        <click selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" stepKey="clickAmountToOpen"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.orderTotalTabOnPaypalCheckout}}" stepKey="waitForAmountButtonToBeClickable"/>
+        <click selector="{{PayPalPaymentSection.orderTotalTabOnPaypalCheckout}}" stepKey="clickAmountToOpen"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.subtotal(subtotalAmount)}}" stepKey="assertSubtotal"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.shipping(shippingAmount)}}" stepKey="assertShipping"/>
-        <waitForText selector="{{PayPalPaymentSection.total}}" userInput="{{totalAmount}}" stepKey="assertTotal"/>
-        <waitForElementClickable selector="{{PayPalPaymentSection.close}}" stepKey="waitForCLoseButtonToBeClickable"/>
-        <click selector="{{PayPalPaymentSection.close}}" stepKey="clickCloseButton"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.total(totalAmount)}}" stepKey="assertTotal"/>
         <waitForText selector="{{PayPalPaymentSection.shippingAddress}}" userInput="{{shippingAddress}}" stepKey="assertShippingAddress"/>
     </actionGroup>
 </actionGroups>

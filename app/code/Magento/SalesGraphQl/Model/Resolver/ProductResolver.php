@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\ProductDataProvider;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
  * Fetches the Product data according to the GraphQL schema
@@ -39,14 +39,10 @@ class ProductResolver implements ResolverInterface
         ?array $value = null,
         ?array $args = null
     ) {
-        if (!isset($value['associatedProduct'])) {
-            throw new GraphQlNoSuchEntityException(
-                __("This product is currently out of stock or not available.")
-            );
+        if (!(($value['model'] ?? null) instanceof OrderItemInterface)) {
+            throw new LocalizedException(__('"model" value should be specified'));
         }
-        /** @var Product $product */
-        $product = $value['associatedProduct'];
 
-        return $this->productDataProvider->getProductDataById((int)$product->getId());
+        return $this->productDataProvider->getProductDataById((int)$value['model']->getProductId());
     }
 }
