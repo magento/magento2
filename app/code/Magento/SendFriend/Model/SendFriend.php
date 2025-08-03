@@ -18,9 +18,9 @@ use Magento\Framework\Validator\ValidatorChain;
  * SendFriend Log
  *
  * @method int getIp()
- * @method \Magento\SendFriend\Model\SendFriend setIp(int $value)
+ * @method SendFriend setIp(int $value)
  * @method int getTime()
- * @method \Magento\SendFriend\Model\SendFriend setTime(int $value)
+ * @method SendFriend setTime(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
