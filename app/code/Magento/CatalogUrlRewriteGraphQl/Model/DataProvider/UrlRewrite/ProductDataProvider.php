@@ -47,6 +47,7 @@ class ProductDataProvider implements EntityDataProviderInterface
     ): array {
         $product = $this->productRepository->getById($id, false, $storeId);
         $result = $product->getData();
+        $result['id'] = $id;
         $result['model'] = $product;
         return $result;
     }
