@@ -103,7 +103,7 @@ class AddToCart implements ResolverInterface
         CreateEmptyCartForCustomer $createEmptyCartForCustomer,
         AddProductsToCartService $addProductsToCart,
         CartItemsRequestBuilder $cartItemsRequestBuilder,
-        CartItemFactory $cartItemFactory
+        CartItemFactory $cartItemFactory = null
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
@@ -114,7 +114,7 @@ class AddToCart implements ResolverInterface
         $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
         $this->addProductsToCartService = $addProductsToCart;
         $this->cartItemsRequestBuilder = $cartItemsRequestBuilder;
-        $this->cartItemFactory = $cartItemFactory;
+        $this->cartItemFactory = $cartItemFactory ?: ObjectManager::getInstance()->get(CartItemFactory::class);
     }
 
     /**
