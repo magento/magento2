@@ -25,12 +25,14 @@ class AddProductsToCart
      * @param AddProductsToCartService $addProductsToCartService
      * @param ScopeConfigInterface $scopeConfig
      * @param PrecursorInterface $cartItemPrecursor
+     * @param CartItemFactory $cartItemFactory
      */
     public function __construct(
         private readonly GetCartForUser $getCartForUser,
         private readonly AddProductsToCartService $addProductsToCartService,
         private readonly ScopeConfigInterface $scopeConfig,
-        private readonly PrecursorInterface $cartItemPrecursor
+        private readonly PrecursorInterface $cartItemPrecursor,
+        private readonly CartItemFactory $cartItemFactory
     ) {
     }
 
@@ -53,7 +55,7 @@ class AddProductsToCart
         $cartItemsData = $this->cartItemPrecursor->process($cartItemsData, $context);
         $cartItems = [];
         foreach ($cartItemsData as $cartItemData) {
-            $cartItems[] = (new CartItemFactory())->create($cartItemData);
+            $cartItems[] = $this->cartItemFactory->create($cartItemData);
         }
 
         /** @var AddProductsToCartOutput $addProductsToCartOutput */
