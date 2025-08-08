@@ -77,6 +77,11 @@ class AddToCart implements ResolverInterface
     private $cartItemsRequestBuilder;
 
     /**
+     * @var CartItemFactory
+     */
+    private $cartItemFactory;
+
+    /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
@@ -86,6 +91,7 @@ class AddToCart implements ResolverInterface
      * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
      * @param AddProductsToCartService $addProductsToCart
      * @param CartItemsRequestBuilder $cartItemsRequestBuilder
+     * @param CartItemFactory $cartItemFactory
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
@@ -96,7 +102,8 @@ class AddToCart implements ResolverInterface
         LocaleQuantityProcessor $quantityProcessor,
         CreateEmptyCartForCustomer $createEmptyCartForCustomer,
         AddProductsToCartService $addProductsToCart,
-        CartItemsRequestBuilder $cartItemsRequestBuilder
+        CartItemsRequestBuilder $cartItemsRequestBuilder,
+        CartItemFactory $cartItemFactory
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
@@ -107,6 +114,7 @@ class AddToCart implements ResolverInterface
         $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
         $this->addProductsToCartService = $addProductsToCart;
         $this->cartItemsRequestBuilder = $cartItemsRequestBuilder;
+        $this->cartItemFactory = $cartItemFactory;
     }
 
     /**
@@ -164,7 +172,7 @@ class AddToCart implements ResolverInterface
             $item->getProduct()->setDisableAddToCart($disableAddToCart);
 
             $cartItemData = $this->cartItemsRequestBuilder->build($item);
-            $cartItem = (new CartItemFactory())->create($cartItemData);
+            $cartItem = $this->cartItemFactory->create($cartItemData);
 
             /** @var AddProductsToCartOutput $addProductsToCartOutput */
             $addProductsToCartOutput = $this->addProductsToCartService->execute($maskedCartId, [$cartItem]);
