@@ -7,6 +7,7 @@ declare (strict_types = 1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver\Wishlist;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
