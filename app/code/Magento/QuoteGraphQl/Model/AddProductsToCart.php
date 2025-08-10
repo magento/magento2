@@ -34,7 +34,6 @@ class AddProductsToCart
         private readonly PrecursorInterface $cartItemPrecursor,
         private readonly CartItemFactory $cartItemFactory
     ) {
-        $this->cartItemFactory = $cartItemFactory;
     }
 
     /**
