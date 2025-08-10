@@ -19,7 +19,7 @@ use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\CartItem\PrecursorInterface;
 
 class AddProductsToCart
-{   
+{
     /**
      * @param GetCartForUser $getCartForUser
      * @param AddProductsToCartService $addProductsToCartService
