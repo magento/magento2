@@ -28,4 +28,8 @@
         <data key="code" unique="suffix">readyforpickup</data>
         <data key="label" unique="suffix">Ready For Pickup</data>
     </entity>
+    <entity name="readyToPickup">
+        <data key="code" unique="suffix">readytopickup</data>
+        <data key="label" unique="suffix">Ready To Pickup</data>
+    </entity>
 </entities>
