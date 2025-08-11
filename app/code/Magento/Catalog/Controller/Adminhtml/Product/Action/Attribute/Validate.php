@@ -5,9 +5,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
+use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute as AttributeAction;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute as AttributeAction;
 use Magento\Framework\App\ObjectManager;
 
 class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
@@ -69,6 +70,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
                         continue;
                     }
                     $data->setData($attributeCode, $value);
+                    $this->updateRestrictionsDateRanges($attribute, $attributeCode, $attributesData);
                     $attribute->getBackend()->validate($data);
                 }
             }
@@ -90,5 +92,26 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
         }
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());
+    }
+
+    /**
+     * Set restrictions for date ranges
+     *
+     * @param Attribute $attribute
+     * @param string $attributeCode
+     * @param array $attributesData
+     * @return void
+     */
+    protected function updateRestrictionsDateRanges(&$attribute, $attributeCode, $attributesData)
+    {
+        if ($attributeCode == 'special_from_date' && !empty($attributesData['special_to_date'])) {
+            $attribute->setMaxValue($attributesData['special_to_date']);
+        }
+        if ($attributeCode == 'news_from_date' && !empty($attributesData['news_to_date'])) {
+            $attribute->setMaxValue($attributesData['news_to_date']);
+        }
+        if ($attributeCode == 'custom_design_from' && !empty($attributesData['custom_design_to'])) {
+            $attribute->setMaxValue($attributesData['custom_design_to']);
+        }
     }
 }
