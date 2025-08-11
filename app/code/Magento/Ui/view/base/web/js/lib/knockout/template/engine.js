@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 define([
     'jquery',
@@ -17,13 +17,13 @@ define([
         sources = {};
 
     function isInViewport(el) {
-        if (!el || (!_.isFunction(el.checkVisibility)) || !el.checkVisibility()) {
+        if (!el || !_.isFunction(el.checkVisibility) || !el.checkVisibility()) {
             return false;
         }
 
         const rect = el.getBoundingClientRect(),
-            vWidth = window.innerWidth || doc.documentElement.clientWidth,
-            vHeight = window.innerHeight || doc.documentElement.clientHeight;
+            vWidth = window.innerWidth || document.documentElement.clientWidth,
+            vHeight = window.innerHeight || document.documentElement.clientHeight;
 
         // Check if the element is out of bounds
         if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight) {
@@ -40,8 +40,8 @@ define([
     RemoteTemplateEngine = function () {
         // Instance reference for closure.
         var engine = this,
-        // Decorate the builtin Knockout "template" binding to track synchronous template renders.
-        origUpdate = ko.bindingHandlers.template.update;
+            // Decorate the builtin Knockout "template" binding to track synchronous template renders.
+            origUpdate = ko.bindingHandlers.template.update;
 
         /**
          * Counter to track the number of currently running render tasks (both synchronous and asynchronous).
@@ -79,16 +79,16 @@ define([
             /*eslint-enable no-unused-vars*/
             if (isInViewport(element.previousElementSibling) || isInViewport(element.parentElement)) {
                 return ko.bindingHandlers.template._updateTemplate.apply(this, arguments);
-            } else {
-                (events => {
-                    const lazyLoadJs = () => {
-                        events.forEach(type => window.removeEventListener(type, lazyLoadJs))
-                        return ko.bindingHandlers.template._updateTemplate.apply(this, arguments);
-                    };
-
-                    events.forEach(type => window.addEventListener(type, lazyLoadJs, {once: true}))
-                })(['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown']);
             }
+            (events => {
+                const lazyLoadJs = () => {
+                    events.forEach(type => window.removeEventListener(type, lazyLoadJs));
+                    return ko.bindingHandlers.template._updateTemplate.apply(this, arguments);
+                };
+
+                events.forEach(type => window.addEventListener(type, lazyLoadJs, {once: true}));
+            })(['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown']);
+
         };
 
         /**
@@ -101,7 +101,10 @@ define([
          * @param {ko.bindingContext} bindingContext
          * @returns {*}
          */
-        ko.bindingHandlers.template._updateTemplate = function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        ko.bindingHandlers.template._updateTemplate = function (
+            // eslint-disable-next-line no-unused-vars
+            element, valueAccessor, allBindings, viewModel, bindingContext
+        ) {
             /*eslint-enable no-unused-vars*/
             var options = ko.utils.peekObservable(valueAccessor()),
                 templateName,
@@ -131,6 +134,7 @@ define([
             }
 
             return updated;
+            /* eslint-enable no-unused-vars */
         };
     };
 

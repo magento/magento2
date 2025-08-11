@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 /** Creates scope binding and registers in to ko.bindingHandlers object */
 define([
@@ -14,6 +14,9 @@ define([
 ], function (ko, registry, $t, renderer, $, consoleLogger, _) {
     'use strict';
 
+    const vWidth = window.innerWidth || document.documentElement.clientWidth,
+        vHeight = window.innerHeight || document.documentElement.clientHeight;
+
     /**
      * Check if an element is visible in the viewport
      *
@@ -21,13 +24,11 @@ define([
      * @returns bool
      */
     function isInViewport(el) {
-        if ((!_.isFunction(el.checkVisibility)) || !el.checkVisibility()) {
+        if (!_.isFunction(el.checkVisibility) || !el.checkVisibility()) {
             return false;
         }
 
-        const rect = el.getBoundingClientRect(),
-            vWidth = window.innerWidth || doc.documentElement.clientWidth,
-            vHeight = window.innerHeight || doc.documentElement.clientHeight;
+        const rect = el.getBoundingClientRect();
 
         // Check if the element is out of bounds
         if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight) {
@@ -73,11 +74,11 @@ define([
         } else {
             (events => {
                 const lazyLoadJs = () => {
-                    events.forEach(type => window.removeEventListener(type, lazyLoadJs))
+                    events.forEach(type => window.removeEventListener(type, lazyLoadJs));
                     runApplyComponents(el, bindingContext, promise, component);
                 };
 
-                events.forEach(type => window.addEventListener(type, lazyLoadJs, {once: true}))
+                events.forEach(type => window.addEventListener(type, lazyLoadJs, {once: true}));
             })(['touchstart', 'mouseover', 'wheel', 'scroll', 'keydown']);
         }
     }
