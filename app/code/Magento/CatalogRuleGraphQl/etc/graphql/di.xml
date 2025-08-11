@@ -9,12 +9,4 @@
     <type name="Magento\CatalogRule\Pricing\Price\CatalogRulePrice">
         <plugin name="update_catalog_rule_price_for_logged_in_customer_group" type="Magento\CatalogRuleGraphQl\Plugin\Pricing\Price\UpdateCatalogRulePrice"/>
     </type>
-    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
-        <arguments>
-            <argument name="extendedConfigData" xsi:type="array">
-                <item name="share_all_catalog_rules" xsi:type="string">catalog/rule/share_all_catalog_rules</item>
-                <item name="share_applied_catalog_rules" xsi:type="string">catalog/rule/share_applied_catalog_rules</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
