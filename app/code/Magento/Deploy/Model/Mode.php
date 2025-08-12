@@ -100,10 +100,10 @@ class Mode
         Reader $reader,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
-        ConfigProvider $configProvider = null,
-        ProcessorFacadeFactory $processorFacadeFactory = null,
-        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ?ConfigProvider $configProvider = null,
+        ?ProcessorFacadeFactory $processorFacadeFactory = null,
+        ?EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
+        ?MaintenanceModeEnabler $maintenanceModeEnabler = null
     ) {
         $this->input = $input;
         $this->output = $output;

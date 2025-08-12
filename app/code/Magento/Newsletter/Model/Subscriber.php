@@ -187,13 +187,13 @@ class Subscriber extends AbstractModel
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         StateInterface $inlineTranslation,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        DateTime $dateTime = null,
-        CustomerInterfaceFactory $customerFactory = null,
-        DataObjectHelper $dataObjectHelper = null,
-        SubscriptionManagerInterface $subscriptionManager = null
+        ?DateTime $dateTime = null,
+        ?CustomerInterfaceFactory $customerFactory = null,
+        ?DataObjectHelper $dataObjectHelper = null,
+        ?SubscriptionManagerInterface $subscriptionManager = null
     ) {
         $this->_newsletterData = $newsletterData;
         $this->_scopeConfig = $scopeConfig;

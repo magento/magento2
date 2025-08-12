@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_Store"/>
             <module name="Magento_Directory"/>
+            <module name="Magento_Csp"/>
         </sequence>
     </module>
 </config>

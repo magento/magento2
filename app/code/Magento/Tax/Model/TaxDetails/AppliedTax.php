@@ -93,7 +93,7 @@ class AppliedTax extends AbstractExtensibleModel implements AppliedTaxInterface
      * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
      * @return $this
      */
-    public function setRates(array $rates = null)
+    public function setRates(?array $rates = null)
     {
         return $this->setData(self::KEY_RATES, $rates);
     }

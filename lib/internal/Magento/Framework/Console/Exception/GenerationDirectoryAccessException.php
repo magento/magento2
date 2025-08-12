@@ -17,7 +17,7 @@ class GenerationDirectoryAccessException extends FileSystemException
     /**
      * @inheritdoc
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
+    public function __construct(?Phrase $phrase = null, ?\Exception $cause = null, $code = 0)
     {
         $phrase = $phrase ?: new Phrase(
             'Command line user does not have read and write permissions on '

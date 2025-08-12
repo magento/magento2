@@ -65,8 +65,8 @@ class ToDataModel
         \Magento\SalesRule\Api\Data\ConditionInterfaceFactory $conditionDataFactory,
         \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory $ruleLabelFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        Json $serializer = null,
-        RuleExtensionFactory $extensionFactory = null
+        ?Json $serializer = null,
+        ?RuleExtensionFactory $extensionFactory = null
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->ruleDataFactory = $ruleDataFactory;

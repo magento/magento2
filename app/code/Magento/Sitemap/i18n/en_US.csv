@@ -21,6 +21,7 @@ Catalog,Catalog
 "We can't generate the sitemap right now.","We can't generate the sitemap right now."
 "We can't find a sitemap to generate.","We can't find a sitemap to generate."
 "You saved the sitemap.","You saved the sitemap."
+"One or more sitemap generation errors occurred: %1","One or more sitemap generation errors occurred: %1"
 "The priority must be between 0 and 1.","The priority must be between 0 and 1."
 Always,Always
 Hourly,Hourly
@@ -47,6 +48,7 @@ Priority,Priority
 "Products Options","Products Options"
 "Add Images into Sitemap","Add Images into Sitemap"
 "CMS Pages Options","CMS Pages Options"
+"Store Url Options","Store Url Options"
 "Generation Settings","Generation Settings"
 Enabled,Enabled
 "Error Email Recipient","Error Email Recipient"
@@ -64,4 +66,3 @@ ID,ID
 "Link for Google","Link for Google"
 "Last Generated","Last Generated"
 Action,Action
-"Store Url Options","Store Url Options"

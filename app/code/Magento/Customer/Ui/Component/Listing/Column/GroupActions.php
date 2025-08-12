@@ -64,7 +64,7 @@ class GroupActions extends Column
         Escaper $escaper,
         array $components = [],
         array $data = [],
-        GroupManagementInterface $groupManagement = null
+        ?GroupManagementInterface $groupManagement = null
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->escaper = $escaper;

@@ -66,7 +66,7 @@ class DataProvider implements DataProviderInterface
         \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
         \Magento\Framework\Component\DirSearch $dirSearch,
         \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
-        \Magento\Framework\App\Utility\Files $filesUtility = null
+        ?\Magento\Framework\App\Utility\Files $filesUtility = null
     ) {
         $this->appState = $appState;
         $this->config = $config;

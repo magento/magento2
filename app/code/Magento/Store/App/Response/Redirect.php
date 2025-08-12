@@ -104,7 +104,7 @@ class Redirect implements RedirectInterface
         SessionManagerInterface $session,
         SidResolverInterface $sidResolver,
         UrlInterface $urlBuilder,
-        Uri $uri = null,
+        ?Uri $uri = null,
         $canUseSessionIdInParam = true,
         ?State $appState = null,
         ?ScopeConfigInterface $scopeConfig = null

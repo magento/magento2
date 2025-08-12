@@ -83,7 +83,7 @@ class GuestPaymentInformationManagementPlugin
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
+        ?\Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if ($this->persistenceSessionHelper->isPersistent()
             && !$this->customerSession->isLoggedIn()

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -204,6 +204,7 @@
         <data key="password">123123UPD</data>
         <data key="password_confirmation">123123UPD</data>
         <data key="current_password">{{_ENV.MAGENTO_ADMIN_PASSWORD}}</data>
+        <data key="role">Administrators</data>
         <array key="roles">
             <item>1</item>
         </array>

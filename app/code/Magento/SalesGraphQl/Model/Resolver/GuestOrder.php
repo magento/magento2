@@ -20,7 +20,7 @@ use Magento\SalesGraphQl\Model\Order\Token;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Retrieve guest order based
+ * Retrieve guest order details
  */
 class GuestOrder implements ResolverInterface
 {
@@ -47,12 +47,12 @@ class GuestOrder implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
-        list($number, $email, $postcode) = $this->getNumberEmailPostcode($args['input'] ?? []);
+        list($number, $email, $lastname) = $this->getNumberEmailLastname($args['input'] ?? []);
         $order = $this->getOrder($number);
-        $this->validateOrder($order, $postcode, $email);
+        $this->validateOrder($order, $lastname, $email);
         return $this->orderFormatter->format($order);
     }
 
@@ -82,35 +82,32 @@ class GuestOrder implements ResolverInterface
      * Ensure the order matches the provided criteria
      *
      * @param OrderInterface $order
-     * @param string $postcode
+     * @param string $lastname
      * @param string $email
      * @return void
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
      */
-    private function validateOrder(OrderInterface $order, string $postcode, string $email): void
+    private function validateOrder(OrderInterface $order, string $lastname, string $email): void
     {
-        if ($order->getBillingAddress()->getPostcode() !== $postcode) {
-            $this->cannotLocateOrder();
-        }
-
-        if ($order->getBillingAddress()->getEmail() !== $email) {
+        $billingAddress = $order->getBillingAddress();
+        if ($billingAddress->getLastname() !== $lastname || $billingAddress->getEmail() !== $email) {
             $this->cannotLocateOrder();
         }
 
         if ($order->getCustomerId()) {
-            $this->customerHasToLogin();
+            throw new GraphQlAuthorizationException(__('Please login to view the order.'));
         }
     }
 
     /**
-     * Retrieve number, email and postcode from input
+     * Retrieve order number, email, and lastname from input
      *
      * @param array $input
      * @return array
      * @throws GraphQlNoSuchEntityException
      */
-    private function getNumberEmailPostcode(array $input): array
+    private function getNumberEmailLastname(array $input): array
     {
         if (isset($input['token'])) {
             $data = $this->token->decrypt($input['token']);
@@ -119,10 +116,10 @@ class GuestOrder implements ResolverInterface
             }
             return $data;
         }
-        if (!isset($input['number']) || !isset($input['email']) || !isset($input['postcode'])) {
+        if (!isset($input['number']) || !isset($input['email']) || !isset($input['lastname'])) {
             $this->cannotLocateOrder();
         }
-        return [$input['number'], $input['email'], $input['postcode']];
+        return [$input['number'], $input['email'], $input['lastname']];
     }
 
     /**
@@ -134,16 +131,5 @@ class GuestOrder implements ResolverInterface
     private function cannotLocateOrder(): void
     {
         throw new GraphQlNoSuchEntityException(__('We couldn\'t locate an order with the information provided.'));
-    }
-
-    /**
-     * Throw exception when the guest checkout is not enabled or order is customer order
-     *
-     * @return void
-     * @throws GraphQlAuthorizationException
-     */
-    private function customerHasToLogin(): void
-    {
-        throw new GraphQlAuthorizationException(__('Please login to view the order.'));
     }
 }

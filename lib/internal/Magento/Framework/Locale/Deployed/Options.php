@@ -67,7 +67,7 @@ class Options implements OptionInterface
         State $state,
         AvailableLocalesInterface $availableLocales,
         DesignInterface $design,
-        DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->localeLists = $localeLists;
         $this->state = $state;

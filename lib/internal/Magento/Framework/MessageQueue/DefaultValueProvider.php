@@ -42,7 +42,7 @@ class DefaultValueProvider
     public function __construct(
         $connection = 'db',
         $exchange = 'magento',
-        DeploymentConfig $config = null
+        ?DeploymentConfig $config = null
     ) {
         $this->connection = $connection;
         $this->exchange = $exchange;

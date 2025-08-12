@@ -757,7 +757,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testGetTypeNonExistentType()
     {
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage('Email template \'foo\' is not defined.');
+        $this->expectExceptionMessage('Email template is not defined.');
 
         $this->mockModel();
         $this->model->setId('foo');

@@ -49,8 +49,8 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(

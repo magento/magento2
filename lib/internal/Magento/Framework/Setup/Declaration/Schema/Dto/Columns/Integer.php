@@ -64,13 +64,13 @@ class Integer extends Column implements
         string $name,
         string $type,
         Table $table,
-        int $padding = null,
+        ?int $padding = null,
         bool $nullable = true,
         bool $unsigned = false,
         bool $identity = false,
-        int $default = null,
-        string $comment = null,
-        string $onCreate = null
+        ?int $default = null,
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->nullable = $nullable;

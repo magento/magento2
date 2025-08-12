@@ -94,7 +94,7 @@ class Form extends \Magento\Framework\View\Element\Template
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Url $customerUrl,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->urlEncoder = $urlEncoder;
         $this->_reviewData = $reviewData;

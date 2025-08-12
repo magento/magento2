@@ -45,7 +45,7 @@ class Mail implements MailInterface
         ConfigInterface $contactsConfig,
         TransportBuilder $transportBuilder,
         StateInterface $inlineTranslation,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->contactsConfig = $contactsConfig;
         $this->transportBuilder = $transportBuilder;

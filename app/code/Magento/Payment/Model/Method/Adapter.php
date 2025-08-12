@@ -115,10 +115,10 @@ class Adapter implements MethodInterface, SaleOperationInterface
         $code,
         $formBlockType,
         $infoBlockType,
-        CommandPoolInterface $commandPool = null,
-        ValidatorPoolInterface $validatorPool = null,
-        CommandManagerInterface $commandExecutor = null,
-        LoggerInterface $logger = null
+        ?CommandPoolInterface $commandPool = null,
+        ?ValidatorPoolInterface $validatorPool = null,
+        ?CommandManagerInterface $commandExecutor = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->valueHandlerPool = $valueHandlerPool;
         $this->validatorPool = $validatorPool;
@@ -277,7 +277,7 @@ class Adapter implements MethodInterface, SaleOperationInterface
     /**
      * @inheritdoc
      */
-    public function isAvailable(CartInterface $quote = null)
+    public function isAvailable(?CartInterface $quote = null)
     {
         if (!$this->isActive($quote ? $quote->getStoreId() : null)) {
             return false;

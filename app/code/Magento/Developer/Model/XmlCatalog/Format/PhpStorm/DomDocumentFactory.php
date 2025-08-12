@@ -26,7 +26,7 @@ class DomDocumentFactory
     /**
      * {@inheritdoc}
      */
-    public function create(string $data = null)
+    public function create(?string $data = null)
     {
         $dom = $this->documentFactory->create($data);
 

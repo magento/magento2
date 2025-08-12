@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -23,5 +23,6 @@
         <element name="pageNumber" type="text" selector="//*[@class='order-products-toolbar toolbar bottom']//a[contains(@class, 'page')]//span[2][contains(text() ,'{{var1}}')]" parameterized="true"/>
         <element name="perPage" type="select" selector="//*[@class='order-products-toolbar toolbar bottom']//select[@id='limiter']"/>
         <element name="rowsInColumn" type="text" selector="//tbody/tr/td[contains(@class, '{{column}}')]" parameterized="true"/>
+        <element name="viewOrderByOrderID" type="button" selector="//td[@data-th='Order #' and contains(text(), '{{orderID}}')]/following-sibling::td[@data-th='Actions']//a[contains(@class, 'action view')]//span" parameterized="true"/>
     </section>
 </sections>

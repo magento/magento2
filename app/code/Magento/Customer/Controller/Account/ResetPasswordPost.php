@@ -47,7 +47,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
         Session $customerSession,
         AccountManagementInterface $accountManagement,
         CustomerRepositoryInterface $customerRepository,
-        CredentialsValidator $credentialsValidator = null
+        ?CredentialsValidator $credentialsValidator = null
     ) {
         $this->session = $customerSession;
         $this->accountManagement = $accountManagement;

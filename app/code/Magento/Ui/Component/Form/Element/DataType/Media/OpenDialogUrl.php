@@ -23,7 +23,7 @@ class OpenDialogUrl
     /**
      * @param string $url
      */
-    public function __construct(string $url = null)
+    public function __construct(?string $url = null)
     {
         $this->openDialogUrl = $url ?? self::DEFAULT_OPEN_DIALOG_URL;
     }

@@ -54,8 +54,8 @@ class AverageRating implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('Value must contain "model" property.'));

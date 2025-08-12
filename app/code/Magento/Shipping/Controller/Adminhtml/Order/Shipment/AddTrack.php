@@ -60,9 +60,9 @@ class AddTrack extends Action implements HttpPostActionInterface
     public function __construct(
         Action\Context $context,
         ShipmentLoader $shipmentLoader,
-        ShipmentRepositoryInterface $shipmentRepository = null,
-        ShipmentTrackInterfaceFactory $trackFactory = null,
-        SerializerInterface $serializer = null
+        ?ShipmentRepositoryInterface $shipmentRepository = null,
+        ?ShipmentTrackInterfaceFactory $trackFactory = null,
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($context);
 

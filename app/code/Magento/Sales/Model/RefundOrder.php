@@ -130,8 +130,8 @@ class RefundOrder implements RefundOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         return $this->orderMutex->execute(
             (int) $orderId,
@@ -169,8 +169,8 @@ class RefundOrder implements RefundOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $order = $this->orderRepository->get($orderId);
         $creditmemo = $this->creditmemoDocumentFactory->createFromOrder(

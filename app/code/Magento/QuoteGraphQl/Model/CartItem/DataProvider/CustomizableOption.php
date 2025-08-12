@@ -36,7 +36,7 @@ class CustomizableOption
      */
     public function __construct(
         CustomizableOptionValueInterface $customOptionValueDataProvider,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->customizableOptionValue = $customOptionValueDataProvider;
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()

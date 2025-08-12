@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyAssociatedProductChangePositionForGroupedProductActionGroup" extends="AdminVerifyAssociatedProductForGroupedProductActionGroup">
+        <remove keyForRemoval="seeProductPosition"/>
+        <fillField userInput="{{position}}" selector="{{AdminGroupedProductOptionGridSection.productPosition(index)}}" stepKey="seeProductPosition"/>
+        <click selector="{{AdminGroupedProductOptionGridSection.productPosition(index)}}" stepKey="checkProductPosition"/>
+        <click  selector="{{AdminGroupedProductOptionGridSection.productPrice(index)}}" stepKey="clickProductPriceForProductPositionUpdate"/>
+    </actionGroup>
+</actionGroups>

@@ -1,19 +1,33 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\AdvancedPricingImportExport\Controller\Adminhtml\Export;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing as ExportAdvancedPricing;
 use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\ImportExport\Model\Export\EntityFiltersProviderInterface;
 
 class GetFilter extends ExportController implements HttpGetActionInterface, HttpPostActionInterface
 {
+    /**
+     * @param Context $context
+     * @param EntityFiltersProviderInterface $filtersProvider
+     */
+    public function __construct(
+        Context $context,
+        private readonly EntityFiltersProviderInterface $filtersProvider
+    ) {
+        parent::__construct($context);
+    }
+
     /**
      * Get grid-filter of entity attributes action.
      *
@@ -34,9 +48,7 @@ class GetFilter extends ExportController implements HttpGetActionInterface, Http
                 /** @var $export \Magento\ImportExport\Model\Export */
                 $export = $this->_objectManager->create(\Magento\ImportExport\Model\Export::class);
                 $export->setData($data);
-                $attrFilterBlock->prepareCollection(
-                    $export->filterAttributeCollection($export->getEntityAttributeCollection())
-                );
+                $attrFilterBlock->prepareCollection($this->filtersProvider->getFilters($export));
                 return $resultLayout;
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());

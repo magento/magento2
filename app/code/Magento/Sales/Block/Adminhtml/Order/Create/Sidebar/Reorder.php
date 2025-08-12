@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
 
@@ -11,7 +11,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml sales order create sidebar cart block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
@@ -24,8 +23,6 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     protected $_sidebarStorageAction = 'add_order_item';
 
     /**
-     * Orders factory
-     *
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_ordersFactory;

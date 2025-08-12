@@ -58,7 +58,7 @@ class ReadFile implements ReadFileInterface
         DriverInterface $driver,
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        Filesystem $filesystem = null
+        ?Filesystem $filesystem = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;

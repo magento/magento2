@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -37,6 +37,7 @@
         <element name="next" type="button" selector="button.button.action.continue.primary" timeout="30"/>
         <element name="firstShippingMethod" type="radio" selector="//*[@id='checkout-shipping-method-load']//input[@class='radio']"/>
         <element name="defaultShipping" type="button" selector=".billing-address-details"/>
+        <element name="billingAddressDetails" type="text" selector=".billing-address-details"/>
         <element name="state" type="button" selector="//*[text()='Alabama']"/>
         <element name="stateInput" type="input" selector="input[name=region]"/>
         <element name="regionOptions" type="select" selector="select[name=region_id] option"/>

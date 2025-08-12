@@ -68,7 +68,7 @@ class GetToken extends AbstractExpress implements HttpGetActionInterface
         \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Customer\Model\Url $customerUrl,
-        \Psr\Log\LoggerInterface $logger = null
+        ?\Psr\Log\LoggerInterface $logger = null
     ) {
         $this->logger = $logger ?: ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
         parent::__construct(

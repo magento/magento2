@@ -28,7 +28,7 @@ interface ImageProcessorInterface
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
         $entityType,
-        CustomAttributesDataInterface $previousCustomerData = null
+        ?CustomAttributesDataInterface $previousCustomerData = null
     );
 
     /**

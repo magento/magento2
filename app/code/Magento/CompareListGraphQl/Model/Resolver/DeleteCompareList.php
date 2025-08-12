@@ -80,8 +80,8 @@ class DeleteCompareList implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (empty($args['uid'])) {
             throw new GraphQlInputException(__('"uid" value must be specified'));

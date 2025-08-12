@@ -74,8 +74,8 @@ class SessionCleaner implements SessionCleanerInterface
         VisitorCollectionFactory $visitorCollectionFactory,
         SessionManagerInterface $sessionManager,
         SaveHandlerInterface $saveHandler,
-        CustomerResourceModel $customerResourceModel = null,
-        VisitorResourceModel $visitorResourceModel = null
+        ?CustomerResourceModel $customerResourceModel = null,
+        ?VisitorResourceModel $visitorResourceModel = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->dateTimeFactory = $dateTimeFactory;

@@ -46,8 +46,8 @@ class Form extends \Magento\Framework\App\Action\Action implements HttpGetAction
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-        CustomerSession $customerSession = null,
-        GuestHelper $guestHelper = null
+        ?CustomerSession $customerSession = null,
+        ?GuestHelper $guestHelper = null
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;

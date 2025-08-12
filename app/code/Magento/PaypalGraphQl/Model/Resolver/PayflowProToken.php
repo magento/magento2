@@ -60,8 +60,8 @@ class PayflowProToken implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $cartId = $args['input']['cart_id'] ?? '';
         $urls = $args['input']['urls'] ?? null ;

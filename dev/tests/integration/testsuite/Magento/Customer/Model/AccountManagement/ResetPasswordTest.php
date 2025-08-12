@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,9 @@ class ResetPasswordTest extends TestCase
             1
         );
         $customerSecure = $this->customerRegistry->retrieveSecureData(1);
-        $mailTemplate = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $mailTemplate = quoted_printable_decode(
+            $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString()
+        );
 
         $this->assertEquals(
             1,

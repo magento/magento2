@@ -24,7 +24,7 @@ interface SenderInterface
     public function send(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\CreditmemoInterface $creditmemo,
-        \Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\CreditmemoCommentCreationInterface $comment = null,
         $forceSyncMode = false
     );
 }

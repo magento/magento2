@@ -128,8 +128,8 @@ class Filesystem
         \Magento\Framework\Filesystem\Driver\File $driverFile,
         \Magento\Store\Model\Config\StoreView $storeView,
         \Magento\Framework\ShellInterface $shell,
-        UserCollection $userCollection = null,
-        Locale $locale = null
+        ?UserCollection $userCollection = null,
+        ?Locale $locale = null
     ) {
         $this->writer = $writer;
         $this->reader = $reader;

@@ -37,8 +37,8 @@ class ProductReviewRatingValueMetadata implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['values'])) {
             throw new GraphQlInputException(__('Value must contain "values" property.'));

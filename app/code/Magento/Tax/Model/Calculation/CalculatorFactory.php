@@ -55,8 +55,8 @@ class CalculatorFactory
     public function create(
         $type,
         $storeId,
-        CustomerAddress $billingAddress = null,
-        CustomerAddress $shippingAddress = null,
+        ?CustomerAddress $billingAddress = null,
+        ?CustomerAddress $shippingAddress = null,
         $customerTaxClassId = null,
         $customerId = null
     ) {

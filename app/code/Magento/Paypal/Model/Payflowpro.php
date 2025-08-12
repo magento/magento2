@@ -317,8 +317,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         ConfigInterfaceFactory $configFactory,
         Gateway $gateway,
         HandlerInterface $errorHandler,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->storeManager = $storeManager;
@@ -348,7 +348,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable($quote) && $this->getConfig()->isMethodAvailable($this->getCode());
     }

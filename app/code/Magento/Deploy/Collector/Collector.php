@@ -72,7 +72,7 @@ class Collector implements CollectorInterface
         SourcePool $sourcePool,
         FileNameResolver $fileNameResolver,
         PackageFactory $packageFactory,
-        Manager $moduleManager = null
+        ?Manager $moduleManager = null
     ) {
         $this->sourcePool = $sourcePool;
         $this->fileNameResolver = $fileNameResolver;

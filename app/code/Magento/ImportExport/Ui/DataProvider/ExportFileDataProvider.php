@@ -66,7 +66,7 @@ class ExportFileDataProvider extends DataProvider
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         DriverInterface $file,
         Filesystem $filesystem,
-        File $fileIO = null,
+        ?File $fileIO = null,
         array $meta = [],
         array $data = []
     ) {

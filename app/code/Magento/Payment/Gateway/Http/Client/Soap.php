@@ -42,7 +42,7 @@ class Soap implements ClientInterface
     public function __construct(
         Logger $logger,
         ClientFactory $clientFactory,
-        ConverterInterface $converter = null
+        ?ConverterInterface $converter = null
     ) {
         $this->logger = $logger;
         $this->converter = $converter;

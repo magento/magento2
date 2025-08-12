@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAssertCartPriceRuleWithShippingMethodSetAsConditionTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Cart price rules"/>
+            <title value="Assert cart price rule with shipping conditions"/>
+            <description value="In Storefront assert cart price rule with shipping method condition is successfully applied"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-9560"/>
+            <group value="shipping"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <createData entity="ApiSimpleProductWithCustomPrice" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create cart price rule with shipping method condition -->
+            <!-- Delete existing cart price rule -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllExistingCartPriceRules"/>
+            <actionGroup ref="AdminOpenNewCartPriceRuleFormPageActionGroup" stepKey="createCartPriceRule"/>
+            <actionGroup ref="AdminCartPriceRuleFillMainInfoActionGroup" stepKey="fillCartPriceRuleMainInfo">
+                <argument name="name" value="{{CartPriceRuleFreeShippingWithCouponAppliedOnly.name}}"/>
+                <argument name="description" value="{{CartPriceRuleFreeShippingWithCouponAppliedOnly.description}}"/>
+            </actionGroup>
+            <!-- Specify coupon -->
+            <actionGroup ref="AdminCartPriceRuleFillCouponInfoActionGroup" stepKey="fillCartPriceRuleCouponInfo"/>
+            <!-- Add condition for the cart price rule (If ALL of these conditions are TRUE : Shipping Method is [flatrate] Fixed) -->
+            <actionGroup ref="AdminCartPriceRuleFillShippingConditionActionGroup" stepKey="setCartAttributeConditionForCartPriceRule"/>
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="fillCartPriceRuleActionsSection">
+                <argument name="rule" value="CartPriceRuleFreeShippingWithCouponAppliedOnly"/>
+            </actionGroup>
+            <!-- Click on apply to shipping amount-->
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionShippingAmountActionGroup" stepKey="clickOnApplyToShippingMethod"/>
+            <!-- In action tab under Free Shipping select For shipment with matching items  -->
+            <actionGroup ref="AdminCreateCartPriceRuleActionsSectionFreeShippingActionGroup" stepKey="fillCartPriceRuleFreeShippingActionsSection">
+                <argument name="freeShippingOption" value="{{CartPriceRuleFreeShippingWithCouponAppliedOnly.simple_free_shipping}}"/>
+            </actionGroup>
+            <!-- Save the cart price rule -->
+            <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete cart price rule for free shipping -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Add product to cart and check shipping prices -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$" />
+            <argument name="productCount" value="1" />
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customer" value="CustomerEntityOne" />
+            <argument name="address" value="CustomerAddressSimple" />
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <waitForText selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Fixed')}}" userInput="$5.00" stepKey="assertFlatRatedMethodPrice"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForFlatRateShippingMethod"/>
+        <!-- Apply cart price rule and verify coupen is successfully applied -->
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="goToPaymentStep"/>
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyCoupon">
+            <argument name="discountCode" value="{{_defaultCoupon.code}}"/>
+        </actionGroup>
+    </test>
+</tests>

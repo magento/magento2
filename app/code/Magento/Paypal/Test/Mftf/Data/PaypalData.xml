@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SamplePaypalConfig" type="paypal_config_state">
         <requiredEntity type="business_account">SampleBusinessAccount</requiredEntity>
         <requiredEntity type="api_username">SampleApiUsername</requiredEntity>
@@ -194,15 +194,19 @@
         <data key="value">{{_CREDS.magento/payflow_pro_business_account}}</data>
     </entity>
     <entity name="PaypalPayflowProPartner" type="partner">
+        <data key="path">payment/payflowpro/partner</data>
         <data key="value">{{_CREDS.magento/payflow_pro_partner}}</data>
     </entity>
     <entity name="PaypalPayflowProUser" type="user">
+        <data key="path">payment/payflowpro/user</data>
         <data key="value">{{_CREDS.magento/payflow_pro_user}}</data>
     </entity>
     <entity name="PaypalPayflowProVendor" type="vendor">
+        <data key="path">payment/payflowpro/vendor</data>
         <data key="value">{{_CREDS.magento/payflow_pro_vendor}}</data>
     </entity>
     <entity name="PaypalPayflowProPassword" type="pwd">
+        <data key="path">payment/payflowpro/pwd</data>
         <data key="value">{{_CREDS.magento/payflow_pro_pwd}}</data>
     </entity>
     <!-- default configuration used to restore Magento config -->
@@ -302,5 +306,13 @@
         <data key="payflow_advanced_user">mpilink</data>
         <data key="payflow_advanced_vendor">mpilink</data>
         <data key="payflow_advanced_password">1234_1234L!</data>
+    </entity>
+    <entity name="EnablePaypalPayStandardNew">
+        <data key="path">payment/wps_express/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisablePaypalPayStandardNew">
+        <data key="path">payment/wps_express/active</data>
+        <data key="value">0</data>
     </entity>
 </entities>

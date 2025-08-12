@@ -30,7 +30,7 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
      * @return void
      */
     protected function _construct(
-        PoisonPillPutInterface $pillPut = null
+        ?PoisonPillPutInterface $pillPut = null
     ) {
         $this->_init('core_config_data', 'config_id');
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()

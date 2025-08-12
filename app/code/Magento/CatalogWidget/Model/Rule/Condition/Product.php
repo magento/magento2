@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -62,7 +62,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct impl
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $data = [],
-        ProductCategoryList $categoryList = null
+        ?ProductCategoryList $categoryList = null
     ) {
         $this->storeManager = $storeManager;
         parent::__construct(

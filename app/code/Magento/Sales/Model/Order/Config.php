@@ -77,7 +77,7 @@ class Config implements ResetAfterRequestInterface
         \Magento\Sales\Model\Order\StatusFactory $orderStatusFactory,
         \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory $orderStatusCollectionFactory,
         \Magento\Framework\App\State $state,
-        StatusLabel $statusLabel = null
+        ?StatusLabel $statusLabel = null
     ) {
         $this->orderStatusFactory = $orderStatusFactory;
         $this->orderStatusCollectionFactory = $orderStatusCollectionFactory;

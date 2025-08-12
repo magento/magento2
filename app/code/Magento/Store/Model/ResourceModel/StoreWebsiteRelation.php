@@ -56,8 +56,8 @@ class StoreWebsiteRelation
     public function getWebsiteStores(
         int $websiteId,
         bool $available = false,
-        int $storeGroupId = null,
-        int $storeId = null
+        ?int $storeGroupId = null,
+        ?int $storeId = null
     ): array {
         $connection = $this->resource->getConnection();
         $storeTable = $this->resource->getTableName('store');

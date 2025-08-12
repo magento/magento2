@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddOptionsToDropdownAttributeActionGroup">
+        <annotations>
+            <description>Adds options to a product attribute of type "dropdown" in the Admin panel.</description>
+        </annotations>
+        <arguments>
+            <argument name="optionIndex" type="string" defaultValue="0"/>
+            <argument name="optionValue" type="string"/>
+        </arguments>
+        <click selector="{{AdminNewAttributePanel.addOption}}" stepKey="clickOnAddOption"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.optionAdminValue(optionIndex)}}" stepKey="waitForAdminLabel"/>
+        <fillField selector="{{AdminNewAttributePanel.optionAdminValue(optionIndex)}}" userInput="{{optionValue}}" stepKey="fillAdminLabel"/>
+    </actionGroup>
+</actionGroups>

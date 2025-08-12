@@ -52,7 +52,7 @@ class UrlRewrite extends AbstractSimpleObject
      */
     public function __construct(
         $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($data);

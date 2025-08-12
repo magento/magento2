@@ -49,7 +49,7 @@ mutation cancelOrder($order_id: ID!, $reason: String!) {
                             data: JSON.stringify({
                                 query: mutation,
                                 variables: {
-                                    'order_id': config.order_id,
+                                    'order_id': btoa(config.order_id),
                                     'reason': reason
                                 }
                             }),

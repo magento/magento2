@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnablePaymentAdvancedConfigurationActionGroup">
+        <annotations>
+            <description>Configuration for Payments Advanced and Paypal credit Sample PayPal credentials</description>
+        </annotations>
+        <arguments>
+            <argument name="credentials" defaultValue="SamplePaypalPaymentsAdvancedConfig"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <scrollTo selector="{{AdminConfigPaymentsAdvancedSection.partner(countryCode)}}" stepKey="scrollToBottom"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.partner(countryCode)}}" stepKey="waitForPartner"/>
+        <fillField selector ="{{AdminConfigPaymentsAdvancedSection.partner(countryCode)}}" userInput="{{credentials.payflow_advanced_partner}}" stepKey="inputPartner"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.vendor(countryCode)}}" stepKey="waitForVendor"/>
+        <fillField selector ="{{AdminConfigPaymentsAdvancedSection.vendor(countryCode)}}" userInput="{{credentials.payflow_advanced_vendor}}" stepKey="inputVendor"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.user(countryCode)}}" stepKey="waitForUser"/>
+        <fillField selector ="{{AdminConfigPaymentsAdvancedSection.user(countryCode)}}" userInput="{{credentials.payflow_advanced_user}}" stepKey="inputUser"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.password(countryCode)}}" stepKey="waitForPassword"/>
+        <fillField selector ="{{AdminConfigPaymentsAdvancedSection.password(countryCode)}}" userInput="{{credentials.payflow_advanced_password}}" stepKey="inputPassword"/>
+        <selectOption selector="{{AdminConfigPaymentsAdvancedSection.testMode(countryCode)}}" userInput="Yes" stepKey="enableTestMode"/>
+        <wait time="10" stepKey="waitToEnableAdvanced"/>
+        <waitForElementNotVisible selector ="{{AdminConfigPaymentsAdvancedSection.solution(countryCode)}}" stepKey="activeEnableSolutions"/>
+        <waitForElementNotVisible selector ="{{AdminConfigPaymentsAdvancedSection.enabledPaypalCredit(countryCode)}}" stepKey="disablePaypalCredit"/>
+        <waitForPageLoad stepKey="waitForPageLoadForEnableSolution"/>
+        <selectOption selector ="{{AdminConfigPaymentsAdvancedSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.greenCheckMrk(countryCode)}}" stepKey="assertGreenTickMarkPresentForEnableThisSolutionDropdown"/>
+        <waitForElementNotVisible selector ="{{AdminConfigPaymentsAdvancedSection.solution(countryCode)}}" stepKey="assertEnabledSolutions"/>
+        <waitForElementNotVisible selector ="{{AdminConfigPaymentsAdvancedSection.paypalCredit(countryCode)}}" stepKey="enablePaypalCredit"/>
+        <waitForElementVisible selector ="{{AdminConfigPaymentsAdvancedSection.sortOrder(countryCode)}}" stepKey="assertSortOrderPaypalCredit"/>
+    </actionGroup>
+</actionGroups>

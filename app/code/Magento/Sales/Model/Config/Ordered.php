@@ -91,7 +91,7 @@ abstract class Ordered extends \Magento\Framework\App\Config\Base
         \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
         $sourceData = null,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($sourceData);
         $this->_configCacheType = $configCacheType;

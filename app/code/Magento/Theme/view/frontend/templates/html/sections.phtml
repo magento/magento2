@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
  *  General template for displaying group of blocks divided into sections
  */
+/** @var \Magento\Framework\Escaper $escaper */
 
 $group = $block->getGroupName();
 $groupCss = $block->getGroupCss();
 ?>
 <?php if ($detailedInfoGroup = $block->getGroupChildNames($group)):?>
-    <div class="sections <?= $block->escapeHtmlAttr($groupCss) ?>">
+    <div class="sections <?= $escaper->escapeHtmlAttr($groupCss) ?>">
         <?php $layout = $block->getLayout(); ?>
-        <div class="section-items <?= $block->escapeHtmlAttr($groupCss) ?>-items"
+        <div class="section-items <?= $escaper->escapeHtmlAttr($groupCss) ?>-items"
              data-mage-init='{"tabs":{"openedState":"active"}}'>
             <?php foreach ($detailedInfoGroup as $name):?>
                 <?php
@@ -25,16 +26,16 @@ $groupCss = $block->getGroupCss();
                     $alias = $layout->getElementAlias($name);
                     $label = $block->getChildData($alias, 'title');
                 ?>
-                <div class="section-item-title <?= $block->escapeHtmlAttr($groupCss) ?>-item-title"
+                <div class="section-item-title <?= $escaper->escapeHtmlAttr($groupCss) ?>-item-title"
                      data-role="collapsible">
-                    <a class="<?= $block->escapeHtmlAttr($groupCss) ?>-item-switch"
-                       data-toggle="switch" href="#<?= $block->escapeHtmlAttr($alias) ?>">
+                    <a class="<?= $escaper->escapeHtmlAttr($groupCss) ?>-item-switch"
+                       data-toggle="switch" href="#<?= $escaper->escapeHtmlAttr($alias) ?>">
                         <?= /* @noEscape */ $label ?>
                     </a>
                 </div>
-                <div class="section-item-content <?= $block->escapeHtmlAttr($groupCss) ?>-item-content"
-                     id="<?= $block->escapeHtmlAttr($alias) ?>"
-                     data-role="content">
+                <div class="section-item-content <?= $escaper->escapeHtmlAttr($groupCss) ?>-item-content"
+                     id="<?= $escaper->escapeHtmlAttr($alias) ?>"
+                     role="tab">
                     <?= /* @noEscape */ $html ?>
                 </div>
             <?php endforeach;?>

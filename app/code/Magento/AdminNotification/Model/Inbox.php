@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Model;
 
@@ -33,7 +33,7 @@ use Magento\AdminNotification\Model\InboxInterface;
 class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierInterface, InboxInterface
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -41,7 +41,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSeverities($severity = null)
     {
@@ -63,7 +63,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadLatestNotice()
     {
@@ -73,7 +73,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNoticeStatus()
     {

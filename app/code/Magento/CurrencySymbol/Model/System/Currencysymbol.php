@@ -138,7 +138,7 @@ class Currencysymbol
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_coreConfig = $coreConfig;
         $this->_configFactory = $configFactory;

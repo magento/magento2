@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,13 +81,11 @@ class Download extends ExportController implements HttpGetActionInterface
             return $resultRedirect;
         }
 
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $fileName = basename($fileName);
-
-        $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
+        $exportDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
 
         try {
-            $fileExist = $exportDirectory->isExist('export/' . $fileName);
+            $fileName  = $exportDirectory->getDriver()->getRealPathSafety(DIRECTORY_SEPARATOR . $fileName);
+            $fileExist = $exportDirectory->isExist('export' . $fileName);
         } catch (Throwable $e) {
             $fileExist = false;
         }
@@ -99,7 +97,7 @@ class Download extends ExportController implements HttpGetActionInterface
         }
 
         try {
-            $path = 'export/' . $fileName;
+            $path = 'export' . $fileName;
             $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
             if ($directory->isFile($path)) {
                 return $this->fileFactory->create(

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigPaymentsAdvancedTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Configuration apply to Paypal Pay later message on Cart Page for Payment Advanced"/>
+            <description value="Paypal Pay Later Message for Paypal Advanced should display on Admin Cart Page configuration"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5700"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct3" stepKey="simpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminConfigPaymentsAdvancedActionGroup" stepKey="ConfigPaymentsAdvanced"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set payment/payflow_advanced/active 0" stepKey="disablePaymentsAdvanced"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <waitForElementClickable selector="{{PaymentsAdvancedConfigSection.cartBtn('us')}}" stepKey="waitForCheckoutCartPageToBeClickable"/>
+        <click selector ="{{PaymentsAdvancedConfigSection.cartBtn('us')}}" stepKey="clickOnCart"/>
+        <selectOption selector ="{{PaymentsAdvancedConfigSection.payLaterDisplay('us')}}" userInput="Yes" stepKey="enableDisplay"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <!-- Reindex and cache flush -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Login to StoreFront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Add simple product-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart" >
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <!--Go to cart page-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+        <waitForPageLoad stepKey="waitForShoppingCartPage"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <!--Switching to iFrame-->
+        <switchToIFrame selector="{{PaymentsAdvancedConfigSection.payPalFrame}}" stepKey="switchToPaypalIFrame"/>
+        <waitForElementVisible  selector="{{PaymentsAdvancedConfigSection.payLaterMessage}}"  stepKey="verifyPayLaterMessage"/>
+        <switchToIFrame stepKey="switchBackMainIframe"/>
+        <!--Change The Option in Position In Checkout cart Page-->
+        <actionGroup ref="AdminConfigPaymentsAdvancedActionGroup" stepKey="ConfigPaymentsAdvanced">
+        </actionGroup>
+        <waitForElementClickable selector="{{PaymentsAdvancedConfigSection.cartBtn('us')}}" stepKey="waitForAdminCarttPageTobeClickable"/>
+        <click selector ="{{PaymentsAdvancedConfigSection.cartBtn('us')}}" stepKey="expandAdminCartePage"/>
+        <selectOption selector ="{{PaymentsAdvancedConfigSection.displayOption('us')}}" userInput="Yes" stepKey="enableCartPageDisplay"/>
+        <selectOption selector ="{{PaymentsAdvancedConfigSection.positionOption('us')}}" userInput="Under PayPal Checkout buttons" stepKey="updatedPositionValue"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPage">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePage">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Navigate Again to Storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToCustomerStoreFront"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="onPageShoppingCart"/>
+        <scrollTo selector="{{PaymentsAdvancedConfigSection.payPalCheckoutField}}" stepKey="scrollToPaypalCheckout"/>
+        <waitForPageLoad stepKey="waitForCartpageTobeLoaded"/>
+        <switchToIFrame selector="{{PaymentsAdvancedConfigSection.payPalFrame}}" stepKey="switchToBuyNowPayLaterIFrame"/>
+        <seeElement selector="{{PaymentsAdvancedConfigSection.payLaterMessage}}"  stepKey="verifyBuyNowPayLaterMessage"/>
+        <switchToIFrame stepKey="switchBackToMainPaypalFrame"/>
+    </test>
+</tests>

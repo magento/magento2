@@ -15,7 +15,6 @@ define([
     'text!ui/template/modal/modal-custom.html',
     'Magento_Ui/js/lib/key-codes',
     'jquery-ui-modules/widget',
-    'jquery-ui-modules/core',
     'mage/translate',
     'jquery/z-index'
 ], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {

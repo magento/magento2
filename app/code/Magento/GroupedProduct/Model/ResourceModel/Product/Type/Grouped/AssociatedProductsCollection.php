@@ -78,7 +78,7 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_config = $config;

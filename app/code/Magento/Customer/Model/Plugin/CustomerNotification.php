@@ -85,7 +85,7 @@ class CustomerNotification
         CustomerRepositoryInterface $customerRepository,
         LoggerInterface $logger,
         RequestInterface $request,
-        StorageInterface $storage = null
+        ?StorageInterface $storage = null
     ) {
         $this->session = $session;
         $this->notificationStorage = $notificationStorage;

@@ -57,7 +57,7 @@ class Variable extends AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Escaper $escaper,
         \Magento\Variable\Model\ResourceModel\Variable $resource,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ?WYSIWYGValidatorInterface $wysiwygValidator = null
     ) {

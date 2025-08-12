@@ -343,7 +343,7 @@ class Reorder
      * @param string|null $code
      * @return void
      */
-    private function addError(string $message, string $code = null): void
+    private function addError(string $message, ?string $code = null): void
     {
         $this->errors[] = new Data\Error(
             $message,
@@ -399,7 +399,7 @@ class Reorder
      * @param string|null $message
      * @return string
      */
-    private function getCartItemErrorMessage(Item $item, Product $product, string $message = null): string
+    private function getCartItemErrorMessage(Item $item, Product $product, ?string $message = null): string
     {
         // try to get sku from line-item first.
         // for complex product type: if custom option is not available it can cause error

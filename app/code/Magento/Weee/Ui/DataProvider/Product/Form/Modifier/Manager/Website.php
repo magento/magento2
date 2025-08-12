@@ -57,7 +57,7 @@ class Website
         LocatorInterface $locator,
         StoreManagerInterface $storeManager,
         DirectoryHelper $directoryHelper,
-        Data $catalogHelper = null
+        ?Data $catalogHelper = null
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;

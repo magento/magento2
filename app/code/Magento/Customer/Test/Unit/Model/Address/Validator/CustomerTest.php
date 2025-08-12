@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,12 +82,7 @@ class CustomerTest extends TestCase
         $originalAddressMock->expects($this->once())->method('getCustomerId')->willReturn(2);
 
         $this->assertEquals(
-            [
-                __(
-                    'Provided customer ID "%customer_id" isn\'t related to current customer address.',
-                    ['customer_id' => null]
-                )
-            ],
+            [__('A customer with the same email address already exists in an associated website.')],
             $this->model->validate($addressMock)
         );
     }
@@ -160,12 +155,7 @@ class CustomerTest extends TestCase
         $originalAddressMock->expects($this->once())->method('getCustomerId')->willReturn(1);
 
         $this->assertEquals(
-            [
-                __(
-                    'Provided customer ID "%customer_id" isn\'t related to current customer address.',
-                    ['customer_id' => 2]
-                )
-            ],
+            [__('A customer with the same email address already exists in an associated website.')],
             $this->model->validate($addressMock)
         );
     }

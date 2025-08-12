@@ -44,7 +44,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
         PriceResolverInterface $priceResolver,
         Configurable $configurable,
         PriceCurrencyInterface $priceCurrency,
-        LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
+        ?LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider = null
     ) {
         $this->priceResolver = $priceResolver;
         $this->configurable = $configurable;

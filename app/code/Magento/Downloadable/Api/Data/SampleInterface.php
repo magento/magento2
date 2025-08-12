@@ -98,7 +98,7 @@ interface SampleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
      * @return $this
      */
-    public function setSampleFileContent(ContentInterface $sampleFileContent = null);
+    public function setSampleFileContent(?ContentInterface $sampleFileContent = null);
 
     /**
      * Return URL or NULL when type is 'file'

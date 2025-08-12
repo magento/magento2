@@ -112,7 +112,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * @param \Magento\Framework\DataObject[] $items
      * @return $this
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         $this->data['items'] = $items;
         return $this;
@@ -155,7 +155,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }

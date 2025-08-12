@@ -47,7 +47,7 @@ class BundleProductGenerator
      */
     public function __construct(
         ProductGeneratorFactory $productGeneratorFactory,
-        ResourceConnection $resource = null
+        ?ResourceConnection $resource = null
     ) {
         $this->productGeneratorFactory = $productGeneratorFactory;
 

@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Catalog\Model\Pricing\SpecialPriceService;
 
 /**
  * Special price model
@@ -21,7 +23,7 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
     /**
      * Price type special
      */
-    const PRICE_CODE = 'special_price';
+    public const PRICE_CODE = 'special_price';
 
     /**
      * @var TimezoneInterface
@@ -29,21 +31,30 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
     protected $localeDate;
 
     /**
+     * @var SpecialPriceService
+     */
+    private SpecialPriceService $specialPriceService;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param TimezoneInterface $localeDate
+     * @param SpecialPriceService|null $specialPriceService
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        TimezoneInterface $localeDate
+        TimezoneInterface $localeDate,
+        ?SpecialPriceService $specialPriceService = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->localeDate = $localeDate;
+        $this->specialPriceService = $specialPriceService ?: ObjectManager::getInstance()
+            ->get(SpecialPriceService::class);
     }
 
     /**
@@ -103,10 +114,12 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
      */
     public function isScopeDateInInterval()
     {
+        $dateTo = $this->specialPriceService->execute($this->getSpecialToDate());
+
         return $this->localeDate->isScopeDateInInterval(
             WebsiteInterface::ADMIN_CODE,
             $this->getSpecialFromDate(),
-            $this->getSpecialToDate()
+            $dateTo
         );
     }
 

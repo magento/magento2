@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
@@ -117,8 +117,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
         \Magento\Msrp\Helper\Data $msrpData,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        UploaderFactory $uploaderFactory = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?UploaderFactory $uploaderFactory = null
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;
@@ -403,7 +403,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         $associatedProducts = !$isStrictProcessMode || !empty($productsInfo)
             ? $this->getAssociatedProducts($product)
-            : false;
+            : [];
 
         foreach ($associatedProducts as $subProduct) {
             $qty = $productsInfo[$subProduct->getId()];

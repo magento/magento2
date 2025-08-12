@@ -54,8 +54,8 @@ class Rss
      */
     public function __construct(
         CacheInterface $cache,
-        SerializerInterface $serializer = null,
-        FeedFactoryInterface $feedFactory = null
+        ?SerializerInterface $serializer = null,
+        ?FeedFactoryInterface $feedFactory = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);

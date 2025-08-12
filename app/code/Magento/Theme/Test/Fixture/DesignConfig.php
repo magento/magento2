@@ -1,23 +1,13 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\Theme\Test\Fixture;
 
+use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
 use Magento\Store\Model\ScopeInterface;
@@ -62,10 +52,12 @@ class DesignConfig implements RevertibleDataFixtureInterface
     /**
      * @param DesignConfigRepositoryInterface $designConfigRepository
      * @param DataObjectFactory $dataObjectFactory
+     * @param State $state
      */
     public function __construct(
         private readonly DesignConfigRepositoryInterface $designConfigRepository,
         private readonly DataObjectFactory $dataObjectFactory,
+        private readonly State $state
     ) {
     }
 
@@ -117,9 +109,12 @@ class DesignConfig implements RevertibleDataFixtureInterface
                 $fieldData->setValue($data[$fieldData->getPath()]);
             }
         }
+        $currentArea = $this->state->getAreaCode();
+        $this->state->setAreaCode('adminhtml');
         $designConfig->setScope($scopeType);
         $designConfig->setScopeId($scopeId);
         $this->designConfigRepository->save($designConfig);
+        $this->state->setAreaCode($currentArea);
         return $origData;
     }
 }

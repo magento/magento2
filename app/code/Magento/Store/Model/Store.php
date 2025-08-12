@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Model;
 
 use Laminas\Uri\UriFactory;
@@ -382,13 +384,13 @@ class Store extends AbstractExtensibleModel implements
         $currencyInstalled,
         \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
-        \Magento\Store\Model\Validation\StoreValidator $modelValidator = null,
-        ModifierInterface $urlModifier = null
+        ?\Magento\Framework\Event\ManagerInterface $eventManager = null,
+        ?\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
+        ?\Magento\Store\Model\Validation\StoreValidator $modelValidator = null,
+        ?ModifierInterface $urlModifier = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -809,8 +811,16 @@ class Store extends AbstractExtensibleModel implements
             return true;
         }
 
-        $secureBaseUrl = $this->_config->getValue(self::XML_PATH_SECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
-        $secureFrontend = $this->_config->getValue(self::XML_PATH_SECURE_IN_FRONTEND, ScopeInterface::SCOPE_STORE);
+        $secureBaseUrl = $this->_config->getValue(
+            self::XML_PATH_SECURE_BASE_URL,
+            ScopeInterface::SCOPE_STORE,
+            $this->getId()
+        );
+        $secureFrontend = $this->_config->getValue(
+            self::XML_PATH_SECURE_IN_FRONTEND,
+            ScopeInterface::SCOPE_STORE,
+            $this->getId()
+        );
 
         if (!$secureBaseUrl || !$secureFrontend) {
             return false;
@@ -819,8 +829,8 @@ class Store extends AbstractExtensibleModel implements
         $uri = UriFactory::factory($secureBaseUrl);
         $port = $uri->getPort();
         $serverPort = $this->_request->getServer('SERVER_PORT');
-        $isSecure = $uri->getScheme() == 'https' && isset($serverPort) && $port == $serverPort;
-        return $isSecure;
+
+        return $uri->getScheme() === 'https' && $serverPort !== null && $port == $serverPort;
     }
 
     /*************************************************************************************
