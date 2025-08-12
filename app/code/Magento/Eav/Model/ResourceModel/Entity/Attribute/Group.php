@@ -92,7 +92,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if ($object->getAttributes()) {
             foreach ($object->getAttributes() as $attribute) {
-                /** @var $attribute \Magento\Eav\Api\Data\AttributeInterface */
+                /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
                 $attribute->setAttributeGroupId($object->getId());
                 $this->attributeResource->saveInSetIncluding(
                     $attribute

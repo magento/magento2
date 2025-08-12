@@ -27,7 +27,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
 
         $groups = $source->getElementsByTagName('group');
         foreach ($groups as $group) {
-            /** @var $group \DOMElement */
+            /** @var \DOMElement $group */
             if (!$group->hasAttribute('id')) {
                 throw new \InvalidArgumentException('Attribute "id" does not exist');
             }
@@ -35,7 +35,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
                 if (!$child instanceof \DOMElement) {
                     continue;
                 }
-                /** @var $group \DOMElement */
+                /** @var \DOMElement $group */
                 $output[$group->getAttribute('id')][$child->nodeName]['value'] = $child->nodeValue;
                 if ($child->hasAttribute('tooltip')) {
                     $output[$group->getAttribute('id')][$child->nodeName]['tooltip'] = $child->getAttribute('tooltip');

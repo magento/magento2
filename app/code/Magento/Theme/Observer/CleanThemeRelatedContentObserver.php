@@ -55,7 +55,7 @@ class CleanThemeRelatedContentObserver implements ObserverInterface
         if (!($theme instanceof \Magento\Framework\View\Design\ThemeInterface)) {
             return;
         }
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
         if ($this->themeConfig->isThemeAssignedToStore($theme)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Theme isn\'t deletable.'));
         }

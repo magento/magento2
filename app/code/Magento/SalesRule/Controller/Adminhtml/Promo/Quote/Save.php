@@ -68,7 +68,7 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     ? null : $data['simple_free_shipping'];
 
             try {
-                /** @var $model \Magento\SalesRule\Model\Rule */
+                /** @var \Magento\SalesRule\Model\Rule $model */
                 $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
                 $this->_eventManager->dispatch(
                     'adminhtml_controller_salesrule_prepare_save',

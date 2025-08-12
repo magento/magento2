@@ -174,7 +174,7 @@ class Config
             $referenceAttributes = $reference->attributes;
             $id = $referenceAttributes->getNamedItem('id')->nodeValue;
             $blocksArray[$id] = [];
-            /** @var $referenceSubNode /DOMNode */
+            /** @var /DOMNode $referenceSubNode */
             foreach ($reference->childNodes as $referenceSubNode) {
                 switch ($referenceSubNode->nodeName) {
                     case 'name_in_layout':

@@ -114,7 +114,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
         $todayStartOfDayDate = $this->_localeDate->date()->setTime(0, 0, 0)->format('Y-m-d H:i:s');
         $todayEndOfDayDate = $this->_localeDate->date()->setTime(23, 59, 59)->format('Y-m-d H:i:s');
 
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->_productCollectionFactory->create();
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 

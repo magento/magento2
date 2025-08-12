@@ -80,7 +80,7 @@ class Index extends \Magento\Framework\App\Action\Action implements HttpGetActio
     {
         $this->layerResolver->create(Resolver::CATALOG_LAYER_SEARCH);
 
-        /* @var $query \Magento\Search\Model\Query */
+        /** @var \Magento\Search\Model\Query $query */
         $query = $this->_queryFactory->get();
 
         $storeId = $this->_storeManager->getStore()->getId();

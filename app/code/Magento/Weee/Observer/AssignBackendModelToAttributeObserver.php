@@ -40,7 +40,7 @@ class AssignBackendModelToAttributeObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $backendModel = \Magento\Weee\Model\Attribute\Backend\Weee\Tax::getBackendModelName();
-        /** @var $object \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $object */
         $object = $observer->getEvent()->getAttribute();
         if ($object->getFrontendInput() == 'weee') {
             $object->setBackendModel($backendModel);

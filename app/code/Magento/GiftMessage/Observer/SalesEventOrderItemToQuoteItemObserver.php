@@ -42,7 +42,7 @@ class SalesEventOrderItemToQuoteItemObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $orderItem \Magento\Sales\Model\Order\Item */
+        /** @var \Magento\Sales\Model\Order\Item $orderItem */
         $orderItem = $observer->getEvent()->getOrderItem();
         // Do not import giftmessage data if order is reordered
         $order = $orderItem->getOrder();
@@ -59,7 +59,7 @@ class SalesEventOrderItemToQuoteItemObserver implements ObserverInterface
             return $this;
         }
 
-        /** @var $quoteItem \Magento\Quote\Model\Quote\Item */
+        /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
         $quoteItem = $observer->getEvent()->getQuoteItem();
         if ($giftMessageId = $orderItem->getGiftMessageId()) {
             $giftMessage = $this->_messageFactory->create()->load($giftMessageId)->setId(null)->save();

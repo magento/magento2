@@ -426,7 +426,7 @@ abstract class AbstractEntity extends AbstractResource implements
      */
     public function getAttribute($attribute)
     {
-        /** @var $config \Magento\Eav\Model\Config */
+        /** @var \Magento\Eav\Model\Config $config */
         $config = $this->_getConfig();
 
         $attributeInstance = $config->getAttribute($this->getEntityType(), $attribute);
@@ -582,7 +582,7 @@ abstract class AbstractEntity extends AbstractResource implements
         $this->_attrSetEntity->addSetInfo($this->getEntityType(), $attributes, $setId);
 
         foreach ($attributes as $code => $attribute) {
-            /* @var $attribute AbstractAttribute */
+            /** @var AbstractAttribute $attribute */
             if (!$attribute->isInSet($setId)) {
                 unset($attributes[$code]);
             }

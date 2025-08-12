@@ -26,7 +26,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
      */
     protected function _prepareForm()
     {
-        /** @var $group \Magento\Eav\Model\Entity\Attribute\Group */
+        /** @var \Magento\Eav\Model\Entity\Attribute\Group $group */
         $group = $this->getGroup();
         if ($group) {
             /** @var \Magento\Framework\Data\Form $form */

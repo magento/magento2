@@ -42,7 +42,7 @@ class UrlRewrite extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getLoadSelect($field, $value, $object)
     {
-        /** @var $select \Magento\Framework\DB\Select */
+        /** @var \Magento\Framework\DB\Select $select */
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if ($object->getStoreId() !== null) {

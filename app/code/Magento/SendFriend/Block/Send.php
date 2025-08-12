@@ -93,7 +93,7 @@ class Send extends \Magento\Framework\View\Element\Template
             return trim($name);
         }
 
-        /* @var $session \Magento\Customer\Model\Session */
+        /** @var \Magento\Customer\Model\Session $session */
         $session = $this->_customerSession;
 
         if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
@@ -117,7 +117,7 @@ class Send extends \Magento\Framework\View\Element\Template
             return trim($email);
         }
 
-        /* @var $session \Magento\Customer\Model\Session */
+        /** @var \Magento\Customer\Model\Session $session */
         $session = $this->_customerSession;
 
         if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {

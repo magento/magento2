@@ -72,7 +72,7 @@ class Image extends \Magento\Framework\App\Config\Value
         // use cached eav config
         $entityTypeId = $this->_eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getId();
 
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $collection */
         $collection = $this->_attributeCollectionFactory->create();
         $collection->setEntityTypeFilter($entityTypeId);
         $collection->setFrontendInputTypeFilter('media_image');

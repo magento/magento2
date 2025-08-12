@@ -419,7 +419,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $quoteData['is_virtual'] = $quote->getIsVirtual();
 
             if (!$quote->getCustomer()->getId()) {
-                /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+                /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
                 $quoteIdMask = $this->quoteIdMaskFactory->create();
                 $quoteData['entity_id'] = $quoteIdMask->load(
                     $this->checkoutSession->getQuote()->getId(),
@@ -465,7 +465,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $optionsData = [];
         $options = $this->configurationPool->getByProductType($item->getProductType())->getOptions($item);
         foreach ($options as $index => $optionValue) {
-            /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
+            /** @var \Magento\Catalog\Helper\Product\Configuration $helper */
             $helper = $this->configurationPool->getByProductType('default');
             $params = [
                 'max_length' => 55,

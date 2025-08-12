@@ -95,7 +95,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $categories = [];
 
-        /* @var $store \Magento\Store\Model\Store */
+        /** @var \Magento\Store\Model\Store $store */
         $store = $this->_storeManager->getStore($storeId);
 
         if (!$store) {

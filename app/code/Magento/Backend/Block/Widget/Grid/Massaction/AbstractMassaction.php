@@ -383,7 +383,7 @@ abstract class AbstractMassaction extends Widget
         $gridBlock = $this->getParentBlock();
         $massactionColumn->setSelected($this->getSelected())->setGrid($gridBlock)->setId($columnId);
 
-        /** @var $columnSetBlock ColumnSet */
+        /** @var ColumnSet $columnSetBlock */
         $columnSetBlock = $gridBlock->getColumnSet();
         $childNames = $columnSetBlock->getChildNames();
         $siblingElement = count($childNames) ? current($childNames) : 0;

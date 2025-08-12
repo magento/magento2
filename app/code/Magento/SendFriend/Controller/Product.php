@@ -70,9 +70,9 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        /* @var $helper \Magento\SendFriend\Helper\Data */
+        /** @var \Magento\SendFriend\Helper\Data $helper */
         $helper = $this->_objectManager->get(\Magento\SendFriend\Helper\Data::class);
-        /* @var $session \Magento\Customer\Model\Session */
+        /** @var \Magento\Customer\Model\Session $session */
         $session = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
 
         if (!$helper->isEnabled()) {

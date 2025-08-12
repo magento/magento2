@@ -105,7 +105,7 @@ class Result extends Template
      */
     public function setListOrders()
     {
-        /* @var $category \Magento\Catalog\Model\Category */
+        /** @var \Magento\Catalog\Model\Category $category */
         $category = $this->_catalogLayer->getCurrentCategory();
 
         $availableOrders = $category->getAvailableSortByOptions();

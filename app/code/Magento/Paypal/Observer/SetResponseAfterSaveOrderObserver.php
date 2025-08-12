@@ -62,7 +62,7 @@ class SetResponseAfterSaveOrderObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /* @var $order \Magento\Sales\Model\Order */
+        /** @var \Magento\Sales\Model\Order $order */
         $order = $this->_coreRegistry->registry('hss_order');
 
         if ($order && $order->getId()) {

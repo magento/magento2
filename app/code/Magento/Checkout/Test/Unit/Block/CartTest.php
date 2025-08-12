@@ -50,7 +50,7 @@ class CartTest extends TestCase
         $this->context->expects($this->once())->method('getEscaper')->willReturn($this->escaper);
         $this->context->expects($this->once())->method('getLayout')->willReturn($this->layoutMock);
 
-        /** @var $cartBlock Cart */
+        /** @var Cart $cartBlock */
         $this->cartBlock = $objectManager->getObject(
             Cart::class,
             [

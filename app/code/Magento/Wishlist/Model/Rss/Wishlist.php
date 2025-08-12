@@ -132,9 +132,9 @@ class Wishlist implements DataProviderInterface
         if ($wishlist->getId()) {
             $data = $this->getHeader();
 
-            /** @var $wishlistItem \Magento\Wishlist\Model\Item */
+            /** @var \Magento\Wishlist\Model\Item $wishlistItem */
             foreach ($wishlist->getItemCollection() as $wishlistItem) {
-                /* @var $product \Magento\Catalog\Model\Product */
+                /** @var \Magento\Catalog\Model\Product $product */
                 $product = $wishlistItem->getProduct();
                 $productUrl = $this->wishlistBlock->getProductUrl($product, ['_rss' => true]);
                 $product->setAllowedInRss(true);

@@ -19,7 +19,7 @@ class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
     public function execute()
     {
         $file = $this->getRequest()->getParam('file');
-        /** @var $helper \Magento\Theme\Helper\Storage */
+        /** @var \Magento\Theme\Helper\Storage $helper */
         $helper = $this->_objectManager->get(\Magento\Theme\Helper\Storage::class);
         try {
             return $this->_fileFactory->create(

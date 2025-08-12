@@ -241,12 +241,12 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _setActiveMenu($itemId)
     {
-        /** @var $menuBlock \Magento\Backend\Block\Menu */
+        /** @var \Magento\Backend\Block\Menu $menuBlock */
         $menuBlock = $this->_view->getLayout()->getBlock('menu');
         $menuBlock->setActive($itemId);
         $parents = $menuBlock->getMenuModel()->getParentItems($itemId);
         foreach ($parents as $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
+            /** @var \Magento\Backend\Model\Menu\Item $item */
             $this->_view->getPage()->getConfig()->getTitle()->prepend($item->getTitle());
         }
         return $this;

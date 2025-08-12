@@ -149,7 +149,7 @@ class CreditmemoDocumentFactory
         ?\Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $data = $this->getCreditmemoCreationData($items, $arguments);
-        /** @var $invoice \Magento\Sales\Model\Order\Invoice */
+        /** @var \Magento\Sales\Model\Order\Invoice $invoice */
         $invoice->setOrder($this->orderRepository->get($invoice->getOrderId()));
         $creditmemo = $this->creditmemoFactory->createByInvoice($invoice, $data);
         if ($comment) {

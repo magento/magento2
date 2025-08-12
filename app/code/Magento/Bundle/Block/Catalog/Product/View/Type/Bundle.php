@@ -170,7 +170,7 @@ class Bundle extends AbstractView implements ResetAfterRequestInterface
 
         $position = 0;
         foreach ($optionsArray as $optionItem) {
-            /* @var $optionItem Option */
+            /** @var Option $optionItem */
             if (!$optionItem->getSelections()) {
                 continue;
             }
@@ -319,7 +319,7 @@ class Bundle extends AbstractView implements ResetAfterRequestInterface
         $selections = [];
         $selectionCount = count($option->getSelections());
         foreach ($option->getSelections() as $selectionItem) {
-            /* @var $selectionItem Product */
+            /** @var Product $selectionItem */
             $selectionId = $selectionItem->getSelectionId();
             $selections[$selectionId] = $this->getSelectionItemData($product, $selectionItem);
 

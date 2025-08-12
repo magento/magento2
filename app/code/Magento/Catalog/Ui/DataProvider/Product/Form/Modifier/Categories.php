@@ -405,7 +405,7 @@ class Categories extends AbstractModifier
      */
     private function retrieveShownCategoriesIds(int $storeId, string $filter = '') : array
     {
-        /* @var $matchingNamesCollection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $matchingNamesCollection */
         $matchingNamesCollection = $this->categoryCollectionFactory->create();
 
         if (!empty($filter)) {
@@ -441,7 +441,7 @@ class Categories extends AbstractModifier
      */
     private function retrieveCategoriesTree(int $storeId, array $shownCategoriesIds) : ?array
     {
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection = $this->categoryCollectionFactory->create();
 
         $collection->addAttributeToFilter('entity_id', ['in' => array_keys($shownCategoriesIds)])

@@ -54,7 +54,7 @@ class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Eleme
      */
     public function getHintHtml()
     {
-        /** @var $storeSwitcher \Magento\Backend\Block\Store\Switcher */
+        /** @var \Magento\Backend\Block\Store\Switcher $storeSwitcher */
         $storeSwitcher = $this->_layout->getBlockSingleton(\Magento\Backend\Block\Store\Switcher::class);
         return $storeSwitcher->getHintHtml();
     }

@@ -91,13 +91,13 @@ class CopyService
      */
     protected function _copyDatabaseCustomization(ThemeInterface $source, ThemeInterface $target)
     {
-        /** @var $themeFile \Magento\Theme\Model\Theme\File */
+        /** @var \Magento\Theme\Model\Theme\File $themeFile */
         foreach ($target->getCustomization()->getFiles() as $themeFile) {
             $themeFile->delete();
         }
-        /** @var $newFile \Magento\Theme\Model\Theme\File */
+        /** @var \Magento\Theme\Model\Theme\File $newFile */
         foreach ($source->getCustomization()->getFiles() as $themeFile) {
-            /** @var $newThemeFile \Magento\Theme\Model\Theme\File */
+            /** @var \Magento\Theme\Model\Theme\File $newThemeFile */
             $newThemeFile = $this->_fileFactory->create();
             $newThemeFile->setData(
                 [
@@ -122,17 +122,17 @@ class CopyService
     protected function _copyLayoutCustomization(ThemeInterface $source, ThemeInterface $target)
     {
         $update = $this->_updateFactory->create();
-        /** @var $targetUpdates \Magento\Widget\Model\ResourceModel\Layout\Update\Collection */
+        /** @var \Magento\Widget\Model\ResourceModel\Layout\Update\Collection $targetUpdates */
         $targetUpdates = $update->getCollection();
         $targetUpdates->addThemeFilter($target->getId());
         $targetUpdates->delete();
 
-        /** @var $sourceCollection \Magento\Widget\Model\ResourceModel\Layout\Link\Collection */
+        /** @var \Magento\Widget\Model\ResourceModel\Layout\Link\Collection $sourceCollection */
         $sourceCollection = $this->_link->getCollection();
         $sourceCollection->addThemeFilter($source->getId());
-        /** @var $layoutLink \Magento\Widget\Model\Layout\Link */
+        /** @var \Magento\Widget\Model\Layout\Link $layoutLink */
         foreach ($sourceCollection as $layoutLink) {
-            /** @var $update \Magento\Widget\Model\Layout\Update */
+            /** @var \Magento\Widget\Model\Layout\Update $update */
             $update = $this->_updateFactory->create();
             $update->load($layoutLink->getLayoutUpdateId());
             if ($update->getId()) {

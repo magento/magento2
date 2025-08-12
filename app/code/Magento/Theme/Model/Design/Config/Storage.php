@@ -106,9 +106,9 @@ class Storage
     public function save(DesignConfigInterface $designConfig)
     {
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
-        /* @var $saveTransaction \Magento\Framework\DB\Transaction */
+        /** @var \Magento\Framework\DB\Transaction $saveTransaction */
         $saveTransaction = $this->transactionFactory->create();
-        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
+        /** @var \Magento\Framework\DB\Transaction $deleteTransaction */
         $deleteTransaction = $this->transactionFactory->create();
         foreach ($fieldsData as $fieldData) {
             /** @var ValueInterface|Value $backendModel */
@@ -145,7 +145,7 @@ class Storage
     public function delete(DesignConfigInterface $designConfig)
     {
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
-        /* @var $deleteTransaction \Magento\Framework\DB\Transaction */
+        /** @var \Magento\Framework\DB\Transaction $deleteTransaction */
         $deleteTransaction = $this->transactionFactory->create();
         foreach ($fieldsData as $fieldData) {
             /** @var ValueInterface|Value $backendModel */

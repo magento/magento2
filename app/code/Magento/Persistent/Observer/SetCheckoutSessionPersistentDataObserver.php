@@ -87,7 +87,7 @@ class SetCheckoutSessionPersistentDataObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $checkoutSession \Magento\Checkout\Model\Session */
+        /** @var \Magento\Checkout\Model\Session $checkoutSession */
         $checkoutSession = $observer->getEvent()->getData('checkout_session');
         if ($this->persistentData->isShoppingCartPersist() && $this->persistentSession->isPersistent()) {
             if (!$this->customerSession->isLoggedIn() && $this->persistentData->getClearOnLogout()) {

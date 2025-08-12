@@ -55,7 +55,7 @@ class AttributeTest extends TestCase
     public function testSaveOptionSystemAttribute()
     {
         /** @var MockObject $connectionMock */
-        /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceModel */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
         $attributeData = [
@@ -198,7 +198,7 @@ class AttributeTest extends TestCase
     public function testSaveOptionNewUserDefinedAttribute()
     {
         /** @var MockObject $connectionMock */
-        /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceModel */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
         $attributeData = [
@@ -295,7 +295,7 @@ class AttributeTest extends TestCase
     public function testSaveOptionNoValue()
     {
         /** @var MockObject $connectionMock */
-        /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceModel */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
         $objectManagerHelper = new ObjectManager($this);
@@ -389,7 +389,7 @@ class AttributeTest extends TestCase
             ]
         );
 
-        /** @var $resource \Magento\Framework\App\ResourceConnection */
+        /** @var \Magento\Framework\App\ResourceConnection $resource */
         $resource = $this->createMock(ResourceConnection::class);
         $resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
         $resource->expects($this->any())->method('getConnection')->with()->willReturn($connectionMock);

@@ -89,7 +89,7 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     {
         $imageTypes = [];
         foreach ($this->catalogProductMediaConfig->getMediaAttributeCodes() as $attributeCode) {
-            /* @var $attribute Attribute */
+            /** @var Attribute $attribute */
             $imageTypes[$attributeCode] = [
                 'code' => $attributeCode,
                 'value' => '',

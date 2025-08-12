@@ -21,12 +21,12 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue implements Htt
     public function execute()
     {
         try {
-            /* @var $queue \Magento\Newsletter\Model\Queue */
+            /** @var \Magento\Newsletter\Model\Queue $queue */
             $queue = $this->_objectManager->create(\Magento\Newsletter\Model\Queue::class);
 
             $templateId = $this->getRequest()->getParam('template_id');
             if ($templateId) {
-                /* @var $template \Magento\Newsletter\Model\Template */
+                /** @var \Magento\Newsletter\Model\Template $template */
                 $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class)->load($templateId);
 
                 if (!$template->getId() || $template->getIsSystem()) {

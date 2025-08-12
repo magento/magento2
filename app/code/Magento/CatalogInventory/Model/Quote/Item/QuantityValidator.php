@@ -107,7 +107,7 @@ class QuantityValidator
      */
     public function validate(Observer $observer)
     {
-        /* @var $quoteItem Item */
+        /** @var Item $quoteItem */
         $quoteItem = $observer->getEvent()->getItem();
         if (!$quoteItem ||
             !$quoteItem->getProductId() ||

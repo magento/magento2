@@ -37,7 +37,7 @@ class Discount extends AbstractTotal
                 $invoice->getOrder()->getBaseShippingDiscountAmount();
         }
 
-        /** @var $item \Magento\Sales\Model\Order\Invoice\Item */
+        /** @var \Magento\Sales\Model\Order\Invoice\Item $item */
         foreach ($invoice->getAllItems() as $item) {
             $orderItem = $item->getOrderItem();
             if ($orderItem->isDummy()) {

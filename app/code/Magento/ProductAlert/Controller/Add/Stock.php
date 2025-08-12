@@ -66,7 +66,7 @@ class Stock extends AddController implements HttpGetActionInterface
         }
 
         try {
-            /* @var $product \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->productRepository->getById($productId);
             $store = $this->storeManager->getStore();
             /** @var \Magento\ProductAlert\Model\Stock $model */

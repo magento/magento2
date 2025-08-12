@@ -70,7 +70,7 @@ class SetQuotePersistentDataObserver implements ObserverInterface
             return;
         }
 
-        /** @var $quote \Magento\Quote\Model\Quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $observer->getEvent()->getQuote();
         if (!$quote) {
             return;

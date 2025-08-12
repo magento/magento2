@@ -799,7 +799,7 @@ class Import extends AbstractModel
         foreach ($entities as $entityCode => $entityData) {
             $behaviorClassName = isset($entityData['behaviorModel']) ? $entityData['behaviorModel'] : null;
             if ($behaviorClassName && class_exists($behaviorClassName)) {
-                /** @var $behavior AbstractBehavior */
+                /** @var AbstractBehavior $behavior */
                 $behavior = $this->_behaviorFactory->create($behaviorClassName);
                 $behaviourData[$entityCode] = [
                     'token' => $behaviorClassName,

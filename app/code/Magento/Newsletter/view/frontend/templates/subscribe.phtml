@@ -11,7 +11,7 @@ if (!$block->getButtonLockManager()) {
         $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
     );
 }
-/** @var $escaper \Magento\Framework\Escaper */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <div class="block newsletter">
     <div class="title"><strong><?= $escaper->escapeHtml(__('Newsletter')) ?></strong></div>

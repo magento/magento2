@@ -119,7 +119,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      */
     public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
-        /** @var $entry ProductAttributeMediaGalleryEntryInterface */
+        /** @var ProductAttributeMediaGalleryEntryInterface $entry */
         $entryContent = $entry->getContent();
 
         if (!$this->contentValidator->isValid($entryContent)) {

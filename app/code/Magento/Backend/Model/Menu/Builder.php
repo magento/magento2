@@ -56,7 +56,7 @@ class Builder
      */
     public function getResult(\Magento\Backend\Model\Menu $menu)
     {
-        /** @var $items \Magento\Backend\Model\Menu\Item[] */
+        /** @var \Magento\Backend\Model\Menu\Item[] $items */
         $params = [];
         $items = [];
 

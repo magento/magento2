@@ -78,7 +78,7 @@ class CategoryProcessor
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
             $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
-            /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+            /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
             foreach ($collection as $category) {
                 $structure = explode(self::DELIMITER_CATEGORY, $category->getPath());
                 $pathSize = count($structure);

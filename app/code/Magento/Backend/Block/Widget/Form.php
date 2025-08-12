@@ -183,7 +183,7 @@ class Form extends \Magento\Backend\Block\Widget
     {
         $this->_addElementTypes($fieldset);
         foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
             if (!$this->_isAttributeVisible($attribute)) {
                 continue;
             }

@@ -275,7 +275,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getProductOptions()
     {
-        /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
+        /** @var \Magento\Catalog\Helper\Product\Configuration $helper */
         $helper = $this->_productConfig;
         return $helper->getCustomOptions($this->getItem());
     }
@@ -333,12 +333,12 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
             }
         }
 
-        /* @var $collection \Magento\Framework\Message\Collection */
+        /** @var \Magento\Framework\Message\Collection $collection */
         $collection = $this->messageManager->getMessages(true, 'quote_item' . $quoteItem->getId());
         if ($collection) {
             $additionalMessages = $collection->getItems();
             foreach ($additionalMessages as $message) {
-                /* @var $message \Magento\Framework\Message\MessageInterface */
+                /** @var \Magento\Framework\Message\MessageInterface $message */
                 $messages[] = [
                     'text' => $this->messageInterpretationStrategy->interpret($message),
                     'type' => $message->getType()
@@ -372,7 +372,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      */
     public function getFormatedOptionValue($optionValue)
     {
-        /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
+        /** @var \Magento\Catalog\Helper\Product\Configuration $helper */
         $helper = $this->_productConfig;
         $params = [
             'max_length' => 55,

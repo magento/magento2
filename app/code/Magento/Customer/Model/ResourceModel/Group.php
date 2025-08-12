@@ -96,7 +96,7 @@ class Group extends \Magento\Framework\Model\ResourceModel\Db\VersionControl\Abs
             $group->getId()
         )->load();
         foreach ($customerCollection as $customer) {
-            /** @var $customer \Magento\Customer\Model\Customer */
+            /** @var \Magento\Customer\Model\Customer $customer */
             $customer->load($customer->getId());
             $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStoreId())->getId();
             $customer->setGroupId($defaultGroupId);

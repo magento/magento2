@@ -229,7 +229,7 @@ class Options extends \Magento\Framework\View\Element\Template
     {
         $config = [];
         foreach ($this->getOptions() as $option) {
-            /* @var $option \Magento\Catalog\Model\Product\Option */
+            /** @var \Magento\Catalog\Model\Product\Option $option */
             if ($option->hasValues()) {
                 $tmpPriceValues = [];
                 foreach ($option->getValues() as $valueId => $value) {

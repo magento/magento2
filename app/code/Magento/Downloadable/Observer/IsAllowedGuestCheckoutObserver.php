@@ -69,7 +69,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
         $storeId = (int)$this->storeManager->getStore($observer->getEvent()->getStore())->getId();
         $result = $observer->getEvent()->getResult();
 
-        /* @var $quote Quote */
+        /** @var Quote $quote */
         $quote = $observer->getEvent()->getQuote();
         $isGuestCheckoutDisabled = $this->scopeConfig->isSetFlag(
             self::XML_PATH_DISABLE_GUEST_CHECKOUT,

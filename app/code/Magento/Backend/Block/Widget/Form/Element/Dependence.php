@@ -104,7 +104,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     public function addFieldDependence($fieldName, $fieldNameFrom, $refField)
     {
         if (!is_object($refField)) {
-            /** @var $refField \Magento\Config\Model\Config\Structure\Element\Dependency\Field */
+            /** @var \Magento\Config\Model\Config\Structure\Element\Dependency\Field $refField */
             $refField = $this->_fieldFactory->create(
                 ['fieldData' => ['value' => (string)$refField], 'fieldPrefix' => '']
             );
@@ -159,7 +159,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         $result = [];
         foreach ($this->_depends as $to => $row) {
             foreach ($row as $from => $field) {
-                /** @var $field \Magento\Config\Model\Config\Structure\Element\Dependency\Field */
+                /** @var \Magento\Config\Model\Config\Structure\Element\Dependency\Field $field */
                 $result[$this->_fields[$to]][$this->_fields[$from]] = [
                     'values' => $field->getValues(),
                     'negative' => $field->isNegative(),

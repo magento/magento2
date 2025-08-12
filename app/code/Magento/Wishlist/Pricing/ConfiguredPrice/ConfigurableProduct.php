@@ -70,7 +70,7 @@ class ConfigurableProduct extends AbstractPrice
                 $option = $configurableProduct->getOptionById($optionId);
                 if ($option) {
                     $itemOption = $item->getOptionByCode('option_' . $option->getId());
-                    /** @var $group \Magento\Catalog\Model\Product\Option\Type\DefaultType */
+                    /** @var \Magento\Catalog\Model\Product\Option\Type\DefaultType $group */
                     $group = $option->groupFactory($option->getType())
                         ->setOption($option);
                     $customPrice += $group->getOptionPrice($itemOption->getValue(), $price);

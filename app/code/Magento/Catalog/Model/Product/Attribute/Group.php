@@ -72,7 +72,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Group
     public function hasSystemAttributes()
     {
         $result = false;
-        /** @var $attributesCollection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $attributesCollection */
         $attributesCollection = $this->_attributeCollectionFactory->create();
         $attributesCollection->setAttributeGroupFilter($this->getId());
         foreach ($attributesCollection as $attribute) {

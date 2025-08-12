@@ -235,7 +235,7 @@ class Matrix extends \Magento\Backend\Block\Template
         foreach ($this->_getAssociatedProducts() as $product) {
             $keys = [];
             foreach ($this->getUsedAttributes() as $attribute) {
-                /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
                 $keys[] = $product->getData($attribute->getAttributeCode());
             }
             $productByUsedAttributes[implode('-', $keys)] = $product;
@@ -252,7 +252,7 @@ class Matrix extends \Magento\Backend\Block\Template
     {
         $variants = [];
         foreach ($this->_getAssociatedProducts() as $product) {
-            /* @var $attribute AbstractAttribute */
+            /** @var AbstractAttribute $attribute */
             foreach ($this->getUsedAttributes() as $attribute) {
                 $variants[$product->getId()][$attribute->getAttributeCode()] =
                     [

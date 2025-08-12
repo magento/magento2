@@ -84,7 +84,7 @@ class AbstractEavTest extends TestCase
         $testAttributeCode = 'lastname';
         $testAttributeValue = 'value';
         $testAttributeOptions = ['value' => 'option'];
-        /** @var $testAttribute \Magento\Eav\Model\Entity\Attribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute $testAttribute */
         $testAttribute = $this->getMockForAbstractClass(
             AbstractAttribute::class,
             [],

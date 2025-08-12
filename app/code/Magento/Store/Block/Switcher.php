@@ -116,7 +116,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
             $websiteStores = $this->_storeManager->getWebsite()->getStores();
             $stores = [];
             foreach ($websiteStores as $store) {
-                /* @var $store \Magento\Store\Model\Store */
+                /** @var \Magento\Store\Model\Store $store */
                 if (!$store->isActive()) {
                     continue;
                 }
@@ -157,7 +157,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             foreach ($rawGroups as $group) {
-                /* @var $group Group */
+                /** @var Group $group */
                 if (!isset($rawStores[$group->getId()])) {
                     continue;
                 }

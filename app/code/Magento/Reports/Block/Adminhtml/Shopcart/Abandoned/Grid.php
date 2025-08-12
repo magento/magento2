@@ -74,7 +74,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
      */
     protected function _prepareCollection()
     {
-        /** @var $collection \Magento\Reports\Model\ResourceModel\Quote\Collection */
+        /** @var \Magento\Reports\Model\ResourceModel\Quote\Collection $collection */
         $collection = $this->_quotesFactory->create();
 
         $filter = $this->getParam($this->getVarNameFilter(), []);

@@ -81,7 +81,7 @@ class RefundOrderInventoryObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /* @var $creditmemo \Magento\Sales\Model\Order\Creditmemo */
+        /** @var \Magento\Sales\Model\Order\Creditmemo $creditmemo */
         $creditmemo = $observer->getEvent()->getCreditmemo();
         $order = $this->orderRepository->get($creditmemo->getOrderId());
         $returnToStockItems = [];

@@ -50,7 +50,7 @@ class SetCanApplyMsrpObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $quote \Magento\Quote\Model\Quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $observer->getEvent()->getQuote();
 
         $canApplyMsrp = false;

@@ -175,7 +175,7 @@ class Processor
         $destinationFile = $this->mediaConfig->getTmpMediaPath($fileName);
 
         try {
-            /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
+            /** @var \Magento\MediaStorage\Helper\File\Storage\Database $storageHelper */
             $storageHelper = $this->fileStorageDb;
             if ($move) {
                 $this->mediaDirectory->renameFile($file, $destinationFile);

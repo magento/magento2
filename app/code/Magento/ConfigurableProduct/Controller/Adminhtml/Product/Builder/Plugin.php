@@ -78,7 +78,7 @@ class Plugin
 
             $data = [];
             foreach ($configProduct->getTypeInstance()->getSetAttributes($configProduct) as $attribute) {
-                /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
                 if (!$attribute->getIsUnique() &&
                     $attribute->getFrontend()->getInputType() != 'gallery' &&
                     $attribute->getAttributeCode() != 'required_options' &&

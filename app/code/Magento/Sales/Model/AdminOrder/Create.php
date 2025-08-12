@@ -586,7 +586,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         /* Initialize catalog rule data with new session values */
         $this->initRuleData();
         foreach ($order->getItemsCollection($this->_salesConfig->getAvailableProductTypes(), true) as $orderItem) {
-            /* @var $orderItem \Magento\Sales\Model\Order\Item */
+            /** @var \Magento\Sales\Model\Order\Item $orderItem */
             if (!$orderItem->getParentItem()) {
                 $qty = $orderItem->getQtyOrdered();
                 if (!$order->getReordered()) {
@@ -1028,7 +1028,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     {
         if (isset($data['add_order_item'])) {
             foreach ($data['add_order_item'] as $orderItemId => $value) {
-                /* @var $orderItem \Magento\Sales\Model\Order\Item */
+                /** @var \Magento\Sales\Model\Order\Item $orderItem */
                 $orderItem = $this->_objectManager->create(\Magento\Sales\Model\Order\Item::class)->load($orderItemId);
                 $item = $this->initFromOrderItem($orderItem);
                 if (is_string($item)) {
@@ -1916,7 +1916,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function _prepareCustomer()
     {
-        /** @var $store \Magento\Store\Model\Store */
+        /** @var \Magento\Store\Model\Store $store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
 

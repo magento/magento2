@@ -132,7 +132,7 @@ class ConvertQuoteTaxToOrderTax
                             'base_real_amount' => $baseRealAmount,
                         ];
 
-                        /** @var $orderTax \Magento\Tax\Model\Sales\Order\Tax */
+                        /** @var \Magento\Tax\Model\Sales\Order\Tax $orderTax */
                         $orderTax = $this->orderTaxFactory->create();
                         $result = $orderTax->setData($data)->save();
 
@@ -166,7 +166,7 @@ class ConvertQuoteTaxToOrderTax
                                         'real_base_amount' => $quoteItemId['real_base_amount'],
                                         'taxable_item_type' => $quoteItemId['item_type'],
                                     ];
-                                    /** @var $taxItem \Magento\Sales\Model\Order\Tax\Item */
+                                    /** @var \Magento\Sales\Model\Order\Tax\Item $taxItem */
                                     $taxItem = $this->taxItemFactory->create();
                                     $taxItem->setData($data)->save();
                                 }

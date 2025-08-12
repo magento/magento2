@@ -95,7 +95,7 @@ class Container extends Select
     {
         if (!$this->getOptions()) {
             $layoutMergeParams = ['theme' => $this->_getThemeInstance($this->getTheme())];
-            /** @var $layoutProcessor \Magento\Framework\View\Layout\ProcessorInterface */
+            /** @var \Magento\Framework\View\Layout\ProcessorInterface $layoutProcessor */
             $layoutProcessor = $this->_layoutProcessorFactory->create($layoutMergeParams);
             $layoutProcessor->addPageHandles([$this->getLayoutHandle()]);
             $layoutProcessor->addPageHandles(['default']);

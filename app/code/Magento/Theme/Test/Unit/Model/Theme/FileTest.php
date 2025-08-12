@@ -114,7 +114,7 @@ class FileTest extends TestCase
         $customization = $this->getMockBuilder(FileInterface::class)
             ->getMock();
 
-        /** @var $customization \Magento\Framework\View\Design\Theme\Customization\FileInterface */
+        /** @var \Magento\Framework\View\Design\Theme\Customization\FileInterface $customization */
         $this->assertInstanceOf(get_class($this->model), $this->model->setCustomizationService($customization));
     }
 

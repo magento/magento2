@@ -124,7 +124,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         $attributes = $this->_viewConfig
             ->getViewConfig()
             ->getMediaAttributes('Magento_Catalog', $this->imageHelper::MEDIA_TYPE_CONFIG_NODE, 'rss_thumbnail');
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         foreach ($this->rssModel->getProductCollection($category, $this->getStoreId()) as $product) {
             $product->setAllowedInRss(true);
             $product->setAllowedPriceInRss(true);
@@ -241,7 +241,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     {
         $result = [];
         if ($this->isAllowed()) {
-            /** @var $category \Magento\Catalog\Model\Category */
+            /** @var \Magento\Catalog\Model\Category $category */
             $category = $this->categoryFactory->create();
             $treeModel = $category->getTreeModel()->loadNode($this->storeManager->getStore()->getRootCategoryId());
             $nodes = $treeModel->loadChildren()->getChildren();
@@ -251,7 +251,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
                 $nodeIds[] = $node->getId();
             }
 
-            /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+            /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
             $collection = $category->getResourceCollection();
             $collection->addIdFilter($nodeIds)
                 ->addAttributeToSelect('url_key')

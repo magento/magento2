@@ -111,7 +111,7 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      */
     public function getSelectCountSql()
     {
-        /* @var $countSelect \Magento\Framework\DB\Select */
+        /** @var \Magento\Framework\DB\Select $countSelect */
         $countSelect = parent::getSelectCountSql();
         $countSelect->resetJoinLeft();
         return $countSelect;

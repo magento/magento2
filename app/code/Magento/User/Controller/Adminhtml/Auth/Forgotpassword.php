@@ -106,7 +106,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                     $this->messageManager->addErrorMessage($exception->getMessage());
                     return $resultRedirect->setPath('admin');
                 }
-                /** @var $collection \Magento\User\Model\ResourceModel\User\Collection */
+                /** @var \Magento\User\Model\ResourceModel\User\Collection $collection */
                 $collection = $this->userCollectionFactory->create();
                 $collection->addFieldToFilter('email', $email);
                 $collection->load(false);

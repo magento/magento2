@@ -46,7 +46,7 @@ class Relation implements RelationInterface
      */
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
-        /** @var $object \Magento\Sales\Model\Order\Invoice */
+        /** @var \Magento\Sales\Model\Order\Invoice $object */
         if (null !== $object->getItems()) {
             foreach ($object->getItems() as $item) {
                 /** @var \Magento\Sales\Model\Order\Invoice\Item */

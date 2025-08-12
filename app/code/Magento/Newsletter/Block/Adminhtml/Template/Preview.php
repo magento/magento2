@@ -54,7 +54,7 @@ class Preview extends \Magento\Backend\Block\Widget
      */
     protected function _toHtml()
     {
-        /* @var $template \Magento\Newsletter\Model\Template */
+        /** @var \Magento\Newsletter\Model\Template $template */
         $template = $this->_templateFactory->create();
 
         if ($id = (int)$this->getRequest()->getParam('id')) {

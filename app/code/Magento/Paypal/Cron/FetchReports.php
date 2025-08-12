@@ -33,7 +33,7 @@ class FetchReports
     {
         /** @var \Magento\Paypal\Model\Report\Settlement $reports */
         $reports = $this->_settlementFactory->create();
-        /* @var $reports \Magento\Paypal\Model\Report\Settlement */
+        /** @var \Magento\Paypal\Model\Report\Settlement $reports */
         $credentials = $reports->getSftpCredentials(true);
         foreach ($credentials as $config) {
             $reports->fetchAndSave(\Magento\Paypal\Model\Report\Settlement::createConnection($config));

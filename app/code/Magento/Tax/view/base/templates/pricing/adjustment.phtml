@@ -6,7 +6,7 @@
 ?>
 
 <?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
-<?php /** @var $escaper \Magento\Framework\Escaper */ ?>
+<?php /** @var \Magento\Framework\Escaper $escaper */ ?>
 
 <?php if ($block->displayBothPrices()): ?>
     <span id="<?= $escaper->escapeHtmlAttr($block->buildIdWithPrefix('price-excluding-tax-')) ?>"

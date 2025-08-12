@@ -17,7 +17,7 @@ class Template extends \Magento\Widget\Controller\Adminhtml\Widget\Instance impl
      */
     public function execute()
     {
-        /* @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
+        /** @var \Magento\Widget\Model\Widget\Instance $widgetInstance */
         $widgetInstance = $this->_initWidgetInstance();
         $block = $this->getRequest()->getParam('block', '');
         $selected = $this->getRequest()->getParam('selected', null);

@@ -48,7 +48,7 @@ class AggregateSalesReportTaxData
         $this->localeResolver->emulate(0);
         $currentDate = $this->localeDate->date();
         $date = $currentDate->modify('-25 hours');
-        /** @var $reportTax \Magento\Tax\Model\ResourceModel\Report\Tax */
+        /** @var \Magento\Tax\Model\ResourceModel\Report\Tax $reportTax */
         $reportTax = $this->reportTaxFactory->create();
         $reportTax->aggregate($date);
         $this->localeResolver->revert();

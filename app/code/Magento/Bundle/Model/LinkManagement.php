@@ -385,7 +385,7 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
             );
         }
 
-        /* @var $resource Bundle */
+        /** @var Bundle $resource */
         $resource = $this->bundleFactory->create();
         $selections = $resource->getSelectionsData($product->getData($linkField));
         return $this->processLinkedProduct(
@@ -427,7 +427,7 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
             );
         }
 
-        /* @var $resource Bundle */
+        /** @var Bundle $resource */
         $resource = $this->bundleFactory->create();
         $selections = $resource->getSelectionsData($product->getData($linkField));
 
@@ -467,7 +467,7 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
             );
         }
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        /* @var $resource Bundle */
+        /** @var Bundle $resource */
         $resource = $this->bundleFactory->create();
         $resource->dropAllUnneededSelections($product->getData($linkField), $excludeSelectionIds);
         $resource->removeProductRelations($product->getData($linkField), array_unique($usedProductIds));

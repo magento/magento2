@@ -60,7 +60,7 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
 
         foreach ($this->rssModel->getProductsCollection() as $item) {
-            /* @var $item \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $item */
             $url = $this->getUrl(
                 'catalog/product/edit',
                 ['id' => $item->getId(), '_secure' => true, '_nosecret' => true]

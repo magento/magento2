@@ -63,7 +63,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->getGroups()) {
-            /* @var $group \Magento\Eav\Model\Entity\Attribute\Group */
+            /** @var \Magento\Eav\Model\Entity\Attribute\Group $group */
             foreach ($object->getGroups() as $group) {
                 $group->setAttributeSetId($object->getId());
                 if ($group->itemExists() && !$group->getId()) {
@@ -74,14 +74,14 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         if ($object->getRemoveGroups()) {
             foreach ($object->getRemoveGroups() as $group) {
-                /* @var $group \Magento\Eav\Model\Entity\Attribute\Group */
+                /** @var \Magento\Eav\Model\Entity\Attribute\Group $group */
                 $group->delete();
             }
             $this->_attrGroupFactory->create()->updateDefaultGroup($object->getId());
         }
         if ($object->getRemoveAttributes()) {
             foreach ($object->getRemoveAttributes() as $attribute) {
-                /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+                /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
                 $attribute->deleteEntity();
             }
         }

@@ -266,7 +266,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         $items = [];
         if ($request->getAllItems()) {
             foreach ($request->getAllItems() as $item) {
-                /* @var $item \Magento\Quote\Model\Quote\Item */
+                /** @var \Magento\Quote\Model\Quote\Item $item */
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     // Don't process children here - we will process (or already have processed) them below
                     continue;
@@ -324,7 +324,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         $defaultErrorMsg = __('The shipping module is not available.');
         $showMethod = $this->getConfigData('showmethod');
 
-        /** @var $item \Magento\Quote\Model\Quote\Item */
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($this->getAllItems($request) as $item) {
             $product = $item->getProduct();
             if ($product && $product->getId()) {
@@ -685,7 +685,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected function debugErrors($errors)
     {
         if ($this->getConfigData('showmethod')) {
-            /* @var $error Error */
+            /** @var Error $error */
             $this->_debug($errors);
         }
     }
@@ -698,7 +698,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected function getErrorMessage()
     {
         if ($this->getConfigData('showmethod')) {
-            /* @var $error Error */
+            /** @var Error $error */
             $error = $this->_rateErrorFactory->create();
             $error->setCarrier($this->getCarrierCode());
             $error->setCarrierTitle($this->getConfigData('title'));

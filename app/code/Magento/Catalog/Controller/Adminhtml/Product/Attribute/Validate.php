@@ -169,7 +169,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
 
         if ($this->getRequest()->has('new_attribute_set_name')) {
             $setName = $this->getRequest()->getParam('new_attribute_set_name');
-            /** @var $attributeSet Set */
+            /** @var Set $attributeSet */
             $attributeSet = $this->_objectManager->create(Set::class);
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {

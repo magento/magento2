@@ -87,12 +87,12 @@ class Cron extends \Magento\Framework\App\Config\Value
         }
 
         try {
-            /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
+            /** @var \Magento\Framework\App\Config\ValueInterface $configValue */
             $configValue = $this->_configValueFactory->create();
             $configValue->load(self::CRON_STRING_PATH, 'path');
             $configValue->setValue($cronExprString)->setPath(self::CRON_STRING_PATH)->save();
 
-            /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
+            /** @var \Magento\Framework\App\Config\ValueInterface $configValue */
             $configValue = $this->_configValueFactory->create();
             $configValue->load(self::CRON_MODEL_PATH, 'path');
             $configValue->setValue($this->_runModelPath)->setPath(self::CRON_MODEL_PATH)->save();

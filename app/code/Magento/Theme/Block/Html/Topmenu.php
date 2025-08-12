@@ -120,7 +120,7 @@ class Topmenu extends Template implements IdentityInterface
     {
         $total = $items->count();
         foreach ($items as $item) {
-            /** @var $item Menu\Item */
+            /** @var Menu\Item $item */
             if ($item->hasChildren()) {
                 $total += $this->_countItems($item->getChildren());
             }

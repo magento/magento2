@@ -137,7 +137,7 @@ class Builder
      */
     private function createEmptyProduct($typeId, $attributeSetId, $storeId): Product
     {
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productFactory->create();
         $product->setData('_edit_mode', true);
 

@@ -481,7 +481,7 @@ class Config extends \Magento\Eav\Model\Config
     {
         $options = ['position' => __('Position')];
         foreach ($this->getAttributesUsedForSortBy() as $attribute) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
+            /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
             $options[$attribute->getAttributeCode()] = $attribute->getStoreLabel();
         }
 

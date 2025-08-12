@@ -170,7 +170,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $destinationFile = $this->getUniqueFileName($file);
 
-        /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
+        /** @var \Magento\MediaStorage\Helper\File\Storage\Database $storageHelper */
         $storageHelper = $this->fileStorageDb;
 
         if ($storageHelper->checkDbUsage()) {

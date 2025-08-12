@@ -588,7 +588,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getUrl($route = '', $params = [])
     {
-        /** @var $url UrlInterface */
+        /** @var UrlInterface $url */
         $url = $this->_url->setScope($this);
         if ($this->_storeManager->getStore()->getId() != $this->getId()) {
             $params['_scope_to_url'] = true;

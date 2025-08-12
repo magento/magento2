@@ -32,7 +32,7 @@ class RelatedProducts
     public function getRelatedProductIds(array $quoteItems)
     {
         $productIds = [];
-        /** @var $quoteItems \Magento\Quote\Model\Quote\Item[] */
+        /** @var \Magento\Quote\Model\Quote\Item[] $quoteItems */
         foreach ($quoteItems as $quoteItem) {
             $productTypeOpt = $quoteItem->getOptionByCode('product_type');
             if ($productTypeOpt instanceof \Magento\Quote\Model\Quote\Item\Option) {

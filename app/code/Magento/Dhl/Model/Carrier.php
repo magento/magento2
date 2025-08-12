@@ -1270,13 +1270,13 @@ class Carrier extends AbstractDhl implements CarrierInterface
                 $this->_errors[] = $e->getMessage();
             }
         }
-        /* @var $result Result */
+        /** @var Result $result */
         $result = $this->_rateFactory->create();
         if ($this->_rates) {
             foreach ($this->_rates as $rate) {
                 $method = $rate['service'];
                 $data = $rate['data'];
-                /* @var $rate Method */
+                /** @var Method $rate */
                 $rate = $this->_rateMethodFactory->create();
                 $rate->setCarrier(self::CODE);
                 $rate->setCarrierTitle($this->getConfigData('title'));
@@ -1323,7 +1323,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
             $dhlProductDescription = $this->getDhlProductTitle($dhlProduct);
 
             if ($currencyCode != $baseCurrencyCode) {
-                /* @var $currency Currency */
+                /** @var Currency $currency */
                 $currency = $this->_currencyFactory->create();
                 $rates = $currency->getCurrencyRates($currencyCode, [$baseCurrencyCode]);
                 if (!empty($rates) && isset($rates[$baseCurrencyCode])) {
@@ -1527,13 +1527,13 @@ class Carrier extends AbstractDhl implements CarrierInterface
             }
         }
 
-        /* @var $result Result */
+        /** @var Result $result */
         $result = $this->_rateFactory->create();
         if ($this->_rates) {
             foreach ($this->_rates as $rate) {
                 $method = $rate['service'];
                 $data = $rate['data'];
-                /* @var $rate Method */
+                /** @var Method $rate */
                 $rate = $this->_rateMethodFactory->create();
                 $rate->setCarrier(self::CODE);
                 $rate->setCarrierTitle($this->getConfigData('title'));
@@ -1587,7 +1587,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
             $dhlProductDescription = $this->getDhlProductTitle($dhlProduct);
 
             if ($currencyCode != $baseCurrencyCode) {
-                /* @var $currency Currency */
+                /** @var Currency $currency */
                 $currency = $this->_currencyFactory->create();
                 $rates = $currency->getCurrencyRates($currencyCode, [$baseCurrencyCode]);
                 if (!empty($rates) && isset($rates[$baseCurrencyCode])) {

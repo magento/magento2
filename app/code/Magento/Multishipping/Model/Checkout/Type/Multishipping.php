@@ -417,7 +417,7 @@ class Multishipping extends \Magento\Framework\DataObject
     public function removeAddressItem($addressId, $itemId)
     {
         $address = $this->getQuote()->getAddressById($addressId);
-        /* @var $address \Magento\Quote\Model\Quote\Address */
+        /** @var \Magento\Quote\Model\Quote\Address $address */
         if ($address) {
             $item = $address->getValidItemById($itemId);
             if ($item) {
@@ -808,7 +808,7 @@ class Multishipping extends \Magento\Framework\DataObject
     {
         $quote = $this->getQuote();
 
-        /** @var $paymentMethod \Magento\Payment\Model\Method\AbstractMethod */
+        /** @var \Magento\Payment\Model\Method\AbstractMethod $paymentMethod */
         $paymentMethod = $quote->getPayment()->getMethodInstance();
         if (!$paymentMethod->isAvailable($quote)) {
             throw new \Magento\Framework\Exception\LocalizedException(

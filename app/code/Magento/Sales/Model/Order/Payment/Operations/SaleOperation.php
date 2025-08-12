@@ -40,7 +40,7 @@ class SaleOperation
      */
     public function execute(OrderPaymentInterface $payment): OrderPaymentInterface
     {
-        /** @var $payment Payment */
+        /** @var Payment $payment */
         $invoice = $payment->getOrder()->prepareInvoice();
         $invoice->register();
         $this->processInvoiceOperation->execute($payment, $invoice, 'sale');

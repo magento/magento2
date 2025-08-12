@@ -35,7 +35,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         foreach ($xpath->query('/payment/credit_cards/type') as $type) {
             $typeArray = [];
 
-            /** @var $typeSubNode \DOMNode */
+            /** @var \DOMNode $typeSubNode */
             foreach ($type->childNodes as $typeSubNode) {
                 switch ($typeSubNode->nodeName) {
                     case 'label':
@@ -87,7 +87,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $groupAttributes = $group->attributes;
             $id = $groupAttributes->getNamedItem('id')->nodeValue;
 
-            /** @var $groupSubNode \DOMNode */
+            /** @var \DOMNode $groupSubNode */
             foreach ($group->childNodes as $groupSubNode) {
                 switch ($groupSubNode->nodeName) {
                     case 'label':
@@ -113,7 +113,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var \DOMNode $method */
         foreach ($xpath->query('/payment/methods/method') as $method) {
             $name = $method->attributes->getNamedItem('name')->nodeValue;
-            /** @var $methodSubNode \DOMNode */
+            /** @var \DOMNode $methodSubNode */
             foreach ($method->childNodes as $methodSubNode) {
                 if ($methodSubNode->nodeType != XML_ELEMENT_NODE) {
                     continue;

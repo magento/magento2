@@ -480,7 +480,7 @@ class Filter extends Template
     {
         $skipParams = ['handle', 'area'];
 
-        /** @var $layout LayoutInterface */
+        /** @var LayoutInterface $layout */
         $layout = $this->_layoutFactory->create(['cacheable' => false]);
         $layout->getUpdate()->addHandle($this->_directiveParams['handle'])->load();
 
@@ -489,7 +489,7 @@ class Filter extends Template
 
         $rootBlock = false;
         foreach ($layout->getAllBlocks() as $block) {
-            /* @var $block AbstractBlock */
+            /** @var AbstractBlock $block */
             if (!$block->getParentBlock() && !$rootBlock) {
                 $rootBlock = $block;
             }

@@ -28,7 +28,7 @@ class Products extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         )->setSelectedProducts(
             explode(',', $selected)
         );
-        /* @var $serializer \Magento\Backend\Block\Widget\Grid\Serializer */
+        /** @var \Magento\Backend\Block\Widget\Grid\Serializer $serializer */
         $serializer = $this->_view->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Grid\Serializer::class,
             '',

@@ -288,7 +288,7 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
     protected function calculateFixedBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)
     {
         $fullAmount = $basePriceValue;
-        /** @var $option Option */
+        /** @var Option $option */
         foreach ($selectionPriceList as $selectionPrice) {
             $fullAmount += ($selectionPrice->getValue() * $selectionPrice->getQuantity());
         }
@@ -377,7 +377,7 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
         if ($selections === null) {
             return $priceList;
         }
-        /* @var $selection \Magento\Bundle\Model\Selection|\Magento\Catalog\Model\Product */
+        /** @var \Magento\Bundle\Model\Selection|\Magento\Catalog\Model\Product $selection */
         foreach ($selections as $selection) {
             if (!$selection->isSalable()) {
                 // @todo CatalogInventory Show out of stock Products

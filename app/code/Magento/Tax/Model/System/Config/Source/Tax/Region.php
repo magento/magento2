@@ -29,7 +29,7 @@ class Region implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray($noEmpty = false, $country = null)
     {
-        /** @var $region \Magento\Directory\Model\ResourceModel\Region\Collection */
+        /** @var \Magento\Directory\Model\ResourceModel\Region\Collection $region */
         $regionCollection = $this->_regionsFactory->create();
         $options = $regionCollection->addCountryFilter($country)->toOptionArray();
 

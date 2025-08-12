@@ -28,7 +28,7 @@ class DownloadCustomCss extends Theme implements HttpGetActionInterface, HttpPos
     {
         $themeId = $this->getRequest()->getParam('theme_id');
         try {
-            /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */
+            /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
             $themeFactory = $this->_objectManager->create(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
             $theme = $themeFactory->create($themeId);
             if ($theme === null || !$theme->getId()) {
@@ -41,7 +41,7 @@ class DownloadCustomCss extends Theme implements HttpGetActionInterface, HttpPos
             $customCssFiles = $theme->getCustomization()->getFilesByType(
                 \Magento\Theme\Model\Theme\Customization\File\CustomCss::TYPE
             );
-            /** @var $customCssFile \Magento\Framework\View\Design\Theme\FileInterface */
+            /** @var \Magento\Framework\View\Design\Theme\FileInterface $customCssFile */
             $customCssFile = reset($customCssFiles);
             if ($customCssFile && $customCssFile->getContent()) {
                 return $this->_fileFactory->create(

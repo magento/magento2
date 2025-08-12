@@ -210,7 +210,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     {
         $tabs = $this->getTabs();
         $tabs->rewind();
-        /** @var $tab \Magento\Config\Model\Config\Structure\Element\Tab */
+        /** @var \Magento\Config\Model\Config\Structure\Element\Tab $tab */
         $tab = $tabs->current();
         $tab->getChildren()->rewind();
         if (!$tab->getChildren()->current()->isVisible()) {

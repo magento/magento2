@@ -152,7 +152,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         $size = $this->getQty();
         $maxAttempts = $this->getMaxAttempts() ? $this->getMaxAttempts() : self::MAX_GENERATE_ATTEMPTS;
         $this->increaseLength();
-        /** @var $coupon \Magento\SalesRule\Model\Coupon */
+        /** @var \Magento\SalesRule\Model\Coupon $coupon */
         $coupon = $this->couponFactory->create();
         $nowTimestamp = $this->dateTime->formatDate($this->date->gmtTimestamp());
 

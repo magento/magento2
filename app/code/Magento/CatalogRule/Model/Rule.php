@@ -350,7 +350,7 @@ class Rule extends AbstractModel implements RuleInterface, IdentityInterface, Re
             $this->setCollectedAttributes([]);
 
             if ($this->getWebsiteIds()) {
-                /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+                /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
                 $productCollection = $this->_productCollectionFactory->create();
                 $productCollection->setStoreId($this->_storeManager->getDefaultStoreView()->getId());
                 $productCollection->addWebsiteFilter($this->getWebsiteIds());

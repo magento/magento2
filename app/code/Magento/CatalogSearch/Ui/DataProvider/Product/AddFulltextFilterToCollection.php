@@ -36,7 +36,7 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
      */
     public function addFilter(Collection $collection, $field, $condition = null)
     {
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         if (isset($condition['fulltext']) && (string)$condition['fulltext'] !== '') {
             $this->searchCollection->addBackendSearchFilter($condition['fulltext']);
             $productIds = $this->searchCollection->load()->getAllIds();

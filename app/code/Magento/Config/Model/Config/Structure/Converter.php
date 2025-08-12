@@ -63,7 +63,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $result = $this->_convertDOMDocument($source);
 
         foreach ($this->_mapperList as $type) {
-            /** @var $mapper MapperInterface */
+            /** @var MapperInterface $mapper */
             $mapper = $this->_mapperFactory->create($type);
             $result = $mapper->map($result);
         }
@@ -111,7 +111,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     break;
 
                 default:
-                    /** @var $child \DOMElement */
+                    /** @var \DOMElement $child */
                     if ($childName == 'attribute') {
                         $childName = $child->getAttribute('type');
                     }

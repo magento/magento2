@@ -44,7 +44,7 @@ class GuestShippingAddressManagement implements GuestShippingAddressManagementIn
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingAddressManagement->assign($quoteIdMask->getQuoteId(), $address);
     }
@@ -54,7 +54,7 @@ class GuestShippingAddressManagement implements GuestShippingAddressManagementIn
      */
     public function get($cartId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingAddressManagement->get($quoteIdMask->getQuoteId());
     }

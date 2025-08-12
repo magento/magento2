@@ -61,7 +61,7 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
     public function getValidateButton()
     {
         if ($this->_validateButton === null) {
-            /** @var $form \Magento\Framework\Data\Form */
+            /** @var \Magento\Framework\Data\Form $form */
             $form = $this->_element->getForm();
 
             $vatElementId = $this->_element->getHtmlId();

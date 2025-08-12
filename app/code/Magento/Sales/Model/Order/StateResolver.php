@@ -21,7 +21,7 @@ class StateResolver implements OrderStateResolverInterface
      */
     private function isOrderComplete(OrderInterface $order)
     {
-        /** @var $order Order|OrderInterface */
+        /** @var Order|OrderInterface $order */
         if (0 == $order->getBaseGrandTotal() || $order->canCreditmemo()) {
             return true;
         }
@@ -37,7 +37,7 @@ class StateResolver implements OrderStateResolverInterface
      */
     private function isOrderClosed(OrderInterface $order, $arguments)
     {
-        /** @var $order Order|OrderInterface */
+        /** @var Order|OrderInterface $order */
         $forceCreditmemo = in_array(self::FORCED_CREDITMEMO, $arguments);
         if ((float)$order->getTotalRefunded() || !$order->getTotalRefunded() && $forceCreditmemo) {
             return true;
@@ -54,7 +54,7 @@ class StateResolver implements OrderStateResolverInterface
      */
     private function isOrderProcessing(OrderInterface $order, $arguments)
     {
-        /** @var $order Order|OrderInterface */
+        /** @var Order|OrderInterface $order */
         if ($order->getState() == Order::STATE_NEW && in_array(self::IN_PROGRESS, $arguments)) {
             return true;
         }
@@ -79,7 +79,7 @@ class StateResolver implements OrderStateResolverInterface
      */
     public function getStateForOrder(OrderInterface $order, array $arguments = [])
     {
-        /** @var $order Order|OrderInterface */
+        /** @var Order|OrderInterface $order */
         $orderState = $this->getInitialOrderState($order);
         if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice() && !$order->canShip()) {
             if ($this->isOrderComplete($order)) {

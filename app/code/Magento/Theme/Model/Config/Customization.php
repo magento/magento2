@@ -112,7 +112,7 @@ class Customization
     {
         $storesByThemes = [];
         $stores = $this->_storeManager->getStores();
-        /** @var $store Store */
+        /** @var Store $store */
         foreach ($stores as $store) {
             foreach ($this->storeThemesResolver->getThemes($store) as $themeId) {
                 if (!isset($storesByThemes[$themeId])) {
@@ -195,7 +195,7 @@ class Customization
         $this->_assignedTheme = [];
         $this->_unassignedTheme = [];
 
-        /** @var $theme ThemeInterface */
+        /** @var ThemeInterface $theme */
         foreach ($themeCollection as $theme) {
             if (isset($assignedThemes[$theme->getId()])) {
                 $theme->setAssignedStores($assignedThemes[$theme->getId()]);

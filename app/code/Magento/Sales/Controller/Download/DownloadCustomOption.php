@@ -72,7 +72,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
     public function execute()
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
-        /** @var $option \Magento\Quote\Model\Quote\Item\Option */
+        /** @var \Magento\Quote\Model\Quote\Item\Option $option */
         $option = $this->_objectManager->create(
             \Magento\Quote\Model\Quote\Item\Option::class
         )->load($quoteItemOptionId);
@@ -92,7 +92,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
         }
         $productOption = null;
         if ($optionId) {
-            /** @var $productOption \Magento\Catalog\Model\Product\Option */
+            /** @var \Magento\Catalog\Model\Product\Option $productOption */
             $productOption = $this->_objectManager->create(
                 \Magento\Catalog\Model\Product\Option::class
             );

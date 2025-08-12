@@ -513,7 +513,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
                 $storeId = $product->getStoreId();
             }
             $eavAttribute->setStoreId($storeId);
-            /* @var $attribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
+            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
             $res[$eavAttribute->getId()] = [
                 'id' => $attribute->getId(),
                 'label' => $attribute->getLabel(),
@@ -691,7 +691,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         foreach ($data as $attributeData) {
-            /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
+            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
             $configurableAttribute = $this->configurableAttributeFactory->create();
             if (!$product->getIsDuplicate()) {
                 if (!empty($attributeData['id'])) {
@@ -717,7 +717,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
                 ->setProductId($product->getData($metadata->getLinkField()))
                 ->save();
         }
-        /** @var $configurableAttributesCollection \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection */
+        /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection $configurableAttributesCollection */
         $configurableAttributesCollection = $this->_attributeCollectionFactory->create();
         $configurableAttributesCollection->setProductFilter($product);
         $configurableAttributesCollection->addFieldToFilter(
@@ -919,7 +919,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
                 $subProduct = true;
                 if ($this->_isStrictProcessMode($processMode)) {
                     foreach ($this->getConfigurableAttributes($product) as $attributeItem) {
-                        /* @var $attributeItem \Magento\Framework\DataObject */
+                        /** @var \Magento\Framework\DataObject $attributeItem */
                         $attrId = $attributeItem->getData('attribute_id');
                         if (!isset($attributes[$attrId]) || empty($attributes[$attrId])) {
                             $subProduct = null;
@@ -1054,7 +1054,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
     {
         if ($productOption = $product->getCustomOption('simple_product')) {
             if ($optionProduct = $productOption->getProduct()) {
-                /* @var $optionProduct \Magento\Catalog\Model\Product */
+                /** @var \Magento\Catalog\Model\Product $optionProduct */
                 return $optionProduct->isVirtual();
             }
         }
@@ -1195,7 +1195,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
         $this->typeConfigurableFactory->create()->saveProducts($product, []);
-        /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
         $configurableAttribute = $this->configurableAttributeFactory->create();
         $configurableAttribute->deleteByProduct($product);
     }

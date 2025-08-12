@@ -21,7 +21,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $output = [];
         $xpath = new \DOMXPath($source);
         $types = $xpath->evaluate('/config/type');
-        /** @var $typeNode \DOMNode */
+        /** @var \DOMNode $typeNode */
         foreach ($types as $typeNode) {
             $typeName = $this->_getAttributeValue($typeNode, 'name');
             $isComposite = $this->_getAttributeValue($typeNode, 'composite', 'false');
@@ -37,7 +37,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $data['is_qty'] = !empty($isQty) && 'false' !== $isQty;
             $data['sort_order'] = (int)$this->_getAttributeValue($typeNode, 'sortOrder', 0);
 
-            /** @var $childNode \DOMNode */
+            /** @var \DOMNode $childNode */
             foreach ($typeNode->childNodes as $childNode) {
                 if ($childNode->nodeType != XML_ELEMENT_NODE) {
                     continue;
@@ -54,7 +54,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                         $data['stock_indexer'] = $this->_getAttributeValue($childNode, 'instance');
                         break;
                     case 'allowedSelectionTypes':
-                        /** @var $selectionsTypes \DOMNode */
+                        /** @var \DOMNode $selectionsTypes */
                         foreach ($childNode->childNodes as $selectionsTypes) {
                             if ($selectionsTypes->nodeType != XML_ELEMENT_NODE) {
                                 continue;
@@ -64,7 +64,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                         }
                         break;
                     case 'customAttributes':
-                        /** @var $customAttributes \DOMNode */
+                        /** @var \DOMNode $customAttributes */
                         foreach ($childNode->childNodes as $customAttributes) {
                             if ($customAttributes->nodeType != XML_ELEMENT_NODE) {
                                 continue;

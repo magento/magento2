@@ -145,7 +145,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        /** @var $label \Magento\Framework\View\Design\Theme\Label */
+        /** @var \Magento\Framework\View\Design\Theme\Label $label */
         $label = $this->_themeLabelFactory->create();
         $options = $label->getLabelsCollection(__('-- Please Select --'));
         $fieldset->addField(
@@ -204,7 +204,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        /* @var $layoutBlock \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout */
+        /** @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout $layoutBlock */
         $layoutBlock = $this->getLayout()->createBlock(
             \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout::class
         )->setWidgetInstance(

@@ -5,7 +5,7 @@
  */
 /** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter */
 ?>
-<?php /** @var  $block \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */ ?>
+<?php /** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block */ ?>
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrderItem()->getOrder() ?>
 <tr id="order-item-row-<?= (int) $_item->getId() ?>">

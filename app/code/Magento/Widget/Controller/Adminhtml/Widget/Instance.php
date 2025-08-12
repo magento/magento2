@@ -96,7 +96,7 @@ abstract class Instance extends \Magento\Backend\App\Action
      */
     protected function _initWidgetInstance()
     {
-        /** @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
+        /** @var \Magento\Widget\Model\Widget\Instance $widgetInstance */
         $widgetInstance = $this->_widgetFactory->create();
 
         $code = $this->getRequest()->getParam('code', null);

@@ -32,7 +32,7 @@ class DeleteProductGoogleExperimentScriptObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
         $this->_modelCode->loadByEntityIdAndType(
             $product->getId(),

@@ -44,7 +44,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         $rootId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
         $categories = [];
         $categoriesIds = [];
-        /* @var $store \Magento\Store\Model\Store */
+        /** @var \Magento\Store\Model\Store $store */
         foreach ($stores as $store) {
             if (!isset($categories[$store->getRootCategoryId()])) {
                 $select = $this->connection->select()->from(
@@ -128,7 +128,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         if (empty($stores)) {
             $stores = $this->storeManager->getStores();
         }
-        /* @var $store \Magento\Store\Model\Store */
+        /** @var \Magento\Store\Model\Store $store */
         foreach ($stores as $store) {
             $this->createTable($store->getId());
         }
@@ -144,7 +144,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      */
     protected function switchTables(array $stores = [])
     {
-        /** @var $store \Magento\Store\Model\Store */
+        /** @var \Magento\Store\Model\Store $store */
         foreach ($stores as $store) {
             $activeTableName = $this->getMainStoreTable($store->getId());
             $temporaryTableName = $this->addTemporaryTableSuffix($this->getMainStoreTable($store->getId()));

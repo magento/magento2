@@ -76,7 +76,7 @@ class UserExpiration extends AbstractDb
      */
     protected function _beforeSave(AbstractModel $userExpiration)
     {
-        /** @var $userExpiration UserExpirationModel */
+        /** @var UserExpirationModel $userExpiration */
         $expiresAt = $userExpiration->getExpiresAt();
         $utcValue = strtotime($expiresAt)
             ? $this->timezone->convertConfigTimeToUtc($expiresAt)
@@ -95,7 +95,7 @@ class UserExpiration extends AbstractDb
      */
     protected function _afterLoad(AbstractModel $userExpiration)
     {
-        /** @var $userExpiration UserExpirationModel */
+        /** @var UserExpirationModel $userExpiration */
         if ($userExpiration->getExpiresAt()) {
             $date = new \DateTime($userExpiration->getExpiresAt());
             $storeValue = $this->timezone->date($date);

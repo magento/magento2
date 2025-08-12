@@ -24,7 +24,7 @@ class FlushAll extends \Magento\Backend\Controller\Adminhtml\Cache implements Ht
     public function execute()
     {
         $this->_eventManager->dispatch('adminhtml_cache_flush_all');
-        /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
+        /** @var \Magento\Framework\Cache\FrontendInterface $cacheFrontend */
         foreach ($this->_cacheFrontendPool as $cacheFrontend) {
             $cacheFrontend->getBackend()->clean();
         }

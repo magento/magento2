@@ -63,7 +63,7 @@ class Popup extends AbstractAction
     {
         $productId = (int)$this->getRequest()->getParam('id');
 
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->factory->create();
         $product->setStoreId($this->getRequest()->getParam('store', 0));
 

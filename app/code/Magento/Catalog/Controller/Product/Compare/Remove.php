@@ -34,7 +34,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare implements Http
             }
 
             if ($product && (int)$product->getStatus() !== Status::STATUS_DISABLED) {
-                /** @var $item \Magento\Catalog\Model\Product\Compare\Item */
+                /** @var \Magento\Catalog\Model\Product\Compare\Item $item */
                 $item = $this->_compareItemFactory->create();
                 if ($this->_customerSession->isLoggedIn()) {
                     $item->setCustomerId($this->_customerSession->getCustomerId());
@@ -45,7 +45,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare implements Http
                 }
 
                 $item->loadByProduct($product);
-                /** @var $helper \Magento\Catalog\Helper\Product\Compare */
+                /** @var \Magento\Catalog\Helper\Product\Compare $helper */
                 $helper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class);
                 if ($item->getId()) {
                     $item->delete();

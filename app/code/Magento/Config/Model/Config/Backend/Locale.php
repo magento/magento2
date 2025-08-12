@@ -80,7 +80,7 @@ class Locale extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        /** @var $collection \Magento\Config\Model\ResourceModel\Config\Data\Collection */
+        /** @var \Magento\Config\Model\ResourceModel\Config\Data\Collection $collection */
         $collection = $this->_configsFactory->create();
         $collection->addPathFilter('currency/options');
 
@@ -106,14 +106,14 @@ class Locale extends \Magento\Framework\App\Config\Value
                             break;
 
                         case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE:
-                            /** @var $website \Magento\Store\Model\Website */
+                            /** @var \Magento\Store\Model\Website $website */
                             $website = $this->_websiteFactory->create();
                             $websiteName = $website->load($data->getScopeId())->getName();
                             $scopeName = __('website(%1) scope', $websiteName);
                             break;
 
                         case \Magento\Store\Model\ScopeInterface::SCOPE_STORE:
-                            /** @var $store \Magento\Store\Model\Store */
+                            /** @var \Magento\Store\Model\Store $store */
                             $store = $this->_storeFactory->create();
                             $storeName = $store->load($data->getScopeId())->getName();
                             $scopeName = __('store(%1) scope', $storeName);

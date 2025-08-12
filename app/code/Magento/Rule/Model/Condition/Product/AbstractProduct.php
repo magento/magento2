@@ -182,7 +182,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
-            /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             if (!$attribute->isAllowedForRuleCondition() || !$attribute->getDataUsingMethod(
                 $this->_isUsedForRuleProperty
             )

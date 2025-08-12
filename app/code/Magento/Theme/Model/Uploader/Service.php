@@ -98,7 +98,7 @@ class Service
      */
     public function uploadCssFile($file)
     {
-        /** @var $fileUploader \Magento\MediaStorage\Model\File\Uploader */
+        /** @var \Magento\MediaStorage\Model\File\Uploader $fileUploader */
         $fileUploader = $this->_uploaderFactory->create(['fileId' => $file]);
         $fileUploader->setAllowedExtensions(['css']);
         $fileUploader->setAllowRenameFiles(true);
@@ -124,7 +124,7 @@ class Service
      */
     public function uploadJsFile($file)
     {
-        /** @var $fileUploader \Magento\MediaStorage\Model\File\Uploader */
+        /** @var \Magento\MediaStorage\Model\File\Uploader $fileUploader */
         $fileUploader = $this->_uploaderFactory->create(['fileId' => $file]);
         $fileUploader->setAllowedExtensions(['js']);
         $fileUploader->setAllowRenameFiles(true);

@@ -180,7 +180,7 @@ class Value extends AbstractDb
                 foreach ($storeIds as $storeId) {
                     if ($priceType == 'fixed') {
                         $storeCurrency = $this->_storeManager->getStore($storeId)->getBaseCurrencyCode();
-                        /** @var $currencyModel Currency */
+                        /** @var Currency $currencyModel */
                         $currencyModel = $this->_currencyFactory->create();
                         $currencyModel->load($websiteBaseCurrency);
                         $rate = $currencyModel->getRate($storeCurrency);

@@ -44,7 +44,7 @@ class GuestCartRepository implements GuestCartRepositoryInterface
      */
     public function get($cartId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->repository->get($quoteIdMask->getQuoteId());
     }
@@ -54,7 +54,7 @@ class GuestCartRepository implements GuestCartRepositoryInterface
      */
     public function save($cartId, MessageInterface $giftMessage)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->repository->save($quoteIdMask->getQuoteId(), $giftMessage);
     }

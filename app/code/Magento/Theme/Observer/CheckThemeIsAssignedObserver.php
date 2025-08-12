@@ -44,7 +44,7 @@ class CheckThemeIsAssignedObserver implements ObserverInterface
     {
         $theme = $observer->getEvent()->getData('theme');
         if ($theme instanceof \Magento\Framework\View\Design\ThemeInterface) {
-            /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+            /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
             if ($this->themeConfig->isThemeAssignedToStore($theme)) {
                 $this->eventDispatcher->dispatch('assigned_theme_changed', ['theme' => $theme]);
             }

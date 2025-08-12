@@ -66,7 +66,7 @@ class VerifyIsGuestCheckoutEnabledBeforeSavePaymentInformation
         PaymentInterface $paymentMethod,
         ?AddressInterface $billingAddress = null
     ): void {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         $quote = $this->cartRepository->get($quoteIdMask->getQuoteId());
         if (!$this->checkoutHelper->isAllowedGuestCheckout($quote)) {

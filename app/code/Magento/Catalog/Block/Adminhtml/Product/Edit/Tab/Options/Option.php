@@ -329,7 +329,7 @@ class Option extends Widget
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             foreach ($optionsArr as $option) {
-                /* @var $option \Magento\Catalog\Model\Product\Option */
+                /** @var \Magento\Catalog\Model\Product\Option $option */
 
                 $this->setItemCount($option->getOptionId());
 
@@ -399,7 +399,7 @@ class Option extends Widget
         $i = 0;
         $itemCount = 0;
         foreach ($option->getValues() as $_value) {
-            /* @var $_value \Magento\Catalog\Model\Product\Option\Value */
+            /** @var \Magento\Catalog\Model\Product\Option\Value $_value */
             $value['optionValues'][$i] = [
                 'item_count' => max($itemCount, $_value->getOptionTypeId()),
                 'option_id' => $_value->getOptionId(),

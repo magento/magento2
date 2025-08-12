@@ -338,7 +338,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     public function findFirstAvailableMenu()
     {
-        /* @var $menu \Magento\Backend\Model\Menu\Item */
+        /** @var \Magento\Backend\Model\Menu\Item $menu */
         $menu = $this->_getMenu();
         $item = $menu->getFirstAvailable();
         $action = $item ? $item->getAction() : null;

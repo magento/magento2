@@ -51,7 +51,7 @@ class ListAssociatedProducts extends \Magento\Backend\Block\Template
      */
     public function getAssociatedProducts()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->_registry->registry('current_product');
         $associatedProducts = $product->getTypeInstance()->getAssociatedProducts($product);
         $products = [];

@@ -45,7 +45,7 @@ class Link extends ProductEdit
      */
     protected function _processDownload(string $resource, string $resourceType)
     {
-        /* @var $helper DownloadHelper */
+        /** @var DownloadHelper $helper */
         $helper = $this->_objectManager->get(DownloadHelper::class);
         $helper->setResource($resource, $resourceType);
 

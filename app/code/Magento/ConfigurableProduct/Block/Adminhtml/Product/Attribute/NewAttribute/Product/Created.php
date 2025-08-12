@@ -71,10 +71,10 @@ class Created extends \Magento\Backend\Block\Widget
     protected function _getGroupAttributes()
     {
         $attributes = [];
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->_coreRegistry->registry('product');
         foreach ($product->getAttributes($this->getRequest()->getParam('group')) as $attribute) {
-            /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
             if ($attribute->getId() == $this->getRequest()->getParam('attribute')) {
                 $attributes[] = $attribute;
             }
@@ -101,7 +101,7 @@ class Created extends \Magento\Backend\Block\Widget
     {
         $result = [];
         if ($this->getRequest()->getParam('product_tab') == 'variations') {
-            /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
             $attribute = $this->_attributeFactory->create()->load($this->getRequest()->getParam('attribute'));
             $result = [
                 'tab' => $this->getRequest()->getParam('product_tab'),
@@ -115,7 +115,7 @@ class Created extends \Magento\Backend\Block\Widget
         }
         $newAttributeSetId = $this->getRequest()->getParam('new_attribute_set_id');
         if ($newAttributeSetId) {
-            /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
+            /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
             $attributeSet = $this->_setFactory->create()->load($newAttributeSetId);
             $result['set'] = ['id' => $attributeSet->getId(), 'label' => $attributeSet->getAttributeSetName()];
         }

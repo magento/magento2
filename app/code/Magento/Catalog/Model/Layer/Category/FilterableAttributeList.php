@@ -41,7 +41,7 @@ class FilterableAttributeList implements FilterableAttributeListInterface
      */
     public function getList()
     {
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->setItemObjectClass(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->addStoreLabel($this->storeManager->getStore()->getId())

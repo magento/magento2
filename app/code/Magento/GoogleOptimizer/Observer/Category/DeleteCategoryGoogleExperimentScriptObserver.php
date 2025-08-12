@@ -32,7 +32,7 @@ class DeleteCategoryGoogleExperimentScriptObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $category \Magento\Catalog\Model\Category */
+        /** @var \Magento\Catalog\Model\Category $category */
         $category = $observer->getEvent()->getCategory();
         $this->_modelCode->loadByEntityIdAndType(
             $category->getId(),

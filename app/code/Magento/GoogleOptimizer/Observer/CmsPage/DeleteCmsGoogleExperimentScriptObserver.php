@@ -32,7 +32,7 @@ class DeleteCmsGoogleExperimentScriptObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $cmsPage \Magento\Cms\Model\Page */
+        /** @var \Magento\Cms\Model\Page $cmsPage */
         $cmsPage = $observer->getEvent()->getObject();
         $this->_modelCode->loadByEntityIdAndType(
             $cmsPage->getId(),

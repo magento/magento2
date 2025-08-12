@@ -334,7 +334,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         $stores = [];
         foreach ($this->getStores() as $store) {
-            /* @var $store \Magento\Store\Model\Store */
+            /** @var \Magento\Store\Model\Store $store */
             if ($store->getLocaleCode() == $locale) {
                 $stores[] = $store;
             }

@@ -76,7 +76,7 @@ class RenewCookieObserver implements ObserverInterface
             return;
         }
 
-        /** @var $request \Magento\Framework\App\RequestInterface */
+        /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $observer->getEvent()->getRequest();
 
         if ($this->_customerSession->isLoggedIn() || $request->getFullActionName() == 'customer_account_logout') {

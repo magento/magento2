@@ -75,7 +75,7 @@ class Totals extends Bar
         $firstPeriod = array_key_first($this->period->getDatePeriods());
         $period = $this->getRequest()->getParam('period', $firstPeriod);
 
-        /* @var $collection Collection */
+        /** @var Collection $collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(
             $period
         )->calculateTotals(

@@ -84,7 +84,7 @@ class RowCustomizer implements RowCustomizerInterface
         $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
 
         while ($product = $productCollection->fetchItem()) {
-            /** @var $product \Magento\Catalog\Api\Data\ProductInterface */
+            /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
             $productLinks = $this->linkRepository->getLinksByProduct($product);
             $productSamples = $this->sampleRepository->getSamplesByProduct($product);
             $this->downloadableData[$product->getId()] = [];

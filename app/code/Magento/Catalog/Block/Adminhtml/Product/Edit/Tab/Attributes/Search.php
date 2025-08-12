@@ -100,7 +100,7 @@ class Search extends \Magento\Backend\Block\Widget
             $labelPart,
             ['position' => 'any']
         );
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $collection */
         $collection = $this->_collectionFactory->create()->addFieldToFilter(
             'frontend_label',
             ['like' => $escapedLabelPart]
@@ -110,7 +110,7 @@ class Search extends \Magento\Backend\Block\Widget
 
         $result = [];
         foreach ($collection->getItems() as $attribute) {
-            /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $result[] = [
                 'id' => $attribute->getId(),
                 'label' => $attribute->getFrontendLabel(),

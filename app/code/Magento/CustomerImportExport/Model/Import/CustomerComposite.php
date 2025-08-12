@@ -248,7 +248,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      */
     protected function _initCustomerAttributes()
     {
-        /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
         foreach ($this->_customerEntity->getAttributeCollection() as $attribute) {
             $this->_customerAttributes[] = $attribute->getAttributeCode();
         }
@@ -263,7 +263,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      */
     protected function _initAddressAttributes()
     {
-        /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
         foreach ($this->_addressEntity->getAttributeCollection() as $attribute) {
             $this->_addressAttributes[] = $attribute->getAttributeCode();
         }

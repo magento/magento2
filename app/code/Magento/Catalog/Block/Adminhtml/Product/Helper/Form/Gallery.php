@@ -144,7 +144,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getContentHtml()
     {
-        /* @var $content \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
+        /** @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content $content */
         $content = $this->getChildBlock('content');
         $content->setId($this->getHtmlId() . '_content')->setElement($this);
         $content->setFormName($this->formName);

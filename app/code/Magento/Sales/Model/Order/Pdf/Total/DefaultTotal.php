@@ -113,7 +113,7 @@ class DefaultTotal extends DataObject
                 $tax['font_size'] = $fontSize;
             }
         } else {
-            /** @var $orders Collection */
+            /** @var Collection $orders */
             $orders = $this->_taxOrdersFactory->create();
             $rates = $orders->loadByOrder($this->getOrder())->toArray();
             $fullInfo = $this->_taxCalculation->reproduceProcess($rates['items']);

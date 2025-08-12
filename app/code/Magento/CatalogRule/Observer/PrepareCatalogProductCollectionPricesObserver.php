@@ -109,7 +109,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
         }
 
         $productIds = [];
-        /* @var $product Product */
+        /** @var Product $product */
         foreach ($collection as $product) {
             $key = implode('|', [$date->format('Y-m-d H:i:s'), $websiteId, $groupId, $product->getId()]);
             if (!$this->rulePricesStorage->hasRulePrice($key)) {

@@ -586,7 +586,7 @@ class Tree extends Dbp
         }
         $resource = $this->_catalogCategory;
         foreach ($attributes as $attributeCode) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
             $attribute = $resource->getAttribute($attributeCode);
             // join non-static attribute table
             if (!$attribute->getBackend()->isStatic()) {

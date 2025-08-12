@@ -256,7 +256,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function _exportIterateCollection($callback, array $args)
     {
-        /** @var $originalCollection \Magento\Framework\Data\Collection */
+        /** @var \Magento\Framework\Data\Collection $originalCollection */
         $originalCollection = $this->getParentBlock()->getPreparedCollection();
         $count = null;
         $page = 1;
@@ -526,13 +526,13 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         }
         $collection = $this->_collectionFactory->create();
 
-        /** @var $item \Magento\Framework\DataObject */
+        /** @var \Magento\Framework\DataObject $item */
         foreach ($baseCollection as $item) {
             if ($item->getIsEmpty()) {
                 continue;
             }
             if ($item->hasChildren() && count($item->getChildren()) > 0) {
-                /** @var $subItem \Magento\Framework\DataObject */
+                /** @var \Magento\Framework\DataObject $subItem */
                 foreach ($item->getChildren() as $subItem) {
                     $tmpItem = clone $item;
                     $tmpItem->unsChildren();
@@ -554,7 +554,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function _getPreparedCollection()
     {
-        /** @var $collection \Magento\Framework\Data\Collection */
+        /** @var \Magento\Framework\Data\Collection $collection */
         $collection = $this->getParentBlock()->getPreparedCollection();
         $collection->setPageSize(0);
         $collection->load();

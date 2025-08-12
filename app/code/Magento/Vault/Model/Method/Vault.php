@@ -436,7 +436,7 @@ class Vault implements VaultPaymentInterface
         if (!$payment instanceof OrderPaymentInterface) {
             throw new \DomainException('Not implemented');
         }
-        /** @var $payment OrderPaymentInterface */
+        /** @var OrderPaymentInterface $payment */
 
         $this->attachTokenExtensionAttribute($payment);
         $this->attachCreditCardInfo($payment);
@@ -467,7 +467,7 @@ class Vault implements VaultPaymentInterface
         if (!$payment instanceof OrderPaymentInterface) {
             throw new \DomainException('Not implemented');
         }
-        /** @var $payment Payment */
+        /** @var Payment $payment */
 
         if ($payment->getAuthorizationTransaction()) {
             throw new \DomainException('Capture can not be performed through vault');

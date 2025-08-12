@@ -40,9 +40,9 @@ class AddVatRequestParamsOrderComment implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        /** @var $orderInstance Order */
+        /** @var Order $orderInstance */
         $orderInstance = $observer->getOrder();
-        /** @var $orderAddress Address */
+        /** @var Address $orderAddress */
         $orderAddress = $this->_getVatRequiredSalesAddress($orderInstance);
         if (!$orderAddress instanceof Address) {
             return;

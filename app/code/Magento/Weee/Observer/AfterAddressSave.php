@@ -75,7 +75,7 @@ class AfterAddressSave implements ObserverInterface
             && $this->cacheConfig->isEnabled()
             && $this->weeeHelper->isEnabled()
         ) {
-            /** @var $customerAddress Address */
+            /** @var Address $customerAddress */
             $address = $observer->getCustomerAddress();
             $this->addressManager->setDefaultAddressAfterSave($address);
         }

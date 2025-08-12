@@ -88,7 +88,7 @@ class Price extends AddController implements HttpGetActionInterface
 
         $store = $this->storeManager->getStore();
         try {
-            /* @var $product \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->productRepository->getById($productId);
             /** @var \Magento\ProductAlert\Model\Price $model */
             $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Price::class)

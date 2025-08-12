@@ -198,7 +198,7 @@ class EmailSenderHandler
      */
     private function filterCollectionByStartFromDate(AbstractCollection $collection): void
     {
-        /** @var $configValue ValueInterface */
+        /** @var ValueInterface $configValue */
         $configValue = $this->configValueFactory->create();
         $configValue->load('sales_email/general/async_sending', 'path');
 

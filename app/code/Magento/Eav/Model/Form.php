@@ -328,7 +328,7 @@ abstract class Form
             $this->_userAttributes = [];
             $this->_systemAttributes = [];
             $this->_allowedAttributes = [];
-            /** @var $attribute \Magento\Eav\Model\Attribute */
+            /** @var \Magento\Eav\Model\Attribute $attribute */
             foreach ($this->_getFilteredFormAttributeCollection() as $attribute) {
                 $this->_attributes[$attribute->getAttributeCode()] = $attribute;
                 if ($attribute->getIsUserDefined()) {
@@ -440,7 +440,7 @@ abstract class Form
     public function extractData(RequestInterface $request, $scope = null, $scopeOnly = true)
     {
         $data = [];
-        /** @var $attribute \Magento\Eav\Model\Attribute */
+        /** @var \Magento\Eav\Model\Attribute $attribute */
         foreach ($this->getAllowedAttributes() as $attribute) {
             $dataModel = $this->_getAttributeDataModel($attribute);
             $dataModel->setRequestScope($scope);
@@ -460,7 +460,7 @@ abstract class Form
     {
         if ($this->_validator === null) {
             $configFiles = $this->_modulesReader->getConfigurationFiles('validation.xml');
-            /** @var $validatorFactory \Magento\Framework\Validator\Config */
+            /** @var \Magento\Framework\Validator\Config $validatorFactory */
             $validatorFactory = $this->_validatorConfigFactory->create(['configFiles' => $configFiles]);
             $builder = $validatorFactory->createValidatorBuilder('eav_entity', 'form');
 
@@ -504,7 +504,7 @@ abstract class Form
      */
     public function compactData(array $data)
     {
-        /** @var $attribute \Magento\Eav\Model\Attribute */
+        /** @var \Magento\Eav\Model\Attribute $attribute */
         foreach ($this->getAllowedAttributes() as $attribute) {
             $dataModel = $this->_getAttributeDataModel($attribute);
             $dataModel->setExtractedData($data);
@@ -525,7 +525,7 @@ abstract class Form
      */
     public function restoreData(array $data)
     {
-        /** @var $attribute \Magento\Eav\Model\Attribute */
+        /** @var \Magento\Eav\Model\Attribute $attribute */
         foreach ($this->getAllowedAttributes() as $attribute) {
             $dataModel = $this->_getAttributeDataModel($attribute);
             $dataModel->setExtractedData($data);
@@ -546,7 +546,7 @@ abstract class Form
     public function outputData($format = \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT)
     {
         $data = [];
-        /** @var $attribute \Magento\Eav\Model\Attribute */
+        /** @var \Magento\Eav\Model\Attribute $attribute */
         foreach ($this->getAllowedAttributes() as $attribute) {
             $dataModel = $this->_getAttributeDataModel($attribute);
             $dataModel->setExtractedData($data);
@@ -562,7 +562,7 @@ abstract class Form
      */
     public function resetEntityData()
     {
-        /** @var $attribute \Magento\Eav\Model\Attribute */
+        /** @var \Magento\Eav\Model\Attribute $attribute */
         foreach ($this->getAllowedAttributes() as $attribute) {
             $value = $this->getEntity()->getOrigData($attribute->getAttributeCode());
             $this->getEntity()->setData($attribute->getAttributeCode(), $value);
@@ -601,7 +601,7 @@ abstract class Form
     public function initDefaultValues()
     {
         if (!$this->getEntity()->getId()) {
-            /** @var $attribute \Magento\Eav\Model\Attribute */
+            /** @var \Magento\Eav\Model\Attribute $attribute */
             foreach ($this->getAttributes() as $attribute) {
                 $default = $attribute->getDefaultValue();
                 if ($default != '') {

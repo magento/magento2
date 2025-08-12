@@ -365,7 +365,7 @@ class Shipping implements RateCollectorInterface
 
         $maxWeight = (double)$carrier->getConfigData('max_package_weight');
 
-        /** @var $item \Magento\Quote\Model\Quote\Item */
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($allItems as $item) {
             if ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
                 && $item->getProduct()->getShipmentType()
@@ -500,7 +500,7 @@ class Shipping implements RateCollectorInterface
      */
     public function collectRatesByAddress(\Magento\Framework\DataObject $address, $limitCarrier = null)
     {
-        /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
+        /** @var \Magento\Quote\Model\Quote\Address\RateRequest $request */
         $request = $this->rateRequestFactory->create();
         $request->setAllItems($address->getAllItems());
         $request->setDestCountryId($address->getCountryId());

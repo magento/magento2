@@ -37,7 +37,7 @@ class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTot
         $cartId,
         \Magento\Checkout\Api\Data\TotalsInformationInterface $addressInformation
     ) {
-        /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->totalsInformationManagement->calculate(
             $quoteIdMask->getQuoteId(),

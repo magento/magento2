@@ -88,7 +88,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _addSubscriberInfoToSelect()
     {
-        /** @var $select \Magento\Framework\DB\Select */
+        /** @var \Magento\Framework\DB\Select $select */
         $select = $this->getConnection()->select()->from(
             ['qlt' => $this->getTable('newsletter_queue_link')],
             'COUNT(qlt.queue_link_id)'

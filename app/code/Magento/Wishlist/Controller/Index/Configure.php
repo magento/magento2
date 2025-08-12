@@ -64,7 +64,7 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex implements Ac
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {
-            /* @var $item \Magento\Wishlist\Model\Item */
+            /** @var \Magento\Wishlist\Model\Item $item */
             $item = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class);
             $item->loadWithOptions($id);
             if (!$item->getId()) {

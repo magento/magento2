@@ -288,7 +288,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         LinkInterface $link,
         $isGlobalScopeContent
     ) {
-        /** @var $existingLink \Magento\Downloadable\Model\Link */
+        /** @var \Magento\Downloadable\Model\Link $existingLink */
         $existingLink = $this->linkFactory->create()->load($link->getId());
         if (!$existingLink->getId()) {
             throw new NoSuchEntityException(
@@ -331,7 +331,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      */
     public function delete($id)
     {
-        /** @var $link \Magento\Downloadable\Model\Link */
+        /** @var \Magento\Downloadable\Model\Link $link */
         $link = $this->linkFactory->create()->load($id);
         if (!$link->getId()) {
             throw new NoSuchEntityException(

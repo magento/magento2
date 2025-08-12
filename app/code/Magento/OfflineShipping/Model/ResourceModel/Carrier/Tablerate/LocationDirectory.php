@@ -87,7 +87,7 @@ class LocationDirectory
         $this->iso2Countries = [];
         $this->iso3Countries = [];
 
-        /** @var $collection \Magento\Directory\Model\ResourceModel\Country\Collection */
+        /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $collection */
         $collection = $this->_countryCollectionFactory->create();
         foreach ($collection->getData() as $row) {
             $this->iso2Countries[$row['iso2_code']] = $row['country_id'];
@@ -136,7 +136,7 @@ class LocationDirectory
         $this->regions = [];
         $this->regionsByCode = [];
 
-        /** @var $collection \Magento\Directory\Model\ResourceModel\Region\Collection */
+        /** @var \Magento\Directory\Model\ResourceModel\Region\Collection $collection */
         $collection = $this->_regionCollectionFactory->create();
         foreach ($collection->getData() as $row) {
             $this->regions[$row['country_id']][$row['code']] = (int)$row['region_id'];

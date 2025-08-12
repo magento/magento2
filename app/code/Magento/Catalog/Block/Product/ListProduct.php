@@ -485,7 +485,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     private function initializeProductCollection()
     {
         $layer = $this->getLayer();
-        /* @var $layer Layer */
+        /** @var Layer $layer */
         if ($this->getShowRootCategory()) {
             $this->setCategoryId($this->_storeManager->getStore()->getRootCategoryId());
         }

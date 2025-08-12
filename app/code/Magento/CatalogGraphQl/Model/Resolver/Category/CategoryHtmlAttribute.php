@@ -47,7 +47,7 @@ class CategoryHtmlAttribute implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /* @var $category Category */
+        /** @var Category $category */
         $category = $value['model'];
         $fieldName = $field->getName();
         $renderedValue = $this->outputHelper->categoryAttribute($category, $category->getData($fieldName), $fieldName);

@@ -553,7 +553,7 @@ class Checkout
             $this->_quote->getPayment()->save();
         }
 
-        /** @var $cart \Magento\Payment\Model\Cart */
+        /** @var \Magento\Payment\Model\Cart $cart */
         $cart = $this->_cartFactory->create(['salesModel' => $this->_quote]);
 
         $this->_getApi()->setPaypalCart($cart);

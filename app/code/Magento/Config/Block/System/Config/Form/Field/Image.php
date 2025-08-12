@@ -25,7 +25,7 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
     {
         $url = parent::_getUrl();
         $config = $this->getFieldConfig();
-        /* @var $config array */
+        /** @var array $config */
         if (isset($config['base_url'])) {
             $element = $config['base_url'];
             $urlType = empty($element['type']) ? 'link' : (string)$element['type'];

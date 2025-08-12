@@ -280,7 +280,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
         $class = '';
 
         try {
-            /** @var $attribute AttributeMetadataInterface */
+            /** @var AttributeMetadataInterface $attribute */
             $attribute = isset($this->_attributes[$attributeCode])
                 ? $this->_attributes[$attributeCode]
                 : $this->_addressMetadataService->getAttributeMetadata($attributeCode);

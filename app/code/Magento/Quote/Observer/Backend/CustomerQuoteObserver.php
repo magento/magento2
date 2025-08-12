@@ -63,7 +63,7 @@ class CustomerQuoteObserver implements ObserverInterface
                  * It is needed to process customer's quotes for all websites
                  * if customer accounts are shared between all of them
                  */
-                /** @var $websites \Magento\Store\Model\Website[] */
+                /** @var \Magento\Store\Model\Website[] $websites */
                 $websites = $this->config->isWebsiteScope()
                     ? [$this->storeManager->getWebsite($customer->getWebsiteId())]
                     : $this->storeManager->getWebsites();

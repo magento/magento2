@@ -360,7 +360,7 @@ class Data extends AbstractHelper implements ResetAfterRequestInterface
             ],
         ];
         foreach ($collection as $region) {
-            /** @var $region \Magento\Directory\Model\Region */
+            /** @var \Magento\Directory\Model\Region $region */
             if (!$region->getRegionId()) {
                 continue;
             }

@@ -358,7 +358,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     protected function _getAttributes()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->getProduct();
         $attributes = [];
 

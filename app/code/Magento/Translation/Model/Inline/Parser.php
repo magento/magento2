@@ -203,10 +203,10 @@ class Parser implements ParserInterface
         $this->_validateTranslationParams($translateParams);
         $this->_filterTranslationParams($translateParams, ['custom']);
 
-        /** @var $validStoreId int */
+        /** @var int $validStoreId */
         $validStoreId = $this->_storeManager->getStore()->getId();
 
-        /** @var $resource StringUtils */
+        /** @var StringUtils $resource */
         $resource = $this->_resourceFactory->create();
         foreach ($translateParams as $param) {
             if ($this->_appState->getAreaCode() == FrontNameResolver::AREA_CODE) {

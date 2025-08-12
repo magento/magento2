@@ -27,18 +27,18 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         $removeJsFiles = (array)$this->getRequest()->getParam('js_removed_files');
         $reorderJsFiles = array_keys($this->getRequest()->getParam('js_order', []));
 
-        /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */
+        /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
         $themeFactory = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
-        /** @var $cssService \Magento\Theme\Model\Theme\Customization\File\CustomCss */
+        /** @var \Magento\Theme\Model\Theme\Customization\File\CustomCss $cssService */
         $cssService = $this->_objectManager->get(\Magento\Theme\Model\Theme\Customization\File\CustomCss::class);
-        /** @var $singleFile \Magento\Theme\Model\Theme\SingleFile */
+        /** @var \Magento\Theme\Model\Theme\SingleFile $singleFile */
         $singleFile = $this->_objectManager->create(
             \Magento\Theme\Model\Theme\SingleFile::class,
             ['fileService' => $cssService]
         );
         try {
             if ($this->getRequest()->getPostValue()) {
-                /** @var $theme \Magento\Theme\Model\Theme */
+                /** @var \Magento\Theme\Model\Theme $theme */
                 if (!empty($themeData['theme_id'])) {
                     $theme = $themeFactory->create($themeData['theme_id']);
                 } else {

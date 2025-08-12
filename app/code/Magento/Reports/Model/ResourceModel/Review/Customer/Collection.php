@@ -83,7 +83,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      */
     protected function _joinCustomers()
     {
-        /** @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
         $connection = $this->getConnection();
         //Prepare fullname field result
         $customerFullname = $connection->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');

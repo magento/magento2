@@ -49,7 +49,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      */
     public function initTotals()
     {
-        /** @var $items \Magento\Sales\Model\Order\Item[] */
+        /** @var \Magento\Sales\Model\Order\Item[] $items */
         $items = $this->getSource()->getAllItems();
         $store = $this->getSource()->getStore();
 

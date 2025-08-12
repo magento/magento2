@@ -234,7 +234,7 @@ class Chooser extends Extended
      */
     protected function _prepareCollection()
     {
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->_collectionFactory->create()->setStoreId(0)->addAttributeToSelect('name');
 
         if ($categoryId = $this->getCategoryId()) {

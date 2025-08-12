@@ -1081,7 +1081,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
         foreach ($selectionIds as $selectionId) {
-            /* @var $selection \Magento\Bundle\Model\Selection */
+            /** @var \Magento\Bundle\Model\Selection $selection */
             $selection = $productSelections->getItemById($selectionId);
             if (!$selection || !$selection->isSalable() && !$skipSaleableCheck) {
                 throw new \Magento\Framework\Exception\LocalizedException(

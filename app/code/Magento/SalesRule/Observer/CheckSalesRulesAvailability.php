@@ -38,12 +38,12 @@ class CheckSalesRulesAvailability
      */
     public function checkSalesRulesAvailability($attributeCode)
     {
-        /* @var $collection \Magento\SalesRule\Model\ResourceModel\Rule\Collection */
+        /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $collection */
         $collection = $this->_collectionFactory->create()->addAttributeInConditionFilter($attributeCode);
 
         $disabledRulesCount = 0;
         foreach ($collection as $rule) {
-            /* @var $rule \Magento\SalesRule\Model\Rule */
+            /** @var \Magento\SalesRule\Model\Rule $rule */
             $rule->setIsActive(0);
             /* @var $rule->getConditions() \Magento\SalesRule\Model\Rule\Condition\Combine */
             $this->_removeAttributeFromConditions($rule->getConditions(), $attributeCode);

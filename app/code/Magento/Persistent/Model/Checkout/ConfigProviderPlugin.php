@@ -71,7 +71,7 @@ class ConfigProviderPlugin
                 && $this->persistentSession->isPersistent()
                 && !$this->customerSession->isLoggedIn()
         ) {
-            /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+            /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
             $quoteIdMask = $this->quoteIdMaskFactory->create();
             $result['quoteData']['entity_id'] = $quoteIdMask->load(
                 $this->checkoutSession->getQuote()->getId(),

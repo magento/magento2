@@ -115,7 +115,7 @@ class ThemeProvider implements ThemeProviderInterface, ResetAfterRequestInterfac
         $area = \Magento\Framework\App\Area::AREA_FRONTEND,
         $type = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
     ) {
-        /** @var $themeCollection \Magento\Theme\Model\ResourceModel\Theme\Collection */
+        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
         $themeCollection = $this->collectionFactory->create();
         $themeCollection->addAreaFilter($area)->addTypeFilter($type);
         return $themeCollection;

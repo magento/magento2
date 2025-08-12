@@ -3,8 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** @var $block \Magento\Paypal\Block\PayLater\Banner */
-/** @var $cartBlock Magento\Checkout\Block\Cart */
+/** @var \Magento\Paypal\Block\PayLater\Banner $block */
+/** @var Magento\Checkout\Block\Cart $cartBlock */
 ?>
 <?php $cartBlock = $block->getLayout()->getBlock('checkout.cart'); ?>
 <?php if ($block->getData('placement') !== 'cart' || is_object($cartBlock) && $cartBlock->getItemsCount()): ?>

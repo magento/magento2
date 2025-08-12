@@ -175,7 +175,7 @@ class OrderStatus implements DataProviderInterface
             return null;
         }
 
-        /** @var $order \Magento\Sales\Model\Order */
+        /** @var \Magento\Sales\Model\Order $order */
         $order = $this->orderFactory->create();
         $order->load($data['order_id']);
 
@@ -206,7 +206,7 @@ class OrderStatus implements DataProviderInterface
      */
     protected function getEntries()
     {
-        /** @var $resourceModel \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatus */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatus $resourceModel */
         $resourceModel = $this->orderResourceFactory->create();
         $results = $resourceModel->getAllCommentCollection($this->order->getId());
         $entries = [];

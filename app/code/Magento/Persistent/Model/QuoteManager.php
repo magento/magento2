@@ -102,7 +102,7 @@ class QuoteManager
      */
     public function setGuest($checkQuote = false)
     {
-        /** @var $quote Quote */
+        /** @var Quote $quote */
         $quote = $this->checkoutSession->getQuote();
         if ($quote && $quote->getId()) {
             if ($checkQuote && !$this->persistentData->isShoppingCartPersist() && !$quote->getIsPersistent()) {

@@ -133,7 +133,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
             ]
         );
 
-        /** @var $label \Magento\Framework\View\Design\Theme\Label */
+        /** @var \Magento\Framework\View\Design\Theme\Label $label */
         $label = $this->_themeLabelFactory->create();
         $options = $label->getLabelsCollection(__('-- Please Select --'));
         $fieldset->addField(

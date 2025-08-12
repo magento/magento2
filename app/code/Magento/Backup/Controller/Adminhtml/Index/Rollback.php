@@ -38,7 +38,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
         $response = new \Magento\Framework\DataObject();
 
         try {
-            /* @var $backup \Magento\Backup\Model\Backup */
+            /** @var \Magento\Backup\Model\Backup $backup */
             $backup = $this->_backupModelFactory->create(
                 $this->getRequest()->getParam('time'),
                 $this->getRequest()->getParam('type')

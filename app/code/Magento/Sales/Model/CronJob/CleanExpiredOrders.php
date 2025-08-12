@@ -57,7 +57,7 @@ class CleanExpiredOrders
     {
         $lifetimes = $this->storesConfig->getStoresConfigByPath('sales/orders/delete_pending_after');
         foreach ($lifetimes as $storeId => $lifetime) {
-            /** @var $orders \Magento\Sales\Model\ResourceModel\Order\Collection */
+            /** @var \Magento\Sales\Model\ResourceModel\Order\Collection $orders */
             $orders = $this->orderCollectionFactory->create();
             $orders->addFieldToFilter('store_id', $storeId);
             $orders->addFieldToFilter('status', Order::STATE_PENDING_PAYMENT);

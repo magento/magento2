@@ -16,7 +16,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute imple
     public function execute()
     {
         $id = $this->getRequest()->getParam('attribute_id');
-        /** @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
         $model = $this->_objectManager->create(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
         )->setEntityTypeId(

@@ -159,7 +159,7 @@ class StockIndex implements StockIndexInterface
         $websitesWithStores = $this->getWebsitesWithDefaultStores($websiteId);
 
         foreach (array_keys($websitesWithStores) as $websiteId) {
-            /* @var $website Website */
+            /** @var Website $website */
             $statuses[$websiteId] = $status;
         }
 

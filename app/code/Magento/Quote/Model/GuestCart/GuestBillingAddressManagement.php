@@ -44,7 +44,7 @@ class GuestBillingAddressManagement implements GuestBillingAddressManagementInte
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return (int)$this->billingAddressManagement->assign($quoteIdMask->getQuoteId(), $address, $useForShipping);
     }
@@ -54,7 +54,7 @@ class GuestBillingAddressManagement implements GuestBillingAddressManagementInte
      */
     public function get($cartId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->billingAddressManagement->get($quoteIdMask->getQuoteId());
     }

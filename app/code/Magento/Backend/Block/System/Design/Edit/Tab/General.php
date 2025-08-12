@@ -78,7 +78,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic
             );
         }
 
-        /** @var $label \Magento\Framework\View\Design\Theme\Label */
+        /** @var \Magento\Framework\View\Design\Theme\Label $label */
         $label = $this->_labelFactory->create();
         $options = $label->getLabelsCollection(__('-- Please Select --'));
         $fieldset->addField(

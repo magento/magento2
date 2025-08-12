@@ -74,7 +74,7 @@ class SynchronizePersistentOnLoginObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $observer->getEvent()->getCustomer();
         // Check if customer is valid (remove persistent cookie for invalid customer)
         if (!$customer || !$customer->getId() || !$this->_persistentSession->isRememberMeChecked()) {
@@ -90,7 +90,7 @@ class SynchronizePersistentOnLoginObserver implements ObserverInterface
             return;
         }
 
-        /** @var $sessionModel \Magento\Persistent\Model\Session */
+        /** @var \Magento\Persistent\Model\Session $sessionModel */
         $sessionModel = $this->_persistentSession->getSession();
 
         // Check if session is wrong or not exists, so create new session

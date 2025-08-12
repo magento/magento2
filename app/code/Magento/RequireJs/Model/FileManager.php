@@ -173,7 +173,7 @@ class FileManager
         $bundles = [];
         if ($this->appState->getMode() == AppState::MODE_PRODUCTION) {
             $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-            /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
+            /** @var \Magento\Framework\View\Asset\File\FallbackContext $context */
             $context = $this->assetRepo->getStaticViewFileContext();
 
             $bundleDir = $context->getPath() . '/' . Config::BUNDLE_JS_DIR;
@@ -203,7 +203,7 @@ class FileManager
     public function clearBundleJsPool()
     {
         $dirWrite = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
+        /** @var \Magento\Framework\View\Asset\File\FallbackContext $context */
         $context = $this->assetRepo->getStaticViewFileContext();
         $bundleDir = $context->getPath() . '/' . Config::BUNDLE_JS_DIR;
         return $dirWrite->delete($bundleDir);

@@ -54,7 +54,7 @@ class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
             $websiteModel->setData($postData['website']);
         }
         $fieldset = $form->addFieldset('website_fieldset', ['legend' => __('Web Site Information')]);
-        /* @var $fieldset \Magento\Framework\Data\Form */
+        /** @var \Magento\Framework\Data\Form $fieldset */
 
         $fieldset->addField(
             'website_name',

@@ -195,7 +195,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
-        /** @var $section \Magento\Config\Model\Config\Structure\Element\Section */
+        /** @var \Magento\Config\Model\Config\Structure\Element\Section $section */
         $section = $this->_configStructure->getElement($this->getSectionCode());
         if ($section && $section->isVisible($this->getWebsiteCode(), $this->getStoreCode())) {
             foreach ($section->getChildren() as $group) {
@@ -296,7 +296,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         // Extends for config data
         $extraConfigGroups = [];
 
-        /** @var $element \Magento\Config\Model\Config\Structure\Element\Field */
+        /** @var \Magento\Config\Model\Config\Structure\Element\Field $element */
         foreach ($group->getChildren() as $element) {
             if ($element instanceof \Magento\Config\Model\Config\Structure\Element\Group) {
                 $this->_initGroup($element, $section, $fieldset);
@@ -476,7 +476,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _populateDependenciesBlock(array $dependencies, $elementId, $elementName)
     {
         foreach ($dependencies as $dependentField) {
-            /** @var $dependentField \Magento\Config\Model\Config\Structure\Element\Dependency\Field */
+            /** @var \Magento\Config\Model\Config\Structure\Element\Dependency\Field $dependentField */
             $fieldNameFrom = $this->_generateElementName($dependentField->getId(), null, '_');
             $this->_getDependence()->addFieldMap(
                 $elementId,

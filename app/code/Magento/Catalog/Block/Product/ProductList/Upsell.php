@@ -103,7 +103,7 @@ class Upsell extends AbstractProduct implements IdentityInterface
     protected function _prepareData()
     {
         $product = $this->getProduct();
-        /* @var $product Product */
+        /** @var Product $product */
         $this->_itemCollection = $product->getUpSellProductCollection()->setPositionOrder()->addStoreFilter();
         if ($this->moduleManager->isEnabled('Magento_Checkout')) {
             $this->_addProductAttributesAndPrices($this->_itemCollection);

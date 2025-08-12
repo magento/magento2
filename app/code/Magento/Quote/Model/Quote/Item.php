@@ -397,7 +397,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             $productIds = [];
             $qtyOptions = [];
             foreach ($this->getOptions() as $option) {
-                /** @var $option \Magento\Quote\Model\Quote\Item\Option */
+                /** @var \Magento\Quote\Model\Quote\Item\Option $option */
                 if (is_object($option->getProduct())
                     && $option->getProduct()->getId() != $this->getProduct()->getId()
                 ) {

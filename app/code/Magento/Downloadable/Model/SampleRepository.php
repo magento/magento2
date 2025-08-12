@@ -272,7 +272,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         $isGlobalScopeContent
     ) {
         $sampleId = $sample->getId();
-        /** @var $existingSample \Magento\Downloadable\Model\Sample */
+        /** @var \Magento\Downloadable\Model\Sample $existingSample */
         $existingSample = $this->sampleFactory->create()->load($sampleId);
 
         if (!$existingSample->getId()) {
@@ -316,7 +316,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      */
     public function delete($id)
     {
-        /** @var $sample \Magento\Downloadable\Model\Sample */
+        /** @var \Magento\Downloadable\Model\Sample $sample */
         $sample = $this->sampleFactory->create()->load($id);
         if (!$sample->getId()) {
             throw new NoSuchEntityException(

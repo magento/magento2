@@ -44,7 +44,7 @@ class Edit extends AbstractScopeConfig implements HttpGetActionInterface
         $website = $this->getRequest()->getParam('website');
         $store = $this->getRequest()->getParam('store');
 
-        /** @var $section \Magento\Config\Model\Config\Structure\Element\Section */
+        /** @var \Magento\Config\Model\Config\Structure\Element\Section $section */
         $section = $this->_configStructure->getElement($current);
         if ($current && !$section->isVisible($website, $store)) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */

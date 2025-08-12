@@ -29,7 +29,7 @@ abstract class Download extends \Magento\Framework\App\Action\Action
      */
     protected function _processDownload($path, $resourceType)
     {
-        /* @var $helper DownloadHelper */
+        /** @var DownloadHelper $helper */
         $helper = $this->_objectManager->get(\Magento\Downloadable\Helper\Download::class);
 
         $helper->setResource($path, $resourceType);

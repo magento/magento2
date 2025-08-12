@@ -43,7 +43,7 @@ class DataTest extends TestCase
      */
     protected function _getDependencies($entityType, $bunchData)
     {
-        /** @var $statementMock \Magento\Framework\DB\Statement\Pdo\Mysql */
+        /** @var \Magento\Framework\DB\Statement\Pdo\Mysql $statementMock */
         $statementMock = $this->createPartialMock(
             Mysql::class,
             ['setFetchMode', 'getIterator']
@@ -56,7 +56,7 @@ class DataTest extends TestCase
             new \ArrayIterator($bunchData)
         );
 
-        /** @var $selectMock \Magento\Framework\DB\Select */
+        /** @var \Magento\Framework\DB\Select $selectMock */
         $selectMock = $this->createPartialMock(Select::class, ['from', 'order']);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $selectMock->expects($this->any())->method('order')->willReturnSelf();
@@ -70,7 +70,7 @@ class DataTest extends TestCase
         $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $connectionMock->expects($this->any())->method('query')->willReturn($statementMock);
 
-        /** @var $resourceModelMock \Magento\Framework\App\ResourceConnection */
+        /** @var \Magento\Framework\App\ResourceConnection $resourceModelMock */
         $resourceModelMock = $this->createMock(ResourceConnection::class);
         $resourceModelMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
 

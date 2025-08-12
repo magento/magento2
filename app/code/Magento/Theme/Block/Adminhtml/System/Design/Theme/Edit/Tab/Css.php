@@ -82,7 +82,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
 
         $formData['custom_css_content'] = $this->_customCssFile ? $this->_customCssFile->getContent() : null;
 
-        /** @var $session \Magento\Backend\Model\Session */
+        /** @var \Magento\Backend\Model\Session $session */
         $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
         $cssFileContent = $session->getThemeCustomCssData();
         if ($cssFileContent) {
@@ -179,7 +179,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
         }
         $themeFieldset->addField('css_download_button', 'button', $downloadButtonConfig);
 
-        /** @var $imageButton \Magento\Backend\Block\Widget\Button */
+        /** @var \Magento\Backend\Block\Widget\Button $imageButton */
         $imageButton = $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Button::class
         )->setData(
@@ -206,7 +206,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
             ['label' => __("Images Assets"), 'text' => $imageButton->toHtml()]
         );
 
-        /** @var $fontButton \Magento\Backend\Block\Widget\Button */
+        /** @var \Magento\Backend\Block\Widget\Button $fontButton */
         $fontButton = $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Button::class
         )->setData(

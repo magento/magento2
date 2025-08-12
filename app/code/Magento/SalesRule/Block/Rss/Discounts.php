@@ -93,7 +93,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
             'language' => $lang,
         ];
 
-        /** @var $rule \Magento\SalesRule\Model\Rule */
+        /** @var \Magento\SalesRule\Model\Rule $rule */
         foreach ($this->rssModel->getDiscountCollection($websiteId, $customerGroupId) as $rule) {
             $toDate = $rule->getToDate()
                 ? '<br/>Discount End Date: ' . $this->formatDate($rule->getToDate(), \IntlDateFormatter::MEDIUM)

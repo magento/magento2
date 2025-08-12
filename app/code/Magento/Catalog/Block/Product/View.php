@@ -174,7 +174,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      */
     public function getJsonConfig()
     {
-        /* @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->getProduct();
         $tierPrices = [];
         $priceInfo = $product->getPriceInfo();

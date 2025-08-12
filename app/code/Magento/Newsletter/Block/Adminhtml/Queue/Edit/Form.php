@@ -64,7 +64,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /* @var $queue \Magento\Newsletter\Model\Queue */
+        /** @var \Magento\Newsletter\Model\Queue $queue */
         $queue = $this->getQueue();
 
         /** @var \Magento\Framework\Data\Form $form */

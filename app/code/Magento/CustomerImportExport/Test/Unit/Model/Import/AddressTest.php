@@ -280,7 +280,7 @@ class AddressTest extends TestCase
      */
     protected function _createCustomerStorageMock()
     {
-        /** @var $customerStorage Storage|MockObject */
+        /** @var Storage|MockObject $customerStorage */
         $customerStorage = $this->createMock(Storage::class);
         $customerStorage
             ->method('getCustomerId')

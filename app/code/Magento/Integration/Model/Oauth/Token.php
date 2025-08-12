@@ -300,7 +300,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
             throw new OauthException(__(array_shift($messages)));
         }
 
-        /** @var $validatorLength \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength */
+        /** @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength $validatorLength */
         $validatorLength = $this->_keyLengthFactory->create();
         $validatorLength->setLength(OauthHelper::LENGTH_TOKEN_SECRET);
         $validatorLength->setName('Token Secret Key');

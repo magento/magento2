@@ -20,7 +20,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
     public function execute()
     {
         $themeId = (int)$this->getRequest()->getParam('id');
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
         $theme = $this->_objectManager->create(\Magento\Framework\View\Design\ThemeInterface::class);
         try {
             $theme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
@@ -30,10 +30,10 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->_coreRegistry->register('current_theme', $theme);
 
             $this->_view->loadLayout();
-            /** @var $tab \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css */
+            /** @var \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css $tab */
             $tab = $this->_view->getLayout()->getBlock('theme_edit_tabs_tab_css_tab');
             if ($tab && $tab->canShowTab()) {
-                /** @var $helper \Magento\Theme\Helper\Theme */
+                /** @var \Magento\Theme\Helper\Theme $helper */
                 $helper = $this->_objectManager->get(\Magento\Theme\Helper\Theme::class);
                 $files = $helper->getCssAssets($theme);
                 $tab->setFiles($files);

@@ -35,7 +35,7 @@ class CreateHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         if ($entity->getTypeId() != Type::TYPE_DOWNLOADABLE) {
             return $entity;
         }

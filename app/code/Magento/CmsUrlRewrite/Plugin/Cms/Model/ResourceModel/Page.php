@@ -54,7 +54,7 @@ class Page
         \Magento\Cms\Model\ResourceModel\Page $subject,
         \Magento\Framework\Model\AbstractModel $object
     ) {
-        /** @var $object \Magento\Cms\Model\Page */
+        /** @var \Magento\Cms\Model\Page $object */
         $urlKey = $object->getData('identifier');
         if ($urlKey === '' || $urlKey === null) {
             $object->setData('identifier', $this->cmsPageUrlPathGenerator->generateUrlKey($object));

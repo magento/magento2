@@ -42,7 +42,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
         $data = $this->getRequest()->getPostValue();
         /** @var Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
-        /** @var $resultBlock Result */
+        /** @var Result $resultBlock */
         $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
         //phpcs:disable Magento2.Security.Superglobal
         if ($data) {

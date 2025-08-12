@@ -56,7 +56,7 @@ class GuestShippingMethodManagement implements
      */
     public function get($cartId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingMethodManagement->get($quoteIdMask->getQuoteId());
     }
@@ -66,7 +66,7 @@ class GuestShippingMethodManagement implements
      */
     public function getList($cartId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingMethodManagement->getList($quoteIdMask->getQuoteId());
     }
@@ -76,7 +76,7 @@ class GuestShippingMethodManagement implements
      */
     public function set($cartId, $carrierCode, $methodCode)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingMethodManagement->set($quoteIdMask->getQuoteId(), $carrierCode, $methodCode);
     }
@@ -86,7 +86,7 @@ class GuestShippingMethodManagement implements
      */
     public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->shippingMethodManagement->estimateByAddress($quoteIdMask->getQuoteId(), $address);
     }
@@ -96,7 +96,7 @@ class GuestShippingMethodManagement implements
      */
     public function estimateByExtendedAddress($cartId, AddressInterface $address)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
 
         return $this->getShipmentEstimationManagement()

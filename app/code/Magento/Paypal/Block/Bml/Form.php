@@ -25,7 +25,7 @@ class Form extends Express\Form
     protected function _construct()
     {
         $this->_config = $this->_paypalConfigFactory->create()->setMethod($this->getMethodCode());
-        /** @var $mark \Magento\Framework\View\Element\Template */
+        /** @var \Magento\Framework\View\Element\Template $mark */
         $mark = $this->_getMarkTemplate();
         $mark->setPaymentAcceptanceMarkHref(
             'https://www.securecheckout.billmelater.com/paycapture-content/'

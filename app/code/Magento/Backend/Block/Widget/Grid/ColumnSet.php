@@ -597,7 +597,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
     {
         $multiRows = $this->getMultipleRows($item);
         if (is_object($multiRows) && $multiRows instanceof \Magento\Framework\Data\Collection) {
-            /** @var $multiRows \Magento\Framework\Data\Collection */
+            /** @var \Magento\Framework\Data\Collection $multiRows */
             $item->addData($multiRows->getFirstItem()->getData());
         } elseif (is_array($multiRows)) {
             $firstItem = $multiRows[0];

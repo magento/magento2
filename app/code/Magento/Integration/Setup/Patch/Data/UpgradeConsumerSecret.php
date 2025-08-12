@@ -83,7 +83,7 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
         for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
             $this->consumerCollection->setCurPage($currentPage);
 
-            /** @var $consumer Consumer */
+            /** @var Consumer $consumer */
             foreach ($this->consumerCollection as $consumer) {
                 $existingSecret = $consumer->getSecret();
                 $entityId = $consumer->getEntityId();

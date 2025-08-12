@@ -69,7 +69,7 @@ class ResetPasswordPost extends Auth implements HttpGetActionInterface, HttpPost
             return;
         }
 
-        /** @var $user \Magento\User\Model\User */
+        /** @var \Magento\User\Model\User $user */
         $user = $this->_userFactory->create()->load($userId);
         $user->setPassword($password);
         $user->setPasswordConfirmation($passwordConfirmation);

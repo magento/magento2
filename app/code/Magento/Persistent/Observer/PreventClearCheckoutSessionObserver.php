@@ -54,7 +54,7 @@ class PreventClearCheckoutSessionObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $action \Magento\Persistent\Controller\Index */
+        /** @var \Magento\Persistent\Controller\Index $action */
         $action = $observer->getEvent()->getControllerAction();
         if ($action instanceof \Magento\Persistent\Controller\Index) {
             if (($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn())

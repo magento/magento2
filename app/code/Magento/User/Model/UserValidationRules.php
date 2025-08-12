@@ -55,7 +55,7 @@ class UserValidationRules
             EmailAddress::INVALID
         );
 
-        /** @var $validator DataObject */
+        /** @var DataObject $validator */
         $validator->addRule(
             $userNameNotEmpty,
             'username'

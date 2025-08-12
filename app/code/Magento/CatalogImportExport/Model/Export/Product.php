@@ -477,7 +477,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function initCategories()
     {
         $collection = $this->_categoryColFactory->create()->addNameToResult();
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
         foreach ($collection as $category) {
             $structure = preg_split('#/+#', $category->getPath());
@@ -551,7 +551,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function initWebsites()
     {
-        /** @var $website \Magento\Store\Model\Website */
+        /** @var \Magento\Store\Model\Website $website */
         foreach ($this->_storeManager->getWebsites() as $website) {
             $this->_websiteIdToCode[$website->getId()] = $website->getCode();
         }

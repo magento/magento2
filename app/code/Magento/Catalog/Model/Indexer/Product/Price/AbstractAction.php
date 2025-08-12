@@ -224,7 +224,7 @@ abstract class AbstractAction
 
         $data = [];
         foreach ($this->getConnection()->fetchAll($select) as $item) {
-            /** @var $website Website */
+            /** @var Website $website */
             $website = $this->_storeManager->getWebsite($item['website_id']);
 
             if ($website->getBaseCurrencyCode() != $baseCurrency) {
@@ -240,7 +240,7 @@ abstract class AbstractAction
                 $rate = 1;
             }
 
-            /** @var $store Store */
+            /** @var Store $store */
             $store = $this->_storeManager->getStore($item['store_id']);
             if ($store) {
                 $timestamp = $this->_localeDate->scopeTimeStamp($store);

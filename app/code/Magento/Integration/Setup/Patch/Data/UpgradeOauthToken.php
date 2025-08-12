@@ -85,7 +85,7 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
         for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
             $this->tokenCollection->setCurPage($currentPage);
 
-            /** @var $token Token */
+            /** @var Token $token */
             foreach ($this->tokenCollection as $token) {
                 $existingSecret = $token->getSecret();
                 $entityId = $token->getEntityId();

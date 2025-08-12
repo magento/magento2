@@ -240,7 +240,7 @@ class Content extends \Magento\Backend\Block\Widget
     {
         $values = [];
         foreach ($this->getMediaAttributes() as $attribute) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
             $values[$attribute->getAttributeCode()] = $this->getElement()->getDataObject()->getData(
                 $attribute->getAttributeCode()
             );
@@ -257,7 +257,7 @@ class Content extends \Magento\Backend\Block\Widget
     {
         $imageTypes = [];
         foreach ($this->getMediaAttributes() as $attribute) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
             $value = $this->getElement()->getDataObject()->getData($attribute->getAttributeCode())
                 ?: $this->getElement()->getImageValue($attribute->getAttributeCode());
             $imageTypes[$attribute->getAttributeCode()] = [

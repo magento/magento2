@@ -75,7 +75,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
         $optionValues = [];
         $options = $this->product->getOptions();
         if ($options) {
-            /** @var $optionItem \Magento\Catalog\Model\Product\Option */
+            /** @var \Magento\Catalog\Model\Product\Option $optionItem */
             foreach ($options as $optionItem) {
                 $min = null;
                 if (!$optionItem->getIsRequire()) {
@@ -93,7 +93,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                         $max = $price;
                     }
                 } else {
-                    /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
+                    /** @var \Magento\Catalog\Model\Product\Option\Value $optionValue */
                     foreach ($optionItem->getValues() as $optionValue) {
                         $price =
                             $this->customOptionPriceCalculator->getOptionPriceByPriceCode($optionValue, $priceCode);
@@ -226,9 +226,9 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
         $this->priceOptions = [];
         $options = $this->product->getOptions();
         if ($options) {
-            /** @var $optionItem \Magento\Catalog\Model\Product\Option */
+            /** @var \Magento\Catalog\Model\Product\Option $optionItem */
             foreach ($options as $optionItem) {
-                /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
+                /** @var \Magento\Catalog\Model\Product\Option\Value $optionValue */
                 foreach ($optionItem->getValues() as $optionValue) {
                     $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
                     $this->priceOptions[$optionValue->getId()][$price] = [

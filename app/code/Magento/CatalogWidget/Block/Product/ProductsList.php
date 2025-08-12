@@ -286,7 +286,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected function getDetailsRendererList()
     {
         if (empty($this->rendererListBlock)) {
-            /** @var $layout LayoutInterface */
+            /** @var LayoutInterface $layout */
             $layout = $this->layoutFactory->create(['cacheable' => false]);
             $layout->getUpdate()->addHandle('catalog_widget_product_list')->load();
             $layout->generateXml();

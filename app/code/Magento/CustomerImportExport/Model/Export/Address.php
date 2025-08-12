@@ -259,7 +259,7 @@ class Address extends AbstractEav
     {
         $row = $this->_addAttributeValuesToRow($item);
 
-        /** @var $customer \Magento\Customer\Model\Customer */
+        /** @var \Magento\Customer\Model\Customer $customer */
         $customer = $this->getCustomers()[$item->getParentId()];
 
         // Fill row with default address attributes values

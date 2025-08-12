@@ -73,7 +73,7 @@ class TaxClassProcessor
         if (empty($this->taxClasses)) {
             $collection = $this->collectionFactory->create();
             $collection->addFieldToFilter('class_type', ClassModel::TAX_CLASS_TYPE_PRODUCT);
-            /* @var $collection Collection */
+            /** @var Collection $collection */
             foreach ($collection as $taxClass) {
                 $this->taxClasses[mb_strtolower($taxClass->getClassName())] = $taxClass->getId();
             }

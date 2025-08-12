@@ -27,7 +27,7 @@ class Delete extends Theme implements HttpGetActionInterface
         $themeId = $this->getRequest()->getParam('id');
         try {
             if ($themeId) {
-                /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+                /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
                 $theme = $this->_objectManager->create(
                     \Magento\Framework\View\Design\ThemeInterface::class
                 )->load($themeId);

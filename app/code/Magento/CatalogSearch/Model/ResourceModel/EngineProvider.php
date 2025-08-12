@@ -88,7 +88,7 @@ class EngineProvider
                 );
             }
 
-            /** @var $engine EngineInterface */
+            /** @var EngineInterface $engine */
             if ($engine && !$engine->isAvailable()) {
                 throw new \LogicException(
                     'Engine is not available: ' . $currentEngine

@@ -2114,7 +2114,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $errors = [];
         foreach ($this->getMessages() as $message) {
-            /* @var $error \Magento\Framework\Message\AbstractMessage */
+            /** @var \Magento\Framework\Message\AbstractMessage $error */
             if ($message->getType() == \Magento\Framework\Message\MessageInterface::TYPE_ERROR) {
                 $errors[] = $message;
             }
@@ -2338,7 +2338,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         if (!$multishipping) {
             foreach ($addresses as $address) {
-                /* @var $address Address */
+                /** @var Address $address */
                 if (!$address->validateMinimumAmount()) {
                     return false;
                 }
@@ -2389,7 +2389,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $isVirtual = true;
         $countItems = 0;
         foreach ($this->getItemsCollection() as $_item) {
-            /* @var $_item \Magento\Quote\Model\Quote\Item */
+            /** @var \Magento\Quote\Model\Quote\Item $_item */
             if ($_item->isDeleted() || $_item->getParentItemId()) {
                 continue;
             }

@@ -717,7 +717,7 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
         $tree = $this->_categoryTreeFactory->create();
-        /* @var $tree \Magento\Catalog\Model\ResourceModel\Category\Tree */
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Tree $tree */
         $nodes = $tree->loadNode($parent)->loadChildren($recursionLevel)->getChildren();
 
         $tree->addCollectionData(null, $sorted, $parent, $toLoad, true);
@@ -805,7 +805,7 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
     public function getChildrenCategories($category)
     {
         $collection = $category->getCollection();
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection->addAttributeToSelect(
             'url_key'
         )->addAttributeToSelect(

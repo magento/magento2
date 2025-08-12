@@ -64,11 +64,11 @@ class DownloadCss extends Theme implements HttpGetActionInterface
         $themeId = $this->getRequest()->getParam('theme_id');
         $file = $this->getRequest()->getParam('file');
 
-        /** @var $urlDecoder DecoderInterface */
+        /** @var DecoderInterface $urlDecoder */
         $urlDecoder = $this->_objectManager->get(DecoderInterface::class);
         $fileId = $urlDecoder->decode($file);
         try {
-            /** @var $theme ThemeInterface */
+            /** @var ThemeInterface $theme */
             $theme = $this->_objectManager->create(ThemeInterface::class)->load($themeId);
             if (!$theme->getId()) {
                 throw new \InvalidArgumentException(sprintf('Theme not found: "%d".', $themeId));

@@ -230,7 +230,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
                 $existingValuesIds[] = $newValue['option_type_id'];
             }
         }
-        /** @var $originalValue \Magento\Catalog\Model\Product\Option\Value */
+        /** @var \Magento\Catalog\Model\Product\Option\Value $originalValue */
         foreach ($originalValues as $originalValue) {
             if (!in_array($originalValue->getData('option_type_id'), $existingValuesIds)) {
                 $originalValue->setData('is_delete', 1);

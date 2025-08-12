@@ -62,7 +62,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /* @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
 
         /**
@@ -72,7 +72,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             return $this;
         }
 
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection */
         $collection = $observer->getEvent()->getCollection();
         $limit = $observer->getEvent()->getLimit();
         if (is_array($limit)) {
@@ -83,7 +83,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             }
         }
 
-        /* @var $resource \Magento\Bundle\Model\ResourceModel\Selection */
+        /** @var \Magento\Bundle\Model\ResourceModel\Selection $resource */
         $resource = $this->bundleSelection;
 
         $productIds = array_keys($collection->getItems());
@@ -100,7 +100,7 @@ class AppendUpsellProductsObserver implements ObserverInterface
             return $this;
         }
 
-        /* @var $bundleCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $bundleCollection */
         $bundleCollection = $product->getCollection();
         $bundleCollection->addAttributeToSelect(
             $this->config->getProductAttributes()

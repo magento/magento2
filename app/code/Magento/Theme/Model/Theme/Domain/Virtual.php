@@ -84,7 +84,7 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
      */
     public function getPhysicalTheme()
     {
-        /** @var $parentTheme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var \Magento\Framework\View\Design\ThemeInterface $parentTheme */
         $parentTheme = $this->_theme->getParentTheme();
         while ($parentTheme && !$parentTheme->isPhysical()) {
             $parentTheme = $parentTheme->getParentTheme();

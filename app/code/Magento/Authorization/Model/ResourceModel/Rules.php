@@ -114,7 +114,7 @@ class Rules extends AbstractDb
                     /** Give basic admin permissions to any admin */
                     $postedResources[] = AbstractAction::ADMIN_RESOURCE;
                     $acl = $this->_aclBuilder->getAcl();
-                    /** @var $resource \Magento\Framework\Acl\AclResource */
+                    /** @var \Magento\Framework\Acl\AclResource $resource */
                     foreach ($acl->getResources() as $resourceId) {
                         $row['permission'] = in_array($resourceId, $postedResources) ? 'allow' : 'deny';
                         $row['resource_id'] = $resourceId;

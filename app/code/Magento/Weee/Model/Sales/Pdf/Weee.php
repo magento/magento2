@@ -49,7 +49,7 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
      */
     public function getTotalsForDisplay()
     {
-        /** @var $items \Magento\Sales\Model\Order\Item[] */
+        /** @var \Magento\Sales\Model\Order\Item[] $items */
         $items = $this->getSource()->getAllItems();
         $store = $this->getSource()->getStore();
 
@@ -72,7 +72,7 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 
         return $totals;
     }
-    
+
     /**
      * Check if we can display Weee total information in PDF
      *

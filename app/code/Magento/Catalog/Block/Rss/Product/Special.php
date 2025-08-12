@@ -128,7 +128,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
 
         $currentDate = (new \DateTime())->setTime(0, 0, 0);
         foreach ($this->rssModel->getProductsCollection($this->getStoreId(), $this->getCustomerGroupId()) as $item) {
-            /** @var $item \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $item */
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 

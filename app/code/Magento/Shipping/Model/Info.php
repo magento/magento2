@@ -76,7 +76,7 @@ class Info extends \Magento\Framework\DataObject
      */
     public function loadByHash($hash)
     {
-        /* @var $helper \Magento\Shipping\Helper\Data */
+        /** @var \Magento\Shipping\Helper\Data $helper */
         $helper = $this->_shippingData;
         $data = $helper->decodeTrackingHash($hash);
         if (!empty($data)) {
@@ -128,7 +128,7 @@ class Info extends \Magento\Framework\DataObject
      */
     protected function _initShipment()
     {
-        /* @var $model Shipment */
+        /** @var Shipment $model */
         $ship = $this->shipmentRepository->get($this->getShipId());
         if (!$ship->getEntityId() || $this->getProtectCode() !== $ship->getProtectCode()) {
             return false;

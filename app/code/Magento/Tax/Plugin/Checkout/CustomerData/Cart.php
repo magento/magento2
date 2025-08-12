@@ -156,7 +156,7 @@ class Cart
     {
         if (is_array($itemsHaystack)) {
             foreach ($itemsHaystack as $item) {
-                /** @var $item \Magento\Quote\Model\Quote\Item */
+                /** @var \Magento\Quote\Model\Quote\Item $item */
                 if ((int)$item->getItemId() == $id) {
                     return $item;
                 }

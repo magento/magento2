@@ -177,7 +177,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         parent::beforeSave();
         $country = $this->getTaxCountryId();
         $region = $this->getTaxRegionId();
-        /** @var $regionModel \Magento\Directory\Model\Region */
+        /** @var \Magento\Directory\Model\Region $regionModel */
         $regionModel = $this->_regionFactory->create();
         $regionModel->load($region);
         if ($regionModel->getCountryId() != $country) {

@@ -100,7 +100,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _afterLoadCollection()
     {
-        /** @var $actionPager \Magento\Review\Helper\Action\Pager */
+        /** @var \Magento\Review\Helper\Action\Pager $actionPager */
         $actionPager = $this->_reviewActionPager;
         $actionPager->setStorageId('reviews');
         $actionPager->setItems($this->getCollection()->getResultingIds());
@@ -113,9 +113,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        /** @var $model \Magento\Review\Model\Review */
+        /** @var \Magento\Review\Model\Review $model */
         $model = $this->_reviewFactory->create();
-        /** @var $collection \Magento\Review\Model\ResourceModel\Review\Product\Collection */
+        /** @var \Magento\Review\Model\ResourceModel\Review\Product\Collection $collection */
         $collection = $this->_productsFactory->create();
 
         if ($this->getProductId() || $this->getRequest()->getParam('productId', false)) {

@@ -24,7 +24,7 @@ class ImportPost extends Rate implements HttpPostActionInterface
         $importRatesFile = $this->getRequest()->getFiles('import_rates_file');
         if ($this->getRequest()->isPost() && isset($importRatesFile['tmp_name'])) {
             try {
-                /** @var $importHandler \Magento\TaxImportExport\Model\Rate\CsvImportHandler */
+                /** @var \Magento\TaxImportExport\Model\Rate\CsvImportHandler $importHandler */
                 $importHandler = $this->_objectManager->create(
                     \Magento\TaxImportExport\Model\Rate\CsvImportHandler::class
                 );

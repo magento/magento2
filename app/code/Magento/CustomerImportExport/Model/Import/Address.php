@@ -309,7 +309,7 @@ class Address extends AbstractCustomer
             ObjectManager::getInstance()->get(CountryWithWebsitesSource::class);
 
         if (!isset($data['attribute_collection'])) {
-            /** @var $attributeCollection \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection */
+            /** @var \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection $attributeCollection */
             $attributeCollection = $attributesFactory->create();
             $attributeCollection->addSystemHiddenFilter()->addExcludeHiddenFrontendFilter();
             $data['attribute_collection'] = $attributeCollection;
@@ -443,7 +443,7 @@ class Address extends AbstractCustomer
      */
     protected function _initCountryRegions()
     {
-        /** @var $region \Magento\Directory\Model\Region */
+        /** @var \Magento\Directory\Model\Region $region */
         foreach ($this->_regionCollection as $region) {
             $countryNormalized = strtolower($region->getCountryId());
             $regionCode = $region->getCode() !== null ? strtolower($region->getCode()) : '';

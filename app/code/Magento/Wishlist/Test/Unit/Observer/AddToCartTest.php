@@ -196,7 +196,7 @@ class AddToCartTest extends TestCase
             ->method('setNoCartRedirect')
             ->with(true);
 
-        /** @var $eventObserver \Magento\Framework\Event\Observer */
+        /** @var \Magento\Framework\Event\Observer $eventObserver */
         $this->observer->execute($eventObserver);
     }
 }

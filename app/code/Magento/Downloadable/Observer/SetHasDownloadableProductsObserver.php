@@ -34,7 +34,7 @@ class SetHasDownloadableProductsObserver implements ObserverInterface
         if (!$this->_checkoutSession->getHasDownloadableProducts()) {
             $order = $observer->getEvent()->getOrder();
             foreach ($order->getAllItems() as $item) {
-                /* @var $item \Magento\Sales\Model\Order\Item */
+                /** @var \Magento\Sales\Model\Order\Item $item */
                 if ($item->getProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                     || $item->getRealProductType() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
                     || $item->getProductOptionByCode(

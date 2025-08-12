@@ -196,7 +196,7 @@ class DesignTest extends TestCase
             ->getMock();
 
         $this->model->setDesign('test');
-        /** @var $design \Magento\Framework\View\DesignInterface */
+        /** @var \Magento\Framework\View\DesignInterface $design */
         $this->assertInstanceOf(get_class($this->model), $this->model->changeDesign($design));
     }
 }

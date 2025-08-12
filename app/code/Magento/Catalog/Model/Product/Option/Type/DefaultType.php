@@ -369,14 +369,14 @@ class DefaultType extends \Magento\Framework\DataObject implements ResetAfterReq
             $options = $this->getProduct()->getOptions();
             if ($options != null) {
                 foreach ($options as $_option) {
-                    /* @var $option Option */
+                    /** @var Option $option */
                     $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()] = [
                         'option_id' => $_option->getId(),
                     ];
                     if ($_option->getGroupByType() == ProductCustomOptionInterface::OPTION_GROUP_SELECT) {
                         $optionValues = [];
                         foreach ($_option->getValues() as $_value) {
-                            /* @var $value Value */
+                            /** @var Value $value */
                             $optionValues[$_value->getTitle()] = $_value->getId();
                         }
                         $this->_productOptions[$this

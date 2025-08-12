@@ -217,7 +217,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($customer->getDefaultShipping()) {
             $this->validateDefaultAddress($customer, $prevCustomerData, CustomerInterface::DEFAULT_SHIPPING);
         }
-        /** @var $customer \Magento\Customer\Model\Data\Customer */
+        /** @var \Magento\Customer\Model\Data\Customer $customer */
         $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
             $customer,

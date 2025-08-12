@@ -102,7 +102,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function getItemRenderer($type)
     {
-        /** @var $renderer \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
+        /** @var \Magento\Sales\Block\Adminhtml\Items\AbstractItems $renderer */
         $renderer = $this->getChildBlock($type) ?: $this->getChildBlock(self::DEFAULT_TYPE);
         if (!$renderer instanceof \Magento\Framework\View\Element\BlockInterface) {
             throw new \RuntimeException('Renderer for type "' . $type . '" does not exist.');

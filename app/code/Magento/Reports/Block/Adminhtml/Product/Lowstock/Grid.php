@@ -66,7 +66,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $storeId = null;
         }
 
-        /** @var $collection Collection  */
+        /** @var Collection $collection */
         $collection = $this->_lowstocksFactory->create()->addAttributeToSelect(
             '*'
         )->filterByIsQtyProductTypes()->joinInventoryItem(

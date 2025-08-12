@@ -68,7 +68,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /** @var $model \Magento\User\Model\User */
+        /** @var \Magento\User\Model\User $model */
         $model = $this->_coreRegistry->registry('permissions_user');
 
         /** @var \Magento\Framework\Data\Form $form */

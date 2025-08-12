@@ -176,7 +176,7 @@ class FlatTableBuilder
         }
         $indexesNeed = array_combine($indexKeys, $indexProps);
 
-        /** @var $table Table */
+        /** @var Table $table */
         $table = $this->_connection->newTable(
             $this->_getTemporaryTableName($this->_productIndexerHelper->getFlatTableName($storeId))
         );
@@ -247,7 +247,7 @@ class FlatTableBuilder
             )
         );
 
-        /* @var $status Attribute */
+        /** @var Attribute $status */
         $status = $this->_productIndexerHelper->getAttribute('status');
         $statusTable = $this->_getTemporaryTableName($status->getBackendTable());
         $statusConditions = [
@@ -333,7 +333,7 @@ class FlatTableBuilder
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         foreach ($tables as $tableName => $columns) {
             foreach ($columns as $attribute) {
-                /* @var $attribute Attribute */
+                /** @var Attribute $attribute */
                 $attributeCode = $attribute->getAttributeCode();
                 if ($attribute->getBackend()->getType() != 'static') {
                     $joinCondition = sprintf('t.%s = e.%s', $linkField, $linkField) .
@@ -342,7 +342,7 @@ class FlatTableBuilder
                         ' AND t.store_id = ' .
                         $storeId .
                         ' AND t.value IS NOT NULL';
-                    /** @var $select Select */
+                    /** @var Select $select */
                     $select = $this->_connection->select()
                         ->joinInner(
                             ['e' => $this->resource->getTableName('catalog_product_entity')],

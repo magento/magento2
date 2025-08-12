@@ -146,7 +146,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
             );
         }
 
-        /** @var $request \Magento\Shipping\Model\Shipment\Request */
+        /** @var \Magento\Shipping\Model\Shipment\Request $request */
         $request = $this->_shipmentRequestFactory->create();
         $request->setOrderShipment($orderShipment);
         $address = $order->getShippingAddress();

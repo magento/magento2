@@ -66,7 +66,7 @@ class CustomerMetadata implements CustomerMetadataInterface
             $formCode
         );
         foreach ($attributesFormCollection as $attribute) {
-            /** @var $attribute \Magento\Customer\Model\Attribute */
+            /** @var \Magento\Customer\Model\Attribute $attribute */
             $attributes[$attribute->getAttributeCode()] = $this->attributeMetadataConverter
                 ->createMetadataAttribute($attribute);
         }

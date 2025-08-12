@@ -47,7 +47,7 @@ class ProductComplexTextAttribute implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /* @var $product Product */
+        /** @var Product $product */
         $product = $value['model'];
         $fieldName = $field->getName();
         $renderedValue = $this->outputHelper->productAttribute($product, $product->getData($fieldName), $fieldName);

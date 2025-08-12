@@ -27,7 +27,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
 
         $groups = $source->getElementsByTagName('group');
         foreach ($groups as $group) {
-            /** @var $group \DOMElement */
+            /** @var \DOMElement $group */
             if (!$group->hasAttribute('id')) {
                 throw new \InvalidArgumentException('Attribute "id" does not exist');
             }

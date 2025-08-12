@@ -60,7 +60,7 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
     protected function _toHtml()
     {
         $results = [];
-        /** @var $optionsBlock \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */
+        /** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option $optionsBlock */
         $optionsBlock = $this->getLayout()->createBlock(
             \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option::class
         )->setIgnoreCaching(

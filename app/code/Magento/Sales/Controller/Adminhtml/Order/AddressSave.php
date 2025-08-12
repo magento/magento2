@@ -119,7 +119,7 @@ class AddressSave extends Order implements HttpPostActionInterface
     public function execute()
     {
         $addressId = $this->getRequest()->getParam('address_id');
-        /** @var $address OrderAddressInterface|AddressModel */
+        /** @var OrderAddressInterface|AddressModel $address */
         $address = $this->_objectManager->create(
             OrderAddressInterface::class
         )->load($addressId);

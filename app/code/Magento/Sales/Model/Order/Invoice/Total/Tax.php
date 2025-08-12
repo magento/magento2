@@ -27,7 +27,7 @@ class Tax extends AbstractTotal
 
         $order = $invoice->getOrder();
 
-        /** @var $item \Magento\Sales\Model\Order\Invoice\Item */
+        /** @var \Magento\Sales\Model\Order\Invoice\Item $item */
         foreach ($invoice->getAllItems() as $item) {
             $orderItem = $item->getOrderItem();
             $orderItemQty = $orderItem->getQtyOrdered();

@@ -42,10 +42,10 @@ class Identity implements \Magento\Framework\Option\ArrayInterface
     {
         if ($this->_options === null) {
             $this->_options = [];
-            /** @var $section \Magento\Config\Model\Config\Structure\Element\Section */
+            /** @var \Magento\Config\Model\Config\Structure\Element\Section $section */
             $section = $this->_configStructure->getElement('trans_email');
 
-            /** @var $group \Magento\Config\Model\Config\Structure\Element\Group */
+            /** @var \Magento\Config\Model\Config\Structure\Element\Group $group */
             foreach ($section->getChildren() as $group) {
                 $this->_options[] = [
                     'value' => preg_replace('#^ident_(.*)$#', '$1', $group->getId()),

@@ -123,7 +123,7 @@ class Express extends PaypalExpress
     {
         $baseTotalDue = $order->getBaseTotalDue();
 
-        /** @var $payment Payment */
+        /** @var Payment $payment */
         $payment = $order->getPayment();
         if (!$payment || !$this->isOrderAuthorizationAllowed($payment)) {
             throw new LocalizedException(__('Authorization is not allowed.'));

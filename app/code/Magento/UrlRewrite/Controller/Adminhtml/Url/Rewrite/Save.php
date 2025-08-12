@@ -184,7 +184,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
     {
         $data = $this->getRequest()->getPostValue();
         if ($data) {
-            /** @var $session \Magento\Backend\Model\Session */
+            /** @var \Magento\Backend\Model\Session $session */
             $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
             try {
                 $model = $this->_getUrlRewrite();

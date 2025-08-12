@@ -61,7 +61,7 @@ class Regexceptions extends \Magento\Config\Block\System\Config\Form\Field\Field
     public function renderCellTemplate($columnName)
     {
         if ($columnName == 'value' && isset($this->_columns[$columnName])) {
-            /** @var $label \Magento\Framework\View\Design\Theme\Label */
+            /** @var \Magento\Framework\View\Design\Theme\Label $label */
             $label = $this->_labelFactory->create();
             $options = $label->getLabelsCollection(__('-- No Theme --'));
             $element = $this->_elementFactory->create('select');

@@ -16,13 +16,13 @@
 
 <?php
     //phpcs:disable
-    /** @var $pricingHelper \Magento\Framework\Pricing\Helper\Data */
+    /** @var \Magento\Framework\Pricing\Helper\Data $pricingHelper */
     $pricingHelper = $this->helper(\Magento\Framework\Pricing\Helper\Data::class);
-    /** @var $_catalogHelper \Magento\Catalog\Helper\Data */
+    /** @var \Magento\Catalog\Helper\Data $_catalogHelper */
     $_catalogHelper = $this->helper(\Magento\Catalog\Helper\Data::class);
     //phpcs:enable
 
-    /** @var $_product \Magento\Catalog\Model\Product */
+    /** @var \Magento\Catalog\Model\Product $_product */
     $_product = $block->getProduct();
     $_id = $_product->getId();
     $_msrpPrice = '';

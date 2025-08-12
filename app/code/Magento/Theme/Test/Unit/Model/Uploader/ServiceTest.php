@@ -79,7 +79,7 @@ class ServiceTest extends TestCase
         )->willReturn(
             $this->_directoryMock
         );
-        /** @var $service \Magento\Theme\Model\Uploader\Service */
+        /** @var \Magento\Theme\Model\Uploader\Service $service */
 
         $this->_fileSizeMock = $this->getMockBuilder(
             Size::class

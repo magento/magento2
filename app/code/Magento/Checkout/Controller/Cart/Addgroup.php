@@ -59,7 +59,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart implements HttpPostActi
                 ->getCollection()
                 ->addIdFilter($orderItemIds)
                 ->load();
-            /* @var $itemsCollection \Magento\Sales\Model\ResourceModel\Order\Item\Collection */
+            /** @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection $itemsCollection */
             foreach ($itemsCollection as $item) {
                 try {
                     $this->addOrderItem($item);

@@ -62,7 +62,7 @@ class AttributeDataFactory implements ResetAfterRequestInterface
      */
     public function create(\Magento\Eav\Model\Attribute $attribute, \Magento\Framework\Model\AbstractModel $entity)
     {
-        /* @var $dataModel \Magento\Eav\Model\Attribute\Data\AbstractData */
+        /** @var \Magento\Eav\Model\Attribute\Data\AbstractData $dataModel */
         $dataModelClass = $attribute->getDataModel();
         if (!empty($dataModelClass)) {
             if (empty($this->_dataModels[$dataModelClass])) {

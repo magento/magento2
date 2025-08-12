@@ -369,14 +369,14 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implement
     {
         $rootCategoryIds = [];
         foreach ($stores as $store) {
-            /* @var $store \Magento\Store\Model\Store */
+            /** @var \Magento\Store\Model\Store $store */
             $rootCategoryIds[$store->getRootCategoryId()] = $store->getRootCategoryId();
         }
         if ($rootCategoryIds) {
             $categories = $this->_getCategories($rootCategoryIds);
         }
         foreach ($stores as $store) {
-            /* @var $store \Magento\Store\Model\Store */
+            /** @var \Magento\Store\Model\Store $store */
             $rootCategoryId = $store->getRootCategoryId();
             if (isset($categories[$rootCategoryId])) {
                 $store->setRootCategoryPath($categories[$rootCategoryId]->getPath());

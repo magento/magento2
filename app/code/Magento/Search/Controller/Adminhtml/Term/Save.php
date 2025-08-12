@@ -76,7 +76,7 @@ class Save extends TermController implements HttpPostActionInterface
         $queryText = $this->getRequest()->getPost('query_text', false);
         $queryId = $this->getRequest()->getPost('query_id', null);
 
-        /* @var $model \Magento\Search\Model\Query */
+        /** @var \Magento\Search\Model\Query $model */
         $model = $this->queryFactory->create();
         if ($queryText) {
             $storeId = $this->getRequest()->getPost('store_id', false);

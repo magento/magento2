@@ -299,11 +299,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _assignOptions()
     {
         $itemIds = array_keys($this->_items);
-        /* @var $optionCollection \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection */
+        /** @var \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection $optionCollection */
         $optionCollection = $this->_optionCollectionFactory->create();
         $optionCollection->addItemFilter($itemIds);
 
-        /* @var $item \Magento\Wishlist\Model\Item */
+        /** @var \Magento\Wishlist\Model\Item $item */
         foreach ($this as $item) {
             $item->setOptions($optionCollection->getOptionsByItem($item));
         }

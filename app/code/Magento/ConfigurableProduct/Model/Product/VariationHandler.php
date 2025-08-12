@@ -141,14 +141,14 @@ class VariationHandler implements ResetAfterRequestInterface
     {
         $attributes = $this->configurableProduct->getUsedProductAttributes($product);
         $attributeSetId = $product->getNewVariationsAttributeSetId();
-        /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
+        /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
         $attributeSet = $this->attributeSetFactory->create()->load($attributeSetId);
         $attributeSet->addSetInfo(
             $this->entityFactory->create()->setType(\Magento\Catalog\Model\Product::ENTITY)->getTypeId(),
             $attributes
         );
         foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Catalog\Model\Entity\Attribute */
+            /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
             if (!$attribute->isInSet($attributeSetId)) {
                 $attribute->setAttributeSetId(
                     $attributeSetId

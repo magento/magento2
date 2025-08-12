@@ -260,7 +260,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
             if ($options) {
                 foreach ($options as $option) {
-                    /* @var $option \Magento\Bundle\Model\Option */
+                    /** @var \Magento\Bundle\Model\Option $option */
                     $selections = $option->getSelections();
                     if (empty($selections)) {
                         continue;
@@ -269,7 +269,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                     $selectionMaximalPrices = [];
 
                     foreach ($option->getSelections() as $selection) {
-                        /* @var $selection \Magento\Bundle\Model\Selection */
+                        /** @var \Magento\Bundle\Model\Selection $selection */
                         if (!$selection->isSalable()) {
                             /**
                              * @todo CatalogInventory Show out of stock Products
@@ -336,12 +336,12 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             $customOptions = $product->getOptions();
             if ($product->getPriceType() == self::PRICE_TYPE_FIXED && $customOptions) {
                 foreach ($customOptions as $customOption) {
-                    /* @var $customOption \Magento\Catalog\Model\Product\Option */
+                    /** @var \Magento\Catalog\Model\Product\Option $customOption */
                     $values = $customOption->getValues();
                     if ($values) {
                         $prices = [];
                         foreach ($values as $value) {
-                            /* @var $value \Magento\Catalog\Model\Product\Option\Value */
+                            /** @var \Magento\Catalog\Model\Product\Option\Value $value */
                             $valuePrice = $value->getPrice(true);
 
                             $prices[] = $valuePrice;

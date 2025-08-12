@@ -61,7 +61,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
          */
         $prevNodeId = $this->getRequest()->getPost('aid', false);
 
-        /** @var $block \Magento\Framework\View\Element\Messages */
+        /** @var \Magento\Framework\View\Element\Messages $block */
         $block = $this->layoutFactory->create()->getMessagesBlock();
         $error = false;
 

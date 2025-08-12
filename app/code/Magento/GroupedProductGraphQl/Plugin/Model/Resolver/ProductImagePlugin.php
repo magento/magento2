@@ -59,7 +59,7 @@ class ProductImagePlugin
         ?array $args = null
     ): array {
 
-        /* @var $cartItem Item */
+        /** @var Item $cartItem */
         $cartItem = $value['cart_item'] ?? [];
         if (!$cartItem instanceof Item ||
             !isset($cartItem['product_type']) ||

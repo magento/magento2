@@ -75,7 +75,7 @@ class Config
      */
     protected function _createRoute($routeData)
     {
-        /** @var $route \Magento\Webapi\Controller\Rest\Router\Route */
+        /** @var \Magento\Webapi\Controller\Rest\Router\Route $route */
         $route = $this->_routeFactory->createRoute(
             \Magento\Webapi\Controller\Rest\Router\Route::class,
             $routeData[self::KEY_ROUTE_PATH]

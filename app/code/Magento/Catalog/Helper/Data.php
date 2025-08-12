@@ -342,7 +342,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             } catch (NoSuchEntityException $e) {
                 return '';
             }
-            /* @var $product \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $product */
             if ($this->_catalogProduct->canShow($product, 'catalog')) {
                 return $product->getProductUrl();
             }
@@ -354,7 +354,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             } catch (NoSuchEntityException $e) {
                 return '';
             }
-            /* @var $category \Magento\Catalog\Model\Category */
+            /** @var \Magento\Catalog\Model\Category $category */
             if (!$this->_catalogCategory->canShow($category)) {
                 return '';
             }

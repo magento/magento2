@@ -38,7 +38,7 @@ class SilentPost extends \Magento\Paypal\Controller\Payflow implements CsrfAware
     {
         $data = $this->getRequest()->getPostValue();
         if (isset($data['INVNUM'])) {
-            /** @var $paymentModel \Magento\Paypal\Model\Payflowlink */
+            /** @var \Magento\Paypal\Model\Payflowlink $paymentModel */
             $paymentModel = $this->_payflowModelFactory->create();
             try {
                 $paymentModel->process($data);

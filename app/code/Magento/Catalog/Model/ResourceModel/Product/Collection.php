@@ -739,7 +739,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function prepareStoreId()
     {
         if ($this->getStoreId() !== null) {
-            /** @var $item \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $item */
             foreach ($this->_items as $item) {
                 $item->setStoreId($this->getStoreId());
             }
@@ -756,7 +756,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _prepareUrlDataObject()
     {
         $objects = [];
-        /** @var $item \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $item */
         foreach ($this->_items as $item) {
             if ($this->getFlag('do_not_use_category_id')) {
                 $item->setDoNotUseCategoryId(true);
@@ -1139,7 +1139,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function getAllAttributeValues($attribute)
     {
-        /** @var $select \Magento\Framework\DB\Select */
+        /** @var \Magento\Framework\DB\Select $select */
         $select = clone $this->getSelect();
         $attribute = $this->getEntity()->getAttribute($attribute);
 
@@ -1403,7 +1403,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function getSetIds()
     {
         $select = clone $this->getSelect();
-        /** @var $select \Magento\Framework\DB\Select */
+        /** @var \Magento\Framework\DB\Select $select */
         $select->reset(Select::COLUMNS);
         $select->reset(Select::ORDER);
         $select->distinct(true);
@@ -1419,7 +1419,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function getProductTypeIds()
     {
         $select = clone $this->getSelect();
-        /** @var $select \Magento\Framework\DB\Select */
+        /** @var \Magento\Framework\DB\Select $select */
         $select->reset(\Magento\Framework\DB\Select::COLUMNS);
         $select->distinct(true);
         $select->columns('type_id');
@@ -2260,9 +2260,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function getTierPriceSelect(array $productIds)
     {
-        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = $this->getAttribute('tier_price');
-        /* @var $backend \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice */
+        /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Tierprice $backend */
         $backend = $attribute->getBackend();
         $websiteId = 0;
         if (!$attribute->isScopeGlobal() && null !== $this->getStoreId()) {

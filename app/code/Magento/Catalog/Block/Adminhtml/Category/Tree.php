@@ -147,7 +147,7 @@ class Tree extends AbstractCategory
     {
         $storeId = $this->getRequest()->getParam('store', $this->_getDefaultStoreId());
 
-        /* @var $collection Collection */
+        /** @var Collection $collection */
         $collection = $this->_categoryFactory->create()->getCollection();
 
         $matchingNamesCollection = clone $collection;

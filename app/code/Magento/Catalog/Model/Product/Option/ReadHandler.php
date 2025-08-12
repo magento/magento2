@@ -39,7 +39,7 @@ class ReadHandler implements ExtensionInterface
     public function execute($entity, $arguments = [])
     {
         $options = [];
-        /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         foreach ($this->optionRepository->getProductOptions($entity) as $option) {
             $option->setProduct($entity);
             $options[] = $option;

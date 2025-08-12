@@ -57,7 +57,7 @@ class StoreResolver
      */
     protected function _initWebsites()
     {
-        /** @var $website \Magento\Store\Model\Website */
+        /** @var \Magento\Store\Model\Website $website */
         foreach ($this->storeManager->getWebsites() as $website) {
             $this->websiteCodeToId[$website->getCode()] = $website->getId();
             $this->websiteCodeToStoreIds[$website->getCode()] = array_flip($website->getStoreCodes());

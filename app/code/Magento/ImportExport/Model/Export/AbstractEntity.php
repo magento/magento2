@@ -209,7 +209,7 @@ abstract class AbstractEntity
      */
     protected function _initStores()
     {
-        /** @var $store \Magento\Store\Model\Store */
+        /** @var \Magento\Store\Model\Store $store */
         foreach ($this->_storeManager->getStores(true) as $store) {
             $this->_storeIdToCode[$store->getId()] = $store->getCode();
         }
@@ -227,7 +227,7 @@ abstract class AbstractEntity
      */
     protected function _initWebsites($withDefault = false)
     {
-        /** @var $website \Magento\Store\Model\Website */
+        /** @var \Magento\Store\Model\Website $website */
         foreach ($this->_storeManager->getWebsites($withDefault) as $website) {
             $this->_websiteIdToCode[$website->getId()] = $website->getCode();
         }
@@ -325,7 +325,7 @@ abstract class AbstractEntity
             }
             $attributeCodes = [];
 
-            /** @var $attribute AbstractAttribute */
+            /** @var AbstractAttribute $attribute */
             foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
                 if (!isset($skippedAttributes[$attribute->getAttributeId()])
                     || in_array($attribute->getAttributeCode(), $this->_permanentAttributes)
@@ -378,7 +378,7 @@ abstract class AbstractEntity
      */
     public function filterAttributeCollection(\Magento\Framework\Data\Collection $collection)
     {
-        /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         foreach ($collection as $attribute) {
             if (in_array($attribute->getAttributeCode(), $this->_disabledAttributes)) {
                 $collection->removeItemByKey($attribute->getId());

@@ -85,7 +85,7 @@ class TableBuilder
         $temporaryEavAttributes = $eavAttributes;
 
         //add status global value to the base table
-        /* @var $status \Magento\Eav\Model\Entity\Attribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute $status */
         $status = $this->_productIndexerHelper->getAttribute('status');
         $temporaryEavAttributes[$status->getBackendTable()]['status'] = $status;
         //Create list of temporary tables based on available attributes attributes
@@ -168,7 +168,7 @@ class TableBuilder
                 ['unsigned'=>true]
             );
 
-            /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             foreach ($columns as $columnName => $attribute) {
                 $attributeCode = $attribute->getAttributeCode();
                 if (isset($flatColumns[$attributeCode])) {
@@ -316,7 +316,7 @@ class TableBuilder
 
                 $selectValue->from(['e' => $temporaryTableName], $keyColumn);
 
-                /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+                /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
                 foreach ($columnsList as $columnName => $attribute) {
                     $countTableName = 't' . ($iterationNum++);
                     $joinCondition = 'e.%3$s = %1$s.%3$s AND %1$s.attribute_id = %2$d AND %1$s.store_id = %4$d';

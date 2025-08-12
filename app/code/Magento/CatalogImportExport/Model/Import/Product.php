@@ -1069,7 +1069,7 @@ class Product extends AbstractEntity
     public function getMediaGalleryAttributeId()
     {
         if (!$this->_mediaGalleryAttributeId) {
-            /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel */
+            /** @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel $resource */
             $resource = $this->_resourceFactory->create();
             $this->_mediaGalleryAttributeId = $resource->getAttribute(self::MEDIA_GALLERY_ATTRIBUTE_CODE)->getId();
         }

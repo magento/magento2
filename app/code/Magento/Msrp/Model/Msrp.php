@@ -41,7 +41,7 @@ class Msrp
     public function canApplyToProduct($product)
     {
         if ($this->mapApplyToProductType === null) {
-            /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             $attribute = $this->eavAttributeFactory->create()->loadByCode(Product::ENTITY, 'msrp');
             $this->mapApplyToProductType = $attribute->getApplyTo();
         }

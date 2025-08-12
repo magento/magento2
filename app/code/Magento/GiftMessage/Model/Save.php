@@ -118,7 +118,7 @@ class Save extends \Magento\Framework\DataObject
      */
     protected function _saveOne($entityId, $giftmessage, $entityType)
     {
-        /* @var $giftmessageModel \Magento\GiftMessage\Model\Message */
+        /** @var \Magento\GiftMessage\Model\Message $giftmessageModel */
         $giftmessageModel = $this->_messageFactory->create();
 
         switch ($entityType) {

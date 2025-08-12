@@ -38,7 +38,7 @@ class Index extends \Magento\Rss\Controller\Feed implements \Magento\Framework\A
             throw new NotFoundException(__('Page not found.'));
         }
 
-        /** @var $rss \Magento\Rss\Model\Rss */
+        /** @var \Magento\Rss\Model\Rss $rss */
         $rss = $this->rssFactory->create();
         $rss->setDataProvider($provider);
 

@@ -140,7 +140,7 @@ class Storage
      */
     public function uploadFile($targetPath)
     {
-        /** @var $uploader Uploader */
+        /** @var Uploader $uploader */
         $uploader = $this->_objectManager->create(
             Uploader::class,
             ['fileId' => 'file']

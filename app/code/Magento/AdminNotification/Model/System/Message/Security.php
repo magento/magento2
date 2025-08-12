@@ -110,7 +110,7 @@ class Security implements MessageInterface
     {
         $unsecureBaseURL = $this->_config->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default');
 
-        /** @var $http Curl */
+        /** @var Curl $http */
         $http = $this->_curlFactory->create();
         $http->setOptions(['timeout' => $this->_verificationTimeOut]);
         $http->write(Request::METHOD_POST, $unsecureBaseURL . $this->_filePath);

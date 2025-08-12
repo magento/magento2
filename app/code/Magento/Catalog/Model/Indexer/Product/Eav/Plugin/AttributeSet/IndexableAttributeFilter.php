@@ -34,9 +34,9 @@ class IndexableAttributeFilter
         $groups = $set->getGroups();
         if (is_array($groups)) {
             foreach ($groups as $group) {
-                /** @var $group \Magento\Eav\Model\Entity\Attribute\Group */
+                /** @var \Magento\Eav\Model\Entity\Attribute\Group $group */
                 foreach ($group->getAttributes() as $attribute) {
-                    /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
+                    /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
                     $catalogResource->load($attribute->getId());
                     if ($catalogResource->isIndexable()) {
                         // Attribute requires to be cloned for new dataset to maintain attribute set changes

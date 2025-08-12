@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Sales\Block\Order\Info\Buttons\Rss */
+/** @var \Magento\Sales\Block\Order\Info\Buttons\Rss $block */
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink()) : ?>
     <a href="<?= $block->escapeHtmlAttr($block->getLink()) ?>" class="action rss">

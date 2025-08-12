@@ -189,7 +189,7 @@ class CartUpdateBeforeTest extends TestCase
         $this->helper->expects($this->once())
             ->method('calculate');
 
-        /** @var $eventObserver \Magento\Framework\Event\Observer */
+        /** @var \Magento\Framework\Event\Observer $eventObserver */
         $this->assertSame(
             $this->observer,
             $this->observer->execute($eventObserver)

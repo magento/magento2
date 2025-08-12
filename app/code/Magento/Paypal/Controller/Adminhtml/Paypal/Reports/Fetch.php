@@ -27,7 +27,7 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
     {
         try {
             $reports = $this->_settlementFactory->create();
-            /* @var $reports \Magento\Paypal\Model\Report\Settlement */
+            /** @var \Magento\Paypal\Model\Report\Settlement $reports */
             $credentials = $reports->getSftpCredentials();
             if (empty($credentials)) {
                 throw new \Magento\Framework\Exception\LocalizedException(

@@ -47,7 +47,7 @@ class NewProducts
      */
     public function getProductsCollection($storeId)
     {
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productFactory->create();
         $todayStartOfDayDate = $this->localeDate->date()
             ->setTime(0, 0)
@@ -56,7 +56,7 @@ class NewProducts
         $todayEndOfDayDate = $this->localeDate->date()
             ->setTime(23, 59, 59)
             ->format('Y-m-d H:i:s');
-        /** @var $products \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $products */
         $products = $product->getResourceCollection();
         $products->setStoreId($storeId);
         $products->addStoreFilter()->addAttributeToFilter(

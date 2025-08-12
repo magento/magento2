@@ -590,7 +590,7 @@ class EntityAbstractTest extends AbstractImportTestCase
      */
     protected function _createSourceAdapterMock(array $columns)
     {
-        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|MockObject */
+        /** @var \Magento\ImportExport\Model\Import\AbstractSource|MockObject $source */
         $source = $this->getMockForAbstractClass(
             AbstractSource::class,
             [],

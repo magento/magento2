@@ -103,7 +103,7 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
                 'default'
             );
             foreach ($this->_storeManager->getWebsites() as $website) {
-                /* @var $website \Magento\Store\Model\Website */
+                /** @var \Magento\Store\Model\Website $website */
                 $websiteBaseCurrency = $website->getBaseCurrencyCode();
                 if ($websiteBaseCurrency !== $baseCurrency) {
                     $rate = $this->_currencyFactory->create()->load(

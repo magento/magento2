@@ -113,7 +113,7 @@ class EstimateShippingMethods implements ResolverInterface
             AddressInterface::KEY_POSTCODE => $args[AddressInterface::KEY_POSTCODE] ?? null,
         ];
 
-        /** @var $address AddressInterface */
+        /** @var AddressInterface $address */
         $address = $this->addressFactory->create(['data' => array_filter($data)]);
         $shippingMethods = [];
 

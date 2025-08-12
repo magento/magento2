@@ -64,7 +64,7 @@ class CleanExpiredQuotes
     {
         $stores = $this->storeManager->getStores(true);
         foreach ($stores as $store) {
-            /** @var $quoteCollection QuoteCollection */
+            /** @var QuoteCollection $quoteCollection */
             $quoteCollection = $this->expiredQuotesCollection->getExpiredQuotes($store);
             $quoteCollection->setPageSize(50);
 

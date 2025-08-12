@@ -256,7 +256,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         if ($this->getRequest()->getPost('return_session_messages_only')) {
             $category->load($category->getId());
             // to obtain truncated category name
-            /** @var $block \Magento\Framework\View\Element\Messages */
+            /** @var \Magento\Framework\View\Element\Messages $block */
             $block = $this->layoutFactory->create()->getMessagesBlock();
             $block->setMessages($this->messageManager->getMessages(true));
 

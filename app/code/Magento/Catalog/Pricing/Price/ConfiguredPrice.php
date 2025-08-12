@@ -82,7 +82,7 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
                 $option = $product->getOptionById($optionId);
                 if ($option) {
                     $itemOption = $this->item->getOptionByCode('option_' . $option->getId());
-                    /** @var $group \Magento\Catalog\Model\Product\Option\Type\DefaultType */
+                    /** @var \Magento\Catalog\Model\Product\Option\Type\DefaultType $group */
                     $group = $option->groupFactory($option->getType())
                         ->setOption($option)
                         ->setConfigurationItem($this->item)

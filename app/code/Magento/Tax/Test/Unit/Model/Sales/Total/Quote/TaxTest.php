@@ -730,7 +730,7 @@ class TaxTest extends TestCase
         $quote = $this->createMock(Quote::class);
         $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
         $shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shippingMock);
-        /** @var $address \Magento\Quote\Model\Quote\Address|MockObject */
+        /** @var \Magento\Quote\Model\Quote\Address|MockObject $address */
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->onlyMethods(

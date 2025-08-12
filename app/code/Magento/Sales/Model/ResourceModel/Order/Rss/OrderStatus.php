@@ -33,7 +33,7 @@ class OrderStatus
      */
     public function getAllCommentCollection($orderId)
     {
-        /** @var $resource \Magento\Framework\App\ResourceConnection */
+        /** @var \Magento\Framework\App\ResourceConnection $resource */
         $resource = $this->_resource;
         $read = $resource->getConnection();
 

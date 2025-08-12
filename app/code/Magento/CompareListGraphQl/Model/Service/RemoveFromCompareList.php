@@ -47,7 +47,7 @@ class RemoveFromCompareList
     public function execute(int $listId, array $products)
     {
         foreach ($products as $productId) {
-            /* @var $item Item */
+            /** @var Item $item */
             $item = $this->compareItemFactory->create();
             $item->setListId($listId);
             $this->compareItemResource->loadByProduct($item, $productId);

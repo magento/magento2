@@ -71,7 +71,7 @@ class Start extends ImportResultController implements HttpPostActionInterface
             /** @var \Magento\Framework\View\Result\Layout $resultLayout */
             $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
 
-            /** @var $resultBlock \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result */
+            /** @var \Magento\ImportExport\Block\Adminhtml\Import\Frame\Result $resultBlock */
             $resultBlock = $resultLayout->getLayout()->getBlock('import.frame.result');
             $resultBlock
                 ->addAction('show', 'import_validation_container')

@@ -253,7 +253,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function loadFromPost(array $postData)
     {
-        /** @var $order \Magento\Sales\Model\Order */
+        /** @var \Magento\Sales\Model\Order $order */
         $order = $this->getOrderRecord($postData['oar_order_id']);
         if (!$this->compareStoredBillingDataWithInput($order, $postData)) {
             throw new InputException(__('You entered incorrect data. Please try again.'));

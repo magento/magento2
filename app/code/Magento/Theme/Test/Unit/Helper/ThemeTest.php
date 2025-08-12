@@ -123,7 +123,7 @@ class ThemeTest extends TestCase
      */
     protected function _getLayoutMergeFactory($theme, $layoutStr)
     {
-        /** @var $layoutProcessor \Magento\Framework\View\Layout\ProcessorInterface */
+        /** @var \Magento\Framework\View\Layout\ProcessorInterface $layoutProcessor */
         $layoutProcessor = $this->getMockBuilder(ProcessorInterface::class)
             ->getMockForAbstractClass();
         $xml = '<layouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . $layoutStr . '</layouts>';
@@ -136,7 +136,7 @@ class ThemeTest extends TestCase
             $layoutElement
         );
 
-        /** @var $processorFactory \Magento\Framework\View\Layout\ProcessorFactory */
+        /** @var \Magento\Framework\View\Layout\ProcessorFactory $processorFactory */
         $processorFactory = $this->createPartialMock(
             ProcessorFactory::class,
             ['create']

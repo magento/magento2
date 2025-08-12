@@ -30,7 +30,7 @@ class ConfigurableAttributeHandler
      */
     public function getApplicableAttributes()
     {
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $collection */
         $collection = $this->collectionFactory->create();
         return $collection->addFieldToFilter(
             'frontend_input',

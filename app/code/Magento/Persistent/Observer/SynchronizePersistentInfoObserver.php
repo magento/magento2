@@ -62,10 +62,10 @@ class SynchronizePersistentInfoObserver implements ObserverInterface
             return;
         }
 
-        /** @var $sessionModel \Magento\Persistent\Model\Session */
+        /** @var \Magento\Persistent\Model\Session $sessionModel */
         $sessionModel = $this->_persistentSession->getSession();
 
-        /** @var $request \Magento\Framework\App\RequestInterface */
+        /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $observer->getEvent()->getRequest();
 
         // Quote Id could be changed only by logged in customer

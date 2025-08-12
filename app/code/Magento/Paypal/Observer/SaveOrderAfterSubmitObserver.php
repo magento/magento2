@@ -39,7 +39,7 @@ class SaveOrderAfterSubmitObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /* @var $order \Magento\Sales\Model\Order */
+        /** @var \Magento\Sales\Model\Order $order */
         $order = $observer->getEvent()->getData('order');
         $this->_coreRegistry->register('hss_order', $order, true);
 

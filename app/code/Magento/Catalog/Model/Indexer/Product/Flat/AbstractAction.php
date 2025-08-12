@@ -203,7 +203,7 @@ abstract class AbstractAction
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
-            /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
+            /** @var \Magento\Catalog\Model\Product\Type\AbstractType $typeInstance */
             if (!$typeInstance->isComposite(null)) {
                 continue;
             }
@@ -217,7 +217,7 @@ abstract class AbstractAction
                     $columns['child_id'],
                     $columns['is_child']
                 );
-                /** @var $select \Magento\Framework\DB\Select */
+                /** @var \Magento\Framework\DB\Select $select */
                 $select = $this->_connection->select()->from(
                     ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
                     ['entity_table.entity_id', $relation->getChildFieldName(), new \Zend_Db_Expr('1')]
@@ -266,7 +266,7 @@ abstract class AbstractAction
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
-            /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
+            /** @var \Magento\Catalog\Model\Product\Type\AbstractType $typeInstance */
             if (!$typeInstance->isComposite(null)) {
                 continue;
             }
@@ -289,7 +289,7 @@ abstract class AbstractAction
                 }
 
                 $entitySelect = new \Zend_Db_Expr($select->__toString());
-                /** @var $select \Magento\Framework\DB\Select */
+                /** @var \Magento\Framework\DB\Select $select */
                 $select = $this->_connection->select()->from(
                     ['e' => $this->_productIndexerHelper->getFlatTableName($storeId)],
                     null

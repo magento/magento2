@@ -105,9 +105,9 @@ class NewOrder implements DataProviderInterface
         $title = __('New Orders');
         $data = ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
 
-        /** @var $order \Magento\Sales\Model\Order */
+        /** @var \Magento\Sales\Model\Order $order */
         $order = $this->orderFactory->create();
-        /** @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection */
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Collection $collection */
         $collection = $order->getResourceCollection();
         $collection->addAttributeToFilter('created_at', ['date' => true, 'from' => $fromDate])
             ->addAttributeToSort('created_at', 'desc');

@@ -51,7 +51,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
      */
     public function execute()
     {
-        /* @var $backup \Magento\Backup\Model\Backup */
+        /** @var \Magento\Backup\Model\Backup $backup */
         $backup = $this->_backupModelFactory->create(
             $this->getRequest()->getParam('time'),
             $this->getRequest()->getParam('type')

@@ -141,7 +141,7 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getFlatUpdateSelect($store)
     {
-        /** @var $option \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option $option */
         $option = $this->_optionFactory->create();
         return $option->getFlatUpdateSelect($this->getAttribute(), $store, false);
     }

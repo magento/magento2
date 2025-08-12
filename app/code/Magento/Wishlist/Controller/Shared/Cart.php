@@ -90,7 +90,7 @@ class Cart extends Action implements HttpPostActionInterface
     {
         $itemId = (int)$this->getRequest()->getParam('item');
 
-        /* @var $item Item */
+        /** @var Item $item */
         $item = $this->itemFactory->create()
             ->load($itemId);
 

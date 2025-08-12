@@ -727,7 +727,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getId());
 
         // Apply any taxes for the items
-        /** @var $item \Magento\Sales\Model\Order\Invoice\Item|\Magento\Sales\Model\Order\Creditmemo\Item */
+        /** @var \Magento\Sales\Model\Order\Invoice\Item|\Magento\Sales\Model\Order\Creditmemo\Item $item */
         foreach ($salesItem->getItems() as $item) {
             $orderItem = $item->getOrderItem();
             $orderItemId = $orderItem->getId();

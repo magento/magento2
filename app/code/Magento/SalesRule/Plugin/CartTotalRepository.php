@@ -87,7 +87,7 @@ class CartTotalRepository
 
         $storeLabel = $storeLabelFallback = null;
 
-        /* @var $label \Magento\SalesRule\Model\Data\RuleLabel */
+        /** @var \Magento\SalesRule\Model\Data\RuleLabel $label */
         foreach ($rule->getStoreLabels() as $label) {
             if ($label->getStoreId() === 0) {
                 $storeLabelFallback = $label->getStoreLabel();

@@ -120,7 +120,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        /** @var $collection \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection */
+        /** @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Collection $collection */
         $collection = $this->_collectionFactory->create();
         $collection->setConditionFilter($this->getConditionName())->setWebsiteFilter($this->getWebsiteId());
 

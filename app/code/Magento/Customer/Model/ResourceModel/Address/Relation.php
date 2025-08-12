@@ -50,7 +50,7 @@ class Relation implements RelationInterface
      */
     public function processRelation(AbstractModel $object): void
     {
-        /** @var $object Address */
+        /** @var Address $object */
         if (!$object->getIsCustomerSaveTransaction() && $object->getId()) {
             $customer = $this->customerFactory->create()->load($object->getCustomerId());
 

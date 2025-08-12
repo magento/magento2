@@ -219,7 +219,7 @@ class Attribute extends AbstractDb
      */
     protected function _beforeDelete(AbstractModel $attribute)
     {
-        /** @var $attribute AttributeInterface */
+        /** @var AttributeInterface $attribute */
         if ($attribute->getId() && !$attribute->getIsUserDefined()) {
             throw new CouldNotDeleteException(__("The system attribute can't be deleted."));
         }
@@ -678,7 +678,7 @@ class Attribute extends AbstractDb
 
         $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
 
-        /** @var $select Select */
+        /** @var Select $select */
         $select = $connection->select()->joinLeft(
             ['t1' => $attribute->getBackend()->getTable()],
             $joinCondition,
@@ -729,7 +729,7 @@ class Attribute extends AbstractDb
      */
     protected function _afterLoad(AbstractModel $object)
     {
-        /** @var $entityType \Magento\Eav\Model\Entity\Type */
+        /** @var \Magento\Eav\Model\Entity\Type $entityType */
         $entityType = $object->getData('entity_type');
         if ($entityType) {
             $additionalTable = $entityType->getAdditionalAttributeTable();

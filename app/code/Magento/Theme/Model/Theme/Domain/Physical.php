@@ -66,7 +66,7 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
         $themeData['theme_title'] = $this->_getVirtualThemeTitle($theme);
         $themeData['type'] = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL;
 
-        /** @var $themeCustomization \Magento\Framework\View\Design\ThemeInterface */
+        /** @var \Magento\Framework\View\Design\ThemeInterface $themeCustomization */
         $themeCustomization = $this->_themeFactory->create()->setData($themeData);
         $themeCustomization->getThemeImage()->createPreviewImageCopy($theme);
         $themeCustomization->save();

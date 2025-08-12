@@ -51,7 +51,7 @@ class ExpiredPersistentQuotesCollection
 
         $lastLoginCondition = gmdate("Y-m-d H:i:s", time() - $lifetime);
 
-        /** @var $quotes Collection */
+        /** @var Collection $quotes */
         $quotes = $this->quoteCollectionFactory->create();
 
         $additionalQuotes = clone $quotes;

@@ -63,7 +63,7 @@ class UpgradeHashAlgorithmCommand extends Command
         $this->collection = $this->customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $customerCollection = $this->collection->getItems();
-        /** @var $customer Customer */
+        /** @var Customer $customer */
         foreach ($customerCollection as $customer) {
             $customer->load($customer->getId());
             if (!$this->encryptor->validateHashVersion($customer->getPasswordHash())) {

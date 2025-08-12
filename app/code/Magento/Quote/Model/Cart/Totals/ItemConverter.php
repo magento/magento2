@@ -100,7 +100,7 @@ class ItemConverter
     {
         $optionsData = [];
 
-        /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
+        /** @var \Magento\Catalog\Helper\Product\Configuration $helper */
         $helper = $this->configurationPool->getByProductType('default');
 
         $options = $this->configurationPool->getByProductType($item->getProductType())->getOptions($item);

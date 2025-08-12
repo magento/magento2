@@ -31,7 +31,7 @@ class AttributeSetFinder implements AttributeSetFinderInterface
      */
     public function findAttributeSetIdsByProductIds(array $productIds)
     {
-        /** @var $collection Collection */
+        /** @var Collection $collection */
         $collection = $this->productCollectionFactory->create();
         $select = $collection
             ->getSelect()

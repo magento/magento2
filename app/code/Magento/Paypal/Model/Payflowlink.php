@@ -576,7 +576,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected function _getCallbackUrl($actionName)
     {
         if ($this->_requestHttp->getParam('website')) {
-            /** @var $website \Magento\Store\Model\Website */
+            /** @var \Magento\Store\Model\Website $website */
             $website = $this->_websiteFactory->create()->load($this->_requestHttp->getParam('website'));
             $secure = $this->_scopeConfig->isSetFlag(
                 \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,

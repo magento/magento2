@@ -30,7 +30,7 @@ class StoreStatusChangeObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        /* @var $order Order */
+        /** @var Order $order */
         $order = $observer->getEvent()->getOrder();
 
         if (!$order->getId()) {

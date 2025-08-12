@@ -1041,7 +1041,7 @@ class Address extends AbstractAddress implements
             $storeId
         );
 
-        /** @var $request RateRequest */
+        /** @var RateRequest $request */
         $request = $this->_rateRequestFactory->create();
         $request->setAllItems($item ? [$item] : $this->getAllItems());
         $request->setDestCountryId($this->getCountryId());

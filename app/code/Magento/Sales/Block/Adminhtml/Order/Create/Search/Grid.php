@@ -149,7 +149,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $attributes = $this->_catalogConfig->getProductAttributes();
         $store = $this->getStore();
 
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->productCollectionProvider->getCollectionForStore($store);
         $collection->addAttributeToSelect(
             $attributes

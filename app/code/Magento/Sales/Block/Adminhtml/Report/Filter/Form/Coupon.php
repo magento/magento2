@@ -115,7 +115,7 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
              * form creates appropriate child block and uses this alias. In this case we can't use the same alias
              * without core logic changes, that's why the code below was moved inside method '_afterToHtml'.
              */
-            /** @var $formAfterBlock \Magento\Backend\Block\Widget\Form\Element\Dependence */
+            /** @var \Magento\Backend\Block\Widget\Form\Element\Dependence $formAfterBlock */
             $formAfterBlock = $this->getLayout()->createBlock(
                 \Magento\Backend\Block\Widget\Form\Element\Dependence::class,
                 'adminhtml.block.widget.form.element.dependence'

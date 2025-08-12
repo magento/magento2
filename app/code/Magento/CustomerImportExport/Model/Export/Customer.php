@@ -186,7 +186,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      */
     public function filterAttributeCollection(\Magento\Framework\Data\Collection $collection)
     {
-        /** @var $attribute \Magento\Customer\Model\Attribute */
+        /** @var \Magento\Customer\Model\Attribute $attribute */
         foreach (parent::filterAttributeCollection($collection) as $attribute) {
             if (!empty($this->_attributeOverrides[$attribute->getAttributeCode()])) {
                 $data = $this->_attributeOverrides[$attribute->getAttributeCode()];

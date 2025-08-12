@@ -30,7 +30,7 @@ class Save extends StatusAction implements HttpPostActionInterface
             $statusCode = $this->getRequest()->getParam('status');
 
             //filter tags in labels/status
-            /** @var $filterManager FilterManager */
+            /** @var FilterManager $filterManager */
             $filterManager = $this->_objectManager->get(FilterManager::class);
             if ($isNew) {
                 $statusCode = $data['status'] = $filterManager->stripTags($data['status']);

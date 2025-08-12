@@ -220,12 +220,12 @@ class Main extends \Magento\Backend\Block\Template
         $items = [];
         $setId = $this->_getSetId();
 
-        /* @var $groups \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection */
+        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection $groups */
         $groups = $this->_groupFactory->create()->getResourceCollection()->setAttributeSetFilter(
             $setId
         )->setSortOrder()->load();
 
-        /* @var $node \Magento\Eav\Model\Entity\Attribute\Group */
+        /** @var \Magento\Eav\Model\Entity\Attribute\Group $node */
         foreach ($groups as $node) {
             $item = [];
             $item['text'] = $this->escapeHtml($node->getAttributeGroupName());
@@ -264,7 +264,7 @@ class Main extends \Magento\Backend\Block\Template
         $collection = $this->_collectionFactory->create()->setAttributeSetFilter($setId)->load();
 
         $attributesIds = ['0'];
-        /* @var $item \Magento\Eav\Model\Entity\Attribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute $item */
         foreach ($collection->getItems() as $item) {
             $attributesIds[] = $item->getAttributeId();
         }

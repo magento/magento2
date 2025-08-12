@@ -80,7 +80,7 @@ class ImageResizeAfterProductSave implements ObserverInterface
             return;
         }
 
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
 
         if ($this->state->isAreaCodeEmulated()) {

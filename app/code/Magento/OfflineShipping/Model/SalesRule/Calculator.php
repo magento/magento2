@@ -31,7 +31,7 @@ class Calculator extends Validator
         $item->setFreeShipping(false);
 
         foreach ($this->getRules($address) as $rule) {
-            /* @var $rule \Magento\SalesRule\Model\Rule */
+            /** @var \Magento\SalesRule\Model\Rule $rule */
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;
             }

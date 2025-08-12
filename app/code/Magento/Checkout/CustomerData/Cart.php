@@ -154,7 +154,7 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
         }
 
         foreach (array_reverse($this->getAllQuoteItems()) as $item) {
-            /* @var $item \Magento\Quote\Model\Quote\Item */
+            /** @var \Magento\Quote\Model\Quote\Item $item */
             if (!$item->getProduct()->isVisibleInSiteVisibility()) {
                 $product =  $item->getOptionByCode('product_type') !== null
                     ? $item->getOptionByCode('product_type')->getProduct()

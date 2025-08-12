@@ -56,11 +56,11 @@ class NotifyStock extends \Magento\Framework\Model\AbstractModel
      */
     public function getProductsCollection()
     {
-        /* @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productFactory->create();
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $product->getCollection();
-        /** @var $resourceStock \Magento\CatalogInventory\Model\ResourceModel\Stock */
+        /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock $resourceStock */
         $resourceStock = $this->stockFactory->create();
         $resourceStock->addLowStockFilter(
             $collection,

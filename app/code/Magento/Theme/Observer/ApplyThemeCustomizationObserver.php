@@ -64,7 +64,7 @@ class ApplyThemeCustomizationObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $themeFile \Magento\Theme\Model\Theme\File */
+        /** @var \Magento\Theme\Model\Theme\File $themeFile */
         foreach ($this->currentTheme->getCustomization()->getFiles() as $themeFile) {
             try {
                 $service = $themeFile->getCustomizationService();

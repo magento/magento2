@@ -49,7 +49,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /* @var $model \Magento\Paypal\Model\Report\Settlement\Row */
+        /** @var \Magento\Paypal\Model\Report\Settlement\Row $model */
         $model = $this->_coreRegistry->registry('current_transaction');
         $fieldsets = [
             'reference_fieldset' => [

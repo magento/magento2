@@ -36,7 +36,7 @@ class SetSpecialPriceStartDate implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var  $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
         if ($product->getSpecialPrice() && $product->getSpecialFromDate() === null) {
             // Set the special_from_date to the current date with time 00:00:00 when a special price is defined

@@ -257,7 +257,7 @@ class Customer extends AbstractCustomer
         $this->_initStores(true)->_initAttributes();
 
         $this->_customerModel = $customerFactory->create();
-        /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer $customerResource */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
         $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()->get(Processor::class);
@@ -451,7 +451,7 @@ class Customer extends AbstractCustomer
                 $value = $value->format(DateTime::DATETIME_PHP_FORMAT);
             }
             if (!$this->_attributes[$attributeCode]['is_static']) {
-                /** @var $attribute \Magento\Customer\Model\Attribute */
+                /** @var \Magento\Customer\Model\Attribute $attribute */
                 $attribute = $this->_customerModel->getAttribute($attributeCode);
                 $backendModel = $attribute->getBackendModel();
                 if ($backendModel

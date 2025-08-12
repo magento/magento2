@@ -228,7 +228,7 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
     public function saveFileToFilesystem($filename)
     {
         if ($this->checkDbUsage()) {
-            /** @var $file \Magento\MediaStorage\Model\File\Storage\Database */
+            /** @var \Magento\MediaStorage\Model\File\Storage\Database $file */
             $file = $this->_dbStorageFactory->create()->loadByFilename($this->_removeAbsPathFromFileName($filename));
             if (!$file->getId()) {
                 return false;

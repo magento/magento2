@@ -44,7 +44,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
      */
     public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->paymentMethodManagement->set($quoteIdMask->getQuoteId(), $method);
     }
@@ -54,7 +54,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
      */
     public function get($cartId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->paymentMethodManagement->get($quoteIdMask->getQuoteId());
     }
@@ -64,7 +64,7 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
      */
     public function getList($cartId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->paymentMethodManagement->getList($quoteIdMask->getQuoteId());
     }

@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Config\Block\System\Config\Tabs */
+/** @var \Magento\Config\Block\System\Config\Tabs $block */
 ?>
 
 <?php if ($block->getTabs()) : ?>
     <div id="<?= $block->escapeHtmlAttr($block->getId()) ?>" class="config-nav">
         <?php
-        /** @var $_tab \Magento\Config\Model\Config\Structure\Element\Tab */
+        /** @var \Magento\Config\Model\Config\Structure\Element\Tab $_tab */
         foreach ($block->getTabs() as $_tab) :
             $activeCollapsible = false;
             foreach ($_tab->getChildren() as $_section) {
@@ -35,7 +35,7 @@
                 <ul class="admin__page-nav-items items" data-role="content">
                     <?php $_iterator = 1; ?>
                     <?php
-                    /** @var $_section \Magento\Config\Model\Config\Structure\Element\Section */
+                    /** @var \Magento\Config\Model\Config\Structure\Element\Section $_section */
                     foreach ($_tab->getChildren() as $_section) : ?>
                         <li class="admin__page-nav-item item
                             <?= $block->escapeHtml($_section->getClass()) ?>

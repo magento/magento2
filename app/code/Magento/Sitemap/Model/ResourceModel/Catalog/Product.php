@@ -288,7 +288,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $products = [];
 
-        /* @var $store Store */
+        /** @var Store $store */
         $store = $this->_storeManager->getStore($storeId);
         if (!$store) {
             return false;
@@ -359,7 +359,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _loadProductImages($product, $storeId)
     {
         $this->_storeManager->setCurrentStore($storeId);
-        /** @var $helper \Magento\Sitemap\Helper\Data */
+        /** @var \Magento\Sitemap\Helper\Data $helper */
         $helper = $this->_sitemapData;
         $imageIncludePolicy = $helper->getProductImageIncludePolicy($storeId);
 

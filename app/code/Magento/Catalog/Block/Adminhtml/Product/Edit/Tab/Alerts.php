@@ -26,7 +26,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
         $accordion = $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Accordion::class
         )->setId('productAlerts');
-        /* @var $accordion \Magento\Backend\Block\Widget\Accordion */
+        /** @var \Magento\Backend\Block\Widget\Accordion $accordion */
 
         $alertPriceAllow = $this->_scopeConfig->getValue(
             'catalog/productalert/allow_price',

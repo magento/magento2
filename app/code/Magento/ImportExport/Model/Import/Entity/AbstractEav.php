@@ -135,7 +135,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      */
     protected function _initWebsites($withDefault = false)
     {
-        /** @var $website \Magento\Store\Model\Website */
+        /** @var \Magento\Store\Model\Website $website */
         foreach ($this->_storeManager->getWebsites($withDefault) as $website) {
             $this->_websiteCodeToId[$website->getCode()] = $website->getId();
         }
@@ -150,7 +150,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      */
     protected function _initStores($withDefault = false)
     {
-        /** @var $store \Magento\Store\Model\Store */
+        /** @var \Magento\Store\Model\Store $store */
         foreach ($this->_storeManager->getStores($withDefault) as $store) {
             $this->_storeCodeToId[$store->getCode()] = $store->getId();
         }
@@ -164,7 +164,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      */
     protected function _initAttributes()
     {
-        /** @var $attribute \Magento\Eav\Model\Attribute */
+        /** @var \Magento\Eav\Model\Attribute $attribute */
         foreach ($this->_attributeCollection as $attribute) {
             $this->_attributes[$attribute->getAttributeCode()] = [
                 'id' => $attribute->getId(),

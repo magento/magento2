@@ -131,7 +131,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         $valueExpr = $connection->getCheckSql('t2.value_id > 0', 't2.value', 't1.value');
-        /** @var $select \Magento\Framework\DB\Select */
+        /** @var \Magento\Framework\DB\Select $select */
         $select = $connection->select()->joinLeft(
             ['t1' => $attributeTable],
             $joinCondition,

@@ -248,7 +248,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements Re
         if ($this->_columns === null) {
             $this->_columns = $this->getFlatColumnsDdlDefinition();
             foreach ($this->getAttributes() as $attribute) {
-                /** @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
+                /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
                 $columns = $attribute->setFlatAddFilterableAttributes(
                     $this->isAddFilterableAttributes()
                 )->setFlatAddChildData(
@@ -410,7 +410,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements Re
             ];
 
             foreach ($this->getAttributes() as $attribute) {
-                /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
+                /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
                 $indexes = $attribute->setFlatAddFilterableAttributes(
                     $this->isAddFilterableAttributes()
                 )->setFlatAddChildData(
@@ -435,7 +435,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     {
         $eavAttributes = [];
         $flatColumnsList = $this->getFlatColumns();
-        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         foreach ($attributes as $attribute) {
             $eavTable = $attribute->getBackend()->getTable();
             $attributeCode = $attribute->getAttributeCode();

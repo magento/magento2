@@ -67,7 +67,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     {
         $options = $this->getColumn()->getOptions();
         if (empty($options) || !is_array($options)) {
-            /** @var $label \Magento\Framework\View\Design\Theme\Label */
+            /** @var \Magento\Framework\View\Design\Theme\Label $label */
             $label = $this->_labelFactory->create();
             $options = $label->getLabelsCollection();
         }

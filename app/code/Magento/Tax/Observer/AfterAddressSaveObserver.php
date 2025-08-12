@@ -75,7 +75,7 @@ class AfterAddressSaveObserver implements ObserverInterface
             && $this->cacheConfig->isEnabled()
             && $this->taxHelper->isCatalogPriceDisplayAffectedByTax()
         ) {
-            /** @var $customerAddress Address */
+            /** @var Address $customerAddress */
             $address = $observer->getCustomerAddress();
             $this->addressManager->setDefaultAddressAfterSave($address);
         }

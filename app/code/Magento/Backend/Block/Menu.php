@@ -276,7 +276,7 @@ class Menu extends \Magento\Backend\Block\Template
     {
         $output = '<ul ' . (0 == $level ? 'id="nav" role="menubar"' : '') . ' >';
 
-        /** @var $menuItem \Magento\Backend\Model\Menu\Item  */
+        /** @var \Magento\Backend\Model\Menu\Item $menuItem */
         foreach ($this->_getMenuIterator($menu) as $menuItem) {
             $output .= '<li ' . $this->_renderMouseEvent(
                 $menuItem
@@ -309,7 +309,7 @@ class Menu extends \Magento\Backend\Block\Template
     {
         $total = count($items);
         foreach ($items as $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
+            /** @var \Magento\Backend\Model\Menu\Item $item */
             if ($item->hasChildren()) {
                 $total += $this->_countItems($item->getChildren());
             }
@@ -400,7 +400,7 @@ class Menu extends \Magento\Backend\Block\Template
         $outputStart = '<ul ' . (0 == $level ? 'id="nav" role="menubar"' : 'role="menu"') . ' >';
         $output = '';
 
-        /** @var $menuItem \Magento\Backend\Model\Menu\Item  */
+        /** @var \Magento\Backend\Model\Menu\Item $menuItem */
         foreach ($this->_getMenuIterator($menu) as $menuItem) {
             $menuId = $menuItem->getId();
             $itemName = substr($menuId, strrpos($menuId, '::') + 2);

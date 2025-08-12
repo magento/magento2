@@ -746,7 +746,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
     public function sortItemsByPriority($items, ?Address $address = null)
     {
         $itemsSorted = [];
-        /** @var $rule Rule */
+        /** @var Rule $rule */
         foreach ($this->getRules($address) as $rule) {
             $actions = $rule->getActions();
             foreach ($items as $itemKey => $itemValue) {

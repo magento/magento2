@@ -160,7 +160,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
             }
             return $this->escapeJs($this->escapeHtml($userRoles));
         }
-        /* @var $user \Magento\User\Model\User */
+        /** @var \Magento\User\Model\User $user */
         $user = $this->_coreRegistry->registry('permissions_user');
         //checking if we have this data and we
         //don't need load it through resource model

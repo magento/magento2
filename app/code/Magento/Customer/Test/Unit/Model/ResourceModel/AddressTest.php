@@ -78,7 +78,7 @@ class AddressTest extends TestCase
      */
     public function testSave($addressId, $isDefaultBilling, $isDefaultShipping)
     {
-        /** @var $address \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject $address */
         $address = $this->getMockBuilder(Address::class)
             ->addMethods(['getIsDefaultBilling', 'getIsDefaultShipping'])
             ->onlyMethods(

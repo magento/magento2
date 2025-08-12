@@ -22,12 +22,12 @@ class Page extends View\Result\Page
      */
     public function setActiveMenu($itemId)
     {
-        /** @var $menuBlock \Magento\Backend\Block\Menu */
+        /** @var \Magento\Backend\Block\Menu $menuBlock */
         $menuBlock = $this->layout->getBlock('menu');
         $menuBlock->setActive($itemId);
         $parents = $menuBlock->getMenuModel()->getParentItems($itemId);
         foreach ($parents as $item) {
-            /** @var $item \Magento\Backend\Model\Menu\Item */
+            /** @var \Magento\Backend\Model\Menu\Item $item */
             $this->getConfig()->getTitle()->prepend($item->getTitle());
         }
         return $this;

@@ -88,7 +88,7 @@ class Related extends AbstractProduct implements IdentityInterface
     protected function _prepareData()
     {
         $product = $this->getProduct();
-        /* @var $product Product */
+        /** @var Product $product */
 
         $this->_itemCollection = $product->getRelatedProductCollection()->addAttributeToSelect(
             'required_options'

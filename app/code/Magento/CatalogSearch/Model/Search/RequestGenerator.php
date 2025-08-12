@@ -80,7 +80,7 @@ class RequestGenerator
     {
         $request = [];
         foreach ($this->getSearchableAttributes() as $attribute) {
-            /** @var $attribute Attribute */
+            /** @var Attribute $attribute */
             if ($attribute->getData($attributeType)) {
                 if (!in_array($attribute->getAttributeCode(), ['price', 'category_ids'], true)) {
                     $queryName = $attribute->getAttributeCode() . '_query';
@@ -142,7 +142,7 @@ class RequestGenerator
     {
         $request = [];
         foreach ($this->getSearchableAttributes() as $attribute) {
-            /** @var $attribute Attribute */
+            /** @var Attribute $attribute */
             if (!$attribute->getIsVisibleInAdvancedSearch()) {
                 continue;
             }

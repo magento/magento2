@@ -68,7 +68,7 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
             return $this;
         }
 
-        /** @var $block \Magento\Framework\View\Element\AbstractBlock */
+        /** @var \Magento\Framework\View\Element\AbstractBlock $block */
         $block = $observer->getEvent()->getBlock();
 
         if (!$block) {
@@ -80,7 +80,7 @@ class ApplyBlockPersistentDataObserver implements ObserverInterface
             $configFilePath = $this->_persistentData->getPersistentConfigFilePath();
         }
 
-        /** @var $persistentConfig \Magento\Persistent\Model\Persistent\Config */
+        /** @var \Magento\Persistent\Model\Persistent\Config $persistentConfig */
         $persistentConfig = $this->_persistentConfigFactory->create();
         $persistentConfig->setConfigFilePath($configFilePath);
 

@@ -103,7 +103,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 \IntlDateFormatter::SHORT
             ),
         ];
-        /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
+        /** @var \Magento\Framework\View\Element\Html\Date $selectBlock */
         $dateBlock = $this->_layout->createBlock(
             \Magento\Framework\View\Element\Html\Date::class,
             '',
@@ -169,7 +169,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'class' => 'admin__control-multiselect multiselect multiselect-export-filter',
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size)) . '"',
             ];
-            /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
+            /** @var \Magento\Framework\View\Element\Html\Select $selectBlock */
             $selectBlock = $this->_layout->createBlock(
                 \Magento\Framework\View\Element\Html\Select::class,
                 '',
@@ -267,7 +267,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
                 'class' => 'admin__control-select select select-export-filter',
             ];
-            /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
+            /** @var \Magento\Framework\View\Element\Html\Select $selectBlock */
             $selectBlock = $this->_layout->createBlock(
                 \Magento\Framework\View\Element\Html\Select::class,
                 '',

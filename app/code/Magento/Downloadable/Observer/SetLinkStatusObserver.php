@@ -52,7 +52,7 @@ class SetLinkStatusObserver implements ObserverInterface
             return $this;
         }
 
-        /* @var $order \Magento\Sales\Model\Order */
+        /** @var \Magento\Sales\Model\Order $order */
         $status = '';
         $linkStatuses = [
             'pending' => \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING,

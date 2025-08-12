@@ -64,7 +64,7 @@ class Data
     {
         $images = $product->getMediaGalleryImages();
         if ($images instanceof \Magento\Framework\Data\Collection) {
-            /** @var $image Image */
+            /** @var Image $image */
             foreach ($images as $image) {
                 $smallImageUrl = $this->imageUrlBuilder
                     ->getUrl($image->getFile(), 'product_page_image_small');

@@ -197,7 +197,7 @@ class Result
         if (!is_array($this->_rates) || !count($this->_rates)) {
             return $this;
         }
-        /* @var $rate \Magento\Quote\Model\Quote\Address\RateResult\Method */
+        /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $rate */
         foreach ($this->_rates as $i => $rate) {
             $tmp[$i] = $rate->getPrice();
         }

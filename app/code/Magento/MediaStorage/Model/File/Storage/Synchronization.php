@@ -51,7 +51,7 @@ class Synchronization
      */
     public function synchronize($relativeFileName)
     {
-        /** @var $storage Database */
+        /** @var Database $storage */
         $storage = $this->storageFactory->create();
         try {
             $storage->loadByFilename($relativeFileName);

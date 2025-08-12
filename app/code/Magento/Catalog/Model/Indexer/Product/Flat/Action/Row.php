@@ -99,7 +99,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
                 $this->flatItemEraser->removeDisabledProducts($ids, $store->getId());
             }
 
-            /* @var $status \Magento\Eav\Model\Entity\Attribute */
+            /** @var \Magento\Eav\Model\Entity\Attribute $status */
             $status = $this->_productIndexerHelper->getAttribute(ProductInterface::STATUS);
             $statusTable = $status->getBackend()->getTable();
             $catalogProductEntityTable = $this->_productIndexerHelper->getTable('catalog_product_entity');

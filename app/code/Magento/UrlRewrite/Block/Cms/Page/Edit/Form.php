@@ -80,9 +80,9 @@ class Form extends \Magento\UrlRewrite\Block\Edit\Form
         );
 
         // Fill request path and target path elements
-        /** @var $requestPath \Magento\Framework\Data\Form\Element\AbstractElement */
+        /** @var \Magento\Framework\Data\Form\Element\AbstractElement $requestPath */
         $requestPath = $this->getForm()->getElement('request_path');
-        /** @var $targetPath \Magento\Framework\Data\Form\Element\AbstractElement */
+        /** @var \Magento\Framework\Data\Form\Element\AbstractElement $targetPath */
         $targetPath = $this->getForm()->getElement('target_path');
 
         $model = $this->_getModel();

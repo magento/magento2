@@ -54,7 +54,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         $passwordConfirmation = (string)$this->getRequest()->getParam('password_confirmation');
         $interfaceLocale = (string)$this->getRequest()->getParam('interface_locale', false);
 
-        /** @var $user \Magento\User\Model\User */
+        /** @var \Magento\User\Model\User $user */
         $user = $this->_objectManager->create(\Magento\User\Model\User::class)->load($userId);
 
         $user->setId($userId)

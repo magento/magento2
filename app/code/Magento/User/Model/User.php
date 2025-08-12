@@ -320,7 +320,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function _getValidationRulesBeforeSave()
     {
-        /** @var $validator DataObject */
+        /** @var DataObject $validator */
         $validator = $this->_validatorObject->create();
         $this->validationRules->addUserInfoRules($validator);
 
@@ -344,7 +344,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function validate()
     {
-        /** @var $validator DataObject */
+        /** @var DataObject $validator */
         $validator = $this->_validatorObject->create();
         $this->validationRules->addUserInfoRules($validator);
 

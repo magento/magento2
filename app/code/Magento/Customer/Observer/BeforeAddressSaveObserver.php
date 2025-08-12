@@ -56,7 +56,7 @@ class BeforeAddressSaveObserver implements ObserverInterface
             $this->_coreRegistry->unregister(self::VIV_CURRENTLY_SAVED_ADDRESS);
         }
 
-        /** @var $customerAddress Address */
+        /** @var Address $customerAddress */
         $customerAddress = $observer->getCustomerAddress();
         if ($customerAddress->getId()) {
             $this->_coreRegistry->register(self::VIV_CURRENTLY_SAVED_ADDRESS, $customerAddress->getId());

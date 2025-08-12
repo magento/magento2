@@ -43,7 +43,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
             \Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE
         );
 
-        /** @var $jsFieldsetRenderer \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */
+        /** @var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $jsFieldsetRenderer */
         $jsFieldsetRenderer = $this->getChildBlock('theme_edit_tabs_tab_js_tab_content');
         $jsFieldsetRenderer->setJsFiles($customization->generateFileInfo($customJsFiles));
 

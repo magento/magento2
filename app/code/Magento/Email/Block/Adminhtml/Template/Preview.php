@@ -58,7 +58,7 @@ class Preview extends \Magento\Backend\Block\Widget
         $request = $this->getRequest();
 
         $storeId = $this->getAnyStoreView()->getId();
-        /** @var $template \Magento\Email\Model\Template */
+        /** @var \Magento\Email\Model\Template $template */
         $template = $this->_emailFactory->create();
 
         if ($id = (int)$request->getParam('id')) {

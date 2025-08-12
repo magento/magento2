@@ -76,7 +76,7 @@ class Discount extends AbstractTotal
             $baseTotalDiscountAmount = $baseTotalDiscountAmount + $baseShippingDiscount;
         }
 
-        /** @var $item \Magento\Sales\Model\Order\Invoice\Item */
+        /** @var \Magento\Sales\Model\Order\Invoice\Item $item */
         foreach ($creditmemo->getAllItems() as $item) {
             $orderItem = $item->getOrderItem();
 

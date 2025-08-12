@@ -67,7 +67,7 @@ class SetRememberMeCheckedStatusObserver implements ObserverInterface
             return;
         }
 
-        /** @var $controllerAction \Magento\Framework\App\RequestInterface */
+        /** @var \Magento\Framework\App\RequestInterface $controllerAction */
         $request = $observer->getEvent()->getRequest();
         if ($request) {
             $rememberMeCheckbox = $request->getPost('persistent_remember_me');

@@ -245,7 +245,7 @@ class Crosssell extends AbstractProduct
      */
     private function getProductLinkField(): string
     {
-        /* @var $collection Collection */
+        /** @var Collection $collection */
         $collection = $this->productCollectionFactory->create();
         return $collection->getProductEntityMetadata()->getLinkField();
     }
@@ -277,7 +277,7 @@ class Crosssell extends AbstractProduct
         $linkIds = [];
         if (!empty($productIds)) {
             $linkField = $this->getProductLinkField();
-            /* @var $collection Collection */
+            /** @var Collection $collection */
             $collection = $this->productCollectionFactory->create();
             $collection->addIdFilter($productIds);
             foreach ($collection as $product) {
@@ -317,7 +317,7 @@ class Crosssell extends AbstractProduct
         if ($this->cartProducts === null) {
             $this->cartProducts = [];
             foreach ($this->getQuote()->getAllItems() as $quoteItem) {
-                /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
+                /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
                 $product = $quoteItem->getProduct();
                 if ($product) {
                     $this->cartProducts[$product->getEntityId()] = $product;

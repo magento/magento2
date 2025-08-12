@@ -38,7 +38,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             $datetimeTo = $value['to'];
 
             //calculate end date considering timezone specification
-            /** @var $datetimeTo \DateTime */
+            /** @var \DateTime $datetimeTo */
             $datetimeTo->setTimezone(
                 new \DateTimeZone(
                     $this->_scopeConfig->getValue(

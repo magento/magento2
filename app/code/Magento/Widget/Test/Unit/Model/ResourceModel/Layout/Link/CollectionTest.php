@@ -109,7 +109,7 @@ class CollectionTest extends AbstractTestCase
 
         $collection = $this->_getCollection($select);
 
-        /** @var $resource \PHPUnit\Framework\MockObject\MockObject */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $resource */
         $resource = $collection->getResource();
         $resource->expects(
             $this->once()

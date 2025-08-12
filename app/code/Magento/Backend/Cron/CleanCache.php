@@ -31,7 +31,7 @@ class CleanCache
      */
     public function execute()
     {
-        /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
+        /** @var \Magento\Framework\Cache\FrontendInterface $cacheFrontend */
         foreach ($this->cacheFrontendPool as $cacheFrontend) {
             // Magento cache frontend does not support the 'old' cleaning mode, that's why backend is used directly
             $cacheFrontend->getBackend()->clean(\Zend_Cache::CLEANING_MODE_OLD);

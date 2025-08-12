@@ -18,7 +18,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $widgets = [];
         $xpath = new \DOMXPath($source);
-        /** @var $widget \DOMNode */
+        /** @var \DOMNode $widget */
         foreach ($xpath->query('/widgets/widget') as $widget) {
             $widgetAttributes = $widget->attributes;
             $widgetArray = ['@' => []];
@@ -34,7 +34,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
 
             $widgetId = $widgetAttributes->getNamedItem('id');
-            /** @var $widgetSubNode \DOMNode */
+            /** @var \DOMNode $widgetSubNode */
             foreach ($widget->childNodes as $widgetSubNode) {
                 switch ($widgetSubNode->nodeName) {
                     case 'label':
@@ -44,7 +44,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                         $widgetArray['description'] = $widgetSubNode->nodeValue;
                         break;
                     case 'parameters':
-                        /** @var $parameter \DOMNode */
+                        /** @var \DOMNode $parameter */
                         foreach ($widgetSubNode->childNodes as $parameter) {
                             if ($parameter->nodeName === '#text' || $parameter->nodeName === '#comment') {
                                 continue;
@@ -150,10 +150,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
             $parameter['type'] = $xsiType;
 
-            /** @var $paramSubNode \DOMNode */
+            /** @var \DOMNode $paramSubNode */
             foreach ($source->childNodes as $paramSubNode) {
                 if ($paramSubNode->nodeName == 'options') {
-                    /** @var $option \DOMNode */
+                    /** @var \DOMNode $option */
                     foreach ($paramSubNode->childNodes as $option) {
                         if ($option->nodeName === '#text') {
                             continue;

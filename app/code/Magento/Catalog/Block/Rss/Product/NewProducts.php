@@ -94,7 +94,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
         ];
 
         foreach ($this->rssModel->getProductsCollection($this->getStoreId()) as $item) {
-            /** @var $item \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $item */
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 

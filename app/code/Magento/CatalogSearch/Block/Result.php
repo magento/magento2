@@ -133,7 +133,7 @@ class Result extends Template
     public function setListOrders()
     {
         $category = $this->catalogLayer->getCurrentCategory();
-        /* @var $category \Magento\Catalog\Model\Category */
+        /** @var \Magento\Catalog\Model\Category $category */
         $availableOrders = $category->getAvailableSortByOptions();
         unset($availableOrders['position']);
         $availableOrders['relevance'] = __('Relevance');

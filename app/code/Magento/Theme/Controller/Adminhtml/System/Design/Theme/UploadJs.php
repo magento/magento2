@@ -23,11 +23,11 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme i
     public function execute()
     {
         $themeId = $this->getRequest()->getParam('id');
-        /** @var $serviceModel \Magento\Theme\Model\Uploader\Service */
+        /** @var \Magento\Theme\Model\Uploader\Service $serviceModel */
         $serviceModel = $this->_objectManager->get(\Magento\Theme\Model\Uploader\Service::class);
-        /** @var $themeFactory \Magento\Framework\View\Design\Theme\FlyweightFactory */
+        /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
         $themeFactory = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
-        /** @var $jsService \Magento\Framework\View\Design\Theme\Customization\File\Js */
+        /** @var \Magento\Framework\View\Design\Theme\Customization\File\Js $jsService */
         $jsService = $this->_objectManager->get(\Magento\Framework\View\Design\Theme\Customization\File\Js::class);
         try {
             $theme = $themeFactory->create($themeId);
@@ -43,7 +43,7 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme i
             $jsFile->setData('content', $jsFileData['content']);
             $jsFile->save();
 
-            /** @var $customization \Magento\Framework\View\Design\Theme\Customization */
+            /** @var \Magento\Framework\View\Design\Theme\Customization $customization */
             $customization = $this->_objectManager->create(
                 \Magento\Framework\View\Design\Theme\CustomizationInterface::class,
                 ['theme' => $theme]

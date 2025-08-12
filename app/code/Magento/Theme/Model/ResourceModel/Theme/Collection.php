@@ -168,7 +168,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $parentThemeId = $themeModel->getParentId();
         $this->addFieldToFilter('parent_id', ['eq' => $themeModel->getId()])->load();
 
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
         foreach ($this->getItems() as $theme) {
             $theme->setParentId($parentThemeId)->save();
         }

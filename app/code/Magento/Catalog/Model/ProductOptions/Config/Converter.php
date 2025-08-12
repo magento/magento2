@@ -18,7 +18,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $output = [];
 
-        /** @var $optionNode \DOMNode */
+        /** @var \DOMNode $optionNode */
         foreach ($source->getElementsByTagName('option') as $optionNode) {
             $optionName = $this->_getAttributeValue($optionNode, 'name');
             $data = [];
@@ -26,7 +26,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $data['label'] = $this->_getAttributeValue($optionNode, 'label');
             $data['renderer'] = $this->_getAttributeValue($optionNode, 'renderer');
 
-            /** @var $childNode \DOMNode */
+            /** @var \DOMNode $childNode */
             foreach ($optionNode->childNodes as $childNode) {
                 if ($childNode->nodeType != XML_ELEMENT_NODE) {
                     continue;

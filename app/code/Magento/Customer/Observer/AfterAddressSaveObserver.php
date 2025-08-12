@@ -123,7 +123,7 @@ class AfterAddressSaveObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        /** @var $customerAddress Address */
+        /** @var Address $customerAddress */
         $customerAddress = $observer->getCustomerAddress();
         $customer = $customerAddress->getCustomer();
 

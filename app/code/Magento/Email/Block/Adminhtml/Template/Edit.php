@@ -396,7 +396,7 @@ class Edit extends Widget implements ContainerInterface
      */
     public function getCurrentlyUsedForPaths($asJSON = true)
     {
-        /** @var $template BackendTemplate */
+        /** @var BackendTemplate $template */
         $template = $this->getEmailTemplate();
         $paths = $template->getSystemConfigPathsWhereCurrentlyUsed();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);
@@ -418,7 +418,7 @@ class Edit extends Widget implements ContainerInterface
         $result = $urlParams = $prefixParts = [];
         $scopeLabel = __('Default Config');
         if ($paths) {
-            /** @var $menu \Magento\Backend\Model\Menu */
+            /** @var \Magento\Backend\Model\Menu $menu */
             $menu = $this->_menuConfig->getMenu();
             $item = $menu->get('Magento_Backend::stores');
             // create prefix path parts

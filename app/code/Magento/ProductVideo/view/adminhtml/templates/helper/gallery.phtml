@@ -39,7 +39,7 @@ $message = 'Restricted admin is allowed to perform actions with images or videos
 </div>
 
 <?php
-/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
+/** @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content $block */
 $element = $block->getElement();
 $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
     'toggleValueElements(this, this.parentNode.parentNode.parentNode)';

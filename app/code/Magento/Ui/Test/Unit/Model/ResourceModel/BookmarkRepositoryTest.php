@@ -75,7 +75,7 @@ class BookmarkRepositoryTest extends TestCase
 
         $this->searchResultsMock = $this->getMockBuilder(BookmarkSearchResultsInterface::class)
             ->getMockForAbstractClass();
-        /** @var $searchResultsFactoryMock \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory */
+        /** @var \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactoryMock */
         $searchResultsFactoryMock = $this->getMockBuilder(
             BookmarkSearchResultsInterfaceFactory::class
         )->disableOriginalConstructor()

@@ -23,7 +23,7 @@ class CollectionByPagesIterator
      */
     public function iterate(\Magento\Framework\Data\Collection\AbstractDb $collection, $pageSize, array $callbacks)
     {
-        /** @var $paginatedCollection \Magento\Framework\Data\Collection\AbstractDb */
+        /** @var \Magento\Framework\Data\Collection\AbstractDb $paginatedCollection */
         $paginatedCollection = null;
         $pageNumber = 1;
         do {

@@ -25,7 +25,7 @@ class Fieldset extends \Magento\Framework\View\Element\Text\ListText
         $total = count($children);
         $i = 0;
         $this->setText('');
-        /** @var $block \Magento\Framework\View\Element\AbstractBlock  */
+        /** @var \Magento\Framework\View\Element\AbstractBlock $block */
         foreach ($children as $block) {
             $i++;
             $block->setIsLastFieldset($i == $total);

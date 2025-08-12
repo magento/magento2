@@ -146,7 +146,7 @@ class Chooser extends \Magento\Backend\Block\Template
     protected function _toHtml()
     {
         $element = $this->getElement();
-        /* @var $fieldset \Magento\Framework\Data\Form\Element\Fieldset */
+        /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
         $fieldset = $element->getForm()->getElement($this->getFieldsetId());
         $chooserId = $this->getUniqId();
         $config = $this->getConfig();

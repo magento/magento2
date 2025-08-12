@@ -156,7 +156,7 @@ class Crosssell extends Extended
      */
     protected function _prepareCollection()
     {
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection */
         $collection = $this->_linkFactory->create()->useCrossSellLinks()->getProductCollection()->setProduct(
             $this->getProduct()
         )->addAttributeToSelect(

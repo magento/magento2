@@ -113,9 +113,9 @@ class Observer
         }
 
         $collection = $this->collectionFactory->create();
-        /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
+        /** @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection $collection */
         foreach ($collection as $sitemap) {
-            /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
+            /** @var \Magento\Sitemap\Model\Sitemap $sitemap */
             try {
                 $this->appEmulation->startEnvironmentEmulation(
                     $sitemap->getStoreId(),

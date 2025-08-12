@@ -101,7 +101,7 @@ class Builder
             if ($condition->getConditions()) {
                 $tables = $this->_getChildCombineTablesToJoin($condition);
             } else {
-                /** @var $condition AbstractCondition */
+                /** @var AbstractCondition $condition */
                 foreach ($condition->getTablesToJoin() as $alias => $table) {
                     if (!isset($tables[$alias])) {
                         $tables[$alias] = $table;
@@ -124,7 +124,7 @@ class Builder
         Combine $combine
     ): Builder {
         foreach ($this->_getCombineTablesToJoin($combine) as $alias => $joinTable) {
-            /** @var $condition AbstractCondition */
+            /** @var AbstractCondition $condition */
             $collection->getSelect()->joinLeft(
                 [$alias => $collection->getResource()->getTable($joinTable['name'])],
                 $joinTable['condition'],
@@ -225,7 +225,7 @@ class Builder
         $getAggregator = $combine->getAggregator();
         $conditions = $combine->getConditions();
         foreach ($conditions as $key => $condition) {
-            /** @var $condition AbstractCondition|Combine */
+            /** @var AbstractCondition|Combine $condition */
             $con = ($getAggregator == 'any' ? Select::SQL_OR : Select::SQL_AND);
             $con = (isset($conditions[$key+1]) ? $con : '');
             if ($condition instanceof Combine) {

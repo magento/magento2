@@ -49,7 +49,7 @@ class Category
      */
     public function getProductCollection(\Magento\Catalog\Model\Category $category, $storeId)
     {
-        /** @var $layer \Magento\Catalog\Model\Layer */
+        /** @var \Magento\Catalog\Model\Layer $layer */
         $layer = $this->catalogLayer->setStore($storeId);
         $collection = $category->getResourceCollection();
         $collection->addAttributeToSelect('url_key')
@@ -58,7 +58,7 @@ class Category
             ->addAttributeToFilter('is_active', 1)
             ->addIdFilter($category->getChildren())
             ->load();
-        /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $this->collectionFactory->create();
 
         $currentCategory = $layer->setCurrentCategory($category);

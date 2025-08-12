@@ -71,7 +71,7 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
         try {
             $files = $this->getRequest()->getParam('files');
 
-            /** @var $helper \Magento\Cms\Helper\Wysiwyg\Images */
+            /** @var \Magento\Cms\Helper\Wysiwyg\Images $helper */
             $helper = $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
             $path = $this->getStorage()->getSession()->getCurrentPath();
             if (!$this->directoryResolver->validatePath($path, DirectoryList::MEDIA)) {

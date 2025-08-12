@@ -40,7 +40,7 @@ class Discounts
      */
     public function getDiscountCollection($websiteId, $customerGroupId)
     {
-        /** @var $collection \Magento\SalesRule\Model\ResourceModel\Rule\Collection */
+        /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addWebsiteGroupDateFilter(
             $websiteId,

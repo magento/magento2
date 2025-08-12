@@ -56,7 +56,7 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
      */
     public function getHintHtml()
     {
-        /** @var $storeSwitcher \Magento\Backend\Block\Store\Switcher */
+        /** @var \Magento\Backend\Block\Store\Switcher $storeSwitcher */
         $storeSwitcher = $this->_layout->getBlockSingleton(\Magento\Backend\Block\Store\Switcher::class);
         return $storeSwitcher->getHintHtml();
     }

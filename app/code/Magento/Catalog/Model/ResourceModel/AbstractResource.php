@@ -533,7 +533,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $connection = $this->getConnection();
 
         foreach ($attribute as $item) {
-            /* @var $attribute \Magento\Catalog\Model\Entity\Attribute */
+            /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
             $item = $this->getAttribute($item);
             if (!$item) {
                 continue;

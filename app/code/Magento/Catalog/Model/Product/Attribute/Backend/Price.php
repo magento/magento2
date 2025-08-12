@@ -119,7 +119,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterSave($object)
     {
-        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
         $attribute = $this->getAttribute();
         $attributeCode = $attribute->getAttributeCode();
         $value = $object->getData($attributeCode);

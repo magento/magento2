@@ -24,9 +24,9 @@ class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
     protected function _prepareForm()
     {
         parent::_prepareForm();
-        /* @var $form \Magento\Framework\Data\Form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->getForm();
-        /* @var $fieldset \Magento\Framework\Data\Form\Element\Fieldset */
+        /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
         $fieldset = $form->getElement('base_fieldset');
         $fieldsToRemove = ['attribute_code', 'is_unique', 'frontend_class'];
 

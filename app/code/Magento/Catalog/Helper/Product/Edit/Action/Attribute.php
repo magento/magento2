@@ -179,7 +179,7 @@ class Attribute extends \Magento\Backend\Helper\Data
             // check product type apply to limitation and remove attributes that impossible to change in mass-update
             $productTypeIds = $this->getProducts()->getProductTypeIds();
             foreach ($this->_attributes as $attribute) {
-                /* @var $attribute \Magento\Catalog\Model\Entity\Attribute */
+                /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
                 foreach ($productTypeIds as $productTypeId) {
                     $applyTo = $attribute->getApplyTo();
                     if (count($applyTo) > 0 && !in_array($productTypeId, $applyTo)) {

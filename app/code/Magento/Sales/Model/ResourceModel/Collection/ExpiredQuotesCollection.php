@@ -66,7 +66,7 @@ class ExpiredQuotesCollection
         );
         $lifetime *= $this->secondsInDay;
 
-        /** @var $quotes Collection */
+        /** @var Collection $quotes */
         $quotes = $this->quoteCollectionFactory->create();
         $quotes->addFieldToFilter('main_table.store_id', $store->getId());
         $quotes->addFieldToFilter('main_table.updated_at', ['to' => date("Y-m-d", time() - $lifetime)]);

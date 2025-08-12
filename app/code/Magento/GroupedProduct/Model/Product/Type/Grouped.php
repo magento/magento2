@@ -307,7 +307,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         if (!$product->hasData($this->_keyAssociatedProductIds)) {
             $associatedProductIds = [];
-            /** @var $item \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $item */
             foreach ($this->getAssociatedProducts($product) as $item) {
                 $associatedProductIds[] = $item->getId();
             }

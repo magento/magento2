@@ -58,7 +58,7 @@ class GuestCartManagement implements GuestCartManagementInterface
      */
     public function createEmptyCart()
     {
-        /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create();
         $cartId = $this->quoteManagement->createEmptyCart();
         $quoteIdMask->setQuoteId($cartId)->save();
@@ -70,7 +70,7 @@ class GuestCartManagement implements GuestCartManagementInterface
      */
     public function assignCustomer($cartId, $customerId, $storeId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->quoteManagement->assignCustomer($quoteIdMask->getQuoteId(), $customerId, $storeId);
     }
@@ -80,7 +80,7 @@ class GuestCartManagement implements GuestCartManagementInterface
      */
     public function placeOrder($cartId, ?PaymentInterface $paymentMethod = null)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         $this->cartRepository->get($quoteIdMask->getQuoteId())
             ->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);

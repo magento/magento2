@@ -106,7 +106,7 @@ class Main extends AbstractMain
     private function removeUnusedFields(): void
     {
         $form = $this->getForm();
-        /* @var $fieldset Fieldset */
+        /** @var Fieldset $fieldset */
         $fieldset = $form->getElement('base_fieldset');
         $fieldsToRemove = ['attribute_code', 'is_unique', 'frontend_class'];
         foreach ($fieldset->getElements() as $element) {

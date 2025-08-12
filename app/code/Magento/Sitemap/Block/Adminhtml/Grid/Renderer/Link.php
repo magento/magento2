@@ -65,7 +65,7 @@ class Link extends AbstractRenderer
      */
     public function render(DataObject $row)
     {
-        /** @var $sitemap Sitemap */
+        /** @var Sitemap $sitemap */
         $sitemap = $this->sitemapFactory->create();
         $sitemap->setStoreId($row->getStoreId());
         $url = $this->_escaper->escapeHtml($sitemap->getSitemapUrl($row->getSitemapPath(), $row->getSitemapFilename()));

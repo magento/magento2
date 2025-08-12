@@ -59,7 +59,7 @@ class Options implements OptionSourceInterface
     {
         if ($this->categoriesTree === null) {
             $storeId = $this->request->getParam('store');
-            /* @var $matchingNamesCollection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+            /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $matchingNamesCollection */
             $matchingNamesCollection = $this->categoryCollectionFactory->create();
 
             $matchingNamesCollection->addAttributeToSelect('path')
@@ -76,7 +76,7 @@ class Options implements OptionSourceInterface
                 }
             }
 
-            /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+            /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
             $collection = $this->categoryCollectionFactory->create();
 
             $collection->addAttributeToFilter('entity_id', ['in' => array_keys($shownCategoriesIds)])

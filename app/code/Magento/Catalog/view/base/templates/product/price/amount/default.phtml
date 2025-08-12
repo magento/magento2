@@ -5,7 +5,7 @@
  */
 ?>
 
-<?php /** @var $block \Magento\Framework\Pricing\Render\Amount */ ?>
+<?php /** @var \Magento\Framework\Pricing\Render\Amount $block */ ?>
 
 <span class="price-container <?= $block->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"
         <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>>

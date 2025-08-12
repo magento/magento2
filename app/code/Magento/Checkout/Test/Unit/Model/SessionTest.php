@@ -390,7 +390,7 @@ class SessionTest extends TestCase
      */
     public function testResetCheckout(): void
     {
-        /** @var $session \Magento\Checkout\Model\Session */
+        /** @var \Magento\Checkout\Model\Session $session */
         $session = $this->helper->getObject(
             Session::class,
             ['storage' => new Storage()]
@@ -410,7 +410,7 @@ class SessionTest extends TestCase
                 'key' => 'value'
             ]
         ];
-        /** @var $session \Magento\Checkout\Model\Session */
+        /** @var \Magento\Checkout\Model\Session $session */
         $session = $this->helper->getObject(
             Session::class,
             ['storage' => new Storage()]
@@ -495,7 +495,7 @@ class SessionTest extends TestCase
                 'key' => 'value',
             ],
         ];
-        /** @var $session \Magento\Checkout\Model\Session */
+        /** @var \Magento\Checkout\Model\Session $session */
         $session = $this->helper->getObject(
             Session::class,
             ['storage' => new Storage()]

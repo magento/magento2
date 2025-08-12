@@ -44,7 +44,7 @@ class GuestItemRepository implements GuestItemRepositoryInterface
      */
     public function get($cartId, $itemId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->repository->get($quoteIdMask->getQuoteId(), $itemId);
     }
@@ -54,7 +54,7 @@ class GuestItemRepository implements GuestItemRepositoryInterface
      */
     public function save($cartId, MessageInterface $giftMessage, $itemId)
     {
-        /** @var $quoteIdMask QuoteIdMask */
+        /** @var QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->repository->save($quoteIdMask->getQuoteId(), $giftMessage, $itemId);
     }

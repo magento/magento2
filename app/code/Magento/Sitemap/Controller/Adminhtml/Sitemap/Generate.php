@@ -45,7 +45,7 @@ class Generate extends Sitemap implements HttpGetActionInterface
         // init and load sitemap model
         $id = $this->getRequest()->getParam('sitemap_id');
         $sitemap = $this->_objectManager->create(\Magento\Sitemap\Model\Sitemap::class);
-        /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
+        /** @var \Magento\Sitemap\Model\Sitemap $sitemap */
         $sitemap->load($id);
         // if sitemap record exists
         if ($sitemap->getId()) {

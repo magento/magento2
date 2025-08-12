@@ -122,7 +122,7 @@ class Validate extends Product implements HttpPostActionInterface, HttpGetAction
             $storeId = $this->getRequest()->getParam('store', 0);
             $store = $this->getStoreManager()->getStore($storeId);
             $this->getStoreManager()->setCurrentStore($store->getCode());
-            /* @var $product \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->productFactory->create();
             $product->setData('_edit_mode', true);
             if ($storeId) {

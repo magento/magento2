@@ -50,7 +50,7 @@ class Theme extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCssAssets($theme)
     {
-        /** @var $layoutProcessor \Magento\Framework\View\Layout\ProcessorInterface */
+        /** @var \Magento\Framework\View\Layout\ProcessorInterface $layoutProcessor */
         $layoutProcessor = $this->_layoutProcessorFactory->create(['theme' => $theme]);
         $layoutElement = $layoutProcessor->getFileLayoutUpdatesXml();
 

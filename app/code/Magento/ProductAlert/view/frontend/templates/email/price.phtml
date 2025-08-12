@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\ProductAlert\Block\Email\Price */
+/** @var \Magento\ProductAlert\Block\Email\Price $block */
 ?>
 <?php if ($_products = $block->getProducts()) : ?>
     <p><?= $block->escapeHtml(__('Price change alert! We wanted you to know that prices have changed for these products:')) ?></p>
     <table>
-    <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+    <?php /** @var \Magento\Catalog\Model\Product $_product */ ?>
     <?php foreach ($_products as $_product) : ?>
         <tr>
             <td class="col photo">

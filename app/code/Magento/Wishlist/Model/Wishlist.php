@@ -493,7 +493,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $_buyRequest->setData('action', 'add');
         }
 
-        /* @var $product Product */
+        /** @var Product $product */
         $cartCandidates = $product->getTypeInstance()->processConfiguration($_buyRequest, clone $product);
 
         /**
@@ -738,7 +738,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $items = $this->getItemCollection();
             $isForceSetQuantity = true;
             foreach ($items as $wishlistItem) {
-                /* @var $wishlistItem Item */
+                /** @var Item $wishlistItem */
                 if ($wishlistItem->getProductId() == $product->getId()
                     && $wishlistItem->getId() != $item->getId()
                     && $wishlistItem->representProduct($product)

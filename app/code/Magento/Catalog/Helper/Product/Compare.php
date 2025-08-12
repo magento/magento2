@@ -314,7 +314,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function calculate($logout = false)
     {
-        /** @var $collection Collection */
+        /** @var Collection $collection */
         $collection = $this->_itemCollectionFactory->create()
             ->useProductItem();
         if (!$logout && $this->_customerSession->isLoggedIn()) {

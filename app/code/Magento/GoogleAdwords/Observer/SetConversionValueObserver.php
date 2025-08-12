@@ -64,7 +64,7 @@ class SetConversionValueObserver implements ObserverInterface
         $conversionCurrency = false;
         $sendOrderCurrency = $this->_helper->hasSendConversionValueCurrency();
         foreach ($this->_collection as $order) {
-            /** @var $order \Magento\Sales\Api\Data\OrderInterface */
+            /** @var \Magento\Sales\Api\Data\OrderInterface $order */
             $conversionValue += $sendOrderCurrency ? $order->getGrandTotal() : $order->getBaseGrandTotal();
             $conversionCurrency = $sendOrderCurrency ? $order->getOrderCurrencyCode() : false;
         }

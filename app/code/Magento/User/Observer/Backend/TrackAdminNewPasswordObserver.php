@@ -74,7 +74,7 @@ class TrackAdminNewPasswordObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /* @var $user User */
+        /** @var User $user */
         $user = $observer->getEvent()->getObject();
         if ($user->getId()) {
             $passwordHash = $user->getPassword();

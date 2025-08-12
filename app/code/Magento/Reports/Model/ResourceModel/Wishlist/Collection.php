@@ -91,7 +91,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function getWishlistCustomerCount()
     {
-        /** @var $collection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
         $collection = $this->_customerResFactory->create();
 
         $customersSelect = $collection->getSelectCountSql();
@@ -121,7 +121,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function getSharedCount()
     {
-        /** @var $collection \Magento\Customer\Model\ResourceModel\Customer\Collection */
+        /** @var \Magento\Customer\Model\ResourceModel\Customer\Collection $collection */
         $collection = $this->_customerResFactory->create();
         $countSelect = $collection->getSelectCountSql();
         $countSelect->joinLeft(

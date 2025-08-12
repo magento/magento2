@@ -175,7 +175,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         $allConditions = [];
 
         foreach ($attributes as $attribute) {
-            /* @var $attribute Attribute */
+            /** @var Attribute $attribute */
             if (!isset($values[$attribute->getAttributeCode()])) {
                 continue;
             }
@@ -367,7 +367,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                     $to = '';
 
                     if (isset($value['currency'])) {
-                        /** @var $currencyModel Currency */
+                        /** @var Currency $currencyModel */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);
                         $from = $currencyModel->format($value['from'], [], false);
                         $to = $currencyModel->format($value['to'], [], false);

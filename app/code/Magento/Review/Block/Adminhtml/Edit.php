@@ -65,7 +65,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_blockGroup = 'Magento_Review';
         $this->_controller = 'adminhtml';
 
-        /** @var $actionPager \Magento\Review\Helper\Action\Pager */
+        /** @var \Magento\Review\Helper\Action\Pager $actionPager */
         $actionPager = $this->_reviewActionPager;
         $actionPager->setStorageId('reviews');
 

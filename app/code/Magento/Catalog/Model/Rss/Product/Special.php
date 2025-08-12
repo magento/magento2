@@ -42,7 +42,7 @@ class Special
     {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
 
-        /** @var $product \Magento\Catalog\Model\Product */
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productFactory->create();
         $product->setStoreId($storeId);
 

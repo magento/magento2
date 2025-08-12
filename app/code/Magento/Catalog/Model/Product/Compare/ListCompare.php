@@ -88,7 +88,7 @@ class ListCompare extends \Magento\Framework\DataObject
      */
     public function addProduct($product)
     {
-        /* @var $item \Magento\Catalog\Model\Product\Compare\Item */
+        /** @var \Magento\Catalog\Model\Product\Compare\Item $item */
         $item = $this->_compareItemFactory->create();
         $this->_addVisitorToItem($item);
         $item->loadByProduct($product);
@@ -154,7 +154,7 @@ class ListCompare extends \Magento\Framework\DataObject
      */
     public function removeProduct($product)
     {
-        /* @var $item \Magento\Catalog\Model\Product\Compare\Item */
+        /** @var \Magento\Catalog\Model\Product\Compare\Item $item */
         $item = $this->_compareItemFactory->create();
         $this->_addVisitorToItem($item);
         $item->loadByProduct($product);

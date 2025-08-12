@@ -57,7 +57,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             return;
         }
 
-        /** @var $model \Magento\User\Model\User */
+        /** @var \Magento\User\Model\User $model */
         $model = $this->_userFactory->create()->load($userId);
         if ($userId && $model->isObjectNew()) {
             $this->messageManager->addError(__('This user no longer exists.'));
@@ -78,7 +78,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             $model->setRoleId($userRoles[0]);
         }
 
-        /** @var $currentUser \Magento\User\Model\User */
+        /** @var \Magento\User\Model\User $currentUser */
         $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
         if ($userId == $currentUser->getId()
             && $this->_objectManager->get(\Magento\Framework\Validator\Locale::class)

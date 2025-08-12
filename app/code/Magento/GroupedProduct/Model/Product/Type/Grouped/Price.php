@@ -24,7 +24,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
         $finalPrice = parent::getFinalPrice($qty, $product);
         if ($product->hasCustomOptions()) {
-            /* @var $typeInstance \Magento\GroupedProduct\Model\Product\Type\Grouped */
+            /** @var \Magento\GroupedProduct\Model\Product\Type\Grouped $typeInstance */
             $typeInstance = $product->getTypeInstance();
             $associatedProducts = $typeInstance->setStoreFilter(
                 $product->getStore(),
@@ -33,7 +33,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                 $product
             );
             foreach ($associatedProducts as $childProduct) {
-                /* @var $childProduct \Magento\Catalog\Model\Product */
+                /** @var \Magento\Catalog\Model\Product $childProduct */
                 $option = $product->getCustomOption('associated_product_' . $childProduct->getId());
                 if (!$option) {
                     continue;

@@ -15,7 +15,7 @@ class Blocks extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      */
     public function renderPageContainers()
     {
-        /* @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
+        /** @var \Magento\Widget\Model\Widget\Instance $widgetInstance */
         $widgetInstance = $this->_initWidgetInstance();
         $layout = $this->getRequest()->getParam('layout');
         $selected = $this->getRequest()->getParam('selected', null);

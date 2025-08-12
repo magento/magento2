@@ -416,7 +416,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      */
     protected function _registerPaymentAuthorization()
     {
-        /** @var $payment \Magento\Sales\Model\Order\Payment */
+        /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $this->_order->getPayment();
         if ($this->_order->canFetchPaymentReviewUpdate()) {
             $payment->update(true);

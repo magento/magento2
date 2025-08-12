@@ -70,9 +70,9 @@ class ConfiguredPriceBox extends FinalPriceBox
      */
     protected function _prepareLayout()
     {
-        /** @var $price \Magento\Catalog\Pricing\Price\ConfiguredPrice */
+        /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $price */
         $price = $this->getPrice();
-        /** @var $renderBlock \Magento\Catalog\Pricing\Render */
+        /** @var \Magento\Catalog\Pricing\Render $renderBlock */
         $renderBlock = $this->getRenderBlock();
         if ($renderBlock && $renderBlock->getItem() instanceof ItemInterface) {
             $price->setItem($renderBlock->getItem());

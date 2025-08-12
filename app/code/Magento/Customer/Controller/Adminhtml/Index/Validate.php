@@ -176,7 +176,7 @@ class Validate extends CustomerAction implements HttpPostActionInterface, HttpGe
             }
             $errors = $this->customerAccountManagement->validate($customer)->getMessages();
         } catch (\Magento\Framework\Validator\Exception $exception) {
-            /* @var $error Error */
+            /** @var Error $error */
             foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
                 $errors[] = $error->getText();
             }

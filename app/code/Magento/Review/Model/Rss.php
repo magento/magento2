@@ -63,7 +63,7 @@ class Rss extends \Magento\Framework\Model\AbstractModel
      */
     public function getProductCollection()
     {
-        /** @var $reviewModel \Magento\Review\Model\Review */
+        /** @var \Magento\Review\Model\Review $reviewModel */
         $reviewModel = $this->reviewFactory->create();
         $collection = $reviewModel->getProductCollection()
             ->addStatusFilter($reviewModel->getPendingStatus())

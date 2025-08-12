@@ -130,7 +130,7 @@ class RulesApplier
     {
         $address = $item->getAddress();
         $appliedRuleIds = [];
-        /* @var $rule Rule */
+        /** @var Rule $rule */
         foreach ($rules as $rule) {
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;

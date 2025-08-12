@@ -156,7 +156,7 @@ class Registration
     public function checkPhysicalThemes()
     {
         $themes = $this->_collectionFactory->create()->addTypeFilter(ThemeInterface::TYPE_PHYSICAL);
-        /** @var $theme ThemeInterface */
+        /** @var ThemeInterface $theme */
         foreach ($themes as $theme) {
             if (!$this->_themeCollection->hasTheme($theme)) {
                 $theme->setType(ThemeInterface::TYPE_VIRTUAL)->save();
@@ -176,7 +176,7 @@ class Registration
             list($parentType, $childType) = $typesSequence;
             $collection = $this->_collectionFactory->create();
             $collection->addTypeRelationFilter($parentType, $childType);
-            /** @var $theme ThemeInterface */
+            /** @var ThemeInterface $theme */
             foreach ($collection as $theme) {
                 $parentId = $this->_getResetParentId($theme);
                 if ($theme->getParentId() != $parentId) {

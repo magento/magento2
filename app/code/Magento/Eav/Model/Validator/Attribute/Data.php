@@ -141,7 +141,7 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      */
     public function isValid($entity)
     {
-        /** @var $attributes Attribute[] */
+        /** @var Attribute[] $attributes */
         $attributes = $this->_getAttributes($entity);
 
         $data = $this->retrieveData($entity);

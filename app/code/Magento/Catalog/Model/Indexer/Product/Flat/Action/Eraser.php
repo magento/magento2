@@ -86,7 +86,7 @@ class Eraser
      */
     public function removeDisabledProducts(array &$ids, $storeId)
     {
-        /* @var $statusAttribute \Magento\Eav\Model\Entity\Attribute */
+        /** @var \Magento\Eav\Model\Entity\Attribute $statusAttribute */
         $statusAttribute = $this->productIndexerHelper->getAttribute('status');
 
         /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */

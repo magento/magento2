@@ -59,7 +59,7 @@ class Tunnel extends Dashboard implements HttpGetActionInterface
         /** @var Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
         if ($gaData && $gaHash) {
-            /** @var $helper Data */
+            /** @var Data $helper */
             $helper = $this->_objectManager->get(Data::class);
             $newHash = $helper->getChartDataHash($gaData);
             if (Security::compareStrings($newHash, $gaHash)) {

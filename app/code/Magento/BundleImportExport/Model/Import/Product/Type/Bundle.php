@@ -808,7 +808,7 @@ class Bundle extends CatalogImportExportAbstractType implements
     private function getStoreIdByCode(string $storeCode): int
     {
         if (!isset($this->storeCodeToId[$storeCode])) {
-            /** @var $store Store */
+            /** @var Store $store */
             foreach ($this->storeManager->getStores() as $store) {
                 $this->storeCodeToId[$store->getCode()] = (int)$store->getId();
             }

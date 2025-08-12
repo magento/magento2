@@ -542,7 +542,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (isset($data['stores'])) {
             $this->_storeCodeToId = $data['stores'];
         } else {
-            /** @var $store Store */
+            /** @var Store $store */
             foreach ($this->_storeManager->getStores(true) as $store) {
                 $this->_storeCodeToId[$store->getCode()] = $store->getId();
             }
@@ -626,7 +626,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         ];
                     }
                 };
-                /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Option\Collection */
+                /** @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection $collection */
                 $this->_optionCollection->reset();
                 $this->_optionCollection->getSelect()->join(
                     ['option_title' => $optionTitleTable],

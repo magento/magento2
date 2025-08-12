@@ -50,7 +50,7 @@ class Most extends \Magento\Backend\Block\Dashboard\Grid
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create();
-        /* @var $collection \Magento\Reports\Model\ResourceModel\Order\Collection */
+        /** @var \Magento\Reports\Model\ResourceModel\Order\Collection $collection */
         $collection->groupByCustomer()->addOrdersCount()->joinCustomerName();
 
         $storeFilter = 0;

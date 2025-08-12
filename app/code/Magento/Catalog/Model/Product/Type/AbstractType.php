@@ -495,7 +495,7 @@ abstract class AbstractType
                     case 'receive_uploaded_file':
                         $src = $queueOptions['src_name'] ?? '';
                         $dst = $queueOptions['dst_name'] ?? '';
-                        /** @var $uploader Http */
+                        /** @var Http $uploader */
                         $uploader = $queueOptions['uploader'] ?? null;
                         $isUploaded = false;
                         if ($uploader && $uploader->isValid($src)) {
@@ -583,7 +583,7 @@ abstract class AbstractType
             $results = [];
             $optionsFromRequest = $buyRequest->getOptions();
             foreach ($options as $option) {
-                /* @var $option \Magento\Catalog\Model\Product\Option */
+                /** @var \Magento\Catalog\Model\Product\Option $option */
                 try {
                     $group = $option->groupFactory($option->getType())
                         ->setOption($option)

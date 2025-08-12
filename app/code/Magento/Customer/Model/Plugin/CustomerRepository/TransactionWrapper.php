@@ -40,7 +40,7 @@ class TransactionWrapper
     ) {
         $this->resourceModel->beginTransaction();
         try {
-            /** @var $result \Magento\Customer\Api\Data\CustomerInterface */
+            /** @var \Magento\Customer\Api\Data\CustomerInterface $result */
             $result = $proceed($customer, $passwordHash);
             $this->resourceModel->commit();
             return $result;

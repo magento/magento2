@@ -234,7 +234,7 @@ class Filter
             $searchResult = $dataProvider->getSearchResult();
             // Use compatible search api getItems when searchResult is not a collection.
             foreach ($searchResult->getItems() as $item) {
-                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                /** @var \Magento\Framework\Api\Search\DocumentInterface $item */
                 $idsArray[] = $item->getId();
             }
         }

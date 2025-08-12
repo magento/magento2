@@ -57,7 +57,7 @@ abstract class Auth extends AbstractAction
             throw new LocalizedException(__('Please correct the password reset token.'));
         }
 
-        /** @var $user \Magento\User\Model\User */
+        /** @var \Magento\User\Model\User $user */
         $user = $this->_userFactory->create()->load($userId);
         if (!$user->getId()) {
             throw new LocalizedException(

@@ -42,14 +42,14 @@ class SuggestedAttributeList
     public function getSuggestedAttributes($labelPart)
     {
         $escapedLabelPart = $this->_resourceHelper->addLikeEscape($labelPart, ['position' => 'any']);
-        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $collection */
         $collection = $this->configurableAttributeHandler->getApplicableAttributes()->addFieldToFilter(
             'frontend_label',
             ['like' => $escapedLabelPart]
         );
         $result = [];
         foreach ($collection->getItems() as $id => $attribute) {
-            /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+            /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
             if ($this->configurableAttributeHandler->isAttributeApplicable($attribute)) {
                 $result[$id] = [
                     'id' => $attribute->getId(),

@@ -259,7 +259,7 @@ class CsvImportHandler
             ];
 
             // try to load existing rate
-            /** @var $rateModel \Magento\Tax\Model\Calculation\Rate */
+            /** @var \Magento\Tax\Model\Calculation\Rate $rateModel */
             $rateModel = $this->_taxRateFactory->create()->loadByCode($modelData['code']);
             $rateModel->addData($modelData);
 

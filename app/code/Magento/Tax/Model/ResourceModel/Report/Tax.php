@@ -75,9 +75,9 @@ class Tax extends \Magento\Reports\Model\ResourceModel\Report\AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        /** @var $createdAt \Magento\Tax\Model\ResourceModel\Report\Tax\Createdat */
+        /** @var \Magento\Tax\Model\ResourceModel\Report\Tax\Createdat $createdAt */
         $createdAt = $this->_createdAtFactory->create();
-        /** @var $updatedAt \Magento\Tax\Model\ResourceModel\Report\Tax\Updatedat */
+        /** @var \Magento\Tax\Model\ResourceModel\Report\Tax\Updatedat $updatedAt */
         $updatedAt = $this->_updatedAtFactory->create();
 
         $createdAt->aggregate($from, $to);

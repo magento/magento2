@@ -22,7 +22,7 @@ class LayoutUpdate extends AbstractImportValidator
      * @var ValidatorFactory
      */
     private $layoutValidatorFactory;
-    
+
     /**
      * @var ValidationStateInterface
      */
@@ -65,7 +65,7 @@ class LayoutUpdate extends AbstractImportValidator
      */
     private function validateXml(string $xml): bool
     {
-        /** @var $layoutXmlValidator \Magento\Framework\View\Model\Layout\Update\Validator */
+        /** @var \Magento\Framework\View\Model\Layout\Update\Validator $layoutXmlValidator */
         $layoutXmlValidator = $this->layoutValidatorFactory->create(
             [
                 'validationState' => $this->validationState,

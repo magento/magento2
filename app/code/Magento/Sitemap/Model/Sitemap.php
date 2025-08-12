@@ -316,7 +316,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     public function collectSitemapItems()
     {
-        /** @var $helper \Magento\Sitemap\Helper\Data */
+        /** @var \Magento\Sitemap\Helper\Data $helper */
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
 
@@ -451,7 +451,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     {
         $this->_initSitemapItems();
 
-        /** @var $item SitemapItemInterface */
+        /** @var SitemapItemInterface $item */
         foreach ($this->_sitemapItems as $item) {
             $xml = $this->_getSitemapRow(
                 $item->getUrl(),

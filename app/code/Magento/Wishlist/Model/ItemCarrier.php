@@ -126,7 +126,7 @@ class ItemCarrier
         $collection = $wishlist->getItemCollection()->setVisibilityFilter();
 
         foreach ($collection as $item) {
-            /** @var $item \Magento\Wishlist\Model\Item */
+            /** @var \Magento\Wishlist\Model\Item $item */
             try {
                 $disableAddToCart = $item->getProduct()->getDisableAddToCart();
                 $item->unsProduct();
@@ -202,7 +202,7 @@ class ItemCarrier
 
             $products = [];
             foreach ($addedProducts as $product) {
-                /** @var $product \Magento\Catalog\Model\Product */
+                /** @var \Magento\Catalog\Model\Product $product */
                 $products[] = '"' . $product->getName() . '"';
             }
 

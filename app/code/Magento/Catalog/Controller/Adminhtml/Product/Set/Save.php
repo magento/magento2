@@ -96,7 +96,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements 
         $attributeSetId = $this->getRequest()->getParam('id', false);
         $isNewSet = $this->getRequest()->getParam('gotoEdit', false) == '1';
 
-        /* @var $model \Magento\Eav\Model\Entity\Attribute\Set */
+        /** @var \Magento\Eav\Model\Entity\Attribute\Set $model */
         $model = $this->attributeSetFactory->create()->setEntityTypeId($entityTypeId);
 
         try {
@@ -141,7 +141,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set implements 
 
         if ($isNewSet) {
             if ($this->getRequest()->getPost('return_session_messages_only')) {
-                /** @var $block \Magento\Framework\View\Element\Messages */
+                /** @var \Magento\Framework\View\Element\Messages $block */
                 $block = $this->layoutFactory->create()->getMessagesBlock();
                 $block->setMessages($this->messageManager->getMessages(true));
                 $body = [

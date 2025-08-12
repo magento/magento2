@@ -165,7 +165,7 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
         }
 
         $itemId = (int)$this->getRequest()->getParam('item');
-        /* @var $item \Magento\Wishlist\Model\Item */
+        /** @var \Magento\Wishlist\Model\Item $item */
         $item = $this->itemFactory->create()->load($itemId);
         if (!$item->getId()) {
             $resultRedirect->setPath('*/*');

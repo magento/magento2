@@ -340,7 +340,7 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     protected function _processFiles($items)
     {
-        /* @var $productHelper \Magento\Catalog\Helper\Product */
+        /** @var \Magento\Catalog\Helper\Product $productHelper */
         $productHelper = $this->_objectManager->get(\Magento\Catalog\Helper\Product::class);
         foreach ($items as $id => $item) {
             $buyRequest = new \Magento\Framework\DataObject($item);

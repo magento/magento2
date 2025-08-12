@@ -54,7 +54,7 @@ class Price extends UnsubscribeController implements HttpGetActionInterface
         }
 
         try {
-            /* @var $product \Magento\Catalog\Model\Product */
+            /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->productRepository->getById($productId);
             if (!$product->isVisibleInCatalog()) {
                 $this->messageManager->addErrorMessage(

@@ -89,7 +89,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      */
     protected function _initAttributeValues()
     {
-        /** @var $attribute AbstractAttribute */
+        /** @var AbstractAttribute $attribute */
         foreach ($this->getAttributeCollection() as $attribute) {
             $this->_attributeValues[$attribute->getAttributeCode()] = $this->getAttributeOptions($attribute);
         }
@@ -104,7 +104,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      */
     protected function _initAttributeTypes()
     {
-        /** @var $attribute AbstractAttribute */
+        /** @var AbstractAttribute $attribute */
         foreach ($this->getAttributeCollection() as $attribute) {
             $this->attributeTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
         }
@@ -144,7 +144,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
             $exportFilter = $this->_parameters[Export::FILTER_ELEMENT_GROUP];
         }
 
-        /** @var $attribute AbstractAttribute */
+        /** @var AbstractAttribute $attribute */
         foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
 

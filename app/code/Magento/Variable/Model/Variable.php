@@ -179,7 +179,7 @@ class Variable extends AbstractModel
      */
     public function getVariablesOptionArray($withGroup = false)
     {
-        /* @var $collection \Magento\Variable\Model\ResourceModel\Variable\Collection */
+        /** @var \Magento\Variable\Model\ResourceModel\Variable\Collection $collection */
         $collection = $this->getCollection();
         $variables = [];
         foreach ($collection->toOptionArray() as $variable) {

@@ -179,7 +179,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function delete()
     {
-        /** @var $update \Magento\Widget\Model\Layout\Update */
+        /** @var \Magento\Widget\Model\Layout\Update $update */
         foreach ($this->getItems() as $update) {
             $update->delete();
         }

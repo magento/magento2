@@ -22,10 +22,10 @@ class ConfiguredPriceBox extends \Magento\Catalog\Pricing\Render\ConfiguredPrice
      */
     protected function _prepareLayout()
     {
-        /** @var $price \Magento\Catalog\Pricing\Price\ConfiguredPrice */
+        /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $price */
         $price = $this->getPrice();
 
-        /** @var $renderBlock \Magento\Catalog\Pricing\Render */
+        /** @var \Magento\Catalog\Pricing\Render $renderBlock */
         $renderBlock = $this->getRenderBlock();
         if (!$renderBlock && $this->getItem() instanceof ItemInterface) {
             $price->setItem($this->getItem());
