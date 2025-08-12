@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart;
 
 /**
  * Adminhtml Shopping cart products report page content block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()
