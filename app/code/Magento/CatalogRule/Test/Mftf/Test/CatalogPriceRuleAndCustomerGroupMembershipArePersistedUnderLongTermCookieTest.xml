@@ -17,8 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27571"/>
             <group value="persistent"/>
-            <!-- added pr_exclude group as this test failing repeatedly and will be fixed and removed in this ACQE-7751 -->
-            <group value="pr_exclude"/>
         </annotations>
         <before>
 
@@ -93,12 +91,12 @@
 
         <!--Click the *Not you?* link and check the price for Simple Product-->
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickNotYouLink"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="waitFormReload"/>
         <actionGroup ref="AssertStorefrontDefaultWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomerAfterLogout"/>
         <actionGroup ref="AssertStorefrontProductPriceInCategoryPageActionGroup" stepKey="assertProductPriceInCategoryPageAfterLogout">
             <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
-        <waitForPageLoad time="30" stepKey="waitFormReload"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductCatalogRuleSpecialPriceTitleByName($createProduct.name$)}}" stepKey="dontSeeSpecialPrice"/>
     </test>
 </tests>

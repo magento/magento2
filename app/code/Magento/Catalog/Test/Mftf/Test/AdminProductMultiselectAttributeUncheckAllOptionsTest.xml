@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductMultiselectAttributeUncheckAllOptionsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Save Product Multiselect attribute without selecting any options"/>
+            <title value="Product Attribute of multiselect type can be saved with all options unchecked"/>
+            <description
+                value="Verify that a product attribute of multiselect type can be saved with all options unchecked in the admin product edit page."/>
+            <testCaseId value="AC-4856"/>
+            <severity value="MAJOR"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Pre-condition Step-1 Multiselect attribute is created with three options: 1, 2, 3 -->
+            <createData entity="multiSelectAttributeWithThreeOptions" stepKey="createMultiSelectProductAttributeWith2Options"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+            <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="openAttributeFromGrid">
+                <argument name="ProductAttribute" value="$$createMultiSelectProductAttributeWith2Options$$"/>
+            </actionGroup>
+            <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption1">
+                <argument name="adminName" value="{{multiSelectAttributeWithThreeOptions.option1}}"/>
+                <argument name="frontName" value="{{multiSelectAttributeWithThreeOptions.option1}}"/>
+                <argument name="row" value="{{multiSelectAttributeWithThreeOptions.option1}}"/>
+            </actionGroup>
+            <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption2">
+                <argument name="adminName" value="{{multiSelectAttributeWithThreeOptions.option2}}"/>
+                <argument name="frontName" value="{{multiSelectAttributeWithThreeOptions.option2}}"/>
+                <argument name="row" value="{{multiSelectAttributeWithThreeOptions.option2}}"/>
+            </actionGroup>
+            <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption3">
+                <argument name="adminName" value="{{multiSelectAttributeWithThreeOptions.option3}}"/>
+                <argument name="frontName" value="{{multiSelectAttributeWithThreeOptions.option3}}"/>
+                <argument name="row" value="{{multiSelectAttributeWithThreeOptions.option3}}"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
+            <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveMultiSelectAttribute"/>
+            <!-- Pre-condition Step-2 Multiselect Attribute added to default Attribute set -->
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+            <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$$createMultiSelectProductAttributeWith2Options.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+            <!-- Pre-condition Step-3 Product is created based on default attribute set. Value of multiselect attribute set to 1 and 2 for this product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+            <waitForElementVisible
+                selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}"
+                stepKey="waitForMultiSelectAttributeToSelect"/>
+            <selectOption
+                selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}"
+                parameterArray="['1','2']" stepKey="selectFirstAndSecondOptions"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <!-- Delete attribute -->
+            <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="openAttributeFromGrid">
+                <argument name="ProductAttribute" value="$$createMultiSelectProductAttributeWith2Options$$"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 2 & 3 - Navigate: Products > Catalog and Open created product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <!-- Step 4 - Uncheck all options of multiselect attribute -->
+        <waitForElement
+            selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}"
+            stepKey="waitForMultiSelectAttributeToUnSelect"/>
+        <unselectOption
+            selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}"
+            parameterArray="['1','2']" stepKey="uncheckAllOptions"/>
+        <!-- Step 5 - Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormAfterUncheck"/>
+        <!-- Assert multiselect attribute has all options unchecked -->
+        <dontSeeOptionIsSelected
+            selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}"
+            userInput="1" stepKey="assertOption1NotChecked"/>
+        <dontSeeOptionIsSelected
+            selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}"
+            userInput="2" stepKey="assertOption2NotChecked"/>
+        <dontSeeOptionIsSelected
+            selector="{{AdminProductFormSection.customSelectAttribute('$$createMultiSelectProductAttributeWith2Options.attribute_code$$')}}"
+            userInput="3" stepKey="assertOption3NotChecked"/>
+    </test>
+</tests>
+

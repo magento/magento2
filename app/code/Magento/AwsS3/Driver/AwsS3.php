@@ -188,7 +188,9 @@ class AwsS3 implements RemoteDriverInterface
         $parentDir = dirname($path);
 
         while (!$this->isDirectory($parentDir)) {
-            $this->createDirectoryRecursively($parentDir);
+            if (!$this->createDirectoryRecursively($parentDir)) {
+                return false;
+            }
         }
 
         if (!$this->isDirectory($path)) {

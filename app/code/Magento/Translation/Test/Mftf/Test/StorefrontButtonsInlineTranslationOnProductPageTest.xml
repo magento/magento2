@@ -20,7 +20,6 @@
             <group value="translation"/>
             <group value="catalog"/>
             <group value="developer_mode_only"/>
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Enable Translate Inline For Storefront -->

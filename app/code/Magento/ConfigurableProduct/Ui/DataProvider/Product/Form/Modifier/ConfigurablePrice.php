@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
@@ -15,7 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableT
  */
 class ConfigurablePrice extends AbstractModifier
 {
-    const CODE_GROUP_PRICE = 'container_price';
+    public const CODE_GROUP_PRICE = 'container_price';
 
     /**
      * @var string
@@ -87,6 +87,14 @@ class ConfigurablePrice extends AbstractModifier
                     ];
                 $config = $visibilityConfig;
                 $config['componentType'] = 'container';
+                if ($productTypeId === ConfigurableType::TYPE_CODE &&
+                    isset($meta[$groupCode]['children'][self::CODE_GROUP_PRICE]
+                        ['children']['price']['arguments']['data']['config']['scopeLabel'])) {
+                    unset($meta[$groupCode]['children'][self::CODE_GROUP_PRICE]
+                        ['children']['price']['arguments']['data']['config']['scopeLabel']);
+                    unset($meta[$groupCode]['children'][self::CODE_GROUP_PRICE]
+                        ['children']['price']['arguments']['data']['config']['service']);
+                }
                 $meta[$groupCode]['children'][self::CODE_GROUP_PRICE] = array_replace_recursive(
                     $meta[$groupCode]['children'][self::CODE_GROUP_PRICE],
                     [

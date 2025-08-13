@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel;
 
 /**
  * Sales report resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Report extends \Magento\Sales\Model\ResourceModel\EntityAbstract
 {
@@ -16,6 +14,7 @@ class Report extends \Magento\Sales\Model\ResourceModel\EntityAbstract
      * Resource initialization
      *
      * @return void
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     protected function _construct()
     {
