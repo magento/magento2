@@ -66,8 +66,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory,
         array $data = [],
-        SystemStore $systemStore = null,
-        GroupExcludedWebsiteRepositoryInterface $groupExcludedWebsiteRepository = null
+        ?SystemStore $systemStore = null,
+        ?GroupExcludedWebsiteRepositoryInterface $groupExcludedWebsiteRepository = null
     ) {
         $this->_taxCustomer = $taxCustomer;
         $this->_taxHelper = $taxHelper;

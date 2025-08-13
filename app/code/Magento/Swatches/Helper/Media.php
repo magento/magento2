@@ -95,7 +95,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Image\Factory $imageFactory,
         \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection,
         \Magento\Framework\View\ConfigInterface $configInterface,
-        CatalogMediaConfig $catalogMediaConfig = null
+        ?CatalogMediaConfig $catalogMediaConfig = null
     ) {
         $this->mediaConfig = $mediaConfig;
         $this->fileStorageDb = $fileStorageDb;

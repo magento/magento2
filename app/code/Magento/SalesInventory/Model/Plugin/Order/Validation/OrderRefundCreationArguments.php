@@ -54,8 +54,8 @@ class OrderRefundCreationArguments
         array $items = [],
         $notify = false,
         $appendComment = false,
-        CreditmemoCommentCreationInterface $comment = null,
-        CreditmemoCreationArgumentsInterface $arguments = null
+        ?CreditmemoCommentCreationInterface $comment = null,
+        ?CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         if ($this->isReturnToStockItems($arguments)) {
             return $validationResults;

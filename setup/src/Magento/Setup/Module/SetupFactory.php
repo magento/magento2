@@ -36,7 +36,7 @@ class SetupFactory
      * @param ResourceConnection $appResource
      * @return Setup
      */
-    public function create(ResourceConnection $appResource = null)
+    public function create(?ResourceConnection $appResource = null)
     {
         $objectManager = $this->objectManagerProvider->get();
         if ($appResource === null) {

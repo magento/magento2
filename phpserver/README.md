@@ -22,7 +22,7 @@ php bin/magento setup:install --base-url=http://127.0.0.1:8082 \
 --admin-firstname=Magento --admin-lastname=User --admin-email=user@example.com \
 --admin-user=admin --admin-password=admin123 --language=en_US \
 --currency=USD --timezone=America/Chicago --use-rewrites=1 \
---search-engine=elasticsearch7 --elasticsearch-host=es-host.example.com --elasticsearch-port=9200
+--search-engine=elasticsearch8 --elasticsearch-host=es-host.example.com --elasticsearch-port=9200
 ```
 
 Note: By default, Magento creates a random Admin URI for you. Make sure to write this value down because it's how you access the Magento Admin later. For example: `http://127.0.0.1:8082/index.php/admin_1vpn01`.

@@ -37,7 +37,7 @@ class Loader
      */
     public function __construct(
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
-        CollectionFactory $collectionFactory = null
+        ?CollectionFactory $collectionFactory = null
     ) {
         $this->_configValueFactory = $configValueFactory;
         $this->collectionFactory = $collectionFactory ?: ObjectManager::getInstance()->get(CollectionFactory::class);

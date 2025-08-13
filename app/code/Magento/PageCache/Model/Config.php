@@ -114,7 +114,7 @@ class Config
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Module\Dir\Reader $reader,
         VclGeneratorFactory $vclGeneratorFactory,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->readFactory = $readFactory;
         $this->_scopeConfig = $scopeConfig;

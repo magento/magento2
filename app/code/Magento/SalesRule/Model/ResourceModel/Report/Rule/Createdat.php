@@ -37,7 +37,7 @@ class Createdat extends \Magento\Reports\Model\ResourceModel\Report\AbstractRepo
         private readonly Validator $timezoneValidator,
         DateTime $dateTime,
         private Config $taxConfig,
-        string $connectionName = null
+        ?string $connectionName = null
     ) {
         parent::__construct(
             $context,

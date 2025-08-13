@@ -52,7 +52,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * @throws \InvalidArgumentException
      * @return \Magento\Framework\Validator\Builder
      */
-    public function createValidatorBuilder($entityName, $groupName, array $builderConfig = null)
+    public function createValidatorBuilder($entityName, $groupName, ?array $builderConfig = null)
     {
         if (!isset($this->_data[$entityName])) {
             throw new \InvalidArgumentException(sprintf('Unknown validation entity "%s"', $entityName));
@@ -95,7 +95,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * @param array|null $builderConfig
      * @return \Magento\Framework\Validator
      */
-    public function createValidator($entityName, $groupName, array $builderConfig = null)
+    public function createValidator($entityName, $groupName, ?array $builderConfig = null)
     {
         return $this->createValidatorBuilder($entityName, $groupName, $builderConfig)->createValidator();
     }

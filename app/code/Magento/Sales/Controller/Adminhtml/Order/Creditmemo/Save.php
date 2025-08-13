@@ -52,7 +52,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
         CreditmemoSender $creditmemoSender,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        SalesData $salesData = null
+        ?SalesData $salesData = null
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         $this->creditmemoSender = $creditmemoSender;

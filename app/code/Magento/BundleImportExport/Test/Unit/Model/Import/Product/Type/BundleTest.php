@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,9 +9,10 @@ namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
 use Magento\BundleImportExport\Model\Import\Product\Type\Bundle;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as ProductAttributeCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
@@ -34,46 +35,41 @@ class BundleTest extends AbstractImportTestCase
     /**
      * @var Bundle
      */
-    protected $bundle;
+    private $bundle;
 
     /**
      * @var ResourceConnection|MockObject
      */
-    protected $resource;
+    private $resource;
 
     /**
      * @var Select|MockObject
      */
-    protected $select;
+    private $select;
 
     /**
      * @var Product|MockObject
      */
-    protected $entityModel;
+    private $entityModel;
 
     /**
      * @var []
      */
-    protected $params;
+    private $params;
 
     /** @var AdapterInterface|MockObject
      */
-    protected $connection;
+    private $connection;
 
     /**
-     * @var MockObject
+     * @var AttributeSetCollectionFactory|MockObject
      */
-    protected $attrSetColFac;
+    private $attrSetColFac;
 
     /**
-     * @var MockObject
+     * @var ProductAttributeCollectionFactory|MockObject
      */
-    protected $prodAttrColFac;
-
-    /**
-     * @var Collection|MockObject
-     */
-    protected $setCollection;
+    private $prodAttrColFac;
 
     /**
      * @var ScopeResolverInterface|MockObject
@@ -179,36 +175,17 @@ class BundleTest extends AbstractImportTestCase
         );
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->resource->expects($this->any())->method('getTableName')->willReturn('tableName');
-        $this->attrSetColFac = $this->createPartialMock(
-            CollectionFactory::class,
-            ['create']
-        );
-        $this->setCollection = $this->createPartialMock(
-            Collection::class,
-            ['setEntityTypeFilter']
-        );
-        $this->attrSetColFac->expects($this->any())->method('create')->willReturn(
-            $this->setCollection
-        );
-        $this->setCollection->expects($this->any())
-            ->method('setEntityTypeFilter')
-            ->willReturn([]);
-        $this->prodAttrColFac = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
-            ['create']
-        );
-        $attrCollection =
-            $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
-        $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
+        $this->attrSetColFac = $this->createMock(AttributeSetCollectionFactory::class);
+        $this->prodAttrColFac = $this->createMock(ProductAttributeCollectionFactory::class);
+        $attrCollection = $this->createMock(ProductAttributeCollection::class);
+        $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
+        $attrCollection->expects($this->any())->method('getItems')->willReturn([]);
         $this->prodAttrColFac->expects($this->any())->method('create')->willReturn($attrCollection);
         $this->params = [
             0 => $this->entityModel,
             1 => 'bundle'
         ];
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getScope'])
-            ->getMockForAbstractClass();
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
 
         $objects = [
             [

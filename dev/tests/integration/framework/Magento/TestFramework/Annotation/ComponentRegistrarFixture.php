@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\TestFramework\Annotation;
 
 use FilesystemIterator;
@@ -98,9 +97,8 @@ class ComponentRegistrarFixture
         } catch (Throwable $exception) {
             ExceptionHandler::handle(
                 'Unable to parse fixtures',
-                get_class($test),
-                $test->getName(false),
-                $exception
+                $exception,
+                $test
             );
         }
         if (!$values) {

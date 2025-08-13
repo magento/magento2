@@ -52,7 +52,7 @@ class QueryResolver
         ConfigInterface $config,
         CacheInterface $cache,
         $cacheId = 'connection_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->config = $config;
         $this->cache = $cache;

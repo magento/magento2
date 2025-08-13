@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,8 +86,8 @@ class ParamsBuilder
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ConfigInterface $viewConfig,
-        DesignInterface $designInterface = null,
-        FlyweightFactory $themeFactory = null
+        ?DesignInterface $designInterface = null,
+        ?FlyweightFactory $themeFactory = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->viewConfig = $viewConfig;
@@ -104,7 +104,7 @@ class ParamsBuilder
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(array $imageArguments, int $scopeId = null): array
+    public function build(array $imageArguments, ?int $scopeId = null): array
     {
         $this->determineCurrentTheme($scopeId);
 
@@ -126,7 +126,7 @@ class ParamsBuilder
      * @param int|null $scopeId
      * @return void
      */
-    private function determineCurrentTheme(int $scopeId = null): void
+    private function determineCurrentTheme(?int $scopeId = null): void
     {
         if (is_numeric($scopeId) || !$this->currentTheme) {
             $themeId = $this->design->getConfigurationDesignTheme(Area::AREA_FRONTEND, ['store' => $scopeId]);
@@ -173,7 +173,7 @@ class ParamsBuilder
      * @param int $scopeId
      * @return array
      */
-    private function getWatermark(string $type, int $scopeId = null): array
+    private function getWatermark(string $type, ?int $scopeId = null): array
     {
         $file = $this->scopeConfig->getValue(
             "design/watermark/{$type}_image",

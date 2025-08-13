@@ -97,7 +97,7 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**
      * @inheritDoc
      */
-    public function setAvailableCurrencyCodes(array $codes = null)
+    public function setAvailableCurrencyCodes(?array $codes = null)
     {
         return $this->setData(self::KEY_AVAILABLE_CURRENCY_CODES, $codes);
     }
@@ -113,7 +113,7 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
     /**
      * @inheritDoc
      */
-    public function setExchangeRates(array $exchangeRates = null)
+    public function setExchangeRates(?array $exchangeRates = null)
     {
         return $this->setData(self::KEY_EXCHANGE_RATES, $exchangeRates);
     }

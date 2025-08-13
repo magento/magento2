@@ -87,8 +87,8 @@ class Edit extends \Magento\Directory\Block\Data
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = [],
-        AddressMetadataInterface $addressMetadata = null,
-        Address $addressHelper = null
+        ?AddressMetadataInterface $addressMetadata = null,
+        ?Address $addressHelper = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressRepository = $addressRepository;

@@ -458,7 +458,7 @@ class NullPaymentProvider implements MethodInterface
      * @param CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable(CartInterface $quote = null)
+    public function isAvailable(?CartInterface $quote = null)
     {
         return false;
     }

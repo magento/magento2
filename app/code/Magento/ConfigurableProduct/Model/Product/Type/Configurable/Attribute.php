@@ -50,8 +50,8 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
         MetadataPool $metadataPool,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataPool = $metadataPool;
@@ -222,7 +222,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     /**
      * @inheritDoc
      */
-    public function setValues(array $values = null)
+    public function setValues(?array $values = null)
     {
         return $this->setData(self::KEY_VALUES, $values);
     }

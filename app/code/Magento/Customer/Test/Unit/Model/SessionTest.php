@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -137,7 +137,7 @@ class SessionTest extends TestCase
         $this->_eventManagerMock
             ->method('dispatch')
             ->willReturnCallback(
-                function ($arg1, $arg2) use ($customer, $customerDto, &$callCount) {
+                function ($arg1, $arg2) use ($customer, $customerDto) {
                     if ($arg1 == 'customer_login' && $arg2 == ['customer' => $customer]) {
                         return null;
                     } elseif ($arg1 == 'customer_data_object_login' && $arg2 == ['customer' => $customerDto]) {
@@ -316,7 +316,7 @@ class SessionTest extends TestCase
             ->willReturn($customerMock);
 
         $this->_storageMock
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(2))
             ->method('getData')
             ->with('customer_id')
             ->willReturn($customerId);

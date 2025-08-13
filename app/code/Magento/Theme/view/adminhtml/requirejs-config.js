@@ -41,7 +41,6 @@ var config = {
             'menu':                               'mage/backend/menu',
             'jstree':                             'jquery/jstree/jquery.jstree',
             'jquery-ui-modules/widget':           'jquery/ui',
-            'jquery-ui-modules/core':             'jquery/ui',
             'jquery-ui-modules/accordion':        'jquery/ui',
             'jquery-ui-modules/autocomplete':     'jquery/ui',
             'jquery-ui-modules/button':           'jquery/ui',

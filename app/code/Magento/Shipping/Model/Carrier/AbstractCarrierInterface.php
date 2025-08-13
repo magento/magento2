@@ -52,7 +52,7 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject|null $params
      * @return array
      */
-    public function getContainerTypes(\Magento\Framework\DataObject $params = null);
+    public function getContainerTypes(?\Magento\Framework\DataObject $params = null);
 
     /**
      * Get Container Types, that could be customized
@@ -67,7 +67,7 @@ interface AbstractCarrierInterface
      * @param \Magento\Framework\DataObject|null $params
      * @return array
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null);
+    public function getDeliveryConfirmationTypes(?\Magento\Framework\DataObject $params = null);
 
     /**
      * Validate request for available ship countries

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -95,13 +95,13 @@ class Full extends AbstractAction
         ResourceConnection $resource,
         StoreManagerInterface $storeManager,
         Config $config,
-        QueryGenerator $queryGenerator = null,
-        BatchSizeManagementInterface $batchSizeManagement = null,
-        BatchProviderInterface $batchProvider = null,
-        MetadataPool $metadataPool = null,
+        ?QueryGenerator $queryGenerator = null,
+        ?BatchSizeManagementInterface $batchSizeManagement = null,
+        ?BatchProviderInterface $batchProvider = null,
+        ?MetadataPool $metadataPool = null,
         $batchRowsCount = null,
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        ProcessManager $processManager = null,
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?ProcessManager $processManager = null,
         ?DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct(

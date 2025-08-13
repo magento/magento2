@@ -48,7 +48,7 @@ class RemoteAddressTest extends TestCase
         array $serverValueMap,
         $expected,
         bool $ipToLong,
-        array $trustedProxies = null
+        ?array $trustedProxies = null
     ): void {
         $remoteAddress = new RemoteAddress(
             $this->requestMock,

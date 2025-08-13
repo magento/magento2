@@ -54,8 +54,8 @@ class ConfigurableAttributeUid implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['attribute_id']) || empty($value['attribute_id'])) {
             throw new GraphQlInputException(__('"attribute_id" value should be specified.'));

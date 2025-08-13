@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeContentOfWysiwygEditorForDisabledByDefaultTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="WYSIWYG Admin Configuration"/>
+            <title value="Change content of Wysiwyg Editor if it's disabled by default"/>
+            <description value="Admin should be able to Check Wysiwyg Editor content can be changed and saved if it is disabled by default"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4143"/>
+            <group value="Cms"/>
+            <group value="pagebuilder_disabled"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage"/>
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock"/>
+            <!-- Simple product is created -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
+                <argument name="FolderName" value="Storage Root"/>
+            </actionGroup>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteCreatedFolder">
+                <argument name="ImageFolder" value="ImageFolder"/>
+            </actionGroup>
+            <!-- Disable WYSIWYG Editor -->
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnEditPage"/>
+            <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
+            <waitForPageLoad stepKey="waitForGridReload"/>
+            <!-- Delete Product, CMS Page, Block -->
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step-1: Login to admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- Step-2,3&4: Set WYSIWYG Editor to disabled By Default -->
+        <magentoCLI command="config:set {{WysiwygDisabled.path}} {{WysiwygDisabled.value}}" stepKey="disableByDefaultWysiwyg"/>
+        <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!--Step-5: Open product page that contains WYSIWYG editor-->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductFormSection.contentTab}}" stepKey="waitToClickContentTab" />
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTabForProduct" />
+        <waitForPageLoad stepKey="waitForGridLoad1"/>
+        <waitForElementNotVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
+        <!--Step-6: Click Show/Hide editor-->
+        <waitForElementClickable selector="{{TinyMCESection.ShowHideBtn}}" stepKey="seeShowHideBtn" />
+        <click selector="{{TinyMCESection.ShowHideBtn}}"  stepKey="clickShowHideBtn" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="assertWYSIWYGEditorToBeVisible"/>
+        <!--Step-7: Click Show/Hide editor Again-->
+        <click selector=" {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowEditor" />
+        <waitForElementNotVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="assertWYSIWYGEditorNotToBeVisible"/>
+        <!--Step-8: Click Show/Hide editor Third Time-->
+        <click selector=" {{TinyMCESection.ShowHideBtn}}" stepKey="clickAgainShowHideBtn" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="assertAgainWYSIWYGEditorToBeVisible"/>
+        <!-- Step-9: Add content into description -->
+        <actionGroup ref="AdminOpenContentSectionOnProductPageActionGroup" stepKey="openDescriptionDropDown"/>
+        <actionGroup ref="AdminFillInProductDescriptionActionGroup" stepKey="fillLongDescription">
+            <argument name="description" value="Hello Test World!"/>
+        </actionGroup>
+        <!-- Step-10: Save entity you are editing -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <!-- Add content into short description -->
+        <waitForElementClickable selector="{{AdminProductFormSection.contentTab}}" stepKey="waitToClickContentTabAgain" />
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTabAgain"/>
+        <waitForPageLoad stepKey="waitForGridLoad2"/>
+        <!--Step-6: Click Show/Hide editor (Short Description)-->
+        <click selector="{{TinyMCESection.ShowHideBtn}}"  stepKey="clickShowHideBtnAgain"/>
+        <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitforTinyMCEToBeVisible"/>
+        <!--Step-7: Click Show/Hide editor Again (Short Description)-->
+        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="focusProductShortDescriptionWysiwyg1"/>
+        <waitForElementNotVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForShortDescription1" />
+        <!--Step-8: Click Show/Hide editor Third Time (Short Description)-->
+        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickAgainShowHideBtn1" />
+        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductShortDescriptionWysiwyg2"/>
+        <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForShortDescription2" />
+        <!-- Step-9: Change editor content into Short description -->
+        <executeJS function="hugerte.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
+        <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn1" />
+        <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideEditorBtn1" />
+        <!-- Step-10: Save entity you are editing (Short Description) -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct1"/>
+        <!-- Verify customer see updated simple product (from the above step) on the storefront page -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <waitForText userInput="Hello Test World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
+        <waitForText userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
+        <!-- Add content into News Letter -->
+        <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+            <argument name="enabled" value="0"/>
+        </actionGroup>
+        <!--Step-5: Open Newsletter page that contains WYSIWYG editor-->
+        <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
+        <waitForPageLoad stepKey="waitForNewsLetterPageLoad1"/>
+        <fillField selector="{{BasicFieldNewsletterSection.templateName}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillTemplateName" />
+        <fillField selector="{{BasicFieldNewsletterSection.templateSubject}}" userInput="{{_defaultNewsletter.subject}}" stepKey="fillTemplateSubject" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderName}}" userInput="{{_defaultNewsletter.senderName}}" stepKey="fillSenderName" />
+        <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
+        <!--Step-6: Click Show/Hide editor (newsletter)-->
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="toggleEditorIfHidden"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCEToBeDisplayed"/>
+        <!--Step-7: Click Show/Hide editor (newsletter) Again-->
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="toggleEditorIfNotHidden"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCENotToBeDisplayed"/>
+        <!--Step-8: Click Show/Hide editor (newsletter) Third Time-->
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="toggleEditorAgainIfHidden"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCEAgainDisplayed"/>
+        <!-- Step-9: Change editor content into NewsLetter -->
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
+            <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage1">
+            <argument name="Image" value="ImageUpload3"/>
+        </actionGroup>
+        <!-- Step-10: Save entity you are editing (Newsletter) -->
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
+        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup" />
+        <click selector="{{BasicFieldNewsletterSection.save}}" stepKey="clickSaveTemplate"/>
+        <waitForPageLoad stepKey="waitForPageLoad10" />
+        <!--Preview the newsletter template-->
+        <fillField selector="{{BasicFieldNewsletterSection.searchInput}}" userInput="{{_defaultNewsletter.name}}" stepKey="fillSearch"/>
+        <click selector="{{BasicFieldNewsletterSection.searchButton}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForPageLoad11"/>
+        <click selector="{{AdminNewsletterGridMainActionsSection.Preview(_defaultNewsletter.name)}}" stepKey="clickPreview"/>
+        <switchToWindow stepKey="switchToWindow" userInput="action_window"/>
+        <actionGroup ref="SwitchToPreviewIframeActionGroup" stepKey="switchToIframe"/>
+        <!--Verify that the text and image are present-->
+        <waitForElementVisible selector="{{StorefrontNewsletterSection.mediaDescription}}" stepKey="assertMediaDescription"/>
+        <waitForElementVisible selector="{{StorefrontNewsletterSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
+        <closeTab stepKey="closeTab"/>
+        <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder2">
+            <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteCreatedFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+        <!--Step-5: Open CMS page that contains WYSIWYG editor-->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
+        <!-- Step-9: Change content into CMS Page -->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageData"/>
+        <scrollTo selector="{{CmsNewPagePageContentSection.header}}" stepKey="scrollContentTab" />
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTabForCMSPage" />
+        <!--Step-6: Click Show/Hide editor (CMS Page)-->
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideTab" />
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE1"/>
+        <!--Step-7: Click Show/Hide editor Again (CMS Page)-->
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="toggleShowHiddenForCMSPage"/>
+        <waitForElementNotVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCENotDisplayedInCMSPage"/>
+        <!--Step-8: Click Show/Hide editor Third Time(CMS Page)-->
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="toggleShowHiddenForCMSPageAgain"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCEDisplayInCMSPage"/>
+        <!-- Step-10: Save entity you are editing (CMS Page) -->
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveNewPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad8" />
+        <!--Step-5: Open CMS Block that contains WYSIWYG editor-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateToPageOnStoreFront">
+            <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontCMSPageSection.mainContent}}" userInput="Sample page content. Yada yada yada." stepKey="seeContent"/>
+        <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery1">
+            <argument name="enabled" value="0"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssignBlockCMSPageWithTinyMCEActionGroup" stepKey="assignBlockToCMSPage">
+            <argument name="Block" value="$$createPreReqBlock$$"/>
+            <argument name="CmsPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
+            <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
+        </actionGroup>
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView"/>
+        <!--Step-6: Click Show/Hide editor (CMS Block)-->
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="clickShowEditorBtn3"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCEToBeAppear"/>
+        <!--Step-7: Click Show/Hide editor Again(CMS Block)-->
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="true" stepKey="clickShowEditorBtn4"/>
+        <waitForElementNotVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCENotToBeAppear"/>
+        <!--Step-8: Click Show/Hide editor Third Time(CMS Block)-->
+        <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false"  stepKey="clickShowEditorBtn5"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE5" />
+        <!-- Step-9: Change content into CMS Block -->
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn1"/>
+        <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn1"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder1">
+            <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToWysiwygFolder1">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder1">
+            <argument name="ImageFolder" value="ImageFolder"/>
+        </actionGroup>
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage">
+            <argument name="Image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="DeleteImageActionGroup" stepKey="deleteImage"/>
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage2">
+            <argument name="Image" value="ImageUpload"/>
+        </actionGroup>
+        <!-- Step-10: Save entity you are editing (CMS Block) -->
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage1"/>
+        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup1" />
+        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="clickSaveBlock"/>
+        <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageBlockLoad" />
+        <!--see image on Storefront-->
+        <waitForElementVisible selector="{{StorefrontBlockSection.mediaDescription}}" stepKey="assertMediaDescription1"/>
+        <waitForElementVisible selector="{{StorefrontBlockSection.imageSource(ImageUpload.fileName)}}" stepKey="assertMediaSource1"/>
+        <!--Step-5: Open Category page that contains WYSIWYG editor-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
+        <scrollTo selector="{{AdminCategoryContentSection.description}}" stepKey="scrollContentDescription"/>
+        <!--Step-6: Click Show/Hide editor (category)-->
+        <click selector="{{TinyMCESection.ShowHideBtn}}"  stepKey="toggleShowHiddenForCategory"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCECategory" />
+        <!--Step-7: Click Show/Hide editor Again (category)-->
+        <click selector="{{TinyMCESection.ShowHideBtn}}"  stepKey="toggleShowHiddenForCategory1"/>
+        <waitForElementNotVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCECategory1" />
+        <!--Step-8: Click Show/Hide editor Third Time (category)-->
+        <click selector="{{TinyMCESection.ShowHideBtn}}"  stepKey="toggleShowHiddenForCategory2"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCECategory2" />
+        <!-- Step-9: Change content into Category -->
+        <executeJS function="hugerte.get('category_form_description').setContent('Hello Category World!');" stepKey="executeJSFillContent"/>
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickOnShowHideEditorBtn" />
+        <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage" />
+        <!-- Step-10: Save entity you are editing (Category) -->
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCatalog"/>
+        <!-- Go to storefront product page, assert product content -->
+        <amOnPage url="/{{SimpleSubCategory.urlKey}}.html" stepKey="goToCategoryFrontPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.CatalogDescription}}"  stepKey="waitForDesVisible" />
+        <waitForText userInput="Hello Category World!" selector="{{StorefrontCategoryMainSection.CatalogDescription}}" stepKey="assertCatalogDescription"/>
+    </test>
+</tests>

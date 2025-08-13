@@ -106,7 +106,7 @@ abstract class Integration extends Action
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Escaper $escaper,
         \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection,
-        Validator $urlValidator = null
+        ?Validator $urlValidator = null
     ) {
         parent::__construct($context);
         $this->_registry = $registry;

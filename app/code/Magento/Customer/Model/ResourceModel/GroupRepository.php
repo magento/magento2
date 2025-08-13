@@ -98,7 +98,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->groupRegistry = $groupRegistry;
         $this->groupFactory = $groupFactory;

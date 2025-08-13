@@ -47,9 +47,16 @@ define([
          * @returns {*}
          */
         initialize: function () {
-            let buyerCountry = customerData.get('paypal-buyer-country');
+            let customer = customerData.get('customer'),
+                buyerCountry = customerData.get('paypal-buyer-country');
 
             this.buyerCountry = buyerCountry().code;
+
+            if (customer().firstname && !this.buyerCountry) {
+                customerData.reload(['paypal-buyer-country'], false);
+                this.buyerCountry = customerData.get('paypal-buyer-country')().code;
+            }
+
             this._super()
                 .observe(['amount']);
 

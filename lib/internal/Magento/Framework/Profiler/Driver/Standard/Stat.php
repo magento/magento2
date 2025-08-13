@@ -160,7 +160,7 @@ class Stat
      * @param string|null $filterPattern
      * @return array
      */
-    public function getFilteredTimerIds(array $thresholds = null, $filterPattern = null)
+    public function getFilteredTimerIds(?array $thresholds = null, $filterPattern = null)
     {
         $timerIds = $this->_getOrderedTimerIds();
         if (!$thresholds && !$filterPattern) {

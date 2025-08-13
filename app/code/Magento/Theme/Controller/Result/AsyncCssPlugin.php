@@ -38,7 +38,7 @@ class AsyncCssPlugin
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        InlineUtilInterface $cspInlineUtil = null
+        ?InlineUtilInterface $cspInlineUtil = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->cspInlineUtil = $cspInlineUtil ?: ObjectManager::getInstance()->get(

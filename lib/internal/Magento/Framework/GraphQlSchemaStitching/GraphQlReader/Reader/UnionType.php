@@ -42,7 +42,7 @@ class UnionType implements TypeMetaReaderInterface
     public function __construct(
         FieldMetaReader $fieldMetaReader,
         DocReader $docReader,
-        CacheAnnotationReader $cacheAnnotationReader = null
+        ?CacheAnnotationReader $cacheAnnotationReader = null
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;

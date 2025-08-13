@@ -376,7 +376,7 @@ class QueryFactoryTest extends TestCase
         ?int $queryId,
         bool $isQueryTextExceeded,
         bool $isQueryTextShort,
-        string $matchedQueryText = null
+        ?string $matchedQueryText = null
     ) {
         if (null === $matchedQueryText) {
             $matchedQueryText = $cleanedRawText;

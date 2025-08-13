@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogImportExport\Model\Import;
@@ -181,6 +181,8 @@ class Product extends AbstractEntity
      */
     public const URL_KEY = 'url_key';
 
+    private const ERROR_DUPLICATE_URL_KEY_BY_CATEGORY = 'duplicatedUrlKeyByCategory';
+
     /**
      * @var array
      */
@@ -316,6 +318,7 @@ class Product extends AbstractEntity
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image: %s) at row %s could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
+        self::ERROR_DUPLICATE_URL_KEY_BY_CATEGORY => 'Url key: \'%s\' was already generated for a %s with the ID: %s. You need to specify the unique URL key manually',
         ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
         'invalidNewToDateValue' => 'Make sure new_to_date is later than or the same as new_from_date',
         // Can't add new translated strings in patch release
@@ -881,15 +884,15 @@ class Product extends AbstractEntity
         \Magento\Catalog\Model\Product\Url $productUrl,
         array $data = [],
         array $dateAttrCodes = [],
-        CatalogConfig $catalogConfig = null,
-        ImageTypeProcessor $imageTypeProcessor = null,
-        MediaGalleryProcessor $mediaProcessor = null,
-        StockItemImporterInterface $stockItemImporter = null,
-        DateTimeFactory $dateTimeFactory = null,
-        ProductRepositoryInterface $productRepository = null,
-        StatusProcessor $statusProcessor = null,
-        StockProcessor $stockProcessor = null,
-        LinkProcessor $linkProcessor = null,
+        ?CatalogConfig $catalogConfig = null,
+        ?ImageTypeProcessor $imageTypeProcessor = null,
+        ?MediaGalleryProcessor $mediaProcessor = null,
+        ?StockItemImporterInterface $stockItemImporter = null,
+        ?DateTimeFactory $dateTimeFactory = null,
+        ?ProductRepositoryInterface $productRepository = null,
+        ?StatusProcessor $statusProcessor = null,
+        ?StockProcessor $stockProcessor = null,
+        ?LinkProcessor $linkProcessor = null,
         ?File $fileDriver = null,
         ?StockItemProcessorInterface $stockItemProcessor = null,
         ?SkuStorage $skuStorage = null
@@ -933,7 +936,7 @@ class Product extends AbstractEntity
         $this->stockProcessor = $stockProcessor ?: ObjectManager::getInstance()
             ->get(StockProcessor::class);
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
-                ->get(LinkProcessor::class);
+            ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
         $this->hashAlgorithm = (version_compare(PHP_VERSION, '8.1.0') >= 0) ? 'xxh128' : 'crc32c';
         parent::__construct(
@@ -949,7 +952,7 @@ class Product extends AbstractEntity
         $this->_optionEntity = $data['option_entity'] ??
             $optionFactory->create(['data' => ['product_entity' => $this]]);
         $this->skuStorage = $skuStorage ?? ObjectManager::getInstance()
-                ->get(SkuStorage::class);
+            ->get(SkuStorage::class);
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
@@ -957,9 +960,9 @@ class Product extends AbstractEntity
         $this->validator->init($this);
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
-                ->get(ProductRepositoryInterface::class);
+            ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
-                ->get(StockItemProcessorInterface::class);
+            ->get(StockItemProcessorInterface::class);
         $this->fileDriver = $fileDriver ?? ObjectManager::getInstance()
             ->get(File::class);
     }
@@ -982,6 +985,43 @@ class Product extends AbstractEntity
             return false;
         }
         return true;
+    }
+
+    /**
+     * Create disable image details
+     *
+     * @param mixed $rowSku
+     * @param mixed $column
+     * @param mixed $rowExistingImages
+     * @param int $storeId
+     * @return array|null
+     */
+    private function disableExistingProductImage(
+        mixed $rowSku,
+        mixed $column,
+        mixed $rowExistingImages,
+        int $storeId
+    ): ?array {
+        try {
+            $product = $this->productRepository->get($rowSku);
+            if ($imagePath = $product->getData($column)) {
+                foreach ($rowExistingImages as $existingImage) {
+                    if ($existingImage['value'] == $imagePath) {
+                        $existingImage['store_id'] = $storeId;
+
+                        return [
+                            'disabled' => 1,
+                            'imageData' => $existingImage,
+                            'exists' => true
+                        ];
+                    }
+                }
+            }
+        } catch (NoSuchEntityException) {
+            return null;
+        }
+
+        return null;
     }
 
     /**
@@ -1648,10 +1688,11 @@ class Product extends AbstractEntity
                     }
                     $rowScope = $this->getRowScope($rowData);
                     $urlKey = $this->getUrlKey($rowData);
+                    $rowSku = $rowData[self::COL_SKU];
                     if (!empty($rowData[self::URL_KEY])) {
                         // If url_key column and its value were in the CSV file
                         $rowData[self::URL_KEY] = $urlKey;
-                    } elseif ($this->isNeedToChangeUrlKey($rowData)) {
+                    } elseif ($this->isNeedToChangeUrlKey($rowData, isset($entityRowsIn[strtolower($rowSku)]))) {
                         // If url_key column was empty or even not declared in the CSV file but by the rules it needs
                         // to be settled. In case when url_key is generating from name column we have to ensure that
                         // the bunch of products will pass for the event with url_key column.
@@ -1661,7 +1702,6 @@ class Product extends AbstractEntity
                         // remove null byte character
                         $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
                     }
-                    $rowSku = $rowData[self::COL_SKU];
                     if (null === $rowSku) {
                         $this->getErrorAggregator()->addRowToSkip($rowNum);
                         continue;
@@ -1915,6 +1955,14 @@ class Product extends AbstractEntity
         $imagesByHash = [];
         foreach ($rowImages as $column => $columnImages) {
             foreach ($columnImages as $columnImageKey => $columnImage) {
+                if ($columnImage == $this->getEmptyAttributeValueConstant()) {
+                    if ($disabledImageDetails =
+                        $this->disableExistingProductImage($rowSku, $column, $rowExistingImages, $storeId)
+                    ) {
+                        $imagesForChangeVisibility[] = $disabledImageDetails;
+                    }
+                    continue;
+                }
                 $uploadedFile = $this->findImageByColumnImage(
                     $productMediaPath,
                     $rowExistingImages,
@@ -2705,7 +2753,9 @@ class Product extends AbstractEntity
         // if product doesn't exist, need to throw critical error else all errors should be not critical.
         $errorLevel = $this->getValidationErrorLevel($sku);
 
-        if (!$this->validator->isValid($rowData)) {
+        $hasValidatedImportParent = $sku && $this->getNewSku($sku);
+        $contextRowData = array_merge(['has_import_parent' => $hasValidatedImportParent], $rowData);
+        if (!$this->validator->isValid($contextRowData)) {
             foreach ($this->validator->getMessages() as $message) {
                 $this->skipRow($rowNum, $message, $errorLevel, $this->validator->getInvalidAttribute());
             }
@@ -3117,7 +3167,7 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Check that url_keys are not assigned to other products in DB
+     * Check that url_keys are not already assigned to others entities in DB
      *
      * @return void
      * @since 100.0.3
@@ -3129,7 +3179,11 @@ class Product extends AbstractEntity
             $urlKeyDuplicates = $this->_connection->fetchAssoc(
                 $this->_connection->select()->from(
                     ['url_rewrite' => $resource->getTable('url_rewrite')],
-                    ['request_path', 'store_id']
+                    [
+                        'request_path',
+                        'store_id',
+                        'entity_type'
+                    ]
                 )->joinLeft(
                     ['cpe' => $resource->getTable('catalog_product_entity')],
                     "cpe.entity_id = url_rewrite.entity_id"
@@ -3137,13 +3191,24 @@ class Product extends AbstractEntity
                     ->where('store_id IN (?)', $storeId)
                     ->where('cpe.sku not in (?)', array_values($urlKeys))
             );
+
             foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
-                $message = sprintf(
-                    $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
-                    $entityData['request_path'],
-                    $entityData['sku']
-                );
+                if ($entityData['entity_type'] === 'category') {
+                    $message = sprintf(
+                        $this->retrieveMessageTemplate(self::ERROR_DUPLICATE_URL_KEY_BY_CATEGORY),
+                        $entityData['request_path'],
+                        $entityData['entity_type'],
+                        $entityData['entity_id'],
+                    );
+                } else {
+                    $message = sprintf(
+                        $this->retrieveMessageTemplate(ValidatorInterface::ERROR_DUPLICATE_URL_KEY),
+                        $entityData['request_path'],
+                        $entityData['sku']
+                    );
+                }
+
                 $this->addRowError(ValidatorInterface::ERROR_DUPLICATE_URL_KEY, $rowNum, 'url_key', $message);
             }
         }
@@ -3210,15 +3275,16 @@ class Product extends AbstractEntity
      * Whether a url key needs to change.
      *
      * @param array $rowData
+     * @param bool $hasParentRow
      * @return bool
      */
-    private function isNeedToChangeUrlKey(array $rowData): bool
+    private function isNeedToChangeUrlKey(array $rowData, bool $hasParentRow = false): bool
     {
         $urlKey = $this->getUrlKey($rowData);
         $productExists = $this->isSkuExist($rowData[self::COL_SKU]);
         $markedToEraseUrlKey = isset($rowData[self::URL_KEY]);
         // The product isn't new and the url key index wasn't marked for change.
-        if (!$urlKey && $productExists && !$markedToEraseUrlKey) {
+        if ($hasParentRow && empty($rowData[self::URL_KEY]) || !$urlKey && $productExists && !$markedToEraseUrlKey) {
             // Seems there is no need to change the url key
             return false;
         }

@@ -52,7 +52,7 @@ class FieldToConvert
         $table,
         $identifierField,
         $fieldName,
-        QueryModifierInterface $queryModifier = null
+        ?QueryModifierInterface $queryModifier = null
     ) {
         $this->dataConverterClass = $dataConverter;
         $this->tableName = $table;

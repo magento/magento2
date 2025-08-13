@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertProductsIntoPackageActionGroup">
+        <arguments>
+            <argument name="simpleProductName" type="string"/>
+            <argument name="configurableProductName" type="string"/>
+            <argument name="virtualProductName" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminShipmentCreatePackageMainSection.addProductsToPackage}}" stepKey="waitForAddProductElement"/>
+        <click selector="{{AdminShipmentCreatePackageMainSection.addProductsToPackage}}" stepKey="clickAddProducts"/>
+        <waitForElementVisible selector="{{AdminShipmentCreatePackageProductGridSection.concreteProductCheckbox('simpleProductName')}}" stepKey="waitForSimpleProductBeVisible"/>
+        <waitForElementVisible selector="{{AdminShipmentCreatePackageProductGridSection.concreteProductCheckbox('configurableProductName')}}" stepKey="waitForConfigurableProductBeVisible"/>
+        <waitForElementNotVisible selector="{{AdminShipmentCreatePackageProductGridSection.concreteProductCheckbox('virtualProductName')}}" stepKey="waitForVirtualProductNotToBeVisible"/>
+        <checkOption selector="{{AdminShipmentCreatePackageProductGridSection.concreteProductCheckbox('simpleProductName')}}" stepKey="checkSimpleProductCheckbox"/>
+        <checkOption selector="{{AdminShipmentCreatePackageProductGridSection.concreteProductCheckbox('configurableProductName')}}" stepKey="checkConfigProductCheckbox"/>
+        <waitForElementVisible selector="{{AdminShipmentCreatePackageMainSection.addSelectedProductToPackage}}" stepKey="waitForAddSelectedProductElement"/>
+        <click selector="{{AdminShipmentCreatePackageMainSection.addSelectedProductToPackage}}" stepKey="clickAddSelectedProduct"/>
+        <waitForElementClickable selector="{{AdminShipmentCreatePackageMainSection.save}}" stepKey="waitForBeEnabled"/>
+        <click selector="{{AdminShipmentCreatePackageMainSection.save}}" stepKey="clickSave"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear"/>
+    </actionGroup>
+</actionGroups>

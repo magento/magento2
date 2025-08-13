@@ -44,7 +44,7 @@ class AccountDelegation implements AccountDelegationInterface
      */
     public function createRedirectForNew(
         CustomerInterface $customer,
-        array $mixedData = null
+        ?array $mixedData = null
     ): Redirect {
         $this->storage->storeNewOperation($customer, $mixedData);
 

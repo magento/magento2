@@ -78,7 +78,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      * @param \Magento\Customer\Api\Data\AddressInterface $billingAddress
      * @return $this
      */
-    public function setBillingAddress(\Magento\Customer\Api\Data\AddressInterface $billingAddress = null)
+    public function setBillingAddress(?\Magento\Customer\Api\Data\AddressInterface $billingAddress = null)
     {
         return $this->setData(self::KEY_BILLING_ADDRESS, $billingAddress);
     }
@@ -89,7 +89,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      * @param \Magento\Customer\Api\Data\AddressInterface $shippingAddress
      * @return $this
      */
-    public function setShippingAddress(\Magento\Customer\Api\Data\AddressInterface $shippingAddress = null)
+    public function setShippingAddress(?\Magento\Customer\Api\Data\AddressInterface $shippingAddress = null)
     {
         return $this->setData(self::KEY_SHIPPING_ADDRESS, $shippingAddress);
     }
@@ -100,7 +100,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey
      * @return $this
      */
-    public function setCustomerTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey = null)
+    public function setCustomerTaxClassKey(?\Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey = null)
     {
         return $this->setData(self::KEY_CUSTOMER_TAX_CLASS_KEY, $customerTaxClassKey);
     }
@@ -122,7 +122,7 @@ class QuoteDetails extends AbstractExtensibleModel implements QuoteDetailsInterf
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this->setData(self::KEY_ITEMS, $items);
     }

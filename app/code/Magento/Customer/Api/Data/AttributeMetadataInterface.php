@@ -172,7 +172,7 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null);
+    public function setOptions(?array $options = null);
 
     /**
      * Get class which is used to display the attribute on frontend.

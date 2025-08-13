@@ -91,8 +91,8 @@ class Url
         RequestInterface $request,
         UrlInterface $urlBuilder,
         EncoderInterface $urlEncoder,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder = null,
-        \Magento\Framework\Url\HostChecker $hostChecker = null
+        ?\Magento\Framework\Url\DecoderInterface $urlDecoder = null,
+        ?\Magento\Framework\Url\HostChecker $hostChecker = null
     ) {
         $this->request = $request;
         $this->urlBuilder = $urlBuilder;

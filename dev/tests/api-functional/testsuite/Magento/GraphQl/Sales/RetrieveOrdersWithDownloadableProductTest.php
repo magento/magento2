@@ -269,7 +269,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
      * @param string $orderNumber
      * @param int|null $qty
      */
-    private function prepareInvoice(string $orderNumber, int $qty = null)
+    private function prepareInvoice(string $orderNumber, ?int $qty = null)
     {
         /** @var Order $order */
         $order = $this->order->loadByIncrementId($orderNumber);

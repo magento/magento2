@@ -55,7 +55,7 @@ class AttributeLoader implements AttributeLoaderInterface
      * @return AbstractEntity
      * @throws LocalizedException
      */
-    public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
+    public function loadAllAttributes(AbstractEntity $resource, ?DataObject $object = null)
     {
         $attributes = $this->config->getEntityAttributes($resource->getEntityType(), $object);
         $attributeCodes = array_keys($attributes);

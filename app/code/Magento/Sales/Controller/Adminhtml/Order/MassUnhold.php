@@ -41,7 +41,7 @@ class MassUnhold extends AbstractMassAction implements HttpPostActionInterface
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory,
-        OrderManagementInterface $orderManagement = null
+        ?OrderManagementInterface $orderManagement = null
     ) {
         parent::__construct($context, $filter);
         $this->collectionFactory = $collectionFactory;

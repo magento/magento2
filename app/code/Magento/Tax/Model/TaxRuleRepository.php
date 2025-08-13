@@ -77,7 +77,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
         CollectionFactory $collectionFactory,
         ResourceRule $resource,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->taxRuleRegistry = $taxRuleRegistry;
         $this->taxRuleSearchResultsFactory = $searchResultsFactory;

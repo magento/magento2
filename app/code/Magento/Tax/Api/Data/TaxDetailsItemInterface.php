@@ -191,7 +191,7 @@ interface TaxDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @param \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null);
+    public function setAppliedTaxes(?array $appliedTaxes = null);
 
     /**
      * Return associated item code if this item is associated with another item, null otherwise

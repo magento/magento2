@@ -81,8 +81,8 @@ class RemoveProductsFromCompareList implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($args['input']['products'])) {
             throw new GraphQlInputException(__('"products" value must be specified.'));

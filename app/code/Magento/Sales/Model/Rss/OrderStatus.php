@@ -80,7 +80,7 @@ class OrderStatus implements DataProviderInterface
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        Signature $signature = null
+        ?Signature $signature = null
     ) {
         $this->objectManager = $objectManager;
         $this->urlBuilder = $urlBuilder;

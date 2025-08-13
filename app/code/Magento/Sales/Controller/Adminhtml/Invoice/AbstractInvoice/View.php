@@ -51,7 +51,7 @@ abstract class View extends \Magento\Backend\App\Action
         Context $context,
         Registry $registry,
         ForwardFactory $resultForwardFactory,
-        InvoiceRepositoryInterface $invoiceRepository = null
+        ?InvoiceRepositoryInterface $invoiceRepository = null
     ) {
         parent::__construct($context);
         $this->registry = $registry;

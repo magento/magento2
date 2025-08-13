@@ -145,7 +145,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey
      * @return $this
      */
-    public function setTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null)
+    public function setTaxClassKey(?\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null)
     {
         return $this->setData(self::KEY_TAX_CLASS_KEY, $taxClassKey);
     }

@@ -1540,7 +1540,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $billingAddress
      * @return $this
      */
-    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
+    public function setBillingAddress(?\Magento\Sales\Api\Data\OrderAddressInterface $billingAddress = null);
 
     /**
      * Gets order payment
@@ -1555,7 +1555,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Sales\Api\Data\OrderPaymentInterface|null $payment
      * @return \Magento\Sales\Api\Data\OrderPaymentInterface
      */
-    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null);
+    public function setPayment(?\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null);
 
     /**
      * Gets status histories for the order.
@@ -1570,7 +1570,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface[] $statusHistories
      * @return $this
      */
-    public function setStatusHistories(array $statusHistories = null);
+    public function setStatusHistories(?array $statusHistories = null);
 
     /**
      * Sets the state for the order.

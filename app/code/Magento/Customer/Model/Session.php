@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -157,7 +157,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\App\Response\Http $response,
-        AccountConfirmation $accountConfirmation = null
+        ?AccountConfirmation $accountConfirmation = null
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerUrl = $customerUrl;
@@ -332,10 +332,8 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function getCustomerId()
     {
-        if ($this->storage->getData('customer_id')) {
-            return $this->storage->getData('customer_id');
-        }
-        return null;
+        $customerId = $this->storage->getData('customer_id');
+        return ($customerId && $this->checkCustomerId($customerId)) ? $customerId : null;
     }
 
     /**

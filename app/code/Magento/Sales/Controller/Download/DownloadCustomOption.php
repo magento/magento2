@@ -51,7 +51,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
         ForwardFactory $resultForwardFactory,
         \Magento\Sales\Model\Download $download,
         \Magento\Framework\Unserialize\Unserialize $unserialize,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;

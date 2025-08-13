@@ -98,8 +98,8 @@ class Type extends \Magento\Framework\Model\AbstractModel
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory,
         \Magento\Eav\Model\Entity\StoreFactory $storeFactory,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

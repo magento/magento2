@@ -94,8 +94,8 @@ class UiComponentFactory extends DataObject
         ContextFactory $contextFactory,
         array $data = [],
         array $componentChildFactories = [],
-        DataInterface $definitionData = null,
-        DataInterfaceFactory $configFactory = null,
+        ?DataInterface $definitionData = null,
+        ?DataInterfaceFactory $configFactory = null,
         ?Sanitizer $sanitizer = null
     ) {
         $this->objectManager = $objectManager;

@@ -72,7 +72,7 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null)
+    public function setOptions(?array $options = null)
     {
         return $this->setData(self::OPTIONS, $options);
     }

@@ -38,7 +38,7 @@ class CountryFilter implements ArgumentInterface
      * @param  Int|null $storeId
      * @return array
      */
-    public function getEuCountryList(int $storeId = null): array
+    public function getEuCountryList(?int $storeId = null): array
     {
         $euCountries = explode(
             ',',

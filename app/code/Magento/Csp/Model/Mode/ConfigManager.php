@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ObjectManager;
 use Magento\Csp\Api\Data\ModeConfiguredInterface;
 use Magento\Csp\Api\ModeConfigManagerInterface;
-use Magento\Csp\Model\Mode\Data\ModeConfigured;
+use Magento\Csp\Model\Mode\Data\ModeConfiguredFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
@@ -44,16 +44,23 @@ class ConfigManager implements ModeConfigManagerInterface
     private Http $request;
 
     /**
+     * @var ModeConfiguredFactory
+     */
+    private $modeConfiguredFactory;
+
+    /**
      * @param ScopeConfigInterface $config
      * @param Store $store
      * @param State $state
      * @param Http|null $request
+     * @param ModeConfiguredFactory|null $modeConfiguredFactory
      */
     public function __construct(
         ScopeConfigInterface $config,
         Store $store,
         State $state,
-        ?Http $request = null
+        ?Http $request = null,
+        ?ModeConfiguredFactory $modeConfiguredFactory = null
     ) {
         $this->config = $config;
         $this->storeModel = $store;
@@ -61,6 +68,8 @@ class ConfigManager implements ModeConfigManagerInterface
 
         $this->request = $request
             ?? ObjectManager::getInstance()->get(Http::class);
+        $this->modeConfiguredFactory = $modeConfiguredFactory
+            ?? ObjectManager::getInstance()->get(ModeConfiguredFactory::class);
     }
 
     /**
@@ -118,9 +127,9 @@ class ConfigManager implements ModeConfigManagerInterface
             );
         }
 
-        return new ModeConfigured(
-            (bool) $reportOnly,
-            !empty($reportUri) ? $reportUri : null
-        );
+        return $this->modeConfiguredFactory->create([
+            'reportOnly' => (bool) $reportOnly,
+            'reportUri' => !empty($reportUri) ? (string)$reportUri : null
+        ]);
     }
 }

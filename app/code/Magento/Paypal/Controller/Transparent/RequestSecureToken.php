@@ -66,7 +66,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
         SecureToken $secureTokenService,
         SessionManager $sessionManager,
         Transparent $transparent,
-        SessionManagerInterface $sessionInterface = null
+        ?SessionManagerInterface $sessionInterface = null
     ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->sessionTransparent = $sessionTransparent;

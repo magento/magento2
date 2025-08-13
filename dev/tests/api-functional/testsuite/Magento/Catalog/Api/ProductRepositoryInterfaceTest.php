@@ -2233,7 +2233,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @param int|null $storeId
      * @return ProductInterface
      */
-    private function getProductModel(string $sku, int $storeId = null): ProductInterface
+    private function getProductModel(string $sku, ?int $storeId = null): ProductInterface
     {
         try {
             $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

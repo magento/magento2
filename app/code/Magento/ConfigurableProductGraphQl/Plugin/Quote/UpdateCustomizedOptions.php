@@ -63,7 +63,7 @@ class UpdateCustomizedOptions
         Quote $subject,
         int $itemId,
         DataObject $buyRequest,
-        DataObject $params = null
+        ?DataObject $params = null
     ): void {
         $item = $subject->getItemById($itemId);
         if ($item) {

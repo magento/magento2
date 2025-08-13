@@ -67,7 +67,7 @@ class Collection implements ResetAfterRequestInterface
         CollectionFactory $attributeCollectionFactory,
         ProductFactory $productFactory,
         MetadataPool $metadataPool,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->productFactory = $productFactory;

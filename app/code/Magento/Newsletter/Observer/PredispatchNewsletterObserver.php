@@ -51,7 +51,7 @@ class PredispatchNewsletterObserver implements ObserverInterface
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
-        Config $newsletterConfig = null
+        ?Config $newsletterConfig = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;

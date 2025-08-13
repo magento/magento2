@@ -176,7 +176,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @return bool|mixed
      */
-    private function isSynchronousInvocationOnlyTrue(\DOMElement $synchronousInvocationOnlyNode = null)
+    private function isSynchronousInvocationOnlyTrue(?\DOMElement $synchronousInvocationOnlyNode = null)
     {
         if ($synchronousInvocationOnlyNode === null) {
             return false;

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -406,6 +406,19 @@
                 <item name="Magento\Framework\App\Cache\State" xsi:type="number">10000</item>
                 <item name="Magento\Framework\DB\Logger\LoggerProxy" xsi:type="number">9999</item>
                 <item name="Magento\Framework\DB\Adapter\Pdo\Mysql" xsi:type="number">9999</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Config\Model\Data\ReEncryptorList\CoreConfigDataReEncryptor" type="Magento\EncryptionKey\Model\Data\ReEncryptorList\ReEncryptor">
+        <arguments>
+            <argument name="description" xsi:type="string">Re-encrypts 'value' column in the 'core_config_data' DB table.</argument>
+            <argument name="handler" xsi:type="object">Magento\Config\Model\Data\ReEncryptorList\CoreConfigDataReEncryptor\Handler</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\EncryptionKey\Model\Data\ReEncryptorList">
+        <arguments>
+            <argument name="reEncryptors" xsi:type="array">
+                <item name="core_config_data" xsi:type="object">Magento\Config\Model\Data\ReEncryptorList\CoreConfigDataReEncryptor</item>
             </argument>
         </arguments>
     </type>

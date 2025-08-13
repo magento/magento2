@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Amqp\Setup;
 
@@ -19,34 +19,34 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * Input key for the options
      */
-    const INPUT_KEY_QUEUE_AMQP_HOST = 'amqp-host';
-    const INPUT_KEY_QUEUE_AMQP_PORT = 'amqp-port';
-    const INPUT_KEY_QUEUE_AMQP_USER = 'amqp-user';
-    const INPUT_KEY_QUEUE_AMQP_PASSWORD = 'amqp-password';
-    const INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST = 'amqp-virtualhost';
-    const INPUT_KEY_QUEUE_AMQP_SSL = 'amqp-ssl';
-    const INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS = 'amqp-ssl-options';
+    public const INPUT_KEY_QUEUE_AMQP_HOST = 'amqp-host';
+    public const INPUT_KEY_QUEUE_AMQP_PORT = 'amqp-port';
+    public const INPUT_KEY_QUEUE_AMQP_USER = 'amqp-user';
+    public const INPUT_KEY_QUEUE_AMQP_PASSWORD = 'amqp-password';
+    public const INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST = 'amqp-virtualhost';
+    public const INPUT_KEY_QUEUE_AMQP_SSL = 'amqp-ssl';
+    public const INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS = 'amqp-ssl-options';
 
     /**
      * Path to the values in the deployment config
      */
-    const CONFIG_PATH_QUEUE_AMQP_HOST = 'queue/amqp/host';
-    const CONFIG_PATH_QUEUE_AMQP_PORT = 'queue/amqp/port';
-    const CONFIG_PATH_QUEUE_AMQP_USER = 'queue/amqp/user';
-    const CONFIG_PATH_QUEUE_AMQP_PASSWORD = 'queue/amqp/password';
-    const CONFIG_PATH_QUEUE_AMQP_VIRTUAL_HOST = 'queue/amqp/virtualhost';
-    const CONFIG_PATH_QUEUE_AMQP_SSL = 'queue/amqp/ssl';
-    const CONFIG_PATH_QUEUE_AMQP_SSL_OPTIONS = 'queue/amqp/ssl_options';
+    public const CONFIG_PATH_QUEUE_AMQP_HOST = 'queue/amqp/host';
+    public const CONFIG_PATH_QUEUE_AMQP_PORT = 'queue/amqp/port';
+    public const CONFIG_PATH_QUEUE_AMQP_USER = 'queue/amqp/user';
+    public const CONFIG_PATH_QUEUE_AMQP_PASSWORD = 'queue/amqp/password';
+    public const CONFIG_PATH_QUEUE_AMQP_VIRTUAL_HOST = 'queue/amqp/virtualhost';
+    public const CONFIG_PATH_QUEUE_AMQP_SSL = 'queue/amqp/ssl';
+    public const CONFIG_PATH_QUEUE_AMQP_SSL_OPTIONS = 'queue/amqp/ssl_options';
 
     /**
      * Default values
      */
-    const DEFAULT_AMQP_HOST = '';
-    const DEFAULT_AMQP_PORT = '5672';
-    const DEFAULT_AMQP_USER = '';
-    const DEFAULT_AMQP_PASSWORD = '';
-    const DEFAULT_AMQP_VIRTUAL_HOST = '/';
-    const DEFAULT_AMQP_SSL = '';
+    public const DEFAULT_AMQP_HOST = '';
+    public const DEFAULT_AMQP_PORT = '5672';
+    public const DEFAULT_AMQP_USER = '';
+    public const DEFAULT_AMQP_PASSWORD = '';
+    public const DEFAULT_AMQP_VIRTUAL_HOST = '/';
+    public const DEFAULT_AMQP_SSL = '';
 
     /**
      * @var ConnectionValidator
@@ -54,8 +54,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $connectionValidator;
 
     /**
-     * Constructor
-     *
      * @param ConnectionValidator $connectionValidator
      */
     public function __construct(ConnectionValidator $connectionValidator)
@@ -64,7 +62,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
@@ -122,7 +120,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
@@ -170,7 +168,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {

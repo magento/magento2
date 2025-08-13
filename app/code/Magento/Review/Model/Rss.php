@@ -43,10 +43,10 @@ class Rss extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Framework\Model\Context $context = null,
-        \Magento\Framework\Registry $registry = null,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\Context $context = null,
+        ?\Magento\Framework\Registry $registry = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->reviewFactory = $reviewFactory;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -51,7 +51,7 @@
         <actionGroup ref="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup" stepKey="selectBillingMethod"/>
 
         <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder"/>
-        <see selector="{{AdminOrderFormMessagesSection.error}}" userInput="The payment method you requested is not available." stepKey="seeErrorMessage"/>
+        <see selector="{{AdminOrderFormMessagesSection.error}}" userInput="This payment method is not available." stepKey="seeErrorMessage"/>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Enable payment method one of "Check/Money Order" and  "Zero Subtotal Checkout" -->

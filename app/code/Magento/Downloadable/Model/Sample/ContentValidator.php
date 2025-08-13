@@ -49,7 +49,7 @@ class ContentValidator
         FileContentValidator $fileContentValidator,
         UrlValidator $urlValidator,
         DomainValidator $domainValidator,
-        File $fileHelper = null
+        ?File $fileHelper = null
     ) {
         $this->fileContentValidator = $fileContentValidator;
         $this->urlValidator = $urlValidator;

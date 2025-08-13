@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddOptionsToSizeAttributeActionGroup">
+        <annotations>
+            <description>Adds size option to a new Attribute on the Configurable Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="position" type="string" defaultValue="0"/>
+            <argument name="size" type="string" defaultValue="S"/>
+        </arguments>
+        <!--Add option 1 to attribute-->
+        <waitForElementVisible selector="{{AdminNewAttributePanel.optionAdminValue('position')}}" stepKey="waitForAdminTextBoxVisible"/>
+        <fillField selector="{{AdminNewAttributePanel.optionAdminValue('position')}}" userInput="{{size}}" stepKey="fillAdminLabel"/>
+        <waitForElementVisible selector="{{AdminNewAttributePanel.optionDefaultStoreValue('position')}}" stepKey="waitForDefaultStoreViewTextBoxVisible"/>
+        <fillField selector="{{AdminNewAttributePanel.optionDefaultStoreValue('position')}}" userInput="{{size}}" stepKey="fillDefaultLabel"/>
+    </actionGroup>
+</actionGroups>

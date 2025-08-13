@@ -130,12 +130,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Quote\Model\ResourceModel\Quote\Collection $quoteResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
-        \Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver $priceTableResolver = null,
-        \Magento\Framework\Indexer\DimensionFactory $dimensionFactory = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        ?\Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
+        ?\Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver $priceTableResolver = null,
+        ?\Magento\Framework\Indexer\DimensionFactory $dimensionFactory = null
     ) {
         $this->setProductEntityId($product->getEntityIdField());
         $this->setProductEntityTableName($product->getEntityTable());

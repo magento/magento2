@@ -42,7 +42,7 @@ class Tree extends \Magento\Backend\Block\Template
         \Magento\Theme\Helper\Storage $storageHelper,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_storageHelper = $storageHelper;
         $this->urlEncoder = $urlEncoder;

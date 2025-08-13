@@ -1,13 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Test\Fixture\AssignCategories as AssignCategoriesFixture;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -17,6 +23,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
 {
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     /** @var ObjectManager */
     private $objectManager;
 
@@ -28,6 +39,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
      */
     protected function setUp(): void
     {
+        $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->uid = $this->objectManager->get(Uid::class);
     }
@@ -90,6 +102,22 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         $categoryAggregation = $this->aggregationCategoryTesting($filterValue, "true");
         $expectedSubcategorie = $this->getSubcategoriesOfCategoryThree() + $this->getSubcategoriesOfCategoryTwo();
         $this->assertEquals($expectedSubcategorie, $categoryAggregation);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, as: 'prod1'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 1'], as: 'cat1'),
+        DataFixture(CategoryFixture::class, ['name' => 'Category 2', 'is_active' => false], as: 'cat2'),
+        DataFixture(AssignCategoriesFixture::class, ['categories' => ['$cat1$', '$cat2$'], 'product' => '$prod1$']),
+    ]
+    public function testAggregationDisabledCategory(): void
+    {
+        $cat1 = $this->fixtures->get('cat1');
+        $cat2 = $this->fixtures->get('cat2');
+        $filterValue = "{category_id: {in: [\"{$cat1->getId()}\",\"{$cat2->getId()}\"]}}";
+        $categoryAggregation = $this->aggregationCategoryTesting($filterValue, 'false');
+        $expectedCategories = [$cat1->getId() => $cat1->getName()];
+        $this->assertEquals($expectedCategories, $categoryAggregation);
     }
 
     /**

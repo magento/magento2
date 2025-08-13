@@ -1190,7 +1190,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param array $request
      * @return Curl
      */
-    private function getCurl(array $request = null): Curl
+    private function getCurl(?array $request = null): Curl
     {
         if (!$this->curl) {
             $this->curl = $this->_curlFactory->create();

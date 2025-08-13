@@ -50,7 +50,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Report\Collection\Ab
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\ResourceModel\Report $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $resource->init($this->getTableByAggregationPeriod('daily'));
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);

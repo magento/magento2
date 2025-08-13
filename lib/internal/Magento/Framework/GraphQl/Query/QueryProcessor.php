@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +53,7 @@ class QueryProcessor
         ExceptionFormatter $exceptionFormatter,
         QueryComplexityLimiter $queryComplexityLimiter,
         ErrorHandlerInterface $errorHandler,
-        QueryParser $queryParser = null
+        ?QueryParser $queryParser = null
     ) {
         $this->exceptionFormatter = $exceptionFormatter;
         $this->queryComplexityLimiter = $queryComplexityLimiter;
@@ -75,9 +75,9 @@ class QueryProcessor
     public function process(
         Schema $schema,
         DocumentNode|string $source,
-        ContextInterface $contextValue = null,
-        array $variableValues = null,
-        string $operationName = null
+        ?ContextInterface $contextValue = null,
+        ?array $variableValues = null,
+        ?string $operationName = null
     ): array {
         if (is_string($source)) {
             $source = $this->queryParser->parse($source);
@@ -88,7 +88,7 @@ class QueryProcessor
         }
 
         $rootValue = null;
-        return GraphQL::executeQuery(
+        $executionResult = GraphQL::executeQuery(
             $schema,
             $source,
             $rootValue,
@@ -100,5 +100,16 @@ class QueryProcessor
         )->toArray(
             (int) ($this->exceptionFormatter->shouldShowDetail() ? DebugFlag::INCLUDE_DEBUG_MESSAGE : false)
         );
+        if (!empty($executionResult['errors'])) {
+            foreach ($executionResult['errors'] as $error) {
+                if (isset($error['extensions']['error_code'])) {
+                    $executionResult['data']['errors'][] = [
+                        'message' => $error['message'],
+                        'code' => $error['extensions']['error_code']
+                    ];
+                }
+            }
+        }
+        return $executionResult;
     }
 }

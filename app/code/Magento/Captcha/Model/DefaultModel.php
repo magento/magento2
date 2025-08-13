@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2012 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -114,7 +114,7 @@ class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Mo
         \Magento\Captcha\Helper\Data $captchaData,
         \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory,
         $formId,
-        Random $randomMath = null,
+        ?Random $randomMath = null,
         ?UserContextInterface $userContext = null
     ) {
         $this->session = $session;
@@ -576,9 +576,8 @@ class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Mo
      */
     protected function gc()
     {
-        // @codingStandardsIgnoreStart
+        // phpcs:ignore
         return; // required for static testing to pass
-        // @codingStandardsIgnoreEnd
     }
 
     /**

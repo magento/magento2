@@ -84,13 +84,13 @@ class UrlRewrite extends AbstractModel
     public function __construct(
         Context $context,
         Registry $registry,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        CacheContext $cacheContext = null,
-        EventManager $eventManager = null,
-        UrlFinderInterface $urlFinder = null,
+        ?Json $serializer = null,
+        ?CacheContext $cacheContext = null,
+        ?EventManager $eventManager = null,
+        ?UrlFinderInterface $urlFinder = null,
         array $entityToCacheTagMap = []
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

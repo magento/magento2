@@ -51,7 +51,7 @@ class WriteFile implements WriteFileInterface
     public function __construct(
         DriverInterface $driver,
         SegmentNames $segmentNames,
-        Filesystem $filesystem = null
+        ?Filesystem $filesystem = null
     ) {
         $this->segmentNames = $segmentNames;
         $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);

@@ -58,7 +58,7 @@ class ShipmentDocumentFactory
         ShipmentFactory $shipmentFactory,
         HydratorPool $hydratorPool,
         TrackFactory $trackFactory,
-        ExtensionAttributesProcessor $extensionAttributesProcessor = null
+        ?ExtensionAttributesProcessor $extensionAttributesProcessor = null
     ) {
         $this->shipmentFactory = $shipmentFactory;
         $this->trackFactory = $trackFactory;
@@ -84,10 +84,10 @@ class ShipmentDocumentFactory
         OrderInterface $order,
         array $items = [],
         array $tracks = [],
-        ShipmentCommentCreationInterface $comment = null,
+        ?ShipmentCommentCreationInterface $comment = null,
         $appendComment = false,
         array $packages = [],
-        ShipmentCreationArgumentsInterface $arguments = null
+        ?ShipmentCreationArgumentsInterface $arguments = null
     ) {
         $shipmentItems = empty($items)
             ? $this->getQuantitiesFromOrderItems($order->getItems())

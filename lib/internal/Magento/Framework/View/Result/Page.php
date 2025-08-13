@@ -139,7 +139,7 @@ class Page extends Layout
         PageLayoutReader $pageLayoutReader,
         $template,
         $isIsolated = false,
-        EntitySpecificHandlesList $entitySpecificHandlesList = null
+        ?EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         $this->request = $context->getRequest();
         $this->assetRepo = $context->getAssetRepository();

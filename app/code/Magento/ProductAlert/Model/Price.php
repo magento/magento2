@@ -1,8 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
+ **/
 namespace Magento\ProductAlert\Model;
 
 use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
@@ -29,8 +29,6 @@ use Magento\ProductAlert\Model\ResourceModel\Price\Customer\Collection;
  * @method int getStoreId()
  * @method \Magento\ProductAlert\Model\Stock setStoreId(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */
@@ -53,8 +51,8 @@ class Price extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\ProductAlert\Model\ResourceModel\Price\Customer\CollectionFactory $customerColFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_customerColFactory = $customerColFactory;
@@ -95,7 +93,7 @@ class Price extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Method for deleting customer from website.
+     * Method for deleting customer's price alert from website.
      *
      * @param int $customerId
      * @param int $websiteId

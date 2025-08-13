@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,9 +112,9 @@ class Categories extends AbstractModifier
         DbHelper $dbHelper,
         UrlInterface $urlBuilder,
         ArrayManager $arrayManager,
-        SerializerInterface $serializer = null,
-        AuthorizationInterface $authorization = null,
-        Session $session = null
+        ?SerializerInterface $serializer = null,
+        ?AuthorizationInterface $authorization = null,
+        ?Session $session = null
     ) {
         $this->locator = $locator;
         $this->categoryCollectionFactory = $categoryCollectionFactory;

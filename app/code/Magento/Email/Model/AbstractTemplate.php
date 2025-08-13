@@ -199,7 +199,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         array $data = [],
-        Database $fileStorageDatabase = null
+        ?Database $fileStorageDatabase = null
     ) {
         $this->design = $design;
         $this->area = isset($data['area']) ? $data['area'] : null;

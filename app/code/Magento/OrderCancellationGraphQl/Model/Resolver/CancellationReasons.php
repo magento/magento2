@@ -23,8 +23,8 @@ class CancellationReasons implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!is_array($value['order_cancellation_reasons'])) {
             $cancellationReasons = json_decode($value['order_cancellation_reasons'], true);

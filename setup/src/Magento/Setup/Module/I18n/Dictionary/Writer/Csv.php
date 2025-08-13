@@ -47,7 +47,7 @@ class Csv implements WriterInterface
             $fields[] = $contextValue;
         }
 
-        fputcsv($this->_fileHandler, $fields, ',', '"');
+        fputcsv($this->_fileHandler, $fields, ',', '"', '\\');
     }
 
     /**

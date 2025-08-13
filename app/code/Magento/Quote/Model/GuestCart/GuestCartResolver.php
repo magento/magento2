@@ -64,7 +64,7 @@ class GuestCartResolver
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function resolve(string $predefinedMaskedQuoteId = null): Quote
+    public function resolve(?string $predefinedMaskedQuoteId = null): Quote
     {
         $maskedQuoteId = $this->guestCartManagement->createEmptyCart();
 

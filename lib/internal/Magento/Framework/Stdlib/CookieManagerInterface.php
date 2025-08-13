@@ -40,7 +40,7 @@ interface CookieManagerInterface extends CookieReaderInterface
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function setSensitiveCookie($name, $value, SensitiveCookieMetadata $metadata = null);
+    public function setSensitiveCookie($name, $value, ?SensitiveCookieMetadata $metadata = null);
 
     /**
      * Set a value in a public cookie with the given $name $value pairing.
@@ -56,7 +56,7 @@ interface CookieManagerInterface extends CookieReaderInterface
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function setPublicCookie($name, $value, PublicCookieMetadata $metadata = null);
+    public function setPublicCookie($name, $value, ?PublicCookieMetadata $metadata = null);
 
     /**
      * Deletes a cookie with the given name.
@@ -69,5 +69,5 @@ interface CookieManagerInterface extends CookieReaderInterface
      *     received and accepted the request to delete this cookie.
      * @throws InputException If the cookie name is empty or contains invalid characters.
      */
-    public function deleteCookie($name, CookieMetadata $metadata = null);
+    public function deleteCookie($name, ?CookieMetadata $metadata = null);
 }

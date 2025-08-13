@@ -82,7 +82,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         $sourceData = null,
         $store = null,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_totalFactory = $totalFactory;

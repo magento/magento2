@@ -86,10 +86,10 @@ class SaveHandler
         CartItemPersister $cartItemPersister,
         BillingAddressPersister $billingAddressPersister,
         ShippingAssignmentPersister $shippingAssignmentPersister,
-        AddressRepositoryInterface $addressRepository = null,
-        AddressInterfaceFactory $addressFactory = null,
-        ShippingAddressPersister $shippingAddressPersister = null,
-        QuoteSession $quoteSession = null
+        ?AddressRepositoryInterface $addressRepository = null,
+        ?AddressInterfaceFactory $addressFactory = null,
+        ?ShippingAddressPersister $shippingAddressPersister = null,
+        ?QuoteSession $quoteSession = null
     ) {
         $this->quoteResourceModel = $quoteResource;
         $this->cartItemPersister = $cartItemPersister;

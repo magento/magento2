@@ -126,7 +126,7 @@ class Fault
         \Magento\Framework\Webapi\Exception $exception,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         State $appState,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_soapFaultCode = $exception->getOriginator();
         $this->_parameters = $exception->getDetails();

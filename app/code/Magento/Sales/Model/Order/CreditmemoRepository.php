@@ -52,7 +52,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;

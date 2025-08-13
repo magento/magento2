@@ -35,9 +35,9 @@ interface ShipOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\ShipmentCommentCreationInterface $comment = null,
         array $tracks = [],
         array $packages = [],
-        \Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
+        ?\Magento\Sales\Api\Data\ShipmentCreationArgumentsInterface $arguments = null
     );
 }

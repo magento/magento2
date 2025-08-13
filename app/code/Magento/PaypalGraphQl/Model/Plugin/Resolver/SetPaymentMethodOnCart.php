@@ -100,8 +100,8 @@ class SetPaymentMethodOnCart
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $paymentCode = $this->arrayManagerFactory->create()->get(self::PATH_CODE, $args) ?? '';
         if (!$this->isAllowedPaymentMethod($paymentCode)) {

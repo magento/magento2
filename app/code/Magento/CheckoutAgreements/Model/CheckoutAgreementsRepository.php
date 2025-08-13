@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CheckoutAgreements\Model;
@@ -90,8 +90,8 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         AgreementResource $agreementResource,
         AgreementFactory $agreementFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $agreementsList = null,
-        ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
+        ?\Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface $agreementsList = null,
+        ?ActiveStoreAgreementsFilter $activeStoreAgreementsFilter = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;

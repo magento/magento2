@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -26,23 +25,23 @@ class CustomerAuthUpdate
     protected $customerResourceModel;
 
     /**
-     * @var Customer
+     * @var CustomerFactory
      */
-    private $customerModel;
+    private $customerFactory;
 
     /**
      * @param CustomerRegistry $customerRegistry
      * @param CustomerResourceModel $customerResourceModel
-     * @param Customer|null $customerModel
+     * @param CustomerFactory $customerFactory
      */
     public function __construct(
         CustomerRegistry $customerRegistry,
         CustomerResourceModel $customerResourceModel,
-        Customer $customerModel = null
+        CustomerFactory $customerFactory
     ) {
         $this->customerRegistry = $customerRegistry;
         $this->customerResourceModel = $customerResourceModel;
-        $this->customerModel = $customerModel ?: ObjectManager::getInstance()->get(Customer::class);
+        $this->customerFactory = $customerFactory;
     }
 
     /**
@@ -55,9 +54,9 @@ class CustomerAuthUpdate
     public function saveAuth($customerId)
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
-
-        $this->customerResourceModel->load($this->customerModel, $customerId);
-        $currentLockExpiresVal = $this->customerModel->getData('lock_expires');
+        $customerModel = $this->customerFactory->create();
+        $this->customerResourceModel->load($customerModel, $customerId);
+        $currentLockExpiresVal = $customerModel->getData('lock_expires');
         $newLockExpiresVal = $customerSecure->getData('lock_expires');
 
         $this->customerResourceModel->getConnection()->update(
@@ -71,7 +70,7 @@ class CustomerAuthUpdate
         );
 
         if ($currentLockExpiresVal !== $newLockExpiresVal) {
-            $this->customerModel->reindex();
+            $customerModel->reindex();
         }
 
         return $this;

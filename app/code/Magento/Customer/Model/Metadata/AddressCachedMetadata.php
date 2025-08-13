@@ -25,7 +25,7 @@ class AddressCachedMetadata extends CachedMetadata implements AddressMetadataInt
      */
     public function __construct(
         AddressMetadata $metadata,
-        AttributeMetadataCache $attributeMetadataCache = null
+        ?AttributeMetadataCache $attributeMetadataCache = null
     ) {
         parent::__construct($metadata, $attributeMetadataCache);
     }

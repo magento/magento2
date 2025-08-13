@@ -62,8 +62,8 @@ class File extends AbstractModel implements FileInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
         \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_themeFactory = $themeFactory;

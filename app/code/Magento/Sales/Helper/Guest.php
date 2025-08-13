@@ -114,8 +114,8 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository = null,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria = null
+        ?\Magento\Sales\Api\OrderRepositoryInterface $orderRepository = null,
+        ?\Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria = null
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->storeManager = $storeManager;

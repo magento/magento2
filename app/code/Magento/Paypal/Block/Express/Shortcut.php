@@ -98,7 +98,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * @param string $checkoutType
      * @param string $alias
      * @param string $shortcutTemplate
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Checkout\Model\Session|null $checkoutSession
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -114,7 +114,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $checkoutType,
         $alias,
         $shortcutTemplate,
-        \Magento\Checkout\Model\Session $checkoutSession = null,
+        ?\Magento\Checkout\Model\Session $checkoutSession = null,
         array $data = []
     ) {
         $this->_paypalConfigFactory = $paypalConfigFactory;

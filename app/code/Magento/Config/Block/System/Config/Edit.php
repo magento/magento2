@@ -59,7 +59,7 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
         array $data = [],
-        Json $jsonSerializer = null
+        ?Json $jsonSerializer = null
     ) {
         $this->_configStructure = $configStructure;
         $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(Json::class);

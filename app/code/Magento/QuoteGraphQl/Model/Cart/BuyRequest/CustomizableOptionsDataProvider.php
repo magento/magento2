@@ -30,7 +30,7 @@ class CustomizableOptionsDataProvider implements BuyRequestDataProviderInterface
      */
     public function __construct(
         ArrayManager $arrayManager,
-        ArrayManagerFactory $arrayManagerFactory = null
+        ?ArrayManagerFactory $arrayManagerFactory = null
     ) {
         $this->arrayManagerFactory = $arrayManagerFactory
             ?? ObjectManager::getInstance()->get(ArrayManagerFactory::class);

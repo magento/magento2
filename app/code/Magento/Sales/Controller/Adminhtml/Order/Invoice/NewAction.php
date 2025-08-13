@@ -57,7 +57,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
         Registry $registry,
         PageFactory $resultPageFactory,
         InvoiceService $invoiceService,
-        OrderRepositoryInterface $orderRepository = null
+        ?OrderRepositoryInterface $orderRepository = null
     ) {
         parent::__construct($context);
 
