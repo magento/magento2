@@ -55,7 +55,7 @@ class IsExcluded implements IsPathExcludedInterface
     public function __construct(
         ExcludedPatternsConfigInterface $config,
         Filesystem $filesystem,
-        ScopeConfigInterface $coreConfig = null
+        ?ScopeConfigInterface $coreConfig = null
     ) {
         $this->config = $config;
         $this->filesystem = $filesystem;

@@ -64,7 +64,7 @@ class StatementFactory
         string $type,
         string $statement,
         string $resource,
-        string $elementType = null
+        ?string $elementType = null
     ) {
         $className = $elementType === Reference::TYPE ? $this->referenceClassName : $this->className;
         return $this->objectManager->create($className, [

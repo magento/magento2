@@ -22,7 +22,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::ship';
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
@@ -62,8 +62,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
         \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator,
         \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender,
-        \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface $shipmentValidator = null,
-        SalesData $salesData = null
+        ?\Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface $shipmentValidator = null,
+        ?SalesData $salesData = null
     ) {
         parent::__construct($context);
 

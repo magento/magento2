@@ -398,7 +398,7 @@ class TimezoneTest extends TestCase
      * @param string $configuredTimezone
      * @param string|null $scope
      */
-    private function scopeConfigWillReturnConfiguredTimezone(string $configuredTimezone, string $scope = null)
+    private function scopeConfigWillReturnConfiguredTimezone(string $configuredTimezone, ?string $scope = null)
     {
         $this->scopeConfig->expects($this->atLeastOnce())
             ->method('getValue')

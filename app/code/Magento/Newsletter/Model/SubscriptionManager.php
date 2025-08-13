@@ -73,7 +73,7 @@ class SubscriptionManager implements SubscriptionManagerInterface
         ScopeConfigInterface $scopeConfig,
         AccountManagementInterface $customerAccountManagement,
         CustomerRepositoryInterface $customerRepository,
-        CustomerSubscriberCache $customerSubscriberCache = null
+        ?CustomerSubscriberCache $customerSubscriberCache = null
     ) {
         $this->subscriberFactory = $subscriberFactory;
         $this->logger = $logger;

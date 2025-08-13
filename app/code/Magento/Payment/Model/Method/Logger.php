@@ -34,7 +34,7 @@ class Logger
      */
     public function __construct(
         LoggerInterface $logger,
-        ConfigInterface $config = null
+        ?ConfigInterface $config = null
     ) {
         $this->logger = $logger;
         $this->config = $config;
@@ -48,7 +48,7 @@ class Logger
      * @param bool|null $forceDebug
      * @return void
      */
-    public function debug(array $data, array $maskKeys = null, $forceDebug = null)
+    public function debug(array $data, ?array $maskKeys = null, $forceDebug = null)
     {
         $maskKeys = $maskKeys !== null ? $maskKeys : $this->getDebugReplaceFields();
         $debugOn = $forceDebug !== null ? $forceDebug : $this->isDebugOn();

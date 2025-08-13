@@ -30,7 +30,7 @@ class NotificationStorage
      */
     public function __construct(
         FrontendInterface $cache,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);

@@ -15,6 +15,7 @@ use Magento\Framework\Setup\Declaration\Schema\Db\StatementAggregator;
 use Magento\Framework\Setup\Declaration\Schema\Db\StatementFactory;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -50,6 +51,11 @@ class DbSchemaWriterTest extends TestCase
      */
     private $model;
 
+    /***
+     * @var DtoFactoriesTable|MockObject
+     */
+    private $dtoFactoriesTable;
+
     protected function setUp(): void
     {
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
@@ -70,12 +76,16 @@ class DbSchemaWriterTest extends TestCase
         $this->resourceConnection->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
+        $this->dtoFactoriesTable = $this->getMockBuilder(DtoFactoriesTable::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new DbSchemaWriter(
             $this->resourceConnection,
             $this->statementFactory,
             $this->dryRunLogger,
-            $this->sqlVersionProvider
+            $this->sqlVersionProvider,
+            $this->dtoFactoriesTable
         );
     }
 

@@ -26,7 +26,7 @@ class Sort implements ArgumentApplierInterface
     /**
      * @param SortOrderBuilder|null $sortOrderBuilder
      */
-    public function __construct(SortOrderBuilder $sortOrderBuilder = null)
+    public function __construct(?SortOrderBuilder $sortOrderBuilder = null)
     {
         $this->sortOrderBuilder = $sortOrderBuilder ?: ObjectManager::getInstance()
             ->get(SortOrderBuilder::class);

@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe.
+# All Rights Reserved.
 type Mutation {
     addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput @doc(description: "An input object that defines which configurable products to add to the cart.")): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\AddConfigurableProductsToCart") @doc(description: "Add one or more configurable products to the specified cart. We recommend using `addProductsToCart` instead.")
 }
@@ -110,4 +110,8 @@ type ConfigurableProductOptionValue @doc(description: "Defines a value for a con
 
 type StoreConfig {
     configurable_thumbnail_source : String @doc(description: "Indicates whether the `parent` or child (`itself`) thumbnail should be used in the cart for configurable products.")
+}
+
+type ConfigurableOrderItem implements OrderItemInterface {
+    parent_sku: String @doc(description: "The SKU of parent product.")
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportTwoProductsInParallelTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import Products"/>
+            <title value="Verify Two imports from admin in parallel."/>
+            <description value="Two imports from admin in parallel."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-7463"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete all imported products -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfProductsPerPage">
+                <argument name="perPage" value="100"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+            <!-- Logout from Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Navigate to the Import page in the admin panel -->
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="goToImportIndexPage"/>
+        <!-- Set import settings: Entity Type > Product, Import Behavior > Add/Update,
+             Select File to Import > press "Check Data" and Validate Message -->
+        <actionGroup ref="AdminImportDataCheckActionGroup" stepKey="adminImportButtonVisible">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="ACPT-846.1.csv"/>
+            <argument name="importValidationMessage" value="Checked rows: 15, checked entities: 15, invalid rows: 0, total errors: 0"/>
+        </actionGroup>
+        <!-- Open a new tab and navigate to the Import page -->
+        <openNewTab stepKey="openNewTab"/>
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="goToImportIndexPage1"/>
+        <!-- In New Tab Set import settings: Entity Type > Product, Import Behavior > Add/Update,
+             Select File to Import > press "Check Data" and Validate Message -->
+        <actionGroup ref="AdminImportDataCheckActionGroup" stepKey="adminImportButtonVisibleForNewTab">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="ACPT-846.2.csv"/>
+            <argument name="importValidationMessage" value="Checked rows: 15, checked entities: 15, invalid rows: 0, total errors: 0"/>
+        </actionGroup>
+        <!-- Switch back to the previous tab -->
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <!-- Click On Import Button and Validate Message -->
+        <actionGroup ref="AdminImportButtonClickActionGroup" stepKey="ImportButtonClick">
+            <argument name="importNoticeMessage" value="Created: 15, Updated: 0, Deleted: 0"/>
+        </actionGroup>
+        <!-- Switch to the next tab -->
+        <switchToNextTab stepKey="switchToNextTab"/>
+        <!-- Click On Import Button and Validate Message -->
+        <actionGroup ref="AdminImportButtonClickActionGroup" stepKey="ImportButtonClickInNextTab">
+            <argument name="importNoticeMessage" value="Created: 15, Updated: 0, Deleted: 0"/>
+        </actionGroup>
+    </test>
+</tests>

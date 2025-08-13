@@ -163,7 +163,7 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
                 'requestQuantity' => ['qty' => 101],
                 'expectedResponse' => [
                     'success' => false,
-                    'error_message' => 'The requested qty is not available']
+                    'error_message' => 'Not enough items for sale']
             ],
             [
                 'requestQuantity' => ['qty' => 230],

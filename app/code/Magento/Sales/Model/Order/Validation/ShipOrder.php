@@ -55,7 +55,7 @@ class ShipOrder implements ShipOrderInterface
         OrderValidatorInterface $orderValidator,
         ShipmentValidatorInterface $shipmentValidator,
         ValidatorResultMerger $validatorResultMerger,
-        ShipmentItemsValidatorInterface $itemsValidator = null
+        ?ShipmentItemsValidatorInterface $itemsValidator = null
     ) {
         $this->orderValidator = $orderValidator;
         $this->shipmentValidator = $shipmentValidator;
@@ -84,10 +84,10 @@ class ShipOrder implements ShipOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        ShipmentCommentCreationInterface $comment = null,
+        ?ShipmentCommentCreationInterface $comment = null,
         array $tracks = [],
         array $packages = [],
-        ShipmentCreationArgumentsInterface $arguments = null
+        ?ShipmentCreationArgumentsInterface $arguments = null
     ) {
         $orderValidationResult = $this->orderValidator->validate(
             $order,

@@ -66,9 +66,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        IndexerRegistry $indexerRegistry = null,
-        DependencyInfoProvider $dependencyInfoProvider = null,
-        MakeSharedIndexValid $makeSharedValid = null,
+        ?IndexerRegistry $indexerRegistry = null,
+        ?DependencyInfoProvider $dependencyInfoProvider = null,
+        ?MakeSharedIndexValid $makeSharedValid = null,
         ?LoggerInterface $logger = null
     ) {
         $this->indexerRegistry = $indexerRegistry;

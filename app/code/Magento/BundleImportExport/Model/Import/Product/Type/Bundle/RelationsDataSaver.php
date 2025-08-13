@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type\Bundle;
 
@@ -31,7 +31,7 @@ class RelationsDataSaver
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
-        Relation $productRelation = null
+        ?Relation $productRelation = null
     ) {
         $this->resource        = $resource;
         $this->productRelation = $productRelation

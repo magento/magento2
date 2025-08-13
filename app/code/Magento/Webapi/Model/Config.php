@@ -58,7 +58,7 @@ class Config implements ConfigInterface
     public function __construct(
         WebapiCache $cache,
         Reader $configReader,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->configReader = $configReader;

@@ -42,7 +42,7 @@ abstract class AbstractOutput implements OutputInterface
      *
      * @param array|null $config
      */
-    public function __construct(array $config = null)
+    public function __construct(?array $config = null)
     {
         if (!empty($config['filterPattern'])) {
             $this->setFilterPattern($config['filterPattern']);

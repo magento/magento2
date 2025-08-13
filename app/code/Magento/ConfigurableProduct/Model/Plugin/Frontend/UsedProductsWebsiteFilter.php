@@ -27,7 +27,7 @@ class UsedProductsWebsiteFilter
     public function beforeGetUsedProducts(
         Configurable $subject,
         ProductInterface $product,
-        array $requiredAttributeIds = null
+        ?array $requiredAttributeIds = null
     ): void {
         $subject->setStoreFilter($product->getStore(), $product);
     }

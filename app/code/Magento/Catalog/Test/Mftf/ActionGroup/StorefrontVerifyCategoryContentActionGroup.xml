@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyCategoryContentActionGroup">
+        <annotations>
+            <description>Verify category content on storefront including image, description, meta title, and product count</description>
+        </annotations>
+        <arguments>
+            <argument name="description" type="string" defaultValue="categoryDescription"/>
+            <argument name="metaTitle" type="string" defaultValue="metaTitle"/>
+            <argument name="productCount" type="string" defaultValue="1"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.categoryImage}}"
+                               stepKey="verifyImageVisible"/>
+        <waitForText userInput="{{description}}"
+                     selector="{{StorefrontCategoryMainSection.CatalogDescriptionWithoutPTag}}"
+                     stepKey="verifyDescription"/>
+        <waitForElement selector="{{StorefrontCategoryHeadSection.pageTitle(metaTitle)}}"
+                        stepKey="verifyMetaTitle"/>
+        <waitForText userInput="{{productCount}}" selector="{{StorefrontCategoryMainSection.productCount}}"
+                     stepKey="verifyProductCount"/>
+    </actionGroup>
+</actionGroups>

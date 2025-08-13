@@ -33,7 +33,7 @@ class GuestOrderTest extends GraphQlAbstract
   guestOrder(input: {
       number: "%number",
       email: "%email",
-      postcode: "%postcode"
+      lastname: "%lastname"
   }) {
     number
     email
@@ -65,7 +65,7 @@ QUERY;
             [
                 '%number' => $order->getIncrementId(),
                 '%email' => $order->getBillingAddress()->getEmail(),
-                '%postcode' => $order->getBillingAddress()->getPostcode(),
+                '%lastname' => $order->getBillingAddress()->getLastname(),
             ]
         );
         $response = $this->graphQlQuery($query);
@@ -106,7 +106,7 @@ QUERY;
             [
                 '%number' => $order->getIncrementId(),
                 '%email' => $order->getBillingAddress()->getEmail(),
-                '%postcode' => $order->getBillingAddress()->getPostcode(),
+                '%lastname' => $order->getBillingAddress()->getLastname(),
             ]
         );
         $this->graphQlQuery($query);
@@ -133,7 +133,7 @@ QUERY;
             [
                 '%number' => $order->getIncrementId(),
                 '%email' => 'incorrect' . $order->getBillingAddress()->getEmail(),
-                '%postcode' => $order->getBillingAddress()->getPostcode(),
+                '%lastname' => $order->getBillingAddress()->getLastname(),
             ]
         );
         $this->graphQlQuery($query);

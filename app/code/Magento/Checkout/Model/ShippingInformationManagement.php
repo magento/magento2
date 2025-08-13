@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -133,9 +133,9 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         AddressRepositoryInterface $addressRepository,
         ScopeConfigInterface $scopeConfig,
         TotalsCollector $totalsCollector,
-        CartExtensionFactory $cartExtensionFactory = null,
-        ShippingAssignmentFactory $shippingAssignmentFactory = null,
-        ShippingFactory $shippingFactory = null,
+        ?CartExtensionFactory $cartExtensionFactory = null,
+        ?ShippingAssignmentFactory $shippingAssignmentFactory = null,
+        ?ShippingFactory $shippingFactory = null,
         ?AddressComparatorInterface $addressComparator = null,
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;

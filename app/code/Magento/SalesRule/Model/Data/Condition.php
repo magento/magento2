@@ -59,7 +59,7 @@ class Condition extends \Magento\Framework\Api\AbstractExtensibleObject implemen
      * @param ConditionInterface[]|null $conditions
      * @return $this
      */
-    public function setConditions(array $conditions = null)
+    public function setConditions(?array $conditions = null)
     {
         return $this->setData(self::KEY_CONDITIONS, $conditions);
     }

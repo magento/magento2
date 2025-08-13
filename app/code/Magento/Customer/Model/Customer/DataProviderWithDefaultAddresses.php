@@ -120,9 +120,9 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         $allowToShowHiddenAttributes = true,
         array $meta = [],
         array $data = [],
-        CustomerFactory $customerFactory = null,
+        ?CustomerFactory $customerFactory = null,
         ?ContextInterface $context = null,
-        CustomerRepositoryInterface $customerRepository = null
+        ?CustomerRepositoryInterface $customerRepository = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $customerCollectionFactory->create();

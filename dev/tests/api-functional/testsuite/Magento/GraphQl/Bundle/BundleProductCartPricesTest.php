@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -113,11 +102,7 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         $query = $this->getCartQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
-        // price is the bundle product price as in this case the options don't have prices
-        // specialPrice is the bundle product price * bundle product special price %
-        // originalItemPriceProduct1 is the bundle product price
-        // originalItemPriceProduct1 is with 10% discount as the special price
-        $expectedResponse = $this->getExpectedResponse(15, 30, 30, 13.5, 27, 15, 13.5);
+        $expectedResponse = $this->getExpectedResponse(15, 30, 30, 13.5, 27, 15, 15);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -185,11 +170,7 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         $query = $this->getCartQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
-        // price is the bundle product price + option fixed price
-        // specialPrice is the bundle product price + option fixed price * bundle product special price %
-        // originalItemPriceProduct1 is the bundle product price
-        // originalItemPriceProduct1 is with 10% discount as the special price
-        $expectedResponse = $this->getExpectedResponse(25, 50, 50, 22.5, 45, 25, 22.5);
+        $expectedResponse = $this->getExpectedResponse(25, 50, 50, 22.5, 45, 25, 25);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -265,11 +246,7 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         $query = $this->getCartQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
-        // price is the bundle product price + options fixed prices
-        // specialPrice is the bundle product price + options fixed prices * bundle product special price %
-        // originalItemPriceProduct1 is the bundle product price
-        // originalItemPriceProduct1 is with 10% discount as the special price
-        $expectedResponse = $this->getExpectedResponse(45, 90, 90, 40.50, 81, 45, 40.5);
+        $expectedResponse = $this->getExpectedResponse(45, 90, 90, 40.50, 81, 45, 45);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -337,12 +314,7 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         $query = $this->getCartQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
-        // price is the (bundle product price * option percent price) + bundle product price
-        // specialPrice is the (bundle product price * option percent price) +
-        // bundle product price * bundle product special price %
-        // originalItemPriceProduct1 is the bundle product price
-        // originalItemPriceProduct1 is with 10% discount as the special price
-        $expectedResponse = $this->getExpectedResponse(18, 36, 36, 16.20, 32.40, 18, 16.2);
+        $expectedResponse = $this->getExpectedResponse(18, 36, 36, 16.20, 32.40, 18, 18);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -418,12 +390,7 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         $query = $this->getCartQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
-        // price is the (bundle product price * options percent price) + bundle product price
-        // specialPrice is the (bundle product price * options percent price) +
-        // bundle product price * bundle product special price %
-        // originalItemPriceProduct1 is the bundle product price
-        // originalItemPriceProduct1 is with 10% discount as the special price
-        $expectedResponse = $this->getExpectedResponse(19.5, 39, 39, 17.55, 35.10, 19.5, 17.55);
+        $expectedResponse = $this->getExpectedResponse(19.5, 39, 39, 17.55, 35.10, 19.5, 19.5);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -499,12 +466,7 @@ class BundleProductCartPricesTest extends GraphQlAbstract
         $query = $this->getCartQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
 
-        // price is the (bundle product price * option percent price) + bundle product price + option fixed price
-        // specialPrice is the (bundle product price * option percent price) + bundle product price +
-        // option fixed price * bundle product special price %
-        // originalItemPriceProduct1 is the bundle product price
-        // originalItemPriceProduct1 is with 10% discount as the special price
-        $expectedResponse = $this->getExpectedResponse(28, 56, 56, 25.20, 50.40, 28, 25.2);
+        $expectedResponse = $this->getExpectedResponse(28, 56, 56, 25.20, 50.40, 28, 28);
 
         $this->assertEquals($expectedResponse, $response);
     }
@@ -623,7 +585,7 @@ class BundleProductCartPricesTest extends GraphQlAbstract
                                 "currency" => "USD"
                             ],
                             "original_item_price" => [
-                                "value" => 25, // product 1 special_price(15) + product 2 price (10)
+                                "value" => 30, // product 1 price(20) + product 2 price (10)
                                 "currency" => "USD"
                             ]
                         ]

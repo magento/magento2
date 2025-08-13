@@ -147,8 +147,8 @@ class InvoiceOrder implements InvoiceOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        InvoiceCommentCreationInterface $comment = null,
-        InvoiceCreationArgumentsInterface $arguments = null
+        ?InvoiceCommentCreationInterface $comment = null,
+        ?InvoiceCreationArgumentsInterface $arguments = null
     ) {
         return $this->orderMutex->execute(
             (int) $orderId,
@@ -189,8 +189,8 @@ class InvoiceOrder implements InvoiceOrderInterface
         array $items = [],
         $notify = false,
         $appendComment = false,
-        InvoiceCommentCreationInterface $comment = null,
-        InvoiceCreationArgumentsInterface $arguments = null
+        ?InvoiceCommentCreationInterface $comment = null,
+        ?InvoiceCreationArgumentsInterface $arguments = null
     ) {
         $order = $this->orderRepository->get($orderId);
         $invoice = $this->invoiceDocumentFactory->create(

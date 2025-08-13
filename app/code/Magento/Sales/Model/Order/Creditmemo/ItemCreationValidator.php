@@ -33,7 +33,7 @@ class ItemCreationValidator implements ItemCreationValidatorInterface
     public function validate(
         CreditmemoItemCreationInterface $entity,
         array $validators,
-        OrderInterface $context = null
+        ?OrderInterface $context = null
     ) {
         return $this->validator->validate($entity, $validators, $context);
     }

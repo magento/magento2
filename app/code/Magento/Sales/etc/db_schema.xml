@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -919,6 +919,12 @@
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" default="0" identity="false"
+                comment="Admin User ID"/>
+        <column xsi:type="int" name="user_type" unsigned="true" nullable="false" default="0" identity="false"
+                comment="User Type"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
@@ -931,6 +937,11 @@
         <index referenceId="SALES_SHIPMENT_COMMENT_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
+        <constraint xsi:type="unique" referenceId="SALES_SHIPMENT_COMMENT_ENTITY_ID_USER_ID_USER_TYPE">
+            <column name="entity_id"/>
+            <column name="user_id"/>
+            <column name="user_type"/>
+        </constraint>
     </table>
     <table name="sales_invoice" resource="sales" engine="innodb" comment="Sales Flat Invoice">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
@@ -1210,6 +1221,12 @@
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" default="0" identity="false"
+                comment="Admin User ID"/>
+        <column xsi:type="int" name="user_type" unsigned="true" nullable="false" default="0" identity="false"
+                comment="User Type"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
@@ -1222,6 +1239,11 @@
         <index referenceId="SALES_INVOICE_COMMENT_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
+        <constraint xsi:type="unique" referenceId="SALES_INVOICE_COMMENT_ENTITY_ID_USER_ID_USER_TYPE">
+            <column name="entity_id"/>
+            <column name="user_id"/>
+            <column name="user_type"/>
+        </constraint>
     </table>
     <table name="sales_creditmemo" resource="sales" engine="innodb" comment="Sales Flat Creditmemo">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
@@ -1512,6 +1534,12 @@
         <column xsi:type="text" name="comment" nullable="true" comment="Comment"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="true" default="CURRENT_TIMESTAMP"
+                comment="Updated At"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" default="0" identity="false"
+                comment="Admin User ID"/>
+        <column xsi:type="int" name="user_type" unsigned="true" nullable="false" default="0" identity="false"
+                comment="User Type"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
@@ -1524,6 +1552,11 @@
         <index referenceId="SALES_CREDITMEMO_COMMENT_PARENT_ID" indexType="btree">
             <column name="parent_id"/>
         </index>
+        <constraint xsi:type="unique" referenceId="SALES_CREDITMEMO_COMMENT_ENTITY_ID_USER_ID_USER_TYPE">
+            <column name="entity_id"/>
+            <column name="user_id"/>
+            <column name="user_type"/>
+        </constraint>
     </table>
     <table name="sales_invoiced_aggregated" resource="sales" engine="innodb" comment="Sales Invoiced Aggregated">
         <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
@@ -2067,5 +2100,21 @@
         <index referenceId="SALES_ORDER_STATUS_LABEL_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+    </table>
+    <table name="sales_order_status_change_history" resource="default" engine="innodb" comment="Save the updated order status with timestamp">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
+                comment="Order ID"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="32"
+                comment="Order Status"/>
+        <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Order status updated at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_STATUS_CHANGE_HISTORY_ORDER_ID_SALES_ORDER_ENTITY_ID"
+                    table="sales_order_status_change_history" column="order_id"
+                    referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE" />
     </table>
 </schema>

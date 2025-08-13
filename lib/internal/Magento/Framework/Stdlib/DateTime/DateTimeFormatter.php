@@ -32,7 +32,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
      */
     public function __construct(
         $useIntlFormatObject = null,
-        ResolverInterface $localeResolver = null
+        ?ResolverInterface $localeResolver = null
     ) {
         $this->useIntlFormatObject = $useIntlFormatObject ?? !\defined('HHVM_VERSION');
         $this->localeResolver = $localeResolver

@@ -83,8 +83,8 @@ class EavAttribute
         \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
         \Magento\Swatches\Model\SwatchFactory $swatchFactory,
         \Magento\Swatches\Helper\Data $swatchHelper,
-        Json $serializer = null,
-        SwatchResource $swatchResource = null
+        ?Json $serializer = null,
+        ?SwatchResource $swatchResource = null
     ) {
         $this->swatchCollectionFactory = $collectionFactory;
         $this->swatchFactory = $swatchFactory;
@@ -296,7 +296,7 @@ class EavAttribute
      * @param int|null $swatchType
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function cleanEavAttributeOptionSwatchValues(array $attributeOptions, int $swatchType = null)
+    private function cleanEavAttributeOptionSwatchValues(array $attributeOptions, ?int $swatchType = null)
     {
         if (count($attributeOptions) && isset($attributeOptions['value'])) {
             $optionsIDs = array_keys($attributeOptions['value']);

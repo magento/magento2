@@ -51,7 +51,7 @@ class TemplateFile extends File
         MinifierInterface $templateMinifier,
         State $appState,
         ConfigInterface $assetConfig,
-        DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->appState = $appState;
         $this->templateMinifier = $templateMinifier;

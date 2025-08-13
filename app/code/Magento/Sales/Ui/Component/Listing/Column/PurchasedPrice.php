@@ -44,7 +44,7 @@ class PurchasedPrice extends Column
         PriceCurrencyInterface $priceFormatter,
         array $components = [],
         array $data = [],
-        Currency $currency = null
+        ?Currency $currency = null
     ) {
         $this->priceFormatter = $priceFormatter;
         $this->currency = $currency ?: \Magento\Framework\App\ObjectManager::getInstance()

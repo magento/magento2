@@ -31,7 +31,7 @@ class Config extends \Magento\Framework\Config\Data
         \Magento\Framework\Search\Request\Config\FilesystemReader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = self::CACHE_ID,
-        SerializerInterface $serializer = null,
+        ?SerializerInterface $serializer = null,
         ?array $cacheTags = null,
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer, $cacheTags);

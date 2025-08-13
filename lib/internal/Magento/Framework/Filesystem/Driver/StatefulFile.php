@@ -34,7 +34,7 @@ class StatefulFile implements DriverInterface
      * StatefulFile constructor.
      * @param File $driverFile
      */
-    public function __construct(File $driverFile = null)
+    public function __construct(?File $driverFile = null)
     {
         $this->driverFile = $driverFile ?? ObjectManager::getInstance()->create(
             File::class,
@@ -199,7 +199,7 @@ class StatefulFile implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null)
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null)
     {
         return $this->driverFile->rename($oldPath, $newPath, $targetDriver);
     }
@@ -213,7 +213,7 @@ class StatefulFile implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null)
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null)
     {
         return $this->driverFile->copy($source, $destination, $targetDriver);
     }
@@ -227,7 +227,7 @@ class StatefulFile implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null)
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null)
     {
         return $this->driverFile->symlink($source, $destination, $targetDriver);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement;
 
@@ -34,7 +34,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory,
         array $data = [],
-        GridCollectionFactory $gridColFactory = null
+        ?GridCollectionFactory $gridColFactory = null
     ) {
 
         $this->_collectionFactory = $collectionFactory;

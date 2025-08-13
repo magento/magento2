@@ -64,6 +64,8 @@ class Reorder
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
+        'Not enough items for sale' => self::ERROR_INSUFFICIENT_STOCK,
+        'Only %s of %s available' => self::ERROR_INSUFFICIENT_STOCK,
     ];
 
     /**
@@ -341,7 +343,7 @@ class Reorder
      * @param string|null $code
      * @return void
      */
-    private function addError(string $message, string $code = null): void
+    private function addError(string $message, ?string $code = null): void
     {
         $this->errors[] = new Data\Error(
             $message,
@@ -358,7 +360,7 @@ class Reorder
     private function getErrorCode(string $message): string
     {
         $code = self::ERROR_UNDEFINED;
-
+        $message = preg_replace('/\d+/', '%s', $message);
         $matchedCodes = array_filter(
             self::MESSAGE_CODES,
             function ($key) use ($message) {
@@ -397,7 +399,7 @@ class Reorder
      * @param string|null $message
      * @return string
      */
-    private function getCartItemErrorMessage(Item $item, Product $product, string $message = null): string
+    private function getCartItemErrorMessage(Item $item, Product $product, ?string $message = null): string
     {
         // try to get sku from line-item first.
         // for complex product type: if custom option is not available it can cause error

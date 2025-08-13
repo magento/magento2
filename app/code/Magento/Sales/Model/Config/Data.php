@@ -24,7 +24,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Sales\Model\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'sales_totals_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

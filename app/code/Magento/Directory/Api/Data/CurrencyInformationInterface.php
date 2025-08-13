@@ -86,7 +86,7 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * @param string[] $codes
      * @return $this
      */
-    public function setAvailableCurrencyCodes(array $codes = null);
+    public function setAvailableCurrencyCodes(?array $codes = null);
 
     /**
      * Get the list of exchange rate information for the store.
@@ -101,7 +101,7 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
      * @param \Magento\Directory\Api\Data\ExchangeRateInterface[] $exchangeRates
      * @return $this
      */
-    public function setExchangeRates(array $exchangeRates = null);
+    public function setExchangeRates(?array $exchangeRates = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

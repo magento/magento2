@@ -52,7 +52,7 @@ class Context implements ResetAfterRequestInterface
      * @param array $default
      * @param Json|null $serializer
      */
-    public function __construct(array $data = [], array $default = [], Json $serializer = null)
+    public function __construct(array $data = [], array $default = [], ?Json $serializer = null)
     {
         $this->data = $data;
         $this->default = $default;

@@ -148,11 +148,11 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
         \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory,
         \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        TimezoneInterface $timezone = null,
-        LocalizedDateToUtcConverterInterface $utcConverter = null
+        ?TimezoneInterface $timezone = null,
+        ?LocalizedDateToUtcConverterInterface $utcConverter = null
     ) {
         parent::__construct(
             $context,

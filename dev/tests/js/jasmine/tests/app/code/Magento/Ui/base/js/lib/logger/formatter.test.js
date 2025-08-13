@@ -24,7 +24,7 @@ define([
                     timestamp: Date.now()
                 };
 
-                date = moment(entry.timestamp).format('YYYY-MM-DD hh:mm:ss');
+                date = moment(entry.timestamp).format('YYYY-MM-DD HH:mm:ssZ');
 
                 expect(formatter.process(entry)).toBe('[' + date + '] [DEBUG] message text');
             });
@@ -43,7 +43,7 @@ define([
                     }
                 };
 
-                date = moment(entry.timestamp).format('YYYY-MM-DD hh:mm:ss');
+                date = moment(entry.timestamp).format('YYYY-MM-DD HH:mm:ssZ');
 
                 expect(formatter.process(entry)).toBe('[' + date + '] [DEBUG] Foo Bar');
             });

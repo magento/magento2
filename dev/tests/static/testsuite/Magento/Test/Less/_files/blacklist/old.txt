@@ -16,6 +16,7 @@ app/design/adminhtml/Magento/backend/Magento_Msrp/web/css/source/_module-old.les
 app/design/adminhtml/Magento/backend/Magento_ProductVideo/web/css/source/_module.less
 app/design/adminhtml/Magento/backend/Magento_Sales/web/css/source/module/_order.less
 app/design/adminhtml/Magento/backend/Magento_Staging/web/css/source/module/_scheduled-changes.less
+app/design/adminhtml/Magento/backend/Magento_Staging/web/css/source/module/_staging-preview.less
 app/design/adminhtml/Magento/backend/Magento_Tax/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Theme/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Ui/web/css/source/_module-old.less

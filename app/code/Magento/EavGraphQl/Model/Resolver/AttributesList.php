@@ -58,8 +58,8 @@ class AttributesList implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ): array {
         if (!$args['entityType']) {
             throw new GraphQlInputException(__('Required parameter "%1" of type string.', 'entityType'));

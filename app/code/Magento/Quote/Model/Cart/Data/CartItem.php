@@ -49,9 +49,9 @@ class CartItem
     public function __construct(
         string $sku,
         float $quantity,
-        string $parentSku = null,
-        array $selectedOptions = null,
-        array $enteredOptions = null
+        ?string $parentSku = null,
+        ?array $selectedOptions = null,
+        ?array $enteredOptions = null
     ) {
         $this->sku = $sku;
         $this->quantity = $quantity;

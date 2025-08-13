@@ -58,7 +58,7 @@ class CartTotalManagement implements CartTotalManagementInterface
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         $shippingCarrierCode = null,
         $shippingMethodCode = null,
-        \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
+        ?\Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
     ) {
         if ($shippingCarrierCode && $shippingMethodCode) {
             $this->shippingMethodManagement->set($cartId, $shippingCarrierCode, $shippingMethodCode);

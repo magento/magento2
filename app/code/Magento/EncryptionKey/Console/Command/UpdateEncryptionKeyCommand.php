@@ -111,7 +111,7 @@ class UpdateEncryptionKeyCommand extends Command
      * @return void
      * @throws FileSystemException
      */
-    private function updateEncryptionKey(string $key = null): void
+    private function updateEncryptionKey(?string $key = null): void
     {
         // prepare new key, encryptor and new configuration segment
         if (!$this->writer->checkIfWritable()) {

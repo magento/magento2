@@ -44,7 +44,7 @@ class Country implements ValidatorInterface
     public function __construct(
         Data $directoryData,
         AllowedCountries $allowedCountriesReader,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->directoryData = $directoryData;
         $this->allowedCountriesReader = $allowedCountriesReader;

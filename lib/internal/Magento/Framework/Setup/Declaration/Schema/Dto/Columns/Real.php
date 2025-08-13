@@ -70,9 +70,9 @@ class Real extends Column implements
         int $scale,
         bool $nullable = true,
         bool $unsigned = false,
-        float $default = null,
-        string $comment = null,
-        string $onCreate = null
+        ?float $default = null,
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->precision = $precision;

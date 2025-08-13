@@ -138,7 +138,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Customer\Helper\View $customerViewHelper,
         WishlistProviderInterface $wishlistProvider,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;

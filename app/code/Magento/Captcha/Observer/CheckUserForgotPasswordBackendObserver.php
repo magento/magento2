@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Captcha\Observer;
@@ -67,7 +67,7 @@ class CheckUserForgotPasswordBackendObserver implements ObserverInterface
         SessionManagerInterface $session,
         ActionFlag $actionFlag,
         ManagerInterface $messageManager,
-        RequestInterface $request = null
+        ?RequestInterface $request = null
     ) {
         $this->_helper = $helper;
         $this->captchaStringResolver = $captchaStringResolver;

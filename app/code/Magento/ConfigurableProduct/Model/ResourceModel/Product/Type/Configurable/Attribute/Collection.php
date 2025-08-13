@@ -99,8 +99,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         Attribute $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ConfigurableResource $configurableResource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?ConfigurableResource $configurableResource = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;

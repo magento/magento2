@@ -200,7 +200,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param Document[] $items
      * @return $this
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         if ($items) {
             foreach ($items as $item) {

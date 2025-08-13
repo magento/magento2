@@ -81,8 +81,8 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
         Region $directoryRegion,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_regionFactory = $regionFactory;
@@ -508,7 +508,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param TaxRateTitleInterface[] $titles
      * @return $this
      */
-    public function setTitles(array $titles = null)
+    public function setTitles(?array $titles = null)
     {
         return $this->setData(self::KEY_TITLES, $titles);
     }

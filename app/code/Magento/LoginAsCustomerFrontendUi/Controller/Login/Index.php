@@ -86,7 +86,7 @@ class Index implements HttpGetActionInterface
         AuthenticateCustomerBySecretInterface $authenticateCustomerBySecret,
         ManagerInterface $messageManager,
         LoggerInterface $logger,
-        Session $customerSession = null
+        ?Session $customerSession = null
     ) {
         $this->resultFactory = $resultFactory;
         $this->request = $request;

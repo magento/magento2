@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\ImageFixture;
 
 /**
  * @magentoDataFixture Magento/Framework/Image/_files/image_fixture.php
@@ -267,36 +271,59 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $image
      * @param array $dims (width, height)
+     * @param boolean $keepRatio
+     * @param array|null $expectedDims (width, height)
+     * @param string|null $expectedException
      * @param string $adapterType
      *
      * @dataProvider resizeDataProvider
      * @depends testOpen
      */
-    public function testResize($image, $dims, $adapterType)
-    {
+    #[
+        DataFixture(ImageFixture::class, ['width' => 1024, 'height' => 768], as: 'image1'),
+        DataFixture(ImageFixture::class, ['width' => 1712, 'height' => 2], as: 'image2'),
+        DataFixture(ImageFixture::class, ['width' => 2, 'height' => 1712], as: 'image3'),
+    ]
+    public function testResize(
+        string $image,
+        array $dims,
+        bool $keepRatio,
+        ?array $expectedDims,
+        ?string $expectedException,
+        string $adapterType
+    ): void {
+        $image = DataFixtureStorageManager::getStorage()->get($image)->getAbsolutePath();
         $adapter = $this->_getAdapter($adapterType);
         $adapter->open($image);
-        try {
-            $adapter->resize($dims[0], $dims[1]);
-            $this->assertEquals($dims, [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]);
-        } catch (\Exception $e) {
-            $result = $dims[0] !== null && $dims[0] <= 0 ||
-                $dims[1] !== null && $dims[1] <= 0 ||
-                empty(${$dims[0]}) && empty(${$dims[1]});
-            $this->assertTrue($result);
+        if ($keepRatio) {
+            $adapter->keepAspectRatio($keepRatio);
         }
+        if ($expectedException) {
+            $this->expectExceptionMessage($expectedException);
+        }
+        $adapter->resize($dims[0], $dims[1]);
+        $this->assertEquals($expectedDims, [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]);
     }
 
-    public static function resizeDataProvider()
+    public static function resizeDataProvider(): array
     {
         return self::_prepareData(
             [
-                [self::_getFixture('image_adapters_test.png'), [150, 70]],
-                [self::_getFixture('image_adapters_test.png'), [null, 70]],
-                [self::_getFixture('image_adapters_test.png'), [100, null]],
-                [self::_getFixture('image_adapters_test.png'), [null, null]],
-                [self::_getFixture('image_adapters_test.png'), [-100, -50]],
-                [self::_getFixture('image_adapters_test.png'), [200, 0]]
+                ['image1', [-100, -70], false, null, 'Invalid image dimensions.'],
+                ['image1', [-100, 70], false, null, 'Invalid image dimensions.'],
+                ['image1', [100, -70], false, null, 'Invalid image dimensions.'],
+                ['image1', [0, 0], false, null, 'Invalid image dimensions.'],
+                ['image1', [0, 70], false, null, 'Invalid image dimensions.'],
+                ['image1', [100, 0], false, null, 'Invalid image dimensions.'],
+                ['image1', [null, null], false, null, 'Invalid image dimensions.'],
+                ['image1', [null, 70], false, [93, 70], null],
+                ['image1', [100, null], false, [100, 75], null],
+                ['image1', [100, 70], false, [100, 70], null],
+                ['image1', [100, 70], true, [93, 70], null],
+                ['image2', [100, 2], false, [100, 2], null],
+                ['image2', [100, 2], true, [100, 1], null],
+                ['image3', [2, 100], false, [2, 100], null],
+                ['image3', [2, 100], true, [1, 100], null],
             ]
         );
     }

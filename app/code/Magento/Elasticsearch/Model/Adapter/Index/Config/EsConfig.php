@@ -22,7 +22,7 @@ class EsConfig extends Data implements EsConfigInterface
         ReaderInterface $reader,
         CacheInterface $cache,
         $cacheId,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

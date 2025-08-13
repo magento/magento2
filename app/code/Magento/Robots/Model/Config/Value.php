@@ -63,9 +63,9 @@ class Value extends ConfigValue implements IdentityInterface
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()

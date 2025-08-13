@@ -19,7 +19,7 @@ class Data extends \Magento\Framework\Config\Data
         ReaderInterface $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'message_queue_topology_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

@@ -64,8 +64,8 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         CategoryRepositoryInterface $categoryRepository,
         Config $eavConfig,
         $connectionName = null,
-        TableResolver $tableResolver = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null
+        ?TableResolver $tableResolver = null,
+        ?DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;

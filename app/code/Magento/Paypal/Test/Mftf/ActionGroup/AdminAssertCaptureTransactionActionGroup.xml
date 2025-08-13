@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertCaptureTransactionActionGroup">
+        <annotations>
+            <description>Click the Transactions button on the Order Details page</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="waitForTransactionsTabToBeClicked"/>
+        <click selector="{{AdminTransactionsGridSection.transactionsSectionBtn}}" stepKey="clickTransactionsTab"/>
+        <waitForElementVisible selector="{{AdminTransactionsGridSection.orderTxnTable}}" stepKey="orderTransactionsTableIsVisible"/>
+        <selectOption selector="{{AdminTransactionsGridSection.orderTxnTableTypeFilter}}" userInput="Capture" stepKey="selectCaptureTypeTxn" />
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="waitToClickSearch"/>
+        <click selector="{{AdminTransactionsGridSection.orderTxnTableSearchBtn}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForFilterToLoad"/>
+        <waitForElementClickable selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickOnCaptureTransaction"/>
+        <click selector="{{AdminTransactionsGridSection.orderTxnTableFirstRow}}" stepKey="clickCaptureTxn"/>
+        <waitForPageLoad stepKey="waitForTxnToLoad"/>
+        <grabTextFrom selector="{{AdminTransactionsGridSection.transactionData('Transaction ID')}}" stepKey="getCaptureTransaction"/>
+        <assertRegExp stepKey="assertEquals" after="getCaptureTransaction" message="pass">
+            <expectedResult type="string">/([0-9a-z\-])*(?&lt;!capture)$/</expectedResult>
+            <actualResult type="variable">getCaptureTransaction</actualResult>
+        </assertRegExp>
+    </actionGroup>
+</actionGroups>

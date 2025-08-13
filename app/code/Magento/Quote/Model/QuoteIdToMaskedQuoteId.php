@@ -40,7 +40,7 @@ class QuoteIdToMaskedQuoteId implements QuoteIdToMaskedQuoteIdInterface
         QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
         QuoteIdMaskResource $quoteIdMaskResource,
-        QuoteResource $quoteResourceModel = null
+        ?QuoteResource $quoteResourceModel = null
     ) {
         $this->quoteIdMaskResource = $quoteIdMaskResource;
         $this->quoteResource = $quoteResourceModel ?? ObjectManager::getInstance()->get(QuoteResource::class);

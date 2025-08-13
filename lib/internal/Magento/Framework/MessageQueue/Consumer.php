@@ -101,13 +101,13 @@ class Consumer implements ConsumerInterface
         MessageEncoder $messageEncoder,
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
-        LoggerInterface $logger = null,
-        ConsumerConfig $consumerConfig = null,
-        CommunicationConfig $communicationConfig = null,
-        QueueRepository $queueRepository = null,
-        MessageController $messageController = null,
-        MessageValidator $messageValidator = null,
-        EnvelopeFactory $envelopeFactory = null
+        ?LoggerInterface $logger = null,
+        ?ConsumerConfig $consumerConfig = null,
+        ?CommunicationConfig $communicationConfig = null,
+        ?QueueRepository $queueRepository = null,
+        ?MessageController $messageController = null,
+        ?MessageValidator $messageValidator = null,
+        ?EnvelopeFactory $envelopeFactory = null
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;

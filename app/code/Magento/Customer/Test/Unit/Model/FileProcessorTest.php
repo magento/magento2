@@ -103,8 +103,8 @@ class FileProcessorTest extends TestCase
     private function getModel(
         $entityTypeCode,
         array $allowedExtensions = [],
-        string $customerFileUrlPath = null,
-        string $customerAddressFileUrlPath = null
+        ?string $customerFileUrlPath = null,
+        ?string $customerAddressFileUrlPath = null
     ): FileProcessor {
         $model = new FileProcessor(
             $this->filesystem,

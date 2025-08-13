@@ -102,7 +102,7 @@ class Bundle
         BundleInterfaceFactory $bundleFactory,
         BundleConfig $bundleConfig,
         Files $files,
-        File $file = null
+        ?File $file = null
     ) {
         $this->pubStaticDir = $filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         $this->bundleFactory = $bundleFactory;

@@ -52,7 +52,7 @@ class CreateEmptyCartForGuest
      * @param string|null $predefinedMaskedQuoteId
      * @return string
      */
-    public function execute(string $predefinedMaskedQuoteId = null): string
+    public function execute(?string $predefinedMaskedQuoteId = null): string
     {
         $maskedQuoteId = $this->guestCartManagement->createEmptyCart();
 

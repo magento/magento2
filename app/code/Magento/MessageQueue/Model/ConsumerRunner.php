@@ -48,7 +48,7 @@ class ConsumerRunner
      */
     public function __construct(
         ConsumerFactory $consumerFactory,
-        MaintenanceMode $maintenanceMode = null,
+        ?MaintenanceMode $maintenanceMode = null,
         $maintenanceSleepInterval = 30
     ) {
         $this->consumerFactory = $consumerFactory;

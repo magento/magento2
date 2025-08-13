@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -137,12 +137,12 @@ class CombineTest extends TestCase
         $this->conditionObjectMock->expects($this->never())
             ->method('loadArray');
 
-        $this->conditionFactoryMock->expects($this->once())
+        $this->conditionFactoryMock->expects($this->never())
             ->method('create')
             ->with($array['conditions'][0]['type'])
             ->willThrowException(new \Exception('everything is fine, it is test'));
 
-        $this->loggerMock->expects($this->once())
+        $this->loggerMock->expects($this->never())
             ->method('critical')
             ->with();
 

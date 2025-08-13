@@ -71,7 +71,7 @@ class Tax extends CommonTaxCollector
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
         \Magento\Tax\Helper\Data $taxData,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->setCode('tax');
         $this->_taxData = $taxData;

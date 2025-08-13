@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,9 +39,7 @@ class GetAttributeValueComposite implements GetAttributeValueInterface
     public function execute(string $entityType, array $customAttribute): ?array
     {
         if (!isset($this->providers[$entityType])) {
-            throw new RuntimeException(
-                __(sprintf('"%s" entity type not set in providers', $entityType))
-            );
+            throw new RuntimeException(__('"%1" entity type not set in providers', $entityType));
         }
         if (!$this->providers[$entityType] instanceof GetAttributeValueInterface) {
             throw new RuntimeException(

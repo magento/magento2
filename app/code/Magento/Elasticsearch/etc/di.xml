@@ -398,4 +398,29 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\Position">
+        <arguments>
+            <argument name="fieldNameResolver" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\ExpressionBuilder">
+        <arguments>
+            <argument name="defaultExpressionBuilder" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\DefaultExpression</argument>
+            <argument name="customExpressionBuilders" xsi:type="array">
+                <item name="entity_id" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\EntityId</item>
+                <item name="relevance" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\Relevance</item>
+                <item name="position" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\Position</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort">
+        <arguments>
+            <argument name="sortExpressionBuilder" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\ExpressionBuilder</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver</argument>
+        </arguments>
+    </type>
 </config>

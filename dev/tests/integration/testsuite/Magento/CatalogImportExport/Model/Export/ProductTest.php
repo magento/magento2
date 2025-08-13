@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types = 1);
@@ -10,6 +10,7 @@ namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
@@ -293,11 +294,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $rows = [];
         $headers = [];
-        foreach (str_getcsv($exportData, "\n") as $row) {
+        foreach (str_getcsv($exportData, "\n", '"', '\\') as $row) {
             if (!$headers) {
-                $headers = str_getcsv($row);
+                $headers = str_getcsv($row, ',', '"', '\\');
             } else {
-                $rows[] = array_combine($headers, str_getcsv($row));
+                $rows[] = array_combine($headers, str_getcsv($row, ',', '"', '\\'));
             }
         }
         return $rows;
@@ -748,6 +749,43 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     *
+     * @return void
+     */
+    public function testFilterForNonDefaultStore(): void
+    {
+        $secondStoreCode = 'fixture_second_store';
+
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+        $secondStore = $store->load($secondStoreCode);
+
+        /** @var \Magento\Catalog\Model\Product\Action $productAction */
+        $productAction = $this->objectManager->create(\Magento\Catalog\Model\Product\Action::class);
+
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+
+        $product = $this->productRepository->get('simple');
+        $productId = $product->getId();
+        $productAction->updateWebsites([$productId], [$secondStore->getWebsiteId()], 'add');
+        $product->setStoreId($secondStore->getId());
+        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
+        $product->setName($product->getName() . ' ' . $secondStoreCode);
+        $this->productRepository->save($product);
+
+        $exportData = $this->doExport(['visibility' => Visibility::VISIBILITY_BOTH]);
+        $this->assertStringNotContainsString($product->getName(), $exportData);
+    }
+
+    /**
      * Verify that "stock status" filter correctly applies to export result
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
@@ -818,16 +856,25 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     * @dataProvider websiteIdFilterDataProvider
      */
-    public function testExportProductWithRestrictedWebsite(): void
+    public function testFilterByWebsiteId(string $websiteIdFilter): void
     {
         $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
         $website = $websiteRepository->get('second_website');
 
-        $exportData = $this->doExport(['website_id' => $website->getId()]);
+        $exportData = $this->doExport([$websiteIdFilter => $website->getId()]);
 
         $this->assertStringContainsString('"Simple Product"', $exportData);
         $this->assertStringNotContainsString('"Virtual Product With Custom Options"', $exportData);
+    }
+
+    public static function websiteIdFilterDataProvider(): array
+    {
+        return [
+            ['website_id'],
+            ['website_ids'],
+        ];
     }
 
     public function testFilterAttributeCollection(): void

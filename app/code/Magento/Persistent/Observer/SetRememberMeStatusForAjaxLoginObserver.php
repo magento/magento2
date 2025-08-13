@@ -44,7 +44,7 @@ class SetRememberMeStatusForAjaxLoginObserver implements ObserverInterface
     public function __construct(
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Persistent\Helper\Session $persistentSession,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_persistentData = $persistentData;
         $this->_persistentSession = $persistentSession;

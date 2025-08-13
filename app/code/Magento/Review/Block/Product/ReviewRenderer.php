@@ -63,8 +63,8 @@ class ReviewRenderer extends Template implements ReviewRendererInterface
         Context $context,
         ReviewFactory $reviewFactory,
         array $data = [],
-        ReviewSummaryFactory $reviewSummaryFactory = null,
-        AppendSummaryDataFactory $appendSummaryDataFactory = null
+        ?ReviewSummaryFactory $reviewSummaryFactory = null,
+        ?AppendSummaryDataFactory $appendSummaryDataFactory = null
     ) {
         $this->_reviewFactory = $reviewFactory;
         $this->reviewSummaryFactory = $reviewSummaryFactory ??

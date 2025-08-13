@@ -44,8 +44,8 @@ class FieldMetaReader
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
-        CacheAnnotationReader $cacheAnnotationReader = null,
-        DeprecatedAnnotationReader $deprecatedAnnotationReader = null
+        ?CacheAnnotationReader $cacheAnnotationReader = null,
+        ?DeprecatedAnnotationReader $deprecatedAnnotationReader = null
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;

@@ -60,13 +60,13 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
      * @param Metadata $metadata
      * @param SearchResultFactory $searchResultFactory
      * @param CollectionProcessorInterface|null $collectionProcessor
-     * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
+     * @param AttributeMetadataDataProvider|null $attributeMetadataDataProvider
      */
     public function __construct(
         Metadata $metadata,
         SearchResultFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor = null,
-        AttributeMetadataDataProvider $attributeMetadataDataProvider = null
+        ?CollectionProcessorInterface $collectionProcessor = null,
+        ?AttributeMetadataDataProvider $attributeMetadataDataProvider = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;

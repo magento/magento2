@@ -77,8 +77,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Catalog\Model\ResourceModel\Product\Collection $productResource,
         \Magento\Customer\Model\ResourceModel\Customer $customerResource,
         \Magento\Sales\Model\ResourceModel\Order\Collection $orderResource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
         ?ProductDataRetriever $productDataRetriever = null
     ) {
         parent::__construct(

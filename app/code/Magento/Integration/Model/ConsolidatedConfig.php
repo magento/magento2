@@ -46,7 +46,7 @@ class ConsolidatedConfig
     public function __construct(
         Cache\TypeConsolidated $configCacheType,
         Config\Consolidated\Reader $configReader,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->configCacheType = $configCacheType;
         $this->configReader = $configReader;

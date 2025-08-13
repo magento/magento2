@@ -30,7 +30,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      * @param CompositeUrlKey|null $compositeUrlValidator
      */
     public function __construct(
-        CompositeUrlKey $compositeUrlValidator = null
+        ?CompositeUrlKey $compositeUrlValidator = null
     ) {
         $this->compositeUrlValidator = $compositeUrlValidator
             ?? ObjectManager::getInstance()->get(CompositeUrlKey::class);

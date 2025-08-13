@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model;
 
@@ -419,18 +419,18 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ResolverInterface $localeResolver = null,
-        ProductOption $productOption = null,
-        OrderItemRepositoryInterface $itemRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        ScopeConfigInterface $scopeConfig = null,
-        RegionFactory $regionFactory = null,
-        RegionResource $regionResource = null,
-        StatusLabel $statusLabel = null,
-        CreditmemoValidator $creditmemoValidator = null
+        ?ResolverInterface $localeResolver = null,
+        ?ProductOption $productOption = null,
+        ?OrderItemRepositoryInterface $itemRepository = null,
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?RegionFactory $regionFactory = null,
+        ?RegionResource $regionResource = null,
+        ?StatusLabel $statusLabel = null,
+        ?CreditmemoValidator $creditmemoValidator = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -887,8 +887,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function checkItemShipping(): bool
     {
         foreach ($this->getAllItems() as $item) {
-            $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
-                $item->getQtyToShip() : $item->getSimpleQtyToShip();
+            if (!$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE) {
+                $qtyToShip = $item->getQtyToShip();
+            } else {
+                if ($item->getParentItem()->getProductType() === Type::TYPE_BUNDLE &&
+                    $item->getParentItem()->getProduct()->getShipmentType() == Type\AbstractType::SHIPMENT_TOGETHER) {
+                    $qtyToShip = $item->getParentItem()->getQtyToShip();
+                } else {
+                    $qtyToShip = $item->getSimpleQtyToShip();
+                }
+            }
 
             if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
                 return true;
@@ -1079,7 +1087,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setBillingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
+    public function setBillingAddress(?\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getBillingAddress();
         if (!empty($old) && !empty($address)) {
@@ -1099,7 +1107,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setShippingAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
+    public function setShippingAddress(?\Magento\Sales\Api\Data\OrderAddressInterface $address = null)
     {
         $old = $this->getShippingAddress();
         if (!empty($old) && !empty($address)) {
@@ -1698,7 +1706,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      */
-    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
+    public function setPayment(?\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
     {
         $this->setData(OrderInterface::PAYMENT, $payment);
         if ($payment !== null) {
@@ -2001,7 +2009,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         if (empty($this->_shipments)) {
             if ($this->getId()) {
-                $this->_shipments = $this->_shipmentCollectionFactory->create()->setOrderFilter($this)->load();
+                $this->_shipments = $this->_shipmentCollectionFactory->create()->setOrderFilter($this);
             } else {
                 return false;
             }
@@ -2018,7 +2026,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         if (empty($this->_creditmemos)) {
             if ($this->getId()) {
-                $this->_creditmemos = $this->_memoCollectionFactory->create()->setOrderFilter($this)->load();
+                $this->_creditmemos = $this->_memoCollectionFactory->create()->setOrderFilter($this);
             } else {
                 return false;
             }
@@ -3617,7 +3625,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * @inheritdoc
      */
-    public function setStatusHistories(array $statusHistories = null)
+    public function setStatusHistories(?array $statusHistories = null)
     {
         return $this->setData(OrderInterface::STATUS_HISTORIES, $statusHistories);
     }

@@ -23,7 +23,7 @@ interface EntityDataProviderInterface
     public function getData(
         string $entity_type,
         int $id,
-        ResolveInfo $info = null,
-        int $storeId = null
+        ?ResolveInfo $info = null,
+        ?int $storeId = null
     ): array;
 }

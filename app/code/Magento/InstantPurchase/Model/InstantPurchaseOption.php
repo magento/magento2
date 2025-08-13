@@ -54,10 +54,10 @@ class InstantPurchaseOption
      * Use InstantPurchaseOptionFactory instead.
      */
     public function __construct(
-        PaymentTokenInterface $paymentToken = null,
-        Address $shippingAddress = null,
-        Address $billingAddress = null,
-        ShippingMethodInterface $shippingMethod = null
+        ?PaymentTokenInterface $paymentToken = null,
+        ?Address $shippingAddress = null,
+        ?Address $billingAddress = null,
+        ?ShippingMethodInterface $shippingMethod = null
     ) {
         $customers = [];
         if ($paymentToken) {

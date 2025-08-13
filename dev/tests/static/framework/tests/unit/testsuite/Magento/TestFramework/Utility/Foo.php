@@ -17,7 +17,7 @@ class Foo
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        \Magento\Customer\Api\CustomerRepositoryInterfaceFactory $customerRepositoryFactory = null
+        ?\Magento\Customer\Api\CustomerRepositoryInterfaceFactory $customerRepositoryFactory = null
     ) {
     }
 

@@ -45,7 +45,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
         \Magento\Reports\Model\Grouped\CollectionFactory $collectionFactory,
         \Magento\Reports\Helper\Data $reportsData,
         array $data = [],
-        ConfigFactory $configFactory = null
+        ?ConfigFactory $configFactory = null
     ) {
         parent::__construct(
             $context,

@@ -49,8 +49,8 @@ class IsDeferred implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!$value['code']) {
             throw new LocalizedException(__('"code" value should be specified'));

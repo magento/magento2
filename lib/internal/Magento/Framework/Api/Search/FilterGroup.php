@@ -36,7 +36,7 @@ class FilterGroup extends AbstractSimpleObject
      * @return $this
      * @codeCoverageIgnore
      */
-    public function setFilters(array $filters = null)
+    public function setFilters(?array $filters = null)
     {
         return $this->setData(self::FILTERS, $filters);
     }

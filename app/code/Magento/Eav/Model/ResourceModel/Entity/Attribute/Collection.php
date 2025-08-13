@@ -56,8 +56,8 @@ class Collection extends AbstractCollection
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         Config $eavConfig,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ?AdapterInterface $connection = null,
+        ?AbstractDb $resource = null
     ) {
         $this->eavConfig = $eavConfig;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);

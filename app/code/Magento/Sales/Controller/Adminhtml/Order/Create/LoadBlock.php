@@ -57,8 +57,8 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         RawFactory $resultRawFactory,
-        StoreManagerInterface $storeManager = null,
-        RegexValidator $regexValidator = null
+        ?StoreManagerInterface $storeManager = null,
+        ?RegexValidator $regexValidator = null
     ) {
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct(

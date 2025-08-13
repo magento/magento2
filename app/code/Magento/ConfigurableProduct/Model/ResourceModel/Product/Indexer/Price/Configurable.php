@@ -108,7 +108,7 @@ class Configurable implements DimensionalIndexerInterface
         BasePriceModifier $basePriceModifier,
         $fullReindexAction = false,
         $connectionName = 'indexer',
-        ScopeConfigInterface $scopeConfig = null,
+        ?ScopeConfigInterface $scopeConfig = null,
         ?BaseSelectProcessorInterface $baseSelectProcessor = null,
         ?OptionsIndexerInterface $optionsIndexer = null
     ) {

@@ -23,7 +23,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
 
     /**
      * @var Registry
@@ -57,7 +57,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
         Registry $registry,
         PageFactory $resultPageFactory,
         InvoiceService $invoiceService,
-        OrderRepositoryInterface $orderRepository = null
+        ?OrderRepositoryInterface $orderRepository = null
     ) {
         parent::__construct($context);
 

@@ -58,7 +58,7 @@ class Page extends AbstractDb
         MetadataPool $metadataPool,
         EntityManager $entityManager,
         $connectionName = null,
-        GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
+        ?GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
     ) {
         $this->metadataPool      = $metadataPool;
         $this->entityManager     = $entityManager;

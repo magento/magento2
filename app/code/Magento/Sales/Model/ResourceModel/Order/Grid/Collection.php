@@ -42,7 +42,7 @@ class Collection extends SearchResult
         EventManager $eventManager,
         $mainTable = 'sales_order_grid',
         $resourceModel = Order::class,
-        TimezoneInterface $timeZone = null
+        ?TimezoneInterface $timeZone = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
         $this->timeZone = $timeZone ?: ObjectManager::getInstance()
