@@ -142,7 +142,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
             $zipFrom = $this->getZipFrom();
             $zipTo = $this->getZipTo();
 
-            if (($zipFrom && strlen($zipFrom) > 9) || ($zipTo && strlen($zipTo) > 9)) {
+            if (($zipFrom && mb_strlen($zipFrom) > 9) || ($zipTo && mb_strlen($zipTo) > 9)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'The ZIP Code length is invalid. '
@@ -167,8 +167,8 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         } else {
             $taxPostCode = $this->getTaxPostcode();
 
-            if ($taxPostCode !== null && strlen($taxPostCode) > 10) {
-                $taxPostCode = substr($taxPostCode, 0, 10);
+            if ($taxPostCode !== null && mb_strlen($taxPostCode) > 10) {
+                $taxPostCode = mb_substr($taxPostCode, 0, 10);
             }
 
             $this->setTaxPostcode($taxPostCode)->setZipIsRange(null)->setZipFrom(null)->setZipTo(null);
