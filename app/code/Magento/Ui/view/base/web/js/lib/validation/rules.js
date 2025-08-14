@@ -1,12 +1,14 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 /* eslint-disable no-useless-escape */
 // jscs:disable no-useless-escape
 /**
  * @api
  */
+
+/* eslint-disable no-useless-escape */
 define([
     'jquery',
     'underscore',
@@ -893,11 +895,11 @@ define([
                 if (utils.isEmpty(value)) {
                     return true;
                 }
-                validRegexp = /^[a-z0-9\._-]{1,30}@([a-z0-9_-]{1,30}\.){1,5}[a-z]{2,4}$/i;
+                validRegexp = /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i; //eslint-disable-line max-len
                 emails = value.split(/[\s\n\,]+/g);
 
                 for (i = 0; i < emails.length; i++) {
-                    if (!validRegexp.test(emails[i].strip())) {
+                    if (!validRegexp.test(emails[i].trim())) {
                         return false;
                     }
                 }
