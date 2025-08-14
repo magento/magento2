@@ -51,10 +51,10 @@ class OnlyXLeftInStockResolver implements ResolverInterface
 
         $product = $value['model'];
         if ($product->getTypeId() === self::PRODUCT_TYPE_CONFIGURABLE) {
-            $variant = $this->productRepositoryInterface->get($product->getSku());
-            return $this->getOnlyXLeftQty($variant);
+            $product = $product->getTypeInstance()->getUsedProducts($product)[0] ?? null;
         }
-        return $this->getOnlyXLeftQty($product);
+
+        return $product !== null ? $this->getOnlyXLeftQty($product) : null;
     }
 
     /**
