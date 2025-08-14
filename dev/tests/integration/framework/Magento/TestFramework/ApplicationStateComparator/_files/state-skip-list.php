@@ -290,6 +290,7 @@ return [
         Magento\Framework\Cache\LockGuardedCacheLoader::class => null,
         Magento\Framework\View\Asset\PreProcessor\Pool::class => null,
         Magento\Framework\App\Area::class => null,
+        Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class => null,
         Magento\Store\Model\Store\Interceptor::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\Comparator::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\GraphQl\Query\QueryParser::class => null, // reloads as a ReloadProcessor
