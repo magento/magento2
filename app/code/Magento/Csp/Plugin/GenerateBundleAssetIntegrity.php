@@ -55,7 +55,7 @@ class GenerateBundleAssetIntegrity
         SubresourceIntegrityFactory $integrityFactory,
         SubresourceIntegrityCollector $integrityCollector,
         Filesystem $filesystem,
-        File $fileIo,
+        File $fileIo
     ) {
         $this->hashGenerator = $hashGenerator;
         $this->integrityFactory = $integrityFactory;
@@ -83,15 +83,18 @@ class GenerateBundleAssetIntegrity
             $files = $pubStaticDir->search(
                 $area ."/" . $theme . "/" . $locale . "/" . Bundle::BUNDLE_JS_DIR . "/*.js"
             );
+            
             foreach ($files as $file) {
+                $bundlePath = $area . '/' . $theme . '/' . $locale .
+                    "/" . Bundle::BUNDLE_JS_DIR . '/' . $this->fileIo->getPathInfo($file)['basename'];
+                    
                 $integrity = $this->integrityFactory->create(
                     [
                         "data" => [
                             'hash' => $this->hashGenerator->generate(
                                 $pubStaticDir->readFile($file)
                             ),
-                            'path' => $area . '/' . $theme . '/' . $locale .
-                                "/" . Bundle::BUNDLE_JS_DIR . '/' . $this->fileIo->getPathInfo($file)['basename']
+                            'path' => $bundlePath
                         ]
                     ]
                 );

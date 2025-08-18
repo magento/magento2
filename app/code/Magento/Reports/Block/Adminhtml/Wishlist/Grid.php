@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Wishlist;
 
 /**
  * Adminhtml wishlist report grid block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -18,6 +16,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_productsFactory;
 
     /**
+     * Initialize
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\ResourceModel\Wishlist\Product\CollectionFactory $productsFactory
@@ -34,6 +34,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialize
+     *
      * @return void
      */
     protected function _construct()
@@ -45,6 +47,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare collection
+     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -63,6 +67,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare Columns
+     *
      * @return \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()

@@ -14,8 +14,7 @@
                 <format>1</format>
             </auto_generated_coupon_codes>
             <graphql>
-                <share_all_sales_rule>1</share_all_sales_rule>
-                <share_applied_sales_rule>1</share_applied_sales_rule>
+                <share_applied_cart_rule>1</share_applied_cart_rule>
             </graphql>
         </promo>
     </default>
