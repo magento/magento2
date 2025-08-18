@@ -258,8 +258,8 @@ class PlaceOrderTest extends GraphQlAbstract
             $exceptionData = $exception->getResponseData();
             self::assertEquals(1, count($exceptionData['errors']));
             self::assertEquals(
-                'Unable to place order: Some addresses can\'t be used due to the' .
-                ' configurations for specific countries.',
+                'Unable to place order: A server error stopped your order from being placed.' .
+                ' Please try to place your order again',
                 $exceptionData['errors'][0]['message']
             );
             self::assertEquals(
@@ -289,7 +289,8 @@ class PlaceOrderTest extends GraphQlAbstract
             $exceptionData = $exception->getResponseData();
             self::assertEquals(1, count($exceptionData['errors']));
             self::assertEquals(
-                'Unable to place order: The shipping method is missing. Select the shipping method and try again.',
+                'Unable to place order: A server error stopped your order from being placed.' .
+                ' Please try to place your order again',
                 $exceptionData['errors'][0]['message']
             );
             self::assertEquals(
@@ -324,11 +325,8 @@ class PlaceOrderTest extends GraphQlAbstract
             $exceptionData = $exception->getResponseData();
             self::assertEquals(1, count($exceptionData['errors']));
             self::assertEquals(
-                'Unable to place order: Please check the billing address information. ' .
-                '"firstname" is required. Enter and try again. "lastname" is required. Enter and try again. ' .
-                '"street" is required. Enter and try again. "city" is required. Enter and try again. ' .
-                '"telephone" is required. Enter and try again. "postcode" is required. Enter and try again. ' .
-                '"countryId" is required. Enter and try again.',
+                'Unable to place order: A server error stopped your order from being placed.' .
+                ' Please try to place your order again',
                 $exceptionData['errors'][0]['message']
             );
             self::assertEquals(
@@ -362,7 +360,8 @@ class PlaceOrderTest extends GraphQlAbstract
             $exceptionData = $exception->getResponseData();
             self::assertEquals(1, count($exceptionData['errors']));
             self::assertEquals(
-                'Unable to place order: A server error stopped your order from being placed. Please try to place your order again',
+                'Unable to place order: A server error stopped your order from being placed.' .
+                ' Please try to place your order again',
                 $exceptionData['errors'][0]['message']
             );
             self::assertEquals(
@@ -407,7 +406,8 @@ class PlaceOrderTest extends GraphQlAbstract
             $exceptionData = $exception->getResponseData();
             self::assertEquals(1, count($exceptionData['errors']));
             self::assertEquals(
-                'Unable to place order: Some of the products are out of stock.',
+                'Unable to place order: A server error stopped your order from being placed.' .
+                ' Please try to place your order again',
                 $exceptionData['errors'][0]['message']
             );
             self::assertEquals(
@@ -452,7 +452,8 @@ class PlaceOrderTest extends GraphQlAbstract
             $exceptionData = $exception->getResponseData();
             self::assertEquals(1, count($exceptionData['errors']));
             self::assertEquals(
-                'Unable to place order: Enter a valid payment method and try again.',
+                'Unable to place order: A server error stopped your order from being placed.' .
+                ' Please try to place your order again',
                 $exceptionData['errors'][0]['message']
             );
             self::assertEquals(
