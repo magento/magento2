@@ -44,7 +44,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\QuoteGraphQl\Model\Resolver\PlaceOrder">
+    <type name="Magento\QuoteGraphQl\Model\OrderErrorProcessor">
         <arguments>
             <argument name="errorMessageFormatter" xsi:type="object">Magento\QuoteGraphQl\Helper\Error\PlaceOrderMessageFormatter</argument>
         </arguments>

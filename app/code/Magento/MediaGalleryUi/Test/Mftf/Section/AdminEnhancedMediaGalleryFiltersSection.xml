@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEnhancedMediaGalleryFiltersSection">
-        <element name="filtersButton" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-expand']"/>
+        <element name="filtersButton" type="button" selector="//div[contains(@class, 'media-gallery-container')]//div[contains(@class, 'admin__data-grid-outer-wrap')]//button[@data-action='grid-filter-expand']"/>
         <element name="categoryGridFiltersButton" type="button" selector="//div[@class='media-gallery-category-container']//button[@data-action='grid-filter-expand']"/>
         <element name="sourceFilterValue" type="select" parameterized="true" selector="//div[@class='media-gallery-container']//select[@name='source']//option[@value='{{option}}']"/>
         <element name="applyFilters" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-apply']"/>
