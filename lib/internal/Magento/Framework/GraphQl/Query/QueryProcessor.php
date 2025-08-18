@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,12 +83,13 @@ class QueryProcessor
             $source = $this->queryParser->parse($source);
         }
         if (!$this->exceptionFormatter->shouldShowDetail()) {
+            $this->queryComplexityLimiter->validateAliasCount($source);
             $this->queryComplexityLimiter->validateFieldCount($source);
             $this->queryComplexityLimiter->execute();
         }
 
         $rootValue = null;
-        return GraphQL::executeQuery(
+        $executionResult = GraphQL::executeQuery(
             $schema,
             $source,
             $rootValue,
@@ -100,5 +101,16 @@ class QueryProcessor
         )->toArray(
             (int) ($this->exceptionFormatter->shouldShowDetail() ? DebugFlag::INCLUDE_DEBUG_MESSAGE : false)
         );
+        if (!empty($executionResult['errors'])) {
+            foreach ($executionResult['errors'] as $error) {
+                if (isset($error['extensions']['error_code'])) {
+                    $executionResult['data']['errors'][] = [
+                        'message' => $error['message'],
+                        'code' => $error['extensions']['error_code']
+                    ];
+                }
+            }
+        }
+        return $executionResult;
     }
 }

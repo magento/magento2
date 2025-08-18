@@ -68,12 +68,11 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
 
         $query = $this->getQuery($wishlistId, $itemId);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-
         $this->assertArrayHasKey('addWishlistItemsToCart', $response);
         $wishlistAfterAddingToCart = $response['addWishlistItemsToCart']['wishlist'];
         $userErrors = $response['addWishlistItemsToCart']['add_wishlist_items_to_cart_user_errors'];
         $this->assertEquals($userErrors[0]['message'], 'You need to choose options for your item.');
-        $this->assertEquals($userErrors[0]['code'], 'UNDEFINED');
+        $this->assertEquals($userErrors[0]['code'], 'REQUIRED_PARAMETER_MISSING');
         $this->assertEquals($userErrors[0]['wishlistId'], $wishlistId);
         $this->assertEquals($userErrors[0]['wishlistItemId'], $itemId);
         $wishlistItems = $wishlistAfterAddingToCart['items_v2']['items'];
@@ -296,7 +295,6 @@ MUTATION;
      * Returns GraphQl mutation string
      *
      * @param string $wishlistId
-     * @param string $itemId
      * @return string
      */
     private function getAddAllItemsToCartQuery(
@@ -385,8 +383,8 @@ QUERY;
      * Returns the GraphQl mutation string for products added to wishlist
      *
      * @param string $wishlistId
-     * @param string $sku2
-     * @param int $quantity2
+     * @param string $sku
+     * @param int $quantity
      * @return string
      */
     private function addSecondProductToWishlist(
