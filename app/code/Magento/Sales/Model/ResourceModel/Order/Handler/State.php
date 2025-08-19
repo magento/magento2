@@ -6,6 +6,7 @@
 
 namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 
@@ -60,11 +61,79 @@ class State
      */
     private function checkForCompleteState(Order $order, ?string $currentState): bool
     {
-        if ($currentState === Order::STATE_PROCESSING && !$order->canShip()) {
+        if ($currentState === Order::STATE_PROCESSING
+            && (!$order->canShip() || $this->isPartiallyRefundedOrderShipped($order))
+        ) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Check if all items are remaining items after partially refunded are shipped
+     *
+     * @param Order $order
+     * @return bool
+     */
+    public function isPartiallyRefundedOrderShipped(Order $order): bool
+    {
+        $isPartiallyRefundedOrderShipped = false;
+        if ($this->getShippedItems($order) > 0
+            && $this->getQtyItemsToShip($order) <= $this->getRefundedItems($order) + $this->getShippedItems($order)) {
+            $isPartiallyRefundedOrderShipped = true;
+        }
+
+        return $isPartiallyRefundedOrderShipped;
+    }
+
+    /**
+     * Get all refunded items number
+     *
+     * @param Order $order
+     * @return int
+     */
+    private function getQtyItemsToShip(Order $order): int
+    {
+        $numOfItemsToShip = 0;
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() == Type::TYPE_SIMPLE) { // only simple products are accountable for the order qty
+                $numOfItemsToShip += (int)$item->getQtyOrdered();
+            }
+        }
+        return $numOfItemsToShip;
+    }
+
+    /**
+     * Get all refunded items number
+     *
+     * @param Order $order
+     * @return int
+     */
+    private function getRefundedItems(Order $order): int
+    {
+        $numOfRefundedItems = 0;
+        foreach ($order->getAllItems() as $item) {
+            if ($item->getProductType() == 'simple') {
+                $numOfRefundedItems += (int)$item->getQtyRefunded();
+            }
+        }
+        return $numOfRefundedItems;
+    }
+
+    /**
+     * Get all shipped items number
+     *
+     * @param Order $order
+     * @return int
+     */
+    private function getShippedItems(Order $order): int
+    {
+        $numOfShippedItems = 0;
+        foreach ($order->getAllItems() as $item) {
+            $numOfShippedItems += (int)$item->getQtyShipped();
+        }
+        return $numOfShippedItems;
     }
 
     /**
