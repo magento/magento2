@@ -174,7 +174,7 @@ abstract class EntityAbstract extends AbstractDb implements ResetAfterRequestInt
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
         $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
-        $data = $this->_prepareDataForSave($object);
+        $data = $this->prepareDataForUpdate($object);
         unset($data[$this->getIdFieldName()]);
         if (count($data) > 0) {
             $this->getConnection()->update($this->getMainTable(), $data, $condition);
