@@ -50,7 +50,7 @@ class ToOrderPaymentTest extends TestCase
     {
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->addMethods(['getCcNumber', 'getCcCid'])
-            ->onlyMethods(['getMethodInstance', 'getAdditionalInformation'])
+            ->onlyMethods(['getMethodInstance', 'getAdditionalInformation', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectCopyMock = $this->createMock(Copy::class);
@@ -98,12 +98,16 @@ class ToOrderPaymentTest extends TestCase
             ->willReturn($additionalInfo);
         $ccNumber = 123456798;
         $ccCid = 1234;
+        $paymentId = 1;
         $this->paymentMock->expects($this->once())
             ->method('getCcNumber')
             ->willReturn($ccNumber);
         $this->paymentMock->expects($this->once())
             ->method('getCcCid')
             ->willReturn($ccCid);
+        $this->paymentMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($paymentId);
 
         $orderPayment = $this->getMockForAbstractClass(
             OrderPaymentInterface::class,
@@ -112,7 +116,7 @@ class ToOrderPaymentTest extends TestCase
             false,
             true,
             true,
-            ['setCcNumber', 'setCcCid', 'setAdditionalInformation']
+            ['setCcNumber', 'setCcCid', 'setAdditionalInformation', 'setQuotePaymentId']
         );
         $orderPayment->expects($this->once())
             ->method('setAdditionalInformation')
@@ -123,6 +127,9 @@ class ToOrderPaymentTest extends TestCase
             ->willReturnSelf();
         $orderPayment->expects($this->once())
             ->method('setCcCid')
+            ->willReturnSelf();
+        $orderPayment->expects($this->once())
+            ->method('setQuotePaymentId')
             ->willReturnSelf();
 
         $this->orderPaymentRepositoryMock->expects($this->once())->method('create')->willReturn($orderPayment);
