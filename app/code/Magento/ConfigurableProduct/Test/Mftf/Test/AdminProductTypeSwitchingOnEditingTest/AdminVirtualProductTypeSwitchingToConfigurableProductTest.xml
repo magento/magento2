@@ -55,7 +55,9 @@
             <argument name="productId" value="$$createProduct.id$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
-        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForConfigurableProduct"/>
+        <actionGroup ref="AdminSelectWeightTypeOnProductFormActionGroup" stepKey="selectWeightForConfigurableProduct">
+            <argument name="weightOption" value="This item has weight"/>
+        </actionGroup>
         <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurationsForProduct">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>

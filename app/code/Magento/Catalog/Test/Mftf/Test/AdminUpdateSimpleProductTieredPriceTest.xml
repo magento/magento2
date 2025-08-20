@@ -69,7 +69,9 @@
         </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductTierPrice300InStock.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductTierPrice300InStock.weight}}" stepKey="fillSimpleProductWeight"/>
-        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="{{simpleProductTierPrice300InStock.weightSelect}}" stepKey="selectProductWeight"/>
+        <actionGroup ref="AdminSelectWeightTypeOnProductFormActionGroup" stepKey="selectProductWeight">
+            <argument name="weightOption" value="{{simpleProductTierPrice300InStock.weightSelect}}"/>
+        </actionGroup>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory"/>
         <waitForPageLoad stepKey="waitForCategory1"/>
