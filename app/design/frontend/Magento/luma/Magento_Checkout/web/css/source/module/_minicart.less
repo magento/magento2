@@ -1,6 +1,6 @@
 // /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
+//  * Copyright 2014 Adobe
+//  * All Rights Reserved.
 //  */
 
 //
@@ -220,6 +220,12 @@
         .minicart-widgets {
             margin-top: 15px;
         }
+
+        &.active {
+            .minicart-items-wrapper {
+                overflow-y: auto;
+            }
+        }
     }
 
     .minicart-items-wrapper {
@@ -228,6 +234,7 @@
         border-left: 0;
         border-right: 0;
         overflow-x: auto;
+        overflow-y: hidden;
         padding: 15px;
     }
 
