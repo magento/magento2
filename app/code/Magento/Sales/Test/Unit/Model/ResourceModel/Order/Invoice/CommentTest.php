@@ -91,6 +91,7 @@ class CommentTest extends TestCase
             ->method('lastInsertId');
         $this->commentModelMock->expects($this->any())->method('hasDataChanges')->willReturn(true);
         $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
+        $this->commentModelMock->expects($this->any())->method('getStoredData')->willReturn([]);
 
         $relationProcessorMock = $this->createMock(
             ObjectRelationProcessor::class
