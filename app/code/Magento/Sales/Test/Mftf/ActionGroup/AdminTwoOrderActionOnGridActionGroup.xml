@@ -6,9 +6,8 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminTwoOrderActionOnGridActionGroup" extends="AdminOrderActionOnGridActionGroup">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminTwoOrderActionOnGridActionGroup" extends="AdminOrderBulkActionForOrderOnGridActionGroup">
         <arguments>
             <argument name="secondOrderId" type="string"/>
         </arguments>
