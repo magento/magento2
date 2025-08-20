@@ -65,8 +65,8 @@
         </actionGroup>
 
         <wait time="10" stepKey="waitForBookmarkToSaveView"/>
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForGridReloaded"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForGridReloaded"/>
         <actionGroup ref="AdminAssertMediaGalleryFilterPlaceholderActionGroup" stepKey="assertFilterApplied">
             <argument name="filterPlaceholder" value="$$product.name$$"/>
         </actionGroup>

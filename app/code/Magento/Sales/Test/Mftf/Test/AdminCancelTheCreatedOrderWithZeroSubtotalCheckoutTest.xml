@@ -74,12 +74,12 @@
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <reloadPage stepKey="refreshPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
         <comment userInput="BIC workaround" stepKey="orderId"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!-- Refresh the page -->
-        <reloadPage stepKey="refreshPageAgain"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPageAgain"/>
 
         <!-- Cancel the Order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>

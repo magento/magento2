@@ -50,7 +50,7 @@
         <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <closeTab stepKey="closeSecondTab"/>
-        <reloadPage stepKey="refreshPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
         <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="checkProductIsAbsentInWishlistIsEmpty"/>
     </test>
 </tests>

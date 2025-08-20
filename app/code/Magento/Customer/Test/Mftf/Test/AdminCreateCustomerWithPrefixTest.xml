@@ -43,7 +43,7 @@
         <selectOption userInput="Male" selector="{{AdminCustomerAccountInformationSection.gender}}" stepKey="fillGender"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!--Filter the customer From grid-->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail">

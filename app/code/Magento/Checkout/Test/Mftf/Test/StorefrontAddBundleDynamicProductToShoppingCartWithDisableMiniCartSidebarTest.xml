@@ -114,7 +114,7 @@
         <!--Enabled Mini Cart -->
         <magentoCLI stepKey="enableShoppingCartSidebar" command="config:set checkout/sidebar/display 1"/>
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
-        <reloadPage stepKey="reloadThePage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadThePage"/>
 
         <!--Click on mini cart-->
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart1"/>

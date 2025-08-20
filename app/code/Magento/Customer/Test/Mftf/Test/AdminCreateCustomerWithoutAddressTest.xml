@@ -41,7 +41,7 @@
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!--Filter the customer From grid-->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail">

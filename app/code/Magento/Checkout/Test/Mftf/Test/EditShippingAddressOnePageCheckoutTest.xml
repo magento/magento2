@@ -78,7 +78,7 @@
         <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
 
         <!--Refresh Page and Place Order-->
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
     </test>
  </tests>

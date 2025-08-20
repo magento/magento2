@@ -77,7 +77,7 @@
         <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeVirtualProductFromMiniCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
         </actionGroup>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!--Check the minicart is empty and verify EmptyCartMessage and AssertProductAbsentInMiniShoppingCart-->
         <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>

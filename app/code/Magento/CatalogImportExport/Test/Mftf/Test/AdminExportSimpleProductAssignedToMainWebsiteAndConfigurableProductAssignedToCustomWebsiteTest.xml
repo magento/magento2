@@ -105,7 +105,7 @@
             <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
         </actionGroup>
-        <reloadPage stepKey="refreshPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
         <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
