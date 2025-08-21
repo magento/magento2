@@ -9,7 +9,6 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 /**
  * Date grid column filter
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @todo        date format
  */
 class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
