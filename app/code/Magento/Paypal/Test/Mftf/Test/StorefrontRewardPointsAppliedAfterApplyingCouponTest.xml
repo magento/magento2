@@ -42,13 +42,12 @@
             <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
             <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
             <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-            <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="General" stepKey="selectCustomerGroup"/>
+            <actionGroup ref="SelectGeneralCustomerGroupActionGroup" stepKey="selectCustomerGroup"/>
             <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
             <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="fillCouponCode"/>
             <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
             <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
             <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="0.99" stepKey="fillDiscountAmount"/>
-            <fillField selector="{{AdminCartPriceRulesFormSection.addRewardPoints}}" userInput="100" stepKey="fillRewardPoints"/>
             <click selector="{{AdminCartPriceRulesFormSection.saveAndContinue}}" stepKey="clickSaveAndContinueButton"/>
         </before>
         <after>

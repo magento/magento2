@@ -988,6 +988,43 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Create disable image details
+     *
+     * @param mixed $rowSku
+     * @param mixed $column
+     * @param mixed $rowExistingImages
+     * @param int $storeId
+     * @return array|null
+     */
+    private function disableExistingProductImage(
+        mixed $rowSku,
+        mixed $column,
+        mixed $rowExistingImages,
+        int $storeId
+    ): ?array {
+        try {
+            $product = $this->productRepository->get($rowSku);
+            if ($imagePath = $product->getData($column)) {
+                foreach ($rowExistingImages as $existingImage) {
+                    if ($existingImage['value'] == $imagePath) {
+                        $existingImage['store_id'] = $storeId;
+
+                        return [
+                            'disabled' => 1,
+                            'imageData' => $existingImage,
+                            'exists' => true
+                        ];
+                    }
+                }
+            }
+        } catch (NoSuchEntityException) {
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
      * Multiple value separator getter.
      *
      * @return string
@@ -1651,10 +1688,11 @@ class Product extends AbstractEntity
                     }
                     $rowScope = $this->getRowScope($rowData);
                     $urlKey = $this->getUrlKey($rowData);
+                    $rowSku = $rowData[self::COL_SKU];
                     if (!empty($rowData[self::URL_KEY])) {
                         // If url_key column and its value were in the CSV file
                         $rowData[self::URL_KEY] = $urlKey;
-                    } elseif ($this->isNeedToChangeUrlKey($rowData)) {
+                    } elseif ($this->isNeedToChangeUrlKey($rowData, isset($entityRowsIn[strtolower($rowSku)]))) {
                         // If url_key column was empty or even not declared in the CSV file but by the rules it needs
                         // to be settled. In case when url_key is generating from name column we have to ensure that
                         // the bunch of products will pass for the event with url_key column.
@@ -1664,7 +1702,6 @@ class Product extends AbstractEntity
                         // remove null byte character
                         $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
                     }
-                    $rowSku = $rowData[self::COL_SKU];
                     if (null === $rowSku) {
                         $this->getErrorAggregator()->addRowToSkip($rowNum);
                         continue;
@@ -1918,6 +1955,14 @@ class Product extends AbstractEntity
         $imagesByHash = [];
         foreach ($rowImages as $column => $columnImages) {
             foreach ($columnImages as $columnImageKey => $columnImage) {
+                if ($columnImage == $this->getEmptyAttributeValueConstant()) {
+                    if ($disabledImageDetails =
+                        $this->disableExistingProductImage($rowSku, $column, $rowExistingImages, $storeId)
+                    ) {
+                        $imagesForChangeVisibility[] = $disabledImageDetails;
+                    }
+                    continue;
+                }
                 $uploadedFile = $this->findImageByColumnImage(
                     $productMediaPath,
                     $rowExistingImages,
@@ -3230,15 +3275,16 @@ class Product extends AbstractEntity
      * Whether a url key needs to change.
      *
      * @param array $rowData
+     * @param bool $hasParentRow
      * @return bool
      */
-    private function isNeedToChangeUrlKey(array $rowData): bool
+    private function isNeedToChangeUrlKey(array $rowData, bool $hasParentRow = false): bool
     {
         $urlKey = $this->getUrlKey($rowData);
         $productExists = $this->isSkuExist($rowData[self::COL_SKU]);
         $markedToEraseUrlKey = isset($rowData[self::URL_KEY]);
         // The product isn't new and the url key index wasn't marked for change.
-        if (!$urlKey && $productExists && !$markedToEraseUrlKey) {
+        if ($hasParentRow && empty($rowData[self::URL_KEY]) || !$urlKey && $productExists && !$markedToEraseUrlKey) {
             // Seems there is no need to change the url key
             return false;
         }
