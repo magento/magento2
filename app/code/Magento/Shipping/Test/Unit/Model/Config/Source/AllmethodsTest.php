@@ -58,13 +58,13 @@ class AllmethodsTest extends TestCase
     }
 
     /**
-     * Ensure that options converted correctly
+     * Ensure that options converted correctly when isActiveOnlyFlag=false
      *
      * @dataProvider getCarriersMethodsProvider
      * @param array $expectedArray
      * @return void
      */
-    public function testToOptionArray(array $expectedArray): void
+    public function testToOptionArrayGetAllCarriers(array $expectedArray): void
     {
         $expectedArray['getAllCarriers'] = [$this->carriersMock];
 
@@ -72,14 +72,31 @@ class AllmethodsTest extends TestCase
             ->method('getAllCarriers')
             ->willReturn($expectedArray['getAllCarriers']);
         $this->carriersMock->expects($this->once())
-            ->method('isActive')
-            ->willReturn(true);
-        $this->carriersMock->expects($this->once())
             ->method('getAllowedMethods')
             ->willReturn($expectedArray['allowedMethods']);
         $this->assertEquals([$expectedArray['expected_result']], $this->allmethods->toOptionArray());
     }
 
+    /**
+     * Ensure that options converted correctly when isActiveOnlyFlag=true
+     *
+     * @dataProvider getCarriersMethodsProvider
+     * @param array $expectedArray
+     * @return void
+     */
+    public function testToOptionArrayGetActiveCarriers(array $expectedArray): void
+    {
+        $expectedArray['getActiveCarriers'] = [$this->carriersMock];
+
+        $this->shippingConfig->expects($this->once())
+            ->method('getActiveCarriers')
+            ->willReturn($expectedArray['getActiveCarriers']);
+        $this->carriersMock->expects($this->once())
+            ->method('getAllowedMethods')
+            ->willReturn($expectedArray['allowedMethods']);
+        $this->assertEquals([$expectedArray['expected_result']], $this->allmethods->toOptionArray(true));
+    }
+    
     /**
      * Returns providers data for test
      *
@@ -92,12 +109,14 @@ class AllmethodsTest extends TestCase
                 [
                     'allowedMethods' => [null => 'method_title'],
                     'expected_result' => [ 'value' => [], 'label' => null],
-                    'getAllCarriers'  => []
+                    'getAllCarriers'  => [],
+                    'getActiveCarriers'  => []
                 ],
                 [
                     'allowedMethods' => ['method_code' => 'method_title'],
                     'expected_result' => [ 'value' => [], 'label' => 'method_code'],
-                    'getAllCarriers'  => []
+                    'getAllCarriers'  => [],
+                    'getActiveCarriers'  => []
                 ]
 
             ]
