@@ -12,25 +12,15 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  * "Reset to Defaults" button renderer
  *
  * @deprecated 100.1.6
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @see Nothing
  */
 class Reset extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * Pasge robots default instructions
+     * Page robots default instructions
      */
-    const XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS = 'design/search_engine_robots/default_custom_instructions';
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-    }
+    public const XML_PATH_ROBOTS_DEFAULT_CUSTOM_INSTRUCTIONS =
+        'design/search_engine_robots/default_custom_instructions';
 
     /**
      * Set template

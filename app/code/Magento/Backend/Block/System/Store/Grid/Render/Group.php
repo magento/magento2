@@ -9,8 +9,6 @@ use Magento\Framework\DataObject;
 
 /**
  * Store render group
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
