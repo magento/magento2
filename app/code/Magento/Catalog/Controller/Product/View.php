@@ -137,7 +137,6 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
     {
         // Get initial data from request
         $categoryId = (int) $this->getRequest()->getParam('category', false);
-        $productId = (int) $this->getRequest()->getParam('id');
         $specifyOptions = $this->getRequest()->getParam('options');
 
         if ($this->getRequest()->isPost() && $this->getRequest()->getParam(self::PARAM_NAME_URL_ENCODED)) {
@@ -174,11 +173,14 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
 
         // Render page
         try {
+            $productId = (int) number_format($this->getRequest()->getParam('id', false), 0, "", "");
             $this->applyCustomDesign($productId);
             $page = $this->resultPageFactory->create();
             $this->viewHelper->prepareAndRender($page, $productId, $this, $params);
             return $page;
         } catch (NoSuchEntityException $e) {
+            return $this->noProductRedirect();
+        } catch (\TypeError $e) {
             return $this->noProductRedirect();
         } catch (\Exception $e) {
             $this->logger->critical($e);
