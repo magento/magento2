@@ -184,6 +184,8 @@ class ViewTest extends TestCase
         $themeId = 3;
         $this->requestMock->method('isPost')
             ->willReturn(false);
+        $this->requestMock->method('getParam')
+            ->willReturn(1);
         $this->productRepositoryMock->method('getById')
             ->willReturn($this->productInterfaceMock);
         $dataObjectMock = $this->getMockBuilder(DataObject::class)
