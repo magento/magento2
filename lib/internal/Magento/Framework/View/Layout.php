@@ -22,6 +22,7 @@ use Magento\Framework\View\Layout\ProcessorFactory;
 use Magento\Framework\View\Layout\Reader\ContextFactory;
 use Magento\Framework\View\Layout\ReaderPool;
 use Psr\Log\LoggerInterface as Logger;
+use Magento\Framework\View\Layout\Reader\Context;
 
 /**
  * Layout model
@@ -375,11 +376,39 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         );
 
         \Magento\Framework\Profiler::start('generate_elements');
-        $this->generatorPool->process($this->getReaderContext(), $generatorContext);
+
+        $isolatedReaderContext = $this->createIsolatedReaderContext();
+
+        $this->generatorPool->process($isolatedReaderContext, $generatorContext);
         \Magento\Framework\Profiler::stop('generate_elements');
 
         $this->addToOutputRootContainers();
         \Magento\Framework\Profiler::stop(__CLASS__ . '::' . __METHOD__);
+    }
+
+    /**
+     * Create isolated reader context to prevent race condition
+     *
+     * @return Context
+     */
+    private function createIsolatedReaderContext(): Context
+    {
+        $originalContext = $this->getReaderContext();
+
+        $originalScheduledStructure = $originalContext->getScheduledStructure();
+        $isolatedScheduledStructure = new Layout\ScheduledStructure(
+            $originalScheduledStructure->__toArray()
+        );
+
+        $originalPageConfig = $originalContext->getPageConfigStructure();
+        $isolatedPageConfig = new \Magento\Framework\View\Page\Config\Structure();
+        $isolatedPageConfig->populateWithArray($originalPageConfig->__toArray());
+
+        // Create new reader context with isolated structures
+        return $this->readerContextFactory->create([
+            'scheduledStructure' => $isolatedScheduledStructure,
+            'pageConfigStructure' => $isolatedPageConfig
+        ]);
     }
 
     /**
