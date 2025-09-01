@@ -467,3 +467,5 @@ Pagination,Pagination
 "Use URL parameter to enable template path hints for Storefront","Use URL parameter to enable template path hints for Storefront"
 "Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]","Add the following parameter to the URL to show template hints ?templatehints=[parameter_value]"
 "URL key "%1" matches a reserved endpoint name (%2). Use another URL key.","URL key "%1" matches a reserved endpoint name (%2). Use another URL key."
+"Minimum Admin Password Length","Minimum Admin Password Length"
+"Minimum number of characters required for admin user passwords. Values below 7 are not allowed.","Minimum number of characters required for admin user passwords. Values below 7 are not allowed."

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -135,8 +135,7 @@ class CompositeTest extends TestCase
                 'data' => [
                     'ok' => true,
                 ],
-                'expectedErrorMessage' => 'The product that was requested doesn\'t exist.'
-                    . ' Verify the product and try again.',
+                'expectedErrorMessage' => 'The product with ID "" does not exist.',
             ],
         ];
     }

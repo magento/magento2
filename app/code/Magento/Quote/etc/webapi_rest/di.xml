@@ -23,4 +23,9 @@
     <type name="Magento\Quote\Model\QuoteValidator">
         <plugin name="error_redirect_processor" type="Magento\Quote\Plugin\Webapi\Model\ErrorRedirectProcessor" />
     </type>
+    <type name="Magento\Quote\Api\CartItemRepositoryInterface">
+        <plugin name="validateProductWebsiteAssignment"
+                type="Magento\Quote\Plugin\Webapi\ValidateProductWebsiteAssignment"
+                sortOrder="100" />
+    </type>
 </config>

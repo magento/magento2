@@ -164,4 +164,7 @@
             <argument name="customConditionProvider" xsi:type="object">CatalogRuleCustomConditionProvider</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Price">
+        <plugin name="recollect_quote_after_rule_change" type="Magento\CatalogRule\Plugin\Model\Indexer\RecollectQuoteAfterRuleChange"/>
+    </type>
 </config>

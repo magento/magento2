@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\CatalogRule\Model\Indexer\ProductPriceCalculator;
@@ -29,6 +28,7 @@ class ProductPriceCalculatorTest extends TestCase
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
+            ->addMethods(['roundPrice'])
             ->getMockForAbstractClass();
         $this->model = new ProductPriceCalculator($this->priceCurrencyMock);
     }
@@ -44,8 +44,8 @@ class ProductPriceCalculatorTest extends TestCase
         $productData = ['rule_price' => $rulePrice];
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
-            ->with($actionAmount)
+            ->method('roundPrice')
+            ->with($actionAmount, 4)
             ->willReturn($actionAmount);
 
         $this->assertEquals($actionAmount, $this->model->calculate($ruleData, $productData));
@@ -63,8 +63,8 @@ class ProductPriceCalculatorTest extends TestCase
         $productData = ['rule_price' => $rulePrice];
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
-            ->with($expectedPrice)
+            ->method('roundPrice')
+            ->with($expectedPrice, 4)
             ->willReturn($expectedPrice);
 
         $this->assertEquals($expectedPrice, $this->model->calculate($ruleData, $productData));
@@ -82,8 +82,8 @@ class ProductPriceCalculatorTest extends TestCase
         $productData = ['rule_price' => $rulePrice];
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
-            ->with($expectedPrice)
+            ->method('roundPrice')
+            ->with($expectedPrice, 4)
             ->willReturn($expectedPrice);
 
         $this->assertEquals($expectedPrice, $this->model->calculate($ruleData, $productData));
@@ -101,8 +101,8 @@ class ProductPriceCalculatorTest extends TestCase
         $productData = ['rule_price' => $rulePrice];
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
-            ->with($expectedPrice)
+            ->method('roundPrice')
+            ->with($expectedPrice, 4)
             ->willReturn($expectedPrice);
 
         $this->assertEquals($expectedPrice, $this->model->calculate($ruleData, $productData));
