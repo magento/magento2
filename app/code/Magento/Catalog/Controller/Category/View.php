@@ -200,6 +200,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * Category view action
      *
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
@@ -250,6 +251,10 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
 
             if ($this->shouldRedirectOnToolbarAction()) {
                 $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+            }
+
+            if ($this->shouldNoIndexNoFollow()) {
+                $page->getConfig()->setRobots('NOINDEX,NOFOLLOW');
             }
             return $page;
         } elseif (!$this->getResponse()->isRedirect()) {
@@ -314,5 +319,21 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 Toolbar::MODE_PARAM_NAME,
                 Toolbar::LIMIT_PARAM_NAME
             ], array_keys($params))) === false;
+    }
+
+    /**
+     * Checks for robots meta tags
+     *
+     * @return bool
+     */
+    private function shouldNoIndexNoFollow(): bool
+    {
+        $params = $this->getRequest()->getParams();
+
+        return empty(array_diff(array_keys($params), [
+                Toolbar::LIMIT_PARAM_NAME,
+                Toolbar::PAGE_PARM_NAME,
+                'id'
+            ])) === false;
     }
 }
