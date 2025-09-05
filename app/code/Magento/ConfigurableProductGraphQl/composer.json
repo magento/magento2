@@ -11,7 +11,7 @@
         "magento/module-quote": "*",
         "magento/module-quote-graph-ql": "*",
         "magento/module-catalog-inventory": "*",
-        "magento/store": "*",
+        "magento/module-store": "*",
         "magento/framework": "*"
     },
     "license": [
