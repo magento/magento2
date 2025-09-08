@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Backend\Block\System\Account\Edit;
@@ -10,6 +10,7 @@ use Magento\Framework\Locale\OptionInterface;
 
 /**
  * Adminhtml edit admin user account form
+ *
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -112,7 +113,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'password',
                 'label' => __('New Password'),
                 'title' => __('New Password'),
-                'class' => 'validate-admin-password'
+                'class' => 'validate-admin-password',
+                'autocomplete' => 'new-password'
             ]
         );
 
@@ -122,7 +124,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => 'password_confirmation',
                 'label' => __('Password Confirmation'),
-                'class' => 'validate-cpassword'
+                'class' => 'validate-cpassword',
+                'autocomplete' => 'new-password'
             ]
         );
 
@@ -151,7 +154,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
                 'title' => __('Your Password'),
                 'class' => 'validate-current-password required-entry',
-                'required' => true
+                'required' => true,
+                'autocomplete' => 'current-password'
             ]
         );
 
