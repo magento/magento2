@@ -240,11 +240,11 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
      * Validate option
      *
      * @param EavAttributeInterface $attribute
-     * @param int $optionId
+     * @param string|int $optionId
      * @return void
      * @throws NoSuchEntityException
      */
-    protected function validateOption(EavAttributeInterface $attribute, int $optionId): void
+    protected function validateOption(EavAttributeInterface $attribute, string|int $optionId): void
     {
         if ($attribute->getSource()->getOptionText($optionId) === false) {
             throw new NoSuchEntityException(
