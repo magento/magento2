@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart\MergeCarts;
 
-
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartItemRepositoryInterface;
@@ -58,7 +59,9 @@ class CartQuantityValidator implements CartQuantityValidatorInterface
                         $product->getId(),
                         $product->getStore()->getWebsiteId()
                     )->getQty();
-                    if ($stockCurrentQty < $guestCartItem->getQty() + $customerCartItem->getQty()) {
+
+                    if (($stockCurrentQty < $guestCartItem->getQty() + $customerCartItem->getQty())
+                        && !$this->isBackordersEnabled($product)) {
                         try {
                             $this->cartItemRepository->deleteById($guestCart->getId(), $guestCartItem->getItemId());
                             $modified = true;
@@ -72,5 +75,21 @@ class CartQuantityValidator implements CartQuantityValidatorInterface
             }
         }
         return $modified;
+    }
+
+    /**
+     * Check if backorders are enabled for the stock item
+     *
+     * @param Product $product
+     * @return bool
+     */
+    private function isBackordersEnabled(Product $product): bool
+    {
+        $backorders = $this->stockRegistry->getStockItem(
+            $product->getId(),
+            $product->getStore()->getWebsiteId()
+        )->getBackorders();
+        return $backorders == Stock::BACKORDERS_YES_NONOTIFY ||
+            $backorders == Stock::BACKORDERS_YES_NOTIFY;
     }
 }

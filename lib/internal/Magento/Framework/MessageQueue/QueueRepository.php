@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
@@ -10,11 +10,6 @@ namespace Magento\Framework\MessageQueue;
  */
 class QueueRepository
 {
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
     /**
      * @var QueueInterface[]
      */
@@ -26,14 +21,11 @@ class QueueRepository
     private $queueFactory;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param string[] $queues
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param QueueFactoryInterface $queueFactory
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $queues = [])
+    public function __construct(QueueFactoryInterface $queueFactory)
     {
-        $this->objectManager = $objectManager;
+        $this->queueFactory = $queueFactory;
     }
 
     /**
@@ -44,26 +36,12 @@ class QueueRepository
      * @return QueueInterface
      * @throws \LogicException
      */
-    public function get($connectionName, $queueName)
+    public function get($connectionName, $queueName): QueueInterface
     {
         if (!isset($this->queueInstances[$connectionName][$queueName])) {
-            $queue = $this->getQueueFactory()->create($queueName, $connectionName);
+            $queue = $this->queueFactory->create($queueName, $connectionName);
             $this->queueInstances[$connectionName][$queueName] = $queue;
         }
         return $this->queueInstances[$connectionName][$queueName];
-    }
-
-    /**
-     * Get queue factory.
-     *
-     * @return QueueFactoryInterface
-     * @deprecated 103.0.0
-     */
-    private function getQueueFactory()
-    {
-        if ($this->queueFactory === null) {
-            $this->queueFactory = $this->objectManager->get(QueueFactoryInterface::class);
-        }
-        return $this->queueFactory;
     }
 }

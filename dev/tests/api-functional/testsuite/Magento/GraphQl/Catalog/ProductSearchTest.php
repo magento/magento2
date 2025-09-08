@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -200,6 +200,64 @@ QUERY;
             [
                 ['price' => 'DESC', 'name' => 'DESC'],
                 ['prod5', 'prod4', 'prod3', 'prod2', 'prod1']
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider filterByNameWithMatchTypeSpecifiedDataProvider
+     */
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'Cronus Yoga Pant'], 'prod1'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'Lucia Cross-Fit Bra'], 'prod2'),
+        DataFixture(ProductFixture::class, ['price' => 20, 'name' => 'Crown Summit Backpack'], 'prod3'),
+    ]
+    public function testFilterByNameWithMatchTypeSpecified($matchType, $expectedReturns, $expectedTotalCount): void
+    {
+        $expectedNames = [];
+        foreach ($expectedReturns as $productName) {
+            $expectedNames[] = $this->fixture->get($productName)->getName();
+        }
+        $query = <<<'QUERY'
+query GetProductsQuery(
+    $searchWord: String,
+    $matchType: FilterMatchTypeEnum
+) {
+    products(
+        filter: {name: {match: $searchWord, match_type: $matchType} },
+    ) {
+        total_count
+        page_info{total_pages}
+        items{
+            __typename
+            url_key
+            sku
+            name
+        }
+    }
+}
+QUERY;
+        $variables = [
+            'searchWord' => 'Cros',
+            'matchType' => $matchType,
+        ];
+
+        $response = $this->graphQlQuery($query, $variables);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertEquals($expectedTotalCount, $response['products']['total_count']);
+        $this->assertEquals($expectedNames, array_column($response['products']['items'], 'name'));
+    }
+
+    /**
+     * @return array
+     */
+    public function filterByNameWithMatchTypeSpecifiedDataProvider(): array
+    {
+        return [
+            [
+                'PARTIAL',
+                ['prod2'],
+                1
             ],
         ];
     }

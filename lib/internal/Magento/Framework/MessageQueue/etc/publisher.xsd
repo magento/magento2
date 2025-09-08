@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -41,6 +41,7 @@
             <xs:element type="connectionType" name="connection" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute type="xs:string" name="topic" use="required" />
+        <xs:attribute type="xs:string" name="queue" />
         <xs:attribute type="xs:boolean" name="disabled" use="optional" />
     </xs:complexType>
 

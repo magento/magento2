@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Tax\Block\Adminhtml\Rate\Form $tmpBlock */
@@ -17,12 +17,48 @@ require([
     "mage/adminhtml/form"
 ], function(jQuery){
 
-    var updater = new RegionUpdater('tax_country_id', 'tax_region', 'tax_region_id', {$regionJson}, 'disable');
+    var updater = new RegionUpdater('tax_country_id', 'tax_region', 'tax_region_id', {$regionJson}, 'disable', true);
     updater.disableRegionValidation();
 
     (function ($) {
         $(document).ready(function () {
             'use strict';
+
+            function enforceWildcard() {
+                var country = $('#tax_country_id').val(),
+                    selectEl = document.getElementById('tax_region_id'),
+                    textEl = document.getElementById('tax_region'),
+                    hasRegions = !!(window.updater && window.updater.sortedRegions &&
+                        window.updater.sortedRegions[country] &&
+                        window.updater.sortedRegions[country].length);
+
+                if (!hasRegions && selectEl) {
+                    var hasWildcard = false, i;
+
+                    for (i = 0; i < selectEl.options.length; i++) {
+                        if (selectEl.options[i].value === '*') { hasWildcard = true; break; }
+                    }
+                    if (!hasWildcard) {
+                        var opt = document.createElement('option');
+                        opt.value = '*';
+                        opt.text = '*';
+                        opt.title = '*';
+                        try {
+                                selectEl.options.add(opt, 1);
+                            } catch (e)
+                            {
+                                selectEl.insertBefore(opt, selectEl.options[1] || null);
+                            }
+                    }
+                    selectEl.value = '*';
+                    selectEl.disabled = true; // keep disable mode
+                }
+                if (!hasRegions && textEl) {
+                    textEl.value = '*';
+                }
+            }
+            $('#tax_country_id').on('change', function () { setTimeout(enforceWildcard, 0); });
+            setTimeout(enforceWildcard, 0);
 
             var zipIsRange = $('#zip_is_range')
                 .on('change.zipRange', function(){

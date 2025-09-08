@@ -26,4 +26,9 @@
         <plugin name="add_existing_product_options"
                 type="Magento\Sales\Plugin\Model\ResourceModel\Order\Relation\AddExistingItemProductOptions"/>
     </type>
+    <type name="Magento\Sales\Model\OrderRepository">
+        <plugin name="validate_billing_address_on_save"
+                type="Magento\Sales\Plugin\Model\OrderRepositoryPlugin"
+                sortOrder="10"/>
+    </type>
 </config>

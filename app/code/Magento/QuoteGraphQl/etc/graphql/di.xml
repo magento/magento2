@@ -106,4 +106,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Query\QueryDataFormatter">
+        <arguments>
+            <argument name="formatters" xsi:type="array">
+                <item name="process_order_response_formatter" xsi:type="object">Magento\QuoteGraphQl\Model\OrderResponseFormatter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
