@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Model;
 
 use Magento\Config\Model\ResourceModel\Config\Data;
@@ -72,7 +74,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Website Group Collection array
      *
-     * @var \Magento\Store\Model\Store[]
+     * @var \Magento\Store\Model\Group[]
      */
     protected $_groups;
 
@@ -121,7 +123,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Website default group
      *
-     * @var \Magento\Store\Model\Store
+     * @var \Magento\Store\Model\Group
      */
     protected $_defaultGroup;
 
@@ -316,7 +318,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Set website groups
      *
-     * @param array $groups
+     * @param \Magento\Store\Model\Group[] $groups
      * @return $this
      */
     public function setGroups($groups)
@@ -348,7 +350,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve website groups
      *
-     * @return \Magento\Store\Model\Store[]
+     * @return \Magento\Store\Model\Group[]
      */
     public function getGroups()
     {
@@ -387,7 +389,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve default group model
      *
-     * @return \Magento\Store\Model\Store
+     * @return \Magento\Store\Model\Group
      */
     public function getDefaultGroup()
     {
