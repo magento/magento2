@@ -110,8 +110,9 @@ class MassPublisher implements PublisherInterface
 
         $publisher = $this->publisherConfig->getPublisher($topicName);
         $connectionName = $publisher->getConnection()->getName();
-        $queue = $this->queueRepository->get($connectionName, $publisher->getQueue());
-        $bulkQueue = $this->bulkQueueRepository->get($connectionName, $publisher->getQueue());
+        $queueName = $publisher->getQueue() ? $publisher->getQueue(): $topicName;
+        $queue = $this->queueRepository->get($connectionName, $queueName);
+        $bulkQueue = $this->bulkQueueRepository->get($connectionName, $queueName);
         $bulkQueue->push($queue, $topicName, $envelopes);
 
         return null;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -13,9 +13,9 @@
             <description>Select shipping method based on the address and shipping method.</description>
         </annotations>
         <waitForElementClickable selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('Culver City', 'Federal Express', 'Ground')}}" stepKey="waitForSelectShippingMethodBasedOnAddress"/>
-            <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('Culver City', 'Federal Express', 'Ground')}}" stepKey="clickToSelectFederalExpressMethod"/>
             <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('Germany', 'DHL', 'Express easy')}}" stepKey="clickToSelectDHLMethod"/>
             <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('London', 'United Parcel Service', 'UPS Worldwide Expedited')}}" stepKey="clickToSelectUPSMethod"/>
             <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('New York', 'United States Postal Service', 'Library Mail Parcel')}}" stepKey="clickToSelectUSPSMethod"/>
+            <click selector="{{AdminShipmentAddressInformationSection.selectShippingMethodBasedOnAddress('Culver City', 'Federal Express', 'Ground')}}" stepKey="clickToSelectFederalExpressMethod"/>
     </actionGroup>
 </actionGroups>
