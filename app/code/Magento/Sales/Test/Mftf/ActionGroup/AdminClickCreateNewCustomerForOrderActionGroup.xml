@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2020 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickCreateNewCustomerForOrderActionGroup">
+        <annotations>
+            <description>Click 'Create New Customer' button on the order create grid page.</description>
+        </annotations>
+
+        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateNewCustomer"/>
+        <waitForPageLoad stepKey="waitForCustomersPage"/>
+    </actionGroup>
+</actionGroups>
