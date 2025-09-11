@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var \Magento\Customer\Block\Form\Login $block */
 if (!$block->getButtonLockManager()) {
+    // phpcs:ignore
     $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
     $block->setButtonLockManager(
         $objectManager->get(\Magento\Framework\View\Element\ButtonLockManager::class)
@@ -35,7 +36,6 @@ if (!$block->getButtonLockManager()) {
                             <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?>
                                id="email" type="email" class="input-text"
                                title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
-                               data-mage-init='{"mage/trim-input":{}}'
                                data-validate="{required:true, 'validate-email':true}">
                     </div>
                 </div>

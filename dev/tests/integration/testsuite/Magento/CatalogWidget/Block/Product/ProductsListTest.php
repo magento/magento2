@@ -8,6 +8,7 @@ namespace Magento\CatalogWidget\Block\Product;
 
 use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
 use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Test\Fixture\MultiselectAttribute as MultiselectAttributeFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
@@ -20,31 +21,33 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for @see \Magento\CatalogWidget\Block\Product\ProductsList
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductListTest extends TestCase
+#[
+    CoversClass(ProductsList::class),
+    DbIsolation(false),
+]
+class ProductsListTest extends TestCase
 {
     /**
      * @var ProductsList
      */
-    protected $block;
+    private $block;
 
     /**
      * @var CategoryCollection;
-
      */
     private $categoryCollection;
 
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var DataFixtureStorage
@@ -56,7 +59,7 @@ class ProductListTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->block = $this->objectManager->create(ProductsList::class);
         $this->categoryCollection = $this->objectManager->create(CategoryCollection::class);
-        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -67,10 +70,10 @@ class ProductListTest extends TestCase
      * 3. Create product list widget condition based on the new multiselect attribute
      * 4. Set at least 2 options of multiselect attribute to match products for the product list widget
      * 5. Load collection for product list widget and make sure that number of loaded products is correct
-     *
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      */
+    #[
+        DataFixture('Magento/Catalog/_files/products_with_multiselect_attribute.php'),
+    ]
     public function testCreateCollection()
     {
         // Reindex EAV attributes to enable products filtration by created multiselect attribute
@@ -111,10 +114,10 @@ class ProductListTest extends TestCase
 
     /**
      * Test product list widget can process condition with dropdown type of attribute
-     *
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/products_with_dropdown_attribute.php
      */
+    #[
+        DataFixture('Magento/Catalog/_files/products_with_dropdown_attribute.php'),
+    ]
     public function testCreateCollectionWithDropdownAttribute()
     {
         /** @var $attribute Attribute */
@@ -166,15 +169,15 @@ class ProductListTest extends TestCase
     /**
      * Check that collection returns correct result if use not contains operator for string attribute
      *
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_xss.php
-     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
-     * @dataProvider createCollectionForSkuDataProvider
      * @param string $encodedConditions
      * @param string $sku
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
+    #[
+        DataFixture('Magento/Catalog/_files/product_simple_xss.php'),
+        DataFixture('Magento/Catalog/_files/product_virtual.php'),
+        DataFixture(ProductFixture::class, ['status' => ProductStatus::STATUS_DISABLED]),
+        DataProvider('createCollectionForSkuDataProvider'),
+    ]
     public function testCreateCollectionForSku($encodedConditions, $sku)
     {
         $this->block->setData('conditions_encoded', $encodedConditions);
@@ -207,12 +210,10 @@ class ProductListTest extends TestCase
 
     /**
      * Check that collection returns correct result if use date attribute.
-     *
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_date_attribute.php
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
+    #[
+        DataFixture('Magento/Catalog/_files/product_simple_with_date_attribute.php'),
+    ]
     public function testProductListWithDateAttribute()
     {
         $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
@@ -238,10 +239,10 @@ class ProductListTest extends TestCase
      * 2. Create 2 new products and assign them to the sub categories
      * 3. Create product list widget condition to display products from the anchor root category
      * 4. Load collection for product list widget and make sure that number of loaded products is correct
-     *
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/product_in_nested_anchor_categories.php
      */
+    #[
+        DataFixture('Magento/Catalog/_files/product_in_nested_anchor_categories.php'),
+    ]
     public function testCreateAnchorCollection()
     {
         // Reindex EAV attributes to enable products filtration by created multiselect attribute
@@ -276,7 +277,6 @@ class ProductListTest extends TestCase
     }
 
     #[
-        DbIsolation(false),
         DataFixture(ProductFixture::class, ['price' => 10], 'p1'),
         DataFixture(ProductFixture::class, ['price' => 20], 'p2'),
         DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$', '$p2$']], 'opt1'),
@@ -301,14 +301,15 @@ class ProductListTest extends TestCase
     /**
      * Test that price rule condition works correctly
      *
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @param string $operator
      * @param int $value
      * @param array $matches
-     * @dataProvider priceFilterDataProvider
      */
+    #[
+        DataFixture('Magento/Catalog/_files/category_with_different_price_products.php'),
+        DataFixture('Magento/ConfigurableProduct/_files/product_configurable.php'),
+        DataProvider('priceFilterDataProvider'),
+    ]
     public function testPriceFilter(string $operator, int $value, array $matches)
     {
         $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,
@@ -375,7 +376,6 @@ class ProductListTest extends TestCase
     }
 
     #[
-        DbIsolation(false),
         DataProvider('collectionResultWithMultiselectAttributeDataProvider'),
         DataFixture(
             MultiselectAttributeFixture::class,
