@@ -6,8 +6,7 @@ type StoreConfig {
     minimum_password_length : String @doc(description: "The minimum number of characters required for a valid password.")
     autocomplete_on_storefront : Boolean @doc(description: "Indicates whether to enable autocomplete on login and forgot password forms.")
     create_account_confirmation: Boolean @doc(description: "Indicates if the new accounts need confirmation.")
-    graphql_share_all_customer_groups: Boolean! @doc(description: "Configuration data from customer/account_information/graphql_share_all_customer_groups")
-    graphql_share_customer_group: Boolean! @doc(description: "Configuration data from customer/account_information/graphql_share_customer_group")
+    graphql_share_customer_group: Boolean @doc(description: "Configuration data from customer/account_information/graphql_share_customer_group")
 }
 
 type Query {
@@ -15,8 +14,7 @@ type Query {
     isEmailAvailable (
         email: String! @doc(description: "The email address to check.")
     ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable") @doc(description: "Check whether the specified email has already been used to create a customer account.")
-    allCustomerGroups: [CustomerGroup!] @doc(description: "An array containing a list of all Customer Groups available.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\AllCustomerGroups")
-    customerGroup: CustomerGroup! @doc(description: "Provides name of the Customer Group assigned to the Customer or Guest.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\GetCustomerGroup")
+    customerGroup: CustomerGroupStorefront! @doc(description: "Provides Customer Group assigned to the Customer or Guest.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\Visitor")
 }
 
 type Mutation {
@@ -157,7 +155,7 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
     custom_attributes(attributeCodes: [ID!]): [AttributeValueInterface] @doc(description: "Customer's custom attributes.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomAttributeFilter")
     confirmation_status: ConfirmationStatusEnum! @doc(description: "The customer's confirmation status.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\ConfirmationStatus")
-    group: CustomerGroup @doc(description: "Name of the customer group assigned to the customer") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerGroup")
+    group: CustomerGroupStorefront @doc(description: "Customer group assigned to the customer") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerGroup")
 }
 
 type CustomerAddresses {
@@ -168,6 +166,7 @@ type CustomerAddresses {
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){
     id: Int @doc(description: "The ID of a `CustomerAddress` object.")
+    uid: ID! @doc(description: "The unique ID for a `CustomerAddress` object.")  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressUid")
     customer_id: Int @doc(description: "The customer ID") @deprecated(reason: "`customer_id` is not needed as part of `CustomerAddress`. The `id` is a unique identifier for the addresses.")
     region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID.")
     region_id: Int @doc(description: "The unique ID for a pre-defined region.")
@@ -497,6 +496,6 @@ enum ConfirmationStatusEnum @doc(description: "List of account confirmation stat
     ACCOUNT_CONFIRMATION_NOT_REQUIRED @doc(description: "Account confirmation not required")
 }
 
-type CustomerGroup @doc(description: "Data of customer group.") {
-    name: String @doc(description: "The name of customer group.")
+type CustomerGroupStorefront @doc(description: "Data of customer group.") {
+    uid: ID! @doc(description: "The unique ID for a `CustomerGroup` object.")
 }

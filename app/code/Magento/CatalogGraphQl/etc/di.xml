@@ -150,4 +150,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder">
+        <arguments>
+            <argument name="partialSearchAnalyzers" xsi:type="array">
+                <item name="name" xsi:type="string">prefix_search</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

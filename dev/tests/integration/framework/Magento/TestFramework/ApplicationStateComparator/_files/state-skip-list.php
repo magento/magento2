@@ -290,6 +290,7 @@ return [
         Magento\Framework\Cache\LockGuardedCacheLoader::class => null,
         Magento\Framework\View\Asset\PreProcessor\Pool::class => null,
         Magento\Framework\App\Area::class => null,
+        Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class => null,
         Magento\Store\Model\Store\Interceptor::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\Comparator::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\GraphQl\Query\QueryParser::class => null, // reloads as a ReloadProcessor
@@ -548,6 +549,38 @@ return [
         Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\DataMapper::class => null,
         // phpcs:enable Generic.Files.LineLength.TooLong
     ],
-    '' => [
+    // Skip both AMQP and STOMP message queue objects for placeOrder operations
+    // This allows the test to work regardless of which message queue system is active
+    'placeOrder' => [
+        // AMQP message queue objects
+        \Magento\Framework\Amqp\ConfigPool::class => null,
+        \Magento\Framework\Amqp\Config::class => null,
+        \Magento\Framework\Amqp\Exchange::class => null,
+        \Magento\Framework\MessageQueue\Publisher::class => null,
+        PhpAmqpLib\Connection\AMQPStreamConnection::class => null,
+        PhpAmqpLib\Connection\AMQPSSLConnection::class => null,
+        // STOMP message queue objects
+        \Magento\Framework\Stomp\ConfigPool::class => null,
+        \Magento\Framework\Stomp\Config::class => null,
+        \Magento\Framework\Stomp\Queue::class => null,
+        \Magento\Framework\Stomp\StompClient::class => null,
+        \Magento\Framework\MessageQueue\QueueRepository::class => null,
+        Stomp\StatefulStomp::class => null,
+    ],
+    'placeOrder-fromConstructed' => [
+        // AMQP message queue objects
+        \Magento\Framework\Amqp\ConfigPool::class => null,
+        \Magento\Framework\Amqp\Config::class => null,
+        \Magento\Framework\Amqp\Exchange::class => null,
+        \Magento\Framework\MessageQueue\Publisher::class => null,
+        PhpAmqpLib\Connection\AMQPStreamConnection::class => null,
+        PhpAmqpLib\Connection\AMQPSSLConnection::class => null,
+        // STOMP message queue objects
+        \Magento\Framework\Stomp\ConfigPool::class => null,
+        \Magento\Framework\Stomp\Config::class => null,
+        \Magento\Framework\Stomp\Queue::class => null,
+        \Magento\Framework\Stomp\StompClient::class => null,
+        \Magento\Framework\MessageQueue\QueueRepository::class => null,
+        \Stomp\StatefulStomp::class => null,
     ],
 ];

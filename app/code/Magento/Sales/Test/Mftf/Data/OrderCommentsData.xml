@@ -18,4 +18,7 @@
         <data key="sent">An example comment when Status is sent.</data>
         <data key="readyForPickup">An example comment when Status is Ready For Pickup.</data>
     </entity>
+    <entity name="OrderUnassignedStatusMessage">
+        <data key="value">You have unassigned the order status.</data>
+    </entity>
 </entities>

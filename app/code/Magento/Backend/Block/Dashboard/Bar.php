@@ -10,8 +10,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Adminhtml dashboard bar block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Bar extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 {

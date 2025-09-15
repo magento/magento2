@@ -8,14 +8,10 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Exception;
-use Magento\Customer\Api\Data\GroupExtension;
-use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\Group;
 use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
-use Magento\Customer\Test\Fixture\CustomerGroup as CustomerGroupFixture;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -27,8 +23,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class GetCustomerGroupTest extends GraphQlAbstract
 {
-    private const GUEST_CUSTOMER_GROUP = 'NOT LOGGED IN';
-
     /**
      * @var CustomerTokenServiceInterface
      */
@@ -40,19 +34,15 @@ class GetCustomerGroupTest extends GraphQlAbstract
     private $fixtures;
 
     /**
-     * @var GroupRepositoryInterface
+     * @var Uid
      */
-    private $groupRepository;
+    private $idEncoder;
 
-    /**
-     * @return void
-     * @throws LocalizedException
-     */
     protected function setUp(): void
     {
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
-        $this->groupRepository = Bootstrap::getObjectManager()->get(GroupRepositoryInterface::class);
+        $this->idEncoder = Bootstrap::getObjectManager()->get(Uid::class);
     }
     /**
      * Test to retrieve customer group when graphql_share_customer_group is enabled.
@@ -61,7 +51,7 @@ class GetCustomerGroupTest extends GraphQlAbstract
      * @throws Exception
      */
     #[
-        Config('customer/account_information/graphql_share_customer_group', 1),
+        Config('customer/account_information/graphql_share_customer_group', true),
         DataFixture(CustomerFixture::class, as: 'customer')
     ]
     public function testGetCustomerGroupForLoggedInCustomer(): void
@@ -72,7 +62,7 @@ class GetCustomerGroupTest extends GraphQlAbstract
             [
                 'customer' => [
                     'group' => [
-                        'name' => $this->groupRepository->getById($customer->getGroupId())->getCode()
+                        'uid' => $this->idEncoder->encode($customer->getGroupId())
                     ]
                 ]
             ],
@@ -86,12 +76,12 @@ class GetCustomerGroupTest extends GraphQlAbstract
     }
 
     /**
-     * Test to retrieve customer group when graphql_share_customer_group is disabled.
+     *  Test to retrieve customer group when graphql_share_customer_group is disabled.
      *
      * @throws Exception
      */
     #[
-        Config('customer/account_information/graphql_share_customer_group', 0),
+        Config('customer/account_information/graphql_share_customer_group', false),
         DataFixture(CustomerFixture::class, as: 'customer')
     ]
     public function testGetCustomerGroupForLoggedInCustomerWhenConfigDisabled(): void
@@ -111,11 +101,8 @@ class GetCustomerGroupTest extends GraphQlAbstract
         );
     }
 
-    /**
-     * @throws Exception
-     */
     #[
-        Config('customer/account_information/graphql_share_customer_group', 1),
+        Config('customer/account_information/graphql_share_customer_group', true),
         DataFixture(CustomerFixture::class, as: 'customer')
     ]
     public function testGetCustomerGroup(): void
@@ -125,7 +112,7 @@ class GetCustomerGroupTest extends GraphQlAbstract
         self::assertEquals(
             [
                 'customerGroup' => [
-                    'name' => $this->groupRepository->getById($customer->getGroupId())->getCode()
+                    'uid' => $this->idEncoder->encode($customer->getGroupId())
                 ]
             ],
             $this->graphQlQuery(
@@ -141,53 +128,7 @@ class GetCustomerGroupTest extends GraphQlAbstract
      * @throws Exception
      */
     #[
-        Config('customer/account_information/graphql_share_customer_group', 1),
-        DataFixture(CustomerGroupFixture::class, as: 'group')
-    ]
-    public function testGetCustomerGroupWhenItsExcluded(): void
-    {
-        $customer = Bootstrap::getObjectManager()->get(Customer::class);
-        $customerGroup = Bootstrap::getObjectManager()->get(Group::class);
-
-        // Load Customer Group
-        $customerGroup->load($this->fixtures->get('group')->getCode(), 'customer_group_code');
-
-        // Ensure extension attributes exist
-        $extensionAttributes = $customerGroup->getExtensionAttributes();
-        if (!$extensionAttributes) {
-            $extensionAttributes = Bootstrap::getObjectManager()->get(GroupExtension::class);
-            $customerGroup->setExtensionAttributes($extensionAttributes);
-        }
-
-        // Set excluded website ID
-        $extensionAttributes->setExcludeWebsiteIds([1]); // Website ID 1 is excluded
-        $customerGroup->setExtensionAttributes($extensionAttributes);
-        $customerGroup->save();
-
-        //set customer
-        $customer->setWebsiteId(1);
-        $customer->setGroupId($customerGroup->getId());
-        $customer->setEmail('excluded_customer@example.com');
-        $customer->setFirstname('Excluded');
-        $customer->setLastname('User');
-        $customer->setPassword('password');
-        $customer->save();
-
-        $response = $this->graphQlQuery(
-            $this->getCustomerGroupQuery(),
-            [],
-            '',
-            $this->getCustomerAuthHeaders('excluded_customer@example.com')
-        );
-
-        self::assertNotEquals($customer->getCustomerGroup(), $response['customerGroup']['name']);
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[
-        Config('customer/account_information/graphql_share_customer_group', 0),
+        Config('customer/account_information/graphql_share_customer_group', false),
         DataFixture(CustomerFixture::class, as: 'customer')
     ]
     public function testGetCustomerGroupWhenConfigDisabled(): void
@@ -208,14 +149,14 @@ class GetCustomerGroupTest extends GraphQlAbstract
      * @throws Exception
      */
     #[
-        Config('customer/account_information/graphql_share_customer_group', 1)
+        Config('customer/account_information/graphql_share_customer_group', true)
     ]
     public function testGetCustomerGroupForGuest(): void
     {
         self::assertEquals(
             [
                 'customerGroup' => [
-                    'name' => self::GUEST_CUSTOMER_GROUP
+                    'uid' => $this->idEncoder->encode('0')
                 ]
             ],
             $this->graphQlQuery($this->getCustomerGroupQuery())
@@ -226,7 +167,7 @@ class GetCustomerGroupTest extends GraphQlAbstract
      * @throws Exception
      */
     #[
-        Config('customer/account_information/graphql_share_customer_group', 0)
+        Config('customer/account_information/graphql_share_customer_group', false)
     ]
     public function testGetCustomerGroupForGuestWhenConfigDisabled(): void
     {
@@ -247,7 +188,7 @@ class GetCustomerGroupTest extends GraphQlAbstract
         return <<<QUERY
             query CustomerGroup {
                 customerGroup {
-                    name
+                    uid
                 }
             }
         QUERY;
@@ -264,7 +205,7 @@ class GetCustomerGroupTest extends GraphQlAbstract
             {
               customer {
                 group {
-                  name
+                  uid
                 }
               }
             }
@@ -272,7 +213,7 @@ class GetCustomerGroupTest extends GraphQlAbstract
     }
 
     /**
-     * Get customer auth headers
+     * Retrieve Auth header for customer with email
      *
      * @param string $email
      * @return array

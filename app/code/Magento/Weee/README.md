@@ -1,12 +1,12 @@
 # Magento_Weee module
 
-The Magento_Weee module enables the application of fees/fixed product taxes (FPT) on certain types of products, usually related to electronic devices and recycling.
+This module enables the application of fees/fixed product taxes (FPT) on certain types of products, usually related to electronic devices and recycling.
 
 Fixed product taxes can be used to setup a WEEE tax that is a fixed amount, rather than a percentage of the product price. FPT can be configured to be displayed at various places in Magento. Rules, amounts, and display options can be configured in the backend.
 
 This module extends the existing functionality of Magento_Tax.
 
-The Magento_Weee module includes the following:
+This module includes the following:
 
 - Ability to add different number of fixed product taxes to product. They are treated as a product attribute.
 - Configuration of where WEEE appears (on category, product, sales, invoice, or credit memo pages) and whether FPT should be taxed.
@@ -14,9 +14,9 @@ The Magento_Weee module includes the following:
 
 ## Installation details
 
-The Magento_Weee module can be installed automatically (using native Magento install mechanism) without any additional actions.
+This module can be installed automatically (using native Magento install mechanism) without any additional actions.
 
-Before installing this module, note that the Magento_Weee is dependent on the following modules:
+Before installing this module, note that this module is dependent on the following modules:
 
 - Magento_Catalog
 - Magento_Checkout
@@ -26,7 +26,7 @@ Before installing this module, note that the Magento_Weee is dependent on the fo
 - Magento_Store
 - Magento_Tax
 
-Refer to [how to enable or disable modules in Magento 2](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
+Refer to [how to enable or disable modules in Magento 2](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Structure
 
@@ -36,9 +36,9 @@ For information about a typical file structure of a module, see [Module file str
 
 ## Extensibility
 
-Extension developers can interact with the Magento_Weee module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://developer.adobe.com/commerce/php/development/components/plugins/).
+Extension developers can interact with this module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Weee module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of this module.
 
 ### Layouts
 
@@ -88,7 +88,7 @@ For more information about a layout, see the [Layout documentation](https://deve
 
 ### UI components
 
-You can extend a customer form and widgets using the configuration files located in the directories
+You can extend a customer form and widgets using the configuration files located in the directories:
 
 - `view/adminhtml/ui_component`:
     - `product_attribute_add_form`
