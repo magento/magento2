@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Eav\Setup;
+
+use Magento\TestFramework\Fixture\AppIsolation;
 
 /**
  * Test class for Magento\Eav\Setup\EavSetup.
@@ -13,8 +14,6 @@ namespace Magento\Eav\Setup;
 class EavSetupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Eav setup.
-     *
      * @var \Magento\Eav\Setup\EavSetup
      */
     private $eavSetup;
@@ -66,6 +65,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider addAttributeThrowExceptionDataProvider
      */
+    #[AppIsolation(true)]
     public function testAddAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -98,10 +98,12 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider addInvalidAttributeThrowExceptionDataProvider
      */
+    #[AppIsolation(true)]
     public function testAddInvalidAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,');
+        $this->expectExceptionMessage('Please use only letters (a-z or A-Z), ' .
+            'numbers (0-9) or underscore (_) in this field,');
 
         $attributeData = $this->getAttributeData();
         $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
