@@ -3,6 +3,7 @@
  * Copyright 2017 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Indexer;
 
@@ -28,7 +29,7 @@ class ProductPriceCalculator
      * Calculates product price.
      *
      * @param array $ruleData
-     * @param null $productData
+     * @param array|null $productData
      * @return float
      */
     public function calculate($ruleData, $productData = null)
@@ -56,6 +57,6 @@ class ProductPriceCalculator
                 $productPrice = 0;
         }
 
-        return $this->priceCurrency->round($productPrice);
+        return $this->priceCurrency->roundPrice($productPrice, 4);
     }
 }

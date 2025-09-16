@@ -166,6 +166,7 @@ type CustomerAddresses {
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){
     id: Int @doc(description: "The ID of a `CustomerAddress` object.")
+    uid: ID! @doc(description: "The unique ID for a `CustomerAddress` object.")  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressUid")
     customer_id: Int @doc(description: "The customer ID") @deprecated(reason: "`customer_id` is not needed as part of `CustomerAddress`. The `id` is a unique identifier for the addresses.")
     region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID.")
     region_id: Int @doc(description: "The unique ID for a pre-defined region.")

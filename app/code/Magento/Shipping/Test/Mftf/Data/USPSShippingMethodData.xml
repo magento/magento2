@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -51,5 +51,25 @@
         <data key="scope_id">1</data>
         <data key="label">No</data>
         <data key="value">0</data>
+    </entity>
+    <entity name="AdminEnableFreeMethodUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_method</data>
+        <data key="value">7</data>
+    </entity>
+    <entity name="AdminDisableFreeMethodUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_method</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminEnableFreeShippingThresholdUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_shipping_enable</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableFreeShippingThresholdUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_shipping_enable</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminFillFreeShippingAmountThresholdUSPSConfigData" type="usps_config">
+        <data key="path">carriers/usps/free_shipping_subtotal</data>
+        <data key="value">49</data>
     </entity>
 </entities>
