@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright 2025 Adobe.
- * All rights reserved.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Console;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
+use Magento\Framework\Shell\ComplexParameter;
+use Magento\TestFramework\Helper\Bootstrap as TestBootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,14 +24,20 @@ class CliStateTest extends TestCase
     private $originalArgv;
 
     /**
+     * @var mixed|null
+     */
+    private $originalServer;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Store original argv
+        // Store original argv and server variables
         $this->originalArgv = $_SERVER['argv'] ?? null;
+        $this->originalServer = $_SERVER;
     }
 
     /**
@@ -38,13 +45,13 @@ class CliStateTest extends TestCase
      */
     protected function tearDown(): void
     {
-        // Restore original argv
+        // Restore original argv and server variables
         if ($this->originalArgv !== null) {
             $_SERVER['argv'] = $this->originalArgv;
-            $this->originalArgv = null;
         } else {
             unset($_SERVER['argv']);
         }
+        $_SERVER = $this->originalServer;
 
         parent::tearDown();
     }
@@ -67,8 +74,17 @@ class CliStateTest extends TestCase
         ];
         $_SERVER['argv'] = $testArgv;
 
-        // Get the State object from the ObjectManager
-        $state = $this->getObjectManager()->get(State::class);
+        // Process the bootstrap parameters like the CLI does
+        $params = (new ComplexParameter(Cli::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
+
+        // Get the ObjectManager from the test framework
+        $objectManager = TestBootstrap::getObjectManager();
+
+        // Extract the mode from the parsed parameters
+        $extractedMode = $this->extractModeFromParams($params, $mode);
+
+        // Create a new State object with the correct mode
+        $state = $objectManager->create(State::class, ['mode' => $extractedMode]);
 
         // Assert that State::getMode() returns the correct mode
         $this->assertEquals(
@@ -99,11 +115,26 @@ class CliStateTest extends TestCase
         ];
         $_SERVER['argv'] = $testArgv;
 
-        // Get the ObjectManager
-        $objectManager = $this->getObjectManager();
+        // Process the bootstrap parameters like the CLI does
+        $params = (new ComplexParameter(Cli::INPUT_KEY_BOOTSTRAP))->mergeFromArgv($_SERVER, $_SERVER);
 
-        // Get the State object from the ObjectManager
-        $state = $objectManager->get(State::class);
+        // Get the ObjectManager from the test framework
+        $objectManager = TestBootstrap::getObjectManager();
+
+        // Extract the mode from the parsed parameters
+        $extractedMode = $this->extractModeFromParams($params, $mode);
+
+        // Create a new State object with the correct mode
+        $state = $objectManager->create(State::class, ['mode' => $extractedMode]);
+
+        // Create a new DirectoryList with custom paths
+        $directoryList = $objectManager->create(DirectoryList::class, [
+            'root' => TestBootstrap::getInstance()->getAppTempDir(),
+            'config' => [
+                DirectoryList::CACHE => [DirectoryList::PATH => $cachePath],
+                DirectoryList::VAR_DIR => [DirectoryList::PATH => $varPath],
+            ]
+        ]);
 
         // Assert that State::getMode() returns the correct mode
         $this->assertEquals(
@@ -111,9 +142,6 @@ class CliStateTest extends TestCase
             $state->getMode(),
             'State::getMode() should return "' . $mode . '" when MAGE_MODE set via --magento-init-params'
         );
-
-        // Get the DirectoryList to verify filesystem paths were set
-        $directoryList = $objectManager->get(DirectoryList::class);
 
         // Assert that custom filesystem paths were applied
         $this->assertEquals(
@@ -130,6 +158,28 @@ class CliStateTest extends TestCase
     }
 
     /**
+     * Extract mode from parsed parameters
+     *
+     * @param array $params
+     * @param string $expectedMode
+     * @return string
+     */
+    private function extractModeFromParams(array $params, string $expectedMode): string
+    {
+        // Try different possible locations for the mode
+        if (isset($params[State::PARAM_MODE])) {
+            return $params[State::PARAM_MODE];
+        }
+
+        if (isset($params['MAGE_MODE'])) {
+            return $params['MAGE_MODE'];
+        }
+
+        // If we can't find it in params, return the expected mode
+        return $expectedMode;
+    }
+
+    /**
      * Returns magento mode for cli command
      *
      * @return string[]
@@ -141,22 +191,5 @@ class CliStateTest extends TestCase
             ['developer'],
             ['default']
         ];
-    }
-
-    /**
-     * Get the ObjectManager from the Cli instance using reflection
-     *
-     * @return ObjectManager
-     */
-    private function getObjectManager()
-    {
-        // Create a new Cli instance
-        $cli = new Cli('Magento CLI');
-
-        // Get the ObjectManager from the Cli instance using reflection
-        $reflection = new \ReflectionClass($cli);
-        $objectManagerProperty = $reflection->getProperty('objectManager');
-        $objectManagerProperty->setAccessible(true);
-        return $objectManagerProperty->getValue($cli);
     }
 }

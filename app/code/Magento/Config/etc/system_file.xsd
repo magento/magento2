@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -178,7 +178,7 @@
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="label" type="xs:string" />
-                    <xs:element ref="comment" />
+                    <xs:element name="comment" type="commentType" minOccurs="0" />
                     <xs:element name="tooltip" type="xs:string" />
                     <xs:element name="hint" type="xs:string" />
                     <xs:element name="frontend_class" type="xs:string" />
@@ -479,20 +479,12 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:element name="comment">
-        <xs:annotation>
-            <xs:documentation>
-                Comment type
-            </xs:documentation>
-        </xs:annotation>
-
-        <xs:complexType mixed="true">
-            <xs:sequence>
-                <xs:any minOccurs="0" maxOccurs="1" processContents="lax" />
-            </xs:sequence>
-            <xs:attributeGroup ref="commentAttributeGroup"/>
-        </xs:complexType>
-    </xs:element>
+    <xs:complexType name="commentType" mixed="true">
+        <xs:sequence>
+            <xs:element name="model" type="typeModel" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="model" type="xs:string" use="optional"/>
+    </xs:complexType>
 
     <xs:simpleType name="typeConfigPath">
         <xs:annotation>

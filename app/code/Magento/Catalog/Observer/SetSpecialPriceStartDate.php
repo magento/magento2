@@ -39,7 +39,14 @@ class SetSpecialPriceStartDate implements ObserverInterface
         /** @var  $product \Magento\Catalog\Model\Product */
         $product = $observer->getEvent()->getProduct();
         if ($product->getSpecialPrice() && $product->getSpecialFromDate() === null) {
-            $product->setData('special_from_date', $this->localeDate->date()->setTime(0, 0));
+            // Set the special_from_date to the current date with time 00:00:00 when a special price is defined
+            // but no start date is specified. This ensures the special price takes effect immediately
+            // and is consistent with how the special price validation works in Magento.
+            // The time is explicitly set to midnight to ensure the special price is active for the entire day.
+            $product->setData(
+                'special_from_date',
+                $this->localeDate->date()->setTime(0, 0)->format('Y-m-d H:i:s')
+            );
         }
         return $this;
     }

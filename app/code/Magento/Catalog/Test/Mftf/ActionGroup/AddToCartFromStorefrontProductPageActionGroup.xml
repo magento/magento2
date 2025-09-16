@@ -17,6 +17,8 @@
             <argument name="productName"/>
         </arguments>
         <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="waitForAddToCartButtonToRemoveDisabledState"/>
+        <!-- Scroll to button to prevent overlapping elements from intercepting click -->
+        <scrollToTopOfPage stepKey="scrollToAddToCartButton"/>
         <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>

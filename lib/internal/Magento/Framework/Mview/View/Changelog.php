@@ -38,6 +38,11 @@ class Changelog implements ChangelogInterface
     public const VERSION_ID_COLUMN_NAME = 'version_id';
 
     /**
+     * Batch size for changelog cleaning operation
+     */
+    private const CHANGELOG_CLEAR_BATCH_SIZE = 10000;
+
+    /**
      * Database connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -249,7 +254,14 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id < ?' => (int)$versionId]);
+        $this->connection->query(
+            sprintf(
+                'DELETE FROM `%s` WHERE %s LIMIT %d',
+                $changelogTableName,
+                'version_id < ' . (int) $versionId,
+                self::CHANGELOG_CLEAR_BATCH_SIZE
+            )
+        );
 
         return true;
     }

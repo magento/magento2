@@ -56,5 +56,6 @@
         <element name="twoDayAMFedexMethod" type="text" selector="//tr[td[@id='label_method_FEDEX_2_DAY_AM_fedex']]//td[contains(@class, 'col-method') and contains(text(), '2 Day AM')]"/>
         <element name="standardOvernightFedexMethod" type="text" selector="//tr[td[@id='label_method_STANDARD_OVERNIGHT_fedex']]//td[contains(@class, 'col-method') and contains(text(), 'Standard Overnight')]"/>
         <element name="priorityOvernightFedexMethod" type="text" selector="//tr[td[@id='label_method_PRIORITY_OVERNIGHT_fedex']]//td[contains(@class, 'col-method') and contains(text(), 'Priority Overnight')]"/>
+        <element name="fedexExpressShipping" type="text" selector="//tr[td[@class='col col-carrier' and normalize-space(text())='Federal Express'] and number(translate(normalize-space(td[@class='col col-price']), '$', '')) > 0]"/>
     </section>
 </sections>

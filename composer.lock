@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0a82fa4155cf2880ee2593885bab2ac",
+    "content-hash": "358f9b6bb140353aa9f0be19ca64bd0c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2953,85 +2953,6 @@
             "time": "2024-11-17T22:29:29+00:00"
         },
         {
-            "name": "laminas/laminas-mvc",
-            "version": "3.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-mvc.git",
-                "reference": "53ba28b7222d3a3b49747a26babef43d1b17fb6f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/53ba28b7222d3a3b49747a26babef43d1b17fb6f",
-                "reference": "53ba28b7222d3a3b49747a26babef43d1b17fb6f",
-                "shasum": ""
-            },
-            "require": {
-                "container-interop/container-interop": "^1.2",
-                "laminas/laminas-eventmanager": "^3.4",
-                "laminas/laminas-http": "^2.15",
-                "laminas/laminas-modulemanager": "^2.16",
-                "laminas/laminas-router": "^3.11.1",
-                "laminas/laminas-servicemanager": "^3.20.0",
-                "laminas/laminas-stdlib": "^3.19",
-                "laminas/laminas-view": "^2.18.0",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-            },
-            "conflict": {
-                "zendframework/zend-mvc": "*"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "^2.5.0",
-                "laminas/laminas-json": "^3.6",
-                "phpunit/phpunit": "^10.5.38",
-                "webmozart/assert": "^1.11"
-            },
-            "suggest": {
-                "laminas/laminas-json": "(^2.6.1 || ^3.0) To auto-deserialize JSON body content in AbstractRestfulController extensions, when json_decode is unavailable",
-                "laminas/laminas-log": "^2.9.1  To provide log functionality via LogFilterManager, LogFormatterManager, and LogProcessorManager",
-                "laminas/laminas-mvc-console": "laminas-mvc-console provides the ability to expose laminas-mvc as a console application",
-                "laminas/laminas-mvc-i18n": "laminas-mvc-i18n provides integration with laminas-i18n, including a translation bridge and translatable route segments",
-                "laminas/laminas-mvc-middleware": "To dispatch middleware in your laminas-mvc application",
-                "laminas/laminas-mvc-plugin-fileprg": "To provide Post/Redirect/Get functionality around forms that container file uploads",
-                "laminas/laminas-mvc-plugin-flashmessenger": "To provide flash messaging capabilities between requests",
-                "laminas/laminas-mvc-plugin-identity": "To access the authenticated identity (per laminas-authentication) in controllers",
-                "laminas/laminas-mvc-plugin-prg": "To provide Post/Redirect/Get functionality within controllers",
-                "laminas/laminas-paginator": "^2.7 To provide pagination functionality via PaginatorPluginManager",
-                "laminas/laminas-servicemanager-di": "laminas-servicemanager-di provides utilities for integrating laminas-di and laminas-servicemanager in your laminas-mvc application"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Mvc\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Laminas's event-driven MVC layer, including MVC Applications, Controllers, and Plugins",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "laminas",
-                "mvc"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-mvc/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-mvc/issues",
-                "rss": "https://github.com/laminas/laminas-mvc/releases.atom",
-                "source": "https://github.com/laminas/laminas-mvc"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2024-11-18T00:14:29+00:00"
-        },
-        {
             "name": "laminas/laminas-permissions-acl",
             "version": "2.17.0",
             "source": {
@@ -3160,77 +3081,6 @@
                 }
             ],
             "time": "2024-10-24T08:57:20+00:00"
-        },
-        {
-            "name": "laminas/laminas-router",
-            "version": "3.14.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-router.git",
-                "reference": "5e1f5ca7fe95200661b50235c891ed3eee02d3f0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-router/zipball/5e1f5ca7fe95200661b50235c891ed3eee02d3f0",
-                "reference": "5e1f5ca7fe95200661b50235c891ed3eee02d3f0",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-http": "^2.15",
-                "laminas/laminas-servicemanager": "^3.14.0",
-                "laminas/laminas-stdlib": "^3.10.1",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-            },
-            "conflict": {
-                "zendframework/zend-router": "*"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "~2.5.0",
-                "laminas/laminas-i18n": "^2.29.0",
-                "phpunit/phpunit": "^10.5.36",
-                "psalm/plugin-phpunit": "^0.19.0",
-                "vimeo/psalm": "^5.26.1"
-            },
-            "suggest": {
-                "laminas/laminas-i18n": "^2.15.0 if defining translatable HTTP path segments"
-            },
-            "type": "library",
-            "extra": {
-                "laminas": {
-                    "component": "Laminas\\Router",
-                    "config-provider": "Laminas\\Router\\ConfigProvider"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Router\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Flexible routing system for HTTP and console applications",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "laminas",
-                "routing"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-router/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-router/issues",
-                "rss": "https://github.com/laminas/laminas-router/releases.atom",
-                "source": "https://github.com/laminas/laminas-router"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2024-10-11T11:18:03+00:00"
         },
         {
             "name": "laminas/laminas-server",
@@ -3853,16 +3703,16 @@
         },
         {
             "name": "laminas/laminas-view",
-            "version": "2.36.0",
+            "version": "2.41.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-view.git",
-                "reference": "ddc9207725cb50508ea48fcf1210dc8480264196"
+                "reference": "77bb5814062fb485dc67baa22ea4b83cc93f7e1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-view/zipball/ddc9207725cb50508ea48fcf1210dc8480264196",
-                "reference": "ddc9207725cb50508ea48fcf1210dc8480264196",
+                "url": "https://api.github.com/repos/laminas/laminas-view/zipball/77bb5814062fb485dc67baa22ea4b83cc93f7e1d",
+                "reference": "77bb5814062fb485dc67baa22ea4b83cc93f7e1d",
                 "shasum": ""
             },
             "require": {
@@ -3878,6 +3728,8 @@
                 "psr/container": "^1 || ^2"
             },
             "conflict": {
+                "amphp/dns": "<2.1.2",
+                "amphp/socket": "<2.3.1",
                 "container-interop/container-interop": "<1.2",
                 "laminas/laminas-router": "<3.0.1",
                 "laminas/laminas-session": "<2.12",
@@ -3885,23 +3737,23 @@
             },
             "require-dev": {
                 "laminas/laminas-authentication": "^2.18",
-                "laminas/laminas-coding-standard": "~2.5.0",
-                "laminas/laminas-feed": "^2.23",
-                "laminas/laminas-filter": "^2.39",
-                "laminas/laminas-http": "^2.20",
-                "laminas/laminas-i18n": "^2.29.0",
+                "laminas/laminas-coding-standard": "~3.1.0",
+                "laminas/laminas-feed": "^2.24.0",
+                "laminas/laminas-filter": "^2.41",
+                "laminas/laminas-http": "^2.22",
+                "laminas/laminas-i18n": "^2.30.0",
                 "laminas/laminas-modulemanager": "^2.17",
                 "laminas/laminas-mvc": "^3.8.0",
                 "laminas/laminas-mvc-i18n": "^1.9",
-                "laminas/laminas-mvc-plugin-flashmessenger": "^1.10.1",
+                "laminas/laminas-mvc-plugin-flashmessenger": "^1.11.0",
                 "laminas/laminas-navigation": "^2.20.0",
                 "laminas/laminas-paginator": "^2.19.0",
-                "laminas/laminas-permissions-acl": "^2.16",
+                "laminas/laminas-permissions-acl": "^2.17",
                 "laminas/laminas-router": "^3.14.0",
-                "laminas/laminas-uri": "^2.12",
-                "phpunit/phpunit": "^10.5.38",
-                "psalm/plugin-phpunit": "^0.19.0",
-                "vimeo/psalm": "^5.26.1"
+                "laminas/laminas-uri": "^2.13",
+                "phpunit/phpunit": "^10.5.48",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "vimeo/psalm": "^6.13.0"
             },
             "suggest": {
                 "laminas/laminas-authentication": "Laminas\\Authentication component",
@@ -3949,7 +3801,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-11-21T17:42:20+00:00"
+            "time": "2025-08-07T08:55:27+00:00"
         },
         {
             "name": "league/flysystem",
@@ -7093,6 +6945,79 @@
             "time": "2025-01-03T09:35:48+00:00"
         },
         {
+            "name": "stomp-php/stomp-php",
+            "version": "5.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stomp-php/stomp-php.git",
+                "reference": "85e7ad490aeda7d23f8dd7c570aab08e096e40b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stomp-php/stomp-php/zipball/85e7ad490aeda7d23f8dd7c570aab08e096e40b6",
+                "reference": "85e7ad490aeda7d23f8dd7c570aab08e096e40b6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stomp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Dejan Bosnanac",
+                    "email": "dejan@nighttale.net",
+                    "homepage": "http://www.nighttale.net"
+                },
+                {
+                    "name": "Sören Rohweder",
+                    "email": "s.rohweder@blage.net",
+                    "homepage": "http://www.monofone.de"
+                },
+                {
+                    "name": "Jens Radtke",
+                    "email": "swefl@fin-sn.de",
+                    "homepage": "http://www.fin-sn.de"
+                }
+            ],
+            "description": "stomp support for PHP",
+            "homepage": "http://github.com/stomp-php/stomp-php",
+            "keywords": [
+                "activeMQ",
+                "apollomq",
+                "jms",
+                "messaging",
+                "rabbitmq",
+                "stomp"
+            ],
+            "support": {
+                "issues": "https://github.com/stomp-php/stomp-php/issues",
+                "source": "https://github.com/stomp-php/stomp-php/tree/5.1.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jmglsn",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/staabm",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-03T12:32:51+00:00"
+        },
+        {
             "name": "symfony/config",
             "version": "v7.2.3",
             "source": {
@@ -9695,16 +9620,16 @@
         },
         {
             "name": "tedivm/jshrink",
-            "version": "v1.7.0",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tedious/JShrink.git",
-                "reference": "7a35f5a4651ca2ce77295eb8a3b4e133ba47e19e"
+                "reference": "29ee510d684c22060040f4260a527206eb8199f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tedious/JShrink/zipball/7a35f5a4651ca2ce77295eb8a3b4e133ba47e19e",
-                "reference": "7a35f5a4651ca2ce77295eb8a3b4e133ba47e19e",
+                "url": "https://api.github.com/repos/tedious/JShrink/zipball/29ee510d684c22060040f4260a527206eb8199f1",
+                "reference": "29ee510d684c22060040f4260a527206eb8199f1",
                 "shasum": ""
             },
             "require": {
@@ -9739,7 +9664,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tedious/JShrink/issues",
-                "source": "https://github.com/tedious/JShrink/tree/v1.7.0"
+                "source": "https://github.com/tedious/JShrink/tree/v1.8.0"
             },
             "funding": [
                 {
@@ -9751,7 +9676,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-04T17:23:23+00:00"
+            "time": "2025-07-28T17:09:23+00:00"
         },
         {
             "name": "tubalmartin/cssmin",
@@ -11544,16 +11469,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "5.0.5",
+            "version": "5.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "7670d653f726a0a122fa6a0d3fc4639825c65c83"
+                "reference": "2eac1598a9ad5f5427fed35c31ae2bdb1cf6df93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/7670d653f726a0a122fa6a0d3fc4639825c65c83",
-                "reference": "7670d653f726a0a122fa6a0d3fc4639825c65c83",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/2eac1598a9ad5f5427fed35c31ae2bdb1cf6df93",
+                "reference": "2eac1598a9ad5f5427fed35c31ae2bdb1cf6df93",
                 "shasum": ""
             },
             "require": {
@@ -11627,9 +11552,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.0.5"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.0.6"
             },
-            "time": "2025-06-19T01:37:42+00:00"
+            "time": "2025-09-08T15:33:15+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",
@@ -14715,6 +14640,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
