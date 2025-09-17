@@ -2091,10 +2091,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private function beforeSubmit(Quote $quote)
     {
         $orderData = [];
-        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
+        if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
-            $oldOrder = $oldOrder->getId() ?
-                $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
             $originalId = $oldOrder->getOriginalIncrementId();
             if (!$originalId) {
                 $originalId = $oldOrder->getIncrementId();
@@ -2121,16 +2119,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     private function afterSubmit(Order $order)
     {
-        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
+        if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
-            $oldOrder = $oldOrder->getId() ?
-                $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
-            if ($this->getSession()->getOrder()->getId()) {
-                $this->orderManagement->cancel($oldOrder->getEntityId());
-            }
+            $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
     }
@@ -2359,25 +2353,22 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Remove cart from transferred items and update the qty.
+     * Remove cart from transferred items
      *
      * @param int|null|Item $cartItem
      * @param int $itemId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @see AC-14442
      */
     private function removeCartTransferredItemsAndUpdateQty(int|null|Item $cartItem, int $itemId)
     {
         $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
         if (isset($removeCartTransferredItems['cart'])) {
             $removeTransferredItemKey = array_search($cartItem->getId(), $removeCartTransferredItems['cart']);
-            if ($removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
+            if ($removeTransferredItemKey !== false && $removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
                 $cartItem->clearMessage();
                 $cartItem->setHasError(false);
-                if (isset($this->request->get('item')[$itemId]['qty'])) {
-                    $qty = $this->request->get('item')[$itemId]['qty'];
-                    $cartItem->setQty($qty);
-                }
-
                 if ($cartItem->getHasError()) {
                     throw new LocalizedException(__($cartItem->getMessage()));
                 }

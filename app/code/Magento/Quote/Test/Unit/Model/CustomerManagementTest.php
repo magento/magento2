@@ -22,6 +22,8 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Api\Data\RegionInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -82,6 +84,11 @@ class CustomerManagementTest extends TestCase
      * @var MockObject
      */
     private $customerAddressFactoryMock;
+
+    /**
+     * @var MockObject
+     */
+    private $regionFactoryMock;
 
     protected function setUp(): void
     {
@@ -153,11 +160,16 @@ class CustomerManagementTest extends TestCase
             true,
             ['create']
         );
+        $this->regionFactoryMock = $this->getMockBuilder(RegionInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
         $this->customerManagement = new CustomerManagement(
             $this->customerRepositoryMock,
             $this->customerAddressRepositoryMock,
             $this->accountManagementMock,
             $this->customerAddressFactoryMock,
+            $this->regionFactoryMock,
             $this->validatorFactoryMock,
             $this->addressFactoryMock
         );
@@ -268,34 +280,72 @@ class CustomerManagementTest extends TestCase
     public function testValidateAddressesNotSavedInAddressBook()
     {
         $this->expectException(ValidatorException::class);
+
+        $regionData = [
+            'region' => 'California',
+            'region_code' => 'CA',
+            'region_id' => 12,
+        ];
+
         $this->quoteMock->method('getCustomerIsGuest')->willReturn(true);
-        $this->quoteAddressMock->method('getStreet')->willReturn(['test']);
-        $this->quoteAddressMock->method('getCustomAttributes')->willReturn(['test']);
-        $this->customerAddressFactoryMock->method('create')
-            ->willReturn($this->customerAddressMock);
-        $addressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->addressFactoryMock->expects($this->exactly(1))->method('create')->willReturn($addressMock);
-        $this->quoteMock
-            ->expects($this->atMost(2))
-            ->method('getBillingAddress')
-            ->willReturn($this->quoteAddressMock);
-        $this->quoteMock
+        $this->quoteMock->method('getBillingAddress')->willReturn($this->quoteAddressMock);
+        $this->quoteMock->method('getShippingAddress')->willReturn($this->quoteAddressMock);
+        $this->quoteAddressMock->method('getCustomerAddressId')->willReturn(null);
+
+        // Set up billing address data
+        $this->quoteAddressMock->method('getPrefix')->willReturn('Mr');
+        $this->quoteAddressMock->method('getFirstname')->willReturn('John');
+        $this->quoteAddressMock->method('getMiddlename')->willReturn('Q');
+        $this->quoteAddressMock->method('getLastname')->willReturn('Public');
+        $this->quoteAddressMock->method('getSuffix')->willReturn('Jr');
+        $this->quoteAddressMock->method('getCompany')->willReturn('Acme Inc.');
+        $this->quoteAddressMock->method('getStreet')->willReturn(['123 Main St']);
+        $this->quoteAddressMock->method('getCountryId')->willReturn('US');
+        $this->quoteAddressMock->method('getCity')->willReturn('Los Angeles');
+        $this->quoteAddressMock->method('getPostcode')->willReturn('90001');
+        $this->quoteAddressMock->method('getTelephone')->willReturn('1234567890');
+        $this->quoteAddressMock->method('getFax')->willReturn('9876543210');
+        $this->quoteAddressMock->method('getVatId')->willReturn('US123456789');
+        $this->quoteAddressMock->method('getRegion')->willReturn($regionData);
+        $this->quoteAddressMock->method('getCustomAttributes')->willReturn(['custom_attr' => 'value']);
+
+        // Region setup
+        $regionMock = $this->createMock(RegionInterface::class);
+        $this->regionFactoryMock->method('create')->willReturn($regionMock);
+        $regionMock->expects($this->once())->method('setRegion')->with('California')->willReturnSelf();
+        $regionMock->expects($this->once())->method('setRegionCode')->with('CA')->willReturnSelf();
+        $regionMock->expects($this->once())->method('setRegionId')->with(12)->willReturnSelf();
+
+        // Customer address object to be created
+        $this->customerAddressFactoryMock->method('create')->willReturn($this->customerAddressMock);
+        $this->customerAddressMock->expects($this->once())->method('setPrefix')->with('Mr');
+        $this->customerAddressMock->expects($this->once())->method('setFirstname')->with('John');
+        $this->customerAddressMock->expects($this->once())->method('setMiddlename')->with('Q');
+        $this->customerAddressMock->expects($this->once())->method('setLastname')->with('Public');
+        $this->customerAddressMock->expects($this->once())->method('setSuffix')->with('Jr');
+        $this->customerAddressMock->expects($this->once())->method('setCompany')->with('Acme Inc.');
+        $this->customerAddressMock->expects($this->once())->method('setStreet')->with(['123 Main St']);
+        $this->customerAddressMock->expects($this->once())->method('setCountryId')->with('US');
+        $this->customerAddressMock->expects($this->once())->method('setCity')->with('Los Angeles');
+        $this->customerAddressMock->expects($this->once())->method('setPostcode')->with('90001');
+        $this->customerAddressMock->expects($this->once())->method('setTelephone')->with('1234567890');
+        $this->customerAddressMock->expects($this->once())->method('setFax')->with('9876543210');
+        $this->customerAddressMock->expects($this->once())->method('setVatId')->with('US123456789');
+        $this->customerAddressMock->expects($this->once())->method('setRegion')->with($regionMock);
+        $this->customerAddressMock
             ->expects($this->once())
-            ->method('getShippingAddress')
-            ->willReturn($this->quoteAddressMock);
-        $this->quoteAddressMock->expects($this->any())->method('getCustomerAddressId')->willReturn(null);
-        $validatorMock = $this->getMockBuilder(Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->validatorFactoryMock
-            ->expects($this->exactly(1))
-            ->method('createValidator')
-            ->with('customer_address', 'save', null)
-            ->willReturn($validatorMock);
-        $validatorMock->expects($this->exactly(1))->method('isValid')->with($addressMock)->willReturn(false);
-        $validatorMock->expects($this->exactly(1))->method('getMessages')->willReturn([]);
+            ->method('setCustomAttributes')
+            ->with(['custom_attr' => 'value']);
+
+        // Validator to fail
+        $validatorMock = $this->createMock(Validator::class);
+        $this->validatorFactoryMock->method('createValidator')->willReturn($validatorMock);
+        $validatorMock->expects($this->once())->method('isValid')->willReturn(false);
+        $validatorMock->expects($this->once())->method('getMessages')->willReturn([]);
+
+        $addressModelMock = $this->createMock(\Magento\Customer\Model\Address::class);
+        $this->addressFactoryMock->method('create')->willReturn($addressModelMock);
+
         $this->customerManagement->validateAddresses($this->quoteMock);
     }
 }

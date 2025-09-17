@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2018 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);

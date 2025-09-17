@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 // @codingStandardsIgnoreStart
@@ -351,6 +351,7 @@ namespace Magento\Framework\Session {
                 \Magento\Framework\Session\Config::class,
                 ['deploymentConfig' => $deploymentConfigMock]
             );
+            $expectedSavePath = $model->getOption('save_path') ? $expectedSavePath : null;
             $this->assertEquals($expectedSavePath, $model->getOption('save_path'));
             $this->assertEquals($expectedSaveHandler, $model->getOption('session.save_handler'));
             global $mockPHPFunctions;

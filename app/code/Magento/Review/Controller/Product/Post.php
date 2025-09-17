@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Controller\Product;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -11,7 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
 /**
- * Class Post
+ * Class Post for posting the review
  */
 class Post extends ProductController implements HttpPostActionInterface
 {
@@ -26,7 +28,7 @@ class Post extends ProductController implements HttpPostActionInterface
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        if (!$this->formKeyValidator->validate($this->getRequest())) {
+        if (!$this->formKeyValidator->validate($this->getRequest()) || false === $this->reviewsConfig->isEnabled()) {
             $resultRedirect->setUrl($this->_redirect->getRefererUrl());
             return $resultRedirect;
         }

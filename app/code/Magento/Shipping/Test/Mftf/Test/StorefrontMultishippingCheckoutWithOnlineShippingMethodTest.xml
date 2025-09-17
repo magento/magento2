@@ -26,7 +26,8 @@
             <createData entity="Simple_Customer_With_Multiple_Address" stepKey="customer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminEnableUSPSActionGroup" stepKey="enableUSPS"/>
-            <actionGroup ref="AdminUPSEnableActionGroup" stepKey="enableUPS"/>
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForEnablingUPS"/>
+            <actionGroup ref="AdminEnableUPSActionGroup" stepKey="enableUPS"/>
             <actionGroup ref="AdminEnableFedExConfigurationActionGroup" stepKey="enableFedEx"/>
             <actionGroup ref="AdminEnableDHLWithoutSpecificCountryConfigurationActionGroup" stepKey="enableDHL"/>
             <!--Set Shipping settings origin data-->

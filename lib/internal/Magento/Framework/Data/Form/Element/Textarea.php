@@ -1,7 +1,8 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Data\Form\Element;
@@ -10,20 +11,18 @@ use Magento\Framework\Escaper;
 
 /**
  * Form textarea element.
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Textarea extends AbstractElement
 {
     /**
      * Default number of rows
      */
-    const DEFAULT_ROWS = 2;
+    public const DEFAULT_ROWS = 2;
 
     /**
      * Default number of columns
      */
-    const DEFAULT_COLS = 15;
+    public const DEFAULT_COLS = 15;
 
     /**
      * @param Factory $factoryElement
@@ -43,6 +42,7 @@ class Textarea extends AbstractElement
         if (!$this->getRows()) {
             $this->setRows(self::DEFAULT_ROWS);
         }
+
         if (!$this->getCols()) {
             $this->setCols(self::DEFAULT_COLS);
         }

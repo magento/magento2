@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
 
@@ -14,7 +14,6 @@ use Magento\Framework\Url\DecoderInterface;
  *
  * @method \Magento\Reports\Model\ResourceModel\Quote\Collection getCollection()
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart

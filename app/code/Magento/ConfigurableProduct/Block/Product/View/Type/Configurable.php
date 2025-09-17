@@ -203,7 +203,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Returns additional values for js config, con be overridden by descendants
+     * Returns additional values for js config, can be overridden by descendants
      *
      * @return array
      */

@@ -411,10 +411,6 @@ class ShippingAddressSameAsBillingTest extends GraphQlAbstract
                 order {
                     order_number
                 }
-                errors {
-                    message
-                    code
-                }
               }
             }
         MUTATION;

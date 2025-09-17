@@ -1,17 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * sales admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml;
 
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -22,7 +21,7 @@ abstract class Index extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::report';
+    public const ADMIN_RESOURCE = 'Magento_Reports::report';
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory

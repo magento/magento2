@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,16 +42,17 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class ProductRepositoryInterfaceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products';
+    private const SERVICE_NAME = 'catalogProductRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products';
 
-    const KEY_TIER_PRICES = 'tier_prices';
-    const KEY_SPECIAL_PRICE = 'special_price';
-    const KEY_CATEGORY_LINKS = 'category_links';
+    private const KEY_TIER_PRICES = 'tier_prices';
+    private const KEY_SPECIAL_PRICE = 'special_price';
+    private const KEY_CATEGORY_LINKS = 'category_links';
 
     /**
      * @var array
@@ -186,8 +186,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = "The product that was requested doesn't exist. Verify the product and try again.";
-
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
         try {
             $this->_webApiCall($serviceInfo, ['sku' => $invalidSku]);
             $this->fail("Expected throwing exception");
@@ -544,14 +543,18 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
-        $this->expectException('Exception');
-        $this->expectExceptionMessage(
-            "The product that was requested doesn't exist. Verify the product and try again."
-        );
 
         // Delete all with 'all' store code
         $this->deleteProduct($sku);
-        $this->getProduct($sku);
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->getProduct($sku);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**

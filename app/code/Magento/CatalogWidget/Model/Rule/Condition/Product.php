@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -178,7 +178,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct impl
                 $storeId = $connection->getIfNullSql($alias . '.store_id', $this->storeManager->getStore()->getId());
                 $linkField = $attribute->getEntity()->getLinkField();
 
-                $collection->getSelect()->join(
+                $collection->getSelect()->joinLeft(
                     [$alias => $collection->getTable($attribute->getBackendTable())],
                     "($alias.$linkField = e.$linkField) AND ($alias.store_id = $storeId)" .
                     " AND ($alias.attribute_id = {$attribute->getId()})",
