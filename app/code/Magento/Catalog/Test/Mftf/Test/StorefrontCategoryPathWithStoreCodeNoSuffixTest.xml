@@ -33,6 +33,10 @@
             <magentoCLI command="config:set {{CategoriesUrlSuffix.path}} {{CategoriesUrlSuffix.value}}" stepKey="resetCategoryUrlSuffixAsDefault"/>
             <!-- Reset configuration: Restore default product URL suffix -->
             <magentoCLI command="config:set {{ProductsUrlSuffix.path}} {{ProductsUrlSuffix.value}}" stepKey="resetProductUrlSuffixAsDefault"/>
+            <!-- Cache Flush -->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
         <remove keyForRemoval="navigateToCategoryStorefront"/>
         <!-- Step 7: Open direct Category 1.2 url -> Check that Cat 1.2 is highlighted & parent Cat 1 is also highlighted -->
