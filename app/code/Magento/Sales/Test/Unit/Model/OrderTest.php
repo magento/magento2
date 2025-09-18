@@ -40,6 +40,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as History
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Config\Model\Config\Source\Nooptreq;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -439,6 +440,14 @@ class OrderTest extends TestCase
         $this->order->setCustomerMiddlename($expectedData['middle_name']);
         $this->order->setCustomerSuffix($expectedData['customer_suffix']);
         $this->order->setCustomerPrefix($expectedData['customer_prefix']);
+        // Ensure prefix/suffix are visible to match expected strings.
+        $this->scopeConfigMock->method('getValue')->willReturnCallback(function ($path) {
+            if ($path === 'customer/address/prefix_show' || $path === 'customer/address/suffix_show') {
+                return Nooptreq::VALUE_REQUIRED;
+            }
+            return null;
+        });
+
         $this->scopeConfigMock->expects($this->exactly($expectedData['invocation']))
             ->method('isSetFlag')
             ->willReturn(true);

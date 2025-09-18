@@ -42,6 +42,8 @@
         </before>
 
         <after>
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>

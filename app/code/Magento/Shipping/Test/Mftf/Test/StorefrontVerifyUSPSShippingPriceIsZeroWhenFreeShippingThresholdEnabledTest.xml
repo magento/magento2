@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyUSPSShippingPriceIsZeroWhenFreeShippingThresholdEnabledTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="USPS Shipping With Free Shipping Threshold Enabled"/>
+            <title value="Customer able to see USPS shipping zero when free shipping threshold enabled"/>
+            <description value="Verify in storefront USPS shipping for particular shipping method is showing zero when free shipping threshold is enabled"/>
+            <testCaseId value="AC-15004"/>
+            <severity value="MAJOR"/>
+            <group value="3rd_party_integration"/>
+            <group value="EnableUSPSShippingSuite"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create product -->
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <field key="price">49.00</field>
+            </createData>
+            <!-- Step 1to3:Enable Free Method select any shipping method -->
+            <magentoCLI command="config:set {{AdminEnableFreeMethodUSPSConfigData.path}} {{AdminEnableFreeMethodUSPSConfigData.value}}" stepKey="enableFreeMethodUSPS"/>
+            <!-- Step 4:Enable Free Shipping Threshold -->
+            <magentoCLI command="config:set {{AdminEnableFreeShippingThresholdUSPSConfigData.path}} {{AdminEnableFreeShippingThresholdUSPSConfigData.value}}" stepKey="enableFreeShippingThresholdUSPS"/>
+            <!-- Step 5:Fill Free Shipping Amount Threshold add amount -->
+            <magentoCLI command="config:set {{AdminFillFreeShippingAmountThresholdUSPSConfigData.path}} {{AdminFillFreeShippingAmountThresholdUSPSConfigData.value}}" stepKey="fillFreeShippingAmountThresholdUSPS"/>
+        </before>
+        <after>
+            <!--delete product-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Disable Free Method select any shipping method -->
+            <magentoCLI command="config:set {{AdminDisableFreeMethodUSPSConfigData.path}} {{AdminDisableFreeMethodUSPSConfigData.value}}" stepKey="disableFreeMethodUSPS"/>
+            <!-- Disable Free Shipping Threshold -->
+            <magentoCLI command="config:set {{AdminDisableFreeShippingThresholdUSPSConfigData.path}} {{AdminDisableFreeShippingThresholdUSPSConfigData.value}}" stepKey="disableFreeShippingThresholdUSPS"/>
+        </after>
+        <!-- Step 7:Navigate to storefront add product to cart and checkout to shipping page -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMiniCart"/>
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="guestCheckoutFillingShippingSection">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="address" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForShippingPageToLoadShippingMethods"/>
+        <!-- Step 8:Select USPS Shipping method which is configured with free shipping -->
+        <checkOption selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Library Mail Parcel')}}" stepKey="checkUSPSLibraryMailParcelShippingMethod"/>
+        <!-- Step 9:Check shipping price is showing Zero -->
+        <waitForText selector="{{CheckoutShippingMethodsSection.shippingRatePriceByName('Library Mail Parcel')}}" userInput="$0.00" stepKey="assertUSPSLibraryMailParcelShippingMethodPriceAsZero"/>
+    </test>
+</tests>

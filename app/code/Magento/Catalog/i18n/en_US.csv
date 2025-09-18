@@ -436,6 +436,8 @@ Search,Search
 "Product with SKU '%1' is not linked to product with SKU '%2'","Product with SKU '%1' is not linked to product with SKU '%2'"
 "Product %1 doesn't have linked %2 as %3","Product %1 doesn't have linked %2 as %3"
 "The product that was requested doesn't exist. Verify the product and try again.","The product that was requested doesn't exist. Verify the product and try again."
+"The product with SKU ""%1"" does not exist.","The product with SKU ""%1"" does not exist."
+"The product with ID ""%1"" does not exist.","The product with ID ""%1"" does not exist."
 "The Product with the ""%1"" SKU doesn't exist.","The Product with the ""%1"" SKU doesn't exist."
 "Invalid product data: %1","Invalid product data: %1"
 "The ""%1"" product couldn't be removed.","The ""%1"" product couldn't be removed."

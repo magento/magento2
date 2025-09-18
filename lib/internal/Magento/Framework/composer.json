@@ -57,7 +57,8 @@
         "exclude": [
             "Amqp",
             "Bulk",
-            "MessageQueue"
+            "MessageQueue",
+            "Stomp"
         ]
     },
     "suggest": {

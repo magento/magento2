@@ -62,6 +62,8 @@
         <see userInput="Hello World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
         <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
         <after>
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

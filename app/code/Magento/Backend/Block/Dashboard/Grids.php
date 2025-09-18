@@ -14,7 +14,6 @@ use Magento\Backend\Block\Widget\Tabs;
  * Adminhtml dashboard bottom tabs
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Grids extends Tabs
