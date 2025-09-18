@@ -1,20 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Block\Hosted\Pro;
 
 /**
  * Hosted Pro iframe block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Iframe extends \Magento\Paypal\Block\Iframe
 {
     /**
-     * Internal constructor
-     * Set payment method code
+     * Internal constructor Set payment method code
      *
      * @return void
      */

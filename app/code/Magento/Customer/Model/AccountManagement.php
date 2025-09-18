@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,6 @@ use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\LocalizedException;
@@ -56,6 +55,7 @@ use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils as StringHelper;
+use Magento\Framework\Validator\Factory as ValidatorFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
@@ -446,6 +446,8 @@ class AccountManagement implements AccountManagementInterface
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
      * @param Authenticate|null $authenticate
+     * @param AddressFactory|null $addressFactory
+     * @param ValidatorFactory|null $validatorFactory
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -491,7 +493,9 @@ class AccountManagement implements AccountManagementInterface
         ?AuthenticationInterface $authentication = null,
         ?Backend $eavValidator = null,
         ?CustomerLogger $customerLogger = null,
-        ?Authenticate $authenticate = null
+        ?Authenticate $authenticate = null,
+        private ?AddressFactory $addressFactory = null,
+        private ?ValidatorFactory $validatorFactory = null,
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -536,6 +540,8 @@ class AccountManagement implements AccountManagementInterface
         $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
         $this->customerLogger = $customerLogger ?? $objectManager->get(CustomerLogger::class);
         $this->authenticate = $authenticate ?? $objectManager->get(Authenticate::class);
+        $this->addressFactory = $addressFactory ?? $objectManager->get(AddressFactory::class);
+        $this->validatorFactory = $validatorFactory ?? $objectManager->get(ValidatorFactory::class);
     }
 
     /**
@@ -921,6 +927,24 @@ class AccountManagement implements AccountManagementInterface
 
         $customerAddresses = $customer->getAddresses() ?: [];
         $customer->setAddresses(null);
+        $customerAddresses = array_filter(
+            $customerAddresses,
+            fn ($address) => $this->isAddressAllowedForWebsite($address, $customer->getStoreId())
+        );
+        $addressValidator = $this->validatorFactory->createValidator('customer_address', 'save');
+        foreach ($customerAddresses as $address) {
+            $addressModel = $this->addressFactory->create()->updateData($address);
+            if ($this->configShare->isWebsiteScope()) {
+                $addressModel->setStoreId($customer->getStoreId());
+            }
+            if (!$addressValidator->isValid($addressModel)) {
+                $exception = new InputException();
+                $messages = $addressValidator->getMessages();
+                array_walk_recursive($messages, [$exception, 'addError']);
+                throw $exception;
+            }
+        }
+
         try {
             // If customer exists existing hash will be used by Repository
             $customer = $this->customerRepository->save($customer, $hash);
@@ -928,14 +952,9 @@ class AccountManagement implements AccountManagementInterface
             throw new InputMismatchException(
                 __('A customer with the same email address already exists in an associated website.')
             );
-        } catch (LocalizedException $e) {
-            throw $e;
         }
         try {
             foreach ($customerAddresses as $address) {
-                if (!$this->isAddressAllowedForWebsite($address, $customer->getStoreId())) {
-                    continue;
-                }
                 if ($address->getId()) {
                     $newAddress = clone $address;
                     $newAddress->setId(null);

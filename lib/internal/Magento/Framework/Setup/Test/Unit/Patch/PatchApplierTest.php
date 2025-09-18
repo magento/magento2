@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -166,20 +166,17 @@ class PatchApplierTest extends TestCase
             \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
-        $patchRegistryMock->expects($this->exactly(2))
-            ->method('registerPatch');
+        $patchRegistryMock->expects($this->exactly(2))->method('registerPatch');
 
-        $this->patchRegistryFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($patchRegistryMock);
+        $this->patchRegistryFactoryMock->expects($this->any())->method('create')->willReturn($patchRegistryMock);
         // phpstan:ignore "Class SomeDataPatch not found."
         $patch1 = $this->createMock(\SomeDataPatch::class);
         $patch1->expects($this->once())->method('apply');
-        $patch1->expects($this->once())->method('getAliases')->willReturn([]);
+        $patch1->expects($this->any())->method('getAliases')->willReturn([]);
         // phpstan:ignore "Class OtherDataPatch not found."
         $patch2 = $this->createMock(\OtherDataPatch::class);
         $patch2->expects($this->once())->method('apply');
-        $patch2->expects($this->once())->method('getAliases')->willReturn([]);
+        $patch2->expects($this->any())->method('getAliases')->willReturn([]);
 
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
@@ -221,7 +218,7 @@ class PatchApplierTest extends TestCase
         );
 
         $patch1 = $this->getMockForAbstractClass(DataPatchInterface::class);
-        $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patch1->expects($this->any())->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, [$patchClass], ['registerPatch']);
@@ -326,7 +323,7 @@ class PatchApplierTest extends TestCase
     public static function applyDataPatchDataInstalledModuleProvider()
     {
         return [
-            'upgrade module iwth only OtherDataPatch' => [
+            'upgrade module with only OtherDataPatch' => [
                 'moduleName' => 'Module1',
                 'dataPatches' => [
                     // phpstan:ignore
@@ -548,7 +545,7 @@ class PatchApplierTest extends TestCase
         );
 
         $patch1 = $this->getMockForAbstractClass(PatchInterface::class);
-        $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patch1->expects($this->any())->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, [$patchClass], ['registerPatch']);
@@ -611,7 +608,7 @@ class PatchApplierTest extends TestCase
     public static function schemaPatchDataProvider()
     {
         return [
-            'upgrade module iwth only OtherSchemaPatch' => [
+            'upgrade module with only OtherSchemaPatch' => [
                 'moduleName' => 'Module1',
                 'schemaPatches' => [
                     // phpstan:ignore

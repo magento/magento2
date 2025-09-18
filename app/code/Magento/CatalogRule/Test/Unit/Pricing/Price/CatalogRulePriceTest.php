@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -142,7 +142,7 @@ class CatalogRulePriceTest extends TestCase
             ->willReturn($productId);
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
-            ->with($catalogRulePrice)
+            ->with($catalogRulePrice, null, null, 4)
             ->willReturn($convertedPrice);
 
         $this->assertEquals($convertedPrice, $this->object->getValue());
@@ -155,7 +155,7 @@ class CatalogRulePriceTest extends TestCase
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->with($catalogRulePrice)
+            ->with($catalogRulePrice, null, null, 4)
             ->willReturn($convertedPrice);
 
         $this->saleableItemMock->expects($this->once())->method('hasData')

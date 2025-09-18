@@ -1,25 +1,36 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
+use Magento\Sales\Model\Order\Creditmemo\Comment as CreditmemoComment;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment as CreditmemoCommentResource;
 
-class AddComment extends \Magento\Backend\App\Action
+class AddComment extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
 
     /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
+     * @var CreditmemoLoader
      */
     protected $creditmemoLoader;
 
@@ -29,41 +40,59 @@ class AddComment extends \Magento\Backend\App\Action
     protected $creditmemoCommentSender;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
     /**
-     * @param Action\Context $context
-     * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
+     * @var CreditmemoComment
+     */
+    private $creditmemoComment;
+
+    /**
+     * @var CreditmemoCommentResource
+     */
+    private $creditmemoCommentResource;
+
+    /**
+     * @param Context $context
+     * @param CreditmemoLoader $creditmemoLoader
      * @param CreditmemoCommentSender $creditmemoCommentSender
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param RawFactory $resultRawFactory
+     * @param CreditmemoComment|null $creditmemoComment
+     * @param CreditmemoCommentResource|null $creditmemoCommentResource
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
+        CreditmemoLoader $creditmemoLoader,
         CreditmemoCommentSender $creditmemoCommentSender,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        RawFactory $resultRawFactory,
+        ?CreditmemoComment $creditmemoComment = null,
+        ?CreditmemoCommentResource  $creditmemoCommentResource = null
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         $this->creditmemoCommentSender = $creditmemoCommentSender;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
+        $this->creditmemoComment = $creditmemoComment ??
+            ObjectManager::getInstance()->get(CreditmemoComment::class);
+        $this->creditmemoCommentResource = $creditmemoCommentResource ??
+            ObjectManager::getInstance()->get(CreditmemoCommentResource::class);
         parent::__construct($context);
     }
 
@@ -78,7 +107,7 @@ class AddComment extends \Magento\Backend\App\Action
             $this->getRequest()->setParam('creditmemo_id', $this->getRequest()->getParam('id'));
             $data = $this->getRequest()->getPost('comment');
             if (empty($data['comment'])) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('The comment is missing. Enter and try again.')
                 );
             }
@@ -87,17 +116,28 @@ class AddComment extends \Magento\Backend\App\Action
             $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
             $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
             $creditmemo = $this->creditmemoLoader->load();
-            $comment = $creditmemo->addComment(
-                $data['comment'],
-                isset($data['is_customer_notified']),
-                isset($data['is_visible_on_front'])
-            );
-            $comment->save();
 
-            $this->creditmemoCommentSender->send($creditmemo, !empty($data['is_customer_notified']), $data['comment']);
+            if (empty($data['comment_id'])) {
+                $comment = $creditmemo->addComment(
+                    $data['comment'],
+                    isset($data['is_customer_notified']),
+                    isset($data['is_visible_on_front'])
+                );
+                $this->creditmemoCommentSender->send(
+                    $creditmemo,
+                    !empty($data['is_customer_notified']),
+                    $data['comment']
+                );
+                $comment->save();
+            } else {
+                $comment = $this->creditmemoComment->setComment($data['comment'])->setId($data['comment_id']);
+                $comment->setCreditmemo($creditmemo);
+                $this->creditmemoCommentResource->save($comment);
+            }
+
             $resultPage = $this->resultPageFactory->create();
             $response = $resultPage->getLayout()->getBlock('creditmemo_comments')->toHtml();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add new comment.')];

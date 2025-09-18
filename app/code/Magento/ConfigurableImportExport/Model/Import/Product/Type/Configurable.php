@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
@@ -59,7 +60,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_INVALID_OPTION_VALUE => 'Column configurable_variations: Invalid option value for attribute "%s"',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
         self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
-        self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%s" is unidentifiable',
+        self::ERROR_UNIDENTIFIABLE_VARIATION => 'Configurable variation "%1" is unidentifiable',
     ];
 
     /**
@@ -580,10 +581,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if (empty($fieldAndValuePairs['sku'])) {
                 throw new LocalizedException(
                     __(
-                        sprintf(
-                            $this->_messageTemplates[self::ERROR_UNIDENTIFIABLE_VARIATION],
-                            $variation
-                        )
+                        $this->_messageTemplates[self::ERROR_UNIDENTIFIABLE_VARIATION],
+                        $variation
                     )
                 );
             }

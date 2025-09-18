@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CategoryDisplaySettings" type="category">
+        <data key="available_sort_by">Product Name</data>
+        <data key="default_sort_by">name</data>
+        <data key="filter_price_range">5.5</data>
+    </entity>
+</entities> 

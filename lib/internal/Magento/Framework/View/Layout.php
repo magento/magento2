@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,11 +11,18 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\View\Design\Theme\ResolverInterface;
+use Magento\Framework\View\Layout\Data\Structure;
 use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\GeneratorPool;
+use Magento\Framework\View\Layout\ProcessorFactory;
+use Magento\Framework\View\Layout\Reader\ContextFactory;
+use Magento\Framework\View\Layout\ReaderPool;
 use Psr\Log\LoggerInterface as Logger;
+use Magento\Framework\View\Layout\Reader\Context;
 
 /**
  * Layout model
@@ -183,21 +190,27 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     private $cacheLifetime;
 
     /**
-     * @param Layout\ProcessorFactory $processorFactory
+     * @var ResponseHttp
+     */
+    private ResponseHttp $response;
+
+    /**
+     * @param ProcessorFactory $processorFactory
      * @param ManagerInterface $eventManager
-     * @param Layout\Data\Structure $structure
+     * @param Structure $structure
      * @param MessageManagerInterface $messageManager
-     * @param Design\Theme\ResolverInterface $themeResolver
-     * @param Layout\ReaderPool $readerPool
-     * @param Layout\GeneratorPool $generatorPool
+     * @param ResolverInterface $themeResolver
+     * @param ReaderPool $readerPool
+     * @param GeneratorPool $generatorPool
      * @param FrontendInterface $cache
-     * @param Layout\Reader\ContextFactory $readerContextFactory
+     * @param ContextFactory $readerContextFactory
      * @param Layout\Generator\ContextFactory $generatorContextFactory
-     * @param \Magento\Framework\App\State $appState
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param State $appState
+     * @param LoggerInterface $logger
      * @param bool $cacheable
      * @param SerializerInterface|null $serializer
      * @param int|null $cacheLifetime
+     * @param ResponseHttp|null $response
      */
     public function __construct(
         Layout\ProcessorFactory $processorFactory,
@@ -214,12 +227,13 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         Logger $logger,
         $cacheable = true,
         ?SerializerInterface $serializer = null,
-        ?int $cacheLifetime = null
+        ?int $cacheLifetime = null,
+        ?ResponseHttp $response = null
     ) {
         $this->_elementClass = \Magento\Framework\View\Layout\Element::class;
         $this->_renderingOutput = new \Magento\Framework\DataObject();
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
-
+        $this->response = $response ?: ObjectManager::getInstance()->get(ResponseHttp::class);
         $this->_processorFactory = $processorFactory;
         $this->_eventManager = $eventManager;
         $this->structure = $structure;
@@ -362,11 +376,39 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         );
 
         \Magento\Framework\Profiler::start('generate_elements');
-        $this->generatorPool->process($this->getReaderContext(), $generatorContext);
+
+        $isolatedReaderContext = $this->createIsolatedReaderContext();
+
+        $this->generatorPool->process($isolatedReaderContext, $generatorContext);
         \Magento\Framework\Profiler::stop('generate_elements');
 
         $this->addToOutputRootContainers();
         \Magento\Framework\Profiler::stop(__CLASS__ . '::' . __METHOD__);
+    }
+
+    /**
+     * Create isolated reader context to prevent race condition
+     *
+     * @return Context
+     */
+    private function createIsolatedReaderContext(): Context
+    {
+        $originalContext = $this->getReaderContext();
+
+        $originalScheduledStructure = $originalContext->getScheduledStructure();
+        $isolatedScheduledStructure = new Layout\ScheduledStructure(
+            $originalScheduledStructure->__toArray()
+        );
+
+        $originalPageConfig = $originalContext->getPageConfigStructure();
+        $isolatedPageConfig = new \Magento\Framework\View\Page\Config\Structure();
+        $isolatedPageConfig->populateWithArray($originalPageConfig->__toArray());
+
+        // Create new reader context with isolated structures
+        return $this->readerContextFactory->create([
+            'scheduledStructure' => $isolatedScheduledStructure,
+            'pageConfigStructure' => $isolatedPageConfig
+        ]);
     }
 
     /**
@@ -557,6 +599,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
                 $result = $this->_renderContainer($name, false);
             }
         } catch (\Exception $e) {
+            $this->response->setNoCacheHeaders();
             if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
                 throw $e;
             }

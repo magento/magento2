@@ -90,7 +90,7 @@ Status,Status
 "Import data validation is complete.","Import data validation is complete."
 "The behavior token for %1 is invalid.","The behavior token for %1 is invalid."
 "Please enter a correct entity model","Please enter a correct entity model"
-"Source file coping failed","Source file coping failed"
+"Source file copying failed","Source file copying failed"
 "The source is not set.","The source is not set."
 "The adapter type must be a non-empty string.","The adapter type must be a non-empty string."
 "'%1' file extension is not supported","'%1' file extension is not supported"

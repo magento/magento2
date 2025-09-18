@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 
@@ -988,6 +988,43 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Create disable image details
+     *
+     * @param mixed $rowSku
+     * @param mixed $column
+     * @param mixed $rowExistingImages
+     * @param int $storeId
+     * @return array|null
+     */
+    private function disableExistingProductImage(
+        mixed $rowSku,
+        mixed $column,
+        mixed $rowExistingImages,
+        int $storeId
+    ): ?array {
+        try {
+            $product = $this->productRepository->get($rowSku);
+            if ($imagePath = $product->getData($column)) {
+                foreach ($rowExistingImages as $existingImage) {
+                    if ($existingImage['value'] == $imagePath) {
+                        $existingImage['store_id'] = $storeId;
+
+                        return [
+                            'disabled' => 1,
+                            'imageData' => $existingImage,
+                            'exists' => true
+                        ];
+                    }
+                }
+            }
+        } catch (NoSuchEntityException) {
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
      * Multiple value separator getter.
      *
      * @return string
@@ -1651,10 +1688,11 @@ class Product extends AbstractEntity
                     }
                     $rowScope = $this->getRowScope($rowData);
                     $urlKey = $this->getUrlKey($rowData);
+                    $rowSku = $rowData[self::COL_SKU];
                     if (!empty($rowData[self::URL_KEY])) {
                         // If url_key column and its value were in the CSV file
                         $rowData[self::URL_KEY] = $urlKey;
-                    } elseif ($this->isNeedToChangeUrlKey($rowData)) {
+                    } elseif ($this->isNeedToChangeUrlKey($rowData, isset($entityRowsIn[strtolower($rowSku)]))) {
                         // If url_key column was empty or even not declared in the CSV file but by the rules it needs
                         // to be settled. In case when url_key is generating from name column we have to ensure that
                         // the bunch of products will pass for the event with url_key column.
@@ -1664,7 +1702,6 @@ class Product extends AbstractEntity
                         // remove null byte character
                         $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
                     }
-                    $rowSku = $rowData[self::COL_SKU];
                     if (null === $rowSku) {
                         $this->getErrorAggregator()->addRowToSkip($rowNum);
                         continue;
@@ -1918,6 +1955,14 @@ class Product extends AbstractEntity
         $imagesByHash = [];
         foreach ($rowImages as $column => $columnImages) {
             foreach ($columnImages as $columnImageKey => $columnImage) {
+                if ($columnImage == $this->getEmptyAttributeValueConstant()) {
+                    if ($disabledImageDetails =
+                        $this->disableExistingProductImage($rowSku, $column, $rowExistingImages, $storeId)
+                    ) {
+                        $imagesForChangeVisibility[] = $disabledImageDetails;
+                    }
+                    continue;
+                }
                 $uploadedFile = $this->findImageByColumnImage(
                     $productMediaPath,
                     $rowExistingImages,
@@ -2708,7 +2753,9 @@ class Product extends AbstractEntity
         // if product doesn't exist, need to throw critical error else all errors should be not critical.
         $errorLevel = $this->getValidationErrorLevel($sku);
 
-        if (!$this->validator->isValid($rowData)) {
+        $hasValidatedImportParent = $sku && $this->getNewSku($sku);
+        $contextRowData = array_merge(['has_import_parent' => $hasValidatedImportParent], $rowData);
+        if (!$this->validator->isValid($contextRowData)) {
             foreach ($this->validator->getMessages() as $message) {
                 $this->skipRow($rowNum, $message, $errorLevel, $this->validator->getInvalidAttribute());
             }
@@ -3228,15 +3275,16 @@ class Product extends AbstractEntity
      * Whether a url key needs to change.
      *
      * @param array $rowData
+     * @param bool $hasParentRow
      * @return bool
      */
-    private function isNeedToChangeUrlKey(array $rowData): bool
+    private function isNeedToChangeUrlKey(array $rowData, bool $hasParentRow = false): bool
     {
         $urlKey = $this->getUrlKey($rowData);
         $productExists = $this->isSkuExist($rowData[self::COL_SKU]);
         $markedToEraseUrlKey = isset($rowData[self::URL_KEY]);
         // The product isn't new and the url key index wasn't marked for change.
-        if (!$urlKey && $productExists && !$markedToEraseUrlKey) {
+        if ($hasParentRow && empty($rowData[self::URL_KEY]) || !$urlKey && $productExists && !$markedToEraseUrlKey) {
             // Seems there is no need to change the url key
             return false;
         }
@@ -3356,6 +3404,7 @@ class Product extends AbstractEntity
 
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
+        $isInStockOld = (bool) ($existStockData['is_in_stock'] ?? $this->defaultStockData['is_in_stock']);
 
         $row = array_merge(
             $this->defaultStockData,
@@ -3366,14 +3415,35 @@ class Product extends AbstractEntity
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo)
-                ? (int) $row['is_in_stock']
-                : 0;
+            $isInStock = $this->stockStateProvider->verifyStock($stockItemDo);
+            /**
+             * This following logic originates from
+             * @see \Magento\CatalogInventory\Model\Stock\StockItemRepository::updateStockStatus
+             * It is important to keep it for consistency
+             */
+            if ($stockItemDo->getManageStock()) {
+                if (!$isInStock) {
+                    if ($stockItemDo->getIsInStock() === true) {
+                        $stockItemDo->setIsInStock(false);
+                        $stockItemDo->setStockStatusChangedAuto(1);
+                    }
+                } else {
+                    if ($stockItemDo->getIsInStock() !== $isInStockOld) {
+                        $stockItemDo->setStockStatusChangedAuto(0);
+                    }
+                    if ($stockItemDo->getIsInStock() === false && $stockItemDo->getStockStatusChangedAuto()) {
+                        $stockItemDo->setIsInStock(true);
+                    }
+                }
+            } else {
+                $stockItemDo->setStockStatusChangedAuto(0);
+            }
+            $row['is_in_stock'] = (int) $stockItemDo->getIsInStock();
+            $row['stock_status_changed_auto'] = (int) $stockItemDo->getStockStatusChangedAuto();
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $date = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
                 $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
             }
-            $row['stock_status_changed_auto'] = (int)!$this->stockStateProvider->verifyStock($stockItemDo);
         } else {
             $row['qty'] = 0;
         }

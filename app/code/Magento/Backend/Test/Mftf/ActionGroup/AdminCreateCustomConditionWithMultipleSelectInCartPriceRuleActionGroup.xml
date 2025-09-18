@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCustomConditionWithMultipleSelectInCartPriceRuleActionGroup" extends="AdminCreateCustomConditionInCartPriceRuleActionGroup">
+        <annotations>
+            <description>Create custom condition in action tab in cart price rule</description>
+        </annotations>
+        <arguments>
+            <argument name="productAttributeOption" type="string" defaultValue="{{productAttributeColour.black}}"/>
+        </arguments>
+        <remove keyForRemoval="fillCategoryId"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1--1')}}" userInput="{{productAttributeOption}}" stepKey="selectProductAttributeValue"/>
+    </actionGroup>
+</actionGroups>

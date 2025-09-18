@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright 2024 Adobe
-  * All Rights Reserved.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -320,5 +320,14 @@
         <data key="name" unique="suffix">ApiCategoryNonAnchor</data>
         <data key="is_active">true</data>
         <requiredEntity type="custom_attribute">CustomAttributeCategoryNonAnchor</requiredEntity>
+    </entity>
+    <entity name="CustomizedCategory" type="category">
+        <data key="name">a</data>
+        <data key="path">b</data>
+        <data key="value">other-a</data>
+        <data key="urlKey">other-b</data>
+        <data key="data">other-b2</data>
+        <data key="url_path">catalog/seo/category_url_suffix</data>
+        <data key="url_suffix">.html</data>
     </entity>
 </entities>

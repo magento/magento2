@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All rights reserved.
  */
 
 namespace Magento\Framework\Mview\View;
@@ -297,7 +297,7 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
      */
     protected function buildStatement(string $event, ViewInterface $view): string
     {
-        $trigger = "%sINSERT IGNORE INTO %s (%s) VALUES (%s);";
+        $trigger = "%sINSERT INTO %s (%s) VALUES (%s);";
         $changelog = $view->getChangelog();
 
         switch ($event) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Model\Reorder\Data\Error;
 use Magento\Sales\Model\OrderFactory;
@@ -26,6 +27,10 @@ class Reorder implements ResolverInterface
      */
     private const ARGUMENT_ORDER_NUMBER = 'orderNumber';
 
+    private const LOCK_PREFIX = 'reorder_lock_';
+
+    private const LOCK_TIMEOUT = 60;
+
     /**
      * @var OrderFactory
      */
@@ -37,15 +42,23 @@ class Reorder implements ResolverInterface
     private $reorder;
 
     /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
      * @param \Magento\Sales\Model\Reorder\Reorder $reorder
      * @param OrderFactory $orderFactory
+     * @param LockManagerInterface $lockManager
      */
     public function __construct(
         \Magento\Sales\Model\Reorder\Reorder $reorder,
-        OrderFactory $orderFactory
+        OrderFactory $orderFactory,
+        LockManagerInterface $lockManager
     ) {
         $this->orderFactory = $orderFactory;
         $this->reorder = $reorder;
+        $this->lockManager = $lockManager;
     }
 
     /**
@@ -74,7 +87,18 @@ class Reorder implements ResolverInterface
             );
         }
 
-        $reorderOutput = $this->reorder->execute($orderNumber, $storeId);
+        $lockName = hash('sha256', $orderNumber);
+        if ($this->lockManager->lock(self::LOCK_PREFIX . $lockName, self::LOCK_TIMEOUT)) {
+            try {
+                $reorderOutput = $this->reorder->execute($orderNumber, $storeId);
+            } finally {
+                $this->lockManager->unlock(self::LOCK_PREFIX . $lockName);
+            }
+        } else {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Sorry, there has been an error processing your request. Please try again later.')
+            );
+        }
 
         return [
             'cart' => [

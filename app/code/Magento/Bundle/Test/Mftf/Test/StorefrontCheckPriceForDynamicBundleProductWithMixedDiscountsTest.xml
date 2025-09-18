@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -173,6 +173,9 @@
             <deleteData createDataKey="sixthProduct" stepKey="deleteSixthProduct"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteCatalogPriceRules"/>
+            <deleteData createDataKey="category1" stepKey="deletecategory1"/>
+            <deleteData createDataKey="category2" stepKey="deletecategory2"/>
+            <deleteData createDataKey="category3" stepKey="deletecategory3"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to storefront category page -->
