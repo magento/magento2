@@ -176,11 +176,11 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $urlSafeSku = rawurlencode($product->getSku());
       
         $enableIdHandle = $this->scopeConfig->isSetFlag(
-            'catalog/layout_settings/enable_id_handle',
+            'dev/layout_settings/enable_id_handle',
             ScopeInterface::SCOPE_STORE
         );
         $enableAttributeSetHandle = $this->scopeConfig->isSetFlag(
-            'catalog/layout_settings/enable_attribute_set_handle',
+            'dev/layout_settings/enable_attribute_set_handle',
             ScopeInterface::SCOPE_STORE
         );
 
