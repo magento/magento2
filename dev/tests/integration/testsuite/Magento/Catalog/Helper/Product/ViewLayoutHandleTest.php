@@ -38,8 +38,8 @@ class ViewLayoutHandleTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/layout_settings/enable_id_handle 1
-     * @magentoConfigFixture current_store catalog/layout_settings/enable_attribute_set_handle 1
+     * @magentoConfigFixture current_store dev/layout_settings/enable_id_handle 1
+     * @magentoConfigFixture current_store dev/layout_settings/enable_attribute_set_handle 1
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
@@ -68,8 +68,8 @@ class ViewLayoutHandleTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/layout_settings/enable_id_handle 0
-     * @magentoConfigFixture current_store catalog/layout_settings/enable_attribute_set_handle 0
+     * @magentoConfigFixture current_store dev/layout_settings/enable_id_handle 0
+     * @magentoConfigFixture current_store dev/layout_settings/enable_attribute_set_handle 0
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
@@ -89,8 +89,8 @@ class ViewLayoutHandleTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/layout_settings/enable_id_handle 1
-     * @magentoConfigFixture current_store catalog/layout_settings/enable_attribute_set_handle 0
+     * @magentoConfigFixture current_store dev/layout_settings/enable_id_handle 1
+     * @magentoConfigFixture current_store dev/layout_settings/enable_attribute_set_handle 0
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
@@ -115,8 +115,8 @@ class ViewLayoutHandleTest extends TestCase
     }
 
     /**
-     * @magentoConfigFixture current_store catalog/layout_settings/enable_id_handle 0
-     * @magentoConfigFixture current_store catalog/layout_settings/enable_attribute_set_handle 1
+     * @magentoConfigFixture current_store dev/layout_settings/enable_id_handle 0
+     * @magentoConfigFixture current_store dev/layout_settings/enable_attribute_set_handle 1
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
