@@ -177,6 +177,37 @@ class CreatePostTest extends AbstractController
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_website customer/create_account/confirm 0
+     * @magentoConfigFixture current_store customer/create_account/default_group 1
+     * @magentoConfigFixture current_store customer/create_account/generate_human_friendly_id 0
+     *
+     * @dataProvider emailDataProvider
+     * @param string $email
+     * @param string $expectedEmail
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testNoConfirmCreatePostPunycodeEmailAction(string $email, string $expectedEmail): void
+    {
+        $this->fillRequestWithAccountData($email);
+        $this->dispatch('customer/account/createPost');
+        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertSessionMessages(
+            $this->containsEqual(
+                (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
+            ),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $customer = $this->customerRegistry->retrieveByEmail($expectedEmail);
+        //Assert customer group
+        $this->assertEquals(1, $customer->getDataModel()->getGroupId());
+        //Assert customer email
+        $this->assertEquals($expectedEmail, $customer->getData('email'));
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_website customer/create_account/confirm 0
      * @magentoConfigFixture current_store customer/create_account/default_group 2
      * @magentoConfigFixture current_store customer/create_account/generate_human_friendly_id 1
      * @return void
@@ -287,6 +318,25 @@ class CreatePostTest extends AbstractController
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertEmpty($this->customerRepository->get($email)->getConfirmation());
+    }
+
+    /**
+     * Email data provider for testing punycode functionality
+     *
+     * @return array[]
+     */
+    public static function emailDataProvider(): array
+    {
+        return [
+            'encoded' => [
+                'email' => 'test@xn--smething-v3a.com',
+                'expected' => 'test@sómething.com',
+            ],
+            'non-encoded' => [
+                'email' => 'test@sómething.com',
+                'expected' => 'test@sómething.com',
+            ]
+        ];
     }
 
     /**

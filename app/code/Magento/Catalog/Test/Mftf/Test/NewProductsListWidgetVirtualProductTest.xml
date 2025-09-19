@@ -21,6 +21,11 @@
 
         </annotations>
 
+        <after>
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+        </after>
+
         <!-- A Cms page containing the New Products Widget gets created here via extends -->
 
         <!-- Create a Virtual Product to appear in the widget -->

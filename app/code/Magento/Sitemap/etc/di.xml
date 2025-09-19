@@ -79,4 +79,7 @@
             <argument name="logger" xsi:type="object">Psr\Log\LoggerInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\Cron\Model\Config\Backend\Sitemap">
+        <plugin name="sitemap_extended_cron_config" type="Magento\Sitemap\Plugin\Cron\Model\Config\Backend\SitemapPlugin" />
+    </type>
 </config>

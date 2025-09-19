@@ -29,8 +29,8 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
-        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openCreatedProductEditPage">
-            <argument name="product" value="$$createProduct$$"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openCreatedProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
         <actionGroup ref="AdminSetBackordersOnProductAdvancedInventoryActionGroup" stepKey="allowBackorders"/>

@@ -266,9 +266,10 @@ abstract class AbstractType
     protected function _getProductAttributes($attrSetData)
     {
         if (is_array($attrSetData)) {
-            return $this->_attributes[$attrSetData[Product::COL_ATTR_SET]];
+            $setName = $attrSetData[Product::COL_ATTR_SET] ?? null;
+            return $setName !== null && isset($this->_attributes[$setName]) ? $this->_attributes[$setName] : [];
         } else {
-            return $this->_attributes[$attrSetData];
+            return isset($this->_attributes[$attrSetData]) ? $this->_attributes[$attrSetData] : [];
         }
     }
 

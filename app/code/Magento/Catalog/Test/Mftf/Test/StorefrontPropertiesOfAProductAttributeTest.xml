@@ -138,6 +138,9 @@
         <generateDate date="-1 day" format="m/d/Y" stepKey="generateYesterdayDate"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageToEditProduct1"/>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct1">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct1">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -149,6 +152,9 @@
         <conditionalClick selector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" dependentSelector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" visible="true" stepKey="selectNoForCustomYesNoAttributeForSimpleProduct1"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct1"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageToEditProduct2"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>

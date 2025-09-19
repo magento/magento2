@@ -255,7 +255,12 @@ class CollectionTest extends TestCase
         $this->connection->expects($this->once())->method('dropTemporaryTable')
             ->with($this->stringContains('temp_category_descendants_'));
         $this->select->method('from')->willReturnSelf();
-        $this->select->method('joinInner')->willReturnSelf();
+        $this->select->expects($this->once())->method('joinInner')
+            ->with(
+                ['ce2' => null],
+                'ce2.path LIKE CONCAT(ce.path, \'/%\')',
+                []
+            )->willReturnSelf();
         $this->select->method('where')->willReturnSelf();
         $this->connection->method('select')->willReturn($this->select);
         $this->connection->method('insertFromSelect')->willReturn('INSERT QUERY');
