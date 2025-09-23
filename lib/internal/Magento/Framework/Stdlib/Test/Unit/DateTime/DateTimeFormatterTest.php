@@ -27,9 +27,6 @@ class DateTimeFormatterTest extends TestCase
 
     protected function setUp(): void
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Skip this test for hhvm due to problem with \IntlDateFormatter::formatObject');
-        }
         $this->objectManager = new ObjectManager($this);
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()

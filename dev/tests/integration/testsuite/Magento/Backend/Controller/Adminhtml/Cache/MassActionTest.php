@@ -127,8 +127,7 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     /**
      * Retrieve cache states (enabled/disabled) information
      *
-     * Access configuration file directly as it is not possible to re-include modified file under HHVM
-     * @link https://github.com/facebook/hhvm/issues/1447
+     * Access configuration file directly
      *
      * @return array
      * @SuppressWarnings(PHPMD.EvalExpression)

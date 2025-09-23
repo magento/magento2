@@ -21,9 +21,6 @@ class MergedXsdTest extends TestCase
 
     protected function setUp(): void
     {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
         $urnResolver = new UrnResolver();
         $this->schemaFile = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/topology_merged.xsd');
     }

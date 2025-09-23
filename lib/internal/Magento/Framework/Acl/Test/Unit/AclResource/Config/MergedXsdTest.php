@@ -32,9 +32,6 @@ class MergedXsdTest extends TestCase
 
     protected function setUp(): void
     {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
         $this->_schemaLocator = new SchemaLocator(
             new UrnResolver()
         );

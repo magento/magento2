@@ -32,9 +32,6 @@ class XsdTest extends TestCase
 
     protected function setUp(): void
     {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
         $this->urnResolver = new UrnResolver();
         $this->_xsdSchema = $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
         $this->_xsdValidator = new XsdValidator();

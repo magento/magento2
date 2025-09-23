@@ -35,13 +35,6 @@ class XsdTest extends TestCase
         self::$_schemaFilePath = $urnResolver->getRealPath('urn:magento:module:Magento_Sales:etc/pdf_file.xsd');
     }
 
-    protected function setUp(): void
-    {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
-    }
-
     /**
      * @param string $fixtureXml
      * @param array $expectedErrors

@@ -65,9 +65,6 @@ class ReaderTest extends TestCase
      */
     protected function setUp(): void
     {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
         $this->objectManager = new ObjectManager($this);
         $this->filePath = __DIR__ . '/_files/';
         $this->fileResolverMock = $this->getMockForAbstractClass(FileResolverInterface::class);

@@ -34,7 +34,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
         $useIntlFormatObject = null,
         ?ResolverInterface $localeResolver = null
     ) {
-        $this->useIntlFormatObject = $useIntlFormatObject ?? !\defined('HHVM_VERSION');
+        $this->useIntlFormatObject = $useIntlFormatObject ?? true;
         $this->localeResolver = $localeResolver
             ?? ObjectManager::getInstance()->get(ResolverInterface::class);
     }

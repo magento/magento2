@@ -997,7 +997,6 @@ class JwtManagerTest extends TestCase
         if (!openssl_pkey_export($rsaPrivateResource, $rsaPrivate, 'pass')) {
             throw new \RuntimeException('Failed to read RSA private key');
         }
-        self::freeResource($rsaPrivateResource);
 
         return [$rsaPrivate, $rsaPublic];
     }
@@ -1024,23 +1023,10 @@ class JwtManagerTest extends TestCase
             if (!openssl_pkey_export($privateResource, $esPrivate, 'pass')) {
                 throw new \RuntimeException('Failed to read EC private key');
             }
-            self::freeResource($privateResource);
             $ecKeys[$bits] = [$esPrivate, $esPublic];
             unset($privateResource, $esPublic, $esPrivate);
         }
 
         return $ecKeys;
-    }
-
-    /**
-     * @param mixed $resource
-     *
-     * @return void
-     */
-    private static function freeResource($resource): void
-    {
-        if (\is_resource($resource) && (version_compare(PHP_VERSION, '8.0') < 0)) {
-            openssl_free_key($resource);
-        }
     }
 }
