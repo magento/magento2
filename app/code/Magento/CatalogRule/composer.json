@@ -13,7 +13,8 @@
         "magento/module-eav": "*",
         "magento/module-rule": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-quote": "*"
     },
     "suggest": {
         "magento/module-import-export": "*",

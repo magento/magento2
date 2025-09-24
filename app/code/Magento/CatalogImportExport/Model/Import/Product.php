@@ -3404,6 +3404,7 @@ class Product extends AbstractEntity
 
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
+        $isInStockOld = (bool) ($existStockData['is_in_stock'] ?? $this->defaultStockData['is_in_stock']);
 
         $row = array_merge(
             $this->defaultStockData,
@@ -3414,14 +3415,35 @@ class Product extends AbstractEntity
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo)
-                ? (int) $row['is_in_stock']
-                : 0;
+            $isInStock = $this->stockStateProvider->verifyStock($stockItemDo);
+            /**
+             * This following logic originates from
+             * @see \Magento\CatalogInventory\Model\Stock\StockItemRepository::updateStockStatus
+             * It is important to keep it for consistency
+             */
+            if ($stockItemDo->getManageStock()) {
+                if (!$isInStock) {
+                    if ($stockItemDo->getIsInStock() === true) {
+                        $stockItemDo->setIsInStock(false);
+                        $stockItemDo->setStockStatusChangedAuto(1);
+                    }
+                } else {
+                    if ($stockItemDo->getIsInStock() !== $isInStockOld) {
+                        $stockItemDo->setStockStatusChangedAuto(0);
+                    }
+                    if ($stockItemDo->getIsInStock() === false && $stockItemDo->getStockStatusChangedAuto()) {
+                        $stockItemDo->setIsInStock(true);
+                    }
+                }
+            } else {
+                $stockItemDo->setStockStatusChangedAuto(0);
+            }
+            $row['is_in_stock'] = (int) $stockItemDo->getIsInStock();
+            $row['stock_status_changed_auto'] = (int) $stockItemDo->getStockStatusChangedAuto();
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $date = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
                 $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
             }
-            $row['stock_status_changed_auto'] = (int)!$this->stockStateProvider->verifyStock($stockItemDo);
         } else {
             $row['qty'] = 0;
         }

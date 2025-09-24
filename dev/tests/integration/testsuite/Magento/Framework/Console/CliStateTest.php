@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright 2025 Adobe.
- * All rights reserved.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -79,10 +79,10 @@ class CliStateTest extends TestCase
 
         // Get the ObjectManager from the test framework
         $objectManager = TestBootstrap::getObjectManager();
-        
+
         // Extract the mode from the parsed parameters
         $extractedMode = $this->extractModeFromParams($params, $mode);
-        
+
         // Create a new State object with the correct mode
         $state = $objectManager->create(State::class, ['mode' => $extractedMode]);
 
@@ -120,7 +120,7 @@ class CliStateTest extends TestCase
 
         // Get the ObjectManager from the test framework
         $objectManager = TestBootstrap::getObjectManager();
-        
+
         // Extract the mode from the parsed parameters
         $extractedMode = $this->extractModeFromParams($params, $mode);
 
@@ -170,11 +170,11 @@ class CliStateTest extends TestCase
         if (isset($params[State::PARAM_MODE])) {
             return $params[State::PARAM_MODE];
         }
-        
+
         if (isset($params['MAGE_MODE'])) {
             return $params['MAGE_MODE'];
         }
-        
+
         // If we can't find it in params, return the expected mode
         return $expectedMode;
     }

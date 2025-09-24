@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\UseCase;
 
+use Magento\Framework\MessageQueue\DefaultValueProvider;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
@@ -15,7 +17,7 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
     protected $msgObject;
 
     /**
-     * {@inheritdoc}
+     * @var string[]
      */
     protected $consumers = ['mixed.sync.and.async.queue.consumer'];
 
@@ -29,8 +31,33 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
      */
     protected $maxMessages = 4;
 
+    /**
+     * @var string
+     */
+    private $connectionType;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        /** @var DefaultValueProvider $defaultValueProvider */
+        $defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
+        $this->connectionType = $defaultValueProvider->getConnection();
+
+        if ($this->connectionType === 'amqp') {
+            parent::setUp();
+        }
+    }
+
     public function testMixSyncAndAsyncSingleQueue()
     {
+        if ($this->connectionType === 'stomp') {
+            $this->markTestSkipped('AMQP test skipped because STOMP connection is available.
+            This test is AMQP-specific.');
+        }
+
         $this->msgObject = $this->objectManager->create(AsyncTestData::class); // @phpstan-ignore-line
 
         // Publish asynchronous messages
