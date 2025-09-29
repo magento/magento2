@@ -31,6 +31,7 @@
     width: auto;
 }
 
+/* @codingStandardsIgnoreStart */
 .__form-control-pattern__hover() {
     border-color: @field-control__hover__border-color;
 }
@@ -48,6 +49,7 @@
     cursor: not-allowed;
     opacity: @disabled__opacity;
 }
+/* @codingStandardsIgnoreEnd */
 
 //  Input text styles
 .admin__control-text {
@@ -134,12 +136,9 @@ option:empty {
     &:before {
         &:extend(.abs-form-control-pattern);
 
-        .admin__control-file:active + &,
-        .admin__control-file:focus + & {
-            /**
-             * @codingStandardsIgnoreStart
-             */
-            &:extend(.abs-form-control-pattern:focus);
+        .admin__control-file::active + &,
+        .admin__control-file::focus + & {
+            &:extend(.abs-form-control-pattern::focus);
         }
 
         .admin__control-file[disabled] + & {
@@ -168,14 +167,14 @@ option:empty {
 //  Support text. Can be used on label or plain text to align controls & actions
 //  ---------------------------------------------
 
-.admin__control-support-text { // ToDo UI: should be renamed to .admin__control-text
+.admin__control-support-text { /* ToDo UI: should be renamed to .admin__control-text */
     border: @field-control__border-width solid transparent;
     display: inline-block;
     font-size: @field-control__font-size;
     line-height: @field-control__line-height;
+    margin-left: @action__outer-indent;
     padding-bottom: @field-control__padding-bottom;
     padding-top: @field-control__padding-top;
-    margin-left: @action__outer-indent;
 
     + [class*='admin__control-'] {
         margin-left: @action__outer-indent;
@@ -288,11 +287,11 @@ option:empty {
         }
 
         &:focus ~ [class*='admin__addon-']:last-child:before {
-            &:extend(.abs-form-control-pattern:focus);
+            &:extend(.abs-form-control-pattern::focus);
         }
 
         &:hover ~ [class*='admin__addon-']:last-child:before {
-            &:extend(.abs-form-control-pattern:hover);
+            &:extend(.abs-form-control-pattern::hover);
         }
     }
 }

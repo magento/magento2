@@ -168,15 +168,12 @@
     width: auto;
     z-index: 1;
 
-    /**
-     * @codingStandardsIgnoreStart
-     */
     &:hover {
-        &:extend(.abs-form-control-pattern:hover);
+        &:extend(.abs-form-control-pattern::hover);
     }
 
     &._focus {
-        &:extend(.abs-form-control-pattern:focus);
+        &:extend(.abs-form-control-pattern::focus);
     }
 
     &._active {
@@ -261,7 +258,7 @@
 
     .selectmenu:hover & {
         &:before {
-            &:extend(.abs-form-control-pattern:hover);
+            &:extend(.abs-form-control-pattern::hover);
         }
     }
 
@@ -270,7 +267,7 @@
     }
 
     .selectmenu._focus &:before {
-        &:extend(.abs-form-control-pattern:focus);
+        &:extend(.abs-form-control-pattern::focus);
     }
 
     body._keyfocus &:focus {
@@ -355,7 +352,7 @@
     white-space: nowrap;
     z-index: 1;
 
-    li:last-child & {
+    li::last-child & {
         padding-right: .4rem;
     }
 
