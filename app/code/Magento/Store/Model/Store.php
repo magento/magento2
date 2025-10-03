@@ -764,8 +764,8 @@ class Store extends AbstractExtensibleModel implements
     public function isUseStoreInUrl()
     {
         return !($this->hasDisableStoreInUrl() && $this->getDisableStoreInUrl())
-            && !$this->getConfig(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)
-            && $this->getConfig(self::XML_PATH_STORE_IN_URL);
+            && !$this->_config->isSetFlag(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)
+            && $this->_config->isSetFlag(self::XML_PATH_STORE_IN_URL);
     }
 
     /**
