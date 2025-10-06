@@ -187,19 +187,10 @@ $formData = $block->getFormData();
                 </div>
             </div>
 
-            <div class="field required">
-                <label for="city" class="label">
-                    <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?></span>
-                </label>
-                <div class="control">
-                    <input type="text"
-                           name="city"
-                           value="<?= $escaper->escapeHtmlAttr($formData->getCity()) ?>"
-                           title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?>"
-                           class="input-text <?= $escaper->escapeHtmlAttr($cityValidationClass) ?>"
-                           id="city">
-                </div>
-            </div>
+            <?php $_city = $block->getLayout()->createBlock(City::class) ?>
+            <?php if ($_city->isEnabled()): ?>
+                <?= $_city->setCity($formData->getCity())->toHtml() ?>
+            <?php endif ?>
 
             <div class="field zip required">
                 <label for="zip" class="label">

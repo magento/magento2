@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -17,6 +17,7 @@
         <element name="showTelephoneInherit" type="checkbox" selector="#customer_address_telephone_show_inherit"/>
         <element name="showCompany" type="select" selector="#customer_address_company_show"/>
         <element name="showCompanyInherit" type="select" selector="#customer_address_company_show_inherit"/>
+        <element name="showCity" type="select" selector="#customer_address_city_show"/>
         <element name="passwordOptions" type="select" selector="#customer_password-head"/>
         <element name="passwordResetProtectionType" type="select" selector="#customer_password_password_reset_protection_type"/>
         <element name="passwordResetProtectionTypeOptions" type="select" selector="#customer_password_password_reset_protection_type option:nth-child({{option}})" parameterized="true"/>
