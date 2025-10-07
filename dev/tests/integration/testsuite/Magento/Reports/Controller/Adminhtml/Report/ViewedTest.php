@@ -1,21 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
-namespace Magento\Backend\Block\Dashboard\Tab\Products;
+namespace Magento\Reports\Controller\Adminhtml\Report;
 
-use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Backend\Block\Dashboard\Tab\Products\Viewed as ViewedProductsTabBlock;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use function PHPUnit\Framework\assertEquals;
 
 /**
  * @magentoAppArea frontend
  */
-class ViewedTest extends \PHPUnit\Framework\TestCase
+class ViewedTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
      * @var ObjectManagerInterface
@@ -39,6 +41,7 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->objectManager = BootstrapHelper::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepository::class);
@@ -46,6 +49,8 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Assert viewed product in reports.
+     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
@@ -53,10 +58,13 @@ class ViewedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPreparedCollectionProductPrice()
     {
+        $sku = 'simple';
+        $product = $this->productRepository->get($sku);
+        $this->getRequest()->setMethod(Http::METHOD_POST)->setPostValue('product_id', $product->getId());
+        $this->dispatch('reports/report_product/view');
+
         /** @var ViewedProductsTabBlock $viewedProductsTabBlock */
         $viewedProductsTabBlock = $this->layout->createBlock(ViewedProductsTabBlock::class);
-        $product = $this->productRepository->getById(1);
-        $this->eventManager->dispatch('catalog_controller_product_view', ['product' => $product]);
 
         $collection = $viewedProductsTabBlock->getPreparedCollection();
 
