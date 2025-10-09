@@ -1347,6 +1347,43 @@ class EavSetup
         return $this;
     }
 
+    /**
+     * Remove an attribute from a group and an attribute set.
+     *
+     * @return $this
+     */
+    public function removeAttributeFromGroup(int|string $entityTypeId, int|string $setId, int|string $groupId, int|string $attributeId): static
+    {
+        $entityTypeId = $this->getEntityTypeId($entityTypeId);
+        $setId = $this->getAttributeSetId($entityTypeId, $setId);
+        $groupId = $this->getAttributeGroupId($entityTypeId, $setId, $groupId);
+        $attributeId = $this->getAttributeId($entityTypeId, $attributeId);
+
+        $table = $this->setup->getTable('eav_entity_attribute');
+        $select = $this->setup->getConnection()->select()->from($table)
+            ->where('entity_type_id = :entity_type_id')
+            ->where('attribute_set_id = :attribute_set_id')
+            ->where('attribute_group_id = :attribute_group_id')
+            ->where('attribute_id = :attribute_id');
+
+        $row = $this->setup->getConnection()->fetchRow($select, [
+            'entity_type_id' => $entityTypeId,
+            'attribute_set_id' => $setId,
+            'attribute_group_id' => $groupId,
+            'attribute_id' => $attributeId,
+        ]);
+
+        if (false === $row) {
+            return $this;
+        }
+
+        $this->setup->getConnection()->delete($table, [
+            'entity_attribute_id = ?' => $row['entity_attribute_id'],
+        ]);
+
+        return $this;
+    }
+
     /******************* BULK INSTALL *****************/
 
     /**

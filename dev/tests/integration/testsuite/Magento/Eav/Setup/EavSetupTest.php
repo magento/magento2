@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Eav\Setup;
+
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\TestFramework\Fixture\AppIsolation;
 
 /**
  * Test class for Magento\Eav\Setup\EavSetup.
@@ -13,8 +15,6 @@ namespace Magento\Eav\Setup;
 class EavSetupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Eav setup.
-     *
      * @var \Magento\Eav\Setup\EavSetup
      */
     private $eavSetup;
@@ -66,6 +66,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider addAttributeThrowExceptionDataProvider
      */
+    #[AppIsolation(true)]
     public function testAddAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -98,10 +99,12 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider addInvalidAttributeThrowExceptionDataProvider
      */
+    #[AppIsolation(true)]
     public function testAddInvalidAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,');
+        $this->expectExceptionMessage('Please use only letters (a-z or A-Z), ' .
+            'numbers (0-9) or underscore (_) in this field,');
 
         $attributeData = $this->getAttributeData();
         $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
@@ -117,6 +120,90 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
             ['1first_character_is_not_letter'],
             ['attribute.with.dots'],
         ];
+    }
+
+    /**
+     * Verify that addAttributeToGroup adds the attribute to the specified group and its attribute set.
+     */
+    #[AppIsolation(true)]
+    public function testAddAttributeToGroup(): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var ModuleDataSetupInterface $setup */
+        $setup = $objectManager->create(ModuleDataSetupInterface::class);
+
+        $attributeData = $this->getAttributeData();
+        $uniqueAttributeName = 'db24abf125674bceabbbd9977bfc4ada';
+        $uniqueGroupName = '64a9ed905ca74cbd86533600a3604d43';
+        $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $uniqueAttributeName, $attributeData);
+        $this->eavSetup->addAttributeGroup(\Magento\Catalog\Model\Product::ENTITY, 'Default', $uniqueGroupName);
+
+        $entityTypeId = $this->eavSetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $setId = $this->eavSetup->getAttributeSetId(\Magento\Catalog\Model\Product::ENTITY, 'Default');
+        $groupId = $this->eavSetup->getAttributeGroupId(\Magento\Catalog\Model\Product::ENTITY, $setId, $uniqueGroupName);
+        $attributeId = $this->eavSetup->getAttributeId(\Magento\Catalog\Model\Product::ENTITY, $uniqueAttributeName);
+        $select = $setup->getConnection()->select()
+            ->from($setup->getTable('eav_entity_attribute'))
+            ->where('entity_type_id = ?', $entityTypeId)
+            ->where('attribute_set_id = ?', $setId)
+            ->where('attribute_group_id = ?', $groupId)
+            ->where('attribute_id = ?', $attributeId);
+
+        // Make sure that the attribute is not assigned to the group already.
+        $row = $select->query()->fetch();
+        $this->assertFalse($row);
+
+        // The actual action
+        $this->eavSetup->addAttributeToGroup($entityTypeId, $setId, $groupId, $attributeId);
+
+        $row = $select->query()->fetch();
+        $this->assertIsArray($row);
+        $this->assertSame($entityTypeId, $row['entity_type_id']);
+        $this->assertSame($setId, $row['attribute_set_id']);
+        $this->assertSame($groupId, $row['attribute_group_id']);
+        $this->assertSame($attributeId, $row['attribute_id']);
+    }
+
+    /**
+     * Verify that testRemoveAttributeFromGroup removes the attribute from the specified group and attribute set.
+     */
+    #[AppIsolation(true)]
+    public function testRemoveAttributeFromGroup(): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var ModuleDataSetupInterface $setup */
+        $setup = $objectManager->create(ModuleDataSetupInterface::class);
+
+        $attributeData = $this->getAttributeData();
+        $uniqueAttributeName = 'e0db51820df24b6fb6a181571aab8823';
+        $uniqueGroupName = 'c6771ccb1ab549378a87ecd6cb1d1352';
+        $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $uniqueAttributeName, $attributeData);
+        $this->eavSetup->addAttributeGroup(\Magento\Catalog\Model\Product::ENTITY, 'Default', $uniqueGroupName);
+
+        $entityTypeId = $this->eavSetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+        $setId = $this->eavSetup->getAttributeSetId(\Magento\Catalog\Model\Product::ENTITY, 'Default');
+        $groupId = $this->eavSetup->getAttributeGroupId(\Magento\Catalog\Model\Product::ENTITY, $setId, $uniqueGroupName);
+        $attributeId = $this->eavSetup->getAttributeId(\Magento\Catalog\Model\Product::ENTITY, $uniqueAttributeName);
+        $this->eavSetup->addAttributeToGroup($entityTypeId, $setId, $groupId, $attributeId);
+
+        $select = $setup->getConnection()->select()
+            ->from($setup->getTable('eav_entity_attribute'))
+            ->where('entity_type_id = ?', $entityTypeId)
+            ->where('attribute_set_id = ?', $setId)
+            ->where('attribute_group_id = ?', $groupId)
+            ->where('attribute_id = ?', $attributeId);
+
+        // Make sure that the attribute is assigned to the group.
+        $row = $select->query()->fetch();
+        $this->assertIsArray($row);
+        $this->assertNotEmpty($row['entity_attribute_id']);
+
+        // The actual action
+        $this->eavSetup->removeAttributeFromGroup($entityTypeId, $setId, $groupId, $attributeId);
+
+        // Make sure that the attribute was removed from the group
+        $row = $select->query()->fetch();
+        $this->assertFalse($row);
     }
 
     /**
