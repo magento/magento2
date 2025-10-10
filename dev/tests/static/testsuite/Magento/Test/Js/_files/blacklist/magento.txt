@@ -28,8 +28,8 @@ lib/web/jquery/**/*.js
 // MINIFIED FILES
 app/code/**/*.min.js
 lib/web/legacy-build.min.js
-lib/web/tiny_mce_6/**/*.js
-lib/web/tiny_mce_6/***/*.js
+lib/web/hugerte/**/*.js
+lib/web/hugerte/***/*.js
 lib/web/jquery/uppy/dist/uppy.min.js
 lib/web/chartjs/Chart.min.js
 

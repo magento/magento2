@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Shipping\Block\Adminhtml;
 
@@ -9,14 +9,11 @@ namespace Magento\Shipping\Block\Adminhtml;
  * Adminhtml shipment create
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -36,6 +33,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Initialize View
+     *
      * @return void
      */
     protected function _construct()
@@ -85,6 +84,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Header Text get
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
@@ -107,6 +108,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get URL
+     *
      * @return string
      */
     public function getBackUrl()
@@ -121,6 +124,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get Email Url
+     *
      * @return string
      */
     public function getEmailUrl()
@@ -129,6 +134,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get Print Url
+     *
      * @return string
      */
     public function getPrintUrl()
@@ -137,6 +144,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Update back button url
+     *
      * @param bool $flag
      * @return $this
      */

@@ -1,0 +1,21 @@
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+    <consumer name="stomp.queue.for.multiple.topics.test.c" queue="stomp.queue.for.multiple.topics.test.c"/>
+    <consumer name="stomp.mixed.sync.and.async.queue.consumer" connection="stomp" queue="stomp.mixed.sync.and.async.queue" handler="Magento\TestModuleAsyncStomp\Model\RequestHandler::process"/>
+    <!-- Consumers for wildcard queues -->
+    <consumer name="stomp.wildcard.queue.one.consumer" connection="stomp" queue="stomp.wildcard.queue.one" handler="Magento\TestModuleAsyncStomp\Model\WildCardHandler::methodOne"/>
+    <consumer name="stomp.wildcard.queue.two.consumer" connection="stomp" queue="stomp.wildcard.queue.two" handler="Magento\TestModuleAsyncStomp\Model\WildCardHandler::methodTwo"/>
+
+    <!-- Consumers for AsyncMultipleTopicsWithEachQueueTest -->
+    <consumer name="stomp.queue.for.multiple.topics.test.y" queue="stomp.queue.for.multiple.topics.test.y" connection="stomp"/>
+    <consumer name="stomp.queue.for.multiple.topics.test.z" queue="stomp.queue.for.multiple.topics.test.z" connection="stomp"/>
+
+    <!-- Consumers for AsyncMultipleHandlersTest -->
+    <consumer name="stomp.mtmh.queue.1.consumer" queue="stomp.mtmh.queue.1" connection="stomp"/>
+    <consumer name="stomp.mtmh.queue.2.consumer" queue="stomp.mtmh.queue.2" connection="stomp"/>
+</config>

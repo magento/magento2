@@ -20,6 +20,8 @@
         <waitForElementVisible selector="{{PayPalPaymentSection.email}}" stepKey="waitForEmailField" />
         <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/PAYPAL_LOGIN}}" stepKey="fillEmail"/>
         <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForNextPageLoad"/>
+        <conditionalClick selector="{{PayPalPaymentSection.usePasswordInsteadButton}}" dependentSelector="{{PayPalPaymentSection.password}}" visible="false" stepKey="clickUsePasswordInsteadIfPasswordFieldNotVisible"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordFieldToBeVisible" />
         <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/PAYPAL_PWD}}" stepKey="fillPassword"/>
         <waitForElementClickable selector="{{PayPalPaymentSection.loginBtn}}" stepKey="waitForLoginField"/>

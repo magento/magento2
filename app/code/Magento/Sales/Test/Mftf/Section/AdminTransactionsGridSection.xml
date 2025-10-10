@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -18,5 +18,6 @@
         <element name="transactionData" type="text" selector="//th[text()='{{transactionData}}']/following-sibling::td" parameterized="true"/>
         <element name="transitionStatus" type="text" selector="//div[@class='admin__data-grid-wrap admin__data-grid-wrap-static']" />
         <element name="transitionsStatus" type="text" selector="//tr[@data-role='row']//td[@data-column='{{transactionStatus}}']" parameterized="true" />
+        <element name="voidTransactionData" type="text" selector="//*[text()='{{transactionData}}']" parameterized="true"/>
     </section>
 </sections>

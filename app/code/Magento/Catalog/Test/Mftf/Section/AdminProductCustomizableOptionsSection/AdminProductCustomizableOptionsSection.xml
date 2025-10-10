@@ -70,5 +70,13 @@
         <!-- Elements to test drag&drop -->
         <element name="dragCustomOptionRecord" type="block" selector="(//tr[{{dragIndex}}]//div[contains(@class, 'draggable-handle')])['1']" timeout="30" parameterized="true"/>
         <element name="customOptionRecordTitle" type="button" selector="//table[@data-index='options']//tr[{{index}}]//div[contains(@class, 'admin__collapsible-title')]//span" timeout="30" parameterized="true"/>
+
+        <element name="useDefaultValue" type="checkbox" selector="(//input[@data-form-part='product_form'])[{{index}}]" parameterized="true"/>
+        <element name="customOptionOrder" type="text" selector="(//div[@class='admin__collapsible-title']/span)[{{index}}]" parameterized="true"/>
+        <element name="paginationNextButton" type="button" selector="//div[@data-bind='visible: !!element.getRecordCount()']//button[@class='action-next']"/>
+        <element name="customOptionPageDropdown" type="select" selector="//div[@class='admin__control-table-pagination']/div[@class='selectmenu']"/>
+        <element name="customPageOption" type="text" selector="//div[@class='selectmenu _active']//li[@data-bind='css: {_edit: isCustomVisible()}']"/>
+        <element name="customPageNumber" type="input" selector="//div[@class='selectmenu _active']//input[@class='admin__control-text']"/>
+        <element name="customSave" type="button" selector="//div[@class='selectmenu _active']//div[@class='selectmenu-item-edit']/button"/>
     </section>
 </sections>

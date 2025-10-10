@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminSecurityConfigSection">
+        <!-- Navigation elements -->
+        <element name="systemTab" type="button" selector="#menu-magento-backend-system"/>
+        <element name="configurationMenuItem" type="button" selector="//span[contains(text(), 'Configuration')]"/>
+
+        <!-- Security group toggle -->
+        <element name="securityTab" type="button" selector="#admin_security-head"/>
+        <element name="securityExpanded" type="block" selector="#admin_security-head.open"/>
+
+        <!-- Minimum Password Length field elements -->
+        <element name="minimumPasswordLengthField" type="input" selector="#admin_security_minimum_password_length"/>
+        <element name="minimumPasswordLengthInherit" type="checkbox" selector="#admin_security_minimum_password_length_inherit"/>
+        <element name="minimumPasswordLengthLabel" type="text" selector="label[for='admin_security_minimum_password_length']"/>
+        <element name="minimumPasswordLengthComment" type="text" selector="#admin_security_minimum_password_length + .note"/>
+
+        <!-- Validation messages -->
+        <element name="fieldValidationMessage" type="text" selector="#admin_security_minimum_password_length-error"/>
+        <element name="fieldSuccessMessage" type="text" selector=".message-success"/>
+        <element name="fieldErrorMessage" type="text" selector=".message-error"/>
+
+        <!-- Save actions -->
+        <element name="saveConfigButton" type="button" selector="#save"/>
+        <element name="saveConfigButtonWait" type="button" selector="#save:not([disabled])"/>
+
+        <!-- Other security fields for context -->
+        <element name="recoveryLinkField" type="input" selector="#admin_security_password_reset_link_expiration_period"/>
+        <element name="useFormKeyField" type="select" selector="#admin_security_use_form_key"/>
+        <element name="caseSensitiveLoginField" type="select" selector="#admin_security_use_case_sensitive_login"/>
+    </section>
+</sections>

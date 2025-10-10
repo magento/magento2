@@ -486,5 +486,11 @@
         <data key="is_used_for_promo_rules">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="multiSelectAttributeWithThreeOptions" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="option1">1</data>
+        <data key="option2">2</data>
+        <data key="option3">3</data>
+    </entity>
 </entities>
 

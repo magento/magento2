@@ -44,6 +44,9 @@
             <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <deleteData createDataKey="createCMSPage" stepKey="deletePreReqCMSPage" />
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteCategory">
+                <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Step-1: Login to admin-->
@@ -98,7 +101,7 @@
         <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductShortDescriptionWysiwyg2"/>
         <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForShortDescription2" />
         <!-- Step-9: Change editor content into Short description -->
-        <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
+        <executeJS function="hugerte.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
         <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn1" />
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideEditorBtn1" />
         <!-- Step-10: Save entity you are editing (Short Description) -->
@@ -261,7 +264,7 @@
         <click selector="{{TinyMCESection.ShowHideBtn}}"  stepKey="toggleShowHiddenForCategory2"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCECategory2" />
         <!-- Step-9: Change content into Category -->
-        <executeJS function="tinyMCE.get('category_form_description').setContent('Hello Category World!');" stepKey="executeJSFillContent"/>
+        <executeJS function="hugerte.get('category_form_description').setContent('Hello Category World!');" stepKey="executeJSFillContent"/>
         <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickOnShowHideEditorBtn" />
         <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage" />
         <!-- Step-10: Save entity you are editing (Category) -->

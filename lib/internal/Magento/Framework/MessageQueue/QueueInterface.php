@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
@@ -59,4 +59,18 @@ interface QueueInterface
      * @since 103.0.0
      */
     public function push(EnvelopeInterface $envelope);
+
+    /**
+     * Only subscribe the queue
+     *
+     * @return void
+     */
+    public function subscribeQueue(): void;
+
+    /**
+     * Clear queue
+     *
+     * @return int
+     */
+    public function clearQueue(): int;
 }

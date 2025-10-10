@@ -1604,4 +1604,8 @@
         <requiredEntity type="product_option">ProductOptionField20</requiredEntity>
         <requiredEntity type="product_option">ProductOptionField21</requiredEntity>
     </entity>
+    <entity name="productWithCheckboxCustomOptions" type="product">
+        <var key="sku" entityType="product" entityKey="sku"/>
+        <requiredEntity type="product_option">ProductOptionCheckboxFor2</requiredEntity>
+    </entity>
 </entities>
