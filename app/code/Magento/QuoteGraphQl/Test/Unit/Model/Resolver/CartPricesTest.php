@@ -11,11 +11,16 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\GraphQl\Model\Query\Context;
+use Magento\Quote\Api\Data\TotalsInterface;
+use Magento\Quote\Api\Data\TotalsInterfaceFactory;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\Resolver\CartPrices;
+use GraphQL\Language\AST\OperationDefinitionNode;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -50,6 +55,11 @@ class CartPricesTest extends TestCase
     private ResolveInfo $resolveInfoMock;
 
     /**
+     * @var DataObjectHelper|MockObject
+     */
+    private DataObjectHelper $dataObjectHelperMock;
+
+    /**
      * @var Context|MockObject
      */
     private Context $contextMock;
@@ -65,6 +75,16 @@ class CartPricesTest extends TestCase
     private Total $totalMock;
 
     /**
+     * @var TotalsInterfaceFactory|MockObject
+     */
+    private $totalsFactoryMock;
+
+    /**
+     * @var Address|MockObject
+     */
+    private $shippingAddressMock;
+
+    /**
      * @var array
      */
     private array $valueMock = [];
@@ -72,13 +92,31 @@ class CartPricesTest extends TestCase
     protected function setUp(): void
     {
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
+        $this->totalsFactoryMock = $this->getMockBuilder(TotalsInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->addMethods(
+                [
+                    'getSubtotal',
+                    'getSubtotalInclTax',
+                    'getGrandTotal',
+                    'getDiscountTaxCompensationAmount',
+                    'getDiscountAmount',
+                    'getDiscountDescription',
+                    'getAppliedTaxes'
+                ]
+            )
+            ->getMock();
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->fieldMock = $this->createMock(Field::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
+        $this->resolveInfoMock->operation = new OperationDefinitionNode([]);
         $this->contextMock = $this->createMock(Context::class);
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->addMethods(['getQuoteCurrencyCode'])
+            ->onlyMethods(['isVirtual', 'getShippingAddress'])
             ->getMock();
         $this->totalMock = $this->getMockBuilder(Total::class)
             ->disableOriginalConstructor()
@@ -96,6 +134,8 @@ class CartPricesTest extends TestCase
             ->getMock();
         $this->cartPrices = new CartPrices(
             $this->totalsCollectorMock,
+            $this->totalsFactoryMock,
+            $this->dataObjectHelperMock,
             $this->scopeConfigMock
         );
     }
@@ -107,7 +147,71 @@ class CartPricesTest extends TestCase
         $this->cartPrices->resolve($this->fieldMock, $this->contextMock, $this->resolveInfoMock, $this->valueMock);
     }
 
-    public function testResolve(): void
+    public function testResolveQuery(): void
+    {
+        $this->resolveInfoMock->operation->operation = 'query';
+
+        $this->shippingAddressMock = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getData'])
+            ->getMock();
+
+        $this->shippingAddressMock->expects($this->any())
+            ->method('getData')
+            ->willReturn([]);
+
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('isVirtual')
+            ->willReturn(0);
+
+        $this->quoteMock
+            ->expects($this->any())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+
+        $this->dataObjectHelperMock->expects($this->once())
+            ->method('populateWithArray')
+            ->with(
+                $this->identicalTo($this->totalMock),
+                [],
+                TotalsInterface::class
+            );
+
+        $this->totalsFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->totalMock);
+
+        $this->resolve();
+
+    }
+
+    public function testResolveQueryVirtual(): void
+    {
+        $this->quoteMock
+            ->expects($this->once())
+            ->method('isVirtual')
+            ->willReturn(1);
+
+        $this->totalMock
+            ->expects($this->once())
+            ->method('getAppliedTaxes');
+
+        $this->resolve();
+    }
+    public function testResolveMutation(): void
+    {
+        $this->resolveInfoMock->operation->operation = 'mutation';
+
+        $this->totalMock
+            ->expects($this->once())
+            ->method('getAppliedTaxes');
+
+        $this->resolve();
+    }
+
+    private function resolve(): void
     {
         $this->valueMock = ['model' => $this->quoteMock];
         $this->quoteMock
@@ -126,9 +230,6 @@ class CartPricesTest extends TestCase
         $this->totalMock
             ->method('getDiscountDescription')
             ->willReturn('Discount Description');
-        $this->totalMock
-            ->expects($this->once())
-            ->method('getAppliedTaxes');
         $this->scopeConfigMock
             ->expects($this->once())
             ->method('getValue')

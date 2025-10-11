@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,8 +13,12 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
+use Magento\Quote\Api\Data\TotalsInterfaceFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Cart\Totals as CartTotals;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\Store\Model\ScopeInterface;
 
@@ -29,17 +33,26 @@ class CartPrices implements ResolverInterface
     private $totalsCollector;
 
     /**
+     * @var string
+     */
+    private const QUERY_TYPE = 'query';
+
+    /**
      * @var ScopeConfigInterface
      */
     private ScopeConfigInterface $scopeConfig;
 
     /**
      * @param TotalsCollector $totalsCollector
+     * @param TotalsInterfaceFactory $totalsFactory
+     * @param DataObjectHelper $dataObjectHelper
      * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         TotalsCollector $totalsCollector,
-        ?ScopeConfigInterface $scopeConfig = null
+        private TotalsInterfaceFactory $totalsFactory,
+        private DataObjectHelper $dataObjectHelper,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->totalsCollector = $totalsCollector;
         $this->scopeConfig = $scopeConfig ??  ObjectManager::getInstance()->get(ScopeConfigInterface::class);
@@ -56,16 +69,29 @@ class CartPrices implements ResolverInterface
 
         /** @var Quote $quote */
         $quote = $value['model'];
-        /**
-         * To calculate a right discount value
-         * before calculate totals
-         * need to reset Cart Fixed Rules in the quote
-         */
-        $quote->setCartFixedRules([]);
-        $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
 
-        $appliedTaxes = $this->getAppliedTaxes($cartTotals, $currency);
+        if(!$quote->isVirtual() && $info->operation->operation == self::QUERY_TYPE){
+            $addressTotalsData = $quote->getShippingAddress()->getData();
+            $cartTotals = $this->totalsFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $cartTotals,
+                $addressTotalsData,
+                QuoteTotalsInterface::class
+            );
+
+            $appliedTaxes = $this->getAppliedTaxes($quote->getShippingAddress(), $currency);
+        } else {
+            /**
+             * To calculate a right discount value
+             * before calculate totals
+             * need to reset Cart Fixed Rules in the quote
+             */
+            $quote->setCartFixedRules([]);
+            $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
+            $appliedTaxes = $this->getAppliedTaxes($cartTotals, $currency);
+        }
+
         $grandTotal = $cartTotals->getGrandTotal();
 
         $totalAppliedTaxes = 0;
@@ -92,14 +118,22 @@ class CartPrices implements ResolverInterface
     /**
      * Returns taxes applied to the current quote
      *
-     * @param Total $total
+     * @param \Magento\Quote\Model\Quote\Address|Total $addressOrTotals
      * @param string $currency
      * @return array
+     * @throws \InvalidArgumentException
      */
-    private function getAppliedTaxes(Total $total, string $currency): array
+    private function getAppliedTaxes($addressOrTotals, string $currency): array
     {
+        if (
+            !$addressOrTotals instanceof Total &&
+            !$addressOrTotals instanceof \Magento\Quote\Model\Quote\Address
+        ) {
+            throw new \InvalidArgumentException('Unsupported totals type: ' . get_class($addressOrTotals));
+        }
+
         $appliedTaxesData = [];
-        $appliedTaxes = $total->getAppliedTaxes();
+        $appliedTaxes = $addressOrTotals->getAppliedTaxes();
 
         if (empty($appliedTaxes)) {
             return $appliedTaxesData;
@@ -133,37 +167,60 @@ class CartPrices implements ResolverInterface
     /**
      * Returns information about an applied discount
      *
-     * @param Total $total
+     * @param @param Total|CartTotals $totals
      * @param string $currency
      * @return array|null
+     * @throws \InvalidArgumentException
      */
-    private function getDiscount(Total $total, string $currency)
+    private function getDiscount($totals, string $currency)
     {
-        if ($total->getDiscountAmount() === 0) {
+        $this->validateTotalsInstance($totals);
+
+        if ($totals->getDiscountAmount() === 0) {
             return null;
         }
         return [
-            'label' => $total->getDiscountDescription() !== null ? explode(', ', $total->getDiscountDescription()) : [],
-            'amount' => ['value' => $total->getDiscountAmount(), 'currency' => $currency]
+            'label' => $totals->getDiscountDescription() !== null ? explode(', ', $totals->getDiscountDescription()) : [],
+            'amount' => ['value' => $totals->getDiscountAmount(), 'currency' => $currency]
         ];
     }
 
     /**
      * Get Subtotal with discount excluding tax.
      *
-     * @param Total $cartTotals
+     * @param @param Total|CartTotals $totals
      * @return float
+     * @throws \InvalidArgumentException
      */
-    private function getSubtotalWithDiscountExcludingTax(Total $cartTotals): float
+    private function getSubtotalWithDiscountExcludingTax($totals): float
     {
+        $this->validateTotalsInstance($totals);
+
         $discountIncludeTax = $this->scopeConfig->getValue(
             'tax/calculation/discount_tax',
             ScopeInterface::SCOPE_STORE
         ) ?? 0;
         $discountExclTax = $discountIncludeTax ?
-            $cartTotals->getDiscountAmount() + $cartTotals->getDiscountTaxCompensationAmount() :
-            $cartTotals->getDiscountAmount();
+            $totals->getDiscountAmount() + $totals->getDiscountTaxCompensationAmount() :
+            $totals->getDiscountAmount();
 
-        return $cartTotals->getSubtotal() +  $discountExclTax;
+        return $totals->getSubtotal() +  $discountExclTax;
+    }
+
+    /**
+     * Validates the provided totals instance to ensure it is of a supported type.
+     *
+     * @param Total|CartTotals $totals
+     * @return void
+     * @throws \InvalidArgumentException If the provided totals instance is of an unsupported type.
+     */
+    private function validateTotalsInstance($totals) {
+
+        if (
+            !$totals instanceof Total &&
+            !$totals instanceof CartTotals
+        ) {
+            throw new \InvalidArgumentException('Unsupported totals type: ' . get_class($totals));
+        }
     }
 }
