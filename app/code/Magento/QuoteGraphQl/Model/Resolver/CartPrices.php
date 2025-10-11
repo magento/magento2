@@ -52,7 +52,7 @@ class CartPrices implements ResolverInterface
         TotalsCollector $totalsCollector,
         private TotalsInterfaceFactory $totalsFactory,
         private DataObjectHelper $dataObjectHelper,
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->totalsCollector = $totalsCollector;
         $this->scopeConfig = $scopeConfig ??  ObjectManager::getInstance()->get(ScopeConfigInterface::class);
