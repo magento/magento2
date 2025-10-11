@@ -26,6 +26,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @see CartPrices
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartPricesTest extends TestCase
 {
@@ -184,7 +186,6 @@ class CartPricesTest extends TestCase
             ->willReturn($this->totalMock);
 
         $this->resolve();
-
     }
 
     public function testResolveQueryVirtual(): void

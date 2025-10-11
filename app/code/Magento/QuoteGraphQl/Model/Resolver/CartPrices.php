@@ -24,6 +24,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @inheritdoc
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartPrices implements ResolverInterface
 {
@@ -71,7 +73,7 @@ class CartPrices implements ResolverInterface
         $quote = $value['model'];
         $currency = $quote->getQuoteCurrencyCode();
 
-        if(!$quote->isVirtual() && $info->operation->operation == self::QUERY_TYPE){
+        if (!$quote->isVirtual() && $info->operation->operation == self::QUERY_TYPE) {
             $addressTotalsData = $quote->getShippingAddress()->getData();
             $cartTotals = $this->totalsFactory->create();
             $this->dataObjectHelper->populateWithArray(
@@ -125,10 +127,7 @@ class CartPrices implements ResolverInterface
      */
     private function getAppliedTaxes($addressOrTotals, string $currency): array
     {
-        if (
-            !$addressOrTotals instanceof Total &&
-            !$addressOrTotals instanceof \Magento\Quote\Model\Quote\Address
-        ) {
+        if (!$addressOrTotals instanceof Total && !$addressOrTotals instanceof \Magento\Quote\Model\Quote\Address) {
             throw new \InvalidArgumentException('Unsupported totals type: ' . get_class($addressOrTotals));
         }
 
@@ -167,7 +166,7 @@ class CartPrices implements ResolverInterface
     /**
      * Returns information about an applied discount
      *
-     * @param @param Total|CartTotals $totals
+     * @param Total|CartTotals $totals
      * @param string $currency
      * @return array|null
      * @throws \InvalidArgumentException
@@ -180,7 +179,8 @@ class CartPrices implements ResolverInterface
             return null;
         }
         return [
-            'label' => $totals->getDiscountDescription() !== null ? explode(', ', $totals->getDiscountDescription()) : [],
+            'label' => $totals->getDiscountDescription() !== null ?
+                explode(', ', $totals->getDiscountDescription()) : [],
             'amount' => ['value' => $totals->getDiscountAmount(), 'currency' => $currency]
         ];
     }
@@ -188,7 +188,7 @@ class CartPrices implements ResolverInterface
     /**
      * Get Subtotal with discount excluding tax.
      *
-     * @param @param Total|CartTotals $totals
+     * @param Total|CartTotals $totals
      * @return float
      * @throws \InvalidArgumentException
      */
@@ -214,12 +214,10 @@ class CartPrices implements ResolverInterface
      * @return void
      * @throws \InvalidArgumentException If the provided totals instance is of an unsupported type.
      */
-    private function validateTotalsInstance($totals) {
+    private function validateTotalsInstance($totals)
+    {
 
-        if (
-            !$totals instanceof Total &&
-            !$totals instanceof CartTotals
-        ) {
+        if (!$totals instanceof Total && !$totals instanceof CartTotals) {
             throw new \InvalidArgumentException('Unsupported totals type: ' . get_class($totals));
         }
     }
