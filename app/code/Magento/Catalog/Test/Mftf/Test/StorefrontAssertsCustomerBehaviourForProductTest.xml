@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontAssertsCustomerBehaviourForProductTest">
+    <test name="StorefrontAssertsCustomerBehaviourForProductTest"  deprecated="Use StorefrontSearchToolbarTest instead">
         <annotations>
             <features value="Catalog"/>
             <stories value="Product Sorting for guest/customer in storefront"/>
@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-8905"/>
             <group value="catalog"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontSearchToolbarTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Precondition Step.1: Magento should be installed.with Sample Data -->

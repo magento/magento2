@@ -6,7 +6,8 @@
         "magento/framework": "*",
         "magento/module-login-as-customer-api": "*",
         "magento/module-customer": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-checkout": "*"
     },
     "type": "magento2-module",
     "license": [
