@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 use Magento\Framework\Setup\SchemaListener;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\StringUtils;
@@ -54,6 +55,11 @@ class MysqlTest extends TestCase
      * @var \PDO|MockObject
      */
     private $connection;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $logger;
 
     /**
      * Setup
@@ -741,10 +747,11 @@ class MysqlTest extends TestCase
 
         $string = $this->createMock(StringUtils::class);
         $dateTime = $this->createMock(DateTime::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $selectFactory = $this->getMockBuilder(SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $dtoFactoriesTable = $this->createMock(DtoFactoriesTable::class);
 
         $adapterMock = $this->getMockBuilder(PdoMysqlAdapter::class)
             ->onlyMethods(
@@ -753,7 +760,7 @@ class MysqlTest extends TestCase
                 [
                     'string' => $string,
                     'dateTime' => $dateTime,
-                    'logger' => $logger,
+                    'logger' => $this->logger,
                     'selectFactory' => $selectFactory,
                     'config' => [
                         'dbname' => 'not_exists',
@@ -761,6 +768,7 @@ class MysqlTest extends TestCase
                         'password' => 'not_valid',
                     ],
                     'serializer' => $this->serializerMock,
+                    'dtoFactoriesTable' => $dtoFactoriesTable,
                 ]
             )
             ->getMock();
@@ -1066,5 +1074,16 @@ class MysqlTest extends TestCase
             [new \Zend_Db_Statement_Exception('', 0, $pdoException)],
             [new \Exception()],
         ];
+    }
+
+    public function testDestruct(): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect', '_rollBack']);
+        $this->addConnectionMock($adapter);
+        $adapter->expects($this->once())->method('_rollBack');
+        $this->logger->expects($this->once())->method('log');
+        $adapter->beginTransaction();
+        $adapter->__destruct();
+        $this->assertEquals(0, $adapter->getTransactionLevel());
     }
 }

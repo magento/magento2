@@ -38,7 +38,6 @@
                 <item name="minimum_password_length" xsi:type="string">customer/password/minimum_password_length</item>
                 <item name="autocomplete_on_storefront" xsi:type="string">customer/password/autocomplete_on_storefront</item>
                 <item name="create_account_confirmation" xsi:type="string">customer/create_account/confirm</item>
-                <item name="graphql_share_all_customer_groups" xsi:type="string">customer/account_information/graphql_share_all_customer_groups</item>
                 <item name="graphql_share_customer_group" xsi:type="string">customer/account_information/graphql_share_customer_group</item>
             </argument>
         </arguments>
@@ -213,5 +212,12 @@
     <type name="Magento\Customer\Model\AccountManagement">
         <plugin name="merge_order_after_customer_signup"
                 type="Magento\CustomerGraphQl\Plugin\Model\MergeGuestOrder" />
+    </type>
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
+        <arguments>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="authorizationValidator" xsi:type="object">Magento\CustomerGraphQl\Controller\HttpRequestValidator\AuthorizationRequestValidator</item>
+            </argument>
+        </arguments>
     </type>
 </config>

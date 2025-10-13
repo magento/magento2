@@ -1,20 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Fixture\CustomerWithAddresses;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Quote\Test\Fixture\AddProductToCart;
+use Magento\Quote\Test\Fixture\CustomerCart as CustomerCartFixture;
+use Magento\Quote\Test\Fixture\QuoteIdMask;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -65,15 +73,15 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
 
     protected function setUp(): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteIdToMaskedId = $objectManager->get(QuoteIdToMaskedQuoteIdInterface::class);
-        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->customerAddressRepository = $objectManager->get(AddressRepositoryInterface::class);
-        $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
-        $this->customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
+        $this->quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
+        $this->quoteFactory = Bootstrap::getObjectManager()->get(QuoteFactory::class);
+        $this->quoteIdToMaskedId = Bootstrap::getObjectManager()->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->getMaskedQuoteIdByReservedOrderId = Bootstrap::getObjectManager()
+            ->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $this->customerAddressRepository = Bootstrap::getObjectManager()->get(AddressRepositoryInterface::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);
+        $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -457,43 +465,50 @@ QUERY;
         $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
     }
 
-    /**
-     * _security
-     * @magentoApiDataFixture Magento/Customer/_files/three_customers.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     *
-     */
+    #[
+        DataFixture(CustomerWithAddresses::class, as: 'customer'),
+        DataFixture(Customer::class, as: 'customer2'),
+        DataFixture(Customer::class, as: 'customer3'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple'], as: 'product'),
+        DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(QuoteIdMask::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$'])
+    ]
     public function testSetShippingAddressToAnotherCustomerCart()
     {
+        $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
         $this->expectException(\Exception::class);
-
-        $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 1);
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      shipping_addresses: [
-        {
-          customer_address_id: 1
-        }
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        postcode
-      }
-    }
-  }
-}
-QUERY;
         $this->expectExceptionMessage(
             "The current user cannot perform operations on cart \"$maskedQuoteId\""
         );
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+
+        $query = <<<MUTATION
+            mutation {
+              setShippingAddressesOnCart(
+                input: {
+                  cart_id: "$maskedQuoteId"
+                  shipping_addresses: [
+                    {
+                      customer_address_id: 1
+                    }
+                  ]
+                }
+              ) {
+                cart {
+                  shipping_addresses {
+                    postcode
+                  }
+                }
+              }
+            }
+        MUTATION;
+
+        $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getHeaderMap(DataFixtureStorageManager::getStorage()->get('customer2')->getEmail())
+        );
     }
 
     /**

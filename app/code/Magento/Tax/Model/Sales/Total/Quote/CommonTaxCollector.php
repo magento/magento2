@@ -746,8 +746,7 @@ class CommonTaxCollector extends AbstractTotal
      */
     public function updateItemTaxInfo($quoteItem, $itemTaxDetails, $baseItemTaxDetails, $store)
     {
-        //The price should be base price
-        $quoteItem->setPrice($baseItemTaxDetails->getPrice());
+        $quoteItem->setPrice($itemTaxDetails->getPrice());
         if ($quoteItem->getCustomPrice() && $this->taxHelper->applyTaxOnCustomPrice()) {
             $quoteItem->setCustomPrice($itemTaxDetails->getPrice());
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
@@ -403,7 +403,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         $associatedProducts = !$isStrictProcessMode || !empty($productsInfo)
             ? $this->getAssociatedProducts($product)
-            : false;
+            : [];
 
         foreach ($associatedProducts as $subProduct) {
             $qty = $productsInfo[$subProduct->getId()];

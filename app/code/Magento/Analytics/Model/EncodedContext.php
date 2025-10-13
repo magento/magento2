@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model;
 
@@ -35,6 +35,8 @@ class EncodedContext
     }
 
     /**
+     * Retrieve content
+     *
      * @return string
      */
     public function getContent()
@@ -43,6 +45,8 @@ class EncodedContext
     }
 
     /**
+     * Retrieve initialization vector
+     *
      * @return string
      */
     public function getInitializationVector()

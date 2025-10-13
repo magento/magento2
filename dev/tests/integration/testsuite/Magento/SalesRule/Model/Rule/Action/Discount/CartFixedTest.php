@@ -535,7 +535,7 @@ class CartFixedTest extends TestCase
             ],
             [
                 'percentDiscount' => 50,
-                'expectedDiscounts' => ['simple1' => 5.72, 'simple2' => 15.27, 'totalDiscount' => -20.99]
+                'expectedDiscounts' => ['simple1' => 5.72, 'simple2' => 15.28, 'totalDiscount' => -21]
             ],
             [
                 'percentDiscount' => 100,

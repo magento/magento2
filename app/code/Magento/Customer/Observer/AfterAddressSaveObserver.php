@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -159,7 +159,10 @@ class AfterAddressSaveObserver implements ObserverInterface
                     $customer->getStore()
                 );
 
-                if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $newGroupId) {
+                if (!$customer->getDisableAutoGroupChange() &&
+                    $newGroupId !== null &&
+                    $customer->getGroupId() != $newGroupId
+                ) {
                     $customer->setGroupId($newGroupId);
                     $customer->save();
                     $this->customerSession->setCustomerGroupId($newGroupId);

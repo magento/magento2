@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontFillCreditCardDetailsActionGroup">
+        <annotations>
+            <description>Fills in the provided Credit Card details. And Clicks on PayNow Button</description>
+        </annotations>
+        <arguments>
+            <argument name="creditCardDetails" defaultValue="VisaDefaultCard"/>
+        </arguments>
+        <!--Fill the required details for Credit card-->
+        <waitForElementVisible selector="{{CheckoutPaymentSection.creditCardField}}" stepKey="waitForCreditCardField"/>
+        <scrollTo selector="{{CheckoutPaymentSection.creditCardField}}" stepKey="scrollToPayment" />
+        <click selector="{{CheckoutPaymentSection.creditCardField}}" stepKey="clickCreditCardField"/>
+        <fillField selector ="{{CheckoutPaymentSection.creditCardField}}" userInput="{{creditCardDetails.cardNumber}}" stepKey="inputCreditcardNumber"/>
+        <fillField selector ="{{CheckoutPaymentSection.expirationMonth}}" userInput="{{creditCardDetails.month}}" stepKey="inputExpirationMonth"/>
+        <fillField selector ="{{CheckoutPaymentSection.expirationYear}}" userInput="{{creditCardDetails.year}}" stepKey="inputExpirationYear"/>
+        <fillField selector ="{{CheckoutPaymentSection.cvv}}" userInput="{{creditCardDetails.cvv}}" stepKey="inputCvv"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.payNowBtn}}" stepKey="waitToClickPayNowBtn"/>
+        <click selector="{{CheckoutPaymentSection.payNowBtn}}" stepKey="clickPayNowBtn"/>
+    </actionGroup>
+</actionGroups>

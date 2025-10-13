@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model;
 
@@ -15,10 +15,9 @@ use Magento\CatalogInventory\Api\Data\StockStatusInterfaceFactory;
 use Magento\CatalogInventory\Api\StockCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class StockRegistryProvider
+ * Class Catalog StockRegistryProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockRegistryProvider implements StockRegistryProviderInterface
@@ -108,6 +107,8 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     }
 
     /**
+     * Get Stock
+     *
      * @param int|null $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
@@ -129,6 +130,8 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     }
 
     /**
+     * Get Stock Item
+     *
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
@@ -151,6 +154,8 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     }
 
     /**
+     * Get Stock Status
+     *
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
@@ -174,6 +179,8 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     }
 
     /**
+     * Get Stock Registry Storage
+     *
      * @return StockRegistryStorage
      */
     private function getStockRegistryStorage()

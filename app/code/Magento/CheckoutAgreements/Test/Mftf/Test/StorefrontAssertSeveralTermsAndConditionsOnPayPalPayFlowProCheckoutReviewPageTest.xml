@@ -18,7 +18,7 @@
             <testCaseId value="AC-4428"/>
             <group value="paypalPayflowProWithOutValut"/>
             <group value="3rd_party_integration"/>
-<!--            <group value="pr_exclude" />-->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
