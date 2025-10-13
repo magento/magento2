@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2019 Adobe
+# All Rights Reserved.
 
 type Query {
     getPayflowLinkToken(input: PayflowLinkTokenInput! @doc(description: "An input object that defines the requirements to receive a payment token.")): PayflowLinkToken @resolver(class: "\\Magento\\PaypalGraphQl\\Model\\Resolver\\PayflowLinkToken") @doc(description: "Retrieve payment credentials for a transaction. Use this query for Payflow Link and Payments Advanced payment methods.")
@@ -146,6 +146,8 @@ type PayflowProResponseOutput {
 
 type StoreConfig {
     payment_payflowpro_cc_vault_active: String @doc(description: "Payflow Pro vault status.")
+    paypal_express_active : Boolean @doc(description: "Extended Config Data - payment/paypal_express/active")
+    paypal_express_visible_on_cart : Boolean @doc(description: "Extended Config Data - payment/paypal_express/visible_on_car")
 }
 
 input VaultTokenInput @doc(description:"Contains required input for payment methods with Vault support.") {
