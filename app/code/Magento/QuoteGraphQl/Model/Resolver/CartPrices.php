@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
 use Magento\Quote\Api\Data\TotalsInterfaceFactory;
 use Magento\Quote\Model\Quote;
@@ -75,6 +76,7 @@ class CartPrices implements ResolverInterface
 
         if (!$quote->isVirtual() && $info->operation->operation == self::QUERY_TYPE) {
             $addressTotalsData = $quote->getShippingAddress()->getData();
+            unset($addressTotalsData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
             $cartTotals = $this->totalsFactory->create();
             $this->dataObjectHelper->populateWithArray(
                 $cartTotals,
