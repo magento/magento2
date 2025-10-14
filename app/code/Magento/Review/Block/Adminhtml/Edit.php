@@ -67,7 +67,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         /** @var $actionPager \Magento\Review\Helper\Action\Pager */
         $actionPager = $this->_reviewActionPager;
-        $actionPager->setStorageId('reviews');
 
         $reviewId = $this->getRequest()->getParam('id');
         $prevId = $actionPager->getPreviousItemId($reviewId);

@@ -7,93 +7,172 @@ declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Helper\Action;
 
-use Magento\Backend\Model\Session;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\DataObject;
 use Magento\Review\Helper\Action\Pager;
+use Magento\Review\Model\ResourceModel\Review\Collection;
+use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit test for \Magento\Review\Helper\Action\Pager
+ */
 class PagerTest extends TestCase
 {
     /** @var Pager */
-    protected $_helper = null;
+    private $pager;
+
+    /** @var CollectionFactory|MockObject */
+    private $collectionFactory;
+
+    /** @var Collection|MockObject */
+    private $collection;
 
     /**
-     * Prepare helper object
+     * Set up test environment
+     *
+     * @return void
      */
     protected function setUp(): void
     {
-        $sessionMock = $this->getMockBuilder(
-            Session::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['setData', 'getData']
-            )->getMock();
-        $sessionMock->expects(
-            $this->any()
-        )->method(
-            'setData'
-        )->with(
-            'search_result_idsreviews',
-            $this->anything()
-        );
-        $sessionMock->expects(
-            $this->any()
-        )->method(
-            'getData'
-        )->with(
-            'search_result_idsreviews'
-        )->willReturn(
-            [3, 2, 6, 5]
-        );
+        $this->collection = $this->createMock(Collection::class);
 
-        $contextMock = $this->createPartialMock(
-            Context::class,
-            ['getModuleManager', 'getRequest']
-        );
-        $this->_helper = new Pager($contextMock, $sessionMock);
-        $this->_helper->setStorageId('reviews');
+        $this->collectionFactory = $this->createMock(CollectionFactory::class);
+        $this->collectionFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->collection);
+
+        $context = $this->createMock(Context::class);
+
+        $this->pager = new Pager($context, $this->collectionFactory);
     }
 
     /**
-     * Test storage set with proper parameters
+     * Test getting next review ID
+     *
+     * @return void
      */
-    public function testStorageSet()
+    public function testGetNextItemId()
     {
-        $result = $this->_helper->setItems([1]);
-        $this->assertEquals($result, $this->_helper);
+        $item = new DataObject(['id' => 10]);
+
+        $this->collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('main_table.review_id', ['gt' => 5])
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setOrder')
+            ->with('main_table.review_id', 'ASC')
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setPageSize')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setCurPage')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($item);
+
+        $this->assertEquals(10, $this->pager->getNextItemId(5));
     }
 
     /**
-     * Test getNextItem
+     * Test that getNextItemId returns false when no item exists
+     *
+     * @return void
      */
-    public function testGetNextItem()
+    public function testGetNextItemIdReturnsFalse()
     {
-        $this->assertEquals(2, $this->_helper->getNextItemId(3));
+        $item = new DataObject([]);
+
+        $this->collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('main_table.review_id', ['gt' => 99])
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setOrder')
+            ->with('main_table.review_id', 'ASC')
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setPageSize')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setCurPage')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($item);
+
+        $this->assertFalse($this->pager->getNextItemId(99));
     }
 
     /**
-     * Test getNextItem when item not found or no next item
+     * Test getting previous review ID
+     *
+     * @return void
      */
-    public function testGetNextItemNotFound()
+    public function testGetPreviousItemId()
     {
-        $this->assertFalse($this->_helper->getNextItemId(30));
-        $this->assertFalse($this->_helper->getNextItemId(5));
+        $item = new DataObject(['id' => 4]);
+
+        $this->collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('main_table.review_id', ['lt' => 5])
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setOrder')
+            ->with('main_table.review_id', 'DESC')
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setPageSize')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setCurPage')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($item);
+
+        $this->assertEquals(4, $this->pager->getPreviousItemId(5));
     }
 
     /**
-     * Test getPreviousItemId
+     * Test that getPreviousItemId returns false when no item exists
+     *
+     * @return void
      */
-    public function testGetPreviousItem()
+    public function testGetPreviousItemIdReturnsFalse()
     {
-        $this->assertEquals(2, $this->_helper->getPreviousItemId(6));
-    }
+        $item = new DataObject([]);
 
-    /**
-     * Test getPreviousItemId when item not found or no next item
-     */
-    public function testGetPreviousItemNotFound()
-    {
-        $this->assertFalse($this->_helper->getPreviousItemId(30));
-        $this->assertFalse($this->_helper->getPreviousItemId(3));
+        $this->collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('main_table.review_id', ['lt' => 1])
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setOrder')
+            ->with('main_table.review_id', 'DESC')
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setPageSize')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setCurPage')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($item);
+
+        $this->assertFalse($this->pager->getPreviousItemId(1));
     }
 }

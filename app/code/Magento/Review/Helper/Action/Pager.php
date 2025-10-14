@@ -6,7 +6,8 @@
 
 namespace Magento\Review\Helper\Action;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
 
 /**
  * Action pager helper for iterating over search results
@@ -14,136 +15,68 @@ use Magento\Framework\Exception\LocalizedException;
  * @api
  * @since 100.0.2
  */
-class Pager extends \Magento\Framework\App\Helper\AbstractHelper
+class Pager extends AbstractHelper
 {
-    const STORAGE_PREFIX = 'search_result_ids';
-
     /**
-     * Storage id
+     * Review collection factory
      *
-     * @var int
+     * @var CollectionFactory
      */
-    protected $_storageId = null;
+    protected $reviewCollectionFactory;
 
     /**
-     * Array of items
+     * Pager constructor.
      *
-     * @var array
-     */
-    protected $_items = null;
-
-    /**
-     * Backend session model
-     *
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $_backendSession;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Backend\Model\Session $backendSession
+     * @param CollectionFactory $reviewCollectionFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Backend\Model\Session $backendSession
+        CollectionFactory $reviewCollectionFactory
     ) {
-        $this->_backendSession = $backendSession;
         parent::__construct($context);
+        $this->reviewCollectionFactory = $reviewCollectionFactory;
     }
 
     /**
-     * Set storage id
-     *
-     * @param int $storageId
-     * @return void
-     */
-    public function setStorageId($storageId)
-    {
-        $this->_storageId = $storageId;
-    }
-
-    /**
-     * Set items to storage
-     *
-     * @param array $items
-     * @return $this
-     */
-    public function setItems(array $items)
-    {
-        $this->_items = $items;
-        $this->_backendSession->setData($this->_getStorageKey(), $this->_items);
-
-        return $this;
-    }
-
-    /**
-     * Load stored items
-     *
-     * @return void
-     */
-    protected function _loadItems()
-    {
-        if ($this->_items === null) {
-            $this->_items = (array)$this->_backendSession->getData($this->_getStorageKey());
-        }
-    }
-
-    /**
-     * Get next item id
+     * Get the next review id.
      *
      * @param int $id
-     * @return int|bool
+     * @return int|false 
      */
     public function getNextItemId($id)
     {
-        $position = $this->_findItemPositionByValue($id);
-        if ($position === false || $position == count($this->_items) - 1) {
-            return false;
-        }
-
-        return $this->_items[$position + 1];
+        return $this->getRelativeReviewId($id, 'gt', 'ASC');
     }
 
     /**
-     * Get previous item id
+     * Get the previous review id.
      *
      * @param int $id
-     * @return int|bool
+     * @return int|false
      */
     public function getPreviousItemId($id)
     {
-        $position = $this->_findItemPositionByValue($id);
-        if ($position === false || $position == 0) {
-            return false;
-        }
-
-        return $this->_items[$position - 1];
+        return $this->getRelativeReviewId($id, 'lt', 'DESC');
     }
 
     /**
-     * Return item position based on passed in value
+     * Get the review id based on comparison and order.
      *
-     * @param mixed $value
-     * @return int|bool
+     * @param int $id 
+     * @param string $operator 
+     * @param string $order 
+     * @return int|false
      */
-    protected function _findItemPositionByValue($value)
+    private function getRelativeReviewId($id, $operator, $order)
     {
-        $this->_loadItems();
-        return array_search($value, $this->_items);
-    }
+        $collection = $this->reviewCollectionFactory->create();
+        $collection->addFieldToFilter('main_table.review_id', [$operator => $id])
+            ->setOrder('main_table.review_id', $order)
+            ->setPageSize(1)
+            ->setCurPage(1);
 
-    /**
-     * Get storage key
-     *
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _getStorageKey()
-    {
-        if (!$this->_storageId) {
-            throw new LocalizedException(__("The storage key wasn't set. Add the storage key and try again."));
-        }
-
-        return self::STORAGE_PREFIX . $this->_storageId;
+        $item = $collection->getFirstItem();
+        return $item->getId() ? (int)$item->getId() : false;
     }
 }

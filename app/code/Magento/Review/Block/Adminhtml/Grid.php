@@ -94,21 +94,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Save search results
-     *
-     * @return \Magento\Backend\Block\Widget\Grid
-     */
-    protected function _afterLoadCollection()
-    {
-        /** @var $actionPager \Magento\Review\Helper\Action\Pager */
-        $actionPager = $this->_reviewActionPager;
-        $actionPager->setStorageId('reviews');
-        $actionPager->setItems($this->getCollection()->getResultingIds());
-
-        return parent::_afterLoadCollection();
-    }
-
-    /**
      * @inheritDoc
      */
     protected function _prepareCollection()

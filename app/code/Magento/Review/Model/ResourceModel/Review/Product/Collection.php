@@ -402,30 +402,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Get result sorted ids
-     *
-     * @return array
-     */
-    public function getResultingIds()
-    {
-        $idsSelect = clone $this->getSelect();
-        $data = $this->getConnection()
-            ->fetchAll(
-                $idsSelect
-                    ->reset(Select::LIMIT_COUNT)
-                    ->reset(Select::LIMIT_OFFSET)
-                    ->columns('rt.review_id')
-            );
-
-        return array_map(
-            function ($value) {
-                return $value['review_id'];
-            },
-            $data
-        );
-    }
-
-    /**
      * Render SQL for retrieve product count
      *
      * @return string
