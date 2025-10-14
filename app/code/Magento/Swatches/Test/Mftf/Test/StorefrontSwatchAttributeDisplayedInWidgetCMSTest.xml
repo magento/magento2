@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2021 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -96,8 +96,8 @@
         <after>
             <!-- Delete Category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <!-- Delete Configurable Product -->
-            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <!-- Delete all products via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <!-- Delete Attribute -->
             <deleteData createDataKey="createVisualSwatchAttribute" stepKey="deleteVisualSwatchAttribute"/>
             <!-- Delete CMS Page -->
