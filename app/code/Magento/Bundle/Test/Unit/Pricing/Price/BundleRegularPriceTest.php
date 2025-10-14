@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,7 +56,8 @@ class BundleRegularPriceTest extends TestCase
     {
         $this->saleableInterfaceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPriceInfo', 'getPriceType', 'getPrice'])
+            ->addMethods(['getPriceType'])
+            ->onlyMethods(['getPriceInfo', 'getPrice'])
             ->getMock();
         $this->bundleCalculatorMock = $this->createMock(
             BundleCalculatorInterface::class
@@ -97,7 +98,7 @@ class BundleRegularPriceTest extends TestCase
             ->willReturn($expectedResult);
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('convertAndRound')
+            ->method('convert')
             ->willReturnArgument(0);
 
         $result = $this->regularPrice->getAmount();
@@ -122,7 +123,7 @@ class BundleRegularPriceTest extends TestCase
             ->willReturn($expectedResult);
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('convertAndRound')
+            ->method('convert')
             ->willReturnArgument(0);
 
         $result = $this->regularPrice->getMaximalPrice();
@@ -164,7 +165,7 @@ class BundleRegularPriceTest extends TestCase
             ->willReturn($expectedPrice);
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('convertAndRound')
+            ->method('convert')
             ->willReturnArgument(0);
 
         $result = $this->regularPrice->getMaximalPrice();
@@ -184,7 +185,7 @@ class BundleRegularPriceTest extends TestCase
             ->willReturn($expectedResult);
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('convertAndRound')
+            ->method('convert')
             ->willReturnArgument(0);
 
         $this->bundleCalculatorMock->expects($this->once())
@@ -225,7 +226,7 @@ class BundleRegularPriceTest extends TestCase
             ->willReturn($minOptionPrice);
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('convertAndRound')
+            ->method('convert')
             ->willReturnArgument(0);
 
         $this->bundleCalculatorMock->expects($this->once())

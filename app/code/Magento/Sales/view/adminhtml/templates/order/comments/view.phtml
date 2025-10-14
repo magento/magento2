@@ -1,17 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Escaper $escaper */
+/** @var View $block */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\Comments\View;
+
+$entityId = $block->getEntity()->getId();
+$editCommentCheck = $block->getData('editCommentCheck');
 ?>
 <?php if ($_entity = $block->getEntity()): ?>
 <div id="comments_block" class="edit-order-comments">
     <div class="order-history-block">
         <div class="admin__field field-row">
             <label class="admin__field-label"
-                   for="history_comment"><?= $block->escapeHtml(__('Comment Text')) ?></label>
+                   for="history_comment"><?= $escaper->escapeHtml(__('Comment Text')) ?></label>
             <div class="admin__field-control">
                 <textarea name="comment[comment]"
                           class="admin__control-textarea"
@@ -30,7 +39,7 @@
                                id="history_notify"
                                value="1" />
                         <label class="admin__field-label"
-                               for="history_notify"><?= $block->escapeHtml(__('Notify Customer by Email')) ?></label>
+                               for="history_notify"><?= $escaper->escapeHtml(__('Notify Customer by Email')) ?></label>
                     </div>
                 <?php endif; ?>
                 <div class="admin__field admin__field-option">
@@ -40,7 +49,7 @@
                            class="admin__control-checkbox"
                            value="1" />
                     <label class="admin__field-label"
-                           for="history_visible"> <?= $block->escapeHtml(__('Visible on Storefront')) ?></label>
+                           for="history_visible"> <?= $escaper->escapeHtml(__('Visible on Storefront')) ?></label>
                 </div>
             </div>
             <div class="order-history-comments-actions">
@@ -50,26 +59,53 @@
     </div>
 
     <ul class="note-list">
-        <?php foreach ($_entity->getCommentsCollection(true) as $_comment): ?>
+        <?php foreach ($_entity->getCommentsCollection(true) as $comment): ?>
             <li>
                 <span class="note-list-date">
-                    <?= /* @noEscape */ $block->formatDate($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
+                    <?= /* @noEscape */ $block->formatDate($comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
                 </span>
                 <span class="note-list-time">
-                    <?= /* @noEscape */ $block->formatTime($_comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
+                    <?= /* @noEscape */ $block->formatTime($comment->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
                 </span>
                 <span class="note-list-customer">
-                    <?= $block->escapeHtml(__('Customer')) ?>
-                    <?php if ($_comment->getIsCustomerNotified()): ?>
-                        <span class="note-list-customer-notified"><?= $block->escapeHtml(__('Notified')) ?></span>
+                    <?= $escaper->escapeHtml(__('Customer')) ?>
+                    <?php if ($comment->getIsCustomerNotified()): ?>
+                        <span class="note-list-customer-notified"><?= $escaper->escapeHtml(__('Notified')) ?></span>
                     <?php else: ?>
                         <span class="note-list-customer-not-notified">
-                            <?= $block->escapeHtml(__('Not Notified')) ?>
+                            <?= $escaper->escapeHtml(__('Not Notified')) ?>
                         </span>
                     <?php endif; ?>
                 </span>
+                <?php if ($editCommentCheck->isCommentAllowedToEdit($comment)): ?>
+                    <span class="note-list-customer">
+                        <a class="edit_comment" href="#">
+                            <?= $escaper->escapeHtml(__('Edit')) ?>
+                        </a>
+                    </span>
+                    <div class="edit-comment-container" style="display: none">
+                        <div class="admin__field-control">
+                            <label>
+                                <textarea name="edit_comment" class="edit-comment-textarea admin__control-textarea"
+                                          disabled="disabled" rows="3" cols="5" spellcheck="false"></textarea>
+                            </label>
+                        </div>
+                        <div class="order-history-comments-actions">
+                            <button title="Update Comment" type="button" class="action-secondary edit-comment-submit"
+                                    data-comment-id="<?= $escaper->escapeHtmlAttr($comment->getId()); ?>">
+                                <?= $escaper->escapeHtml(__('Update Comment')) ?>
+                            </button>
+                            <button title="Cancel" type="button" class="edit-comment-cancel">
+                                <?= $escaper->escapeHtml(__('Cancel')) ?>
+                            </button>
+                        </div>
+                    </div>
+                <?php endif; ?>
                 <div class="note-list-comment">
-                    <?= $block->escapeHtml($_comment->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                    <?= /* @noEscape */ nl2br($escaper->escapeHtml(
+                        $comment->getComment(),
+                        ['b', 'br', 'strong', 'i', 'u', 'a']
+                    ))?>
                 </div>
             </li>
         <?php endforeach; ?>
@@ -78,7 +114,7 @@
     <?php $scriptString = <<<script
 require(['prototype'], function(){
     submitComment = function() {
-        submitAndReloadArea($('comments_block').parentNode, '{$block->escapeJs($block->getSubmitUrl())}')
+        submitAndReloadArea($('comments_block').parentNode, '{$escaper->escapeJs($block->getSubmitUrl())}')
     };
     if ($('submit_comment_button')) {
         $('submit_comment_button').observe('click', submitComment);
@@ -87,4 +123,22 @@ require(['prototype'], function(){
 script;
     ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        "openModal(event); event.preventDefault();",
+        'a.edit_comment'
+    ) ?>
+
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        "closeCommentArea();",
+        '.edit-comment-cancel'
+    ) ?>
+
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        "updateComment('".$escaper->escapeHtml($editCommentCheck->getEditUrl($entityId))."', event);",
+        '.edit-comment-submit'
+    ) ?>
 <?php endif; ?>

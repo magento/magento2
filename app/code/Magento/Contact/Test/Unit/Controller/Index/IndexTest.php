@@ -53,7 +53,7 @@ class IndexTest extends TestCase
             ->getMockForAbstractClass();
 
         $contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(
+            ->onlyMethods(
                 ['getRequest', 'getResponse', 'getResultFactory', 'getUrl']
             )->disableOriginalConstructor(
             )->getMock();

@@ -136,9 +136,9 @@ class GroupTest extends TestCase
 
         $dbAdapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(['lastInsertId'])
+            ->onlyMethods(
                 [
-                    'lastInsertId',
                     'describeTable',
                     'update',
                     'select'

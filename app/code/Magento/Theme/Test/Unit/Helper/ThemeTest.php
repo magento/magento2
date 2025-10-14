@@ -45,7 +45,7 @@ class ThemeTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getCssAssetsDataProvider()
+    public static function getCssAssetsDataProvider()
     {
         // @codingStandardsIgnoreStart
         return [

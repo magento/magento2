@@ -126,6 +126,7 @@ class LinkTest extends TestCase
      *
      * @return void
      * @dataProvider executeDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testExecuteFile(string $fileType): void
     {
@@ -133,29 +134,61 @@ class LinkTest extends TestCase
         $fileName = 'link.jpg';
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id', 0], ['type', 0])
-            ->willReturnOnConsecutiveCalls(1, $fileType);
+            ->willReturnCallback(function ($arg1, $arg2) use ($fileType) {
+                if ($arg1 == 'id' && $arg2 == 0) {
+                    return 1;
+                } elseif ($arg1 == 'type' && $arg2 == 0) {
+                    return $fileType;
+                }
+            });
         $this->response->expects($this->once())->method('setHttpResponseCode')->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response
             ->expects($this->any())
             ->method('setHeader')
-            ->withConsecutive(
-                ['Pragma', 'public', true],
-                [
-                    'Cache-Control',
-                    'must-revalidate, post-check=0, pre-check=0',
-                    true
-                ],
-                ['Content-type', 'text/html'],
-                ['Content-Length', $fileSize],
-                ['Content-Disposition', 'attachment; filename=' . $fileName]
-            )->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2 = null, $arg3 = null) use ($fileSize, $fileName) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == 'Pragma' && $arg2 == 'public' && $arg3 == true) {
+                            return $this->response;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == 'Cache-Control' && $arg2 == 'must-revalidate, post-check=0, pre-check=0' &&
+                            $arg3 == true) {
+                            return $this->response;
+                        }
+                        break;
+                    case 3:
+                        if ($arg1 == 'Content-type' && $arg2 == 'text/html' && $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                    case 4:
+                        if ($arg1 === 'Content-Length' && $arg2 === $fileSize && $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                    case 5:
+                        if ($arg1 == 'Content-Disposition' && $arg2 == 'attachment; filename=' . $fileName &&
+                            $arg3 === null) {
+                            return $this->response;
+                        }
+                        break;
+                }
+
+                return $this->response;
+            });
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
         $this->objectManager
             ->method('get')
-            ->withConsecutive([File::class], [\Magento\Downloadable\Model\Link::class], [Download::class])
-            ->willReturnOnConsecutiveCalls($this->fileHelper, $this->linkModel, $this->downloadHelper);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [File::class] => $this->fileHelper,
+                [\Magento\Downloadable\Model\Link::class] => $this->linkModel,
+                [Download::class] => $this->downloadHelper,
+            });
         $this->fileHelper->expects($this->once())->method('getFilePath')
             ->willReturn('filepath/' . $fileType . '.jpg');
         $this->downloadHelper->expects($this->once())->method('setResource')
@@ -192,8 +225,13 @@ class LinkTest extends TestCase
     {
         $this->request
             ->method('getParam')
-            ->withConsecutive(['id', 0], ['type', 0])
-            ->willReturnOnConsecutiveCalls(1, $fileType);
+            ->willReturnCallback(function ($arg1, $arg2) use ($fileType) {
+                if ($arg1 == 'id' && $arg2 == 0) {
+                    return 1;
+                } elseif ($arg1 == 'type' && $arg2 == 0) {
+                    return $fileType;
+                }
+            });
         $this->response->expects($this->once())->method('setHttpResponseCode')->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response->expects($this->any())->method('setHeader')->willReturnSelf();
@@ -231,7 +269,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             ['link'],

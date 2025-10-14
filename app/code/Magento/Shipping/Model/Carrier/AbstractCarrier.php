@@ -188,7 +188,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getContainerTypes(\Magento\Framework\DataObject $params = null)
+    public function getContainerTypes(?\Magento\Framework\DataObject $params = null)
     {
         return [];
     }
@@ -201,7 +201,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getAllowedContainers(\Magento\Framework\DataObject $params = null)
+    protected function _getAllowedContainers(?\Magento\Framework\DataObject $params = null)
     {
         $containersAll = $this->getContainerTypesAll();
         if (empty($containersAll)) {
@@ -265,7 +265,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
+    public function getDeliveryConfirmationTypes(?\Magento\Framework\DataObject $params = null)
     {
         return [];
     }

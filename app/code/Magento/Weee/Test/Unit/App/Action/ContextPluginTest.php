@@ -201,11 +201,24 @@ class ContextPluginTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY, ScopeInterface::SCOPE_STORE, null],
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION, ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturnOnConsecutiveCalls('US', 0);
+            ->willReturnCallback(function (...$args) {
+                static $index = 0;
+                $expectedArgs = [
+                    [
+                        TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                        ScopeInterface::SCOPE_STORE,
+                        null
+                    ],
+                    [
+                        TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION,
+                        ScopeInterface::SCOPE_STORE,
+                        null
+                    ]
+                ];
+                $returnValue = ['US',0];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue[$index - 1] : null;
+            });
 
         $this->weeeTaxMock->expects($this->once())
             ->method('isWeeeInLocation')
@@ -294,11 +307,24 @@ class ContextPluginTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY, ScopeInterface::SCOPE_STORE, null],
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION, ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturnOnConsecutiveCalls('US', 0);
+            ->willReturnCallback(function (...$args) {
+                static $index = 0;
+                $expectedArgs = [
+                    [
+                        TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                        ScopeInterface::SCOPE_STORE,
+                        null
+                    ],
+                    [
+                        TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION,
+                        ScopeInterface::SCOPE_STORE,
+                        null
+                    ]
+                ];
+                $returnValue = ['US',0];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue[$index - 1] : null;
+            });
 
         $this->customerSessionMock->expects($this->once())
             ->method('getDefaultTaxBillingAddress')
@@ -359,11 +385,24 @@ class ContextPluginTest extends TestCase
 
         $this->scopeConfigMock
             ->method('getValue')
-            ->withConsecutive(
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY, ScopeInterface::SCOPE_STORE, null],
-                [TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION, ScopeInterface::SCOPE_STORE, null]
-            )
-            ->willReturnOnConsecutiveCalls('US', 0);
+            ->willReturnCallback(function (...$args) {
+                static $index = 0;
+                $expectedArgs = [
+                    [
+                        TaxConfig::CONFIG_XML_PATH_DEFAULT_COUNTRY,
+                        ScopeInterface::SCOPE_STORE,
+                        null
+                    ],
+                    [
+                        TaxConfig::CONFIG_XML_PATH_DEFAULT_REGION,
+                        ScopeInterface::SCOPE_STORE,
+                        null
+                    ]
+                ];
+                $returnValue = ['US',0];
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue[$index - 1] : null;
+            });
 
         $this->customerSessionMock->expects($this->once())
             ->method('getDefaultTaxShippingAddress')

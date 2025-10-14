@@ -51,11 +51,11 @@ class SortFixturesTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function sortFixturesProvider(): array
+    public static function sortFixturesProvider(): array
     {
         return [
             'first_data_set' => [
-                'sorted_fixtures' => [
+                'sortedFixtures' => [
                     'fixture3_second_module.php',
                     'fixture1_first_module.php',
                     'fixture1_second_module.php',
@@ -67,7 +67,7 @@ class SortFixturesTest extends AbstractOverridesTest
                 ],
             ],
             'second_data_set' => [
-                'sorted_fixtures' => [
+                'sortedFixtures' => [
                     'fixture1_first_module.php',
                     'fixture1_second_module.php',
                     'fixture2_first_module.php',

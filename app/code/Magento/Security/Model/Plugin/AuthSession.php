@@ -51,7 +51,7 @@ class AuthSession
         \Magento\Framework\Message\ManagerInterface $messageManager,
         AdminSessionsManager $sessionsManager,
         \Magento\Security\Model\SecurityCookie $securityCookie,
-        \Magento\Security\Model\UserExpirationManager $userExpirationManager = null
+        ?\Magento\Security\Model\UserExpirationManager $userExpirationManager = null
     ) {
         $this->request = $request;
         $this->messageManager = $messageManager;

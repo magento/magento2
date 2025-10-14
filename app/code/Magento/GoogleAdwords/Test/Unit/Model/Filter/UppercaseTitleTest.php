@@ -25,7 +25,7 @@ class UppercaseTitleTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForFilterValues()
+    public static function dataProviderForFilterValues()
     {
         return [['some name', 'Some Name'], ['test', 'Test']];
     }

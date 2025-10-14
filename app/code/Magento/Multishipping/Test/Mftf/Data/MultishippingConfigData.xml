@@ -12,6 +12,10 @@
         <data key="path">multishipping/options/checkout_multiple_maximum_qty</data>
         <data key="value">2</data>
     </entity>
+    <entity name="MaximumQtyAllowed10ForShippingToMultipleAddressesConfigData">
+        <data key="path">multishipping/options/checkout_multiple_maximum_qty</data>
+        <data key="value">10</data>
+    </entity>
     <!-- Magento Default Value -->
     <entity name="MaximumQtyAllowed100ForShippingToMultipleAddressesConfigData">
         <data key="path">multishipping/options/checkout_multiple_maximum_qty</data>

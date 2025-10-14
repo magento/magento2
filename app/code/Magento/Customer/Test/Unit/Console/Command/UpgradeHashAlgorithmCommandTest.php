@@ -34,7 +34,7 @@ class UpgradeHashAlgorithmCommandTest extends TestCase
     {
         $this->customerCollectionFactory = $this->getMockBuilder(
             CollectionFactory::class
-        )->setMethods(['create'])
+        )->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

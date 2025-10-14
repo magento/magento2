@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,11 +65,12 @@ class ProductTest extends TestCase
 
         $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getState', '__wakeup'])
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getId', 'getState'])
             ->getMockForAbstractClass();
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $this->proceed = function () {

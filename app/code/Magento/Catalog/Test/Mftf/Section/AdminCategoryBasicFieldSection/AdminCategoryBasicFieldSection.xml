@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -34,5 +34,10 @@
         <element name="destinationCategory" type="text" selector="//li[contains(@class, 'jstree-node')]//a[contains(text(),'Default Category')]"/>
         <element name="grabPopUpText" type="input" selector="//div[@class='modal-inner-wrap']//div[@data-id='information-dialog-category']//div[text()='This operation can take a long time']"/>
         <element name="acceptPopUp" type="input" selector="//div[@class='modal-inner-wrap']//button[@class='action-primary']/span[text()='Ok']"/>
+        <element name="saveCategory" type="button" selector="#save" timeout="30"/>
+        <element name="expandCollapseProductsInCategorySection" type="text" selector="//div[@data-state-collapsible='{{status}}']//strong//span[text()='{{section}}']" parameterized="true"/>
+        <element name="productPositionInCategory" type="input" selector="//td[contains(@class,'col-name') and contains(text(),'{{productName}}')]/following-sibling::td//input[@name='position']" parameterized="true"/>
+        <element name="btnMoveProductToFirstPosition" type="button" selector="//td[contains(@class,'col-name') and contains(text(),'{{productName}}')]/following-sibling::td//a[@class='move-top icon-backward']" parameterized="true" timeout="30"/>
+        <element name="btnMoveProductToLastPosition" type="button" selector="//td[contains(@class,'col-name') and contains(text(),'{{productName}}')]/following-sibling::td//a[@class='move-bottom icon-forward']" parameterized="true" timeout="30"/>
     </section>
 </sections>

@@ -9,6 +9,7 @@ use Cm\RedisSession\Handler\ConfigInterface;
 use Cm\RedisSession\Handler\LoggerInterface;
 use Cm\RedisSession\ConnectionFailedException;
 use Cm\RedisSession\ConcurrentConnectionsExceededException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem;
@@ -17,24 +18,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Redis implements \SessionHandlerInterface
 {
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var \Cm\RedisSession\Handler[]
      */
-    private $connection;
+    private array $connection = [];
 
     /**
      * @param ConfigInterface $config
@@ -42,11 +28,11 @@ class Redis implements \SessionHandlerInterface
      * @param Filesystem $filesystem
      * @throws SessionException
      */
-    public function __construct(ConfigInterface $config, LoggerInterface $logger, Filesystem $filesystem)
-    {
-        $this->config = $config;
-        $this->logger = $logger;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        private readonly ConfigInterface $config,
+        private readonly LoggerInterface $logger,
+        private readonly Filesystem $filesystem,
+    ) {
     }
 
     /**
@@ -97,7 +83,7 @@ class Redis implements \SessionHandlerInterface
         try {
             $result = $this->getConnection()->read($sessionId);
         } catch (ConcurrentConnectionsExceededException $e) {
-            require $this->filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/503.php');
+            throw new LocalizedException(__("Redis session exceeded concurrent connections"), $e);
         }
 
         return $result;

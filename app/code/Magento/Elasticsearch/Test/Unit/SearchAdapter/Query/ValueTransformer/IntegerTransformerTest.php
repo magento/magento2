@@ -50,7 +50,7 @@ class IntegerTransformerTest extends TestCase
      *
      * @return array
      */
-    public function valuesDataProvider(): array
+    public static function valuesDataProvider(): array
     {
         return [
             ['12345', 12345],

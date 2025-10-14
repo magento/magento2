@@ -74,8 +74,8 @@ class Links implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();

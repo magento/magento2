@@ -30,7 +30,7 @@ class Country extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function __construct(
         Context $context,
         ?string $connectionName = null,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class

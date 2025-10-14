@@ -166,7 +166,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function executeIsPostDataDataProvider(): array
+    public static function executeIsPostDataDataProvider(): array
     {
         return [
             [false, ['0' => '0']],
@@ -275,6 +275,7 @@ class SaveTest extends TestCase
      * @param bool $withStoreId
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function mockGetRequestData(
         string $queryText,
@@ -290,13 +291,25 @@ class SaveTest extends TestCase
         if ($withStoreId) {
             $this->request
                 ->method('getPost')
-                ->withConsecutive(['query_text', false], ['query_id', null], ['store_id', false])
-                ->willReturnOnConsecutiveCalls($queryText, $queryId, 1);
+                ->willReturnCallback(function ($arg1, $arg2) use ($queryText, $queryId) {
+                    if ($arg1 == 'query_text' && $arg2 == false) {
+                        return $queryText;
+                    } elseif ($arg1 == 'query_id' && $arg2 == null) {
+                        return $queryId;
+                    } elseif ($arg1 == 'store_id' && $arg2 == false) {
+                        return 1;
+                    }
+                });
         } else {
             $this->request
                 ->method('getPost')
-                ->withConsecutive(['query_text', false], ['query_id', null])
-                ->willReturnOnConsecutiveCalls($queryText, $queryId);
+                ->willReturnCallback(function ($arg1, $arg2) use ($queryText, $queryId) {
+                    if ($arg1 == 'query_text' && $arg2 == false) {
+                        return $queryText;
+                    } elseif ($arg1 == 'query_id' && $arg2 == null) {
+                        return $queryId;
+                    }
+                });
         }
     }
 }

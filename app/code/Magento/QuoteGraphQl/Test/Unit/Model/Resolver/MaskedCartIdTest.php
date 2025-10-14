@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\Context;
@@ -16,7 +17,6 @@ use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
-use Magento\QuoteGraphQl\Model\Resolver\Cart;
 use Magento\QuoteGraphQl\Model\Resolver\MaskedCartId;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -133,5 +133,33 @@ class MaskedCartIdTest extends TestCase
             ->method('save')
             ->with($this->quoteIdMask);
         $this->maskedCartId->resolve($this->fieldMock, $this->contextMock, $this->resolveInfoMock, $this->valueMock);
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function testResolveForExceptionWhenQuoteNotExists(): void
+    {
+        $this->expectExceptionMessage('Current user does not have an active cart.');
+        $this->valueMock = ['model' => $this->quoteMock];
+        $cartId = 0;
+        $this->quoteIdToMaskedQuoteId->method('execute')->with($cartId)->willThrowException(
+            new NoSuchEntityException(
+                __(
+                    'No such entity with %fieldName = %fieldValue',
+                    [
+                        'fieldName' => 'quoteId',
+                        'fieldValue' => $cartId
+                    ]
+                )
+            )
+        );
+        $this->maskedCartId->resolve(
+            $this->fieldMock,
+            $this->contextMock,
+            $this->resolveInfoMock,
+            $this->valueMock
+        );
     }
 }

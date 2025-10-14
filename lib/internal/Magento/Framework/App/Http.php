@@ -87,7 +87,7 @@ class Http implements \Magento\Framework\AppInterface
         ConfigLoaderInterface $configLoader,
         State $state,
         Registry $registry,
-        ExceptionHandlerInterface $exceptionHandler = null
+        ?ExceptionHandlerInterface $exceptionHandler = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;

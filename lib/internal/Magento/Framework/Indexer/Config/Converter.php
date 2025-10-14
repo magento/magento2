@@ -8,9 +8,23 @@ namespace Magento\Framework\Indexer\Config;
 use Magento\Framework\Config\ConverterInterface;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface;
 
 class Converter implements ConverterInterface
 {
+    /**
+     * @var SortingAdjustmentInterface
+     */
+    private SortingAdjustmentInterface $sortingAdjustment;
+
+    /**
+     * @param SortingAdjustmentInterface $sortingAdjustment
+     */
+    public function __construct(SortingAdjustmentInterface $sortingAdjustment)
+    {
+        $this->sortingAdjustment = $sortingAdjustment;
+    }
+
     /**
      * Convert dom node tree to array
      *
@@ -47,8 +61,7 @@ class Converter implements ConverterInterface
             $output[$indexerId] = $data;
         }
         $output = $this->sortByDependencies($output);
-
-        return $output;
+        return $this->sortingAdjustment->adjust($output);
     }
 
     /**
@@ -239,6 +252,7 @@ class Converter implements ConverterInterface
      * @param \DOMNode $node
      * @return string
      * @deprecated 101.0.0
+     * @see not used anymore
      */
     protected function getTranslatedNodeValue(\DOMNode $node)
     {
@@ -334,6 +348,7 @@ class Converter implements ConverterInterface
     {
         $accumulated[] = $indexerId;
         $result = $list[$indexerId]['dependencies'] ?? [];
+        $addedResult = [];
         foreach ($result as $relatedIndexerId) {
             if (in_array($relatedIndexerId, $accumulated)) {
                 throw new ConfigurationMismatchException(
@@ -359,8 +374,9 @@ class Converter implements ConverterInterface
                 );
             }
             $relatedResult = $this->expandDependencies($list, $relatedIndexerId, $accumulated);
-            $result = array_unique(array_merge($result, $relatedResult));
+            $addedResult[] = $relatedResult;
         }
-        return $result;
+        $result = array_merge($result, ...$addedResult);
+        return array_unique($result);
     }
 }

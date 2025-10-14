@@ -73,7 +73,7 @@ class PublisherConsumerController
         array $consumers = [],
         array $appInitParams = [],
         ?int $maxMessages = null,
-        ClearQueueProcessor $clearQueueProcessor = null
+        ?ClearQueueProcessor $clearQueueProcessor = null
     ) {
         $this->consumers = $consumers;
         $this->publisher = $publisher;

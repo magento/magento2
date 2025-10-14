@@ -47,7 +47,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($className, $this->model->getActionClassName($module, $controller));
     }
 
-    public function getControllerClassNameDataProvider()
+    public static function getControllerClassNameDataProvider()
     {
         return [
             ['Magento_TestModule', 'controller', \Magento\TestModule\Controller\Adminhtml\Controller::class],
@@ -69,7 +69,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         ];
 
         $routeConfig = $this->getMockBuilder(\Magento\Framework\App\Route\Config::class)
-            ->setMethods(['_getRoutes'])
+            ->onlyMethods(['_getRoutes'])
             ->setConstructorArgs(
                 [
                     'reader' => $this->objectManager->get(\Magento\Framework\App\Route\Config\Reader::class),

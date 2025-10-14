@@ -190,7 +190,7 @@ class UserTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return array
      */
-    public function saveActionPasswordChangeDataProvider()
+    public static function saveActionPasswordChangeDataProvider()
     {
         $password = uniqid('123q');
         $passwordPairs = [

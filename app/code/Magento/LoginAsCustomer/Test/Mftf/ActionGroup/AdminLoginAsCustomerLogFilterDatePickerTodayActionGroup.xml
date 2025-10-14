@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,6 +15,7 @@
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.filters}}" stepKey="clickFilters"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerFrom}}" stepKey="clickFromDate"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickToToday"/>
+        <waitForElementClickable selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerTo}}" stepKey="waitForToDateClickable"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerTo}}" stepKey="clickToDate"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickTodayDateAgain"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>

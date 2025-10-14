@@ -48,7 +48,7 @@ class TemplateTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->itemFactoryMock = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->buttonMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()

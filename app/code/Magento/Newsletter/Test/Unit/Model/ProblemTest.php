@@ -197,8 +197,13 @@ class ProblemTest extends TestCase
         $this->setSubscriber();
         $this->subscriberMock
             ->method('__call')
-            ->withConsecutive(['setSubscriberStatus', [Subscriber::STATUS_UNSUBSCRIBED]], ['setIsStatusChanged'])
-            ->willReturnOnConsecutiveCalls($this->subscriberMock, $this->subscriberMock);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'setSubscriberStatus' && $arg2[0] == Subscriber::STATUS_UNSUBSCRIBED) {
+                    return $this->subscriberMock;
+                } elseif ($arg1 == 'setIsStatusChanged') {
+                    return $this->subscriberMock;
+                }
+            });
         $this->subscriberMock->expects($this->once())
             ->method('save');
 

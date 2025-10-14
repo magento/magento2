@@ -1,11 +1,9 @@
 <?php
-declare(strict_types=1);
 /**
- * Test class for \Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
@@ -152,7 +150,7 @@ class BundleTest extends TestCase
             ->willReturn(['option_1' => ['delete' => 1]]);
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setBundleProductOptions'])
+            ->addMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
         $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttribute);
@@ -175,6 +173,13 @@ class BundleTest extends TestCase
             ->method('setBundleOptionsData')
             ->with($this->bundleOptionsCleaned);
         $this->productMock->expects($this->never())->method('setBundleSelectionsData');
+        $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setBundleProductOptions'])
+            ->getMockForAbstractClass();
+        $extensionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
+        $this->productMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttribute);
+        $this->productMock->expects($this->once())->method('setExtensionAttributes')->with($extensionAttribute);
         $this->productMock->expects($this->once())->method('getPriceType')->willReturn(2);
         $this->productMock->expects($this->any())->method('getOptionsReadonly')->willReturn(true);
         $this->productMock->expects($this->once())->method('setCanSaveBundleSelections')->with(false);
@@ -193,7 +198,7 @@ class BundleTest extends TestCase
         $this->requestMock->expects($this->any())->method('getPost')->willReturnMap($valueMap);
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setBundleProductOptions'])
+            ->addMethods(['setBundleProductOptions'])
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->once())->method('setBundleProductOptions')->with([]);
         $this->productMock->expects($this->any())->method('getCompositeReadonly')->willReturn(false);

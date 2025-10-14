@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaypalExpressCheckoutWithDiscountCouponTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Paypal express checkout with discount"/>
+            <title value="Paypal Express Checkout with discount coupon applied"/>
+            <description value="Place an order with discount coupon applied using paypal express checkout as payment method"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-6152"/>
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Delete all existing cart price rules -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <!-- Create new cart price rule -->
+            <createData entity="SalesRuleSpecificCouponWithPercentDiscount" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete Cart Price Rule -->
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login to StoreFront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- Goto Checkout Page -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping" />
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <!-- Assert order total before applying coupon -->
+        <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotalBeforeCoupon">
+            <argument name="orderTotal" value="$128.00"/>
+        </actionGroup>
+        <!-- Apply Discount Coupon to the Order and assert order total -->
+        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
+            <argument name="discountCode" value="$$createCouponForCartPriceRule.code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotalAfterCoupon">
+            <argument name="orderTotal" value="$110.70"/>
+        </actionGroup>
+        <!-- Click on PayPal payment radio button -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$110.70" stepKey="verifyOrderTotalOnPaypalPage"/>
+        <!-- Click PayPal button and go back to Magento site -->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <!-- I see order successful Page -->
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber</actualResult>
+        </assertNotEmpty>
+    </test>
+</tests>

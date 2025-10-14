@@ -9,6 +9,10 @@ use Magento\Framework\Search\Request\Filter\Range as RangeFilterRequest;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
+/**
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
+ */
 class Range implements FilterInterface
 {
     /**
@@ -26,6 +30,8 @@ class Range implements FilterInterface
     }
 
     /**
+     * Add the range filters
+     *
      * @param RequestFilterInterface|RangeFilterRequest $filter
      * @return array
      */
@@ -33,10 +39,10 @@ class Range implements FilterInterface
     {
         $filterQuery = [];
         $fieldName = $this->fieldMapper->getFieldName($filter->getField());
-        if ($filter->getFrom()) {
+        if ($filter->getFrom() !== null) {
             $filterQuery['range'][$fieldName]['gte'] = $filter->getFrom();
         }
-        if ($filter->getTo()) {
+        if ($filter->getTo() !== null) {
             $filterQuery['range'][$fieldName]['lte'] = $filter->getTo();
         }
         return [$filterQuery];

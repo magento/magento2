@@ -109,7 +109,7 @@ class RedirectDataPreprocessorTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             [1, []],

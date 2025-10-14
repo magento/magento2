@@ -113,7 +113,7 @@ class AllowedQuantityTest extends TestCase
      *
      * @return array
      */
-    public function saleQuantityDataProvider(): array
+    public static function saleQuantityDataProvider(): array
     {
         return [
             [

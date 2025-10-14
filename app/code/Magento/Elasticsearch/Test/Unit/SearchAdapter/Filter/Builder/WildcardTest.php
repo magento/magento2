@@ -47,7 +47,7 @@ class WildcardTest extends TestCase
 
         $this->filterInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Wildcard::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'getField',
                 'getValue',
             ])

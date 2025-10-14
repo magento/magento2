@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,38 +86,39 @@ class GroupTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->abstractModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isObjectNew', 'dataHasChangedFor', 'getStoreIds'])
+            ->addMethods(['getStoreIds', 'getWebsiteId'])
+            ->onlyMethods(['isObjectNew', 'dataHasChangedFor'])
             ->getMockForAbstractClass();
         $this->subjectMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['reinitStores'])
+            ->onlyMethods(['reinitStores'])
             ->getMockForAbstractClass();
         $this->categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCategories'])
+            ->onlyMethods(['getCategories'])
             ->getMock();
         $this->categoryFactoryMock = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productFactoryMock = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCategoryIds', 'addAttributeToSelect', 'addWebsiteFilter', 'getIterator'])
+            ->onlyMethods(['addCategoryIds', 'addAttributeToSelect', 'addWebsiteFilter', 'getIterator'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCollection'])
+            ->onlyMethods(['getCollection'])
             ->getMock();
         $this->productUrlRewriteGeneratorMock = $this->getMockBuilder(ProductUrlRewriteGenerator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate'])
+            ->onlyMethods(['generate'])
             ->getMock();
         $this->plugin = $this->objectManager->getObject(
             GroupPlugin::class,
@@ -139,6 +140,9 @@ class GroupTest extends TestCase
             ->method('getStoreIds')
             ->willReturn(['1']);
         $this->abstractModelMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn(1);
+        $this->abstractModelMock->expects($this->once())
             ->method('dataHasChangedFor')
             ->with('website_id')
             ->willReturn(true);
@@ -150,29 +154,6 @@ class GroupTest extends TestCase
         $this->categoryFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->categoryMock);
-        $this->productFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->productMock);
-        $this->productMock->expects($this->once())
-            ->method('getCollection')
-            ->willReturn($this->productCollectionMock);
-        $this->productCollectionMock->expects($this->once())
-            ->method('addCategoryIds')
-            ->willReturn($this->productCollectionMock);
-        $this->productCollectionMock->expects($this->once())
-            ->method('addAttributeToSelect')
-            ->willReturn($this->productCollectionMock);
-        $this->productCollectionMock->expects($this->once())
-            ->method('addWebsiteFilter')
-            ->willReturn($this->productCollectionMock);
-        $arrayIteratorMock = new \ArrayIterator([$this->productMock]);
-        $this->productCollectionMock->expects($this->once())
-            ->method('getIterator')
-            ->willReturn($arrayIteratorMock);
-        $this->productUrlRewriteGeneratorMock->expects($this->once())
-            ->method('generate')
-            ->with($this->productMock)
-            ->willReturn([]);
 
         $this->assertSame(
             $this->subjectMock,

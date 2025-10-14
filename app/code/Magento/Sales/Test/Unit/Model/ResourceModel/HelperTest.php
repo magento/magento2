@@ -91,7 +91,7 @@ class HelperTest extends TestCase
     /**
      * @return array
      */
-    public function getBestsellersReportUpdateRatingPosProvider()
+    public static function getBestsellersReportUpdateRatingPosProvider()
     {
         return [
             ['alias', ['monthly' => 'alias', 'daily' => 'alias2', 'yearly' => 'alias3'], 'month'],

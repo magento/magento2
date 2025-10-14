@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBillingAddressShownOnSecondCheckoutIfUPSEnabledTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Test Billing address in checkout with UPS carrier"/>
+            <title value="Billing address is shown on second checkout step if enable UPS and refresh page"/>
+            <description value="Billing address is reflected correctly on second checkout step on refreshing payment checkout page post enabling UPS"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4334"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create product -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!-- Enabling Check/Money Order Payment Method -->
+            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <!--Enable Flat Rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!--Set Shipping settings origin data-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
+                <argument name="country" value="United States"/>
+                <argument name="state" value="California"/>
+                <argument name="postcode" value="90034"/>
+            </actionGroup>
+            <!--Cache flush-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheWithUPSDisable">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Reset shipping origin-->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="resetShippingOriginConfig"/>
+            <!--Navigate to shipping method configuration-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForDisablingUPS"/>
+            <!--Configure UPS shipping method with enable for checkout = No-->
+            <actionGroup ref="AdminDisableUPSActionGroup" stepKey="disableUPSShippingMethod"/>
+            <!--delete product-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <!--Logout Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Add simple product to cart-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!--Proceed to checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="proceedToCheckout"/>
+        <!--Enter shipping address & method-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingAddressDetailsWithFlatRate">
+            <argument name="customerVar" value="Simple_US_Utah_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_Florida"/>
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+        <!---Select payment method : Check/Money Order-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
+        <!--Verify checkbox is checked for element "My billing and shipping address are the same"-->
+        <seeCheckboxIsChecked selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="seeCheckboxChecked"/>
+        <!--Navigate to shipping method configuration for enabling UPS-->
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPageForEnablingUPS"/>
+        <!--Configure UPS shipping method with enable for checkout = Yes-->
+        <actionGroup ref="AdminEnableUPSActionGroup" stepKey="enableUPSShippingMethod">
+            <argument name="shipping" value="UPSShippingMethod"/>
+        </actionGroup>
+        <!--Cache flush-->
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheWithUPSEnabled">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!--Refresh Checkout Page-->
+        <amOnPage url="/checkout/#payment" stepKey="refreshStorefrontPaymentCheckoutPage"/>
+        <!--Assert billing address is same & checkbox is checked for element "My billing and shipping address are the same"-->
+        <actionGroup ref="CheckBillingAddressInCheckoutWithBillingAddressOnPaymentPageActionGroup" stepKey="assertBillingAddressPostRefresh">
+            <argument name="customerVar" value="Simple_US_Utah_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_Florida"/>
+        </actionGroup>
+        <seeCheckboxIsChecked selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="seeCheckboxCheckedPostRefresh"/>
+        <!--Navigate to shipping method section-->
+        <amOnPage url="/checkout/#shipping" stepKey="navigateStorefrontBillingAndShippingDetailsPage"/>
+        <!--Enter Shipping details & select UPS shipping method-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingAddressDetailsWithUPS">
+            <argument name="customerVar" value="Simple_US_Utah_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_Florida"/>
+            <argument name="shippingMethod" value="United Parcel Service"/>
+        </actionGroup>
+        <!---Select payment method : Check/Money Order-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPaymentAgain"/>
+        <!-- Place Order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrderButton"/>
+        <!--grab order number-->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!--navigate to orders grid-->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminSalesOrders"/>
+        <!--filter order by ID-->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <!--assert order ID-->
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$grabOrderNumber</actualResult>
+        </assertNotEmpty>
+    </test>
+</tests>

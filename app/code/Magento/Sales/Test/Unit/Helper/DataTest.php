@@ -210,7 +210,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getScopeConfigValue()
+    public static function getScopeConfigValue()
     {
         return [
             [true],

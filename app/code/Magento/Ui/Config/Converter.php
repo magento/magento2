@@ -7,48 +7,49 @@ namespace Magento\Ui\Config;
 
 use Magento\Framework\Config\ConverterInterface as ConfigConverterInterface;
 use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Layout\Argument\Parser;
 use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
  * Converter for UI Component instances configuration files
  */
-class Converter implements ConfigConverterInterface
+class Converter implements ConfigConverterInterface, ResetAfterRequestInterface
 {
     /**
      * The key attributes of a node
      */
-    const DATA_ATTRIBUTES_KEY = 'attributes';
+    public const DATA_ATTRIBUTES_KEY = 'attributes';
 
     /**
      * The key for the data arguments
      */
-    const DATA_ARGUMENTS_KEY = 'arguments';
+    public const DATA_ARGUMENTS_KEY = 'arguments';
 
     /**
      * The key of sub components
      */
-    const DATA_COMPONENTS_KEY = 'children';
+    public const DATA_COMPONENTS_KEY = 'children';
 
     /**
      * The key of the arguments node
      */
-    const ARGUMENT_KEY = 'argument';
+    public const ARGUMENT_KEY = 'argument';
 
     /**
      * The key of the settings component
      */
-    const SETTINGS_KEY = 'settings';
+    public const SETTINGS_KEY = 'settings';
 
     /**
      * Key name attribute value
      */
-    const NAME_ATTRIBUTE_KEY = 'name';
+    public const NAME_ATTRIBUTE_KEY = 'name';
 
     /**
      * Key class attribute value
      */
-    const CLASS_ATTRIBUTE_KEY = 'class';
+    public const CLASS_ATTRIBUTE_KEY = 'class';
 
     /**
      * @var Parser
@@ -224,6 +225,8 @@ class Converter implements ConfigConverterInterface
     }
 
     /**
+     * Process child result
+     *
      * @param \DOMNode $node
      * @param array $childResult
      * @return array
@@ -270,5 +273,13 @@ class Converter implements ConfigConverterInterface
         }
 
         return [$arguments, $childResult];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->schemaMap = [];
     }
 }

@@ -71,7 +71,7 @@ class SwitcherPluginTest extends TestCase
     /**
      * @return array
      */
-    public function beforeGetUrlDataProvider()
+    public static function beforeGetUrlDataProvider()
     {
         return [
             ['any value', [ConfigStructurePlugin::REQUEST_PARAM_COUNTRY => null]],

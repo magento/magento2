@@ -477,7 +477,7 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function prepareChildProductDataProvider(): array
+    public static function prepareChildProductDataProvider(): array
     {
         return [
             [false],

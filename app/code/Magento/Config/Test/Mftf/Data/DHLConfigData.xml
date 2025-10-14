@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminDHLEnableConfigData">
+        <data key="path">carriers/dhl/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDHLDisableConfigData">
+        <data key="path">carriers/dhl/active</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminCarriersDHLId">
+        <data key="path">carriers/dhl/id</data>
+        <data key="scope_id">1</data>
+        <data key="value">{{_CREDS.magento/carriers_dhl_access_id}}</data>
+    </entity>
+    <entity name="AdminCarriersDHLPassword">
+        <data key="path">carriers/dhl/password</data>
+        <data key="scope_id">1</data>
+        <data key="value">{{_CREDS.magento/carriers_dhl_password_us}}</data>
+    </entity>
+    <entity name="AdminCarriersDHLAccount">
+        <data key="path">carriers/dhl/account</data>
+        <data key="scope_id">1</data>
+        <data key="value">{{_CREDS.magento/carriers_dhl_account_number}}</data>
+    </entity>
+    <entity name="AdminCarriersDHLAllowedAllCountries">
+        <data key="path">carriers/dhl/sallowspecific</data>
+        <data key="scope_id">1</data>
+        <data key="value">0</data>
+        <data key="label">All Allowed Countries</data>
+    </entity>
+    <entity name="AdminCarriersDHLSpecificCountries">
+        <data key="path">carriers/dhl/sallowspecific</data>
+        <data key="scope_id">1</data>
+        <data key="value">1</data>
+        <data key="label">Specific Countries</data>
+    </entity>
+    <entity name="DHLSpecificCountryUnitedKingdomConfigData">
+        <data key="path">carriers/dhl/specificcountry</data>
+        <data key="scope_id">1</data>
+        <data key="label">United Kingdom</data>
+        <data key="value">GB</data>
+    </entity>
+    <entity name="AdminEnableDHLShowMethod">
+        <data key="path">carriers/dhl/showmethod</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableDHLShowMethod">
+        <data key="path">carriers/dhl/showmethod</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminEnableDHLDebug">
+        <data key="path">carriers/dhl/debug</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableDHLDebug">
+        <data key="path">carriers/dhl/debug</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminEnableSandboxMode">
+        <data key="path">carriers/dhl/sandbox_mode</data>
+        <data key="scope_id">1</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminDisableSandboxMode">
+        <data key="path">carriers/dhl/sandbox_mode</data>
+        <data key="scope_id">1</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="AdminPoundsUnitOfMeasureDHL">
+        <data key="path">carriers/dhl/unit_of_measure</data>
+        <data key="label">Pounds</data>
+        <data key="value">L</data>
+    </entity>
+    <entity name="AdminCarriersDHLEUId">
+        <data key="path">carriers/dhl/id</data>
+        <data key="scope_id">1</data>
+        <data key="value">EvgeniyDE</data>
+    </entity>
+    <entity name="AdminCarriersDHLEUPassword">
+        <data key="path">carriers/dhl/password</data>
+        <data key="scope_id">1</data>
+        <data key="value">aplNb6Rop</data>
+    </entity>
+    <entity name="AdminCarriersDHLEUAccount">
+        <data key="path">carriers/dhl/account</data>
+        <data key="scope_id">1</data>
+        <data key="value">130000279</data>
+    </entity>
+</entities>

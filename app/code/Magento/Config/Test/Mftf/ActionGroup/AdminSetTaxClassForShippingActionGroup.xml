@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetTaxClassForShippingActionGroup" extends="SetTaxClassForShippingActionGroup">
+        <annotations>
+            <description>Extends to select required shipping tax class</description>
+        </annotations>
+        <arguments>
+            <argument name="taxClass" type="string" defaultValue="Taxable Goods"/>
+        </arguments>
+
+        <remove keyForRemoval="selectOption"/>
+        <selectOption selector="{{SalesConfigSection.ShippingTaxClass}}" userInput="{{taxClass}}" after="uncheckUseSystemValue" stepKey="setShippingTaxClass"/>
+    </actionGroup>
+</actionGroups>

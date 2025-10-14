@@ -46,15 +46,14 @@ class FixerIoTest extends TestCase
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
 
         $this->model = new FixerIo($this->currencyFactory, $this->scopeConfig, $this->httpClientFactory);
@@ -75,11 +74,15 @@ class FixerIoTest extends TestCase
             . "http://data.fixer.io for UAH.";
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/fixerio/api_key', 'store'],
-                ['currency/fixerio/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('api_key', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 === 'currency/fixerio/api_key' && $arg2 === 'store') {
+                        return 'api_key';
+                    } elseif ($arg1 === 'currency/fixerio/timeout' && $arg2 === 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         /** @var Currency|MockObject $currency */
         $currency = $this->getMockBuilder(Currency::class)
@@ -92,7 +95,7 @@ class FixerIoTest extends TestCase
         /** @var DataObject|MockObject $currencyMock */
         $httpResponse = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBody'])
+            ->addMethods(['getBody'])
             ->getMock();
 
         $this->currencyFactory->method('create')

@@ -27,7 +27,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null);
+    public function setAppliedTaxes(?array $appliedTaxes = null);
 
     /**
      * Get order item tax details
@@ -42,7 +42,7 @@ interface OrderTaxDetailsInterface extends \Magento\Framework\Api\ExtensibleData
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

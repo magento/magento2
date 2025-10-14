@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialCaptureForSalesOrderPlacedWithPaypalPayflowProTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Create partial Capture for Order Placed with PayPal Payflow Pro"/>
+            <description value="Create partial Capture for a Paypal Payflow Pro Order and and verify the transaction status after submit the Invoice."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4795"/>
+            <group value="paypalPayflowProWithOutVault"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <!--Create a customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Create Simple product-->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="quantity">5</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexConfig">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheConfig">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!-- Login to admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete product and customer-->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <!-- Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
+        <actionGroup ref="StorefrontAddCategoryProductToCartWithQuantityNewActionGroup" stepKey="addToCartFromStorefrontProductPage1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="quantity" value="5"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCheckoutFromMinicartNewActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatrate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <!-- Checkout select Credit Card (Payflow Pro) and place order-->
+        <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+        <!--Fill Card Data  and place an order-->
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+            <argument name="cardData" value="VisaDefaultCard"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFillCardData"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <!-- Grab order number-->
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--Go to Admin and check order information-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!-- Check status -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <!-- Go to invoice tab and fill data -->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
+        <fillField selector="{{AdminOrderInvoiceViewSection.invoiceQty}}" userInput="2" stepKey="fillInvoiceQuantity"/>
+        <waitForPageLoad stepKey="wait"/>
+        <click selector="{{AdminOrderInvoiceViewSection.updateInvoiceBtn}}" stepKey="clickUpdateQtyInvoiceBtn"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+        <!-- Assert invoice with shipment success message -->
+        <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForLastTransactionIDFieldToBeAppearedAfterSubmittingInvoice"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionIDForCaptured"/>
+        <!--Open the comment history tab and assert the comment-->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterSubmittingInvoice"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $271.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
+        <waitForElementClickable selector="{{StorefrontOrderInvoicesSection.invoiceTab1}}" stepKey="waitForInvoiceTabToBeClicked"/>
+        <actionGroup ref="AdminAssertInvoiceGrandTotalDetailsActionGroup" stepKey="clickOnInvoiceSectionFromOrdersPage"/>
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForAuthorization">
+            <argument name="transactionType" value="authorization"/>
+            <argument name="transitionTypeStatus" value="No"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTransitionTypeStatusNewActionGroup" stepKey="assertTransactionTypeStatusForCapture">
+            <argument name="transactionType" value="capture"/>
+            <argument name="transitionTypeStatus" value="No"/>
+        </actionGroup>
+    </test>
+</tests>

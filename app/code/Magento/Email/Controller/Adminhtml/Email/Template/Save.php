@@ -48,9 +48,9 @@ class Save extends Template implements HttpPostActionInterface
     public function __construct(
         Context $context,
         Registry $coreRegistry,
-        DateTime $dateTime = null,
-        TemplateResource $templateResource = null,
-        Session $backendSession = null
+        ?DateTime $dateTime = null,
+        ?TemplateResource $templateResource = null,
+        ?Session $backendSession = null
     ) {
         $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
         $this->templateResource = $templateResource ?: ObjectManager::getInstance()->get(TemplateResource::class);

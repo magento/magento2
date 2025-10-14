@@ -13,10 +13,10 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class LowstockTest extends AbstractControllerTest
+class LowstockTest extends AbstractControllerTestCase
 {
     /**
      * @var Lowstock
@@ -83,12 +83,17 @@ class LowstockTest extends AbstractControllerTest
         $this->breadcrumbsBlockMock
             ->expects($this->exactly(3))
             ->method('addLink')
-            ->withConsecutive(
-                [new Phrase('Reports'), new Phrase('Reports')],
-                [new Phrase('Products'), new Phrase('Products')],
-                [new Phrase('Low Stock'), new Phrase('Low Stock')]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == new Phrase('Reports') && $arg2 == new Phrase('Reports')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Products') && $arg2 == new Phrase('Products')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Low Stock') && $arg2 == new Phrase('Low Stock')) {
+                        return null;
+                    }
+                }
             );
-
         $this->lowstock->execute();
     }
 }

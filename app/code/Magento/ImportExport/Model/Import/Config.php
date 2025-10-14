@@ -24,7 +24,7 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\ImportEx
         \Magento\ImportExport\Model\Import\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'import_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

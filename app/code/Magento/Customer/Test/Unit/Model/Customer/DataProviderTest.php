@@ -133,7 +133,7 @@ class DataProviderTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getAttributesMetaDataProvider(): array
+    public static function getAttributesMetaDataProvider(): array
     {
         return [
             [
@@ -287,11 +287,10 @@ class DataProviderTest extends TestCase
     {
         $this->eavConfigMock
             ->method('getEntityType')
-            ->withConsecutive(['customer'], ['customer_address'])
-            ->willReturnOnConsecutiveCalls(
-                $this->getTypeCustomerMock($customerAttributes),
-                $this->getTypeAddressMock()
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['customer'] => $this->getTypeCustomerMock($customerAttributes),
+                ['customer_address'] => $this->getTypeAddressMock()
+            });
 
         return $this->eavConfigMock;
     }
@@ -901,9 +900,10 @@ class DataProviderTest extends TestCase
 
         $this->eavConfigMock
             ->method('getEntityType')
-            ->withConsecutive(['customer'], ['customer_address'])
-            ->willReturnOnConsecutiveCalls($typeCustomerMock, $typeAddressMock);
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['customer'] => $typeCustomerMock,
+                ['customer_address'] => $typeAddressMock
+            });
         $this->eavValidationRulesMock->expects($this->once())
             ->method('build')
             ->with(
@@ -928,6 +928,10 @@ class DataProviderTest extends TestCase
             );
 
         $objectManager = new ObjectManager($this);
+        $this->fileUploaderDataResolver = $this->getMockBuilder(FileUploaderDataResolver::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
         $dataProvider = $objectManager->getObject(
             CustomerDataProvider::class,
             [
@@ -936,7 +940,8 @@ class DataProviderTest extends TestCase
                 'requestFieldName' => 'request-field-name',
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig' => $this->eavConfigMock
+                'eavConfig' => $this->eavConfigMock,
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver
             ]
         );
 

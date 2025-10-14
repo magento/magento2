@@ -260,7 +260,11 @@ class CollectionTest extends TestCase
 
         $this->resourceMock
             ->method('getTable')
-            ->withConsecutive([$mainTable]);
+            ->willReturnCallback(function ($arg1) use ($mainTable) {
+                if ($arg1 == $mainTable) {
+                    return null;
+                }
+            });
 
         $this->connectionMock
             ->expects($getIfNullSqlResult)
@@ -415,8 +419,11 @@ class CollectionTest extends TestCase
 
         $this->connectionMock
             ->method('prepareSqlCondition')
-            ->withConsecutive(['`created_at`', ['from' => $fromDate, 'to' => $toDate]]);
-
+            ->willReturnCallback(function ($arg1, $arg2) use ($fromDate, $toDate) {
+                if ($arg1 == "`created_at`" && $arg2 == ['from' => $fromDate, 'to' => $toDate]) {
+                    return null;
+                }
+            });
         $this->collection->setDateRange($fromDate, $toDate);
     }
 
@@ -446,19 +453,19 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function useAggregatedDataDataProvider(): array
+    public static function useAggregatedDataDataProvider(): array
     {
         return [
-            [1, 'sales_order_aggregated_created', 0, $this->never()],
-            [0, 'sales_order', 0, $this->exactly(7)],
-            [0, 'sales_order', 1, $this->exactly(6)]
+            [1, 'sales_order_aggregated_created', 0, self::never()],
+            [0, 'sales_order', 0, self::exactly(7)],
+            [0, 'sales_order', 1, self::exactly(6)]
         ];
     }
 
     /**
      * @return array
      */
-    public function firstPartDateRangeDataProvider(): array
+    public static function firstPartDateRangeDataProvider(): array
     {
         return [
             ['', '', '', ['0 0 0 23:59:59', '0 0 1 0:59:59', '0 0 0 22:59:59']],
@@ -470,7 +477,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function secondPartDateRangeDataProvider(): array
+    public static function secondPartDateRangeDataProvider(): array
     {
         $dateStart = new \DateTime();
         $expectedYear = $dateStart->format('Y');
@@ -486,20 +493,20 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function totalsDataProvider(): array
+    public static function totalsDataProvider(): array
     {
         return [
-            [1, 1, 'sales_order_aggregated_created', $this->never()],
-            [0, 1, 'sales_order_aggregated_created', $this->never()],
-            [1, 0, 'sales_order', $this->exactly(10)],
-            [0, 0, 'sales_order', $this->exactly(11)]
+            [1, 1, 'sales_order_aggregated_created', self::never()],
+            [0, 1, 'sales_order_aggregated_created', self::never()],
+            [1, 0, 'sales_order', self::exactly(10)],
+            [0, 0, 'sales_order', self::exactly(11)]
         ];
     }
 
     /**
      * @return array
      */
-    public function salesDataProvider(): array
+    public static function salesDataProvider(): array
     {
         return [
             [1, 1, 'sales_order_aggregated_created'],
@@ -512,7 +519,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function storesDataProvider(): array
+    public static function storesDataProvider(): array
     {
         $firstReturn = [
             'subtotal' => 'SUM(main_table.base_subtotal * main_table.base_to_global_rate)',

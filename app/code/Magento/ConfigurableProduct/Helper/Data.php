@@ -46,7 +46,7 @@ class Data
      */
     public function __construct(
         ImageHelper $imageHelper,
-        UrlBuilder $urlBuilder = null,
+        ?UrlBuilder $urlBuilder = null,
         ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->imageHelper = $imageHelper;

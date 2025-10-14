@@ -111,7 +111,7 @@ class Redirect
         CustomerUrl $customerUrl,
         ResultFactory $resultFactory,
         CookieMetadataFactory $cookieMetadataFactory,
-        HostChecker $hostChecker = null
+        ?HostChecker $hostChecker = null
     ) {
         $this->request = $request;
         $this->session = $customerSession;

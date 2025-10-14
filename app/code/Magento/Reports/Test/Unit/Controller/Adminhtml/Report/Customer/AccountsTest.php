@@ -11,9 +11,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Page\Title;
 use Magento\Reports\Controller\Adminhtml\Report\Customer\Accounts;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 
-class AccountsTest extends AbstractControllerTest
+class AccountsTest extends AbstractControllerTestCase
 {
     /**
      * @var Accounts
@@ -63,10 +63,16 @@ class AccountsTest extends AbstractControllerTest
             ->with('Magento_Reports::report_customers_accounts');
         $this->breadcrumbsBlockMock
             ->method('addLink')
-            ->withConsecutive(
-                [new Phrase('Reports'), new Phrase('Reports')],
-                [new Phrase('Customers'), new Phrase('Customers')],
-                [new Phrase('New Accounts'), new Phrase('New Accounts')]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == new Phrase('Reports') && $arg2 == new Phrase('Reports')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('Customers') && $arg2 == new Phrase('Customers')) {
+                        return null;
+                    } elseif ($arg1 == new Phrase('New Accounts') && $arg2 == new Phrase('New Accounts')) {
+                        return null;
+                    }
+                }
             );
         $this->accounts->execute();
     }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminGiftMessageAtOrderLevelActionGroup">
+        <annotations>
+            <description>Check that Gift Message at order level on admin side.</description>
+        </annotations>
+        <arguments>
+            <argument name="message" type="string"/>
+        </arguments>
+        <scrollTo selector="{{AdminOrderGiftSection.giftMessageOrderSection}}" stepKey="scrollToGiftMessageSection"/>
+        <seeInField userInput="July" selector="{{AdminOrderGiftSection.giftMessageFromName}}" stepKey="seeFromName"/>
+        <seeInField userInput="Josh" selector="{{AdminOrderGiftSection.giftMessageToName}}" stepKey="seeToName"/>
+        <seeInField userInput="{{message}}" selector="{{AdminOrderGiftSection.giftMessageMessage}}" stepKey="seeMessage"/>
+    </actionGroup>
+</actionGroups>

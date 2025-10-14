@@ -75,7 +75,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
         EavConfig $eavConfig,
         \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->attributeSetResource = $attributeSetResource;
         $this->attributeSetFactory = $attributeSetFactory;

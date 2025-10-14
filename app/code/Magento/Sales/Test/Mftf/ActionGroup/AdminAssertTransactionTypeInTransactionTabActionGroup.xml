@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertTransactionTypeInTransactionTabActionGroup" extends="AdminOpenTransactionsTabActionGroup">
+        <annotations>
+            <description>Click open transaction in transaction Tab on the Order Details page</description>
+        </annotations>
+        <arguments>
+            <argument name="transactionType" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminTransactionsGridSection.transactionData('Transaction ID')}}" after="clickFirstRow" stepKey="waitForTransactionToBeAppreared"/>
+        <grabTextFrom selector="{{AdminTransactionsGridSection.transactionData('Transaction ID')}}" after="waitForTransactionToBeAppreared" stepKey="getTransactionType"/>
+        <assertRegExp stepKey="assertEquals" after="getTransactionType" message="pass">
+            <expectedResult type="string">/([0-9a-z\-])*(?&lt;!{{transactionType}})$/</expectedResult>
+            <actualResult type="variable">getTransactionType</actualResult>
+        </assertRegExp>
+    </actionGroup>
+</actionGroups>

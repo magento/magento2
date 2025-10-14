@@ -58,7 +58,7 @@ class Cron implements \Magento\Framework\AppInterface
         Console\Response $response,
         ObjectManagerInterface $objectManager,
         array $parameters = [],
-        \Magento\Framework\App\AreaList $areaList = null
+        ?\Magento\Framework\App\AreaList $areaList = null
     ) {
         $this->_state = $state;
         $this->_request = $request;

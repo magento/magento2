@@ -12,5 +12,8 @@
         <element name="addSelectedProductToPackage" type="button" selector="#package_block_1 button[data-action='package-save-items']"/>
         <element name="save" type="button" selector="button[data-action='save-packages']"/>
         <element name="saveButtonDisabled" type="button" selector="button[data-action='save-packages']._disabled"/>
+        <element name="addPackage" type="button" selector="//div[@class='page-actions-buttons']//button[@data-action='add-packages']"/>
+        <element name="addProductsToSecondPackage" type="button" selector="#package_block_2 button[data-action='package-add-items']"/>
+        <element name="addSelectedProductToSecondPackage" type="button" selector="#package_block_2 button[data-action='package-save-items']"/>
     </section>
 </sections>

@@ -145,7 +145,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Config\Block\System\Config\Form\Fieldset\Factory $fieldsetFactory,
         \Magento\Config\Block\System\Config\Form\Field\Factory $fieldFactory,
         array $data = [],
-        SettingChecker $settingChecker = null
+        ?SettingChecker $settingChecker = null
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_configFactory = $configFactory;

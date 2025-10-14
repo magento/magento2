@@ -34,7 +34,7 @@
     </entity>
     <entity name="DefaultTaxDestinationRegion">
         <data key="path">tax/defaults/region</data>
-        <data key="value">*</data>
+        <data key="value">0</data>
     </entity>
     <entity name="DefaultTaxDestinationPostcode">
         <data key="path">tax/defaults/postcode</data>

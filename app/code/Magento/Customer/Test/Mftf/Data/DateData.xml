@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="EN_US_DATE">
         <data key="short">9/21/93</data>
-        <data key="short4DigitYear">9/21/1993</data>
+        <data key="short4DigitYear">09/21/1993</data>
         <data key="medium">Sep 21, 1993</data>
         <data key="long">September 21, 1993</data>
         <data key="full">Tuesday, September 21, 1993</data>

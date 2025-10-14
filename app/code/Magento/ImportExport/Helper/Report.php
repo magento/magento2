@@ -61,7 +61,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getExecutionTime($time)
     {
-        $reportTime = $this->timeZone->date($time);
+        $reportTime = $this->timeZone->date(new \DateTime($time));
         $timeDiff = $reportTime->diff($this->timeZone->date());
         return $timeDiff->format('%H:%I:%S');
     }

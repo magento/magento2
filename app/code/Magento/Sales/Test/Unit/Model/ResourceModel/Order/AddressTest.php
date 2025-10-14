@@ -98,10 +98,6 @@ class AddressTest extends TestCase
             ->method('validate')
             ->with($this->addressMock)
             ->willReturn([]);
-        $this->entitySnapshotMock->expects($this->once())
-            ->method('isModified')
-            ->with($this->addressMock)
-            ->willReturn(true);
         $this->addressMock->expects($this->once())
             ->method('getParentId')
             ->willReturn(1);
@@ -116,10 +112,6 @@ class AddressTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('We can\'t save the address:');
-        $this->entitySnapshotMock->expects($this->once())
-            ->method('isModified')
-            ->with($this->addressMock)
-            ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
             ->willReturn(true);

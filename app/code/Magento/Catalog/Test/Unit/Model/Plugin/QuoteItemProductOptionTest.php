@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,11 +60,12 @@ class QuoteItemProductOptionTest extends TestCase
             ->getMock();
         $this->quoteItemMock = $this->getMockBuilder(AbstractQuoteItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptions', 'getProduct'])
+            ->addMethods(['getOptions'])
+            ->onlyMethods(['getProduct'])
             ->getMockForAbstractClass();
         $this->quoteItemOptionMock = $this->getMockBuilder(QuoteItemOption::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->addMethods(['getCode'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

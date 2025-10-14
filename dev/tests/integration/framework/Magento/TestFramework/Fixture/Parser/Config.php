@@ -41,12 +41,12 @@ class Config implements ParserInterface
         try {
             $reflection = $scope === ParserInterface::SCOPE_CLASS
                 ? new \ReflectionClass($test)
-                : new \ReflectionMethod($test, $test->getName(false));
+                : new \ReflectionMethod($test, $test->name());
         } catch (\ReflectionException $e) {
             throw new LocalizedException(
                 __(
                     'Unable to parse attributes for %1',
-                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? '' : '::' . $test->getName(false))
+                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? '' : '::' . $test->name())
                 ),
                 $e
             );
@@ -67,7 +67,7 @@ class Config implements ParserInterface
                         'Invalid scope type "%1" was supplied to %2 at %3',
                         $scopeType,
                         get_class($this),
-                        get_class($test) . ($scope === 'class' ? '' : '::' . $test->getName(false))
+                        get_class($test) . ($scope === 'class' ? '' : '::' . $test->name())
                     ),
                 );
             }

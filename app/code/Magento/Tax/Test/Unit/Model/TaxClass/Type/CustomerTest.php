@@ -25,7 +25,7 @@ class CustomerTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $searchResultsMock  = $this->getMockBuilder(SearchResults::class)
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
         $searchResultsMock->expects($this->once())
@@ -45,7 +45,7 @@ class CustomerTest extends TestCase
 
         $filterGroupBuilder = $this->createMock(FilterGroupBuilder::class);
         $searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->setMethods(['addFilters', 'create'])
+            ->onlyMethods(['addFilters', 'create'])
             ->setConstructorArgs(['filterGroupBuilder' => $filterGroupBuilder])
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,7 +56,7 @@ class CustomerTest extends TestCase
         $searchCriteriaBuilder->expects($this->once())->method('create')->willReturn($expectedSearchCriteria);
 
         $customerGroupServiceMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['getList'])
+            ->onlyMethods(['getList'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $customerGroupServiceMock->expects($this->once())

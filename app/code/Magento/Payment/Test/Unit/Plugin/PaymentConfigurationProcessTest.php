@@ -52,22 +52,22 @@ class PaymentConfigurationProcessTest extends TestCase
         $this->storeManager = $this
             ->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->store = $this
             ->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->paymentMethodList = $this
             ->getMockBuilder(PaymentMethodListInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getActiveList'])
+            ->onlyMethods(['getActiveList'])
             ->getMockForAbstractClass();
         $this->layoutProcessor =  $this
             ->getMockBuilder(LayoutProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['process'])
+            ->onlyMethods(['process'])
             ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
@@ -88,6 +88,10 @@ class PaymentConfigurationProcessTest extends TestCase
      */
     public function testBeforeProcess($jsLayout, $activePaymentList, $expectedResult)
     {
+        if (!empty($activePaymentList)) {
+            $activePaymentList[0] = $activePaymentList[0]($this);
+            $activePaymentList[1] = $activePaymentList[1]($this);
+        }
         $this->store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($this->store);
         $this->paymentMethodList->expects($this->once())
@@ -99,12 +103,24 @@ class PaymentConfigurationProcessTest extends TestCase
         $this->assertEquals($result[0], $expectedResult);
     }
 
+    protected function getMockForPaymentMethod($return) {
+        $payflowproPaymentMethod = $this
+            ->getMockBuilder(PaymentMethodInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getCode'])
+            ->getMockForAbstractClass();
+
+        $payflowproPaymentMethod->expects(self::any())->method('getCode')->willReturn($return);
+
+        return $payflowproPaymentMethod;
+    }
+
     /**
      * Data provider for BeforeProcess.
      *
      * @return array
      */
-    public function beforeProcessDataProvider()
+    public static function beforeProcessDataProvider()
     {
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment']['children']['renders']['children'] = [
@@ -127,19 +143,8 @@ class PaymentConfigurationProcessTest extends TestCase
             ]
         ];
 
-        $payflowproPaymentMethod = $this
-            ->getMockBuilder(PaymentMethodInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
-            ->getMockForAbstractClass();
-        $payflowproLinkPaymentMethod = $this
-            ->getMockBuilder(PaymentMethodInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
-            ->getMockForAbstractClass();
-
-        $payflowproPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflowpro');
-        $payflowproLinkPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflow_link');
+        $payflowproPaymentMethod = static fn (self $testCase) => $testCase->getMockForPaymentMethod('payflowpro');
+        $payflowproLinkPaymentMethod = static fn (self $testCase) => $testCase->getMockForPaymentMethod('payflow_link');
 
         return [
             [$jsLayout, [], $result1],

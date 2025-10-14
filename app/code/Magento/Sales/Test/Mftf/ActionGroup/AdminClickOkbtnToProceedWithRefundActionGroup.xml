@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickOkbtnToProceedWithRefundActionGroup" extends="AdminOpenAndFillCreditMemoRefundActionGroup">
+        <annotations>
+            <description>Admin Click Ok btn to proceed with refund</description>
+        </annotations>
+        <waitForElementClickable selector="{{AdminCreditMemoItemsSection.clickOkbtn}}" stepKey="waitForOkbtn" after="clickCreateCreditMemo"/>
+        <click selector="{{AdminCreditMemoItemsSection.clickOkbtn}}" stepKey="clickOnOkbtnToProceedWithRefund" before="seeNewCreditMemoPage"/>
+    </actionGroup>
+</actionGroups>

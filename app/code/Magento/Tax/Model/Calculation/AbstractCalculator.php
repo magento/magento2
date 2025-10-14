@@ -145,7 +145,7 @@ abstract class AbstractCalculator
         Calculation $calculationTool,
         \Magento\Tax\Model\Config $config,
         $storeId,
-        \Magento\Framework\DataObject $addressRateRequest = null
+        ?\Magento\Framework\DataObject $addressRateRequest = null
     ) {
         $this->taxClassManagement = $taxClassService;
         $this->taxDetailsItemDataObjectFactory = $taxDetailsItemDataObjectFactory;

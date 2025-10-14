@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
@@ -28,6 +29,7 @@ use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\RefundAdapterInterface;
 use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
+use Magento\Sales\Model\OrderMutex;
 use Magento\Sales\Model\RefundInvoice;
 use Magento\Sales\Model\ValidatorResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -208,7 +210,7 @@ class RefundInvoiceTest extends TestCase
             ->getMockForAbstractClass();
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
+            ->onlyMethods(['hasMessages', 'getMessages', 'addMessage'])
             ->getMockForAbstractClass();
 
         $this->refundInvoice = new RefundInvoice(
@@ -222,7 +224,8 @@ class RefundInvoiceTest extends TestCase
             $this->creditmemoDocumentFactoryMock,
             $this->notifierMock,
             $this->configMock,
-            $this->loggerMock
+            $this->loggerMock,
+            new OrderMutex($this->resourceConnectionMock)
         );
     }
 
@@ -238,14 +241,17 @@ class RefundInvoiceTest extends TestCase
      */
     public function testOrderCreditmemo($invoiceId, $isOnline, $items, $notify, $appendComment)
     {
-        $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnection')
-            ->with('sales')
-            ->willReturn($this->adapterInterface);
-        $this->invoiceRepositoryMock->expects($this->once())
+        $this->mockConnection($invoiceId);
+        $this->invoiceMock->expects($this->exactly(2))
+            ->method('getOrderId')
+            ->willReturn($invoiceId);
+        $this->orderMock->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($invoiceId);
+        $this->invoiceRepositoryMock->expects($this->exactly(2))
             ->method('get')
             ->willReturn($this->invoiceMock);
-        $this->orderRepositoryMock->expects($this->once())
+        $this->orderRepositoryMock->expects($this->exactly(2))
             ->method('get')
             ->willReturn($this->orderMock);
         $this->creditmemoDocumentFactoryMock->expects($this->once())
@@ -341,11 +347,17 @@ class RefundInvoiceTest extends TestCase
         $appendComment = true;
         $isOnline = false;
         $errorMessages = ['error1', 'error2'];
-
-        $this->invoiceRepositoryMock->expects($this->once())
+        $this->mockConnection($invoiceId);
+        $this->invoiceMock->expects($this->exactly(2))
+            ->method('getOrderId')
+            ->willReturn($invoiceId);
+        $this->orderMock->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($invoiceId);
+        $this->invoiceRepositoryMock->expects($this->exactly(2))
             ->method('get')
             ->willReturn($this->invoiceMock);
-        $this->orderRepositoryMock->expects($this->once())
+        $this->orderRepositoryMock->expects($this->exactly(2))
             ->method('get')
             ->willReturn($this->orderMock);
 
@@ -401,15 +413,18 @@ class RefundInvoiceTest extends TestCase
         $notify = true;
         $appendComment = true;
         $isOnline = false;
-        $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnection')
-            ->with('sales')
-            ->willReturn($this->adapterInterface);
 
-        $this->invoiceRepositoryMock->expects($this->once())
+        $this->mockConnection($invoiceId);
+        $this->invoiceMock->expects($this->exactly(2))
+            ->method('getOrderId')
+            ->willReturn($invoiceId);
+        $this->orderMock->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn($invoiceId);
+        $this->invoiceRepositoryMock->expects($this->exactly(2))
             ->method('get')
             ->willReturn($this->invoiceMock);
-        $this->orderRepositoryMock->expects($this->once())
+        $this->orderRepositoryMock->expects($this->exactly(2))
             ->method('get')
             ->willReturn($this->orderMock);
 
@@ -465,18 +480,50 @@ class RefundInvoiceTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function dataProvider()
-    {
+    protected function getMockForCreditMemoItem() {
         $creditmemoItemCreationMock = $this->getMockBuilder(CreditmemoItemCreationInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        return $creditmemoItemCreationMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProvider()
+    {
+        $creditmemoItemCreationMock = static fn (self $testCase) => $testCase->getMockForCreditMemoItem();
 
         return [
             'TestWithNotifyTrue' => [1, true,  [1 => $creditmemoItemCreationMock], true, true],
             'TestWithNotifyFalse' => [1, true,  [1 => $creditmemoItemCreationMock], false, true],
         ];
+    }
+
+    private function mockConnection(int $orderId)
+    {
+        $select = $this->createMock(Select::class);
+        $select->expects($this->once())
+            ->method('from')
+            ->with('sales_order', 'entity_id')
+            ->willReturnSelf();
+        $select->expects($this->once())
+            ->method('where')
+            ->with('entity_id = ?', $orderId)
+            ->willReturnSelf();
+        $select->expects($this->once())
+            ->method('forUpdate')
+            ->with(true)
+            ->willReturnSelf();
+        $this->adapterInterface->expects($this->once())
+            ->method('select')
+            ->willReturn($select);
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getConnection')
+            ->with('sales')
+            ->willReturn($this->adapterInterface);
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getTableName')
+            ->willReturnArgument(0);
     }
 }

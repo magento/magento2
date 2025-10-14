@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -26,9 +26,10 @@
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
                 <argument name="ProductAttribute" value="{{multiselectProductAttribute.attribute_code}}"/>
             </actionGroup>
-            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
-            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
-            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="clickDelete"/>
+            <comment userInput="BIC workaround" stepKey="clickOk"/>
+            <comment userInput="BIC workaround" stepKey="waitForDeletion"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
@@ -52,7 +53,7 @@
             <argument name="frontName" value="{{multiselectProductAttribute.option1_frontend}}"/>
             <argument name="row" value="1"/>
         </actionGroup>
-        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption2">
+        <actionGroup ref="CreateAttributeDropdownNthOptionAsDefaultActionGroup" stepKey="createOption2">
             <argument name="adminName" value="{{multiselectProductAttribute.option2_admin}}"/>
             <argument name="frontName" value="{{multiselectProductAttribute.option2_frontend}}"/>
             <argument name="row" value="2"/>
@@ -79,7 +80,7 @@
         <dontSeeCheckboxIsChecked stepKey="dontSeeOption1Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('1')}}"/>
         <seeInField stepKey="seeOption2Admin" selector="{{AttributePropertiesSection.dropdownNthOptionAdmin('2')}}" userInput="{{multiselectProductAttribute.option2_admin}}"/>
         <seeInField stepKey="seeOption2StoreView" selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView('2')}}" userInput="{{multiselectProductAttribute.option2_frontend}}"/>
-        <dontSeeCheckboxIsChecked stepKey="dontSeeOption2Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('2')}}"/>
+        <seeCheckboxIsChecked stepKey="dontSeeOption2Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('2')}}"/>
         <seeInField stepKey="seeOption3Admin" selector="{{AttributePropertiesSection.dropdownNthOptionAdmin('3')}}" userInput="{{multiselectProductAttribute.option3_admin}}"/>
         <seeInField stepKey="seeOption3StoreView" selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView('3')}}" userInput="{{multiselectProductAttribute.option3_frontend}}"/>
         <seeCheckboxIsChecked stepKey="seeOption3Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('3')}}"/>

@@ -78,11 +78,11 @@ class DeleteTest extends TestCase
             ->getMockForAbstractClass();
         $addressInterfaceFactoryMock = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $regionInterfaceFactoryMock = $this->getMockBuilder(RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
@@ -92,7 +92,7 @@ class DeleteTest extends TestCase
             ->getMock();
         $forwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $pageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()

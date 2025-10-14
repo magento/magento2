@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\Xml\Parser;
+use Magento\Framework\Xml\ParserFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +34,12 @@ class LoaderTest extends TestCase
      * @var MockObject
      */
     private $parser;
+
+    /** @var MockObject */
+    private $parser2;
+
+    /** @var MockObject */
+    private $parserFactory;
 
     /**
      * @var MockObject
@@ -61,10 +68,20 @@ class LoaderTest extends TestCase
     {
         $this->converter = $this->createMock(Dom::class);
         $this->parser = $this->createMock(Parser::class);
-        $this->parser->expects($this->once())->method('initErrorHandler');
+        $this->parser->expects($this->never())->method('initErrorHandler');
+        $this->parser2 = $this->createMock(Parser::class);
+        $this->parser2->expects($this->any())->method('initErrorHandler');
+        $this->parserFactory = $this->createMock(ParserFactory::class);
+        $this->parserFactory->expects($this->any())->method('create')->willReturn($this->parser2);
         $this->registry = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
         $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
-        $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
+        $this->loader = new Loader(
+            $this->converter,
+            $this->parser,
+            $this->registry,
+            $this->driver,
+            $this->parserFactory,
+        );
     }
 
     /**
@@ -103,9 +120,9 @@ class LoaderTest extends TestCase
         $this->converter
             ->method('convert')
             ->willReturnOnConsecutiveCalls(...$willReturnArgs);
-        $this->parser->expects($this->atLeastOnce())->method('loadXML')
+        $this->parser2->expects($this->atLeastOnce())->method('loadXML')
             ->with(self::$sampleXml);
-        $this->parser->expects($this->atLeastOnce())->method('getDom');
+        $this->parser2->expects($this->atLeastOnce())->method('getDom');
         $result = $this->loader->load();
         $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
 
@@ -117,7 +134,7 @@ class LoaderTest extends TestCase
     /**
      * @return array
      */
-    public function testLoadDataProvider(): array
+    public static function testLoadDataProvider(): array
     {
         return [
             'Ordered modules list returned by registrar' => [
@@ -172,8 +189,8 @@ class LoaderTest extends TestCase
                 ['c' => $fixture['c']],
                 ['d' => $fixture['d']]
             );
-        $this->parser->expects($this->atLeastOnce())->method('loadXML');
-        $this->parser->expects($this->atLeastOnce())->method('getDom');
+        $this->parser2->expects($this->atLeastOnce())->method('loadXML');
+        $this->parser2->expects($this->atLeastOnce())->method('getDom');
         $result = $this->loader->load(['d']);
         $this->assertSame(['a', 'c', 'b'], array_keys($result));
         $this->assertSame($fixture['a'], $result['a']);

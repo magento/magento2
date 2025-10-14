@@ -75,8 +75,8 @@ class Grid extends AbstractGrid
         array $joins = [],
         array $columns = [],
         $connectionName = null,
-        NotSyncedDataProviderInterface $notSyncedDataProvider = null,
-        LastUpdateTimeCache $lastUpdateTimeCache = null
+        ?NotSyncedDataProviderInterface $notSyncedDataProvider = null,
+        ?LastUpdateTimeCache $lastUpdateTimeCache = null
     ) {
         $this->mainTableName = $mainTableName;
         $this->gridTableName = $gridTableName;

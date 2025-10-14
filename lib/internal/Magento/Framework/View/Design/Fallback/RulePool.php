@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Design\Fallback;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Design\Fallback\Rule\Composite;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 
@@ -15,27 +16,26 @@ use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
  *
  * Factory that produces all sorts of fallback rules
  */
-class RulePool
+class RulePool implements ResetAfterRequestInterface
 {
-    /**#@+
+    /**
      * Supported types of fallback rules
      */
-    const TYPE_FILE = 'file';
-    const TYPE_LOCALE_FILE = 'locale';
-    const TYPE_TEMPLATE_FILE = 'template';
-    const TYPE_STATIC_FILE = 'static';
-    const TYPE_EMAIL_TEMPLATE = 'email';
-    /**#@-*/
-
-    /**#@-*/
-    protected $filesystem;
+    public const TYPE_FILE = 'file';
+    public const TYPE_LOCALE_FILE = 'locale';
+    public const TYPE_TEMPLATE_FILE = 'template';
+    public const TYPE_STATIC_FILE = 'static';
+    public const TYPE_EMAIL_TEMPLATE = 'email';
 
     /**
-     * Rules
-     *
+     * @var \Magento\Framework\Filesystem
+     */
+    protected \Magento\Framework\Filesystem $filesystem;
+
+    /**
      * @var array
      */
-    private $rules = [];
+    private array $rules = [];
 
     /**
      * Factory for simple rule
@@ -86,6 +86,14 @@ class RulePool
         $this->themeFactory = $themeFactory;
         $this->moduleFactory = $moduleFactory;
         $this->modularSwitchFactory = $modularSwitchFactory;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->rules = [];
     }
 
     /**

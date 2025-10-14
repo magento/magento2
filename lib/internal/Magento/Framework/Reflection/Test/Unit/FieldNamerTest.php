@@ -41,7 +41,7 @@ class FieldNamerTest extends TestCase
     /**
      * @return array
      */
-    public function methodNameProvider()
+    public static function methodNameProvider()
     {
         return [
             'isMethod' => ['isValid', 'valid'],

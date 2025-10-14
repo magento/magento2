@@ -81,7 +81,7 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
      *
      * @return array
      */
-    public function getConfigGenerate(): array
+    public static function getConfigGenerate(): array
     {
         return [
             [

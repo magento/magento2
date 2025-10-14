@@ -27,7 +27,7 @@ class ModeInputArgument extends InputArgument
      * @param callable|null $callableDescription
      * @param string|bool|int|float|array|null $default
      */
-    public function __construct(string $name, int $mode = null, callable $callableDescription = null, $default = null)
+    public function __construct(string $name, ?int $mode = null, ?callable $callableDescription = null, $default = null)
     {
         $this->callableDescription = $callableDescription;
         parent::__construct($name, $mode, '', $default);
@@ -36,7 +36,7 @@ class ModeInputArgument extends InputArgument
     /**
      * @inheritDoc
      */
-    public function getDescription()
+    public function getDescription():string
     {
         if (null !== $this->callableDescription) {
             $description = ($this->callableDescription)();

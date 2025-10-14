@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class AttributesTest extends AbstractModifierTest
+class AttributesTest extends AbstractModifierTestCase
 {
     /**
      * @var UrlInterface|MockObject

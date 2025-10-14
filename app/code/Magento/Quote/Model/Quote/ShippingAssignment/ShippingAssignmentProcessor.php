@@ -47,7 +47,7 @@ class ShippingAssignmentProcessor
         ShippingAssignmentFactory $shippingAssignmentFactory,
         ShippingProcessor $shippingProcessor,
         CartItemPersister $cartItemPersister,
-        AddressRepositoryInterface $addressRepository = null
+        ?AddressRepositoryInterface $addressRepository = null
     ) {
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         $this->shippingProcessor = $shippingProcessor;

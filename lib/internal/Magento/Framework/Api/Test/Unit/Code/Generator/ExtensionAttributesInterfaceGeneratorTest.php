@@ -53,7 +53,7 @@ class ExtensionAttributesInterfaceGeneratorTest extends TestCase
             );
         $typeProcessorMock = $this->getMockBuilder(TypeProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(null)
+            ->addMethods([])
             ->getMock();
 
         /** @var ExtensionAttributesInterfaceGenerator $model */

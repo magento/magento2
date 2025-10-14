@@ -87,8 +87,8 @@ class Edit extends \Magento\Directory\Block\Data
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = [],
-        AddressMetadataInterface $addressMetadata = null,
-        Address $addressHelper = null
+        ?AddressMetadataInterface $addressMetadata = null,
+        ?Address $addressHelper = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_addressRepository = $addressRepository;
@@ -125,7 +125,7 @@ class Edit extends \Magento\Directory\Block\Data
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
             $postedData['region'] = [
                 'region_id' => isset($postedData['region_id']) ? $postedData['region_id'] : null,
-                'region' => $postedData['region'],
+                'region' => $postedData['region'] ?? null,
             ];
             $this->dataObjectHelper->populateWithArray(
                 $this->_address,

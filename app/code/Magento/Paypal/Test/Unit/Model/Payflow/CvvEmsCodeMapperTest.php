@@ -81,7 +81,7 @@ class CvvEmsCodeMapperTest extends TestCase
      *
      * @return array
      */
-    public function getCodeDataProvider()
+    public static function getCodeDataProvider()
     {
         return [
             ['cvvCode' => '', 'expected' => 'P'],

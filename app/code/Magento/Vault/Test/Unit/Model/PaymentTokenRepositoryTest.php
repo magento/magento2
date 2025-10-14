@@ -99,13 +99,13 @@ class PaymentTokenRepositoryTest extends TestCase
             ->getMock();
 
         $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->setMethods(['save', 'load'])
+            ->onlyMethods(['save', 'load'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentTokenMock->setIsActive(true);
         $this->paymentTokenMock->setPublicHash(PaymentTokenRepositoryTest::PUBLIC_HASH);
         $this->paymentTokenFactoryMock = $this->getMockBuilder(PaymentTokenFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -122,7 +122,7 @@ class PaymentTokenRepositoryTest extends TestCase
             ->getMock();
 
         $this->searchResultsFactoryMock = $this->getMockBuilder(PaymentTokenSearchResultsInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -133,7 +133,7 @@ class PaymentTokenRepositoryTest extends TestCase
             ->getMock();
 
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionProcessor = $this->createMock(
@@ -149,7 +149,7 @@ class PaymentTokenRepositoryTest extends TestCase
                 'collectionFactory' => $this->collectionFactoryMock,
                 'collectionProcessor' => $this->collectionProcessor
             ])
-            ->setMethods(null)
+            ->onlyMethods([])
             ->getMock();
     }
 

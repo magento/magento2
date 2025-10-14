@@ -85,7 +85,7 @@ class ModuleTest extends TestCase
     /**
      * @return array
      */
-    public function convertModuleNotationToPathModularSeparatorDataProvider()
+    public static function convertModuleNotationToPathModularSeparatorDataProvider()
     {
         return [
             'same module' => [

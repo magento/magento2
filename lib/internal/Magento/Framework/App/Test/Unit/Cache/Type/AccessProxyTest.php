@@ -33,8 +33,16 @@ class AccessProxyTest extends TestCase
         $cacheEnabler = $this->getMockForAbstractClass(StateInterface::class);
         $cacheEnabler
             ->method('isEnabled')
-            ->withConsecutive([$identifier], [$identifier])
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnCallback(function ($arg1) use ($identifier) {
+                static $callCount = 0;
+                if ($callCount == 0 && $arg1 == $identifier) {
+                    $callCount++;
+                    return false;
+                } elseif ($callCount == 1 && $arg1 == $identifier) {
+                    $callCount++;
+                    return true;
+                }
+            });
 
         $object = new AccessProxy($frontendMock, $cacheEnabler, $identifier);
         $helper = new ProxyTesting();

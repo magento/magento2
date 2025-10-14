@@ -371,4 +371,90 @@ class ProductSearchTest extends GraphQlAbstract
         }
         QUERY;
     }
+
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 0,
+                'category_ids' => ['$category.id$'],
+            ],
+            'product1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 0.5,
+                'category_ids' => ['$category.id$'],
+            ],
+            'product2'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 1,
+                'category_ids' => ['$category.id$'],
+            ],
+            'product3'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 1.5,
+                'category_ids' => ['$category.id$'],
+            ],
+            'product4'
+        ),
+    ]
+    public function testProductSearchWithZeroPriceProducts()
+    {
+
+        $response = $this->graphQlQuery($this->getSearchQueryBasedOnPriceRange(0, null));
+        $this->assertEquals(4, $response['products']['totalResult']);
+
+        $response = $this->graphQlQuery($this->getSearchQueryBasedOnPriceRange(0, 0));
+        $this->assertEquals(1, $response['products']['totalResult']);
+
+        $response = $this->graphQlQuery($this->getSearchQueryBasedOnPriceRange(0.5, null));
+        $this->assertEquals(3, $response['products']['totalResult']);
+
+        $response = $this->graphQlQuery($this->getSearchQueryBasedOnPriceRange(0, 1));
+        $this->assertEquals(3, $response['products']['totalResult']);
+    }
+
+    /**
+     * Prepare search query for products with price range
+     *
+     * @param float $priceFrom
+     * @param float|null $priceTo
+     * @return string
+     */
+    private function getSearchQueryBasedOnPriceRange(float $priceFrom, null|float $priceTo): string
+    {
+        $priceToFilter = $priceTo !== null ? ',to:"' . $priceTo . '"' : '';
+        return <<<QUERY
+        query {
+          products(
+            pageSize: 10
+            currentPage: 1,
+            filter: {price:{from:"$priceFrom" $priceToFilter}}
+          ) {
+            totalResult: total_count
+            productItems: items {
+              sku
+              urlKey: url_key
+              price: price_range {
+                fullPrice: minimum_price {
+                  finalPrice: final_price {
+                    currency
+                    value
+                  }
+                }
+              }
+            }
+          }
+        }
+        QUERY;
+    }
 }

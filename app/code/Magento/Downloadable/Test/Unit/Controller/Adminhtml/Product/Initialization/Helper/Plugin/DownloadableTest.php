@@ -70,15 +70,15 @@ class DownloadableTest extends TestCase
         );
         $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
+            ->addMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
             ->getMockForAbstractClass();
         $sampleFactoryMock = $this->getMockBuilder(SampleInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $linkFactoryMock = $this->getMockBuilder(LinkInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $linkBuilderMock = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
@@ -135,7 +135,7 @@ class DownloadableTest extends TestCase
     /**
      * @return array
      */
-    public function afterInitializeWithEmptyDataDataProvider()
+    public static function afterInitializeWithEmptyDataDataProvider()
     {
         return [
             [['link' => [], 'sample' => []]],
@@ -173,7 +173,7 @@ class DownloadableTest extends TestCase
     /**
      * @return array
      */
-    public function afterInitializeIfDownloadableNotExistDataProvider()
+    public static function afterInitializeIfDownloadableNotExistDataProvider()
     {
         return [
             [false],

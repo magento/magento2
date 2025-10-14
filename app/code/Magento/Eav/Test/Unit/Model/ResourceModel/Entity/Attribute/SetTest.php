@@ -79,7 +79,7 @@ class SetTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getTableName'])
+            ->onlyMethods(['getConnection', 'getTableName'])
             ->getMock();
         $this->transactionManagerMock = $this->createMock(
             TransactionManagerInterface::class
@@ -97,7 +97,7 @@ class SetTest extends TestCase
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['isCacheEnabled', 'getEntityType', 'getCache'])
+            ->onlyMethods(['isCacheEnabled', 'getEntityType', 'getCache'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -200,7 +200,7 @@ class SetTest extends TestCase
         ];
         $cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
+            ->onlyMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
             ->getMockForAbstractClass();
         $cacheKey = Set::ATTRIBUTES_CACHE_ID . 1;
         $cacheMock
@@ -236,7 +236,7 @@ class SetTest extends TestCase
 
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'joinLeft', 'where'])
+            ->onlyMethods(['from', 'joinLeft', 'where'])
             ->getMock();
         $selectMock->expects($this->once())->method('from')->willReturnSelf();
         $selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
@@ -244,7 +244,7 @@ class SetTest extends TestCase
 
         $connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
-            ->setMethods(['select', 'fetchAll'])
+            ->onlyMethods(['select', 'fetchAll'])
             ->getMock();
         $connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($selectMock);
         $connectionMock->expects($this->atLeastOnce())->method('fetchAll')->willReturn($fetchResult);
@@ -282,7 +282,7 @@ class SetTest extends TestCase
         $this->eavConfigMock->expects($this->any())->method('isCacheEnabled')->willReturn(true);
         $cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
+            ->onlyMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
             ->getMockForAbstractClass();
         $cacheMock->expects($this->once())
             ->method('load')

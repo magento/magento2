@@ -34,7 +34,7 @@ class ActionTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setActions', 'getActions'])
+            ->addMethods(['setActions', 'getActions'])
             ->getMock();
         $this->action = $objectManager->getObject(Action::class);
     }

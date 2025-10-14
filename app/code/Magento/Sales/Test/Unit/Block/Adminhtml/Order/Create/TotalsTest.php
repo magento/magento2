@@ -74,7 +74,7 @@ class TotalsTest extends TestCase
     /**
      * @return array
      */
-    public function getNoteNotifyDataProvider()
+    public static function getNoteNotifyDataProvider()
     {
         return [
             [0, false],

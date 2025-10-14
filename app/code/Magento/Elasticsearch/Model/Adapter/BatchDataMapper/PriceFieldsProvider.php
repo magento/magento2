@@ -16,6 +16,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provide data mapping for price fields
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class PriceFieldsProvider implements AdditionalFieldsProviderInterface
 {

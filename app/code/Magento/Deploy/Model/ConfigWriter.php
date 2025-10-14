@@ -44,7 +44,7 @@ class ConfigWriter
     public function __construct(
         Writer $writer,
         ArrayManager $arrayManager,
-        PreparedValueFactory $valueFactory = null
+        ?PreparedValueFactory $valueFactory = null
     ) {
         $this->writer = $writer;
         $this->arrayManager = $arrayManager;

@@ -130,7 +130,7 @@ class Shipping implements RateCollectorInterface
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\Math\Division $mathDivision,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        RateRequestFactory $rateRequestFactory = null,
+        ?RateRequestFactory $rateRequestFactory = null,
         ?PackageResultFactory $packageResultFactory = null,
         ?CarrierResultFactory $carrierResultFactory = null
     ) {

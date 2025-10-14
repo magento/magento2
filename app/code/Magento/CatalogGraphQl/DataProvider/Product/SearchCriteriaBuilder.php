@@ -1,102 +1,59 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\DataProvider\Product;
 
 use Magento\Catalog\Api\Data\EavAttributeInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Eav\Model\Config;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplierPool;
 use Magento\Framework\Search\Request\Config as SearchConfig;
 
 /**
  * Build search criteria
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-
 class SearchCriteriaBuilder
 {
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var FilterBuilder
-     */
-    private $filterBuilder;
-
-    /**
-     * @var FilterGroupBuilder
-     */
-    private $filterGroupBuilder;
-
-    /**
-     * @var Builder
-     */
-    private $builder;
-
-    /**
-     * @var Visibility
-     */
-    private $visibility;
-
-    /**
-     * @var SortOrderBuilder
-     */
-    private $sortOrderBuilder;
-
-    /**
-     * @var Config
-     */
-    private Config $eavConfig;
-
-    /**
-     * @var SearchConfig
-     */
-    private SearchConfig $searchConfig;
-
-    /**
-     * @param Builder $builder
      * @param ScopeConfigInterface $scopeConfig
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param Visibility $visibility
-     * @param SortOrderBuilder|null $sortOrderBuilder
-     * @param Config|null $eavConfig
-     * @param SearchConfig|null $searchConfig
+     * @param SortOrderBuilder $sortOrderBuilder
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
+     * @param SearchConfig $searchConfig
+     * @param RequestDataBuilder $localData
+     * @param SearchCriteriaResolverFactory $criteriaResolverFactory
+     * @param ArgumentApplierPool $argumentApplierPool
+     * @param array $partialSearchAnalyzers
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        Builder $builder,
-        ScopeConfigInterface $scopeConfig,
-        FilterBuilder $filterBuilder,
-        FilterGroupBuilder $filterGroupBuilder,
-        Visibility $visibility,
-        SortOrderBuilder $sortOrderBuilder = null,
-        Config $eavConfig = null,
-        SearchConfig $searchConfig = null
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly FilterBuilder $filterBuilder,
+        private readonly FilterGroupBuilder $filterGroupBuilder,
+        private readonly Visibility $visibility,
+        private readonly SortOrderBuilder $sortOrderBuilder,
+        private readonly ProductAttributeRepositoryInterface $productAttributeRepository,
+        private readonly SearchConfig $searchConfig,
+        private readonly RequestDataBuilder $localData,
+        private readonly SearchCriteriaResolverFactory $criteriaResolverFactory,
+        private readonly ArgumentApplierPool $argumentApplierPool,
+        private readonly array $partialSearchAnalyzers = []
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->filterBuilder = $filterBuilder;
-        $this->filterGroupBuilder = $filterGroupBuilder;
-        $this->builder = $builder;
-        $this->visibility = $visibility;
-        $this->sortOrderBuilder = $sortOrderBuilder ?? ObjectManager::getInstance()->get(SortOrderBuilder::class);
-        $this->eavConfig = $eavConfig ?? ObjectManager::getInstance()->get(Config::class);
-        $this->searchConfig = $searchConfig ?? ObjectManager::getInstance()->get(SearchConfig::class);
     }
 
     /**
@@ -109,44 +66,41 @@ class SearchCriteriaBuilder
      */
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
-        $partialMatchFilters = [];
+        $isSearch = isset($args['search']);
+        $requestName = $includeAggregation ? 'graphql_product_search_with_aggregation' : 'graphql_product_search';
+
         if (isset($args['filter'])) {
             $partialMatchFilters = $this->getPartialMatchFilters($args);
+            if (count($partialMatchFilters)) {
+                $this->updateMatchTypeRequestConfig($requestName, $partialMatchFilters);
+            }
             $args = $this->removeMatchTypeFromArguments($args);
         }
-        $searchCriteria = $this->builder->build('products', $args);
-        $isSearch = isset($args['search']);
-        $this->updateRangeFilters($searchCriteria);
-        if ($includeAggregation) {
-            $attributeData = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
-            $priceOptions = $attributeData->getData();
 
-            if ($priceOptions['is_filterable'] != 0) {
-                $this->preparePriceAggregation($searchCriteria);
+        $searchCriteria = $this->criteriaResolverFactory->create(
+            [
+                'searchRequestName' => $requestName,
+                'currentPage' => $args['currentPage'],
+                'size' => $args['pageSize'],
+                'orders' => null,
+            ]
+        )->resolve();
+        foreach ($args as $argumentName => $argument) {
+            if ($this->argumentApplierPool->hasApplier($argumentName)) {
+                $argumentApplier = $this->argumentApplierPool->getApplier($argumentName);
+                $argumentApplier->applyArgument($searchCriteria, 'products', $argumentName, $argument);
             }
-            $requestName = 'graphql_product_search_with_aggregation';
-        } else {
-            $requestName = 'graphql_product_search';
         }
-        $searchCriteria->setRequestName($requestName);
-
-        if (count($partialMatchFilters)) {
-            $this->updateMatchTypeRequestConfig($requestName, $partialMatchFilters);
-        }
-
+        $this->updateRangeFilters($searchCriteria);
+        $this->preparePriceAggregation($searchCriteria, $includeAggregation);
         if ($isSearch) {
             $this->addFilter($searchCriteria, 'search_term', $args['search']);
         }
-
         if (!$searchCriteria->getSortOrders()) {
             $this->addDefaultSortOrder($searchCriteria, $args, $isSearch);
         }
-
         $this->addEntityIdSort($searchCriteria);
         $this->addVisibilityFilter($searchCriteria, $isSearch, !empty($args['filter']['category_id']));
-
-        $searchCriteria->setCurrentPage($args['currentPage']);
-        $searchCriteria->setPageSize($args['pageSize']);
 
         return $searchCriteria;
     }
@@ -156,7 +110,6 @@ class SearchCriteriaBuilder
      *
      * @param string $requestName
      * @param array $partialMatchFilters
-     *
      * @return void
      */
     private function updateMatchTypeRequestConfig(string $requestName, array $partialMatchFilters): void
@@ -166,17 +119,20 @@ class SearchCriteriaBuilder
             foreach ($query['match'] ?? [] as $index => $matchItem) {
                 if (in_array($matchItem['field'] ?? null, $partialMatchFilters, true)) {
                     $data['queries'][$queryName]['match'][$index]['matchCondition'] = 'match_phrase_prefix';
+                    if (array_key_exists($matchItem['field'], $this->partialSearchAnalyzers)) {
+                        $data['queries'][$queryName]['match'][$index]['analyzer']
+                            = $this->partialSearchAnalyzers[$matchItem['field']];
+                    }
                 }
             }
         }
-        $this->searchConfig->merge([$requestName => $data]);
+        $this->localData->setData([$requestName => $data]);
     }
 
     /**
      * Check if and what type of match_type value was requested
      *
      * @param array $args
-     *
      * @return array
      */
     private function getPartialMatchFilters(array $args): array
@@ -194,7 +150,6 @@ class SearchCriteriaBuilder
      * Remove the match_type to avoid search criteria containing it
      *
      * @param array $args
-     *
      * @return array
      */
     private function removeMatchTypeFromArguments(array $args): array
@@ -246,7 +201,7 @@ class SearchCriteriaBuilder
         }
 
         $sortOrderArray[] = $this->sortOrderBuilder
-            ->setField('_id')
+            ->setField('entity_id')
             ->setDirection($sortDir)
             ->create();
         $searchCriteria->setSortOrders($sortOrderArray);
@@ -256,10 +211,21 @@ class SearchCriteriaBuilder
      * Prepare price aggregation algorithm
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param bool $includeAggregation
      * @return void
      */
-    private function preparePriceAggregation(SearchCriteriaInterface $searchCriteria): void
+    private function preparePriceAggregation(SearchCriteriaInterface $searchCriteria, bool $includeAggregation): void
     {
+        if (!$includeAggregation) {
+            return;
+        }
+
+        $attributeData = $this->productAttributeRepository->get('price');
+        $priceOptions = $attributeData->getData();
+        if ((int) $priceOptions['is_filterable'] === 0) {
+            return;
+        }
+
         $priceRangeCalculation = $this->scopeConfig->getValue(
             \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -311,7 +277,7 @@ class SearchCriteriaBuilder
                 ->setDirection(SortOrder::SORT_DESC)
                 ->create();
         } else {
-            $categoryIdFilter = isset($args['filter']['category_id']) ? $args['filter']['category_id'] : false;
+            $categoryIdFilter = $args['filter']['category_id'] ?? false;
             if ($categoryIdFilter) {
                 if (!is_array($categoryIdFilter[array_key_first($categoryIdFilter)])
                     || count($categoryIdFilter[array_key_first($categoryIdFilter)]) <= 1

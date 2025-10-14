@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,7 +88,7 @@ class CreateTest extends TestCase
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $operation = $this->getMockBuilder(OperationInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $operationList->expects($this->once())->method('getItems')->willReturn([$operation]);
@@ -123,7 +123,7 @@ class CreateTest extends TestCase
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $operation = $this->getMockBuilder(OperationInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $operationList->expects($this->once())->method('getItems')->willReturn([$operation]);

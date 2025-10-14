@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -71,12 +71,12 @@ class SetSpecialPriceStartDateTest extends TestCase
 
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->addMethods(['getProduct'])
             ->getMock();
 
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSpecialPrice', 'getSpecialFromDate', 'setData'])
+            ->onlyMethods(['getSpecialPrice', 'getSpecialFromDate', 'setData'])
             ->getMock();
 
         $this->observer = $this->objectManager->getObject(
@@ -88,13 +88,13 @@ class SetSpecialPriceStartDateTest extends TestCase
     }
 
     /**
-     * Test observer execute method
+     * Test observer execute method when special_from_date is null
      */
     public function testExecuteModifySpecialFromDate(): void
     {
         $specialPrice = 15;
         $specialFromDate = null;
-        $localeDateMock = ['special_from_date' => $this->returnValue($this->dateObject)];
+        $formattedDate = '2023-01-01 00:00:00';
 
         $this->observerMock
             ->expects($this->once())
@@ -106,9 +106,17 @@ class SetSpecialPriceStartDateTest extends TestCase
             ->method('getProduct')
             ->willReturn($this->productMock);
 
-        $this->dateObject->expects($this->any())
+        $this->dateObject
+            ->expects($this->once())
             ->method('setTime')
+            ->with(0, 0)
             ->willReturnSelf();
+
+        $this->dateObject
+            ->expects($this->once())
+            ->method('format')
+            ->with('Y-m-d H:i:s')
+            ->willReturn($formattedDate);
 
         $this->timezone
             ->expects($this->once())
@@ -128,7 +136,79 @@ class SetSpecialPriceStartDateTest extends TestCase
         $this->productMock
             ->expects($this->once())
             ->method('setData')
-            ->willReturn($localeDateMock);
+            ->with('special_from_date', $formattedDate);
+
+        $this->observer->execute($this->observerMock);
+    }
+
+    /**
+     * Test observer doesn't modify special_from_date when it's already set
+     */
+    public function testExecuteDoesNotModifyExistingSpecialFromDate(): void
+    {
+        $specialPrice = 15;
+        $existingSpecialFromDate = '2023-01-01 00:00:00';
+
+        $this->observerMock
+            ->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock
+            ->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
+
+        $this->productMock
+            ->expects($this->once())
+            ->method('getSpecialPrice')
+            ->willReturn($specialPrice);
+
+        $this->productMock
+            ->expects($this->once())
+            ->method('getSpecialFromDate')
+            ->willReturn($existingSpecialFromDate);
+
+        $this->productMock
+            ->expects($this->never())
+            ->method('setData');
+
+        $this->timezone
+            ->expects($this->never())
+            ->method('date');
+
+        $this->observer->execute($this->observerMock);
+    }
+
+    /**
+     * Test observer doesn't set special_from_date when special price is not set
+     */
+    public function testExecuteDoesNotSetSpecialFromDateWithoutSpecialPrice(): void
+    {
+        $specialPrice = null;
+
+        $this->observerMock
+            ->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($this->eventMock);
+
+        $this->eventMock
+            ->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
+
+        $this->productMock
+            ->expects($this->once())
+            ->method('getSpecialPrice')
+            ->willReturn($specialPrice);
+
+        $this->productMock
+            ->expects($this->never())
+            ->method('getSpecialFromDate');
+
+        $this->productMock
+            ->expects($this->never())
+            ->method('setData');
 
         $this->observer->execute($this->observerMock);
     }

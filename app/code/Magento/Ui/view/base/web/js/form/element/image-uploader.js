@@ -11,7 +11,8 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/validation/validator',
     'Magento_Ui/js/form/element/file-uploader',
-    'mage/adminhtml/browser'
+    'mage/adminhtml/browser',
+    'jquery/jquery-storageapi'
 ], function ($, _, utils, uiAlert, validator, Element, browser) {
     'use strict';
 
@@ -54,7 +55,13 @@ define([
                 fileSize = $buttonEl.data('size'),
                 fileMimeType = $buttonEl.data('mime-type'),
                 filePathname = $buttonEl.val(),
-                fileBasename = filePathname.split('/').pop();
+                fileBasename = filePathname.split('/').pop(),
+                deletedFiles = $.localStorage.get('deleted_images');
+
+            if (deletedFiles && deletedFiles.indexOf(filePathname) !== -1) {
+                $.localStorage.set('deleted_images', deletedFiles.splice(deletedFiles.indexOf(filePathname), 1));
+                filePathname += '?rand=' + Date.now();
+            }
 
             this.addFile({
                 type: fileMimeType,
@@ -133,7 +140,7 @@ define([
          * @param {Event} e
          */
         triggerImageUpload: function (imageUploader, e) {
-            $(e.target).closest('.file-uploader').find('input[type="file"]').trigger('click');
+            $(e.target).closest('.file-uploader').find('.uppy-Dashboard-browse').trigger('click');
         },
 
         /**

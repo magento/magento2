@@ -52,7 +52,7 @@ class ProductAttributeGridBuildObserverTest extends TestCase
         $this->gridMock = $this->createMock(Grid::class);
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGrid'])
+            ->addMethods(['getGrid'])
             ->getMock();
 
         $this->observer = $objectManager->getObject(

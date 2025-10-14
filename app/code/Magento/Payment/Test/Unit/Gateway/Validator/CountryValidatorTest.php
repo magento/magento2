@@ -78,8 +78,13 @@ class CountryValidatorTest extends TestCase
 
         $this->configMock
             ->method('getValue')
-            ->withConsecutive(['allowspecific', $storeId], ['specificcountry', $storeId])
-            ->willReturnOnConsecutiveCalls($allowspecific, $specificcountry);
+            ->willReturnCallback(function ($arg1, $arg2) use ($storeId, $allowspecific, $specificcountry) {
+                if ($arg1 == 'allowspecific' && $arg2 == $storeId) {
+                    return $allowspecific;
+                } elseif ($arg1 == 'specificcountry' && $arg2 == $storeId) {
+                    return $specificcountry;
+                }
+            });
 
         $this->resultFactoryMock->expects($this->once())
             ->method('create')
@@ -92,7 +97,7 @@ class CountryValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateAllowspecificTrueDataProvider(): array
+    public static function validateAllowspecificTrueDataProvider(): array
     {
         return [
             [1, 'US', 1, 'US,UK,CA', true], //$storeId, $country, $allowspecific, $specificcountry, $isValid
@@ -123,7 +128,7 @@ class CountryValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateAllowspecificFalseDataProvider(): array
+    public static function validateAllowspecificFalseDataProvider(): array
     {
         return [
             [1, 0, true] //$storeId, $allowspecific, $isValid

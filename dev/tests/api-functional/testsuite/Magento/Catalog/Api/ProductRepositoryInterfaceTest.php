@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,16 +42,17 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class ProductRepositoryInterfaceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products';
+    private const SERVICE_NAME = 'catalogProductRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products';
 
-    const KEY_TIER_PRICES = 'tier_prices';
-    const KEY_SPECIAL_PRICE = 'special_price';
-    const KEY_CATEGORY_LINKS = 'category_links';
+    private const KEY_TIER_PRICES = 'tier_prices';
+    private const KEY_SPECIAL_PRICE = 'special_price';
+    private const KEY_CATEGORY_LINKS = 'category_links';
 
     /**
      * @var array
@@ -186,8 +186,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $expectedMessage = "The product that was requested doesn't exist. Verify the product and try again.";
-
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
         try {
             $this->_webApiCall($serviceInfo, ['sku' => $invalidSku]);
             $this->fail("Expected throwing exception");
@@ -209,11 +208,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function productCreationProvider()
+    public static function productCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -544,14 +543,18 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
-        $this->expectException('Exception');
-        $this->expectExceptionMessage(
-            "The product that was requested doesn't exist. Verify the product and try again."
-        );
 
         // Delete all with 'all' store code
         $this->deleteProduct($sku);
-        $this->getProduct($sku);
+        $expectedMessage = 'The product with SKU "%1" does not exist.';
+        try {
+            $this->getProduct($sku);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
     }
 
     /**
@@ -1134,7 +1137,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function testGetListWithFilteringByStoreDataProvider()
+    public static function testGetListWithFilteringByStoreDataProvider()
     {
         return [
             [
@@ -1226,7 +1229,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function productPaginationDataProvider()
+    public static function productPaginationDataProvider()
     {
         return [
             'expect-all-items' => [
@@ -1370,11 +1373,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array[]
      */
-    public function getListSortingByPositionDataProvider(): array
+    public static function getListSortingByPositionDataProvider(): array
     {
         return [
             'sort_by_position_descending' => [
-                'direction' => SortOrder::SORT_DESC,
+                'sortOrder' => SortOrder::SORT_DESC,
                 'expectedItems' => [
                     'search_product_5',
                     'search_product_4',
@@ -1384,7 +1387,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 ],
             ],
             'sort_by_position_ascending' => [
-                'direction' => SortOrder::SORT_ASC,
+                'sortOrder' => SortOrder::SORT_ASC,
                 'expectedItems' => [
                     'search_product_1',
                     'search_product_2',
@@ -1463,7 +1466,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    protected function getSimpleProductData($productData = [])
+    protected static function getSimpleProductData($productData = [])
     {
         return [
             ProductInterface::SKU => isset($productData[ProductInterface::SKU])
@@ -2233,7 +2236,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @param int|null $storeId
      * @return ProductInterface
      */
-    private function getProductModel(string $sku, int $storeId = null): ProductInterface
+    private function getProductModel(string $sku, ?int $storeId = null): ProductInterface
     {
         try {
             $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

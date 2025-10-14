@@ -77,11 +77,9 @@ class NewBillingTest extends TestCase
         $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
         $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->atLeastOnce())

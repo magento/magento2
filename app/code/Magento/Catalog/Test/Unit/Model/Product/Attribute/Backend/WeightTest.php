@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,7 +82,7 @@ class WeightTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderValidate()
+    public static function dataProviderValidate()
     {
         return [
             'US simple' => ['1234.56'],
@@ -113,7 +113,7 @@ class WeightTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderValidateForFailure()
+    public static function dataProviderValidateForFailure()
     {
         return [
             'negative US simple' => ['-1234.56'],

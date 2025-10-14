@@ -36,23 +36,21 @@ class TestCasePropertiesTest extends TestCase
      */
     public function testEndTestSuiteDestruct(): void
     {
-        $phpUnitTestSuite = new TestSuite();
+        $phpUnitTestSuite = TestSuite::empty('TestSuite');
         $phpUnitTestSuite->addTestFile(__DIR__ . '/TestCasePropertiesTest/DummyTestCase.php');
         // Because addTestFile() adds classes from file to tests array, use first testsuite
         /** @var TestSuite $testSuite */
         $testSuite = current($phpUnitTestSuite->tests());
         $testSuite->run();
-        /** @var \Magento\Test\Workaround\Cleanup\TestCasePropertiesTest\DummyTestCase $testClass */
-        $testClass = current($testSuite->tests());
 
-        $reflectionClass = new \ReflectionClass($testClass);
+        $reflectionClass = new \ReflectionClass($testSuite);
         $classProperties = $reflectionClass->getProperties();
         $fixturePropertiesNames = array_keys($this->fixtureProperties);
 
         foreach ($classProperties as $property) {
             if (in_array($property->getName(), $fixturePropertiesNames)) {
                 $property->setAccessible(true);
-                $value = $property->getValue($testClass);
+                $value = $property->getValue($testSuite);
                 $this->assertNotNull($value);
             }
         }
@@ -62,7 +60,7 @@ class TestCasePropertiesTest extends TestCase
         foreach ($classProperties as $property) {
             if (in_array($property->getName(), $fixturePropertiesNames)) {
                 $property->setAccessible(true);
-                $value = $property->getValue($testClass);
+                $value = $property->getValue($testSuite);
                 $this->assertNull($value);
             }
         }

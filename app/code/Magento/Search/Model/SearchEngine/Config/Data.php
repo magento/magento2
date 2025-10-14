@@ -26,7 +26,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Framework\Search\SearchEngine\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'search_engine_config_cache',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

@@ -23,10 +23,11 @@ class FactoryTest extends TestCase
      *
      * @param string $classType
      * @param string $className
-     * @param MockObject $classTypeMock
+     * @param \Closure $classTypeMock
      */
     public function testCreate($classType, $className, $classTypeMock)
     {
+        $classTypeMock = $classTypeMock($this);
         $classMock = $this->createPartialMock(
             ClassModel::class,
             ['getClassType', 'getId', '__wakeup']
@@ -53,10 +54,12 @@ class FactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
-        $customerClassMock = $this->createMock(Customer::class);
-        $productClassMock = $this->createMock(Product::class);
+        $customerClassMock = static fn (self $testCase) =>
+            $testCase->createMock(Customer::class);
+        $productClassMock = static fn (self $testCase) =>
+            $testCase->createMock(Product::class);
         return [
             [
                 ClassModel::TAX_CLASS_TYPE_CUSTOMER,

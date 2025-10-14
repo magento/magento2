@@ -43,7 +43,7 @@ class Multiselect implements \Magento\Framework\Option\ArrayInterface
     public function __construct(
         GroupManagementInterface $groupManagement,
         \Magento\Framework\Convert\DataObject $converter,
-        GroupSourceLoggedInOnlyInterface $groupSourceLoggedInOnly = null
+        ?GroupSourceLoggedInOnlyInterface $groupSourceLoggedInOnly = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;

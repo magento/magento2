@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Email\Container;
 
-class Template
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class Template implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -23,7 +25,7 @@ class Template
     protected $templateId;
 
     /**
-     * @var int
+     * @var int|string
      */
     protected $id;
 
@@ -72,7 +74,7 @@ class Template
     /**
      * Set email template id
      *
-     * @param int $id
+     * @param int|string $id
      * @return void
      */
     public function setTemplateId($id)
@@ -83,10 +85,21 @@ class Template
     /**
      * Get email template id
      *
-     * @return int
+     * @return int|string
      */
     public function getTemplateId()
     {
         return $this->id;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->vars = null;
+        $this->options = null;
+        $this->id = null;
+        $this->templateId = null;
     }
 }

@@ -95,7 +95,7 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
     {
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->giftMessageHelperMock = $this->createMock(MessageHelper::class);
         $this->observerMock = $this->createMock(Observer::class);

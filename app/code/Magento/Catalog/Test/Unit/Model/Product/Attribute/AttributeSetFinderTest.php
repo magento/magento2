@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +40,7 @@ class AttributeSetFinderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->productCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productCollectionFactory->expects($this->once())->method('create')->willReturn($this->productCollection);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
 use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\CatalogRule\Model\ResourceModel\RuleFactory as ResourceRuleFactory;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -26,35 +27,72 @@ class CatalogRuleRepositoryTest extends TestCase
     private $catalogRuleRepository;
 
     /**
-     * @inheridoc
+     * @var RuleProductProcessor
+     */
+    private $ruleProductProcessor;
+
+    /**
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->catalogRuleRepository = Bootstrap::getObjectManager()->get(CatalogRuleRepositoryInterface::class);
+        $this->ruleProductProcessor = Bootstrap::getObjectManager()->get(RuleProductProcessor::class);
     }
 
     /**
-     * Verify index become invalid in case rule become inactive and stays active in case inactive rule has been saved.
+     * Verify that index is not invalidated after saving catalog rule.
      *
      * @magentoDataFixture Magento/CatalogRule/_files/catalog_rule_25_customer_group_all.php
      * @magentoDbIsolation disabled
      *
      * @return void
      */
-    public function testIndexInvalidationAfterInactiveRuleSave(): void
+    public function testIndexerShouldNotBeInvalidatedAfterSavingCatalogRule(): void
     {
         $ruleProductProcessor = Bootstrap::getObjectManager()->get(RuleProductProcessor::class);
-        $state = $ruleProductProcessor->getIndexer()->getState();
-        $state->setStatus(StateInterface::STATUS_VALID);
-        $ruleProductProcessor->getIndexer()->setState($state);
         $rule = $this->getRuleByName('Test Catalog Rule With 25 Percent Off');
+
+        // save active rule
+        $this->markIndexerAsValid();
+        $rule->setDescription('save active');
+        $this->catalogRuleRepository->save($rule);
+        self::assertEquals(StateInterface::STATUS_VALID, $ruleProductProcessor->getIndexer()->getStatus());
+
+        // change status from active to inactive
+        $this->markIndexerAsValid();
         $rule->setIsActive(0);
+        $rule->setDescription('change status from active to inactive');
         $this->catalogRuleRepository->save($rule);
-        self::assertEquals(StateInterface::STATUS_INVALID, $ruleProductProcessor->getIndexer()->getStatus());
-        $state = $ruleProductProcessor->getIndexer()->getState();
-        $state->setStatus(StateInterface::STATUS_VALID);
-        $ruleProductProcessor->getIndexer()->setState($state);
+        self::assertEquals(StateInterface::STATUS_VALID, $ruleProductProcessor->getIndexer()->getStatus());
+
+        // save inactive rule
+        $this->markIndexerAsValid();
+        $rule->setDescription('save inactive');
         $this->catalogRuleRepository->save($rule);
+        self::assertEquals(StateInterface::STATUS_VALID, $ruleProductProcessor->getIndexer()->getStatus());
+
+        // change status from inactive to active
+        $this->markIndexerAsValid();
+        $rule->setIsActive(1);
+        $rule->setDescription('change status from inactive to active');
+        $this->catalogRuleRepository->save($rule);
+        self::assertEquals(StateInterface::STATUS_VALID, $ruleProductProcessor->getIndexer()->getStatus());
+    }
+
+    /**
+     * Verify that index is not invalidated after deleting catalog rule.
+     *
+     * @magentoDataFixture Magento/CatalogRule/_files/catalog_rule_25_customer_group_all.php
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testIndexerShouldNotBeInvalidatedAfterDeletingCatalogRule(): void
+    {
+        $ruleProductProcessor = Bootstrap::getObjectManager()->get(RuleProductProcessor::class);
+        $rule = $this->getRuleByName('Test Catalog Rule With 25 Percent Off');
+        $this->catalogRuleRepository->delete($rule);
         self::assertEquals(StateInterface::STATUS_VALID, $ruleProductProcessor->getIndexer()->getStatus());
     }
 
@@ -73,5 +111,15 @@ class CatalogRuleRepositoryTest extends TestCase
         $ruleId = $catalogRuleResource->getConnection()->fetchOne($select);
 
         return $this->catalogRuleRepository->get((int)$ruleId);
+    }
+
+    /**
+     * @return void
+     */
+    private function markIndexerAsValid(): void
+    {
+        $state = $this->ruleProductProcessor->getIndexer()->getState();
+        $state->setStatus(StateInterface::STATUS_VALID);
+        $this->ruleProductProcessor->getIndexer()->setState($state);
     }
 }

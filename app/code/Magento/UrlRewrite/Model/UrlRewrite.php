@@ -84,13 +84,13 @@ class UrlRewrite extends AbstractModel
     public function __construct(
         Context $context,
         Registry $registry,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        CacheContext $cacheContext = null,
-        EventManager $eventManager = null,
-        UrlFinderInterface $urlFinder = null,
+        ?Json $serializer = null,
+        ?CacheContext $cacheContext = null,
+        ?EventManager $eventManager = null,
+        ?UrlFinderInterface $urlFinder = null,
         array $entityToCacheTagMap = []
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -152,6 +152,15 @@ class UrlRewrite extends AbstractModel
                 'store_id' => $storeId
             ]
         );
+
+        // to manage accent characters in URL rewrite
+        if ($urlRewriteTarget) {
+            $planeChars = iconv('UTF-8', 'ISO-8859-1//IGNORE', $urlRewriteTarget->getRequestPath());
+
+            if ($planeChars !== $urlRewriteTarget->getRequestPath()) {
+                $urlRewriteTarget = null;
+            }
+        }
 
         while ($urlRewriteTarget &&
             $urlRewriteTarget->getTargetPath() !== $urlRewriteTarget->getRequestPath() &&

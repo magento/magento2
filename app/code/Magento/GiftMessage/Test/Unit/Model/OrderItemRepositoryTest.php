@@ -75,30 +75,30 @@ class OrderItemRepositoryTest extends TestCase
         $helper = new ObjectManager($this);
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getItemById', 'getIsVirtual'])
+            ->onlyMethods(['load', 'getItemById', 'getIsVirtual'])
             ->getMock();
         $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->helperMock = $this->getMockBuilder(Message::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->giftMessageSaveModelMock = $this->getMockBuilder(Save::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setGiftmessages', 'saveAllInOrder'])
+            ->addMethods(['setGiftmessages'])
+            ->onlyMethods(['saveAllInOrder'])
             ->getMock();
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
@@ -126,7 +126,7 @@ class OrderItemRepositoryTest extends TestCase
         $messageId = 3;
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGiftMessageId'])
+            ->addMethods(['getGiftMessageId'])
             ->getMock();
         $messageMock = $this->getMockBuilder(\Magento\GiftMessage\Model\Message::class)
             ->disableOriginalConstructor()
@@ -200,7 +200,7 @@ class OrderItemRepositoryTest extends TestCase
         $orderItemId = 2;
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGiftMessageId'])
+            ->addMethods(['getGiftMessageId'])
             ->getMock();
 
         $this->orderFactoryMock->expects($this->once())
@@ -241,7 +241,7 @@ class OrderItemRepositoryTest extends TestCase
         $messageId = null;
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGiftMessageId'])
+            ->addMethods(['getGiftMessageId'])
             ->getMock();
 
         $this->orderFactoryMock->expects($this->once())
@@ -289,7 +289,7 @@ class OrderItemRepositoryTest extends TestCase
         ];
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGiftMessageId'])
+            ->addMethods(['getGiftMessageId'])
             ->getMock();
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
@@ -374,7 +374,7 @@ class OrderItemRepositoryTest extends TestCase
         $orderItemId = 2;
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGiftMessageId'])
+            ->addMethods(['getGiftMessageId'])
             ->getMock();
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
@@ -413,7 +413,7 @@ class OrderItemRepositoryTest extends TestCase
         $orderItemId = 2;
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGiftMessageId'])
+            ->addMethods(['getGiftMessageId'])
             ->getMock();
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
@@ -463,7 +463,7 @@ class OrderItemRepositoryTest extends TestCase
         $excep = new \Exception('Exception message');
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getGiftMessageId'])
+            ->addMethods(['getGiftMessageId'])
             ->getMock();
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()

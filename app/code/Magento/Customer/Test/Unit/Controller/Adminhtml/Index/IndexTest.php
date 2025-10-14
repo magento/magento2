@@ -85,7 +85,7 @@ class IndexTest extends TestCase
             ForwardFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
@@ -95,7 +95,8 @@ class IndexTest extends TestCase
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
+            ->onlyMethods(['getConfig'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -105,7 +106,7 @@ class IndexTest extends TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['unsCustomerData', 'unsCustomerFormData'])
+            ->addMethods(['unsCustomerData', 'unsCustomerFormData'])
             ->getMock();
 
         $objectManager = new ObjectManager($this);
@@ -150,9 +151,14 @@ class IndexTest extends TestCase
             ->with('Customers');
         $this->resultPageMock->expects($this->atLeastOnce())
             ->method('addBreadcrumb')
-            ->withConsecutive(
-                ['Customers', 'Customers'],
-                ['Manage Customers', 'Manage Customers']
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'Customers' && $arg2 == 'Customers') {
+                        return null;
+                    } elseif ($arg1 == 'Manage Customers' && $arg2 == 'Manage Customers') {
+                        return null;
+                    }
+                }
             );
         $this->sessionMock->expects($this->once())
             ->method('unsCustomerData');

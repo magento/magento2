@@ -10,15 +10,16 @@ use Magento\Framework\Config\Dom\ArrayNodeConfig;
 use Magento\Framework\Config\Dom\NodePathMatcher;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Converts MessageQueue topology config from \DOMDocument to array
  */
-class Converter implements \Magento\Framework\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface, ResetAfterRequestInterface
 {
     /**
-     * @var FlatConverter
+     * @var FlatConverter|null
      */
     private $converter;
 
@@ -26,18 +27,23 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Boolean value converter.
      *
      * @var BooleanUtils
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $booleanUtils;
+    private readonly BooleanUtils $booleanUtils;
 
     /**
      * @var InterpreterInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $argumentInterpreter;
+    private readonly InterpreterInterface $argumentInterpreter;
 
     /**
      * @var DefaultValueProvider
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
-    private $defaultValue;
+    private readonly DefaultValueProvider $defaultValue;
 
     /**
      * Initialize dependencies.
@@ -59,6 +65,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Magento2.Performance.ForeachArrayMerge
      */
     public function convert($source)
     {
@@ -86,14 +93,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 }
             }
 
-            // @codingStandardsIgnoreStart
             if (isset($result[$name . '--' . $connection]['bindings']) && count($bindings) > 0) {
                 $bindings = array_merge($result[$name . '--' . $connection]['bindings'], $bindings);
             }
             if (isset($result[$name . '--' . $connection]['arguments']) && count($exchangeArguments) > 0) {
                 $exchangeArguments = array_merge($result[$name . '--' . $connection]['arguments'], $exchangeArguments);
             }
-            // @codingStandardsIgnoreEnd
 
             $autoDelete = $this->getAttributeValue($exchange, 'autoDelete', false);
             $result[$name . '--' . $connection] = [
@@ -193,5 +198,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             'arguments' => $bindingArguments
         ];
         return $bindings;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->converter = null;
     }
 }

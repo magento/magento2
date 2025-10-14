@@ -141,43 +141,43 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function intervalsDataProvider()
+    public static function intervalsDataProvider()
     {
         return [
             [
-                '_period' => 'day',
-                '_from' => new \DateTime('-3 day'),
-                '_to' => new \DateTime('+3 day'),
+                'period' => 'day',
+                'fromDate' => new \DateTime('-3 day'),
+                'toDate' => new \DateTime('+3 day'),
                 'size' => 7
             ],
             [
-                '_period' => 'month',
-                '_from' => new \DateTime('2015-01-15 11:11:11'),
-                '_to' => new \DateTime('2015-01-25 11:11:11'),
+                'period' => 'month',
+                'fromDate' => new \DateTime('2015-01-15 11:11:11'),
+                'toDate' => new \DateTime('2015-01-25 11:11:11'),
                 'size' => 1
             ],
             [
-                '_period' => 'month',
-                '_from' => new \DateTime('2015-01-15 11:11:11'),
-                '_to' => new \DateTime('2015-02-25 11:11:11'),
+                'period' => 'month',
+                'fromDate' => new \DateTime('2015-01-15 11:11:11'),
+                'toDate' => new \DateTime('2015-02-25 11:11:11'),
                 'size' => 2
             ],
             [
-                '_period' => 'year',
-                '_from' => new \DateTime('2015-01-15 11:11:11'),
-                '_to' => new \DateTime('2015-01-25 11:11:11'),
+                'period' => 'year',
+                'fromDate' => new \DateTime('2015-01-15 11:11:11'),
+                'toDate' => new \DateTime('2015-01-25 11:11:11'),
                 'size' => 1
             ],
             [
-                '_period' => 'year',
-                '_from' => new \DateTime('2014-01-15 11:11:11'),
-                '_to' => new \DateTime('2015-01-25 11:11:11'),
+                'period' => 'year',
+                'fromDate' => new \DateTime('2014-01-15 11:11:11'),
+                'toDate' => new \DateTime('2015-01-25 11:11:11'),
                 'size' => 2
             ],
             [
-                '_period' => null,
-                '_from' => new \DateTime('-3 day'),
-                '_to' => new \DateTime('+3 day'),
+                'period' => null,
+                'fromDate' => new \DateTime('-3 day'),
+                'toDate' => new \DateTime('+3 day'),
                 'size' => 0
             ]
         ];

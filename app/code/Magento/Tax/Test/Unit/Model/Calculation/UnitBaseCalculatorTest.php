@@ -82,7 +82,7 @@ class UnitBaseCalculatorTest extends TestCase
         $this->taxDetailsItem = $objectManager->getObject(ItemDetails::class);
         $this->taxDetailsItemDataObjectFactoryMock =
             $this->getMockBuilder(TaxDetailsItemInterfaceFactory::class)
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->taxDetailsItemDataObjectFactoryMock->expects($this->any())
@@ -91,7 +91,7 @@ class UnitBaseCalculatorTest extends TestCase
 
         $this->mockCalculationTool = $this->getMockBuilder(Calculation::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'round', 'getRate', 'getStoreRate', 'getRateRequest', 'getAppliedRates'])
+            ->onlyMethods(['__wakeup', 'round', 'getRate', 'getStoreRate', 'getRateRequest', 'getAppliedRates'])
             ->getMock();
         $this->mockCalculationTool->expects($this->any())
             ->method('round')

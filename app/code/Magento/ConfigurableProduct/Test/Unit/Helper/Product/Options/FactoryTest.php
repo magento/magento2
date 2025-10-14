@@ -63,17 +63,17 @@ class FactoryTest extends TestCase
 
         $this->configurable = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
-            ->setMethods(['canUseAttribute'])
+            ->onlyMethods(['canUseAttribute'])
             ->getMock();
 
         $this->attributeFactory = $this->getMockBuilder(AttributeFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->optionValueFactory = $this->getMockBuilder(OptionValueInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->productAttributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
@@ -102,7 +102,7 @@ class FactoryTest extends TestCase
 
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setValues', 'getData'])
+            ->onlyMethods(['setValues', 'getData'])
             ->getMock();
 
         $this->attributeFactory->expects(static::once())
@@ -137,7 +137,7 @@ class FactoryTest extends TestCase
 
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setValues', 'setData'])
+            ->onlyMethods(['setValues', 'setData'])
             ->getMock();
 
         $this->attributeFactory->expects(static::once())

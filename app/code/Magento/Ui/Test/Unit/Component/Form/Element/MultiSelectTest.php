@@ -13,7 +13,7 @@ use Magento\Ui\Component\Form\Element\MultiSelect;
 /**
  * @method MultiSelect getModel
  */
-class MultiSelectTest extends AbstractElementTest
+class MultiSelectTest extends AbstractElementTestCase
 {
     /**
      * @inheritdoc
@@ -37,7 +37,7 @@ class MultiSelectTest extends AbstractElementTest
     {
         $processorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['register', 'notify'])
+            ->onlyMethods(['register', 'notify'])
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         $this->getModel()->prepare();

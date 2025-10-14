@@ -68,7 +68,7 @@ class ActionsTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             [

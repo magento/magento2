@@ -268,7 +268,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @param \Magento\Customer\Api\Data\RegionInterface $region
      * @return $this
      */
-    public function setRegion(RegionInterface $region = null)
+    public function setRegion(?RegionInterface $region = null)
     {
         return $this->setData(self::REGION, $region);
     }

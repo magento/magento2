@@ -139,7 +139,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     protected $_optionsByCode = [];
 
     /**
-     * Not Represent options
+     * Not Represent option
      *
      * @var array
      */
@@ -148,6 +148,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Flag stating that options were successfully saved
      *
+     * @var bool
      */
     protected $_flagOptionsSaved;
 
@@ -176,6 +177,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      * @deprecated 101.0.0
+     * @see nothing
      */
     protected $stockRegistry;
 
@@ -225,10 +227,10 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\Quote\Model\Quote\Item\Compare $quoteItemCompare,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ?ComparatorInterface $itemOptionComparator = null
     ) {
         $this->_errorInfos = $statusListFactory->create();
@@ -348,6 +350,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         if (!$this->getParentItem() || !$this->getId()) {
             $qty = $this->_prepareQty($qty);
             $this->setQtyToAdd($qty);
+            $this->setPreviousQty($this->getQty());
             $this->setQty($this->getQty() + $qty);
         }
         return $this;

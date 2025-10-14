@@ -11,7 +11,7 @@ type Query {
     customAttributeMetadataV2(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.") @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataV2Identity")
     attributesForm(formCode: String! @doc(description: "Form code.")): AttributesFormOutput!
     @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm")
-    @doc(description: "Retrieve EAV attributes associated to a frontend form. For region_id and country_id attributes information use DirectoryGraphQl module.")
+    @doc(description: "Retrieve EAV attributes associated to a frontend form. Use countries query provided by DirectoryGraphQl module to retrieve region_id and country_id attribute options.")
     @cache(cacheIdentity: "Magento\\Eav\\Model\\Cache\\AttributesFormIdentity")
     attributesList(
         entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")

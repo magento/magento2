@@ -105,7 +105,7 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $this->assertEquals($expectedResult, $item, 'Filtration does not seem to work correctly.');
     }
 
-    public function itemsWithFiltersDataProvider()
+    public static function itemsWithFiltersDataProvider()
     {
         $firstItem = ['id' => 1, 'name' => 'testProduct1', 'price' => 1];
         $secondItem = ['id' => 2, 'name' => 'testProduct2', 'price' => 2];

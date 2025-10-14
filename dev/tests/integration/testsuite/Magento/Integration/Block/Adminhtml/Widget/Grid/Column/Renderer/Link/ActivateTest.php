@@ -82,7 +82,7 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('>Reauthorize</a>', $buttonHtml);
     }
 
-    public function renderTokenExchangeProvider()
+    public static function renderTokenExchangeProvider()
     {
         return [
             ['http://example.com/endpoint', 'http://example.com/identity', 1],

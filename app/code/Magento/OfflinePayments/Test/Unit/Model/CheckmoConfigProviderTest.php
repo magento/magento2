@@ -78,7 +78,7 @@ class CheckmoConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetConfig()
+    public static function dataProviderGetConfig()
     {
         $checkmoCode = Checkmo::PAYMENT_METHOD_CHECKMO_CODE;
         return [

@@ -31,7 +31,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\Mview\View\State\CollectionInterface $stateCollection,
         $cacheId = 'mview_config',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->stateCollection = $stateCollection;
 

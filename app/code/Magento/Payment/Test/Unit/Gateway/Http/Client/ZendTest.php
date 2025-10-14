@@ -57,7 +57,7 @@ class ZendTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->clientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 

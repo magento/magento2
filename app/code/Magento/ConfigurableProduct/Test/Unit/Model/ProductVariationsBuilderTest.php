@@ -113,7 +113,12 @@ class ProductVariationsBuilderTest extends TestCase
 
         $output
             ->method('setData')
-            ->withConsecutive([$productData], ['custom_attributes', ['sort_order' => $attribute]]);
+            ->willReturnCallback(function ($arg1, $arg2) use ($productData, $attribute) {
+                if ($arg1 == $productData && $arg2 == ['custom_attributes', ['sort_order' => $attribute]]) {
+                    return null;
+                }
+            });
+
         $output->expects($this->once())->method('setPrice')->with(10);
         $output->expects($this->once())->method('setName')->with('simple-15');
         $output->expects($this->once())->method('setSku')->with('simple-sku-15');

@@ -9,12 +9,7 @@ namespace Magento\Framework\Setup;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-/**
- * Console Logger
- *
- * @package Magento\Setup\Model
- */
-class ConsoleLogger implements LoggerInterface
+class ConsoleLogger implements ConsoleLoggerInterface
 {
     /**
      * Indicator of whether inline output is started
@@ -24,8 +19,6 @@ class ConsoleLogger implements LoggerInterface
     private $isInline = false;
 
     /**
-     * Console
-     *
      * @var OutputInterface
      */
     protected $console;
@@ -44,7 +37,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logSuccess($message)
     {
@@ -53,7 +46,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logError(\Exception $e)
     {
@@ -62,7 +55,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function log($message)
     {
@@ -71,7 +64,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logInline($message)
     {
@@ -80,12 +73,21 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logMeta($message)
     {
         $this->terminateLine();
         $this->console->writeln('<metadata>' . $message . '</metadata>');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function logMetaInline($message)
+    {
+        $this->isInline = true;
+        $this->console->write('<metadata>' . $message . '</metadata>');
     }
 
     /**

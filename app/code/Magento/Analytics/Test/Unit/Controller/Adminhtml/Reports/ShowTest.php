@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -141,7 +141,7 @@ class ShowTest extends TestCase
     /**
      * @return array
      */
-    public function executeWithExceptionDataProvider()
+    public static function executeWithExceptionDataProvider()
     {
         return [
             'ExecuteWithLocalizedException' => [new LocalizedException(__('TestMessage'))],

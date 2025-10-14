@@ -170,4 +170,28 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
+    <entity name="SetCurrencyAEDBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">AED</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForAED">
+        <data key="path">currency/options/allow</data>
+        <data key="value">AED</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForQAR">
+        <data key="path">currency/options/allow</data>
+        <data key="value">QAR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDefaultCurrencyAEDConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">AED</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
 </entities>

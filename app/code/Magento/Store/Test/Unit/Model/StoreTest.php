@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -99,7 +99,7 @@ class StoreTest extends TestCase
         $this->configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
-            ->setMethods(['getCurrencyCode'])
+            ->addMethods(['getCurrencyCode'])
             ->getMockForAbstractClass();
         $this->store = $this->objectManagerHelper->getObject(
             Store::class,
@@ -141,7 +141,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
         return [
             [1, null],
@@ -171,7 +171,7 @@ class StoreTest extends TestCase
         $website = $this->getMockForAbstractClass(WebsiteInterface::class);
 
         $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->getMockForAbstractClass();
         $websiteRepository->expects($this->once())
             ->method('getById')
@@ -194,7 +194,7 @@ class StoreTest extends TestCase
     public function testGetWebsiteIfWebsiteIsNotExist()
     {
         $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->onlyMethods(['getById'])
             ->getMockForAbstractClass();
         $websiteRepository->expects($this->never())
             ->method('getById');
@@ -218,7 +218,7 @@ class StoreTest extends TestCase
         $group = $this->getMockForAbstractClass(GroupInterface::class);
 
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $groupRepository->expects($this->once())
             ->method('get')
@@ -241,7 +241,7 @@ class StoreTest extends TestCase
     public function testGetGroupIfGroupIsNotExist()
     {
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->setMethods(['getById'])
+            ->addMethods(['getById'])
             ->getMockForAbstractClass();
         $groupRepository->expects($this->never())
             ->method('getById');
@@ -333,7 +333,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getBaseUrlDataProvider()
+    public static function getBaseUrlDataProvider()
     {
         return [
             [
@@ -502,7 +502,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentUrlDataProvider()
+    public static function getCurrentUrlDataProvider()
     {
         return [
             [
@@ -584,7 +584,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function getBaseCurrencyDataProvider()
+    public static function getBaseCurrencyDataProvider()
     {
         return [
             [0, 'USD'],
@@ -624,33 +624,35 @@ class StoreTest extends TestCase
      * @dataProvider isCurrentlySecureDataProvider
      *
      * @param bool $expected
-     * @param array $value
+     * @param array|int|null $value
      * @param bool $requestSecure
      * @param bool $useSecureInFrontend
      * @param string|null $secureBaseUrl
      */
     public function testIsCurrentlySecure(
-        $expected,
-        $value,
-        $requestSecure = false,
-        $useSecureInFrontend = true,
-        $secureBaseUrl = 'https://example.com:443'
+        bool        $expected,
+        array|int|null   $value,
+        bool        $requestSecure = false,
+        bool        $useSecureInFrontend = true,
+        ?string     $secureBaseUrl = 'https://example.com:443'
     ) {
         /* @var ReinitableConfigInterface|MockObject $configMock */
-        $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $configMock->expects($this->any())
             ->method('getValue')
             ->willReturnMap([
                 [
                     Store::XML_PATH_SECURE_BASE_URL,
                     ScopeInterface::SCOPE_STORE,
-                    null,
+                    2,
                     $secureBaseUrl
                 ],
                 [
                     Store::XML_PATH_SECURE_IN_FRONTEND,
                     ScopeInterface::SCOPE_STORE,
-                    null,
+                    2,
                     $useSecureInFrontend
                 ]
             ]);
@@ -670,6 +672,8 @@ class StoreTest extends TestCase
             ['config' => $configMock, 'request' => $this->requestMock]
         );
 
+        $model->setStoreId(2);
+
         if ($expected) {
             $this->assertTrue($model->isCurrentlySecure(), "Was expecting this test to show as secure, but it wasn't");
         } else {
@@ -680,7 +684,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function isCurrentlySecureDataProvider()
+    public static function isCurrentlySecureDataProvider()
     {
         return [
             'secure request, no server setting' => [true, [], true],
@@ -690,6 +694,7 @@ class StoreTest extends TestCase
             'unsecure request, using registered port, not using secure in frontend' => [false, 443, false, false],
             'unsecure request, no secure base url, not using secure in frontend' => [false, 443, false, false, null],
             'unsecure request, not using registered port, not using secure in frontend' => [false, 80, false, false],
+            'unsecure request, no server setting' => [false, null, false],
         ];
     }
 
@@ -768,7 +773,7 @@ class StoreTest extends TestCase
     /**
      * @return array
      */
-    public function currencyCodeDataProvider(): array
+    public static function currencyCodeDataProvider(): array
     {
         return [
             [

@@ -233,8 +233,10 @@ class ViewTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['invoice_id'], ['come_from'])
-            ->willReturnOnConsecutiveCalls($invoiceId, 'anything');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['invoice_id'] => $invoiceId,
+                ['come_from'] => 'anything'
+            });
 
         $menuBlockMock = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()
             ->onlyMethods(['getMenuModel'])

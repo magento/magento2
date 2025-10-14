@@ -105,11 +105,9 @@ class NewShippingTest extends TestCase
         $this->objectManagerMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMockForAbstractClass();
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->atLeastOnce())
@@ -190,7 +188,7 @@ class NewShippingTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'shipping_address_exists' => ['*/checkout/addresses', 'shipping_address', 'back/address'],

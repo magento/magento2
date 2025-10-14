@@ -43,7 +43,7 @@ class JsTest extends TestCase
         );
 
         $this->_model = $this->getMockBuilder(Js::class)
-            ->setMethods(['_getCurrentTheme'])
+            ->onlyMethods(['_getCurrentTheme'])
             ->setConstructorArgs($constructArguments)
             ->getMock();
     }

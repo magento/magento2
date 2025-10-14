@@ -15,7 +15,7 @@ use Magento\Sales\Model\ResourceModel\EntityAbstract;
 use Magento\Sales\Model\ResourceModel\Order;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class OrderSenderTest extends AbstractSenderTest
+class OrderSenderTest extends AbstractSenderTestCase
 {
     private const ORDER_ID = 1;
 
@@ -199,9 +199,14 @@ class OrderSenderTest extends AbstractSenderTest
         } else {
             $this->orderResourceMock
                 ->method('saveAttribute')
-                ->withConsecutive(
-                    [$this->orderMock, 'email_sent'],
-                    [$this->orderMock, 'send_email']
+                ->willReturnCallback(
+                    function ($arg1, $arg2) {
+                        if ($arg1 === $this->orderMock && $arg2 === 'email_sent') {
+                            return null;
+                        } elseif ($arg1 === $this->orderMock && $arg2 === 'send_email') {
+                            return null;
+                        }
+                    }
                 );
 
             $this->assertFalse(
@@ -233,7 +238,7 @@ class OrderSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendDataProvider(): array
+    public static function sendDataProvider(): array
     {
         return [
             [0, 0, true, false],
@@ -359,7 +364,7 @@ class OrderSenderTest extends AbstractSenderTest
     /**
      * @return array
      */
-    public function sendVirtualOrderDataProvider(): array
+    public static function sendVirtualOrderDataProvider(): array
     {
         return [
             [true, 1, null],

@@ -23,7 +23,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     /**
      * @var ConfigurableOptionsProviderInterface
      */
-    private $configurableOptionsProvider;
+    private ConfigurableOptionsProviderInterface $configurableOptionsProvider;
 
     /**
      * @param Context $context
@@ -36,14 +36,14 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param array $data
      */
     public function __construct(
-        Context $context,
-        SaleableInterface $saleableItem,
-        PriceInterface $price,
-        RendererPool $rendererPool,
-        SalableResolverInterface $salableResolver,
-        MinimalPriceCalculatorInterface $minimalPriceCalculator,
+        Context                              $context,
+        SaleableInterface                    $saleableItem,
+        PriceInterface                       $price,
+        RendererPool                         $rendererPool,
+        SalableResolverInterface             $salableResolver,
+        MinimalPriceCalculatorInterface      $minimalPriceCalculator,
         ConfigurableOptionsProviderInterface $configurableOptionsProvider,
-        array $data = []
+        array                                $data = []
     ) {
         parent::__construct(
             $context,
@@ -62,17 +62,26 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * Define if the special price should be shown
      *
      * @return bool
+     * @throws \Exception
      */
     public function hasSpecialPrice()
     {
-        $product = $this->getSaleableItem();
-        foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
-            $regularPrice = $subProduct->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
-            $finalPrice = $subProduct->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
-            if ($finalPrice < $regularPrice) {
-                return true;
+        if ($this->isProductList()) {
+            if (!$this->getData('special_price_map')) {
+                return false;
             }
+
+            return (bool)$this->getData('special_price_map')[$this->saleableItem->getId()];
+        } else {
+            $product = $this->getSaleableItem();
+            foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
+                $regularPrice = $subProduct->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
+                $finalPrice = $subProduct->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
+                if ($finalPrice < $regularPrice) {
+                    return true;
+                }
+            }
+            return false;
         }
-        return false;
     }
 }

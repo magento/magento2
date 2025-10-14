@@ -9,8 +9,10 @@ namespace Magento\Vault\Test\Unit\Observer;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
@@ -77,6 +79,14 @@ class AfterPaymentSaveObserverTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                KeyValidator::class,
+                $this->createMock(KeyValidator::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         /** @var Random|MockObject $encryptorRandomGenerator */
         $encryptorRandomGenerator = $this->createMock(Random::class);
         /** @var DeploymentConfig|MockObject $deploymentConfigMock */
@@ -88,17 +98,17 @@ class AfterPaymentSaveObserverTest extends TestCase
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken', '__wakeup'])
+            ->addMethods(['__wakeup', 'setVaultPaymentToken', 'getVaultPaymentToken'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->paymentTokenManagementMock = $this->getMockBuilder(PaymentTokenManagement::class)
-            ->setMethods(['saveTokenWithPaymentLink'])
+            ->onlyMethods(['saveTokenWithPaymentLink'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->setMethods(null)
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,13 +118,13 @@ class AfterPaymentSaveObserverTest extends TestCase
         $this->salesOrderMock = $this->createMock(Order::class);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
-            ->setMethods(['getWebsiteId'])
+            ->onlyMethods(['getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         // Sales Order Payment Model
         $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods(['getAdditionalInformation'])
+            ->onlyMethods(['getAdditionalInformation'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderPaymentMock->setOrder($this->salesOrderMock);
@@ -122,7 +132,7 @@ class AfterPaymentSaveObserverTest extends TestCase
 
         // Arguments to observer container
         $this->eventObserverArgMock = $this->getMockBuilder(Observer::class)
-            ->setMethods(['getDataByKey'])
+            ->onlyMethods(['getDataByKey'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventObserverArgMock->expects($this->any())
@@ -204,7 +214,7 @@ class AfterPaymentSaveObserverTest extends TestCase
      *
      * @return array
      */
-    public function positiveCaseDataProvider()
+    public static function positiveCaseDataProvider()
     {
         return [
             [

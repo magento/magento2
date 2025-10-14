@@ -64,7 +64,7 @@ class CreditmemoTest extends TestCase
         );
 
         $this->model = $this->getMockBuilder(Creditmemo::class)
-            ->setMethods(['getLinks', 'getLinksTitle'])
+            ->onlyMethods(['getLinks', 'getLinksTitle'])
             ->setConstructorArgs($modelConstructorArgs)
             ->getMock();
 
@@ -142,13 +142,13 @@ class CreditmemoTest extends TestCase
         )->method(
             'getLinks'
         )->willReturn(
-            
+
                 new DataObject(
                     ['purchased_items' => [
                         new DataObject(['link_title' => 'Magento User Guide']), ],
                     ]
                 )
-            
+
         );
         $this->pdf->expects(
             $this->once()

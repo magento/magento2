@@ -60,7 +60,7 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      */
     public function __construct(
         AttributeDataFactory $attrDataFactory,
-        Config $eavConfig = null,
+        ?Config $eavConfig = null,
         array $ignoredAttributesByTypesList = []
     ) {
         $this->eavConfig = $eavConfig ?: \Magento\Framework\App\ObjectManager::getInstance()

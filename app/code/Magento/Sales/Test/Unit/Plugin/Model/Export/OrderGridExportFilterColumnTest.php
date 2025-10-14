@@ -133,7 +133,7 @@ class OrderGridExportFilterColumnTest extends TestCase
      *
      * @return array
      */
-    public function getColumnsDataProvider(): array
+    public static function getColumnsDataProvider(): array
     {
         return [
             'test case when namespace is not `sales_order_grid`' =>

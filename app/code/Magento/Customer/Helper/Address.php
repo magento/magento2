@@ -86,7 +86,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
      * @var CustomerMetadataInterface
      *
      * @deprecated 101.0.0
-     * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     protected $_customerMetadataService;
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ResetCalculationClassForShippingActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax Calculation Method Based On'. Sets 'Unit Price' to 'Total'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxCalculationMethod" type="string" defaultValue="Total"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxConfigPagetoReset"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" stepKey="openTaxCalculationSettingsSection"/>
+        <waitForElementVisible selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" stepKey="seeShippingTaxClass"/>
+        <checkOption selector="{{AdminConfigureTaxSection.taxCalculationAlgorithmInherit}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" userInput="{{taxCalculationMethod}}" stepKey="setShippingTaxClass"/>
+        <click selector="{{AdminConfigureTaxSection.save}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForConfigSaved"/>
+        <click selector="{{AdminConfigureTaxSection.taxCalculationSettingsOpened}}" stepKey="closeTaxCalcSettingsSection"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+    </actionGroup>
+</actionGroups>

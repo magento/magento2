@@ -34,9 +34,9 @@ class ValidationException extends LocalizedException implements AggregateExcepti
      */
     public function __construct(
         Phrase $phrase,
-        \Exception $cause = null,
+        ?\Exception $cause = null,
         $code = 0,
-        ValidationResult $validationResult = null
+        ?ValidationResult $validationResult = null
     ) {
         parent::__construct($phrase, $cause, $code);
         $this->validationResult = $validationResult;

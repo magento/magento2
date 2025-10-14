@@ -61,7 +61,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function providerTrackData()
+    public static function providerTrackData()
     {
         return [
             [

@@ -49,7 +49,6 @@
     <type name="Magento\NewRelicReporting\Plugin\CommandPlugin">
         <arguments>
             <argument name="skipCommands" xsi:type="array">
-                <item xsi:type="boolean" name="cron:run">true</item>
                 <item xsi:type="boolean" name="server:run">true</item>
             </argument>
         </arguments>

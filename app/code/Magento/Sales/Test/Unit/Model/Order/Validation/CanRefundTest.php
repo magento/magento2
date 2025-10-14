@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Validation;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -40,10 +41,16 @@ class CanRefundTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-
+        $objects = [
+            [
+                ScopeConfigInterface::class,
+                $this->createMock(ScopeConfigInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getItems'])
+            ->onlyMethods(['getStatus', 'getItems'])
             ->getMockForAbstractClass();
 
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
@@ -87,7 +94,7 @@ class CanRefundTest extends TestCase
      * Data provider for testCanCreditmemoWrongState
      * @return array
      */
-    public function canCreditmemoWrongStateDataProvider()
+    public static function canCreditmemoWrongStateDataProvider()
     {
         return [
             [Order::STATE_PAYMENT_REVIEW],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -81,7 +81,7 @@ class CreateTest extends TestCase
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
         $this->resultPage = $this->getMockBuilder(ResultInterface::class)
-            ->setMethods(['setData'])
+            ->addMethods(['setData'])
             ->getMockForAbstractClass();
 
         $this->action = $objectManagerHelper->getObject(

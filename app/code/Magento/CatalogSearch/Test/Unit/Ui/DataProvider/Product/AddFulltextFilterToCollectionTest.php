@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,14 +41,14 @@ class AddFulltextFilterToCollectionTest extends TestCase
         $this->objectManager = new ObjectManagerHelper($this);
 
         $this->searchCollection = $this->getMockBuilder(SearchCollection::class)
-            ->setMethods(['addBackendSearchFilter', 'load', 'getAllIds'])
+            ->onlyMethods(['addBackendSearchFilter', 'load', 'getAllIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchCollection->expects($this->any())
             ->method('load')
             ->willReturnSelf();
         $this->collection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['addIdFilter'])
+            ->addMethods(['addIdFilter'])
             ->disableOriginalConstructor()
             ->getMock();
 

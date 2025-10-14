@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
@@ -211,7 +211,7 @@ class AfterImportDataObserverTest extends TestCase
                 StoreManagerInterface::class
             )
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getWebsite',
                 ]
@@ -231,7 +231,7 @@ class AfterImportDataObserverTest extends TestCase
         $this->productUrlRewriteGenerator =
             $this->getMockBuilder(ProductUrlRewriteGenerator::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['generate'])
+                ->onlyMethods(['generate'])
                 ->getMock();
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
@@ -249,7 +249,7 @@ class AfterImportDataObserverTest extends TestCase
         );
         $this->urlFinder = $this
             ->getMockBuilder(UrlFinderInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'findAllByData',
                 ]
@@ -275,7 +275,7 @@ class AfterImportDataObserverTest extends TestCase
         $this->mergeDataProvider = new MergeDataProvider();
         $mergeDataProviderFactory->expects($this->once())->method('create')->willReturn($this->mergeDataProvider);
         $this->categoryCollectionFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeValue = $this->getMockBuilder(AttributeValue::class)
@@ -337,19 +337,18 @@ class AfterImportDataObserverTest extends TestCase
         $this->importProduct
             ->expects($this->exactly($productsCount))
             ->method('getNewSku')
-            ->withConsecutive(
-                [$this->products[0][ImportProduct::COL_SKU]],
-                [$this->products[1][ImportProduct::COL_SKU]]
-            )
-            ->will($this->onConsecutiveCalls($newSku[0], $newSku[1]));
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->products[0][ImportProduct::COL_SKU]] => $newSku[0],
+                [$this->products[1][ImportProduct::COL_SKU]] => $newSku[1]
+            });
 
         $this->importProduct
             ->expects($this->exactly($productsCount))
             ->method('getProductCategories')
-            ->withConsecutive(
-                [$this->products[0][ImportProduct::COL_SKU]],
-                [$this->products[1][ImportProduct::COL_SKU]]
-            )->willReturn([]);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$this->products[0][ImportProduct::COL_SKU]] => [],
+                [$this->products[1][ImportProduct::COL_SKU]] => []
+            });
         $getProductWebsitesCallsCount = $productsCount * 2;
         $this->importProduct
             ->expects($this->exactly($getProductWebsitesCallsCount))

@@ -43,7 +43,7 @@ class GuestCartTotalManagement implements GuestCartTotalManagementInterface
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         $shippingCarrierCode = null,
         $shippingMethodCode = null,
-        \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
+        ?\Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
     ) {
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->cartTotalManagement->collectTotals(

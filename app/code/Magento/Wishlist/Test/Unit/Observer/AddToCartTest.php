@@ -65,7 +65,7 @@ class AddToCartTest extends TestCase
     {
         $this->checkoutSession = $this->getMockBuilder(
             Session::class
-        )->setMethods(
+        )->addMethods(
             [
                 'getSharedWishlist',
                 'getWishlistPendingMessages',
@@ -82,11 +82,12 @@ class AddToCartTest extends TestCase
             ->getMock();
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
+            ->addMethods(['setWishlistItemCount'])
+            ->onlyMethods(['isLoggedIn', 'getCustomerId'])
             ->getMock();
         $this->wishlistFactory = $this->getMockBuilder(WishlistFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->wishlist = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()
@@ -117,19 +118,19 @@ class AddToCartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getRequest', 'getResponse'])
+            ->addMethods(['getRequest', 'getResponse'])
             ->disableOriginalConstructor()
             ->getMock();
         $request = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
         $response = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['setRedirect'])
+            ->addMethods(['setRedirect'])
             ->getMockForAbstractClass();
         $wishlists = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $loadedWishlist = $this->getMockBuilder(Wishlist::class)
-            ->setMethods(['getId', 'delete'])
+            ->onlyMethods(['getId', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 

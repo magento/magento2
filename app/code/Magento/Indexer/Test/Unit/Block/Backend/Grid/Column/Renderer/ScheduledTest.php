@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,12 +43,12 @@ class ScheduledTest extends TestCase
     /**
      * @return array
      */
-    public function typeProvider()
+    public static function typeProvider()
     {
         return [
-            ['customer_grid', true, 'grid-severity-major', __('Update by Schedule')],
-            ['customer_grid', false, 'grid-severity-notice', __('Update on Save')],
-            ['customer_grid', '', 'grid-severity-notice', __('Update on Save')],
+            ['customer_grid', true, 'grid-severity-notice', __('Update by Schedule')],
+            ['customer_grid', false, 'grid-severity-major', __('Update on Save')],
+            ['customer_grid', '', 'grid-severity-major', __('Update on Save')],
             ['catalog_product_price', true, 'grid-severity-notice', __('Update by Schedule')],
             ['catalog_product_price', false, 'grid-severity-major', __('Update on Save')],
             ['catalog_product_price', '', 'grid-severity-major', __('Update on Save')],

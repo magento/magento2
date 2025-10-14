@@ -54,7 +54,7 @@ class ShipmentFactory
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->converter = $convertOrderFactory->create();
         $this->trackFactory = $trackFactory;

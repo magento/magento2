@@ -54,7 +54,7 @@ class ChangeTitleTest extends TestCase
         /** @var Status|MockObject $trackingStatusMock */
         $trackingStatusMock = $this->getMockBuilder(Status::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCarrier'])
+            ->addMethods(['getCarrier'])
             ->getMock();
         $trackingStatusMock->expects($this::once())
             ->method('getCarrier')
@@ -70,7 +70,7 @@ class ChangeTitleTest extends TestCase
      *
      * @return array
      */
-    public function testAfterGetTitleDataProvider(): array
+    public static function testAfterGetTitleDataProvider(): array
     {
         return [
             [Carrier::CODE, 'Original Title', __('Expected Delivery:')],

@@ -71,25 +71,25 @@ class RequestSecureTokenTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionTransparent = $this->getMockBuilder(Generic::class)
-            ->setMethods(['setQuoteId'])
+            ->addMethods(['setQuoteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->secureTokenService = $this->getMockBuilder(
             SecureToken::class
         )
-            ->setMethods(['requestToken'])
+            ->onlyMethods(['requestToken'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionManager = $this->getMockBuilder(SessionManager::class)
-            ->setMethods(['getQuote'])
+            ->addMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->transparent = $this->getMockBuilder(Transparent::class)
-            ->setMethods(['getCode', 'isActive'])
+            ->onlyMethods(['getCode', 'isActive'])
             ->disableOriginalConstructor()
             ->getMock();
 

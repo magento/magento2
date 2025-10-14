@@ -58,8 +58,11 @@ class CheckmoTest extends TestCase
     {
         $this->infoMock
             ->method('getAdditionalInformation')
-            ->withConsecutive(['payable_to'])
-            ->willReturnOnConsecutiveCalls($details);
+            ->willReturnCallback(function ($arg1) use ($details) {
+                if ($arg1 == 'payable_to') {
+                    return $details;
+                }
+            });
         $this->block->setData('info', $this->infoMock);
 
         static::assertEquals($expected, $this->block->getPayableTo());
@@ -70,10 +73,10 @@ class CheckmoTest extends TestCase
      *
      * @return array
      */
-    public function getPayableToDataProvider(): array
+    public static function getPayableToDataProvider(): array
     {
         return [
-            ['payable_to' => 'payable', 'payable'],
+            ['details' => 'payable', 'payable'],
             ['', null]
         ];
     }
@@ -90,8 +93,14 @@ class CheckmoTest extends TestCase
     {
         $this->infoMock
             ->method('getAdditionalInformation')
-            ->withConsecutive([], ['mailing_address'])
-            ->willReturnOnConsecutiveCalls(null, $details);
+            ->willReturnCallback(function ($arg1) use ($details) {
+                if ($arg1 == 'mailing_address') {
+                    return $details;
+                } elseif (empty($arg1)) {
+                    return null;
+                }
+            });
+
         $this->block->setData('info', $this->infoMock);
 
         static::assertEquals($expected, $this->block->getMailingAddress());
@@ -102,11 +111,11 @@ class CheckmoTest extends TestCase
      *
      * @return array
      */
-    public function getMailingAddressDataProvider(): array
+    public static function getMailingAddressDataProvider(): array
     {
         return [
-            ['mailing_address' => 'blah@blah.com', 'blah@blah.com'],
-            ['mailing_address' => '', null]
+            ['details' => 'blah@blah.com', 'blah@blah.com'],
+            ['details' => '', null]
         ];
     }
 
@@ -119,8 +128,13 @@ class CheckmoTest extends TestCase
         $mailingAddress = 'blah@blah.com';
         $this->infoMock
             ->method('getAdditionalInformation')
-            ->withConsecutive([], ['mailing_address'])
-            ->willReturnOnConsecutiveCalls(null, $mailingAddress);
+            ->willReturnCallback(function ($arg1) use ($mailingAddress) {
+                if ($arg1 == 'mailing_address') {
+                    return $mailingAddress;
+                } elseif ($arg1 == []) {
+                    return null;
+                }
+            });
         $this->block->setData('info', $this->infoMock);
 
         // First we set the property $this->_mailingAddress

@@ -81,7 +81,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function isDevAllowedDataProvider()
+    public static function isDevAllowedDataProvider()
     {
         return [
             'allow_nothing' => [

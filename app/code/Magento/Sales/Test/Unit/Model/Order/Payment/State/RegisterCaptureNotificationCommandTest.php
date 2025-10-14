@@ -28,7 +28,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
     /**
      * @var string
      */
-    private $newOrderStatus = 'custom_status';
+    private static $newOrderStatus = 'custom_status';
 
     /**
      * @see RegisterCaptureNotificationCommand::execute
@@ -64,7 +64,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
     /**
      * @return array
      */
-    public function commandResultDataProvider()
+    public static function commandResultDataProvider()
     {
         return [
             [
@@ -72,7 +72,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
                 false,
                 Order::STATE_COMPLETE,
                 Order::STATE_COMPLETE,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'Registered notification about captured amount of %1.',
             ],
             [
@@ -80,7 +80,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
                 false,
                 null,
                 Order::STATE_PROCESSING,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'Registered notification about captured amount of %1.',
             ],
             [
@@ -88,7 +88,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
                 false,
                 Order::STATE_NEW,
                 Order::STATE_PROCESSING,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'Registered notification about captured amount of %1.',
             ],
             [
@@ -96,7 +96,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
                 false,
                 Order::STATE_PENDING_PAYMENT,
                 Order::STATE_PROCESSING,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'Registered notification about captured amount of %1.',
             ],
             [
@@ -104,7 +104,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
                 false,
                 Order::STATE_PROCESSING,
                 Order::STATE_PAYMENT_REVIEW,
-                $this->newOrderStatus,
+                self::$newOrderStatus,
                 'An amount of %1 will be captured after being approved at the payment gateway.',
             ],
             [
@@ -135,7 +135,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $statusResolver->method('getOrderStatusByState')
-            ->willReturn($this->newOrderStatus);
+            ->willReturn(self::$newOrderStatus);
 
         return $statusResolver;
     }
@@ -149,7 +149,8 @@ class RegisterCaptureNotificationCommandTest extends TestCase
         /** @var Order|MockObject $order */
         $order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrency', 'getOrderStatusByState'])
+            ->addMethods(['getOrderStatusByState'])
+            ->onlyMethods(['getBaseCurrency'])
             ->getMock();
         $order->method('getBaseCurrency')
             ->willReturn($this->getCurrency());
@@ -166,7 +167,7 @@ class RegisterCaptureNotificationCommandTest extends TestCase
     private function getPayment($isTransactionPending, $isFraudDetected)
     {
         $payment = $this->getMockBuilder(OrderPaymentInterface::class)
-            ->setMethods(['getIsTransactionPending', 'getIsFraudDetected'])
+            ->addMethods(['getIsTransactionPending', 'getIsFraudDetected'])
             ->getMockForAbstractClass();
         $payment->method('getIsTransactionPending')
             ->willReturn($isTransactionPending);

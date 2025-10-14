@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class NameResolverTest extends TestCase
     {
         $this->nameResolverMock = $this->getMockBuilder(NameResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getName'])
+            ->onlyMethods(['getName'])
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -75,7 +75,7 @@ class NameResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getAliasDataProvider()
+    public static function getAliasDataProvider()
     {
         return [
             'ElementConfigWithAliases' => [

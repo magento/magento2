@@ -40,7 +40,7 @@ class BooleanFilterTest extends CategoryBooleanFilterTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         $dataProvider = parent::getFiltersWithCustomAttributeDataProvider();
 
@@ -48,17 +48,17 @@ class BooleanFilterTest extends CategoryBooleanFilterTest
             $dataProvider,
             [
                 'not_used_in_navigation' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable_in_search' => 0,
                     ],
                 ],
                 'used_in_navigation_with_results' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable_in_search' => 1,
                     ],
                 ],
                 'used_in_navigation_without_results' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable' => 0,
                         'is_filterable_in_search' => 1,
                     ],

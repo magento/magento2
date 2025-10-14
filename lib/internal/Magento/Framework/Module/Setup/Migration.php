@@ -149,7 +149,7 @@ class Migration
         MigrationData $migrationData,
         $confPathToMapFile,
         $compositeModules = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_pathToMapFile = $confPathToMapFile;

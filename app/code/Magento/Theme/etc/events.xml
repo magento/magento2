@@ -12,4 +12,10 @@
     <event name="theme_save_after">
         <observer name="check_theme_is_assigned" instance="Magento\Theme\Observer\CheckThemeIsAssignedObserver" />
     </event>
+    <event name="admin_system_config_changed_section_general">
+        <observer name="move_store_level_design_config_to_website_scope_on_single_store_mode" instance="Magento\Theme\Observer\MoveStoreLevelDesignConfigToWebsiteScopeOnSingleStoreMode" />
+    </event>
+    <event name="clean_cache_by_tags">
+        <observer name="invalidate_layout_cache" instance="Magento\Theme\Observer\InvalidateLayoutCacheObserver"/>
+    </event>
 </config>

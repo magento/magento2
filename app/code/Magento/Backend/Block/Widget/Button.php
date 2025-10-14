@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget;
 
@@ -14,7 +14,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  * Button widget
  *
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Button extends \Magento\Backend\Block\Widget

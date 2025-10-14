@@ -51,15 +51,15 @@ class IndexResolverTest extends TestCase
     {
         $this->converter = $this->getMockBuilder(ConverterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convert'])
+            ->onlyMethods(['convert'])
             ->getMockForAbstractClass();
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convert'])
+            ->onlyMethods(['convert'])
             ->getMockForAbstractClass();
         $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldType'])
+            ->onlyMethods(['getFieldType'])
             ->getMockForAbstractClass();
         $objectManager = new ObjectManagerHelper($this);
 
@@ -108,7 +108,7 @@ class IndexResolverTest extends TestCase
             ->willReturn('string');
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods([
+            ->onlyMethods([
                 'isSearchable',
                 'isAlwaysIndexable',
                 'isComplexType',
@@ -149,7 +149,7 @@ class IndexResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldIndexProvider()
+    public static function getFieldIndexProvider()
     {
         return [
             [true, true, true, true, true, true, true, 'string', null],

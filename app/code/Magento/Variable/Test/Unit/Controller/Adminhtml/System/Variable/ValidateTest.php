@@ -79,23 +79,24 @@ class ValidateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['initMessages', 'getMessagesBlock'])
+            ->onlyMethods(['getMessagesBlock'])
+            ->addMethods(['initMessages'])
             ->getMockForAbstractClass();
         $this->layoutMock->expects($this->any())
             ->method('getMessagesBlock')
             ->willReturn($messagesMock);
         $layoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $layoutFactoryMock->expects($this->any())->method('create')->willReturn($this->layoutMock);
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPost'])
+            ->addMethods(['getPost'])
             ->getMockForAbstractClass();
         $responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['setError', 'setHtmlMessage'])
+            ->addMethods(['setError', 'setHtmlMessage'])
             ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
@@ -113,7 +114,7 @@ class ValidateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $resultJsonFactoryMock->expects($this->any())->method('create')->willReturn($this->resultJsonMock);
@@ -130,14 +131,14 @@ class ValidateTest extends TestCase
                 $coreRegistryMock,
                 $this->getMockBuilder(ForwardFactory::class)
                     ->disableOriginalConstructor()
-                    ->setMethods(['create'])->getMock(),
+                    ->onlyMethods(['create'])->getMock(),
                 $resultJsonFactoryMock,
                 $this->getMockBuilder(PageFactory::class)
                     ->disableOriginalConstructor()
-                    ->setMethods(['create'])->getMock(),
+                    ->onlyMethods(['create'])->getMock(),
                 $layoutFactoryMock,
             ]
-        )->setMethods(['_initVariable'])->getMock();
+        )->onlyMethods(['_initVariable'])->getMock();
         $this->validateMock->expects($this->any())
             ->method('_initVariable')
             ->willReturn($this->variableMock);
@@ -181,7 +182,7 @@ class ValidateTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [ false, ['error' => false]],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Dhl\Model;
@@ -107,6 +107,17 @@ class Carrier extends AbstractDhl implements CarrierInterface
     private const SERVICE_PREFIX_QUOTE = 'QUOT';
     private const SERVICE_PREFIX_SHIPVAL = 'SHIP';
     private const SERVICE_PREFIX_TRACKING = 'TRCK';
+
+    /** DHL REST API */
+
+    public const WEIGHT_UNIT_LB = 'LB';
+    public const WEIGHT_UNIT_KG = 'KG';
+    public const WEIGHT_UNIT_IMPERIAL = 'imperial';
+    public const WEIGHT_UNIT_METRIC = 'metric';
+    public const API_RESPONSE_STATUS_SUCCESS = 'Success';
+    public const DHL_TYPE_XML = 'DHL_XML';
+    public const DHL_TYPE_REST = 'DHL_REST';
+    public const DHL_REST_API_VERSION = '2.12.0';
 
     /**
      * Rate request data
@@ -325,8 +336,8 @@ class Carrier extends AbstractDhl implements CarrierInterface
         DateTime $dateTime,
         LaminasClientFactory $httpClientFactory,
         array $data = [],
-        XmlValidator $xmlValidator = null,
-        ProductMetadataInterface $productMetadata = null,
+        ?XmlValidator $xmlValidator = null,
+        ?ProductMetadataInterface $productMetadata = null,
         ?AsyncClientInterface $httpClient = null,
         ?ProxyDeferredFactory $proxyDeferredFactory = null
     ) {
@@ -417,7 +428,12 @@ class Carrier extends AbstractDhl implements CarrierInterface
         $this->setRequest($requestDhl);
         //Loading quotes
         //Saving $result to use proper result with the callback
-        $this->_result = $result = $this->_getQuotes();
+        $result = null;
+        if ($this->getConfigData('type') == self::DHL_TYPE_XML) {
+            $this->_result = $result = $this->_getQuotes();
+        } elseif ($this->getConfigData('type') == self::DHL_TYPE_REST) {
+            $this->_result = $result = $this->_getQuotesRest();
+        }
         //After quotes are loaded parsing the response.
         return $this->proxyDeferredFactory->create(
             [
@@ -484,6 +500,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setRequest(DataObject $request)
     {
@@ -491,16 +508,19 @@ class Carrier extends AbstractDhl implements CarrierInterface
         $this->setStore($request->getStoreId());
 
         $requestObject = new DataObject();
-
         $requestObject->setIsGenerateLabelReturn($request->getIsGenerateLabelReturn());
-
         $requestObject->setStoreId($request->getStoreId());
-
         if ($request->getLimitMethod()) {
             $requestObject->setService($request->getLimitMethod());
         }
-
         $requestObject = $this->_addParams($requestObject);
+
+        /** setting destination city name in case of guest customer specific to DHL REST API */
+        $region = $this->_regionFactory->create()->loadByCode(
+            $request->getDestRegionCode(),
+            $request->getDestCountryId()
+        );
+        $destCityName = $region->getId() ? $region->getName() : '';
 
         if ($request->getDestPostcode()) {
             $requestObject->setDestPostal($request->getDestPostcode());
@@ -520,7 +540,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
             ->setCustomsValue($request->getPackageCustomsValue())
             ->setDestStreet($this->string->substr($destStreet, 0, 35))
             ->setDestStreetLine2($request->getDestStreetLine2())
-            ->setDestCity($request->getDestCity())
+            ->setDestCity($request->getDestCity() ? $request->getDestCity() : $destCityName)
             ->setOrigCompanyName($request->getOrigCompanyName())
             ->setOrigCity($request->getOrigCity())
             ->setOrigPhoneNumber($request->getOrigPhoneNumber())
@@ -578,7 +598,6 @@ class Carrier extends AbstractDhl implements CarrierInterface
         }
 
         $requestObject->setBaseSubtotalInclTax($request->getBaseSubtotalInclTax());
-
         $this->setRawRequest($requestObject);
 
         return $this;
@@ -1070,7 +1089,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
                 $deferredResponses[] = [
                     'deferred' => $this->httpClient->request(
                         new Request(
-                            (string)$this->getConfigData('gateway_url'),
+                            (string)$this->getConfigData('gateway_xml_url'),
                             Request::METHOD_POST,
                             ['Content-Type' => 'application/xml'],
                             mb_convert_encoding($request, 'UTF-8')
@@ -1145,7 +1164,6 @@ class Carrier extends AbstractDhl implements CarrierInterface
     protected function _buildQuotesRequestXml()
     {
         $rawRequest = $this->_rawRequest;
-
         $xmlStr = '<?xml version="1.0" encoding = "UTF-8"?>' .
             '<req:DCTRequest schemaVersion="2.0" ' .
             'xmlns:req="http://www.dhl.com" ' .
@@ -1357,6 +1375,269 @@ class Carrier extends AbstractDhl implements CarrierInterface
     }
 
     /**
+     * DHL REST API for Quote Data
+     *
+     * @return Result\ProxyDeferred
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function _getQuotesRest()
+    {
+        $rawRequest = $this->_rawRequest;
+        $url = $this->getGatewayURL();
+        $packageWeightUnit = $this->_getRestPackageWeightUnit();
+
+        /** Dutiable */
+        $dutiable = ["isCustomsDeclarable" => false];
+        if ($this->isDutiable($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId())) {
+            $declaredValue = (int) $rawRequest->getValue();
+            $baseCurrencyCode = $this->_storeManager
+                ->getWebsite($this->_request->getWebsiteId())
+                ->getBaseCurrencyCode();
+            $dutiable = [
+                "isCustomsDeclarable" => true,
+                "monetaryAmount" => [
+                    [
+                        "typeCode" => "declaredValue",
+                        "value" => $declaredValue,
+                        "currency" => $baseCurrencyCode
+                    ]
+                ]
+            ];
+        }
+
+        $rateParams = array_merge([
+            "customerDetails" => [
+                "shipperDetails" => [
+                    "postalCode" => $rawRequest->getOrigPostal(),
+                    "cityName" => $rawRequest->getOrigCity(),
+                    "countryCode" => $rawRequest->getOrigCountryId()
+                ],
+                "receiverDetails" => [
+                    "postalCode" => $rawRequest->getDestPostal(),
+                    "cityName" => $rawRequest->getDestCity(),
+                    "countryCode" => $rawRequest->getDestCountryId()
+                ]
+            ],
+            "accounts" => [
+                [
+                    "typeCode" => "shipper",
+                    "number" => $this->getConfigData('account')
+                ]
+            ],
+            "plannedShippingDateAndTime" => date('Y-m-d\TH:i:s\Z', strtotime($this->_getShipDate())),
+            "unitOfMeasurement" => $packageWeightUnit,
+            "getAdditionalInformation" => [
+                [
+                    "typeCode" => "allValueAddedServices",
+                    "isRequested" => true
+                ]
+            ],
+            "packages" => [
+                [
+                    "typeCode" => "3BX",
+                    "weight" => (float) $this->_getWeight($rawRequest->getWeight()),
+                    "dimensions" => [
+                        // If no value is provided for the dimension, a default size of 3 will be used
+                        "length" => $this->_getDimension(max(3, $this->getConfigData('depth'))),
+                        "width" => $this->_getDimension(max(3, $this->getConfigData('width'))),
+                        "height" => $this->_getDimension(max(3, $this->getConfigData('height')))
+                    ]
+                ]
+            ]
+        ], $dutiable);
+
+        $ratePayload = json_encode($rateParams, JSON_PRETTY_PRINT);
+
+        $httpResponse = $this->httpClient->request(
+            new Request($url . '/rates', Request::METHOD_POST, $this->getRestHeaders(), $ratePayload)
+        );
+        $debugData['request'] = $ratePayload;
+
+        return $this->proxyDeferredFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($httpResponse, $debugData) {
+                        $responseResult = null;
+                        $jsonResponse = '';
+                        try {
+                            $responseResult = $httpResponse->get();
+                        } catch (HttpException $e) {
+                            $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
+                            $this->_logger->critical($e);
+                        }
+                        if ($responseResult) {
+                            $jsonResponse = $responseResult->getStatusCode() >= 400 ? '' : $responseResult->getBody();
+                        }
+                        $debugData['result'] = $jsonResponse;
+                        $this->_debug($debugData);
+                        return $this->_parseRestResponse($jsonResponse);
+                    }
+                )
+            ]
+        );
+    }
+
+    /**
+     * DHL REST Auth Token
+     *
+     * @return string
+     */
+    private function getDhlAccessToken() : string
+    {
+        $username = (string) $this->getConfigData('api_key');
+        $password = (string) $this->getConfigData('api_secret');
+        $access_token = base64_encode($username . ":" . $password);
+        return $access_token;
+    }
+
+    /**
+     * Rest API Headers
+     *
+     * @return string[]
+     */
+    private function getRestHeaders(): array
+    {
+        return [
+            "Authorization" => "Basic " . $this->getDhlAccessToken(),
+            "Content-Type" => "application/json",
+            "x-version" => self::DHL_REST_API_VERSION
+        ];
+    }
+
+    /**
+     * Parse response from DHL REST API
+     *
+     * @param string $rateResponse
+     * @return Result
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function _parseRestResponse($rateResponse): Result
+    {
+        $responseError = __('The response is in wrong format.');
+        if ($rateResponse !== null && strlen($rateResponse) > 0) {
+            $rateResponseData = json_decode($rateResponse, true);
+            if (isset($rateResponseData['products']) && isset($rateResponseData['exchangeRates'])) {
+                foreach ($rateResponseData['products'] as $product) {
+                    $this->_addRestRate($product, $rateResponseData['exchangeRates']);
+                }
+            } else {
+                $this->_errors[] = $responseError;
+            }
+        }
+
+        /* @var $result Result */
+        $result = $this->_rateFactory->create();
+        if ($this->_rates) {
+            foreach ($this->_rates as $rate) {
+                $method = $rate['service'];
+                $data = $rate['data'];
+                /* @var $rate Method */
+                $rate = $this->_rateMethodFactory->create();
+                $rate->setCarrier(self::CODE);
+                $rate->setCarrierTitle($this->getConfigData('title'));
+                $rate->setMethod($method);
+                $rate->setMethodTitle($data['term']);
+                $rate->setCost($data['price_total']);
+                $rate->setPrice($data['price_total']);
+                $result->append($rate);
+            }
+        } else {
+            if (!empty($this->_errors)) {
+                if ($this->_isShippingLabelFlag) {
+                    throw new LocalizedException($responseError);
+                }
+                $this->debugErrors($this->_errors);
+            }
+            $result->append($this->getErrorMessage());
+        }
+
+        return $result;
+    }
+
+    /**
+     * DHL Quote Data calculating rates
+     *
+     * @param array $product
+     * @param array $exchangeRates
+     * @return $this
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function _addRestRate(array $product, array $exchangeRates): self
+    {
+        if (isset($product['productName'])
+            && isset($product['productCode'])
+            && isset($exchangeRates[0]['currency'])
+            && array_key_exists((string)$product['productCode'], $this->getAllowedMethods())
+        ) {
+            // DHL product code, e.g. '3', 'A', 'N', etc.
+            $dhlProduct = (string)$product['productCode'];
+            $totalPrice = $product['totalPrice'];
+            $billic_price = array_column(
+                array_filter($totalPrice, fn ($price) => $price['currencyType'] === 'BILLC'),
+                'price'
+            );
+
+            $totalEstimate = (float)(string) $billic_price[0] ?? null;
+            $currencyCode = (string)$exchangeRates[0]['currency'];
+            $baseCurrencyCode = $this->_storeManager->getWebsite($this->_request->getWebsiteId())
+                ->getBaseCurrencyCode();
+            $dhlProductDescription = $this->getDhlProductTitle($dhlProduct);
+
+            if ($currencyCode != $baseCurrencyCode) {
+                /* @var $currency Currency */
+                $currency = $this->_currencyFactory->create();
+                $rates = $currency->getCurrencyRates($currencyCode, [$baseCurrencyCode]);
+                if (!empty($rates) && isset($rates[$baseCurrencyCode])) {
+                    // Convert to store display currency using store exchange rate
+                    $totalEstimate = $totalEstimate * $rates[$baseCurrencyCode];
+                } else {
+                    $rates = $currency->getCurrencyRates($baseCurrencyCode, [$currencyCode]);
+                    if (!empty($rates) && isset($rates[$currencyCode])) {
+                        $totalEstimate = $totalEstimate / $rates[$currencyCode];
+                    }
+                    if (!isset($rates[$currencyCode]) || !$totalEstimate) {
+                        $totalEstimate = false;
+                        $this->_errors[] = __(
+                            'We had to skip DHL method %1 because we couldn\'t find exchange rate %2 (Base Currency).',
+                            $currencyCode,
+                            $baseCurrencyCode
+                        );
+                    }
+                }
+            }
+            if ($totalEstimate) {
+                $data = [
+                    'term' => $dhlProductDescription,
+                    'price_total' => $this->getMethodPrice($totalEstimate, $dhlProduct),
+                ];
+                if (!empty($this->_rates)) {
+                    foreach ($this->_rates as $product) {
+                        if ($product['data']['term'] == $data['term']
+                            && $product['data']['price_total'] == $data['price_total']
+                        ) {
+                            return $this;
+                        }
+                    }
+                }
+                $this->_rates[] = ['service' => $dhlProduct, 'data' => $data];
+            } else {
+                $this->_errors[] = __("Zero shipping charge for '%1'", $dhlProductDescription);
+            }
+        } else {
+            $dhlProductDescription = false;
+            if (isset($product['productCode'])) {
+                $dhlProductDescription = $this->getDhlProductTitle((string)$product['productCode']);
+            }
+            $dhlProductDescription = $dhlProductDescription ? $dhlProductDescription : __("DHL");
+            $this->_errors[] = __("Zero shipping charge for '%1'", $dhlProductDescription);
+        }
+        return $this;
+    }
+
+    /**
      * Returns dimension unit (cm or inch)
      *
      * @return string
@@ -1428,7 +1709,9 @@ class Carrier extends AbstractDhl implements CarrierInterface
         $this->_prepareShipmentRequest($request);
         $this->_mapRequestToShipment($request);
         $this->setRequest($request);
-
+        if ($this->getConfigData('type') == self::DHL_TYPE_REST) {
+            return $this->_doShipmentRequestRest();
+        }
         return $this->_doRequest();
     }
 
@@ -1486,7 +1769,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getContainerTypes(DataObject $params = null)
+    public function getContainerTypes(?DataObject $params = null)
     {
         return [
             self::DHL_CONTENT_TYPE_DOC => __('Documents'),
@@ -1846,17 +2129,236 @@ class Carrier extends AbstractDhl implements CarrierInterface
     }
 
     /**
+     * DHL Shipment label API
+     *
+     * @return DataObject
+     * @throws LocalizedException
+     * @throws Throwable
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function _doShipmentRequestRest(): DataObject
+    {
+        $rawRequest = $this->_request;
+        $url = $this->getGatewayURL().'/shipments';
+
+        /** shipper */
+        $shipperAddress = $receiverAddress = [];
+        $shipAddress = $rawRequest->getShipperAddressStreet1() . ' ' . $rawRequest->getShipperAddressStreet2();
+        $shipAddress = $this->string->split($shipAddress, 45, false, true);
+        if (is_array($shipAddress)) {
+            $addressLineNumber = 1;
+            foreach ($shipAddress as $addressLine) {
+                if ($addressLineNumber > 3) {
+                    break;
+                }
+                $shipperAddress["addressLine".$addressLineNumber] = $addressLine;
+                $addressLineNumber++;
+            }
+        } else {
+            $shipperAddress["addressLine1"] = $shipAddress;
+        }
+
+        $shipperContactPersonName = is_string($rawRequest->getShipperContactPersonName()) ?
+            substr($rawRequest->getShipperContactPersonName(), 0, 34) : '';
+        $shipperContactPhoneNumber = is_string($rawRequest->getShipperContactPhoneNumber()) ?
+            substr($rawRequest->getShipperContactPhoneNumber(), 0, 24) : '';
+
+        /** Receiver */
+        $companyName = $rawRequest->getRecipientContactCompanyName() ? $rawRequest
+            ->getRecipientContactCompanyName() : $rawRequest
+            ->getRecipientContactPersonName();
+        $recipientAddress = $rawRequest->getRecipientAddressStreet1() . ' ' . $rawRequest->getRecipientAddressStreet2();
+        $recipientAddress = $this->string->split($recipientAddress, 45, false, true);
+        if (is_array($recipientAddress)) {
+            $addressLineNumber = 1;
+            foreach ($recipientAddress as $addressLine) {
+                if ($addressLineNumber > 3) {
+                    break;
+                }
+                $receiverAddress["addressLine".$addressLineNumber] = $addressLine;
+                $addressLineNumber++;
+            }
+        } else {
+            $receiverAddress["addressLine1"] = $recipientAddress;
+        }
+        $recipientContactPersonName = is_string($rawRequest->getRecipientContactPersonName()) ?
+            substr($rawRequest->getRecipientContactPersonName(), 0, 34) : '';
+        $recipientContactPhoneNumber = is_string($rawRequest->getRecipientContactPhoneNumber()) ?
+            substr($rawRequest->getRecipientContactPhoneNumber(), 0, 24) : '';
+
+        /** Packages Details */
+        $i = 0;
+        $packages = [];
+        foreach ($rawRequest->getPackages() as $package) {
+            $nodePiece = [];
+            $nodePiece['weight'] = round((float) $package['params']['weight']);
+            $params = $package['params'];
+            if ($params['width'] && $params['length'] && $params['height']) {
+                $nodePiece['dimensions']['width'] = round((float) $params['width']);
+                $nodePiece['dimensions']['height'] = round((float) $params['height']);
+                $nodePiece['dimensions']['length'] = round((float) $params['length']);
+            }
+            $content = [];
+            foreach ($package['items'] as $item) {
+                $content[] = $item['name'];
+            }
+            $nodePiece['description'] = $this->string->substr(implode(',', $content), 0, 34);
+            $packages[$i] = $nodePiece;
+            $i++;
+        }
+
+        $packageWeightUnit = $this->_getRestPackageWeightUnit();
+
+        /** Dutiable */
+        $dutiable = ["isCustomsDeclarable" => false];
+        if ($this->isDutiable(
+            $rawRequest->getShipperAddressCountryCode(),
+            $rawRequest->getRecipientAddressCountryCode()
+        )) {
+            $declaredValue = sprintf("%.2F", $rawRequest->getOrderShipment()->getOrder()->getSubtotal());
+            $baseCurrencyCode = $this->_storeManager->getWebsite($rawRequest->getWebsiteId())->getBaseCurrencyCode();
+            /** Export Declaration details */
+            $nodeExportItems = [];
+            foreach ($rawRequest->getPackages() as $exportItem) {
+                $i = 0;
+                foreach ($exportItem['items'] as $itemNo => $itemData) {
+                    $nodeExportItem = [];
+                    $nodeExportItem['number'] = $itemNo;
+                    $nodeExportItem['description'] = $itemData['name'];
+                    $nodeExportItem['price'] = (int)$itemData['price'];
+                    $nodeExportItem['quantity']['value'] = (int)$itemData['qty'];
+                    $nodeExportItem['quantity']['unitOfMeasurement'] = 'PCS';
+                    $nodeExportItem['weight']['netValue'] = (int)$itemData['weight'];
+                    $nodeExportItem['weight']['grossValue'] = (int)$itemData['weight'];
+                    $nodeExportItem['manufacturerCountry'] = $rawRequest->getShipperAddressCountryCode();
+                    $nodeExportItems[$i] = $nodeExportItem;
+                    $i++;
+                }
+            }
+            $dutiable = [
+                "isCustomsDeclarable" => true,
+                "declaredValue" => $declaredValue,
+                "declaredValueCurrency" => $baseCurrencyCode,
+                "exportDeclaration" => [
+                    "lineItems" => $nodeExportItems,
+                    "invoice" => [
+                        "number" => $rawRequest->getOrderShipment()->getOrder()->getIncrementId(),
+                        "date" => date('Y-m-d')
+                    ]
+                ]
+            ];
+        }
+
+        /** Payload for shipping request REST */
+
+        $shippingParams = [
+            "plannedShippingDateAndTime" => date('Y-m-d\TH:i:s\G\M\TP', strtotime($this->_getShipDate())),
+            "pickup" => [
+                "isRequested" => false
+            ],
+            "productCode" => $rawRequest->getShippingMethod(),
+            "accounts" => [
+                [
+                    "typeCode" => "shipper",
+                    "number" => $this->getConfigData('account'),
+                ]
+            ],
+            "valueAddedServices" => [
+                [
+                    "serviceCode" => "II",
+                    "value" => 10
+                ]
+            ],
+            "customerDetails" => [
+                "shipperDetails" => [
+                    "postalAddress" => array_merge([
+                        "postalCode" => $rawRequest->getShipperAddressPostalCode(),
+                        "cityName" => $rawRequest->getShipperAddressCity(),
+                        "countryCode" => $rawRequest->getShipperAddressCountryCode()
+                    ], $shipperAddress),
+                    "contactInformation" => [
+                        "phone" => $shipperContactPhoneNumber,
+                        "companyName" => $rawRequest->getShipperContactCompanyName(),
+                        "fullName" => $shipperContactPersonName
+                    ]
+                ],
+                "receiverDetails" => [
+                    "postalAddress" => array_merge([
+                        "cityName" => $rawRequest->getRecipientAddressCity(),
+                        "countryCode" => $rawRequest->getRecipientAddressCountryCode(),
+                        "postalCode" => $rawRequest->getRecipientAddressPostalCode()
+                    ], $receiverAddress),
+                    "contactInformation" => [
+                        "phone" => $recipientContactPhoneNumber,
+                        "companyName" => is_string($companyName) ? substr($companyName, 0, 60) : '',
+                        "fullName" => $recipientContactPersonName
+                    ]
+                ]
+            ],
+            "content" => array_merge([
+                "packages" => $packages,
+                "description" => "Shipment",
+                "incoterm" => "DAP",
+                "unitOfMeasurement" => $packageWeightUnit
+            ], $dutiable)
+        ];
+
+        $shippingPayload = json_encode($shippingParams);
+
+        $debugData = ['request' => $this->filterDebugData($shippingPayload)];
+        try {
+            $response = $this->httpClient->request(
+                new Request(
+                    $url,
+                    Request::METHOD_POST,
+                    $this->getRestHeaders(),
+                    $shippingPayload
+                )
+            );
+            $responseBody = $response->get()->getBody();
+            $debugData['result'] = $this->filterDebugData($responseBody);
+        } catch (Exception $e) {
+            $this->_errors[$e->getCode()] = $e->getMessage();
+            $responseBody = '';
+        }
+        $this->_debug($debugData);
+        $this->_isShippingLabelFlag = true;
+        $shipmentData = json_decode($responseBody);
+        $result = new DataObject();
+        try {
+            if (!isset($shipmentData->shipmentTrackingNumber) || !isset($shipmentData->documents[0]->content)) {
+                throw new LocalizedException(__('Unable to retrieve shipping label'));
+            }
+            $result->setTrackingNumber((string)$shipmentData->shipmentTrackingNumber);
+            $labelContent = (string)$shipmentData->documents[0]->content;
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $result->setShippingLabelContent(base64_decode($labelContent));
+        } catch (Exception $e) {
+            throw new LocalizedException(__($e->getMessage()));
+        }
+
+        return $result;
+    }
+
+    /**
      * Get tracking
      *
      * @param string|string[] $trackings
      * @return \Magento\Shipping\Model\Tracking\Result|null
      */
-    public function getTracking($trackings)
+    public function getTracking(string|array $trackings): ?\Magento\Shipping\Model\Tracking\Result
     {
         if (!is_array($trackings)) {
             $trackings = [$trackings];
         }
-        $this->_getXMLTracking($trackings);
+
+        if ($this->getConfigData('type') == self::DHL_TYPE_REST) {
+            $this->_getRestTracking($trackings);
+        } else {
+            $this->_getXMLTracking($trackings);
+        }
 
         return $this->_result;
     }
@@ -2031,6 +2533,146 @@ class Carrier extends AbstractDhl implements CarrierInterface
     }
 
     /**
+     * @param string[] $trackings
+     * @return void
+     * @throws Throwable
+     */
+    protected function _getRestTracking(array $trackings): void
+    {
+        $url = $this->getGatewayURL().'/tracking?';
+
+        $trackingParams = [
+            'shipmentTrackingNumber' => implode(',', $trackings),
+            'language' => 'en',
+            'limit' => 10
+        ];
+
+        $queryString = http_build_query($trackingParams);
+        $trackingPayload = (object)[];
+        $trackingPayload = json_encode($trackingPayload);
+
+        $debugData = ['request' => $this->filterDebugData($trackingPayload)];
+        try {
+            $response = $this->httpClient->request(
+                new Request(
+                    $url.$queryString,
+                    Request::METHOD_GET,
+                    $this->getRestHeaders(),
+                    $trackingPayload
+                )
+            );
+            $responseBody = $response->get()->getBody();
+            $debugData['result'] = $this->filterDebugData($responseBody);
+
+            // Check if the response contains valid JSON data
+            $decoded = json_decode($responseBody, true);
+            if (isset($decoded['additionalDetails']) && is_array($decoded['additionalDetails'])) {
+                $validTrackings = [];
+                foreach ($decoded['additionalDetails'] as $detail) {
+                    if (preg_match('/Shipments Found for shipmentTrackingNumber (\d+)/', $detail, $matches)) {
+                        $validTrackings[] = $matches[1];
+                    }
+                }
+                if (!empty($validTrackings)) {
+                    $this->_getRestTracking($validTrackings);
+                    return;
+                }
+            }
+        } catch (Exception $e) {
+            $this->_errors[$e->getCode()] = $e->getMessage();
+            $responseBody = '';
+        }
+        $this->_debug($debugData);
+        $this->_parseRestTrackingResponse($trackings, $responseBody);
+    }
+
+    /**
+     * @param string[] $trackings
+     * @param string $response
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function _parseRestTrackingResponse(array $trackings, string $response): void
+    {
+        $errorTitle = __('Unable to retrieve tracking');
+        $resultArr = [];
+
+        if (!empty(trim($response))) {
+            $trackingData = json_decode($response);
+            if (!empty($trackingData)
+                && (isset($trackingData->status)
+                    && $trackingData->status !== self::API_RESPONSE_STATUS_SUCCESS)
+            ) {
+                foreach ($trackings as $tracking) {
+                    $this->_errors[$tracking] = __('Unable to retrieve tracking');
+                }
+            } elseif (!empty($trackingData)
+                && $trackingData->shipments[0]->status == self::API_RESPONSE_STATUS_SUCCESS) {
+                foreach ($trackingData->shipments as $shipment) {
+                    $awbinfoData = [];
+                    $trackNum = isset($shipment->shipmentTrackingNumber)
+                        ? (string)$shipment->shipmentTrackingNumber : '';
+                    if ($shipment->description) {
+                        $awbinfoData['service'] = (string)$shipment->description;
+                    }
+                    if ($shipment->unitOfMeasurements == self::WEIGHT_UNIT_IMPERIAL) {
+                        $shipmentMeasurements = self::WEIGHT_UNIT_LB;
+                    } else {
+                        $shipmentMeasurements = self::WEIGHT_UNIT_KG;
+                    }
+
+                    $awbinfoData['weight'] = (string)$shipment->totalWeight . ' ' .
+                        (string)$shipmentMeasurements;
+                    $packageProgress = [];
+                    if (isset($shipment->events)) {
+                        foreach ($shipment->events as $shipmentEvent) {
+                            $shipmentEventArray = [];
+                            $shipmentEventArray['activity'] = (string)$shipmentEvent->ServiceEvent->EventCode
+                                . ' ' . (string)$shipmentEvent->ServiceEvent->Description;
+                            $shipmentEventArray['deliverydate'] = (string)$shipmentEvent->Date;
+                            $shipmentEventArray['deliverytime'] = (string)$shipmentEvent->Time;
+                            $shipmentEventArray['deliverylocation'] = (string)$shipmentEvent->ServiceArea
+                                    ->Description . ' [' . (string)$shipmentEvent->ServiceArea->ServiceAreaCode . ']';
+                            $packageProgress[] = $shipmentEventArray;
+                        }
+                        $awbinfoData['progressdetail'] = $packageProgress;
+                    }
+                    $resultArr[$trackNum] = $awbinfoData;
+                }
+            }
+        }
+
+        $result = $this->_trackFactory->create();
+
+        if (!empty($resultArr)) {
+            foreach ($resultArr as $trackNum => $data) {
+                $tracking = $this->_trackStatusFactory->create();
+                $tracking->setCarrier($this->_code);
+                $tracking->setCarrierTitle($this->getConfigData('title'));
+                $tracking->setTracking($trackNum);
+                $tracking->addData($data);
+                $result->append($tracking);
+            }
+        }
+
+        if (!empty($this->_errors) || empty($resultArr)) {
+            $resultArr = !empty($this->_errors) ? $this->_errors : $trackings;
+            foreach ($resultArr as $trackNum => $err) {
+                $error = $this->_trackErrorFactory->create();
+                $error->setCarrier($this->_code);
+                $error->setCarrierTitle($this->getConfigData('title'));
+                $error->setTracking(!empty($this->_errors) ? $trackNum : $err);
+                $error->setErrorMessage(!empty($this->_errors) ? $err : $errorTitle);
+                $result->append($error);
+            }
+        }
+        $this->_errors = [];
+
+        $this->_result = $result;
+    }
+
+    /**
      * Get final price for shipping method with handling fee per package
      *
      * @param float $cost
@@ -2150,7 +2792,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
      * @param string|null $datetime
      * @return string
      */
-    private function buildMessageTimestamp(string $datetime = null): string
+    private function buildMessageTimestamp(?string $datetime = null): string
     {
         return $this->_coreDate->date(DATE_RFC3339, $datetime);
     }
@@ -2207,10 +2849,30 @@ class Carrier extends AbstractDhl implements CarrierInterface
     private function getGatewayURL(): string
     {
         if ($this->getConfigData('sandbox_mode')) {
-            return (string)$this->getConfigData('sandbox_url');
+            if ($this->getConfigData('type') == self::DHL_TYPE_XML) {
+                return (string)$this->getConfigData('sandbox_xml_url');
+            } else {
+                return (string)$this->getConfigData('sandbox_rest_url');
+            }
         } else {
-            return (string)$this->getConfigData('gateway_url');
+            if ($this->getConfigData('type') == self::DHL_TYPE_XML) {
+                return (string)$this->getConfigData('gateway_xml_url');
+            } else {
+                return (string)$this->getConfigData('gateway_rest_url');
+            }
         }
+    }
+
+    /**
+     * Get the weight Unit for Rest API
+     *
+     * @return string
+     * @throws LocalizedException
+     */
+    private function _getRestPackageWeightUnit(): string
+    {
+        $packageWeightUnit = substr($this->_getWeightUnit(), 0, 1);
+        return $packageWeightUnit === 'L' ? self::WEIGHT_UNIT_IMPERIAL : self::WEIGHT_UNIT_METRIC;
     }
 
     /**

@@ -335,7 +335,7 @@ class WeeeTaxTest extends TestCase
      *
      * @return array
      */
-    public function collectDataProvider()
+    public static function collectDataProvider()
     {
         // 1. When the Weee is not taxable, this collector does not change the item, but it will update the address
         //    data based on the weee totals accumulated in the previous 'weee' collector
@@ -344,17 +344,17 @@ class WeeeTaxTest extends TestCase
         $data = [];
 
         $data['price_incl_tax_weee_taxable_unit_included_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => true,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => true,
                 'isTaxable' => true,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
                 [
                     'weee_tax_applied_amount' => 9.24,
                     'base_weee_tax_applied_amount' => 9.24,
@@ -366,8 +366,8 @@ class WeeeTaxTest extends TestCase
                     'base_weee_tax_applied_row_amnt_incl_tax' => 20,
                 ],
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 'subtotal' => 18.48,
                 'base_subtotal' => 18.48,
                 'subtotal_incl_tax' => 20,
@@ -378,17 +378,17 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_incl_tax_weee_taxable_unit_not_included_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => true,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => false,
                 'isTaxable' => true,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
                 [
                     'weee_tax_applied_amount' => 9.24,
                     'base_weee_tax_applied_amount' => 9.24,
@@ -400,8 +400,8 @@ class WeeeTaxTest extends TestCase
                     'base_weee_tax_applied_row_amnt_incl_tax' => 20,
                 ],
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 'subtotal' => 0,
                 'base_subtotal' => 0,
                 'subtotal_incl_tax' => 20,
@@ -412,17 +412,17 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_excl_tax_weee_taxable_unit_included_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => false,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => true,
                 'isTaxable' => true,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
                 [
                     'weee_tax_applied_amount' => 10,
                     'base_weee_tax_applied_amount' => 10,
@@ -434,8 +434,8 @@ class WeeeTaxTest extends TestCase
                     'base_weee_tax_applied_row_amnt_incl_tax' => 21.66,
                 ],
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 'subtotal' => 20,
                 'base_subtotal' => 20,
                 'subtotal_incl_tax' => 21.66,
@@ -446,20 +446,20 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_incl_tax_weee_non_taxable_unit_included_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => true,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => true,
                 'isTaxable' => false,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 self::KEY_WEEE_TOTALS => 20,
                 self::KEY_WEEE_BASE_TOTALS => 20,
                 'subtotal' => 20,
@@ -472,20 +472,20 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_excl_tax_weee_non_taxable_unit_include_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => false,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => true,
                 'isTaxable' => false,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 self::KEY_WEEE_TOTALS => 20,
                 self::KEY_WEEE_BASE_TOTALS => 20,
                 'subtotal' => 20,
@@ -498,17 +498,17 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_incl_tax_weee_taxable_row_include_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => true,
                 'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => true,
                 'isTaxable' => true,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
                 [
                     'weee_tax_applied_amount' => 9.24,
                     'base_weee_tax_applied_amount' => 9.24,
@@ -520,8 +520,8 @@ class WeeeTaxTest extends TestCase
                     'base_weee_tax_applied_row_amnt_incl_tax' => 20,
                 ],
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 'subtotal' => 18.48,
                 'base_subtotal' => 18.48,
                 'subtotal_incl_tax' => 20,
@@ -532,17 +532,17 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_excl_tax_weee_taxable_row_include_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => false,
                 'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => true,
                 'isTaxable' => true,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
                 [
                     'weee_tax_applied_amount' => 10,
                     'base_weee_tax_applied_amount' => 10,
@@ -554,8 +554,8 @@ class WeeeTaxTest extends TestCase
                     'base_weee_tax_applied_row_amnt_incl_tax' => 21.65,
                 ],
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 'subtotal' => 20,
                 'base_subtotal' => 20,
                 'subtotal_incl_tax' => 21.65,
@@ -566,20 +566,20 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_incl_tax_weee_non_taxable_row_include_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => true,
                 'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => true,
                 'isTaxable' => false,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 self::KEY_WEEE_TOTALS => 20,
                 self::KEY_WEEE_BASE_TOTALS => 20,
                 'subtotal' => 20,
@@ -592,20 +592,20 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_excl_tax_weee_non_taxable_row_not_included_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => false,
                 'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => false,
                 'isTaxable' => false,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 self::KEY_WEEE_TOTALS => 20,
                 self::KEY_WEEE_BASE_TOTALS => 20,
                 'subtotal' => 0,
@@ -618,17 +618,17 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['price_excl_tax_weee_taxable_unit_not_included_in_subtotal'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => false,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => false,
                 'isTaxable' => true,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
                 [
                     'weee_tax_applied_amount' => 10,
                     'base_weee_tax_applied_amount' => 10,
@@ -650,8 +650,8 @@ class WeeeTaxTest extends TestCase
                     'base_weee_tax_applied_row_amnt_incl_tax' => 4.40,
                 ],
             ],
-            'item_qty' => 2,
-            'address_data' => [
+            'itemQty' => 2,
+            'addressData' => [
                 'subtotal' => 0,
                 'base_subtotal' => 0,
                 'subtotal_incl_tax' => 26.40,
@@ -662,17 +662,17 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['weee_disabled'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => false,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => false,
                 'includeInSubtotal' => false,
                 'isTaxable' => true,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
                 [
                     'weee_tax_applied_amount' => null,
                     'base_weee_tax_applied_amount' => null,
@@ -694,8 +694,8 @@ class WeeeTaxTest extends TestCase
                     'base_weee_tax_applied_row_amnt_incl_tax' => null,
                 ],
             ],
-            'item_qty' => 1,
-            'address_data' => [
+            'itemQty' => 1,
+            'addressData' => [
                 'subtotal' => null,
                 'base_subtotal' => null,
                 'subtotal_incl_tax' => null,
@@ -706,17 +706,17 @@ class WeeeTaxTest extends TestCase
         ];
 
         $data['zero_items'] = [
-            'tax_config' => [
+            'taxConfig' => [
                 'priceIncludesTax' => false,
                 'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
-            'weee_config' => [
+            'weeeConfig' => [
                 'isEnabled' => true,
                 'includeInSubtotal' => false,
                 'isTaxable' => true,
                 'getApplied' => [],
             ],
-            'item_weee_tax_details' => [
+            'itemWeeeTaxDetails' => [
                 [
                     'weee_tax_applied_amount' => null,
                     'base_weee_tax_applied_amount' => null,
@@ -738,8 +738,8 @@ class WeeeTaxTest extends TestCase
                     'base_weee_tax_applied_row_amnt_incl_tax' => null,
                 ],
             ],
-            'item_qty' => 0,
-            'address_data' => [
+            'itemQty' => 0,
+            'addressData' => [
                 'subtotal' => null,
                 'base_subtotal' => null,
                 'subtotal_incl_tax' => null,

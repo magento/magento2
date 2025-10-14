@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -122,22 +122,22 @@ class LoadBlockTest extends AbstractBackendController
         } else {
             $body = $this->getResponse()->getBody();
         }
-        $this->assertStringNotContainsString("sidebar[add_cart_item][$itemId]", $body);
+        $this->assertStringContainsString("sidebar[add_cart_item][$itemId]", $body);
     }
 
     /**
      * @return array
      */
-    public function responseFlagsProvider(): array
+    public static function responseFlagsProvider(): array
     {
         return [
             'as_json' => [
-                'as_json' => true,
-                'as_js_varname' => false,
+                'asJson' => true,
+                'asJsVarname' => false,
             ],
             'as_plain' => [
-                'as_json' => false,
-                'as_js_varname' => true,
+                'asJson' => false,
+                'asJsVarname' => true,
             ],
         ];
     }

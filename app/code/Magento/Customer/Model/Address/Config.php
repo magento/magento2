@@ -75,7 +75,7 @@ class Config extends ConfigData
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $cacheId = 'address_format',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
         $this->_storeManager = $storeManager;

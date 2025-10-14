@@ -130,7 +130,7 @@ class RedirectTest extends TestCase
      *
      * @return array
      */
-    public function urlAddresses(): array
+    public static function urlAddresses(): array
     {
         return [
             [self::STUB_CUSTOM_ADMIN_URL, Area::AREA_ADMINHTML, true, self::STUB_CUSTOM_ADMIN_URL],

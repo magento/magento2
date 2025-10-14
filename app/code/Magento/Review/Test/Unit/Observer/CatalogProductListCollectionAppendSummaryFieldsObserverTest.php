@@ -74,7 +74,7 @@ class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCa
     {
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCollection'])
+            ->addMethods(['getCollection'])
             ->getMock();
 
         $this->observerMock = $this->createMock(Observer::class);
@@ -85,12 +85,12 @@ class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCa
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $this->sumResourceMock = $this->createPartialMock(
@@ -100,7 +100,7 @@ class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCa
 
         $this->sumResourceFactoryMock = $this->getMockBuilder(SummaryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->observer = new CatalogProductListCollectionAppendSummaryFieldsObserver(

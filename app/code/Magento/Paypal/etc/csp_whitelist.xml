@@ -38,6 +38,12 @@
                 <value id="www_sandbox_paypal" type="host">www.sandbox.paypal.com</value>
                 <value id="www_pilot_payflowlink_paypal" type="host">pilot-payflowlink.paypal.com</value>
                 <value id="pilot_payflowlink_paypal_com" type="host">pilot-payflowlink.paypal.com</value>
+                <value id="paypal_objects" type="host">www.paypalobjects.com</value>
+            </values>
+        </policy>
+        <policy id="font-src">
+            <values>
+                <value id="paypal_objects" type="host">www.paypalobjects.com</value>
             </values>
         </policy>
         <policy id="form-action">

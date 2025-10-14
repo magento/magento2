@@ -184,7 +184,7 @@ class Config
         Title $title,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $isIncludesAvailable = true,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;

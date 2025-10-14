@@ -150,7 +150,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getActiveMethodsDataProvider()
+    public static function getActiveMethodsDataProvider()
     {
         return [[true], [false]];
     }

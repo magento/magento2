@@ -29,32 +29,36 @@ class GenerateVclCommand extends Command
     /**
      * Access list option name
      */
-    const ACCESS_LIST_OPTION = 'access-list';
+    public const ACCESS_LIST_OPTION = 'access-list';
 
     /**
      * Backend host option name
      */
-    const BACKEND_HOST_OPTION = 'backend-host';
+    public const BACKEND_HOST_OPTION = 'backend-host';
 
     /**
      * Backend port option name
      */
-    const BACKEND_PORT_OPTION = 'backend-port';
+    public const BACKEND_PORT_OPTION = 'backend-port';
 
     /**
      * Varnish version option name
      */
-    const EXPORT_VERSION_OPTION = 'export-version';
+    public const EXPORT_VERSION_OPTION = 'export-version';
 
     /**
      * Grace period option name
      */
-    const GRACE_PERIOD_OPTION = 'grace-period';
+    public const GRACE_PERIOD_OPTION = 'grace-period';
 
+    /**
+     * Input file option name
+     */
+    public const INPUT_FILE_OPTION = 'input-file';
     /**
      * Output file option name
      */
-    const OUTPUT_FILE_OPTION = 'output-file';
+    public const OUTPUT_FILE_OPTION = 'output-file';
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteFactory
@@ -130,6 +134,7 @@ class GenerateVclCommand extends Command
         }
 
         try {
+            $inputFile = $input->getOption(self::INPUT_FILE_OPTION);
             $outputFile = $input->getOption(self::OUTPUT_FILE_OPTION);
             $varnishVersion = $input->getOption(self::EXPORT_VERSION_OPTION);
             $vclParameters = array_merge($this->inputToVclParameters($input), [
@@ -137,7 +142,7 @@ class GenerateVclCommand extends Command
                 'designExceptions' => $this->getDesignExceptions(),
             ]);
             $vclGenerator = $this->vclGeneratorFactory->create($vclParameters);
-            $vcl = $vclGenerator->generateVcl($varnishVersion);
+            $vcl = $vclGenerator->generateVcl($varnishVersion, $inputFile);
 
             if ($outputFile) {
                 $writer = $this->writeFactory->create($outputFile, DriverPool::FILE, 'w+');
@@ -192,7 +197,7 @@ class GenerateVclCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'The version of Varnish file',
-                VclTemplateLocator::VARNISH_SUPPORTED_VERSION_4
+                VclTemplateLocator::VARNISH_SUPPORTED_VERSION_6
             ),
             new InputOption(
                 self::GRACE_PERIOD_OPTION,
@@ -200,6 +205,12 @@ class GenerateVclCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Grace period in seconds',
                 300
+            ),
+            new InputOption(
+                self::INPUT_FILE_OPTION,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Input file to generate vcl from'
             ),
             new InputOption(
                 self::OUTPUT_FILE_OPTION,
@@ -211,6 +222,8 @@ class GenerateVclCommand extends Command
     }
 
     /**
+     * Maps input keys to vcl parameters
+     *
      * @param InputInterface $input
      * @return array
      */

@@ -51,8 +51,15 @@ class LockBackendFactoryTest extends TestCase
         $this->expectExceptionMessage('Unknown locks provider: someProvider');
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['lock/provider', LockBackendFactory::LOCK_DB], ['lock/config', []])
-            ->willReturnOnConsecutiveCalls('someProvider', []);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'lock/provider') {
+                        return 'someProvider';
+                    } elseif ($arg == 'lock/config') {
+                        return [];
+                    }
+                }
+            );
 
         $this->factory->create();
     }
@@ -68,8 +75,15 @@ class LockBackendFactoryTest extends TestCase
         $lockManagerMock = $this->getMockForAbstractClass(LockManagerInterface::class);
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(['lock/provider', LockBackendFactory::LOCK_DB], ['lock/config', []])
-            ->willReturnOnConsecutiveCalls($lockProvider, $config);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($lockProvider, $config) {
+                    if ($arg1 == 'lock/provider' && $arg2 == LockBackendFactory::LOCK_DB) {
+                        return $lockProvider;
+                    } elseif ($arg1 == 'lock/config' && empty($arg2)) {
+                        return $config;
+                    }
+                }
+            );
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($lockProviderClass, $config)
@@ -81,7 +95,7 @@ class LockBackendFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider(): array
+    public static function createDataProvider(): array
     {
         $data = [
             'db' => [

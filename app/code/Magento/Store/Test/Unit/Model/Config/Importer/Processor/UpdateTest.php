@@ -102,7 +102,7 @@ class UpdateTest extends TestCase
             ->getMock();
         $this->websiteFactoryMock = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()
@@ -112,11 +112,11 @@ class UpdateTest extends TestCase
             ->getMock();
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()

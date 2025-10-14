@@ -67,9 +67,9 @@ class CreditmemoFactory
     public function __construct(
         \Magento\Sales\Model\Convert\OrderFactory $convertOrderFactory,
         \Magento\Tax\Model\Config $taxConfig,
-        JsonSerializer $serializer = null,
-        FormatInterface $localeFormat = null,
-        CreditmemoValidator $creditmemoValidator = null
+        ?JsonSerializer $serializer = null,
+        ?FormatInterface $localeFormat = null,
+        ?CreditmemoValidator $creditmemoValidator = null
     ) {
         $this->convertor = $convertOrderFactory->create();
         $this->taxConfig = $taxConfig;

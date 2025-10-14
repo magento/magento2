@@ -57,11 +57,11 @@ class GatewayTest extends TestCase
     protected function setUp(): void
     {
         $this->httpClientFactoryMock = $this->getMockBuilder(LaminasClientFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->httpClientMock = $this->getMockBuilder(LaminasClient::class)
-            ->setMethods(['send', 'setUri'])
+            ->onlyMethods(['send', 'setUri'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->httpClientFactoryMock->expects(static::once())
@@ -72,7 +72,7 @@ class GatewayTest extends TestCase
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
-            ->setMethods(['debug'])
+            ->onlyMethods(['debug'])
             ->getMock();
 
         $this->object = new Gateway(
@@ -98,7 +98,7 @@ class GatewayTest extends TestCase
         $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $responseMock = $this->getMockBuilder(Response::class)
-            ->setMethods(['getBody'])
+            ->onlyMethods(['getBody'])
             ->disableOriginalConstructor()
             ->getMock();
         $responseMock->expects(static::once())
@@ -127,7 +127,7 @@ class GatewayTest extends TestCase
     /**
      * @return array[]
      */
-    public function postRequestOkDataProvider(): array
+    public static function postRequestOkDataProvider(): array
     {
         return [
             [
@@ -188,7 +188,7 @@ class GatewayTest extends TestCase
         $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $responseMock = $this->getMockBuilder(Response::class)
-            ->setMethods(['getBody'])
+            ->onlyMethods(['getBody'])
             ->disableOriginalConstructor()
             ->getMock();
         $responseMock->expects(static::once())
@@ -217,7 +217,7 @@ class GatewayTest extends TestCase
     /**
      * @return array[]
      */
-    public function requestBodyDataProvider(): array
+    public static function requestBodyDataProvider(): array
     {
         return [
             [
@@ -246,7 +246,7 @@ class GatewayTest extends TestCase
         $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $responseMock = $this->getMockBuilder(Response::class)
-            ->setMethods(['getBody'])
+            ->onlyMethods(['getBody'])
             ->disableOriginalConstructor()
             ->getMock();
         $responseMock->expects(static::never())

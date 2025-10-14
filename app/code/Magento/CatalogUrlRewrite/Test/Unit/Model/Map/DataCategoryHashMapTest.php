@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,7 +60,7 @@ class DataCategoryHashMapTest extends TestCase
         $categoryIdsOther = ['2' => [2, 3, 4]];
 
         $categoryMock = $this->getMockBuilder(CategoryInterface::class)
-            ->setMethods(['getResource'])
+            ->addMethods(['getResource'])
             ->getMockForAbstractClass();
         $connectionAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class NoRouteObserverTest extends TestCase
             ->getMock();
         $this->eventMock = $this
             ->getMockBuilder(Event::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'getStatus',
                     'getRedirect',
@@ -55,7 +55,7 @@ class NoRouteObserverTest extends TestCase
             ->getMock();
         $this->objectMock = $this
             ->getMockBuilder(DataObject::class)
-            ->setMethods(
+            ->addMethods(
                 [
                     'setLoaded',
                     'setForwardModule',

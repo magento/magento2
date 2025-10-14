@@ -126,12 +126,12 @@ class CancelTest extends TestCase
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             ForwardFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -140,7 +140,7 @@ class CancelTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRequest',
                     'getResponse',

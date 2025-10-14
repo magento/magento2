@@ -7,7 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <css src="jquery/uppy/dist/uppy.fileupload-ui.css"/>
         <css src="Magento_Theme::css/theme.css"/>
         <css src="prototype/windows/themes/default.css"/>
         <link src="Magento_Theme::js/bootstrap.js"/>

@@ -45,7 +45,7 @@ class ConditionsTest extends TestCase
     public function testRender()
     {
         $rule = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['getConditions', '__sleep', '__wakeup'])
+            ->onlyMethods(['getConditions', '__sleep', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $conditions = $this->createPartialMock(Combine::class, ['asHtmlRecursive']);

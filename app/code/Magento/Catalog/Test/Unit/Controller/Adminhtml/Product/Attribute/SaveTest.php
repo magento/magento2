@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -395,7 +395,8 @@ class SaveTest extends AttributeTest
     private function addReturnResultConditions(string $path = '', array $params = [], array $response = [])
     {
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['initMessages', 'getMessagesBlock'])
+            ->addMethods(['initMessages'])
+            ->onlyMethods(['getMessagesBlock'])
             ->getMockForAbstractClass();
         $this->layoutFactoryMock
             ->expects($this->once())

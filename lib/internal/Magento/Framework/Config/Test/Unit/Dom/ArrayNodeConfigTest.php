@@ -50,8 +50,15 @@ class ArrayNodeConfigTest extends TestCase
         $xpath = '/root/numeric[@attr="value"]/two';
         $this->nodePathMatcher
             ->method('match')
-            ->withConsecutive(['/root/numeric/one', $xpath], ['/root/numeric/two', $xpath])
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/numeric/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/numeric/two' && $arg2 == $xpath) {
+                        return true;
+                    }
+                }
+            );
         $this->assertTrue($this->object->isNumericArray($xpath));
     }
 
@@ -63,12 +70,17 @@ class ArrayNodeConfigTest extends TestCase
         $xpath = '/root/numeric[@attr="value"]/four';
         $this->nodePathMatcher
             ->method('match')
-            ->withConsecutive(
-                ['/root/numeric/one', $xpath],
-                ['/root/numeric/two', $xpath],
-                ['/root/numeric/three', $xpath]
-            )
-            ->willReturnOnConsecutiveCalls(false, false, false);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/numeric/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/numeric/two' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/numeric/three' && $arg2 == $xpath) {
+                        return false;
+                    }
+                }
+            );
         $this->assertFalse($this->object->isNumericArray($xpath));
     }
 
@@ -80,11 +92,15 @@ class ArrayNodeConfigTest extends TestCase
         $xpath = '/root/assoc[@attr="value"]/two';
         $this->nodePathMatcher
             ->method('match')
-            ->withConsecutive(
-                ['/root/assoc/one', $xpath],
-                ['/root/assoc/two', $xpath]
-            )
-            ->willReturnOnConsecutiveCalls(false, true);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/assoc/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/assoc/two' && $arg2 == $xpath) {
+                        return true;
+                    }
+                }
+            );
         $this->assertEquals('id', $this->object->getAssocArrayKeyAttribute($xpath));
     }
 
@@ -96,12 +112,17 @@ class ArrayNodeConfigTest extends TestCase
         $xpath = '/root/assoc[@attr="value"]/four';
         $this->nodePathMatcher
             ->method('match')
-            ->withConsecutive(
-                ['/root/assoc/one', $xpath],
-                ['/root/assoc/two', $xpath],
-                ['/root/assoc/three', $xpath]
-            )
-            ->willReturnOnConsecutiveCalls(false, false, false);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($xpath) {
+                    if ($arg1 == '/root/assoc/one' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/assoc/two' && $arg2 == $xpath) {
+                        return false;
+                    } elseif ($arg1 == '/root/assoc/three' && $arg2 == $xpath) {
+                        return false;
+                    }
+                }
+            );
         $this->assertNull($this->object->getAssocArrayKeyAttribute($xpath));
     }
 }

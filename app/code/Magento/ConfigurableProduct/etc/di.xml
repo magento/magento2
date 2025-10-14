@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -21,9 +21,6 @@
     <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\OptionsSelectBuilder" />
     <preference for="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsFilterInterface" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsCompositeFilter" />
 
-    <type name="Magento\CatalogWidget\Block\Product\ProductsList">
-        <plugin name="configurable_product_widget_product_list" type="Magento\ConfigurableProduct\Plugin\CatalogWidget\Block\Product\ProductsListPlugin" sortOrder="2"/>
-    </type>
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
     </type>
@@ -164,6 +161,7 @@
     <type name="Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice">
         <arguments>
             <argument name="priceResolver" xsi:type="object">ConfigurableRegularPriceResolver</argument>
+            <argument name="configurableMaxPriceCalculator" xsi:type="object">Magento\ConfigurableProduct\Model\ConfigurableMaxPriceCalculator</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
@@ -286,5 +284,11 @@
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="updateStockChangedAuto" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto" />
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler">
+        <plugin name="tier_price_update_handler_plugin" type="Magento\ConfigurableProduct\Plugin\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandlerPlugin" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
+        <plugin name="storeSpecificConfigurableProductFromParentId" type="Magento\ConfigurableProduct\Plugin\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider\GetProductChildIds"/>
     </type>
 </config>

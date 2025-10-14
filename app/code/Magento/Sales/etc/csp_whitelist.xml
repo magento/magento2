@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="shipping-method" type="hash" algorithm="sha256">W5akSSK6LD5BjIlNICMcXaUObQSRAaj6bs7JHADURBA=</value>
+                <value id="payment-method" type="hash" algorithm="sha256">3qVqeAdyxxTdPkkRzqapjGkAUYLahxSrB7Mdup+GPQ0=</value>
+                <value id="menu-item" type="hash" algorithm="sha256">2rvfFrggTCtyF5WOiTri1gDS8Boibj4Njn0e+VCBmDI=</value>
+                <value id="admin-payment-script-1" type="hash" algorithm="sha256">p8MCfMHqrovsjRYU9z0bU17dd0z81k/fVbGrtBBiM9g=</value>
+                <value id="admin-payment-script-2" type="hash" algorithm="sha256">0pk2s4oXwBELlC6IBVb3nNaM2PjfjwI2N6OGIX5lx8Y=</value>
+                <value id="admin-payment-script-3" type="hash" algorithm="sha256">nkEZknO0IxNxY/CkTMBhjNhwPvglpYumjx31B4fjkY8=</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

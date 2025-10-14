@@ -12,6 +12,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 
 /**
  * Composite resolver for resolving field type.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class CompositeResolver implements ResolverInterface
 {

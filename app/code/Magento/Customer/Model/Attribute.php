@@ -90,10 +90,10 @@ class Attribute extends \Magento\Eav\Model\Attribute
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         DateTimeFormatterInterface $dateTimeFormatter,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Customer\Model\Metadata\AttributeMetadataCache $attributeMetadataCache = null
+        ?\Magento\Customer\Model\Metadata\AttributeMetadataCache $attributeMetadataCache = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
         $this->attributeMetadataCache = $attributeMetadataCache ?: \Magento\Framework\App\ObjectManager::getInstance()

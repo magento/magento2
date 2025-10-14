@@ -1,19 +1,8 @@
 <?xml version="1.0"?>
 <!--
-/************************************************************************
- *
+/**
  * Copyright 2014 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -41,6 +30,24 @@
                 <field id="secret_key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1">
                     <label>Secret Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="enabled_tracking_api" translate="label" type="select" sortOrder="61" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Enable Tracking API credentials</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tracking_api_key" translate="label" type="obscure" sortOrder="62" showInDefault="1" showInWebsite="1">
+                    <label>Tracking API Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="enabled_tracking_api">1</field>
+                    </depends>
+                </field>
+                <field id="tracking_api_secret_key" translate="label" type="obscure" sortOrder="63" showInDefault="1" showInWebsite="1">
+                    <label>Tracking API Secret Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <depends>
+                        <field id="enabled_tracking_api">1</field>
+                    </depends>
                 </field>
                 <field id="sandbox_mode" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Sandbox Mode</label>

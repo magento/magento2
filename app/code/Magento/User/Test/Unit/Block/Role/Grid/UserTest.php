@@ -278,15 +278,21 @@ class UserTest extends TestCase
         $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($directoryMock);
         $directoryMock->expects($this->any())->method('getRelativePath')->willReturn('filename');
 
-        $blockMock->expects($this->exactly(7))->method('setId')->withConsecutive(
-            ['in_role_users'],
-            ['role_user_id'],
-            ['role_user_username'],
-            ['role_user_firstname'],
-            ['role_user_lastname'],
-            ['role_user_email'],
-            ['role_user_is_active']
-        )->willReturnSelf();
+        $blockMock->expects($this->exactly(7))->method('setId')
+                    ->willReturnCallback(function ($column) use ($blockMock) {
+                        switch ($column) {
+                            case 'in_role_users':
+                            case 'role_user_id':
+                            case 'role_user_username':
+                            case 'role_user_firstname':
+                            case 'role_user_lastname':
+                            case 'role_user_email':
+                            case 'role_user_is_active':
+                                return $blockMock;
+                            default:
+                                break;
+                        }
+                    });
 
         $this->model->toHtml();
     }

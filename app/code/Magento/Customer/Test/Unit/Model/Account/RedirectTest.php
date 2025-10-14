@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Account;
 
@@ -111,21 +110,25 @@ class RedirectTest extends TestCase
         $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'getLastCustomerId',
-                    'isLoggedIn',
-                    'getId',
                     'setLastCustomerId',
                     'unsBeforeAuthUrl',
                     'getBeforeAuthUrl',
-                    'setBeforeAuthUrl',
-                    'getAfterAuthUrl',
-                    'setAfterAuthUrl',
                     'getBeforeRequestParams',
+                    'getAfterAuthUrl',
                     'getBeforeModuleName',
                     'getBeforeControllerName',
                     'getBeforeAction',
+                ]
+            )
+            ->onlyMethods(
+                [
+                    'isLoggedIn',
+                    'getId',
+                    'setBeforeAuthUrl',
+                    'setAfterAuthUrl'
                 ]
             )
             ->getMock();
@@ -136,9 +139,9 @@ class RedirectTest extends TestCase
         $this->url = $this->getMockForAbstractClass(UrlInterface::class);
         $this->urlDecoder = $this->getMockForAbstractClass(DecoderInterface::class);
         $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
-            ->setMethods(
+            ->addMethods(['DashboardUrl'])
+            ->onlyMethods(
                 [
-                    'DashboardUrl',
                     'getAccountUrl',
                     'getLoginUrl',
                     'getLogoutUrl',
@@ -263,7 +266,7 @@ class RedirectTest extends TestCase
      *
      * @return array
      */
-    public function getRedirectDataProvider()
+    public static function getRedirectDataProvider()
     {
         /**
          * Customer ID
@@ -293,18 +296,18 @@ class RedirectTest extends TestCase
             [1, 2, 'referer', 'base', 'defined', '', 'account', 'login', 'logout', 'dashboard', true, true],
             // Logout, Without Redirect to Dashboard
             [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
+                'customerId' => 1,
+                'lastCustomerId' => 2,
                 'referer' => 'http://base.com/customer/account/logoutSuccess/',
-                'base_url' => 'http://base.com/',
-                'before_auth_url' => 'http://base.com/',
-                'after_auth_url' => 'http://base.com/customer/account/',
-                'account_url' => 'account',
-                'login_url' => 'login',
-                'logout_url' => 'logout',
-                'dashboard_url' => 'dashboard',
-                'is_customer_logged_id_flag' => true,
-                'redirect_to_dashboard_flag' => false,
+                'baseUrl' => 'http://base.com/',
+                'beforeAuthUrl' => 'http://base.com/',
+                'afterAuthUrl' => 'http://base.com/customer/account/',
+                'accountUrl' => 'account',
+                'loginUrl' => 'login',
+                'logoutUrl' => 'logout',
+                'dashboardUrl' => 'dashboard',
+                'customerLoggedIn' => true,
+                'redirectToDashboard' => false,
             ],
         ];
     }

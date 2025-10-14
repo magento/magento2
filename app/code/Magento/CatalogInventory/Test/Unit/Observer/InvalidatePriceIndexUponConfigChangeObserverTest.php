@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,7 @@ class InvalidatePriceIndexUponConfigChangeObserverTest extends TestCase
         $this->observerMock = $this->createMock(Observer::class);
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getChangedPaths'])
+            ->addMethods(['getChangedPaths'])
             ->getMock();
 
         $this->observer = $objectManager->getObject(

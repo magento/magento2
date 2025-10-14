@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\ResourceModel\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class InvoiceCommentSenderTest extends AbstractSenderTest
+class InvoiceCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var InvoiceCommentSender

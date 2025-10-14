@@ -188,7 +188,7 @@ class PersonalInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrentStatusDataProvider()
+    public static function getCurrentStatusDataProvider()
     {
         return [
             ['Offline', null, null, null],
@@ -215,7 +215,7 @@ class PersonalInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getLastLoginDateDataProvider()
+    public static function getLastLoginDateDataProvider()
     {
         return [
             ['2015-03-04 12:00:00', '2015-03-04 12:00:00'],
@@ -242,7 +242,7 @@ class PersonalInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getStoreLastLoginDateDataProvider()
+    public static function getStoreLastLoginDateDataProvider()
     {
         return [
             ['2015-03-04 12:00:00', '2015-03-04 12:00:00'],
@@ -267,11 +267,11 @@ class PersonalInfoTest extends TestCase
     /**
      * @return array
      */
-    public function getAccountLockDataProvider()
+    public static function getAccountLockDataProvider()
     {
         return [
-            ['result' => 'Locked', 'expectedValue' => true],
-            ['result' => 'Unlocked', 'expectedValue' => false]
+            ['expectedResult' => 'Locked', 'value' => true],
+            ['expectedResult' => 'Unlocked', 'value' => false]
         ];
     }
 }

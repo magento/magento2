@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigurePayPalPaymentsProActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal credentials and other details. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="credentials" defaultValue="SamplePaypalPaymentsProConfig"/>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <waitForElementClickable selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForConfigureButtonToBeClicked"/>
+        <click selector ="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="expandOtherPaypalConfigButton"/>
+        <scrollTo selector="{{PayPalPaymentsProConfigSection.paymentsAdvanced(countryCode)}}" stepKey="scrollToConfigure"/>
+        <waitForElementClickable selector="{{PayPalPaymentsProConfigSection.configureBtn(countryCode)}}" stepKey="waitForPayPalPaymentsProConfigureBtn"/>
+        <click selector ="{{PayPalPaymentsProConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalPaymentsProConfigureBtn"/>
+        <scrollTo selector="{{PayPalPaymentsProConfigSection.partner(countryCode)}}" stepKey="scrollToBottom"/>
+        <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.partner(countryCode)}}" stepKey="waitForPartner"/>
+        <fillField selector ="{{PayPalPaymentsProConfigSection.partner(countryCode)}}" userInput="{{credentials.paypal_paymentspro_parner}}" stepKey="inputPartner"/>
+        <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.user(countryCode)}}" stepKey="waitForUser"/>
+        <fillField selector ="{{PayPalPaymentsProConfigSection.user(countryCode)}}" userInput="{{credentials.paypal_paymentspro_user}}" stepKey="inputUser"/>
+        <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.vendor(countryCode)}}" stepKey="waitForVendor"/>
+        <fillField selector ="{{PayPalPaymentsProConfigSection.vendor(countryCode)}}" userInput="{{credentials.paypal_paymentspro_vendor}}" stepKey="inputVendor"/>
+        <waitForElementVisible selector="{{PayPalPaymentsProConfigSection.password(countryCode)}}" stepKey="waitForPassword"/>
+        <fillField selector ="{{PayPalPaymentsProConfigSection.password(countryCode)}}" userInput="{{credentials.paypal_paymentspro_password}}" stepKey="inputPassword"/>
+        <selectOption selector="{{PayPalPaymentsProConfigSection.testMode(countryCode)}}" userInput="Yes" stepKey="enableTestMode"/>
+        <selectOption selector ="{{PayPalPaymentsProConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
+        <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForSaveButtonBecomeClickable"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

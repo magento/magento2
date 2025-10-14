@@ -56,7 +56,7 @@ class ConfigTest extends TestCase
      *
      * @return array[]
      */
-    public function useCaseProvider(): array
+    public static function useCaseProvider(): array
     {
         return [
             [State::MODE_PRODUCTION, false, false],

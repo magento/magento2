@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUPSEnableActionGroup">
+        <annotations>
+            <description>Enable UPS shipping method in the configuration section.</description>
+        </annotations>
+        <magentoCLI command="config:set {{AdminEnableUPSConfigData.path}} {{AdminEnableUPSConfigData.value}}" stepKey="enableUPS"/>
+        <magentoCLI command="config:set {{AdminAccessLicenseNumberUPSConfigData.path}} {{AdminAccessLicenseNumberUPSConfigData.value}}" stepKey="accessLicenseNumber"/>
+        <magentoCLI command="config:set {{AdminUserIDUPSConfigData.path}} {{AdminUserIDUPSConfigData.value}}" stepKey="fillUserID"/>
+        <magentoCLI command="config:set {{AdminPasswordUPSConfigData.path}} {{AdminPasswordUPSConfigData.value}}" stepKey="fillPassword"/>
+        <magentoCLI command="config:set {{AdminShipperNumberUPSConfigData.path}} {{AdminShipperNumberUPSConfigData.value}}" stepKey="fillShipperNumber"/>
+        <magentoCLI command="config:set {{AdminEnableDebugUPSConfigData.path}} {{AdminEnableDebugUPSConfigData.value}}" stepKey="enableDebug"/>
+        <magentoCLI command="config:set {{AdminEnableShowMethodUPSConfigData.path}} {{AdminEnableShowMethodUPSConfigData.value}}" stepKey="enableShowMethod"/>
+    </actionGroup>
+</actionGroups>

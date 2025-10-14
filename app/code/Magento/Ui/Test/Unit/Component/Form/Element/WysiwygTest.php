@@ -16,7 +16,7 @@ use Magento\Ui\Component\Form\Element\Wysiwyg;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class WysiwygTest extends AbstractElementTest
+class WysiwygTest extends AbstractElementTestCase
 {
     /**
      * @var FormFactory|MockObject
@@ -43,7 +43,7 @@ class WysiwygTest extends AbstractElementTest
         parent::setUp();
         $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->formMock = $this->getMockBuilder(Form::class)
             ->disableOriginalConstructor()

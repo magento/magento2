@@ -25,4 +25,22 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ResolverIdentityClassProvider">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed" xsi:type="string">
+                    Magento\NewsletterGraphQl\Model\Resolver\Cache\Subscriber\ResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider">
+        <arguments>
+            <argument name="factorProviders" xsi:type="array">
+                <item name="Magento\NewsletterGraphQl\Model\Resolver\IsSubscribed" xsi:type="array">
+                    <item name="parent_customer_entity_id" xsi:type="string">Magento\NewsletterGraphQl\Model\Resolver\CacheKey\FactorProvider\ParentCustomerEntityId</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

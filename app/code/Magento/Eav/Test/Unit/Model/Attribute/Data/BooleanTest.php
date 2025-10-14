@@ -55,7 +55,7 @@ class BooleanTest extends TestCase
     /**
      * @return array
      */
-    public function getOptionTextDataProvider()
+    public static function getOptionTextDataProvider()
     {
         return [
             [

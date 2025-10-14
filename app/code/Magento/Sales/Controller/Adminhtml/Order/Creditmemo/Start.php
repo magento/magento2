@@ -14,7 +14,7 @@ class Start extends \Magento\Backend\App\Action implements HttpGetActionInterfac
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::creditmemo';
 
     /**
      * Start create creditmemo action

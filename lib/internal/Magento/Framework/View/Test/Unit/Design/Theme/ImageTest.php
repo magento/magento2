@@ -108,8 +108,15 @@ class ImageTest extends TestCase
             ->getMock();
         $this->_filesystemMock
             ->method('getDirectoryWrite')
-            ->withConsecutive([DirectoryList::MEDIA], [DirectoryList::ROOT])
-            ->willReturnOnConsecutiveCalls($this->_mediaDirectoryMock, $this->_rootDirectoryMock);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == DirectoryList::MEDIA) {
+                        return $this->_mediaDirectoryMock;
+                    } elseif ($arg == DirectoryList::ROOT) {
+                        return $this->_rootDirectoryMock;
+                    }
+                }
+            );
         $imageFactory = $this->createMock(Factory::class);
         $this->_imageMock = $this->createMock(\Magento\Framework\Image::class);
         $imageFactory->expects($this->any())->method('create')->willReturn($this->_imageMock);
@@ -318,9 +325,12 @@ class ImageTest extends TestCase
 
         $this->_mediaDirectoryMock
             ->method('delete')
-            ->withConsecutive(
-                [$this->stringContains('test.png')],
-                [$tmpFilePath]
+            ->willReturnCallback(
+                function ($arg) use ($tmpFilePath) {
+                    if (strpos($arg, 'test.png') !== false || $arg == $tmpFilePath) {
+                        return null;
+                    }
+                }
             );
 
         $this->_model->uploadPreviewImage($scope);

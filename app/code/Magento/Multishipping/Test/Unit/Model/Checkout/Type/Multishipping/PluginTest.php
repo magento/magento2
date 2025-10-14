@@ -158,7 +158,7 @@ class PluginTest extends TestCase
     /**
      * @return array
      */
-    public function getDataDataProvider()
+    public static function getDataDataProvider()
     {
         return [
             'test with multi shipping addresses' => [10.0, ['qty' => '5'], true],

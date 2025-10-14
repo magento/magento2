@@ -40,7 +40,7 @@ class AccountTokensTest extends TestCase
 
         $this->tokenManagement = $this->getMockBuilder(CustomerTokenManagement::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerSessionTokens'])
+            ->onlyMethods(['getCustomerSessionTokens'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(AccountTokens::class, [

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialRefundOrderPaidThroughPayPalSmartButtonTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Admin Create Partial Refund"/>
+            <title value="Create partial Refund for Order Paid with PayPal Smart Button"/>
+            <description value="Generate a partial refund for an order and verifying the transaction status after submit the credit memos."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5181"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <!-- Create Category and Product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <field key="price">10</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Admin Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Enabling PayPal Express Checkout -->
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
+            <!-- Changing PayPal Express Checkout Basic Settings -->
+            <magentoCLI command="config:set {{StorefrontPaypalExpressSalePaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressSalePaymentActionOptionConfigData.value}}" stepKey="changePaymentAction"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+            <!-- Open Product Page to add product in the cart -->
+            <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="amOnProductPage">
+                <argument name="product" value="$createProduct$"/>
+            </actionGroup>
+            <scrollTo selector="{{StorefrontProductActionSection.quantity}}" stepKey="scrollToQuantityField"/>
+            <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+                <argument name="productName" value="$$createProduct.name$$"/>
+                <argument name="productQty" value="2"/>
+            </actionGroup>
+            <!-- Go to Checkout -->
+            <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToShippingPage"/>
+            <!-- Filling shipping information and click next -->
+            <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+                <argument name="shippingMethod" value="Flat Rate"/>
+                <argument name="customerVar" value="Simple_US_Customer_CA"/>
+                <argument name="customerAddressVar" value="US_Address_California"/>
+            </actionGroup>
+            <!-- Click on PayPal payment radio button -->
+            <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+            <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+            <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+            <!-- Login to PayPal in-context and verify order total on PayPal page-->
+            <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+            <!-- Click PayPal button and go back to Magento site -->
+            <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+            <!-- I see order successful Page -->
+            <waitForElementVisible selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForLoadSuccessPageTitle"/>
+            <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumberVisible"/>
+        </before>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+            <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+                <actualResult type="const">$grabOrderNumber</actualResult>
+            </assertNotEmpty>
+            <!-- Go to Admin and check order information -->
+            <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
+                <argument name="orderId" value="{$grabOrderNumber}"/>
+            </actionGroup>
+            <waitForLoadingMaskToDisappear stepKey="waitForSearchingOrder"/>
+            <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+            <!-- Filter invoice in invoices grid based on the order id -->
+            <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
+                <argument name="orderId" value="{$grabOrderNumber}"/>
+            </actionGroup>
+            <waitForElementClickable selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="waitForInvoiceGrid"/>
+            <click selector="{{AdminInvoicesGridSection.firstRow}}" stepKey="openInvoice"/>
+            <waitForPageLoad stepKey="waitForInvoiceDetailsPageToLoad"/>
+            <!-- Creating Credit Memos from the invoice view page -->
+            <waitForElementClickable selector="{{AdminInvoiceTotalSection.creditMemosButton}}" stepKey="waitForElementToClickCreditMemos"/>
+            <click selector="{{AdminInvoiceTotalSection.creditMemosButton}}" stepKey="clickCreditMemosButton"/>
+            <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillQtyInCreditMemo"/>
+            <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickOnUpdateButtonToCreateMemo"/>
+            <waitForElementVisible selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="waitForGrandTotalVisible"/>
+            <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabGrandTotal"/>
+            <assertEquals message="ExpectedPrice" stepKey="assertBundleProductPrice">
+                <actualResult type="variable">$grabGrandTotal</actualResult>
+                <expectedResult type="string">$20.00</expectedResult>
+            </assertEquals>
+            <!-- Click on the Refund button to generate the credit memo -->
+            <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickSubmitInvoice"/>
+            <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeSuccessMessage"/>
+            <waitForText selector="{{AdminCreditMemoOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="waitForTextOrderStatus"/>
+            <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
+            <waitForPageLoad stepKey="waitForTabLoad"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToMemoId"/>
+            <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
+            <actionGroup ref="AdminAssertRefundInRefundsGridActionGroup" stepKey="assertRefund">
+                <argument name="orderId" value="{$grabOrderNumber}"/>
+                <argument name="memoId" value="{$grabMemoId}"/>
+                <argument name="refundStatus" value="Refunded"/>
+                <argument name="refundedTotal" value="$20.00"/>
+            </actionGroup>
+            <waitForElementVisible selector="{{AdminCreditMemosGridSection.grandTotal}}" stepKey="waitForMemoGrandTotal"/>
+            <grabTextFrom selector="{{AdminCreditMemosGridSection.grandTotal}}" stepKey="creditMemoGrandTotal"/>
+            <assertEquals message="ComparePrice" stepKey="assertCreditMemoGrandTotal">
+                <actualResult type="variable">creditMemoGrandTotal</actualResult>
+                <expectedResult type="string">$20.00</expectedResult>
+            </assertEquals>
+            <!-- Navigate to the Transaction tab to compare the result -->
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSalesTransactionsPage">
+                <argument name="menuUiId" value="{{AdminMenuSales.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuSalesTransactions.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaleTransactionGridPageActionGroup" stepKey="checkCaptureTxnType">
+                <argument name="orderId" value="{$grabOrderNumber}"/>
+                <argument name="txnType" value="Capture"/>
+                <argument name="closed" value="No"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaleTransactionGridPageActionGroup" stepKey="checkRefundTxnType">
+                <argument name="orderId" value="{$grabOrderNumber}"/>
+                <argument name="txnType" value="Refund"/>
+                <argument name="closed" value="Yes"/>
+            </actionGroup>
+        <after>
+            <!-- delete category and product -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--  Disable PayPal Express Checkout and Basic setting change -->
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="configPaypalExpressCheckoutDisable"/>
+            <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="paymentActionChangeToAuthorization"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+    </test>
+</tests>

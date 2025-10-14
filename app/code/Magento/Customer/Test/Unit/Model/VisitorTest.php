@@ -59,14 +59,15 @@ class VisitorTest extends TestCase
         $this->registryMock = $this->createMock(Registry::class);
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSessionId', 'getVisitorData', 'setVisitorData'])
+            ->addMethods(['getVisitorData', 'setVisitorData'])
+            ->onlyMethods(['getSessionId'])
             ->getMock();
         $this->httpRequestMock = $this->createMock(HttpRequest::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->visitorResourceModelMock = $this->getMockBuilder(VisitorResourceModel::class)
-            ->setMethods([
+            ->onlyMethods([
                 'beginTransaction',
                 '__sleep',
                 '__wakeup',

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -31,5 +31,7 @@
         <element name="seeLayeredNavigationCategoryVisualSwatch" type="text" selector="//div[@class='filter-options-title' and contains(text(),'attribute')]"/>
         <element name="seeTextSwatchOption" type="text" selector="//div[@class='swatch-option text ' and contains(text(),'textSwatchOption1')]"/>
         <element name="seeVisualSwatchOption" type="text" selector="//div[@class='swatch-option image ']/..//div[@data-option-label='visualSwatchOption2']"/>
+        <element name="expandLayeredNavigationAttribute" type="button" selector="//div[@class='filter-options-title' and text()='{{AttributeName}}']" parameterized="true"/>
+        <element name="layeredNavigationAttributeOptions" type="button" selector="//div[@class='filter-options-title' and text()='{{AttributeName}}']/following-sibling::div//a[text()='{{arg}}']" parameterized="true"/>
     </section>
 </sections>

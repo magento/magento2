@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model;
 
@@ -102,7 +102,6 @@ class PhpReadinessCheck
 
         $settings = array_merge(
             $this->checkXDebugNestedLevel(),
-            $this->checkPopulateRawPostSetting(),
             $this->checkFunctionsExistence()
         );
 
@@ -266,52 +265,6 @@ class PhpReadinessCheck
                 'error' => $error
             ];
         }
-
-        return $data;
-    }
-
-    /**
-     * Checks if PHP version >= 5.6.0 and always_populate_raw_post_data is set to -1
-     *
-     * Beginning PHP 7.0, support for 'always_populate_raw_post_data' is going to removed.
-     * And beginning PHP 5.6, a deprecated message is displayed if 'always_populate_raw_post_data'
-     * is set to a value other than -1.
-     *
-     * @return array
-     */
-    private function checkPopulateRawPostSetting()
-    {
-        // HHVM and PHP 7does not support 'always_populate_raw_post_data' to be set to -1
-        if (version_compare(PHP_VERSION, '7.0.0-beta') >= 0 || defined('HHVM_VERSION')) {
-            return [];
-        }
-
-        $data = [];
-        $error = false;
-        $iniSetting = (int)ini_get('always_populate_raw_post_data');
-
-        $checkVersionConstraint = $this->versionParser->parseConstraints('~5.6.0');
-        $normalizedPhpVersion = $this->getNormalizedCurrentPhpVersion(PHP_VERSION);
-        $currentVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
-        if ($checkVersionConstraint->matches($currentVersion) && $iniSetting !== -1) {
-            $error = true;
-        }
-
-        $message = sprintf(
-            'Your PHP Version is %s, but always_populate_raw_post_data = %d.
- 	        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will be removed in PHP 7.0.
- 	        This will stop the installer from running.
-	        Please open your php.ini file and set always_populate_raw_post_data to -1.
- 	        If you need more help please call your hosting provider.',
-            PHP_VERSION,
-            (int)ini_get('always_populate_raw_post_data')
-        );
-
-        $data['always_populate_raw_post_data'] = [
-            'message' => $message,
-            'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
-            'error' => $error
-        ];
 
         return $data;
     }

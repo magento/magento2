@@ -148,7 +148,7 @@ class AddressTest extends TestCase
 
         /** @var Collection|TestCase $attributeCollection */
         $attributeCollection = $this->getMockBuilder(Collection::class)
-            ->setMethods(['getEntityTypeCode'])
+            ->addMethods(['getEntityTypeCode'])
             ->setConstructorArgs([$entityFactory])
             ->getMock();
 

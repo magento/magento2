@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -70,7 +70,7 @@ class RowCustomizerTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getScope'])
+            ->onlyMethods(['getScope'])
             ->getMockForAbstractClass();
         $this->rowCustomizerMock = $this->objectManagerHelper->getObject(
             RowCustomizer::class,

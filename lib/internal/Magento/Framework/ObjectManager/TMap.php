@@ -59,7 +59,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
         ObjectManagerInterface $objectManager,
         ConfigInterface $configInterface,
         array $array = [],
-        \Closure $objectCreationStrategy = null
+        ?\Closure $objectCreationStrategy = null
     ) {
         if ((empty($this->type) || !class_exists($this->type)) && !interface_exists($type)) {
             throw new \InvalidArgumentException(sprintf('Unknown type %s', $type));

@@ -44,7 +44,7 @@ class ConvertSwatchAttributeFrontendInputTest extends TestCase
     /**
      * @return array
      */
-    public function attributeData()
+    public static function attributeData()
     {
         return [
             [

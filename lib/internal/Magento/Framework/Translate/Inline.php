@@ -1,7 +1,5 @@
 <?php
 /**
- * Inline Translations Library
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,6 +12,7 @@ use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Translate\Inline\ConfigInterface;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Framework\Translate\Inline\StateInterface;
@@ -25,7 +24,7 @@ use Magento\Framework\View\LayoutInterface;
  * Translate Inline Class
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Inline implements InlineInterface
+class Inline implements InlineInterface, ResetAfterRequestInterface
 {
     /**
      * Indicator to hold state of whether inline translation is allowed
@@ -289,5 +288,14 @@ class Inline implements InlineInterface
         } catch (LocalizedException $e) {
             return false;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->isAllowed = null;
+        $this->isScriptInserted = false;
     }
 }

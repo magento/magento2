@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -443,4 +443,54 @@
         <data key="attribute_code">attribute</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelForExportImport</requiredEntity>
     </entity>
+    <!-- Product attributes for sorting in product listing as No -->
+    <entity name="textAttributeWithNoProductSortListing" extends="newProductAttribute" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="dateAttributeWithNoProductSortListing" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">date</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="yesNoAttributeWithNoProductSortListing" extends="productYesNoAttribute" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="dropdownAttributeWithNoProductSortListing" extends="productAttributeWithDropdownTwoOptions" type="ProductAttribute">
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="multiSelectAttributeWithNoProductSortListing" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="priceAttributeWithNoProductSortListing" extends="newProductAttribute" type="ProductAttribute">
+        <data key="frontend_input">price</data>
+        <data key="used_for_sort_by">false</data>
+    </entity>
+    <entity name="productAttributeFPT" type="ProductAttribute">
+        <data key="default_frontend_label">FPT</data>
+        <data key="attribute_code">fpt</data>
+        <data key="frontend_input">weee</data>
+        <data key="scope">global</data>
+        <data key="is_used_in_grid">true</data>
+        <data key="is_visible_in_grid">true</data>
+        <data key="is_filterable_in_grid">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="productAttributeAgeGroupDropdown" type="ProductAttribute">
+        <data key="default_frontend_label" unique="suffix">Age Group</data>
+        <data key="attribute_code" unique="suffix">agegroup</data>
+        <data key="frontend_input">select</data>
+        <data key="scope">website</data>
+        <data key="is_required">false</data>
+        <data key="is_unique">false</data>
+        <data key="is_searchable">false</data>
+        <data key="is_used_for_promo_rules">true</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
+    </entity>
+    <entity name="multiSelectAttributeWithThreeOptions" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="option1">1</data>
+        <data key="option2">2</data>
+        <data key="option3">3</data>
+    </entity>
 </entities>
+

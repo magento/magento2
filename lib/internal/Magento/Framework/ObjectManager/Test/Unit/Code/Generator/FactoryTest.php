@@ -39,7 +39,7 @@ class FactoryTest extends TestCase
 
         /** @var Factory|MockObject $generator */
         $generator = $this->getMockBuilder(Factory::class)
-            ->setMethods(['_validateData'])
+            ->onlyMethods(['_validateData'])
             ->setConstructorArgs(
                 [
                     Sample::class,

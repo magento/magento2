@@ -12,7 +12,7 @@ use Magento\Ui\Component\Form\Element\CheckboxSet;
 /**
  * @method CheckboxSet getModel
  */
-class CheckboxSetTest extends AbstractElementTest
+class CheckboxSetTest extends AbstractElementTestCase
 {
     /**
      * @inheritdoc

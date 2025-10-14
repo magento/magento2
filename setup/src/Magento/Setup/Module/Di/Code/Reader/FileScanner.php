@@ -421,7 +421,7 @@ class FileScanner
      *
      * @return array|null
      */
-    public function getUses(string $namespace = null): ?array
+    public function getUses(?string $namespace = null): ?array
     {
         $this->scan();
 
@@ -435,7 +435,7 @@ class FileScanner
      *
      * @return array|null
      */
-    protected function getUsesNoScan(string $namespace = null): ?array
+    protected function getUsesNoScan(?string $namespace = null): ?array
     {
         $namespaces = [];
         foreach ($this->infos as $info) {

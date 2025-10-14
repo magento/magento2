@@ -6,8 +6,6 @@
 
 /**
  * Grouped Products Stock Status Indexer Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Indexer\Stock;
 
@@ -32,7 +30,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param null $connectionName
+     * @param null|string $connectionName
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      */
     public function __construct(
@@ -41,7 +39,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $connectionName = null,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+        ?\Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
     ) {
         parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(

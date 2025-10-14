@@ -6,19 +6,18 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
          stderr="true">
-    <!-- Code coverage filters -->
-    <coverage>
+    <source>
         <include>
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
         </include>
-    </coverage>
+    </source>
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento Setup/Upgrade Tests">
@@ -39,17 +38,11 @@
         <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="1"/>
     </php>
     <!-- Test listeners -->
-    <listeners>
-        <listener class="Magento\TestFramework\Event\PhpUnit"/>
-        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
-    </listeners>
     <extensions>
-        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
-            <!-- Optional arguments block; omit it if you want to use default values -->
-            <arguments>
-                <!-- Path to config file (default is config/allure.config.php) -->
-                <string>allure/allure.config.php</string>
-            </arguments>
-        </extension>
+        <bootstrap class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Path to config file (default is config/allure.config.php) -->
+            <parameter name="config" value="allure/allure.config.php" />
+        </bootstrap>
+        <bootstrap class="Magento\TestFramework\Event\Subscribers"/>
     </extensions>
 </phpunit>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Cache\Backend;
@@ -26,12 +26,20 @@ class Redis extends \Cm_Cache_Backend_Redis
     private $preloadKeys = [];
 
     /**
+     * Whether to use lua on garbage collection
+     *
+     * @var bool
+     */
+    private bool $useLuaOnGc;
+
+    /**
      * @param array $options
      */
     public function __construct($options = [])
     {
         $this->preloadKeys = $options['preload_keys'] ?? [];
         parent::__construct($options);
+        $this->useLuaOnGc = isset($options['use_lua_on_gc']) ? (bool) $options['use_lua_on_gc'] : (bool) $this->_useLua;
     }
 
     /**
@@ -51,7 +59,10 @@ class Redis extends \Cm_Cache_Backend_Redis
                 $redis->hGet(self::PREFIX_KEY . $key, self::FIELD_DATA);
             }
 
-            $this->preloadedData = array_filter(array_combine($this->preloadKeys, $redis->exec()));
+            $redisResponse = $redis->exec();
+            $this->preloadedData = is_array($redisResponse) ?
+                array_filter(array_combine($this->preloadKeys, $redisResponse)) :
+                [];
         }
 
         if (isset($this->preloadedData[$id])) {
@@ -94,6 +105,20 @@ class Redis extends \Cm_Cache_Backend_Redis
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _collectGarbage()
+    {
+        $useLua = $this->_useLua;
+        $this->_useLua = $this->useLuaOnGc;
+        try {
+            parent::_collectGarbage();
+        } finally {
+            $this->_useLua = $useLua;
+        }
     }
 
     /**

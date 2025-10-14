@@ -61,8 +61,8 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
         Context $context,
         Helper $resourceHelper,
         $connectionName = null,
-        ConnectionFactory $connectionFactory = null,
-        DeploymentConfig $deploymentConfig = null
+        ?ConnectionFactory $connectionFactory = null,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_resourceHelper = $resourceHelper;

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminChangeFixedProductTaxesActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page via the Admin Side Menu. Change the values for 'Fixed Product Taxes'.</description>
+        </annotations>
+        <!-- change shopping cart display setting configurations -->
+        <scrollTo selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" stepKey="scrollToFixedProductTaxesSection"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.fixedProductTaxes}}" dependentSelector="{{AdminConfigureTaxSection.fixedProductTaxes}}" visible="true" stepKey="openFixedProductTaxesSettings"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueEnableFpt}}" dependentSelector="{{AdminConfigureTaxSection.systemValueEnableFpt}}" visible="true" stepKey="clickSystemValueEnableFptCheckBox"/>
+        <selectOption userInput="Yes" selector="{{AdminConfigureTaxSection.dropdownFptYes}}" stepKey="selectDropdownValueForFpt"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}" dependentSelector="{{AdminConfigureTaxSection.systemValueDisplayPricesProducts}}" visible="true" stepKey="clickSystemValueDisplayPricesProductsCheckBox"/>
+        <selectOption userInput="Excluding FPT" selector="{{AdminConfigureTaxSection.dropdownIncludingFPTAndFPTDescription}}" stepKey="selectOptionForDropdownIncludingFPTAndFPTDescription"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesOnProductViewPageCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesOnProductViewPageCheckbox}}" visible="true" stepKey="clickDisplayPricesOnProductViewPageCheckBox"/>
+        <selectOption userInput="Excluding FPT" selector="{{AdminConfigureTaxSection.displayPricesOnProductViewPage}}" stepKey="selectOptionForDisplayPricesOnProductViewPage"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesInSaleModuleCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesInSaleModuleCheckbox}}" visible="true" stepKey="clickDisplayPricesInSaleModuleCheckbox"/>
+        <selectOption userInput="Excluding FPT" selector="{{AdminConfigureTaxSection.displayPricesInSaleModule}}" stepKey="selectOptionForDisplayPricesInSaleModule"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.displayPricesInEmailCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.displayPricesInEmailCheckbox}}" visible="true" stepKey="clickDisplayPricesInEmailCheckbox"/>
+        <selectOption userInput="Excluding FPT" selector="{{AdminConfigureTaxSection.displayPricesInEmail}}" stepKey="selectOptionForDisplayPricesInEmail"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.systemValueApplyTaxToFpt}}" dependentSelector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" visible="true" stepKey="clickSystemValueApplyTaxToFptCheckbox"/>
+        <selectOption userInput="Yes" selector="{{AdminConfigureTaxSection.dropdownApplyTaxToFpt}}" stepKey="selectOptionForDropdownApplyTaxToFpt"/>
+        <conditionalClick selector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" dependentSelector="{{AdminConfigureTaxSection.includeFPTInSubtotalCheckbox}}" visible="true" stepKey="clickIncludeFPTInSubtotalCheckbox"/>
+        <selectOption userInput="No" selector="{{AdminConfigureTaxSection.includeFPTInSubtotal}}" stepKey="selectOptionForIncludeFPTInSubtotal"/>
+    </actionGroup>
+</actionGroups>

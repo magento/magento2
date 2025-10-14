@@ -47,8 +47,10 @@ class ServiceTest extends TestCase
         );
         $this->_importConfig
             ->method('getServiceLabel')
-            ->withConsecutive(['service_one'], ['service_two'])
-            ->willReturnOnConsecutiveCalls('Service One', 'Service Two');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['service_one'] => 'Service One',
+                ['service_two'] => 'Service Two'
+            });
         $expectedResult = [
             ['value' => 'service_one', 'label' => 'Service One'],
             ['value' => 'service_two', 'label' => 'Service Two'],

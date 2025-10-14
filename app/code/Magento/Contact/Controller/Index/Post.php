@@ -52,7 +52,7 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
         ConfigInterface $contactsConfig,
         MailInterface $mail,
         DataPersistorInterface $dataPersistor,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($context, $contactsConfig);
         $this->context = $context;

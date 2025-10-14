@@ -38,7 +38,7 @@ class Confirmation extends Column
         ScopeConfigInterface $scopeConfig,
         array $components,
         array $data,
-        AccountConfirmation $accountConfirmation = null
+        ?AccountConfirmation $accountConfirmation = null
     ) {
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);

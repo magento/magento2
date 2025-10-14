@@ -42,7 +42,7 @@ class SortOrderTest extends TestCase
     /**
      * @return array
      */
-    public function sortOrderDirectionProvider()
+    public static function sortOrderDirectionProvider()
     {
         return [[SortOrder::SORT_ASC], [SortOrder::SORT_DESC]];
     }
@@ -60,7 +60,7 @@ class SortOrderTest extends TestCase
     /**
      * @return array
      */
-    public function invalidSortDirectionProvider()
+    public static function invalidSortDirectionProvider()
     {
         return [
             [-1],

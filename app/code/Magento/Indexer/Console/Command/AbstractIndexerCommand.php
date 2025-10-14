@@ -39,7 +39,7 @@ abstract class AbstractIndexerCommand extends Command
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        \Magento\Indexer\Model\Indexer\CollectionFactory $collectionFactory = null
+        ?\Magento\Indexer\Model\Indexer\CollectionFactory $collectionFactory = null
     ) {
         $this->objectManagerFactory = $objectManagerFactory;
         $this->collectionFactory = $collectionFactory;

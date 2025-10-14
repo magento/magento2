@@ -78,7 +78,7 @@ class Validator extends AbstractValidator
     public function __construct(
         DomFactory $domConfigFactory,
         UrnResolver $urnResolver,
-        ValidationStateInterface $validationState = null
+        ?ValidationStateInterface $validationState = null
     ) {
         $this->_domConfigFactory = $domConfigFactory;
         $this->_initMessageTemplates();

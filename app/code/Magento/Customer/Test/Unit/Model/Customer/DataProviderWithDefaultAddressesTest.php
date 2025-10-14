@@ -201,7 +201,7 @@ class DataProviderWithDefaultAddressesTest extends TestCase
      *
      * @return array
      */
-    public function getAttributesMetaDataProvider(): array
+    public static function getAttributesMetaDataProvider(): array
     {
         return [
             [

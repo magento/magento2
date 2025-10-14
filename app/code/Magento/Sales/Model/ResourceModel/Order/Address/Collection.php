@@ -16,15 +16,11 @@ use Magento\Sales\Model\ResourceModel\Order\Address as AddressResource;
 class Collection extends AbstractCollection implements OrderAddressSearchResultInterface
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_address_collection';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'order_address_collection';
@@ -40,19 +36,5 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
             Address::class,
             AddressResource::class
         );
-    }
-
-    /**
-     * Redeclare after load method for dispatch event
-     *
-     * @return $this
-     */
-    protected function _afterLoad()
-    {
-        parent::_afterLoad();
-
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', [$this->_eventObject => $this]);
-
-        return $this;
     }
 }

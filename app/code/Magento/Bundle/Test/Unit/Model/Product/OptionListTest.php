@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -125,7 +124,7 @@ class OptionListTest extends TestCase
             ->with($productMock, $optionId)
             ->willReturn([$linkMock]);
         $newOptionMock = $this->getMockBuilder(OptionInterface::class)
-            ->setMethods(['setDefaultTitle'])
+            ->addMethods(['setDefaultTitle'])
             ->getMockForAbstractClass();
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')

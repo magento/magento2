@@ -132,27 +132,27 @@ class ManagerTest extends TestCase
     /**
      * @return array$transactionId, $parentTransactionId, $transactionBasedTxnId
      */
-    public function generateTransactionIdDataProvider()
+    public static function generateTransactionIdDataProvider()
     {
         return [
             'withoutTransactionId' => [
                 'transactionId' => null,
                 'parentTransactionId' => 2,
-                'transactionBasedOnId' => 1,
+                'transactionBasedTxnId' => 1,
                 'type' => Transaction::TYPE_REFUND,
                 'expectedResult' => "2-" . Transaction::TYPE_REFUND
             ],
             'withTransactionId' => [
                 'transactionId' => 33,
                 'parentTransactionId' => 2,
-                'transactionBasedOnId' => 1,
+                'transactionBasedTxnId' => 1,
                 'type' => Transaction::TYPE_REFUND,
                 'expectedResult' => 33
             ],
             'withBasedTransactionId' => [
                 'transactionId' => null,
                 'parentTransactionId' => null,
-                'transactionBasedOnId' => 4,
+                'transactionBasedTxnId' => 4,
                 'type' => Transaction::TYPE_REFUND,
                 'expectedResult' => "4-" . Transaction::TYPE_REFUND
             ],
@@ -162,7 +162,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function isTransactionExistsDataProvider()
+    public static function isTransactionExistsDataProvider()
     {
         return [
             'withTransactionIdAndTransaction' => ["100-refund", true, true],
@@ -175,7 +175,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function getAuthorizationDataProvider()
+    public static function getAuthorizationDataProvider()
     {
         return [
             'withParentId' => [false, 1, 1],

@@ -17,6 +17,6 @@ class Csv extends AbstractFile
      */
     protected function _readFile()
     {
-        return fgetcsv($this->_fileHandler, null, ',', '"');
+        return fgetcsv($this->_fileHandler, null, ',', '"', '\\');
     }
 }

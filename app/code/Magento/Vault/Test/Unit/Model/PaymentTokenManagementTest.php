@@ -96,11 +96,11 @@ class PaymentTokenManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchResultsFactory = $this->getMockBuilder(PaymentTokenSearchResultsInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)

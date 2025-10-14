@@ -37,12 +37,12 @@ class ToModelTest extends TestCase
     {
         $this->ruleFactory = $this->getMockBuilder(RuleFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->dataObjectProcessor = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['buildOutputDataArray'])
             ->getMock();
 
         $helper = new ObjectManager($this);
@@ -84,7 +84,8 @@ class ToModelTest extends TestCase
          */
         $dataCondition = $this->getMockBuilder(Condition::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getConditionType', 'getValue', 'getAttributeName', 'getOperator',
+            ->addMethods(['create', 'load'])
+            ->onlyMethods(['getConditionType', 'getValue', 'getAttributeName', 'getOperator',
                 'getAggregatorType', 'getConditions'])
             ->getMock();
 
@@ -115,13 +116,15 @@ class ToModelTest extends TestCase
 
         $dataCondition1 = $this->getMockBuilder(Condition::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getConditionType', 'getValue', 'getAttributeName', 'getOperator',
+            ->addMethods(['create', 'load'])
+            ->onlyMethods(['getConditionType', 'getValue', 'getAttributeName', 'getOperator',
                 'getAggregatorType', 'getConditions'])
             ->getMock();
 
         $dataCondition2 = $this->getMockBuilder(Condition::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getConditionType', 'getValue', 'getAttributeName', 'getOperator',
+            ->addMethods(['create', 'load'])
+            ->onlyMethods(['getConditionType', 'getValue', 'getAttributeName', 'getOperator',
                 'getAggregatorType', 'getConditions'])
             ->getMock();
 
@@ -142,7 +145,8 @@ class ToModelTest extends TestCase
          */
         $dataModel = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getData', 'getRuleId', 'getCondition', 'getActionCondition',
+            ->addMethods(['create', 'load', 'getData'])
+            ->onlyMethods(['getRuleId', 'getCondition', 'getActionCondition',
                 'getStoreLabels'])
             ->getMock();
         $dataModel
@@ -167,7 +171,8 @@ class ToModelTest extends TestCase
 
         $ruleModel = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getId', 'getData'])
+            ->addMethods(['create'])
+            ->onlyMethods(['load', 'getId', 'getData'])
             ->getMock();
 
         $ruleModel
@@ -208,11 +213,15 @@ class ToModelTest extends TestCase
          */
         $dataModel = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->addMethods(
                 [
                     'create',
                     'load',
-                    'getData',
+                    'getData'
+                ]
+            )
+            ->onlyMethods(
+                [
                     'getRuleId',
                     'getCondition',
                     'getActionCondition',
@@ -244,7 +253,8 @@ class ToModelTest extends TestCase
             ->willReturn([]);
         $ruleModel = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'load', 'getId', 'getData'])
+            ->addMethods(['create'])
+            ->onlyMethods(['load', 'getId', 'getData'])
             ->getMock();
         $ruleModel
             ->expects($this->atLeastOnce())
@@ -287,7 +297,7 @@ class ToModelTest extends TestCase
     /**
      * @return array
      */
-    public function expectedDatesProvider()
+    public static function expectedDatesProvider()
     {
         return [
             'mm/dd/yyyy to yyyy-mm-dd' => [

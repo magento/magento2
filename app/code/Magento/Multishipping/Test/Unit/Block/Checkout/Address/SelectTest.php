@@ -130,7 +130,7 @@ class SelectTest extends TestCase
     /**
      * @return array
      */
-    public function isDefaultAddressDataProvider()
+    public static function isDefaultAddressDataProvider()
     {
         return [
             'yes' => [1, true],

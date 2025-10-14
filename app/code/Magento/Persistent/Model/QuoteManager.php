@@ -23,22 +23,16 @@ use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 class QuoteManager
 {
     /**
-     * Persistent session
-     *
      * @var \Magento\Persistent\Helper\Session
      */
     protected $persistentSession;
 
     /**
-     * Checkout session
-     *
      * @var \Magento\Checkout\Model\Session
      */
     protected $checkoutSession;
 
     /**
-     * Persistent data
-     *
      * @var Data
      */
     protected $persistentData;
@@ -163,30 +157,24 @@ class QuoteManager
      * Converts persistent cart tied to logged out customer to a guest cart, retaining customer information required for
      * checkout
      *
+     * @param Quote $quote
      * @return void
      */
-    public function convertCustomerCartToGuest()
+    public function convertCustomerCartToGuest(Quote $quote)
     {
-        $quoteId = $this->checkoutSession->getQuoteId();
-        /** @var $quote Quote */
-        $quote = $this->quoteRepository->get($quoteId);
-        if ($quote && $quote->getId()) {
-            $this->_setQuotePersistent = false;
-            $quote->setIsActive(true)
-                ->setCustomerId(null)
-                ->setCustomerEmail(null)
-                ->setCustomerFirstname(null)
-                ->setCustomerLastname(null)
-                ->setIsPersistent(false);
-            $quote->getAddressesCollection()->walk('setCustomerAddressId', ['customerAddressId' => null]);
-            $quote->getAddressesCollection()->walk('setCustomerId', ['customerId' => null]);
-            $quote->getAddressesCollection()->walk('setEmail', ['email' => null]);
-            $quote->collectTotals();
-            $quote->getCustomer()->setId(null);
-            $this->persistentSession->getSession()->removePersistentCookie();
-            $this->persistentSession->setSession(null);
-            $this->quoteRepository->save($quote);
-        }
+        $this->_setQuotePersistent = false;
+        $billingAddress = $quote->getBillingAddress();
+        $quote->setCustomerId(null)
+            ->setCustomerGroupId(GroupInterface::NOT_LOGGED_IN_ID)
+            ->setCustomerEmail($billingAddress->getEmail())
+            ->setCustomerFirstname($billingAddress->getFirstname())
+            ->setCustomerLastname($billingAddress->getLastname())
+            ->setIsPersistent(false);
+        $quote->getAddressesCollection()->walk('setCustomerAddressId', ['customerAddressId' => null]);
+        $quote->getAddressesCollection()->walk('setCustomerId', ['customerId' => null]);
+        $quote->collectTotals();
+        $quote->getCustomer()->setId(null);
+        $this->quoteRepository->save($quote);
     }
 
     /**

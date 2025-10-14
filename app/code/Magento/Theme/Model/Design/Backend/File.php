@@ -78,11 +78,11 @@ class File extends BackendFile
         RequestDataInterface $requestData,
         Filesystem $filesystem,
         UrlInterface $urlBuilder,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        Database $databaseHelper = null,
-        IoFileSystem $ioFileSystem = null
+        ?Database $databaseHelper = null,
+        ?IoFileSystem $ioFileSystem = null
     ) {
         parent::__construct(
             $context,

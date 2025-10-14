@@ -54,10 +54,10 @@ class CollectionTest extends TestCase
     {
         $this->entityFactory = $this->getMockBuilder(EntityFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->themeConfigFactory = $this->getMockBuilder(\Magento\Framework\Config\ThemeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->directory = $this->getMockBuilder(ReadInterface::class)
@@ -196,7 +196,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addConstraintDataProvider()
+    public static function addConstraintDataProvider()
     {
         return [
             'area' => [

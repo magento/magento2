@@ -192,9 +192,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
         ProductRepositoryInterface $productRepository,
         $useCurrentWebsite = true,
         array $data = [],
-        Json $serializer = null,
-        StockRegistryInterface $stockRegistry = null,
-        ScopeConfigInterface $scopeConfig = null,
+        ?Json $serializer = null,
+        ?StockRegistryInterface $stockRegistry = null,
+        ?ScopeConfigInterface $scopeConfig = null,
         ?StockConfigurationInterface $stockConfiguration = null
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;

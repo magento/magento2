@@ -182,7 +182,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue(): array
+    public static function dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue(): array
     {
         return [
             1 => [Type::TYPE_DOWNLOADABLE, true],

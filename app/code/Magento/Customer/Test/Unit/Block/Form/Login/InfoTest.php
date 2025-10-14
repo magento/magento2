@@ -41,19 +41,19 @@ class InfoTest extends TestCase
         $this->customerUrl = $this->getMockBuilder(
             Url::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getRegisterUrl']
             )->getMock();
         $this->checkoutData = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['isContextCheckout']
             )->getMock();
         $this->coreUrl = $this->getMockBuilder(
             \Magento\Framework\Url\Helper\Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['addRequestParam']
             )->getMock();
 

@@ -42,7 +42,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderDirectSettersGettersMethods(): array
+    public static function dataProviderDirectSettersGettersMethods(): array
     {
         return [
             ['setShippingPriceIncludeTax', 'shippingPriceIncludesTax', true],
@@ -80,7 +80,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetCalculationSequence(): array
+    public static function dataProviderGetCalculationSequence(): array
     {
         return [
             [true,  true,  Calculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],
@@ -118,7 +118,7 @@ class ConfigTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderScopeConfigMethods(): array
+    public static function dataProviderScopeConfigMethods(): array
     {
         return [
             [
@@ -380,5 +380,51 @@ class ConfigTest extends TestCase
                 'http:\\kiwis.rule.com'
             ]
         ];
+    }
+
+    /**
+     * Tests check if necessary do product price conversion
+     *
+     * @return void
+     */
+    public function testNeedPriceConversion(): void
+    {
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        Config::XML_PATH_DISPLAY_CART_SHIPPING,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        true
+                    ],
+                    [
+                        Config::XML_PATH_DISPLAY_CART_SHIPPING,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        false
+                    ],
+                    [
+                        Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        true
+                    ],
+                    [
+                        Config::XML_PATH_DISPLAY_CART_PRICE,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        false
+                    ]
+                ]
+            );
+        /** @var Config */
+        $model = new Config($scopeConfigMock);
+        $model->setPriceIncludesTax(false);
+        $model->setNeedUseShippingExcludeTax(false);
+        $model->setShippingPriceIncludeTax(false);
+        $this->assertEquals(true, $model->needPriceConversion());
     }
 }

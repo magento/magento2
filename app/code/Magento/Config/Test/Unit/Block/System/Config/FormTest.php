@@ -183,7 +183,7 @@ class FormTest extends TestCase
         $objectArguments = $helper->getConstructArguments(Form::class, $data);
         $this->_objectBuilder = $this->getMockBuilder(Form::class)
             ->setConstructorArgs($objectArguments)
-            ->setMethods(['something']);
+            ->addMethods(['something']);
         $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -209,7 +209,7 @@ class FormTest extends TestCase
     public function testInitForm($sectionIsVisible)
     {
         /** @var Form|MockObject $object */
-        $object = $this->_objectBuilder->setMethods(['_initGroup'])->getMock();
+        $object = $this->_objectBuilder->onlyMethods(['_initGroup'])->getMock();
         $object->setData('scope_id', 1);
         $this->_formFactoryMock->expects($this->any())->method('create')->willReturn($this->_formMock);
         $this->_formMock->expects($this->once())->method('setParent')->with($object);
@@ -255,7 +255,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function initFormDataProvider()
+    public static function initFormDataProvider()
     {
         return [
             [false],
@@ -273,7 +273,7 @@ class FormTest extends TestCase
     public function testInitGroup($shouldCloneFields, $prefixes, $callNum)
     {
         /** @var Form|MockObject $object */
-        $object = $this->_objectBuilder->setMethods(['initFields'])->getMock();
+        $object = $this->_objectBuilder->onlyMethods(['initFields'])->getMock();
         $this->_formFactoryMock->expects($this->any())->method('create')->willReturn($this->_formMock);
         $this->_formMock->expects($this->once())->method('setParent')->with($object);
         $this->_formMock->expects($this->once())->method('setBaseUrl')->with('base_url');
@@ -374,7 +374,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function initGroupDataProvider()
+    public static function initGroupDataProvider()
     {
         return [
             [true, [['field' => 'field', 'label' => 'label']], 1],
@@ -575,7 +575,7 @@ class FormTest extends TestCase
     /**
      * @return array
      */
-    public function initFieldsDataProvider()
+    public static function initFieldsDataProvider()
     {
         return [
             [

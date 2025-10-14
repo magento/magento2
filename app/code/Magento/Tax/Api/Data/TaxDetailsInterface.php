@@ -71,7 +71,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @param \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null);
+    public function setAppliedTaxes(?array $appliedTaxes = null);
 
     /**
      * Get TaxDetails items
@@ -86,7 +86,7 @@ interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @param \Magento\Tax\Api\Data\TaxDetailsItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

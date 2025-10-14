@@ -95,7 +95,7 @@ class DeleteByDirectoryPathTest extends TestCase
      *
      * @return array
      */
-    public function directoryPathDataProvider(): array
+    public static function directoryPathDataProvider(): array
     {
         return [
             'Existing path' => [self::DIRECTORY_PATH],

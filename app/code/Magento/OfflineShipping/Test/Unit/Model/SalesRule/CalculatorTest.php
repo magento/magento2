@@ -24,7 +24,7 @@ class CalculatorTest extends TestCase
     {
         $this->_model = $this->createPartialMock(
             Calculator::class,
-            ['_getRules', '__wakeup']
+            ['getRules', '__wakeup']
         );
     }
 
@@ -40,7 +40,7 @@ class CalculatorTest extends TestCase
         $item->expects($this->once())->method('getAddress')->willReturn($addressMock);
 
         $this->_model->expects($this->once())
-            ->method('_getRules')
+            ->method('getRules')
             ->with($addressMock)
             ->willReturn([]);
 

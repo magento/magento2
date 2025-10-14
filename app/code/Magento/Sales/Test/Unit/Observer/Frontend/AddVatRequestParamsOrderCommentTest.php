@@ -71,7 +71,7 @@ class AddVatRequestParamsOrderCommentTest extends TestCase
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getShippingAddress', 'addStatusHistoryComment', 'getBillingAddress'])
+            ->onlyMethods(['getShippingAddress', 'addStatusHistoryComment', 'getBillingAddress'])
             ->getMock();
         $orderMock->expects($this->any())
             ->method('getShippingAddress')
@@ -98,7 +98,7 @@ class AddVatRequestParamsOrderCommentTest extends TestCase
     /**
      * @return array
      */
-    public function addVatRequestParamsOrderCommentDataProvider()
+    public static function addVatRequestParamsOrderCommentDataProvider()
     {
         return [
             [

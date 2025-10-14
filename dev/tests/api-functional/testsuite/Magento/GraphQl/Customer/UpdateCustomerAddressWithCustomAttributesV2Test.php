@@ -36,7 +36,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'attribute_set_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_group_id' => 1,
             'attribute_code' => 'simple_attribute',
-            'sort_order' => 2
+            'sort_order' => 2,
+            'is_required' => 1,
+            'frontend_label' => 'simple_attribute'
         ],
         'simple_attribute',
     ),
@@ -310,6 +312,55 @@ QUERY;
                 $this->customerAddress->getId(),
                 $this->multiselect_attribute->getAttributeCode(),
                 "1345"
+            ),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($this->customer->getEmail(), $this->currentPassword)
+        );
+    }
+
+    /**
+     * @return void
+     * @throws AuthenticationException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testAttemptToUpdateCustomerAddressNonPassingRequiredCustomAttribute()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("\"simple_attribute\" is a required value.");
+
+        $query = <<<QUERY
+mutation {
+  updateCustomerAddress(id: "%s", input: {
+    firstname: "Testing"
+    custom_attributesV2: [
+      {
+        attribute_code: "%s"
+        value: ""
+      }
+    ]
+  }) {
+    custom_attributesV2 {
+      code
+      ... on AttributeValue {
+        value
+      }
+      ... on AttributeSelectedOptions {
+        selected_options {
+          value
+          label
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation(
+            sprintf(
+                $query,
+                $this->customerAddress->getId(),
+                $this->simple_attribute->getAttributeCode(),
             ),
             [],
             '',

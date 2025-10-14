@@ -9,19 +9,32 @@ namespace Magento\Framework\Indexer\Test\Unit\Config;
 
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Indexer\Config\Converter;
+use Magento\Framework\Indexer\Config\Converter\SortingAdjustmentInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConverterTest extends TestCase
 {
     /**
-     * @var Converter|MockObject
+     * @var Converter
      */
     protected $_model;
 
+    /**
+     * @var SortingAdjustmentInterface|MockObject
+     */
+    private $sortingAdjustment;
+
     protected function setUp(): void
     {
-        $this->_model = new Converter();
+        $this->sortingAdjustment = $this->getMockBuilder(SortingAdjustmentInterface::class)
+            ->getMockForAbstractClass();
+        $this->sortingAdjustment->method("adjust")->will(
+            $this->returnCallback(function ($arg) {
+                return $arg;
+            })
+        );
+        $this->_model = new Converter($this->sortingAdjustment);
     }
 
     public function testConvert()
@@ -49,7 +62,7 @@ class ConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithDependenciesDataProvider()
+    public static function convertWithDependenciesDataProvider()
     {
         return [
             [
@@ -116,18 +129,18 @@ XML
     /**
      * @return array
      */
-    public function convertWithCircularDependenciesDataProvider()
+    public static function convertWithCircularDependenciesDataProvider()
     {
         return [
             'Circular dependency on the first level' => [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_2"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_1"/></dependencies></indexer>'
                     . '</config>',
                 'exceptionMessage' => "Circular dependency references from 'indexer_2' to 'indexer_1'.",
             ],
             'Circular dependency a deeper than the first level' => [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_2"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_3"/></dependencies></indexer>'
                     . '<indexer id="indexer_3"><dependencies><indexer id="indexer_4"/></dependencies></indexer>'
@@ -155,11 +168,11 @@ XML
     /**
      * @return array
      */
-    public function convertWithDependencyOnNotExistingIndexerDataProvider()
+    public static function convertWithDependencyOnNotExistingIndexerDataProvider()
     {
         return [
             [
-                'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
+                'inputXml' => '<?xml version="1.0" encoding="UTF-8"?><config>'
                     . '<indexer id="indexer_1"><dependencies><indexer id="indexer_3"/></dependencies></indexer>'
                     . '<indexer id="indexer_2"><dependencies><indexer id="indexer_1"/></dependencies></indexer>'
                     . '</config>',

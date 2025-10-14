@@ -183,7 +183,7 @@ class TaxRuleRepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function saveExceptionsDataProvider()
+    public static function saveExceptionsDataProvider()
     {
         return [
             [

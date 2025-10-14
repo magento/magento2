@@ -6,17 +6,24 @@
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Model\ProductRepository;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Catalog\Model\ProductRepositoryFactory;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 
 /**
- * BasePriceStorage test.
+ * Base price storage test to test the update and update with invalid parameter.
  */
 class BasePriceStorageTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogBasePriceStorageV1';
-    const SERVICE_VERSION = 'V1';
-    const SIMPLE_PRODUCT_SKU = 'simple';
+    private const SERVICE_NAME = 'catalogBasePriceStorageV1';
+    private const SERVICE_VERSION = 'V1';
+    private const SIMPLE_PRODUCT_SKU = 'simple';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -24,11 +31,23 @@ class BasePriceStorageTest extends WebapiAbstract
     private $objectManager;
 
     /**
+     * @var ProductRepositoryFactory
+     */
+    private $repositoryFactory;
+
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * Set up.
      */
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->repositoryFactory = Bootstrap::getObjectManager()->get(ProductRepositoryFactory::class);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -156,5 +175,52 @@ class BasePriceStorageTest extends WebapiAbstract
         ];
 
         $this->assertEquals($expectedResponse, $response);
+    }
+
+    /**
+     * Test update last updated at method.
+     *
+     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+    ]
+    public function testUpdateLastUpdatedAt()
+    {
+        $product = $this->fixtures->get('product');
+        $productSku = $product->getSku();
+        /** @var ProductRepository $beforeProductRepository */
+        $beforeProductRepository = $this->repositoryFactory->create();
+        $beforeProductUpdatedAt = $beforeProductRepository->get($productSku)->getUpdatedAt();
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/base-prices',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Update',
+            ],
+        ];
+        $newPrice = 9999;
+        $storeId = 0;
+        $response = $this->_webApiCall(
+            $serviceInfo,
+            [
+                'prices' => [
+                    [
+                        'price' => $newPrice,
+                        'store_id' => $storeId,
+                        'sku' => $productSku,
+                    ]
+                ]
+            ]
+        );
+        $this->assertEmpty($response);
+
+        /** @var ProductRepository $afterProductRepository */
+        $afterProductRepository = $this->repositoryFactory->create();
+        $afterProductUpdatedAt = $afterProductRepository->get($productSku)->getUpdatedAt();
+        $this->assertTrue(strtotime($afterProductUpdatedAt) >= strtotime($beforeProductUpdatedAt));
     }
 }

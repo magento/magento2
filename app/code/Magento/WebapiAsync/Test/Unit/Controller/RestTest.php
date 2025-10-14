@@ -122,30 +122,30 @@ class RestTest extends TestCase
         $this->requestMock->expects($this->any())->method('getHttpHost')->willReturn('testHostName.com');
         $this->responseMock = $this->getResponseMock();
         $routerMock = $this->getMockBuilder(Router::class)
-            ->setMethods(['match'])
+            ->onlyMethods(['match'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->routeMock = $this->getRouteMock();
         $this->serviceMock = $this->getMockBuilder(self::SERVICE_ID)
-            ->setMethods([self::SERVICE_METHOD])
+            ->addMethods([self::SERVICE_METHOD])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->oauthServiceMock = $this->getMockBuilder(OauthInterface::class)
-            ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
+            ->onlyMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
         $this->authorizationMock = $this->getMockBuilder(Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $paramsOverriderMock = $this->getMockBuilder(ParamsOverrider::class)
-            ->setMethods(['overrideParams'])
+            ->addMethods(['overrideParams'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethodReturnType'])
+            ->addMethods(['getMethodReturnType'])
             ->getMockForAbstractClass();
 
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
@@ -159,7 +159,7 @@ class RestTest extends TestCase
 
         $this->serviceInputProcessorMock = $this->getMockBuilder(ServiceInputProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['process'])->getMock();
+            ->onlyMethods(['process'])->getMock();
 
         $areaListMock = $this->createMock(AreaList::class);
         $areaMock = $this->getMockForAbstractClass(AreaInterface::class);
@@ -271,7 +271,7 @@ class RestTest extends TestCase
 
         $this->swaggerGeneratorMock = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate', 'getListOfServices'])
+            ->onlyMethods(['generate', 'getListOfServices'])
             ->getMockForAbstractClass();
 
         $this->asyncSchemaRequestProcessor = $objectManager->getObject(
@@ -284,7 +284,7 @@ class RestTest extends TestCase
 
         $this->asyncRequestProcessor =
             $this->getMockBuilder(AsynchronousRequestProcessor::class)
-                ->setMethods(['process'])
+                ->onlyMethods(['process'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -305,7 +305,7 @@ class RestTest extends TestCase
     private function getRouteMock()
     {
         return $this->getMockBuilder(Route::class)
-            ->setMethods([
+            ->onlyMethods([
                 'isSecure',
                 'getServiceMethod',
                 'getServiceClass',
@@ -322,7 +322,7 @@ class RestTest extends TestCase
     private function getRequestMock()
     {
         return $this->getMockBuilder(Request::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isSecure',
                     'getRequestData',
@@ -343,7 +343,7 @@ class RestTest extends TestCase
     private function getResponseMock()
     {
         return $this->getMockBuilder(Response::class)
-            ->setMethods(['sendResponse', 'prepareResponse', 'setHeader'])
+            ->onlyMethods(['sendResponse', 'prepareResponse', 'setHeader'])
             ->disableOriginalConstructor()
             ->getMock();
     }

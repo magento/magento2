@@ -90,14 +90,13 @@ class EmptyGroupCategoryTest extends TestCase
             ->willReturn([$groupMock1, $groupMock2]);
         $this->urlBuilderMock->expects($this->exactly(2))
             ->method('getUrl')
-            ->withConsecutive(
-                ['adminhtml/system_store/editGroup', ['group_id' => 1]],
-                ['adminhtml/system_store/editGroup', ['group_id' => 2]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'http://url1.com',
-                'http://url2.com'
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1== 'adminhtml/system_store/editGroup' && $arg2['group_id'] == 1) {
+                    return 'http://url1.com';
+                } elseif ($arg1== 'adminhtml/system_store/editGroup' && $arg2['group_id'] == 2) {
+                    return 'http://url2.com';
+                }
+            });
 
         $this->assertEquals(
             'The following stores are not associated with a root category: <a href="http://url1.com">groupName1</a>, '
@@ -137,7 +136,7 @@ class EmptyGroupCategoryTest extends TestCase
     /**
      * @return array
      */
-    public function isDisplayedDataProvider()
+    public static function isDisplayedDataProvider()
     {
         return [
             [

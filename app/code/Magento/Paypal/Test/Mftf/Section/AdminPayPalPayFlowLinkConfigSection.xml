@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminPayPalPayFlowLinkConfigSection">
+        <element name="configureBtn" type="button" selector="//button[@id='payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us-head']" parameterized="true"/>
+        <element name="partner" type="text" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_partner" parameterized="true"/>
+        <element name="user" type="text" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_user" parameterized="true"/>
+        <element name="vendor" type="text" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_vendor" parameterized="true"/>
+        <element name="password" type="text" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_pwd" parameterized="true"/>
+        <element name="testMode" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_payflow_link_payflow_link_sandbox_flag" parameterized="true"/>
+        <element name="enableSolution" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_enable_payflow_link" parameterized="true"/>
+        <element name="paymentGateway" type="button" selector="//*[@id='payment_{{countryCode}}_paypal_payment_gateways-head']   " parameterized="true"/>
+        <element name="paypalAllInOnePaymentSolutions" type="input" selector="//*[contains(@id, 'payment_{{countryCode}}_paypal_group_all_in_one-head')]" parameterized="true" />
+        <element name="enablePaypalCredit" type="select" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_enable_express_checkout_bml" parameterized="true"/>
+        <element name="enableExpressCheckout" type="select" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_enable_express_checkout" parameterized="true"/>
+        <element name="disabledEnableSolution" type="select" selector="//*[contains(@id,'payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_enable_payflow_link')]//label[@class='enabled']" parameterized="true"/>
+        <element name="disabledPaypalCredit" type="select" selector="//*[contains(@id,'payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_enable_express_checkout_bml')]//label[@class='enabled']" parameterized="true"/>
+        <element name="disabledExpressCheckout" type="select" selector="//*[contains(@id,'payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_enable_express_checkout')]//label[@class='enabled']" parameterized="true"/>
+        <element name="sortOrder" type="input" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us_payflow_link_required_express_checkout_bml_sort_order" parameterized="true"/>
+        <element name="closeButton" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_payflow_link_us-head span[class='state-opened']" parameterized="true"/>
+    </section>
+</sections>

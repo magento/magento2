@@ -96,6 +96,9 @@ class DeployStaticContentTest extends TestCase
      * @param array $options
      * @param string $expectedContentVersion
      * @dataProvider deployDataProvider
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testDeploy($options, $expectedContentVersion)
     {
@@ -129,7 +132,7 @@ class DeployStaticContentTest extends TestCase
         }
 
         $strategy = $this->getMockBuilder(CompactDeploy::class)
-            ->setMethods(['deploy'])
+            ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         if ($options['refresh-content-version-only']) {
@@ -147,19 +150,19 @@ class DeployStaticContentTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $deployRjsConfig = $this->getMockBuilder(DeployRequireJsConfig::class)
-            ->setMethods(['deploy'])
+            ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $deployI18n = $this->getMockBuilder(DeployTranslationsDictionary::class)
-            ->setMethods(['deploy'])
+            ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $deployBundle = $this->getMockBuilder(Bundle::class)
-            ->setMethods(['deploy'])
+            ->onlyMethods(['deploy'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $minifyTemplates = $this->getMockBuilder(MinifyTemplates::class)
-            ->setMethods(['minifyTemplates'])
+            ->onlyMethods(['minifyTemplates'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -169,23 +172,41 @@ class DeployStaticContentTest extends TestCase
         } else {
             $this->objectManager->expects($this->exactly(4))
                 ->method('create')
-                ->withConsecutive(
-                    [DeployPackage::class, ['logger' => $this->logger]],
-                    [DeployRequireJsConfig::class, ['logger' => $this->logger]],
-                    [DeployTranslationsDictionary::class, ['logger' => $this->logger]],
-                    [Bundle::class, ['logger' => $this->logger]]
-                )
-                ->willReturnOnConsecutiveCalls(
-                    $deployPackageService,
-                    $deployRjsConfig,
-                    $deployI18n,
-                    $deployBundle
+                ->willReturnCallback(
+                    function (
+                        $class,
+                        $params
+                    ) use (
+                        $deployPackageService,
+                        $deployRjsConfig,
+                        $deployI18n,
+                        $deployBundle
+                    ) {
+                        if ($class === DeployPackage::class &&
+                            $params === ['logger' => $this->logger]) {
+                            return $deployPackageService;
+                        } elseif ($class === DeployRequireJsConfig::class &&
+                            $params === ['logger' => $this->logger]) {
+                            return $deployRjsConfig;
+                        } elseif ($class === DeployTranslationsDictionary::class &&
+                            $params === ['logger' => $this->logger]) {
+                            return $deployI18n;
+                        } elseif ($class === Bundle::class &&
+                            $params === ['logger' => $this->logger]) {
+                            return $deployBundle;
+                        }
+                    }
                 );
 
             $this->objectManager->expects($this->exactly(1))
                 ->method('get')
-                ->withConsecutive([MinifyTemplates::class])
-                ->willReturnOnConsecutiveCalls($minifyTemplates);
+                ->willReturnCallback(
+                    function ($class) use ($minifyTemplates) {
+                        if ($class === MinifyTemplates::class) {
+                            return $minifyTemplates;
+                        }
+                    }
+                );
         }
 
         $this->assertNull($this->service->deploy($options));
@@ -194,7 +215,7 @@ class DeployStaticContentTest extends TestCase
     /**
      * @return array
      */
-    public function deployDataProvider()
+    public static function deployDataProvider()
     {
         return [
             [

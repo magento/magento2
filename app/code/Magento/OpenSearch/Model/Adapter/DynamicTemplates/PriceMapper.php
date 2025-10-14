@@ -19,7 +19,8 @@ class PriceMapper implements MapperInterface
     {
         $templates[] = [
             'price_mapping' => [
-                'match' => 'price_*',
+                "match_pattern" => "regex",
+                'match' => 'price_\\d+_\\d+',
                 'match_mapping_type' => 'string',
                 'mapping' => [
                     'type' => 'double',

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +17,9 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor;
+use Magento\Quote\Model\Quote\Item\CartItemValidatorInterface;
 use Magento\Quote\Model\Quote\Item\Repository;
+use Magento\Quote\Model\QuoteMutexInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -111,7 +112,9 @@ class RepositoryTest extends TestCase
             $this->productRepositoryMock,
             $this->itemDataFactoryMock,
             $this->optionsProcessorMock,
-            ['custom_options' => $this->customOptionProcessor]
+            ['custom_options' => $this->customOptionProcessor],
+            $this->createMock(QuoteMutexInterface::class),
+            $this->createMock(CartItemValidatorInterface::class)
         );
     }
 
@@ -146,7 +149,27 @@ class RepositoryTest extends TestCase
         $quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
         $quoteMock->expects($this->once())->method('getLastAddedItem')->willReturn($itemId);
 
-        $this->assertEquals($itemId, $this->repository->save($this->itemMock));
+        $this->assertEquals(
+            $itemId,
+            $this->invokeMethod($this->repository, 'saveItem', [$this->itemMock])
+        );
+    }
+
+    /**
+     * Invokes private method.
+     *
+     * @param $object
+     * @param $methodName
+     * @param array $parameters
+     * @return mixed
+     */
+    private function invokeMethod(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 
     /**

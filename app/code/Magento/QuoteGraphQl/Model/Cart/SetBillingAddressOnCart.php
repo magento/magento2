@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,6 +83,9 @@ class SetBillingAddressOnCart
 
         $this->validateBillingAddress($billingAddress);
         $this->assignBillingAddressToCart->execute($cart, $billingAddress, $useForShipping);
+        if ($sameAsShipping) {
+            $cart->getShippingAddress()->setSameAsBilling(1)->save();
+        }
     }
 
     /**
@@ -146,7 +149,7 @@ class SetBillingAddressOnCart
 
         if (count($shippingAddresses) > 1) {
             throw new GraphQlInputException(
-                __('Could not use the "use_for_shipping" option, because multiple shipping addresses have already been set.')
+                __('Could not use "use_for_shipping" option, as multiple shipping addresses have already been set.')
             );
         }
     }

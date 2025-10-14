@@ -85,7 +85,7 @@ class AbstractHelperTest extends TestCase
     /**
      * @return array
      */
-    public function escapeLikeValueDataProvider()
+    public static function escapeLikeValueDataProvider()
     {
         return [
             [

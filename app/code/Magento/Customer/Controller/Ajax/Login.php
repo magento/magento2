@@ -90,8 +90,8 @@ class Login extends \Magento\Framework\App\Action\Action implements HttpPostActi
         AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        CookieManagerInterface $cookieManager = null,
-        CookieMetadataFactory $cookieMetadataFactory = null
+        ?CookieManagerInterface $cookieManager = null,
+        ?CookieMetadataFactory $cookieMetadataFactory = null
     ) {
         parent::__construct($context);
         $this->customerSession = $customerSession;

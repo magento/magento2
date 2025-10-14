@@ -43,4 +43,8 @@ type StoreConfig @doc(description: "Contains information about a store's configu
     secure_base_static_url : String @doc(description: "The secure fully-qualified URL that specifies the location of static view files.")
     secure_base_media_url : String @doc(description: "The secure fully-qualified URL that specifies the location of media files.")
     use_store_in_url: Boolean @doc(description: "Indicates whether the store code should be used in the URL.")
+    default_country: String @doc(description: "Extended Config Data - general/country/default")
+    countries_with_required_region: String @doc(description: "Extended Config Data - general/region/state_required")
+    optional_zip_countries: String @doc(description: "Extended Config Data - general/country/optional_zip_countries")
+    display_state_if_optional: Boolean @doc(description: "Extended Config Data - general/region/display_all")
 }

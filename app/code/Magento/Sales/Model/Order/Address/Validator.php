@@ -63,8 +63,8 @@ class Validator
     public function __construct(
         DirectoryHelper $directoryHelper,
         CountryFactory $countryFactory,
-        EavConfig $eavConfig = null,
-        EmailAddressValidator $emailAddressValidator = null
+        ?EavConfig $eavConfig = null,
+        ?EmailAddressValidator $emailAddressValidator = null
     ) {
         $this->directoryHelper = $directoryHelper;
         $this->countryFactory = $countryFactory;

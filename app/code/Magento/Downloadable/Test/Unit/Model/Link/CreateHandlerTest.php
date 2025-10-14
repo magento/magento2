@@ -48,7 +48,7 @@ class CreateHandlerTest extends TestCase
 
         /** @var ProductExtensionInterface|MockObject $productExtensionMock */
         $productExtensionMock = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->setMethods(['getDownloadableProductLinks'])
+            ->addMethods(['getDownloadableProductLinks'])
             ->getMockForAbstractClass();
         $productExtensionMock->expects($this->once())
             ->method('getDownloadableProductLinks')
@@ -56,7 +56,8 @@ class CreateHandlerTest extends TestCase
 
         /** @var ProductInterface|MockObject $entityMock */
         $entityMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getTypeId', 'getExtensionAttributes', 'getSku'])
             ->getMockForAbstractClass();
         $entityMock->expects($this->once())
             ->method('getTypeId')
@@ -86,7 +87,8 @@ class CreateHandlerTest extends TestCase
     {
         /** @var ProductInterface|MockObject $entityMock */
         $entityMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getTypeId', 'getExtensionAttributes', 'getSku'])
             ->getMockForAbstractClass();
         $entityMock->expects($this->once())
             ->method('getTypeId')

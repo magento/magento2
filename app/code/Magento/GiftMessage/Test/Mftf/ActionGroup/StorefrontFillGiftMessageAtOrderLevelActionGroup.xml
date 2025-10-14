@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontFillGiftMessageAtOrderLevelActionGroup">
+        <annotations>
+            <description>Fill gift messages at order level.</description>
+        </annotations>
+        <waitForElementClickable selector="{{StorefrontOrderGiftSection.giftMessageTitle}}" stepKey="waitToClickOnGiftOptionsAtOrderLevel"/>
+        <click selector="{{StorefrontOrderGiftSection.giftMessageTitle}}" stepKey="clickOnGiftOptionsAtOrderLevel"/>
+        <waitForElementVisible selector="{{StorefrontOrderGiftSection.giftMessageTo}}" stepKey="waitTillToFieldIsVisible"/>
+        <fillField selector="{{StorefrontOrderGiftSection.giftMessageTo}}" userInput="Josh" stepKey="fillToField"/>
+        <waitForElementVisible selector="{{StorefrontOrderGiftSection.giftMessageFrom}}" stepKey="waitTillFromFieldIsVisible"/>
+        <fillField selector="{{StorefrontOrderGiftSection.giftMessageFrom}}" userInput="July" stepKey="fillFromField"/>
+        <waitForElementVisible selector="{{StorefrontOrderGiftSection.giftMessageMessage}}" stepKey="waitTillMessageFieldIsVisible"/>
+        <fillField selector="{{StorefrontOrderGiftSection.giftMessageMessage}}" userInput="This is gift message for ALL ORDERED ITEMS" stepKey="fillMessageField"/>
+        <waitForElementClickable selector="{{StorefrontOrderGiftSection.giftMessageUpdateButton}}" stepKey="waitForUpdateButton"/>
+        <click selector="{{StorefrontOrderGiftSection.giftMessageUpdateButton}}" stepKey="saveGiftMessage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded" />
+        <scrollTo selector="{{StorefrontOrderGiftSection.giftMessageSummary}}" stepKey="scrollToGiftMessage"/>
+        <see selector="{{StorefrontOrderGiftSection.giftMessageSummary}}" userInput="This is gift message for ALL ORDERED ITEMS" stepKey="seeGiftMessage"/>
+    </actionGroup>
+</actionGroups>

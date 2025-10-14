@@ -43,10 +43,10 @@ class InstantPurchaseOptionFactory
      * @since 100.2.0
      */
     public function create(
-        PaymentTokenInterface $paymentToken = null,
-        Address $shippingAddress = null,
-        Address $billingAddress = null,
-        ShippingMethodInterface $shippingMethod = null
+        ?PaymentTokenInterface $paymentToken = null,
+        ?Address $shippingAddress = null,
+        ?Address $billingAddress = null,
+        ?ShippingMethodInterface $shippingMethod = null
     ): InstantPurchaseOption {
         return $this->objectManager->create(InstantPurchaseOption::class, [
             'paymentToken' => $paymentToken,

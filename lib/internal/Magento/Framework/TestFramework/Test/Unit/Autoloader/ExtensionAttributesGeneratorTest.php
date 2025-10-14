@@ -42,7 +42,7 @@ class ExtensionAttributesGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function generateNonExtensionAttributesDataProvider()
+    public static function generateNonExtensionAttributesDataProvider()
     {
         return [
             'non-extension attribute class' => ['\My\SimpleClass'],

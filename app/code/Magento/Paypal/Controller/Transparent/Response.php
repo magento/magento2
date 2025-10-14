@@ -81,8 +81,8 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         ResponseValidator $responseValidator,
         LayoutFactory $resultLayoutFactory,
         Transparent $transparent,
-        Session $sessionTransparent = null,
-        PaymentFailuresInterface $paymentFailures = null
+        ?Session $sessionTransparent = null,
+        ?PaymentFailuresInterface $paymentFailures = null
     ) {
         parent::__construct($context);
         $this->coreRegistry = $coreRegistry;

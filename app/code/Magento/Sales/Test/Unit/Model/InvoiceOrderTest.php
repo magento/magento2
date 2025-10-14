@@ -189,7 +189,7 @@ class InvoiceOrderTest extends TestCase
 
         $this->errorMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
+            ->onlyMethods(['hasMessages', 'getMessages', 'addMessage'])
             ->getMockForAbstractClass();
 
         $this->invoiceOrder = new InvoiceOrder(
@@ -430,7 +430,7 @@ class InvoiceOrderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'TestWithNotifyTrue' => [1, true, [1 => 2], true, true],

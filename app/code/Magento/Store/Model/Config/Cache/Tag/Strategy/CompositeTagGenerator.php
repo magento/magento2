@@ -23,7 +23,7 @@ class CompositeTagGenerator implements TagGeneratorInterface
      * @param TagGeneratorInterface[] $tagGenerators
      */
     public function __construct(
-        array $tagGenerators
+        array $tagGenerators = []
     ) {
         $this->tagGenerators = $tagGenerators;
     }

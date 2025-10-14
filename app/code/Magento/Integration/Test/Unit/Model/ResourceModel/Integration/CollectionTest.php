@@ -72,8 +72,15 @@ class CollectionTest extends TestCase
     {
         $this->collection
             ->method('_translateCondition')
-            ->withConsecutive(['endpoint', ['like' => 'http:%']], ['identity_link_url', ['like' => 'http:%']])
-            ->willReturnOnConsecutiveCalls('endpoint like \'http:%\'', 'identity_link_url like \'http:%\'');
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'endpoint' && $arg2 == ['like' => 'http:%']) {
+                        return 'endpoint like \'http:%\'';
+                    } elseif ($arg1 == 'identity_link_url' && $arg2 == ['like' => 'http:%']) {
+                        return 'identity_link_url like \'http:%\'';
+                    }
+                }
+            );
 
         $this->select->expects($this->once())
             ->method('where')

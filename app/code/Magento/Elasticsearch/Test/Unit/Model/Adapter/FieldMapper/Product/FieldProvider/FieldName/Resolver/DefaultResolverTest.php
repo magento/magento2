@@ -46,11 +46,11 @@ class DefaultResolverTest extends TestCase
         $objectManager = new ObjectManagerHelper($this);
         $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getFieldType'])
+            ->onlyMethods(['getFieldType'])
             ->getMockForAbstractClass();
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convert'])
+            ->onlyMethods(['convert'])
             ->getMockForAbstractClass();
 
         $this->resolver = $objectManager->getObject(
@@ -85,7 +85,7 @@ class DefaultResolverTest extends TestCase
             ->willReturn('string');
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getFrontendInput', 'isSortable'])
+            ->onlyMethods(['getAttributeCode', 'getFrontendInput', 'isSortable'])
             ->getMock();
         $attributeMock->expects($this->any())
             ->method('getAttributeCode')
@@ -109,7 +109,7 @@ class DefaultResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider()
+    public static function getFieldNameProvider()
     {
         return [
             ['', 'code', '', false, [], 'code'],

@@ -53,12 +53,13 @@ class MsrpPriceCalculatorTest extends TestCase
      * Test getMrspPriceValue() with the data provider below
      *
      * @param array $msrpPriceCalculators
-     * @param Product $productMock
+     * @param \Closure $productMock
      * @param float $expected
      * @dataProvider getMsrpPriceValueDataProvider
      */
     public function testGetMsrpPriceValue($msrpPriceCalculatorPrice, $productMock, $expected)
     {
+        $productMock = $productMock($this);
         $this->msrpGroupedCalculatorMock->expects($this->any())
             ->method('getMsrpPriceValue')->willReturn($msrpPriceCalculatorPrice);
 
@@ -70,17 +71,17 @@ class MsrpPriceCalculatorTest extends TestCase
      *
      * @return array
      */
-    public function getMsrpPriceValueDataProvider()
+    public static function getMsrpPriceValueDataProvider()
     {
         return [
             'Get Mrsp Price with product and msrp calculator and the same product type' => [
                 23.50,
-                $this->createProductMock(GroupedType::TYPE_CODE, 0),
+                static fn (self $testCase) => $testCase->createProductMock(GroupedType::TYPE_CODE, 0),
                 23.50
             ],
             'Get Mrsp Price with product and msrp calculator and the different product type' => [
                 24.88,
-                $this->createProductMock(ProductType::TYPE_SIMPLE, 24.88),
+                static fn (self $testCase) => $testCase->createProductMock(ProductType::TYPE_SIMPLE, 24.88),
                 24.88
             ]
         ];

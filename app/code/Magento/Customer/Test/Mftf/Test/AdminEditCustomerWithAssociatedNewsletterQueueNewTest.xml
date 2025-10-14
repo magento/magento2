@@ -37,6 +37,8 @@
             <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openTemplate"/>
             <actionGroup ref="AdminMarketingDeleteNewsletterTemplateActionGroup" stepKey="deleteTemplate"/>
 
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

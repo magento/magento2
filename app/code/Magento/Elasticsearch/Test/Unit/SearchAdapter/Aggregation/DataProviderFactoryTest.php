@@ -32,7 +32,7 @@ class DataProviderFactoryTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMockForAbstractClass();
         $this->factory = $objectManager->getObject(
             DataProviderFactory::class,
@@ -66,7 +66,7 @@ class DataProviderFactoryTest extends TestCase
             ->getMockForAbstractClass();
         /** @var MockObject $queryContainerMock */
         $queryContainerMock = $this->getMockBuilder(QueryContainer::class)
-            ->setMethods(['getQuery'])
+            ->onlyMethods(['getQuery'])
             ->disableOriginalConstructor()
             ->getMock();
         $queryContainerMock->expects($this->never())->method('getQuery');
@@ -81,7 +81,7 @@ class DataProviderFactoryTest extends TestCase
             ->getMock();
         /** @var MockObject $queryContainer */
         $queryContainer = $this->getMockBuilder(QueryContainer::class)
-            ->setMethods(['getQuery'])
+            ->onlyMethods(['getQuery'])
             ->disableOriginalConstructor()
             ->getMock();
         $queryContainer->expects($this->never())->method('getQuery');

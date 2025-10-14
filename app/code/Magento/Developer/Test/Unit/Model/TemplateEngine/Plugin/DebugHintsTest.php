@@ -77,7 +77,7 @@ class DebugHintsTest extends TestCase
         $this->debugHintsFactoryMock = $this->getMockBuilder(
             DebugHintsFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -155,7 +155,7 @@ class DebugHintsTest extends TestCase
     /**
      * @return array
      */
-    public function afterCreateActiveDataProvider()
+    public static function afterCreateActiveDataProvider()
     {
         return [
             ['dev/debug/template_hints_storefront', false, false, null],
@@ -214,7 +214,7 @@ class DebugHintsTest extends TestCase
     /**
      * @return array
      */
-    public function afterCreateInactiveDataProvider()
+    public static function afterCreateInactiveDataProvider()
     {
         return [
             ['dev/debug/template_hints_storefront', false, false, false, null],

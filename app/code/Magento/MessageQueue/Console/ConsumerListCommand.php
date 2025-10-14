@@ -5,6 +5,7 @@
  */
 namespace Magento\MessageQueue\Console;
 
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
  */
 class ConsumerListCommand extends Command
 {
-    const COMMAND_QUEUE_CONSUMERS_LIST = 'queue:consumers:list';
+    public const COMMAND_QUEUE_CONSUMERS_LIST = 'queue:consumers:list';
 
     /**
      * @var ConsumerConfig
@@ -37,7 +38,7 @@ class ConsumerListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -47,7 +48,7 @@ class ConsumerListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -62,6 +63,8 @@ HELP
     }
 
     /**
+     * Get Consumers
+     *
      * @return string[]
      */
     private function getConsumers()
@@ -79,6 +82,7 @@ HELP
      * @return ConsumerConfig
      *
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     private function getConsumerConfig()
     {

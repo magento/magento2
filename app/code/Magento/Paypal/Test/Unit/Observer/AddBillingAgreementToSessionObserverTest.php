@@ -180,7 +180,7 @@ class AddBillingAgreementToSessionObserverTest extends TestCase
     /**
      * @return array
      */
-    public function addBillingAgreementToSessionDataProvider()
+    public static function addBillingAgreementToSessionDataProvider()
     {
         return [[true], [false]];
     }

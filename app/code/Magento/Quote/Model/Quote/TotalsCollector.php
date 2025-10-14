@@ -95,7 +95,7 @@ class TotalsCollector
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
         \Magento\Quote\Model\QuoteValidator $quoteValidator,
-        QuantityCollector $quantityCollector = null
+        ?QuantityCollector $quantityCollector = null
     ) {
         $this->totalCollector = $totalCollector;
         $this->totalCollectorFactory = $totalCollectorFactory;

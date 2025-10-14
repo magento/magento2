@@ -76,11 +76,11 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Translate\InlineInterface $translateInline,
-        Json $jsonSerializer = null,
-        Base64Json $base64jsonSerializer = null,
-        LayoutCacheKeyInterface $layoutCacheKey = null,
+        ?Json $jsonSerializer = null,
+        ?Base64Json $base64jsonSerializer = null,
+        ?LayoutCacheKeyInterface $layoutCacheKey = null,
         ?RegexFactory $regexValidatorFactory = null,
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;

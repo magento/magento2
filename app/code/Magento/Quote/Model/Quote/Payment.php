@@ -97,12 +97,12 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         array $additionalChecks = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        \Magento\Framework\Serialize\JsonValidator $jsonValidator = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\JsonValidator $jsonValidator = null
     ) {
         $this->methodSpecificationFactory = $methodSpecificationFactory;
         $this->additionalChecks = $additionalChecks;

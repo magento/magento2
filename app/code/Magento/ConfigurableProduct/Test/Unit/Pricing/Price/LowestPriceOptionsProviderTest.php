@@ -71,28 +71,28 @@ class LowestPriceOptionsProviderTest extends TestCase
         $this->resourceConnection = $this
             ->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
+            ->onlyMethods(['getConnection'])
             ->getMock();
         $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($this->connection);
         $this->linkedProductSelectBuilder = $this
             ->getMockBuilder(LinkedProductSelectBuilderInterface::class)
-            ->setMethods(['build'])
+            ->onlyMethods(['build'])
             ->getMockForAbstractClass();
         $this->productCollection = $this
             ->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addAttributeToSelect', 'addIdFilter', 'getItems'])
+            ->onlyMethods(['addAttributeToSelect', 'addIdFilter', 'getItems'])
             ->getMock();
         $this->collectionFactory = $this
             ->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->productCollection);
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);

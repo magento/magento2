@@ -51,7 +51,7 @@ class BatchProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getBatchesDataProvider()
+    public static function getBatchesDataProvider()
     {
         return [
             [200, 600, [['from' => 1, 'to' => 200], ['from' => 201, 'to' => 400], ['from' => 401, 'to' => 600]]],

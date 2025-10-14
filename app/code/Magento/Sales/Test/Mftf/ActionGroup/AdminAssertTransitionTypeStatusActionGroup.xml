@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertTransitionTypeStatusActionGroup" extends="AdminOpenTransactionsTabActionGroup">
+        <annotations>
+            <description>Click open Transactions Tab on the Order Details page and Check Transition Status</description>
+        </annotations>
+        <arguments>
+            <argument name="transitionTypeStatus" type="string" defaultValue="Yes"/>
+        </arguments>
+        <remove keyForRemoval="clickOnVoidTransaction"/>
+        <remove keyForRemoval="clickFirstRow"/>
+        <waitForText selector="{{AdminTransactionsGridSection.transitionsStatus('is_closed')}}" userInput="{{transitionTypeStatus}}" stepKey="verifyTransitionTypeStatus" after="waitForFilterToLoad"/>
+    </actionGroup>
+</actionGroups>

@@ -20,19 +20,22 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
     public function __construct()
     {
         parent::__construct();
-        $this->defaultAttributePostData['serialized_options_arr'] = $this->getOptionsDataArr();
-        $this->defaultAttributePostData['is_filterable'] = '0';
-        $this->defaultAttributePostData['is_filterable_in_search'] = '0';
+        static::$defaultAttributePostData['serialized_options_arr'] = static::getOptionsDataArr();
+        static::$defaultAttributePostData['is_filterable'] = '0';
+        static::$defaultAttributePostData['is_filterable_in_search'] = '0';
     }
 
     /**
      * @inheritdoc
      */
-    public function getAttributeData(): array
+    public static function getAttributeData(): array
     {
+        static::$defaultAttributePostData['serialized_options_arr'] = static::getOptionsDataArr();
+        static::$defaultAttributePostData['is_filterable'] = '0';
+        static::$defaultAttributePostData['is_filterable_in_search'] = '0';
         $result = parent::getAttributeData();
-        unset($result["{$this->getFrontendInput()}_with_default_value"]);
-        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+        unset($result["{static::getFrontendInput()}_with_default_value"]);
+        unset($result["{static::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -40,17 +43,19 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
     /**
      * @inheritdoc
      */
-    public function getAttributeDataWithErrorMessage(): array
+    public static function getAttributeDataWithErrorMessage(): array
     {
         $wrongSerializeMessage = 'The attribute couldn\'t be saved due to an error. Verify your information and ';
         $wrongSerializeMessage .= 'try again. If the error persists, please try again later.';
-
+        static::$defaultAttributePostData['serialized_options_arr'] = static::getOptionsDataArr();
+        static::$defaultAttributePostData['is_filterable'] = '0';
+        static::$defaultAttributePostData['is_filterable_in_search'] = '0';
         return array_replace_recursive(
             parent::getAttributeDataWithErrorMessage(),
             [
-                "{$this->getFrontendInput()}_with_wrong_serialized_options" => [
+                "{static::getFrontendInput()}_with_wrong_serialized_options" => [
                     array_merge(
-                        $this->defaultAttributePostData,
+                        static::$defaultAttributePostData,
                         [
                             'serialized_options_arr' => [],
                             'serialized_options' => '?.\\//',
@@ -65,11 +70,14 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
     /**
      * @inheritdoc
      */
-    public function getAttributeDataWithCheckArray(): array
+    public static function getAttributeDataWithCheckArray(): array
     {
+        static::$defaultAttributePostData['serialized_options_arr'] = static::getOptionsDataArr();
+        static::$defaultAttributePostData['is_filterable'] = '0';
+        static::$defaultAttributePostData['is_filterable_in_search'] = '0';
         $result = parent::getAttributeDataWithCheckArray();
-        unset($result["{$this->getFrontendInput()}_with_default_value"]);
-        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+        unset($result["{static::getFrontendInput()}_with_default_value"]);
+        unset($result["{static::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -79,12 +87,15 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
      *
      * @return array
      */
-    public function getUpdateOptionsProvider(): array
+    public static function getUpdateOptionsProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        static::$defaultAttributePostData['serialized_options_arr'] = static::getOptionsDataArr();
+        static::$defaultAttributePostData['is_filterable'] = '0';
+        static::$defaultAttributePostData['is_filterable_in_search'] = '0';
+        $frontendInput = static::getFrontendInput();
         return [
             "{$frontendInput}_update_options" => [
-                'post_data' => [
+                'postData' => [
                     'options_array' => [
                         'option_1' => [
                             'order' => '5',
@@ -111,7 +122,7 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
                 ],
             ],
             "{$frontendInput}_delete_options" => [
-                'post_data' => [
+                'postData' => [
                     'options_array' => [
                         'option_1' => [
                             'value' => [],
@@ -140,7 +151,7 @@ abstract class AbstractAttributeDataWithOptions extends AbstractBaseAttributeDat
      *
      * @return array
      */
-    protected function getOptionsDataArr(): array
+    protected static function getOptionsDataArr(): array
     {
         return [
             [

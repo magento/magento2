@@ -106,7 +106,7 @@ class AttributeTest extends TestCase
 
         /** @var IndexerInterface|MockObject $indexerMock */
         $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->setMethods(['getData'])
+            ->addMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -147,7 +147,7 @@ class AttributeTest extends TestCase
      *
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         $dimensions = [['scope' => 1], ['scope' => 2]];
 

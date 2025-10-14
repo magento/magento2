@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class EngineProviderTest extends TestCase
             ->willReturn($currentEngine);
 
         $engineMock = $this->getMockBuilder($currentEngineClass)
-            ->setMethods(['isAvailable'])
+            ->addMethods(['isAvailable'])
             ->getMockForAbstractClass();
 
         $this->objectManagerMock->expects($this->once())
@@ -137,7 +137,7 @@ class EngineProviderTest extends TestCase
             ->willReturn($currentEngine);
 
         $engineMock = $this->getMockBuilder($currentEngineClass)
-            ->setMethods(['isAvailable'])
+            ->addMethods(['isAvailable'])
             ->getMockForAbstractClass();
 
         $this->objectManagerMock->expects($this->once())

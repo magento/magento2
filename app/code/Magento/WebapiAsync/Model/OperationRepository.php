@@ -68,7 +68,7 @@ class OperationRepository implements OperationRepositoryInterface
         MessageValidator $messageValidator,
         Json $jsonSerializer,
         InputParamsResolver $inputParamsResolver,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->operationFactory = $operationFactory;
         $this->jsonSerializer = $jsonSerializer;

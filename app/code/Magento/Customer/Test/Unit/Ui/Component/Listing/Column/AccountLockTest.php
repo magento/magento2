@@ -55,7 +55,7 @@ class AccountLockTest extends TestCase
     /**
      * @return array
      */
-    public function testPrepareDataSourceDataProvider()
+    public static function testPrepareDataSourceDataProvider()
     {
         return [
             [

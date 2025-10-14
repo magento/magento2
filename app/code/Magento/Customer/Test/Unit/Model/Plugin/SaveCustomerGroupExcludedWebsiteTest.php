@@ -225,7 +225,7 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
      *
      * @return array[]
      */
-    public function dataProviderNoExcludedWebsitesChanged(): array
+    public static function dataProviderNoExcludedWebsitesChanged(): array
     {
         return [
             [
@@ -260,7 +260,7 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
      *
      * @return array[]
      */
-    public function dataProviderExcludedWebsitesChanged(): array
+    public static function dataProviderExcludedWebsitesChanged(): array
     {
         return [
             [

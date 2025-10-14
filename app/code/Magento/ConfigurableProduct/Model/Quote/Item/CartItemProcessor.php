@@ -51,7 +51,7 @@ class CartItemProcessor implements CartItemProcessorInterface
         \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
         \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
         \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->productOptionFactory = $productOptionFactory;

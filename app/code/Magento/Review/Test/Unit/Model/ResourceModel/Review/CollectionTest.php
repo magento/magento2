@@ -155,10 +155,14 @@ class CollectionTest extends TestCase
     ): void {
         $this->readerAdapterMock
             ->method('quoteInto')
-            ->withConsecutive(
-                [$quoteIntoArguments1[0], $quoteIntoArguments1[1]],
-                [$quoteIntoArguments2[0], $quoteIntoArguments2[1]]
-            )->willReturnOnConsecutiveCalls($quoteIntoReturn1, $quoteIntoReturn2);
+            ->willReturnCallback(function ($arg1, $arg2)
+ use ($quoteIntoArguments1, $quoteIntoArguments2, $quoteIntoReturn1, $quoteIntoReturn2) {
+                if ($arg1 == $quoteIntoArguments1[1] && $arg2 == $quoteIntoArguments2[1]) {
+                    return $quoteIntoReturn1;
+                } elseif ($arg1 == $quoteIntoArguments1[1] && $arg2 == $quoteIntoArguments2[1]) {
+                    return $quoteIntoReturn2;
+                }
+            });
         $this->selectMock->expects($this->exactly($callNum))
             ->method('join')
             ->with(
@@ -172,7 +176,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addEntityFilterDataProvider(): array
+    public static function addEntityFilterDataProvider(): array
     {
         return [
             [

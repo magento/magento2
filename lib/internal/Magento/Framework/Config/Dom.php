@@ -407,7 +407,7 @@ class Dom
     private static function _renderErrorMessage(
         \LibXMLError $errorInfo,
         string $format,
-        \DOMDocument $dom = null
+        ?\DOMDocument $dom = null
     ): string {
         $result = $format;
         foreach ($errorInfo as $field => $value) {

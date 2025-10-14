@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View;
 
@@ -14,15 +14,11 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 class History extends \Magento\Backend\Block\Template
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Sales data
-     *
      * @var \Magento\Sales\Helper\Data
      */
     protected $_salesData = null;
@@ -63,7 +59,7 @@ class History extends \Magento\Backend\Block\Template
         $button = $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            ['label' => __('Submit Comment'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
+            ['label' => __('Update'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
         );
         $this->setChild('submit_button', $button);
         return parent::_prepareLayout();
@@ -136,9 +132,9 @@ class History extends \Magento\Backend\Block\Template
     /**
      * Replace links in string
      *
-     * @param array|string $data
+     * @param string|int|float|\Stringable|array<string|int|float|\Stringable> $data
      * @param null|array $allowedTags
-     * @return string
+     * @return ($data is array ? string[] : string)
      */
     public function escapeHtml($data, $allowedTags = null)
     {

@@ -16,13 +16,17 @@ class GroupedCollection extends Collection
     /**#@+
      * Special properties, enforced to be grouped by
      */
-    const PROPERTY_CONTENT_TYPE = 'content_type';
+    public const PROPERTY_CONTENT_TYPE = 'content_type';
 
-    const PROPERTY_CAN_MERGE = 'can_merge';
-
-    /**#@-*/
+    public const PROPERTY_CAN_MERGE = 'can_merge';
 
     /**#@-*/
+
+    /**
+     * Factory for PropertyGroup
+     *
+     * @var PropertyGroupFactory
+     */
     protected $propertyFactory;
 
     /**
@@ -58,6 +62,8 @@ class GroupedCollection extends Collection
     }
 
     /**
+     * Insert asset by after key
+     *
      * @param string $identifier
      * @param AssetInterface $asset
      * @param string $key
@@ -67,10 +73,19 @@ class GroupedCollection extends Collection
     {
         parent::insert($identifier, $asset, $key);
         $properties = $this->getFilteredProperties($asset);
-        $this->getGroupFor($properties)->insert($identifier, $asset, $key);
+        $group = $this->getGroupFor($properties);
+        $groupAssets = $group->getAll();
+
+        if (!$groupAssets) {
+            //add current asset to group
+            $group->add($identifier, $asset);
+        }
+        $group->insert($identifier, $asset, $key);
     }
 
     /**
+     * Get Asset Properties
+     *
      * @param AssetInterface $asset
      * @param array $properties
      * @return array

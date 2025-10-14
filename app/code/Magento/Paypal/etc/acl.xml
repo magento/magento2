@@ -12,7 +12,9 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Paypal::paypal" title="PayPal Section" translate="title" sortOrder="50" />
+                            <resource id="Magento_Payment::payment">
+                                <resource id="Magento_Paypal::paypal" title="PayPal Section" translate="title" sortOrder="50" />
+                            </resource>
                         </resource>
                     </resource>
                 </resource>

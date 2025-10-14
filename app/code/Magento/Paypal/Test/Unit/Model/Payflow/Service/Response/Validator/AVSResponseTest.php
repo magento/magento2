@@ -76,7 +76,7 @@ class AVSResponseTest extends TestCase
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             [

@@ -145,8 +145,14 @@ class MassDeleteTest extends TestCase
 
         $this->objectManager
             ->method('create')
-            ->withConsecutive([Query::class], [Query::class])
-            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+            ->willReturnCallback(function ($arg) use ($willReturnArgs) {
+                if ($arg == Query::class) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
 
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')->willReturnSelf();

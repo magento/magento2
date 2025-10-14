@@ -66,8 +66,8 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -359,7 +359,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * @param \Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent
      * @return $this
      */
-    public function setLinkFileContent(\Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent = null)
+    public function setLinkFileContent(?\Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent = null)
     {
         return $this->setData(self::KEY_LINK_FILE_CONTENT, $linkFileContent);
     }
@@ -404,7 +404,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      * @return $this
      */
     public function setSampleFileContent(
-        \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null
+        ?\Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null
     ) {
         return $this->setData(self::KEY_SAMPLE_FILE_CONTENT, $sampleFileContent);
     }

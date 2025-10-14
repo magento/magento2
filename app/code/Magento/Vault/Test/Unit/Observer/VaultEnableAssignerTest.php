@@ -73,7 +73,7 @@ class VaultEnableAssignerTest extends TestCase
     /**
      * @return array
      */
-    public function booleanDataProvider()
+    public static function booleanDataProvider()
     {
         return [
             ['true', true],

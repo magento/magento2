@@ -156,7 +156,7 @@ class PostTest extends TestCase
     /**
      * Data provider for test exceute post validation
      */
-    public function postDataProvider(): array
+    public static function postDataProvider(): array
     {
         return [
             [['name' => null, 'comment' => null, 'email' => '', 'hideit' => 'no']],

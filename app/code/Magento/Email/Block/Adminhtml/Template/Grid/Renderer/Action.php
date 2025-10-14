@@ -7,8 +7,6 @@ namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
  * Email templates grid block action item renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
 {

@@ -15,6 +15,7 @@ use Magento\Customer\Controller\RegistryConstants;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\CollectionFactory;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -32,8 +33,6 @@ use Magento\Store\Model\System\Store as SystemStore;
 class Cart extends Extended
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
@@ -266,14 +265,16 @@ class Cart extends Extended
     /**
      * Get the quote of the cart
      *
-     * @return \Magento\Quote\Model\Quote
+     * @return Quote
+     * @throws LocalizedException
      */
     protected function getQuote()
     {
         if (null === $this->quote) {
             $customerId = $this->getCustomerId();
-            $storeIds = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
-
+            $websiteId = $this->getWebsiteId() ?:
+                $this->_storeManager->getDefaultStoreView()->getWebsiteId();
+            $storeIds = $this->getAssociatedStoreIds((int) $websiteId);
             try {
                 $this->quote = $this->quoteRepository->getForCustomer($customerId, $storeIds);
             } catch (NoSuchEntityException $e) {
@@ -331,5 +332,21 @@ class Cart extends Extended
     private function getWebsiteFilterHtml(): string
     {
         return $this->getChildHtml('website_filter_block');
+    }
+
+    /**
+     * Get website associated store IDs
+     *
+     * @param int $websiteId
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getAssociatedStoreIds(int $websiteId): array
+    {
+        $storeIds = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
+        if (empty($this->getWebsiteId()) && !empty($this->_storeManager->getWebsite()->getStoreIds())) {
+            $storeIds = $this->_storeManager->getWebsite()->getStoreIds();
+        }
+        return $storeIds;
     }
 }

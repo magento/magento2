@@ -28,6 +28,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Registry;
+use Magento\Eav\Api\Data\AttributeExtensionFactory;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -210,7 +211,8 @@ class AttributeTest extends TestCase
         );
 
         $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
+            ->addMethods(['getIdFieldName', 'saveInSetIncluding'])
+            ->onlyMethods(['_construct', 'getConnection'])
             ->getMockForAbstractClass();
         $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
             ->getMock();
@@ -232,6 +234,15 @@ class AttributeTest extends TestCase
         $this->attributeMetadataCacheMock = $this->getMockBuilder(AttributeMetadataCache::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $objects = [
+            [
+                AttributeExtensionFactory::class,
+                $this->createMock(AttributeExtensionFactory::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->attribute = $objectManagerHelper->getObject(
             Attribute::class,
             [
@@ -314,7 +325,7 @@ class AttributeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderCanBeSearchableInGrid()
+    public static function dataProviderCanBeSearchableInGrid()
     {
         return [
             [0, 'text', false],
@@ -350,7 +361,7 @@ class AttributeTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderCanBeFilterableInGrid()
+    public static function dataProviderCanBeFilterableInGrid()
     {
         return [
             [0, 'text', false],

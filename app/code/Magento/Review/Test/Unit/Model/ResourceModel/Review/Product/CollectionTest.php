@@ -132,7 +132,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addAttributeToFilterDataProvider(): array
+    public static function addAttributeToFilterDataProvider(): array
     {
         return [
             ['rt.review_id'],
@@ -176,8 +176,18 @@ class CollectionTest extends TestCase
 
         if ($sqlConditionWithSec) {
             $this->connectionMock->method('prepareSqlCondition')
-                ->withConsecutive(['rdt.customer_id', $sqlConditionWith], ['rdt.store_id', $sqlConditionWithSec])
-                ->willReturnOnConsecutiveCalls($conditionSqlQuery, $conditionSqlQuery);
+                ->willReturnCallback(
+                    function ($arg1, $arg2) use ($sqlConditionWith, $conditionSqlQuery, $sqlConditionWithSec) {
+                        static $callCount = 0;
+                        if ($callCount === 0 && $arg1 === 'rdt.customer_id' && $arg2 === $sqlConditionWith) {
+                            $callCount++;
+                            return $conditionSqlQuery;
+                        } elseif ($callCount === 1 && $arg1 === 'rdt.store_id' && $arg2 === $sqlConditionWithSec) {
+                            $callCount++;
+                            return $conditionSqlQuery;
+                        }
+                    }
+                );
         } else {
             $this->connectionMock->method('prepareSqlCondition')
                 ->with('rdt.customer_id', $sqlConditionWith)
@@ -196,7 +206,7 @@ class CollectionTest extends TestCase
     /**
      * @return array
      */
-    public function addAttributeToFilterWithAttributeTypeDataProvider(): array
+    public static function addAttributeToFilterWithAttributeTypeDataProvider(): array
     {
         $exprNull = new \Zend_Db_Expr('NULL');
         $defaultStore = Store::DEFAULT_STORE_ID;

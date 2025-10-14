@@ -13,6 +13,10 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Search\Model\ResourceModel\SynonymGroup;
 
+/**
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
+ */
 class SynonymReaderPlugin
 {
     /**

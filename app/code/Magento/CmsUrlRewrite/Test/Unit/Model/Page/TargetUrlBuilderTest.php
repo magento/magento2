@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -119,26 +119,25 @@ class TargetUrlBuilderTest extends TestCase
             ->willReturn('test/index');
         $this->frontendUrlBuilderMock->expects($this->any())
             ->method('getUrl')
-            ->withConsecutive(
-                [
-                    'test/index',
-                    [
-                        '_current' => false,
-                        '_nosid' => true,
-                        '_query' => [
-                            StoreManagerInterface::PARAM_NAME => $storeId
-                        ]
-                    ]
-                ],
-                [
-                    'stores/store/switch',
-                    $urlParams
-                ]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'http://domain.com/test',
-                'http://domain.com/test/index'
-            );
+            ->willReturnCallback(function (...$args) use ($storeId, $urlParams) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($args === ['test/index',
+                            ['_current' => false, '_nosid' => true, '_query' =>
+                                [StoreManagerInterface::PARAM_NAME => $storeId]]]) {
+                            return 'http://domain.com/test';
+                        }
+                        break;
+                    case 2:
+                        if ($args === ['stores/store/switch', $urlParams]) {
+                            return 'http://domain.com/test/index';
+                        }
+                        break;
+
+                }
+            });
 
         $result = $this->viewModel->process('test/index', $storeId);
 
@@ -150,7 +149,7 @@ class TargetUrlBuilderTest extends TestCase
      *
      * @return array
      */
-    public function scopedUrlsDataProvider(): array
+    public static function scopedUrlsDataProvider(): array
     {
         $enStoreCode = 'en';
         $defaultUrlParams = [

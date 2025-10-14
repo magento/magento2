@@ -52,7 +52,7 @@ class StartConsumerCommand extends Command
         \Magento\Framework\App\State $appState,
         ConsumerFactory $consumerFactory,
         $name = null,
-        LockManagerInterface $lockManager = null
+        ?LockManagerInterface $lockManager = null
     ) {
         $this->appState = $appState;
         $this->consumerFactory = $consumerFactory;

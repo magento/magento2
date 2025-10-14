@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -185,7 +185,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
     /**
      * @return array
      */
-    public function shouldFormatUrlKeyAndGenerateUrlPathIfUrlKeyIsNotUsingDefaultValueDataProvider()
+    public static function shouldFormatUrlKeyAndGenerateUrlPathIfUrlKeyIsNotUsingDefaultValueDataProvider()
     {
         return [
             [true],
@@ -245,7 +245,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
     /**
      * @return array
      */
-    public function shouldResetUrlPathAndUrlKeyIfUrlKeyIsUsingDefaultValueDataProvider(): array
+    public static function shouldResetUrlPathAndUrlKeyIfUrlKeyIsUsingDefaultValueDataProvider(): array
     {
         return [
             [false, 0],
@@ -366,7 +366,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
     /**
      * @return array
      */
-    public function shouldThrowExceptionIfUrlKeyIsEmptyDataProvider()
+    public static function shouldThrowExceptionIfUrlKeyIsEmptyDataProvider()
     {
         return [
             [0, false],
@@ -425,10 +425,9 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $childCategory = $this->getMockBuilder(Category::class)
-            ->setMethods(
+            ->addMethods(['setUrlPath', 'getUrlPath'])
+            ->onlyMethods(
                 [
-                    'getUrlPath',
-                    'setUrlPath',
                     'getResource',
                     'getStore',
                     'getStoreId',

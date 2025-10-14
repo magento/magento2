@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,8 +17,10 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5262"/>
             <group value="cloud"/>
+            <skip>
+                <issueId value="AC-15476">Skipped because of AC bug</issueId>
+            </skip>
         </annotations>
-
         <before>
             <!-- Set Enable Inventory Check On Cart Load = No -->
             <magentoCLI command="config:set {{DisableInventoryCheckOnCartLoad.path}} {{DisableInventoryCheckOnCartLoad.value}}" stepKey="disableCartLoad"/>
@@ -28,7 +30,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create SimpleProductwithPrice100 -->
-            <createData entity="SimpleProductQty100" stepKey="simpleProductOne">
+            <createData entity="ApiSimpleProduct" stepKey="simpleProductOne">
                 <requiredEntity createDataKey="createSubcategory"/>
             </createData>
             <!-- Go To Subcategory Page-->
@@ -39,11 +41,13 @@
         </before>
         <!-- Delete the Data after execution-->
         <after>
-            <deleteData createDataKey="createCategory" stepKey="deleteProduct"/>
-            <deleteData createDataKey="simpleProductOne" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
             <magentoCLI command="config:set {{EnableInventoryCheckOnCartLoad.path}} {{EnableInventoryCheckOnCartLoad.value}}" stepKey="enableCartLoad"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
+        <!-- Mouse Hover Product On Category Page initial check-->
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProductInitial"/>
         <!-- Open New tab-->
         <openNewTab stepKey="openNewTab"/>
         <!-- Open Product From AdminPage-->
@@ -62,11 +66,11 @@
         <!-- Mouse Hover Product On Category Page-->
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <!-- Select Add to cart-->
-        <waitForElementClickable selector="{{StorefrontCategoryMainSection.addToCartProductBySku($$simpleProductOne.sku$$)}}" stepKey="waitForAddToCartButton"/>
-        <click selector="{{StorefrontCategoryMainSection.addToCartProductBySku($$simpleProductOne.sku$$)}}" stepKey="toCategory"/>
-        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="wait"/>
+        <waitForElementClickable selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="waitForAddToCartButton"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="toCategory"/>
+        <waitForPageLoad stepKey="waitForPage"/>
+        <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsgText}}" stepKey="wait"/>
         <!-- Assert the Error Message-->
-        <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Product that you are trying to add is not available." stepKey="seeErrorMessage"/>
+        <waitForText userInput="Product that you are trying to add is not available." selector="{{StorefrontProductPageSection.errorMsgText}}" stepKey="seeErrorMessage"/>
     </test>
-
 </tests>

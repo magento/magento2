@@ -54,7 +54,7 @@ class WidgetTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->conditionsHelper = $this->getMockBuilder(Conditions::class)
-            ->setMethods(['encode'])
+            ->onlyMethods(['encode'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaperMock = $this->getMockBuilder(Escaper::class)

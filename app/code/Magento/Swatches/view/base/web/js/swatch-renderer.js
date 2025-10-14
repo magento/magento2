@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -385,7 +385,7 @@ define([
                 isInProductView = false;
 
             productId = this.element.parents('.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id');
+                .find('.price-box.price-final_price').attr('data-product-id');
 
             if (!productId) {
                 // Check individual product.
@@ -798,7 +798,7 @@ define([
 
             $widget._Rebuild();
 
-            if ($priceBox.is(':data(mage-priceBox)')) {
+            if ($priceBox.data('mage-priceBox') !== undefined) {
                 $widget._UpdatePrice();
             }
 
@@ -854,7 +854,7 @@ define([
          */
         _toggleCheckedAttributes: function ($this, $wrapper) {
             $wrapper.attr('aria-activedescendant', $this.attr('id'))
-                    .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
+                .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
             $this.attr('aria-checked', true);
         },
 
@@ -1309,7 +1309,10 @@ define([
                 }
 
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
-                isInitial = _.isEqual(imagesToUpdate, initialImages);
+                isInitial = _.isEqual(
+                    imagesToUpdate.map(({thumb, img, full, type, videoUrl}) => ({thumb, img, full, type, videoUrl})),
+                    initialImages.map(({thumb, img, full, type, videoUrl}) => ({thumb, img, full, type, videoUrl}))
+                );
 
                 if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
                     imagesToUpdate = imagesToUpdate.concat(initialImages);
@@ -1331,7 +1334,13 @@ define([
          * @private
          */
         _addFotoramaVideoEvents: function (isInitial) {
-            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)
+                || !$(this.options.mediaGallerySelector).AddFotoramaVideoEvents('instance')
+            ) {
+                $(this.options.mediaGallerySelector).on('addfotoramavideoeventscreate', function () {
+                    this._addFotoramaVideoEvents(isInitial);
+                }.bind(this));
+
                 return;
             }
 

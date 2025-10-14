@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableFedExConfigurationActionGroup">
+        <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} {{AdminFedexEnableForCheckoutConfigData.value}}" stepKey="enableCheckout"/>
+        <magentoCLI command="config:set {{AdminFedexEnableSandboxModeConfigData.path}} {{AdminFedexEnableSandboxModeConfigData.value}}" stepKey="enableSandbox"/>
+        <magentoCLI command="config:set {{AdminFedexEnableDebugConfigData.path}} {{AdminFedexEnableDebugConfigData.value}}" stepKey="enableDebug"/>
+        <magentoCLI command="config:set {{AdminFedexEnableShowMethodConfigData.path}} {{AdminFedexEnableShowMethodConfigData.value}}" stepKey="enableShowMethod"/>
+        <magentoCLI command="config:set {{AdminFedexAccount.path}} {{_CREDS.magento/carriers_fedex_account}}" stepKey="accountSetting"/>
+        <magentoCLI command="config:set {{AdminFedexHubId.path}} {{_CREDS.magento/carriers_fedex_smartpost_hubid}}" stepKey="accountHub"/>
+        <magentoCLI command="config:set {{AdminFedexApiKey.path}} {{_CREDS.magento/carriers_fedex_api_key}}" stepKey="accountApiKey"/>
+        <magentoCLI command="config:set {{AdminFedexSecretKey.path}} {{_CREDS.magento/carriers_fedex_secret_key}}" stepKey="accountSecretKey"/>
+    </actionGroup>
+</actionGroups>

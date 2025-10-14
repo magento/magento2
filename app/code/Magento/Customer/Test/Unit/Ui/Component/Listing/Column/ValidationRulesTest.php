@@ -66,7 +66,7 @@ class ValidationRulesTest extends TestCase
      *
      * @return array
      */
-    public function validationRulesDataProvider(): array
+    public static function validationRulesDataProvider(): array
     {
         return [
             ['alpha', 'validate-alpha'],

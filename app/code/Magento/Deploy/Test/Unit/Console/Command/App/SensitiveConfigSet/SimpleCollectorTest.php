@@ -52,7 +52,7 @@ class SimpleCollectorTest extends TestCase
     {
         $this->questionFactoryMock = $this->getMockBuilder(QuestionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->questionHelperMock = $this->getMockBuilder(QuestionHelper::class)
             ->disableOriginalConstructor()
@@ -83,23 +83,25 @@ class SimpleCollectorTest extends TestCase
             ->getMock();
         $this->inputMock->expects($this->exactly(2))
             ->method('getArgument')
-            ->withConsecutive(
-                [SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH],
-                [SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $configPaths[0],
-                'someValue'
+            ->willReturnCallback(
+                function ($arg) use ($configPaths) {
+                    if ($arg === SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH) {
+                        return $configPaths[0];
+                    } elseif ($arg === SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE) {
+                        return 'someValue';
+                    }
+                }
             );
         $this->questionFactoryMock->expects($this->exactly(2))
             ->method('create')
-            ->withConsecutive(
-                [['question' => 'Please enter config path: ']],
-                [['question' => 'Please enter value: ']]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $pathQuestionMock,
-                $valueQuestionMock
+            ->willReturnCallback(
+                function ($arg) use ($pathQuestionMock, $valueQuestionMock) {
+                    if ($arg['question'] === 'Please enter config path: ') {
+                        return $pathQuestionMock;
+                    } elseif ($arg['question'] === 'Please enter value: ') {
+                        return $valueQuestionMock;
+                    }
+                }
             );
 
         $this->assertEquals(
@@ -161,23 +163,25 @@ class SimpleCollectorTest extends TestCase
             ->willThrowException(new LocalizedException(__($message)));
         $this->inputMock->expects($this->exactly(2))
             ->method('getArgument')
-            ->withConsecutive(
-                [SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH],
-                [SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $configPaths[0],
-                null
+            ->willReturnCallback(
+                function ($arg) use ($configPaths) {
+                    if ($arg === SensitiveConfigSetCommand::INPUT_ARGUMENT_PATH) {
+                        return $configPaths[0];
+                    } elseif ($arg === SensitiveConfigSetCommand::INPUT_ARGUMENT_VALUE) {
+                        return null;
+                    }
+                }
             );
         $this->questionFactoryMock->expects($this->exactly(2))
             ->method('create')
-            ->withConsecutive(
-                [['question' => 'Please enter config path: ']],
-                [['question' => 'Please enter value: ']]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $pathQuestionMock,
-                $valueQuestionMock
+            ->willReturnCallback(
+                function ($arg) use ($pathQuestionMock, $valueQuestionMock) {
+                    if ($arg['question'] === 'Please enter config path: ') {
+                        return $pathQuestionMock;
+                    } elseif ($arg['question'] === 'Please enter value: ') {
+                        return $valueQuestionMock;
+                    }
+                }
             );
 
         $this->model->getValues(

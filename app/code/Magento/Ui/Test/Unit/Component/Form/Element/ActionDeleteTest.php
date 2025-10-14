@@ -9,7 +9,7 @@ namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
 use Magento\Ui\Component\Form\Element\ActionDelete;
 
-class ActionDeleteTest extends AbstractElementTest
+class ActionDeleteTest extends AbstractElementTestCase
 {
     /**
      * @inheritdoc

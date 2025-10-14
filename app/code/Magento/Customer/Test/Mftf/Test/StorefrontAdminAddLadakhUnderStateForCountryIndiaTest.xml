@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdminAddLadakhUnderStateForCountryIndiaTest">
+        <annotations>
+            <stories value="Ladakh state under India"/>
+            <title value="Ladakh state present under India country if selected"/>
+            <description value="Ladakh should gets displayed in State option against India"/>
+            <testCaseId value="AC-5674"/>
+            <severity value="MINOR"/>
+            <features value="Customer"/>
+        </annotations>
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create product-->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <!--Create customer-->
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!--Delete customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Delete product-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--Logout as Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <!--Navigate to create account page-->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <!--Create new customer account-->
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="createNewCustomerAccount">
+            <argument name="customer" value="Simple_US_Customer" />
+        </actionGroup>
+        <!--Click create account button-->
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="clickCreateAccountButton"/>
+        <!--Open address book in my account-->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBookPage">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <!-- Choose Country as "India" -->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="India" stepKey="selectCountryInStorefrontAddressBook"/>
+        <!-- Choose State as "Ladakh" -->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="selectStateInStorefrontAddressBook"/>
+        <!--Assert if state "Ladakh" is selected-->
+        <waitForText selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontAddressBook"/>
+        <!--Make State & Country default before using FillNewCustomerAddressRequiredFieldsActionGroup-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="United States" stepKey="selectCountryAsDefaultInStorefrontAddressBook"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="" stepKey="selectStateAsDefaultInStorefrontAddressBook"/>
+        <!--Fill default California address-->
+        <actionGroup ref="FillNewCustomerAddressRequiredFieldsActionGroup" stepKey="fillNewAddressFields">
+            <argument name="address" value="US_Address_California"/>
+        </actionGroup>
+        <!--Save the address-->
+        <actionGroup ref="StorefrontSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
+        <!--Add new address-->
+        <waitForElementClickable selector="{{AdminCustomerAddressesSection.addNewAddress}}" stepKey="waitForAddNewAddressButton"/>
+        <click selector="{{AdminCustomerAddressesSection.addNewAddress}}" stepKey="addNewAddress"/>
+        <!--Select country as "India" while adding address-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="India" stepKey="selectCountryInStorefrontToAddNewAddress"/>
+        <!--Select state as "Ladakh" while adding address-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="selectStateInStorefrontToAddNewAddress"/>
+        <!--Assert state as "Ladakh" while adding address-->
+        <waitForText selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontToAddNewAddress"/>
+        <!--Select country other than "India" - picked "United States"-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="United States" stepKey="selectUnitedStatesAsCountryInStorefrontAddressBook"/>
+        <!--Assert state "Ladakh" does not present post selecting "United States" as country-->
+        <dontSeeInField selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertLadakhNotAvailableUnderCountryUnitedStates"/>
+        <!--Again navigate to Address book-->
+        <amOnPage url="customer/address/index/" stepKey="goToAddressPageToEditBillingAddress"/>
+        <waitForPageLoad stepKey="waitForBillingAddressPageToLoad"/>
+        <!--Open change billing address page-->
+        <waitForElementClickable selector="{{StorefrontCustomerAddressesSection.changeBillingAddress}}" stepKey="waitForChangeBillingAddress"/>
+        <click selector="{{StorefrontCustomerAddressesSection.changeBillingAddress}}" stepKey="openChangeBillingAddress"/>
+        <!--Select country as "India" while edit billing address-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="India" stepKey="selectCountryInStorefrontInEditBillingAddress"/>
+        <!--Select state as "Ladakh" while edit billing address-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="selectStateInStorefrontInEditBillingAddress"/>
+        <!--Assert state as "Ladakh" while edit billing address-->
+        <waitForText selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontInEditBillingAddress"/>
+        <!--Again navigate to Address book-->
+        <amOnPage url="customer/address/index/" stepKey="goToAddressPageToEditShippingAddress"/>
+        <waitForPageLoad stepKey="waitForShippingAddressPageToLoad"/>
+        <!--Open change shipping address page-->
+        <waitForElementClickable selector="{{StorefrontCustomerAddressesSection.changeShippingAddress}}" stepKey="waitForChangeShippingAddress"/>
+        <click selector="{{StorefrontCustomerAddressesSection.changeShippingAddress}}" stepKey="openChangeShippingAddress"/>
+        <!-- Select country as "India" while edit shipping address-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="India" stepKey="selectCountryInStorefrontInEditShippingAddress"/>
+        <!-- Select state as "Ladakh" while edit shipping address-->
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="selectStateInStorefrontInEditShippingAddress"/>
+        <!-- Assert state as "Ladakh" while edit shipping address-->
+        <waitForText selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Ladakh" stepKey="assertStateInStorefrontInEditShippingAddress"/>
+        <!--Signout customer from storefront-->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="storefrontCustomerSignOut"/>
+        <!--Navigate to product page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!--Add product to cart-->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!--Navigate to checkout-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <!--Select country as "India" in Shipping Information page-->
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="India" stepKey="selectCountryInStorefrontCheckout"/>
+        <!--Select state as "Ladakh" in Shipping Information page-->
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="Ladakh" stepKey="selectStateInStorefrontCheckout"/>
+        <!--Assert state as "Ladakh" in Shipping Information page selected-->
+        <waitForText selector="{{CheckoutShippingSection.region}}" userInput="Ladakh" stepKey="assertStateInStorefrontCheckout"/>
+        <!--Fill shipping address as per UK customer to place order-->
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestShippingAddress">
+            <argument name="customer" value="UKCustomer"/>
+            <argument name="customerAddress" value="updateCustomerUKAddress"/>
+        </actionGroup>
+        <!--Select Flat Rate as shipping method-->
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
+        <!--Navigate to billing step-->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToBillingStep"/>
+        <!--Select "Money Order" as payment method-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!--Place order and grab order ID-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
+        <!--Navigate to admin customer-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="adminOpenCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <!--Navigate to address tab-->
+        <actionGroup ref="AdminOpenAddressesTabFromCustomerEditPageActionGroup" stepKey="openAddressesTab"/>
+        <actionGroup ref="AdminClickAddNewAddressButtonOnCustomerAddressesTabActionGroup" stepKey="clickAddNewAddressButtonAgain"/>
+        <!--Select country as "India" in admin address book-->
+        <selectOption selector="{{AdminCustomerAddressesSection.country}}" userInput="India" stepKey="selectCountryInAdminAddressBook"/>
+        <!--Select state as "Ladakh" in admin address book-->
+        <selectOption selector="{{AdminCustomerAddressesSection.state}}" userInput="Ladakh" stepKey="selectStateInAdminAddressBook"/>
+        <!--Assert state as "Ladakh" in admin address book-->
+        <waitForText selector="{{AdminCustomerAddressesSection.state}}" userInput="Ladakh" stepKey="assertStateInAdminAddressBook"/>
+        <!--Navigate to admin address and edit-->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$orderId}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEditOrderActionGroup" stepKey="editOrder">
+            <argument name="orderId" value="{$orderId}"/>
+        </actionGroup>
+        <!--Uncheck "Same as Billing Address" checkbox-->
+        <uncheckOption selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="unCheckSameAsBillingAddress"/>
+        <!--Select country as "India" in admin order details page || Billing Address-->
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.Country}}" userInput="India" stepKey="selectCountryInEditOrderBillingAddress"/>
+        <!--Select state as "Ladakh" in admin order details page || Billing Address-->
+        <selectOption selector="{{AdminOrderFormBillingAddressSection.State}}" userInput="Ladakh" stepKey="selectStateInEditOrderBillingAddress"/>
+        <!--Assert state as "Ladakh" in admin order details page || Billing Address-->
+        <waitForText selector="{{AdminOrderFormBillingAddressSection.State}}" userInput="Ladakh" stepKey="assertStateInEditOrderBillingAddress"/>
+        <!--Select country as "India" in admin order details page || Shipping Address-->
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.Country}}" userInput="India" stepKey="selectCountryInEditOrderShippingAddress"/>
+        <!--Select state as "Ladakh" in admin order details page || Shipping Address-->
+        <selectOption selector="{{AdminOrderFormShippingAddressSection.State}}" userInput="Ladakh" stepKey="selectStateInEditOrderShippingAddress"/>
+        <!--Assert state as "Ladakh" in admin order details page || Shipping Address-->
+        <waitForText selector="{{AdminOrderFormShippingAddressSection.State}}" userInput="Ladakh" stepKey="assertStateInEditOrderShippingAddress"/>
+        <!--Navigate to Tax Rate page-->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+        <!--Add new Tax Rate-->
+        <waitForElementClickable selector="{{AdminTaxRulesSection.addNewTaxRate}}" stepKey="waitToAddNewTaxRate"/>
+        <click selector="{{AdminTaxRulesSection.addNewTaxRate}}" stepKey="addNewTaxRate"/>
+        <!--Assert Country & State in new Tax Rate page-->
+        <waitForElementVisible selector="{{AdminTaxRulesSection.country}}" stepKey="waitForSelectCountryInNewTaxRate"/>
+        <!--Select country as "India" in admin Tax Rate page-->
+        <selectOption selector="{{AdminTaxRulesSection.country}}" userInput="India" stepKey="selectCountryInNewTaxRate"/>
+        <!--Select state as "Ladakh" in admin Tax Rate page-->
+        <selectOption selector="{{AdminTaxRulesSection.state}}" userInput="Ladakh" stepKey="selectStateInNewTaxRate"/>
+        <!--Assert state as "Ladakh" in admin Tax Rate page-->
+        <waitForText selector="{{AdminTaxRulesSection.state}}" userInput="Ladakh" stepKey="assertStateInNewTaxRate"/>
+    </test>
+</tests>

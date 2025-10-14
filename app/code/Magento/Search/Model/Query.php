@@ -111,8 +111,8 @@ class Query extends AbstractModel implements QueryInterface
         CollectionFactory $searchCollectionFactory,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
-        AbstractResource $resource = null,
-        DbCollection $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?DbCollection $resourceCollection = null,
         array $data = []
     ) {
         $this->_queryCollectionFactory = $queryCollectionFactory;

@@ -14,5 +14,20 @@
         <element name="shippingAddress" type="text" selector=".order-shipping-address address"/>
         <element name="shippingAddressEdit" type="button" selector=".order-shipping-address .actions a"/>
         <element name="goToShippingInformation" type="button" selector="//button[@title='Go to Shipping Information']"/>
+        <element name="checkoutWithMultipleAddresses" type="button" selector=".cart-summary .action.multicheckout"/>
+        <element name="updateQtyAndAddress" type="button" selector="//form[contains(@id, 'checkout_multishipping_form')]//button//span[contains(text(), 'Update Qty &amp; Addresses')]"/>
+        <element name="selectShippingMethodBasedOnAddress" type="radio" selector="//form[contains(@id, 'shipping_method_form')]//address[contains(., '{{city}}')]/ancestor::div[contains(@class, 'block-content')]//div[contains(@class, 'box-shipping-method')]//dt[contains(., '{{shippingMethodType}}')]/following::dd[1]//label[contains(., '{{shippingMethodName}}')]/preceding::div[1]/input" parameterized="true"/>
+        <element name="goToBillingInfo" type="button" selector=".action.primary.continue"/>
+        <element name="goToReviewOrder" type="button" selector="#payment-continue" timeout="30"/>
+        <element name="reviewOrderInfo" type="text" selector="//form[contains(@id, 'review-order-form')]//address[contains(., '{{city}}')]/ancestor::div[contains(@class, 'block-content')]//div[contains(@class, 'box-shipping-method')]//div[contains(text(), '{{shippingMethodType}}')]" parameterized="true"/>
+        <element name="placeOrder" type="button" selector="#review-button"/>
+        <element name="successTitle" type="text" selector=".page-title"/>
+        <element name="multiCheckoutOrderId" type="text" selector=".multicheckout ul.orders-list .shipping-list:nth-child({{row}}) a" parameterized="true"/>
+        <element name="orderInformationAddress" type="text" selector="//div[contains(@class, 'box-order-shipping-address')]//address[contains(., '{{city}}')]" parameterized="true"/>
+        <element name="orderShippingMethod" type="text" selector="//div[contains(@class, 'box-order-shipping-method')]//div[contains(., '{{method}}')]" parameterized="true"/>
+        <element name="adminOrderShippingAddress" type="text" selector="//div[contains(@class, 'order-shipping-address')]//address[contains(., '{{city}}')]" parameterized="true"/>
+        <element name="adminShippingMethod" type="text" selector="//div[contains(@class, 'order-shipping-method')]//div[contains(@class, 'admin__page-section-item-content')]//strong[contains(., '{{method}}')]" parameterized="true"/>
+        <element name="shippingAddressSelector" type="select" selector="//tr[position()={{addressPosition}}]//td[@data-th='Send To']//select" parameterized="true"/>
+        <element name="shippingAddressOptions" type="select" selector="#multiship-addresses-table tbody tr:nth-of-type({{addressPosition}}) .col.address select option:nth-of-type({{optionIndex}})" parameterized="true"/>
     </section>
 </sections>

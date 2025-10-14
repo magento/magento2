@@ -93,7 +93,7 @@ class CollectionFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             [null],

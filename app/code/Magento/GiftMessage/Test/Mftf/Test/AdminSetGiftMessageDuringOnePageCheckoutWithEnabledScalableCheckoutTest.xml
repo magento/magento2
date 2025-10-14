@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSetGiftMessageDuringOnePageCheckoutWithEnabledScalableCheckoutTest" extends="StorefrontGiftMessageForOrderOnCheckoutCartPageTest">
+        <annotations>
+            <stories value="Gift Message for order present on checkout cart page."/>
+            <title value="Admin Set GiftMessage during OnePageCheckout with enabled ScalableCheckout"/>
+            <description value="Admin Set GiftMessage during OnePageCheckout with enabled ScalableCheckout and assert the gift message in order page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-3953"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set sales/gift_options/allow_items 1" stepKey="allowGiftMessagesForOrderItems"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set sales/gift_options/allow_items 0" stepKey="disableGiftMessageForOrder"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="openOrdersGridAndClearFilters" />
+        </after>
+        <remove keyForRemoval="assertGiftMessageForAdminOrder"/>
+        <!--See gift options link at item level and order level-->
+        <waitForElement selector="{{StorefrontOrderGiftSection.giftOptionsItemLevel}}" before="seeGiftMessageFields" stepKey="seeGiftOptionsItemLevel"/>
+        <waitForElement selector="{{StorefrontOrderGiftSection.giftMessageTitle}}" after="seeGiftOptionsItemLevel" stepKey="seeGiftOptionsOrderLevel"/>
+        <!--Click on gift options at item level and fill gift message-->
+        <waitForElementClickable selector="{{StorefrontOrderGiftSection.giftOptionsItemLevel}}" after="seeGiftOptionsOrderLevel" stepKey="waitForGiftOptionsAtItemLevel"/>
+        <click selector="{{StorefrontOrderGiftSection.giftOptionsItemLevel}}" after="waitForGiftOptionsAtItemLevel" stepKey="clickOnGiftOptionsAtItemLevel"/>
+        <!--Assert Edit and Delete icons at item level-->
+        <waitForElement selector="{{StorefrontOrderGiftSection.giftOptionsEditAtItemLevel}}" before="fillGiftMessageFields" stepKey="assertEditIconAtItemLevel"/>
+        <waitForElement selector="{{StorefrontOrderGiftSection.giftOptionsDeleteAtItemLevel}}" after="assertEditIconAtItemLevel" stepKey="assertDeleteIconAtItemLevel"/>
+        <!--Fill Gift message at order level-->
+        <actionGroup ref="StorefrontFillGiftMessageAtOrderLevelActionGroup" before="navigateToCheckoutPage" stepKey="fillGiftMessageAtOrderLevel"/>
+        <!--Assert Edit and Delete icons at order level-->
+        <waitForElement selector="{{StorefrontOrderGiftSection.giftOptionsEditAtOrderLevel}}" after="fillGiftMessageAtOrderLevel" stepKey="assertEditIconAtOrderLevel"/>
+        <waitForElement selector="{{StorefrontOrderGiftSection.giftOptionsDeleteAtOrderLevel}}" after="assertEditIconAtOrderLevel" stepKey="assertDeleteIconAtOrderLevel"/>
+        <!--Assert gift message at order level-->
+        <actionGroup ref="AssertAdminGiftMessageAtOrderLevelActionGroup" after="filterOrdersGridById" stepKey="assertGiftMessageAtOrderLevelForAdminOrder">
+            <argument name="message" value="This is gift message for ALL ORDERED ITEMS"/>
+        </actionGroup>
+        <!--Assert gift message at item level-->
+        <actionGroup ref="AssertAdminGiftMessageAtItemLevelActionGroup" after="assertGiftMessageAtOrderLevelForAdminOrder" stepKey="assertGiftMessageAtItemLevelForAdminOrder">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+            <argument name="message" value="Best wishes!"/>
+        </actionGroup>
+    </test>
+</tests>
+

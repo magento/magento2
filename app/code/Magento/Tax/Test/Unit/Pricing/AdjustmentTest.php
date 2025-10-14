@@ -68,7 +68,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public function isIncludedInBasePriceDataProvider()
+    public static function isIncludedInBasePriceDataProvider()
     {
         return [[true], [false]];
     }
@@ -93,7 +93,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public function isIncludedInDisplayPriceDataProvider()
+    public static function isIncludedInDisplayPriceDataProvider()
     {
         return [
             [false, false, false],
@@ -132,7 +132,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public function extractAdjustmentDataProvider()
+    public static function extractAdjustmentDataProvider()
     {
         return [
             [false, 'not_important', 'not_important', 0.00],
@@ -165,7 +165,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public function applyAdjustmentDataProvider()
+    public static function applyAdjustmentDataProvider()
     {
         return [
             [1.1, 2.2, 2.2],
@@ -187,7 +187,7 @@ class AdjustmentTest extends TestCase
     /**
      * @return array
      */
-    public function isExcludedWithDataProvider()
+    public static function isExcludedWithDataProvider()
     {
         return [
             [Adjustment::ADJUSTMENT_CODE, true],

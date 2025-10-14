@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="PlaceOrderUsingPaypalExpressWithPaymentActionOrderTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Place order using Paypal Express with Payment Action as Order"/>
+            <description value="Placing an order with paypal express checkout payment option and the payment action as Ordered and assert the data in order page of admin. "/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-6159"/>
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct" stepKey="simpleProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionOrder"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionBackToAuthorization"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Go to storefront and add product to cart -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$createCustomer$" />
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addTheProductToCart">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="goToCheckoutPage"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <waitForElementClickable selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('PayPal Express Checkout')}}" stepKey="waitForPayPalExpressCheckoutIsPresent"/>
+        <click selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('PayPal Express Checkout')}}" stepKey="clickPayPalExpressCheckout"/>
+        <waitForPageLoad stepKey="waitForPaypalExpressCheckoutToBeLoaded"/>
+        <!-- Click on Paypal paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="LoginToPayPal"/>
+        <!--Transfer Cart Line and Shipping Method assertion-->
+        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodNotExistActionGroup" stepKey="assertPayPalSettings"/>
+        <!--Click PayPal button and go back to Magento site-->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
+        <!-- See order successful Page instead of Order Review Page -->
+        <waitForElement selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForLoadSuccessPageTitle"/>
+        <waitForElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="waitForLoadSuccessPage"/>
+        <!--Grab order number-->
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
+        <!--Go to admin sales page and open the order id-->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!--Assert the total-->
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$128.00" stepKey="checkGrandTotal"/>
+        <!--Grab the transaction id-->
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabTransactionID"/>
+        <!--Open comment history tab and assert the comment-->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Ordered amount')}}" userInput="Ordered amount of $128.00 Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotes"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderStatus}}" userInput="Processing" stepKey="assertOrderStatusInCommentsHistorySection"/>
+        <!--Assert Authorize button is present and Invoice button is absent-->
+        <actionGroup ref="AdminAssertAuthorizeButtonOnOrderPageActionGroup" stepKey="assertAuthorizeButtonIsPresent"/>
+        <dontSee selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="dontSeeInvoiceButton"/>
+        <!--Open transaction tab and assert transaction type is order-->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertTransactionType">
+            <argument name="transactionType" value="order"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <!--Hold and unhold the order-->
+        <actionGroup ref="AdminClicksHoldButtonActionGroup" stepKey="clickOnHoldButton"/>
+        <dontSee selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="dontSeeAuthorizationButton"/>
+        <actionGroup ref="AdminClicksUnHoldButtonActionGroup" stepKey="clickUnHoldButton"/>
+        <actionGroup ref="AdminAssertAuthorizeButtonOnOrderPageActionGroup" stepKey="assertAuthorizeButtonIsPresentAfterUnHolding"/>
+        <!--Authorize the order-->
+        <actionGroup ref="AdminAuthorizeAnOrderActionGroup" stepKey="authorizeTheOrder"/>
+        <!--Open Comments history tab and assert the comment for authorization-->
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForLastTransactionIDFieldToBeAppeared"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionID"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterAuthorizing"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Authorized amount')}}" userInput="Authorized amount of $128.00. Transaction ID: &quot;{$grabLastTransactionID}&quot;" stepKey="seeOrderHistoryNotesAfterAuthorizing"/>
+        <dontSee selector="{{AdminOrderDetailsMainActionsSection.authorize}}" stepKey="dontSeeAuthorizationButtonAfterAuthorizing"/>
+        <!--Assert the invoice button is present-->
+        <waitForElementVisible selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="waitForInvoiceButtonToBeAppeared"/>
+        <!--Assert the authorization transaction is present in transaction grid-->
+        <actionGroup ref="AdminAssertTransactionTypeInTransactionTabActionGroup" stepKey="assertTransactionTypeHasAuthorization">
+            <argument name="transactionType" value="authorization"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClickedAfterAsserting"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButtonAfterAsserting"/>
+        <!--Submit invoice-->
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
+        <seeOptionIsSelected userInput="Capture Online" selector="{{AdminInvoiceTotalSection.amount}}" stepKey="seeOptionType"/>
+        <!--Submit creating invoice into the order and assert the status of the order-->
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoiceIntoOrder"/>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">
+            <argument name="status" value="Processing"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="waitForLastTransactionIDFieldToBeAppearedAfterSubmittingInvoice"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField('Last Transaction ID')}}" stepKey="grabLastTransactionIDForCaptured"/>
+        <!--Open the comment history tab and assert the comment-->
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistoryAfterSubmittingInvoice"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType('Captured amount')}}" userInput="Captured amount of $128.00 online. Transaction ID: &quot;{$grabLastTransactionIDForCaptured}&quot;" stepKey="seeOrderHistoryNotesAfterSubmittingInvoice"/>
+    </test>
+</tests>

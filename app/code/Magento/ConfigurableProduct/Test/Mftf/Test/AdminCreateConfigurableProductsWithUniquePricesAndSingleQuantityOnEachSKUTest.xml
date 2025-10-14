@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductsWithUniquePricesAndSingleQuantityOnEachSKUTest">
+        <annotations>
+            <stories value="Create configurable product"/>
+            <title value="Configure Price 'Apply unique prices by attribute to each SKU' and Inventory 'Apply single quantity to each SKUs' in 'Create Configurations' wizard"/>
+            <description value="Admin create configurable product and select 'Apply unique prices by attribute to each SKU' and 'Apply single quantity to each SKUs' in 'Create Configurations' in configuration wizard during creation and assert child product's price after creation."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4671"/>
+        </annotations>
+
+        <before>
+            <!-- Log in to Dashboard page -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+
+        <after>
+            <!--Delete configurable product-->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductsWithAllVariations">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <!-- Delete Created Attribute -->
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
+                <argument name="ProductAttribute" value="sizeAttribute"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterInProductAttributePage"/>
+            <!--Logout from Admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminArea"/>
+        </after>
+
+        <!-- Navigate to Catalog-> Products and click On Configurable product dropdown -->
+        <actionGroup ref="GotoCatalogProductsPageActionGroup" stepKey="goToCatalogProductsPage"/>
+        <actionGroup ref="GotoConfigurableProductPageActionGroup" stepKey="goToConfigurableProductPage"/>
+        <!-- Assert Page title and Fill New product information-->
+        <waitForText selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeNewProductPageTitle"/>
+        <waitForElementVisible selector="{{NewProduct.productName}}" stepKey="waitForProductNameToBeDisplayed"/>
+        <fillField stepKey="fillInProductNameFields" selector="{{NewProduct.productName}}" userInput="{{ApiConfigurableProduct.name}}"/>
+        <waitForElementVisible selector="{{NewProduct.productSku}}" stepKey="waitForProductSkuToBeDisplayed"/>
+        <fillField stepKey="fillInProductSkuFields" selector="{{NewProduct.productSku}}" userInput="{{ApiConfigurableProduct.sku}}"/>
+        <waitForElementVisible selector="{{NewProduct.price}}" stepKey="waitForPriceToBeDisplayed"/>
+        <fillField stepKey="fillInPriceFields" selector="{{NewProduct.price}}" userInput="{{ApiConfigurableProduct.price}}"/>
+        <waitForElementVisible selector="{{NewProduct.weight}}" stepKey="waitForWeightToBeDisplayed"/>
+        <fillField stepKey="fillInWeightFields" selector="{{NewProduct.weight}}" userInput="{{ApiConfigurableProduct.weight}}"/>
+        <!--Click on create configuration button-->
+        <scrollTo selector="{{NewProduct.title('Configurations')}}" stepKey="scrollToConfigurationsSection"/>
+        <waitForText userInput="Configurations" selector="{{NewProduct.title('Configurations')}}" stepKey="seeConfigurationsSection"/>
+        <waitForText userInput="Create Configurations" selector="{{NewProduct.title('Create Configurations')}}" stepKey="seeCreateConfigurationsButtonIsPresent"/>
+        <waitForElementClickable selector="{{NewProduct.createConfigurationButton}}" stepKey="waitForCreateConfigurationButtonToBeClickable"/>
+        <click stepKey="clickOnCreateConfigurationsButton" selector="{{NewProduct.createConfigurationButton}}"/>
+        <waitForPageLoad stepKey="waitForCreateProductConfigurationPageToLoad"/>
+        <!--Assert create product configuration title and Select Attribute step is active-->
+        <waitForText userInput="Create Product Configurations" selector="{{NewProduct.titleContainsText('Create Product Configurations')}}" stepKey="seeCreateProductConfigurationsWizard"/>
+        <waitForText userInput="Select Attributes" selector="{{NewProduct.selectAttribute}}" stepKey="seeSelectAttributeStepIsActive"/>
+        <!-- Click on create Attribute buttons-->
+        <click stepKey="clickOnCreateNewAttributeButton" selector="{{NewProduct.createNewAttributeButton}}"/>
+        <waitForPageLoad stepKey="waitForNewAttributePageLoad"/>
+        <!--Fill option 1 -->
+        <actionGroup ref="AdminCreateNewDefaultAttributeForAsWithOptionActionGroup" stepKey="fillOption1">
+            <argument name="defaultLabel" value="{{sizeAttribute.default_label}}"/>
+        </actionGroup>
+        <!-- Fill option 2-->
+        <actionGroup ref="AdminAddOptionForAttributeActionGroup" stepKey="fillOption2"/>
+        <!--Click on save button-->
+        <waitForElementClickable selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="waitForClickSaveAttributeButton"/>
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForSavingAttribute"/>
+        <!--Filter created attribute and click on Next-->
+        <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="checkFirstAttribute">
+            <argument name="attributeCode" value="{{sizeAttribute.attribute_code}}"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitToClickOnNextButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
+        <waitForPageLoad stepKey="waitForStepLoad"/>
+        <!--Select All options-->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="waitToClickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitToClickSecondNextStep"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickSecondNextStep"/>
+        <!--Set image and price-->
+        <waitForText userInput="Step 3: Bulk Images, Price and Quantity" selector="{{AdminProductFormConfigurationsSection.stepsWizardTitle}}" stepKey="seeBulkImagesPriceAndQuantityStepIsDisplayed"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyUniquePricesByAttributeToEachSku}}" stepKey="clickOnApplyUniquePricesByAttributeToEachSku"/>
+        <selectOption selector="{{AdminCreateProductConfigurationsPanel.selectAttribute}}" userInput="Size" stepKey="selectAttribute"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.attribute1}}" stepKey="seePriceFieldForOption1"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute1}}" userInput="6" stepKey="fillRedAttributePrice"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.attribute2}}" stepKey="seePriceFieldForOption2"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attribute2}}" userInput="8" stepKey="fillBlueAttributePrice"/>
+        <!-- Assigning quantities to each SKU's -->
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="waitToClickOnApplySingleQuantityToEachSku"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.quantity}}" stepKey="waitForQuantityField"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="15" stepKey="enterAttributeQuantity"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextButtonToBecomeClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButtonToNavigateToSummaryTab"/>
+        <!--Assert Cancel, Back and Generate Products and buttons are present-->
+        <waitForText userInput="Cancel" selector="{{AdminCreateProductConfigurationsPanel.cancel}}" stepKey="assertCancelButtonIsPresent"/>
+        <waitForText userInput="Back" selector="{{AdminCreateProductConfigurationsPanel.back}}" stepKey="assertBackButtonIsPresent"/>
+        <waitForText userInput="Generate Products" selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="assertGenerateProductButtonIsPresent"/>
+        <!--See created child products are present in summary page-->
+        <waitForText userInput="Step 4: Summary" selector="{{AdminProductFormConfigurationsSection.stepsWizardTitle}}" stepKey="seeSummeryStepIsDisplayed"/>
+        <waitForElement selector="{{AdminCreateProductConfigurationsPanel.configProductName('1')}}" stepKey="seeConfigurableProduct1"/>
+        <waitForElement selector="{{AdminCreateProductConfigurationsPanel.configProductName('2')}}" stepKey="seeConfigurableProduct2"/>
+        <!--Grab child products's names and click on next-->
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.configProductName('1')}}" stepKey="grabTextForConfigProduct1"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.configProductName('2')}}" stepKey="grabTextForConfigProduct2"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForGenerateProductButtonIsPresent"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProductButtonIsPresent"/>
+        <!--Choose affected attribute set and Save product and then see success message-->
+        <waitForElementClickable selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveConfigurableProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProduct"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProduct"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessage"/>
+        <!--Open 1st child variant and assert the price from configuration grid-->
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('1')}}" x="0" y="-100" stepKey="scrollToFirstChildProduct"/>
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('1')}}" stepKey="waitForLinkOfProduct1ToDisplay"/>
+        <click selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('1')}}" stepKey="clickOnProduct1Link"/>
+        <switchToNextTab stepKey="switchToConfigChildProduct1Page"/>
+        <waitForPageLoad stepKey="waitForProduct1PageToLoad"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="6.00" stepKey="seeProductPrice1"/>
+        <closeTab stepKey="closeConfigChildProduct1Page"/>
+        <!--Open 2nd child variant and assert the price from configuration grid-->
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('2')}}" stepKey="waitForLinkOfProduct2ToDisplay"/>
+        <click selector="{{AdminProductFormConfigurationsSection.currentVariationsProductName('2')}}" stepKey="clickOnProduct2Link"/>
+        <switchToNextTab stepKey="switchToConfigChildProduct2Page"/>
+        <waitForPageLoad stepKey="waitForProduct2PageLoad"/>
+        <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="8.00" stepKey="seeProductPrice2"/>
+        <closeTab stepKey="closeConfigChildProduct2Page"/>
+    </test>
+</tests>

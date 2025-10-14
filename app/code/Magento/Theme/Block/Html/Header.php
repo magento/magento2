@@ -33,7 +33,7 @@ class Header extends Template
     public function __construct(
         Context $context,
         array $data = [],
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         parent::__construct($context, $data);
         $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);

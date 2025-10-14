@@ -196,7 +196,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function testExecuteEmailsDataProvider(): array
+    public static function testExecuteEmailsDataProvider(): array
     {
         /**
         * string $sendEmail
@@ -285,8 +285,10 @@ class SaveTest extends TestCase
             ->getMock();
         $saveTransaction
             ->method('addObject')
-            ->withConsecutive([$invoice], [$order])
-            ->willReturnOnConsecutiveCalls($saveTransaction, $saveTransaction);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$invoice] => $saveTransaction,
+                [$order] => $saveTransaction
+            });
 
         $session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()

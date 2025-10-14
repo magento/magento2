@@ -74,10 +74,10 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
         array $data = [],
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        \Magento\Framework\Locale\Format $localeFormat = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
-        Resolver $layerResolver = null
+        ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        ?\Magento\Framework\Locale\Format $localeFormat = null,
+        ?\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
+        ?Resolver $layerResolver = null
     ) {
         parent::__construct(
             $context,

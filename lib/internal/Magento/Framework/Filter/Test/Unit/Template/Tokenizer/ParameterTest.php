@@ -47,7 +47,7 @@ class ParameterTest extends TestCase
     /**
      * @return array
      */
-    public function sampleTokenizeStringProvider()
+    public static function sampleTokenizeStringProvider()
     {
         return [
             ["%20direct_url='about-magento-demo-store'", ['direct_url' => 'about-magento-demo-store']],
@@ -60,7 +60,7 @@ class ParameterTest extends TestCase
     /**
      * @return array
      */
-    public function sampleGetValueStringProvider()
+    public static function sampleGetValueStringProvider()
     {
         return [
             [" direct_url='about-magento-demo-store'", "direct_url='about-magento-demo-store'"],

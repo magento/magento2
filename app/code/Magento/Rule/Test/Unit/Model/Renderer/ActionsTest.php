@@ -45,7 +45,7 @@ class ActionsTest extends TestCase
     public function testRender()
     {
         $rule = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['getActions', '__sleep', '__wakeup'])
+            ->onlyMethods(['getActions', '__sleep', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $actions = $this->createPartialMock(Collection::class, ['asHtmlRecursive']);

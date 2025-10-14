@@ -319,7 +319,7 @@ abstract class AbstractEntity implements EntityInterface
         ResourceConnection $resource,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->string = $string;
         $this->_scopeConfig = $scopeConfig;
@@ -580,7 +580,7 @@ abstract class AbstractEntity implements EntityInterface
      * @param array|null $rowData
      * @return string
      */
-    public function getBehavior(array $rowData = null)
+    public function getBehavior(?array $rowData = null)
     {
         if (isset(
             $this->_parameters['behavior']

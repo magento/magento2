@@ -127,7 +127,6 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $eavConfig,
             $data
         );
-
         $this->addMessageTemplate(self::ERROR_WEBSITE_IS_EMPTY, __('Please specify a website.'));
         $this->addMessageTemplate(
             self::ERROR_EMAIL_IS_EMPTY,
@@ -174,6 +173,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected function _getCustomerId($email, $websiteCode)
     {
         $email = strtolower(trim($email));
+
         if (isset($this->_websiteCodeToId[$websiteCode])) {
             $websiteId = $this->_websiteCodeToId[$websiteCode];
             return $this->_customerStorage->getCustomerId($email, $websiteId);

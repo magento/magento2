@@ -85,15 +85,15 @@ class UploadTest extends TestCase
 
         $this->storageDatabase = $this->getMockBuilder(Database::class)
             ->disableOriginalConstructor()
-            ->setMethods(['saveFile'])
+            ->onlyMethods(['saveFile'])
             ->getMock();
         $this->uploaderFactory = $this->getMockBuilder(UploaderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -145,7 +145,7 @@ class UploadTest extends TestCase
             ->getMock();
         $resultJson = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->getMock();
         $this->request->expects($this->once())->method('getParam')->with('type')->willReturn('samples');
         $this->sample->expects($this->once())->method('getBaseTmpPath')->willReturn('base_tmp_path');

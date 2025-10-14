@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -23,9 +23,13 @@
         <element name="customOption" type="block" selector="[data-index='options'] tbody tr.data-row"/>
         <element name="customOptionButtonDelete" type="button" selector="[data-index='options'] [data-index='delete_button']"/>
         <element name="toggleCustomizableOption" type="button" selector="//table[@data-index='options']//tr[{{index}}]//div[contains(@class, 'admin__collapsible-title')]" parameterized="true" timeout="30"/>
+        <element name="customTextArea" type="text" selector="textarea[name='product[{{areaName}}]']" parameterized="true"/>
+        <element name="customDropDown" type="select" selector="select[name='product[{{dropdown}}]']" parameterized="true"/>
+        <element name="customYesOrNo" type="checkbox" selector="input[name='product[{{boolean}}]']+label" parameterized="true"/>
+        <element name="customMultiSelect" type="select" selector="[name='product[multi_en]']"/>
 
         <element name="optionTypeDropDown" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//div[contains(@class, 'action-select-wrap')]" parameterized="true" timeout="30"/>
-        <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//*[contains(., '{{optionValue}}')]" parameterized="true" timeout="30"/>
+        <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//label[contains(text(), '{{optionValue}}')]" parameterized="true" timeout="30"/>
         <element name="checkSelect" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Type']/parent::label/parent::div/parent::div//div[@data-role='selected-option']" parameterized="true"/>
         <element name="checkOptionType" type="select" selector="//span[text()='{{optionTitle}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='{{optionType}}']" parameterized="true"/>
         <element name="checkDropDown" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='Drop-down']" parameterized="true"/>
@@ -66,5 +70,13 @@
         <!-- Elements to test drag&drop -->
         <element name="dragCustomOptionRecord" type="block" selector="(//tr[{{dragIndex}}]//div[contains(@class, 'draggable-handle')])['1']" timeout="30" parameterized="true"/>
         <element name="customOptionRecordTitle" type="button" selector="//table[@data-index='options']//tr[{{index}}]//div[contains(@class, 'admin__collapsible-title')]//span" timeout="30" parameterized="true"/>
+
+        <element name="useDefaultValue" type="checkbox" selector="(//input[@data-form-part='product_form'])[{{index}}]" parameterized="true"/>
+        <element name="customOptionOrder" type="text" selector="(//div[@class='admin__collapsible-title']/span)[{{index}}]" parameterized="true"/>
+        <element name="paginationNextButton" type="button" selector="//div[@data-bind='visible: !!element.getRecordCount()']//button[@class='action-next']"/>
+        <element name="customOptionPageDropdown" type="select" selector="//div[@class='admin__control-table-pagination']/div[@class='selectmenu']"/>
+        <element name="customPageOption" type="text" selector="//div[@class='selectmenu _active']//li[@data-bind='css: {_edit: isCustomVisible()}']"/>
+        <element name="customPageNumber" type="input" selector="//div[@class='selectmenu _active']//input[@class='admin__control-text']"/>
+        <element name="customSave" type="button" selector="//div[@class='selectmenu _active']//div[@class='selectmenu-item-edit']/button"/>
     </section>
 </sections>

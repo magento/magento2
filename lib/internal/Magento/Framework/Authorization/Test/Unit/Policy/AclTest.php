@@ -76,10 +76,14 @@ class AclTest extends TestCase
     {
         $this->_aclMock
             ->method('isAllowed')
-            ->withConsecutive([ 'some_role', 'some_resource'], ['some_role', null])
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new InvalidArgumentException()),
-                true
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'some_role' && $arg2 == 'some_resource') {
+                        throw new InvalidArgumentException();
+                    } elseif ($arg1 == 'some_role' && $arg2 == null) {
+                        return true;
+                    }
+                }
             );
 
         $this->_aclMock->expects($this->once())->method('hasResource')->with('some_resource')->willReturn(false);

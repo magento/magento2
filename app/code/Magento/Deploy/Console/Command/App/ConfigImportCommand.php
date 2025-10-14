@@ -60,9 +60,9 @@ class ConfigImportCommand extends Command
      */
     public function __construct(
         Processor $processor,
-        DeploymentConfig $deploymentConfig = null,
-        EmulatedAdminhtmlAreaProcessor $adminhtmlAreaProcessor = null,
-        AreaList $areaList = null
+        ?DeploymentConfig $deploymentConfig = null,
+        ?EmulatedAdminhtmlAreaProcessor $adminhtmlAreaProcessor = null,
+        ?AreaList $areaList = null
     ) {
         $this->processor = $processor;
         $this->deploymentConfig = $deploymentConfig

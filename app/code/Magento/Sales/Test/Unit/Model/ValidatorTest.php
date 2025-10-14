@@ -74,7 +74,7 @@ class ValidatorTest extends TestCase
         $this->entityMock = $this->getMockForAbstractClass(OrderInterface::class);
         $this->validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()
+            ->onlyMethods(['create'])->disableOriginalConstructor()
             ->getMock();
         $this->validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
         $this->validatorResultFactoryMock->expects($this->any())->method('create')

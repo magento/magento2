@@ -42,7 +42,7 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null)
+    public function setAppliedTaxes(?array $appliedTaxes = null)
     {
         return $this->setData(self::KEY_APPLIED_TAXES, $appliedTaxes);
     }
@@ -53,7 +53,7 @@ class Details extends \Magento\Framework\Model\AbstractExtensibleModel implement
      * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this->setData(self::KEY_ITEMS, $items);
     }

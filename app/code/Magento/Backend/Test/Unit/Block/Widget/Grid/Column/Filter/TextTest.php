@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class TextTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
-            ->setMethods(['getEscaper'])
+            ->onlyMethods(['getEscaper'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaper = $this->createPartialMock(
@@ -67,7 +67,7 @@ class TextTest extends TestCase
             'class="input-text admin__control-text no-changes" data-ui-id="filter-escapedhtml"  />';
 
         $column = $this->getMockBuilder(Column::class)
-            ->setMethods(['getId', 'getHtmlId'])
+            ->onlyMethods(['getId', 'getHtmlId'])
             ->disableOriginalConstructor()
             ->getMock();
 

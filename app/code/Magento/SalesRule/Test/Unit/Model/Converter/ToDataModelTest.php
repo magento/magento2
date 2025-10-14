@@ -81,41 +81,40 @@ class ToDataModelTest extends TestCase
     {
         $this->ruleFactory = $this->getMockBuilder(RuleFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->ruleDataFactory = $this->getMockBuilder(RuleInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->conditionDataFactory = $this->getMockBuilder(
             ConditionInterfaceFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->dataObjectProcessor = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->ruleLabelFactory = $this->getMockBuilder(RuleLabelInterfaceFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->salesRule = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['_construct', 'getData', 'getConditionsSerialized', 'getActionsSerialized'])
+            ->addMethods(['getConditionsSerialized', 'getActionsSerialized'])
+            ->onlyMethods(['_construct', 'getData'])
             ->getMock();
 
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(null)
+            ->addMethods([])
             ->getMock();
 
         $this->extensionFactoryMock = $this->getMockBuilder(RuleExtensionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -206,16 +205,18 @@ class ToDataModelTest extends TestCase
 
         $dataModel = $this->getMockBuilder(\Magento\SalesRule\Model\Data\Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create', 'getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
+            ->addMethods(['create'])
+            ->onlyMethods(['getStoreLabels', 'setStoreLabels', 'getCouponType', 'setCouponType'])
             ->getMock();
 
         $dataLabel = $this->getMockBuilder(RuleLabelInterface::class)
-            ->setMethods(['setStoreId', 'setStoreLabel', 'setStoreLabels'])
+            ->addMethods(['setStoreLabels'])
+            ->onlyMethods(['setStoreId', 'setStoreLabel'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $dataCondition = $this->getMockBuilder(Condition::class)
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -316,7 +317,7 @@ class ToDataModelTest extends TestCase
         ];
 
         $dataCondition = $this->getMockBuilder(Condition::class)
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->disableOriginalConstructor()
             ->getMock();
 

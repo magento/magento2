@@ -154,7 +154,7 @@ class ObjectTest extends TestCase
     /**
      * @return array
      */
-    public function evaluateWrongClassDataProvider()
+    public static function evaluateWrongClassDataProvider()
     {
         return [
             'no class' => [[], '\InvalidArgumentException', 'Object class name is missing'],

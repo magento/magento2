@@ -55,7 +55,7 @@ Role,Role
 System,System
 Permissions,Permissions
 "You cannot delete your own account.","You cannot delete your own account."
-"You have entered an invalid password for current user.","You have entered an invalid password for current user."
+"The password entered for the current user is invalid. Verify the password and try again.","The password entered for the current user is invalid. Verify the password and try again."
 "You deleted the user.","You deleted the user."
 "We can't find a user to delete.","We can't find a user to delete."
 "This user no longer exists.","This user no longer exists."
@@ -63,6 +63,7 @@ Permissions,Permissions
 "You have revoked the user's tokens.","You have revoked the user's tokens."
 "We can't find a user to revoke.","We can't find a user to revoke."
 "You cannot delete self-assigned roles.","You cannot delete self-assigned roles."
+"We can't find a role to delete.","We can't find a role to delete."
 "You deleted the role.","You deleted the role."
 "An error occurred while deleting this role.","An error occurred while deleting this role."
 "Edit Role","Edit Role"
@@ -71,6 +72,7 @@ Permissions,Permissions
 "You saved the role.","You saved the role."
 "An error occurred while saving this role.","An error occurred while saving this role."
 "You saved the user.","You saved the user."
+Administrator,Administrator
 "A user with the same user name or email already exists.","A user with the same user name or email already exists."
 Recommended,Recommended
 Forced,Forced
@@ -78,12 +80,13 @@ Forced,Forced
 email,email
 password,password
 username,username
-"You did not sign in correctly or your account is temporarily disabled.","You did not sign in correctly or your account is temporarily disabled."
-"You need more permissions to access this.","You need more permissions to access this."
-"Your account is temporarily disabled.","Your account is temporarily disabled."
-"User Name is a required field.","User Name is a required field."
-"First Name is a required field.","First Name is a required field."
-"Last Name is a required field.","Last Name is a required field."
+"The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.","The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."
+"More permissions are needed to access this.","More permissions are needed to access this."
+"The password reset token is incorrect. Verify the token and try again.","The password reset token is incorrect. Verify the token and try again."
+"Your account is temporarily disabled. Please try again later.","Your account is temporarily disabled. Please try again later."
+"""User Name"" is required. Enter and try again.","""User Name"" is required. Enter and try again."
+"""First Name"" is required. Enter and try again.","""First Name"" is required. Enter and try again."
+"""Last Name"" is required. Enter and try again.","""Last Name"" is required. Enter and try again."
 "Please enter a valid email.","Please enter a valid email."
 "Password is required field.","Password is required field."
 "Your password must be at least %1 characters.","Your password must be at least %1 characters."
@@ -108,6 +111,12 @@ All,All
 Resources,Resources
 "Warning!<br>This action will remove this user from already assigned role.<br>Are you sure?","Warning!<br>This action will remove this user from already assigned role.<br>Are you sure?"
 "Warning!<br>This action will remove those users from already assigned roles.<br>Are you sure?","Warning!<br>This action will remove those users from already assigned roles.<br>Are you sure?"
+"New admin user '%user_name' created","New admin user '%user_name' created"
+"Hello,","Hello,"
+"A new admin account was created for %first_name, %last_name using %email.","A new admin account was created for %first_name, %last_name using %email."
+"If you have not authorized this action, please contact us immediately at %store_email","If you have not authorized this action, please contact us immediately at %store_email"
+"or call us at %store_phone","or call us at %store_phone"
+"Thanks,","Thanks,"
 "Password Reset Confirmation for %name","Password Reset Confirmation for %name"
 "%name,","%name,"
 "There was recently a request to change the password for your account.","There was recently a request to change the password for your account."
@@ -115,20 +124,16 @@ Resources,Resources
 "If you did not make this request, you can ignore this email and your password will remain the same.","If you did not make this request, you can ignore this email and your password will remain the same."
 "Thank you,","Thank you,"
 "New %changes for %user_name","New %changes for %user_name"
-"Hello,","Hello,"
-"We have received a request to change the following information associated with your account at %store_name: %changes.","We have received a request to change the following information associated with your account at %store_name: %changes."
-"If you have not authorized this action, please contact us immediately at %store_email","If you have not authorized this action, please contact us immediately at %store_email"
-"or call us at %store_phone","or call us at %store_phone"
-"Thanks,","Thanks,"
+"We have received a request to reset the %changes associated with your account at %store_name.","We have received a request to reset the %changes associated with your account at %store_name."
 "All Users","All Users"
 "User Roles","User Roles"
 "User Notification Template","User Notification Template"
 "Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
+"New User Notification Template","New User Notification Template"
 "Maximum Login Failures to Lockout Account","Maximum Login Failures to Lockout Account"
 "We will disable this feature if the value is empty.","We will disable this feature if the value is empty."
 "Lockout Time (minutes)","Lockout Time (minutes)"
 "Password Lifetime (days)","Password Lifetime (days)"
-"We will disable this feature if the value is empty. ","We will disable this feature if the value is empty. "
 "Password Change","Password Change"
 Unlock,Unlock
 ID,ID
@@ -136,3 +141,4 @@ Username,Username
 "Last login","Last login"
 Failures,Failures
 Unlocked,Unlocked
+"Last Logged in","Last Logged in"

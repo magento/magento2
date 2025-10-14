@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,8 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Bundle\Api\ProductLinkManagementAddChildrenInterface;
 
 class SaveActionTest extends TestCase
 {
@@ -51,6 +53,16 @@ class SaveActionTest extends TestCase
      */
     private $saveAction;
 
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var ProductLinkManagementAddChildrenInterface
+     */
+    private $addChildren;
+
     protected function setUp(): void
     {
         $this->linkManagement = $this->getMockBuilder(ProductLinkManagementInterface::class)
@@ -65,6 +77,12 @@ class SaveActionTest extends TestCase
         $this->optionResource = $this->getMockBuilder(OptionResource::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->addChildren = $this->getMockBuilder(ProductLinkManagementAddChildrenInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->product = $this->getMockBuilder(ProductInterface::class)
             ->addMethods(['getStoreId', 'getData', 'setIsRelationsChanged'])
             ->getMockForAbstractClass();
@@ -73,7 +91,9 @@ class SaveActionTest extends TestCase
             $this->optionResource,
             $this->metadataPool,
             $this->type,
-            $this->linkManagement
+            $this->linkManagement,
+            $this->storeManager,
+            $this->addChildren
         );
     }
 
@@ -109,9 +129,6 @@ class SaveActionTest extends TestCase
             ->method('getMetadata')
             ->willReturn($metadata);
 
-        $this->linkManagement->expects($this->once())
-            ->method('getChildren')
-            ->willReturn([]);
         $this->product->expects($this->once())
             ->method('setIsRelationsChanged')
             ->with(true);

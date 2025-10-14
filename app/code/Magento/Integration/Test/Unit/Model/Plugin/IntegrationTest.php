@@ -149,8 +149,15 @@ class IntegrationTest extends TestCase
             ->willReturn($integrationId);
         $integrationModelMock
             ->method('getData')
-            ->withConsecutive(['all_resources'], ['resource'], ['resource'])
-            ->willReturnOnConsecutiveCalls(null, ['testResource'], ['testResource']);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === 'all_resources') {
+                        return null;
+                    } elseif ($arg === 'resource') {
+                        return ['testResource'];
+                    }
+                }
+            );
 
         $this->integrationAuthServiceMock->expects($this->once())
             ->method('grantPermissions')
@@ -173,8 +180,13 @@ class IntegrationTest extends TestCase
             ->willReturn($integrationId);
         $integrationModelMock
             ->method('getData')
-            ->withConsecutive(['all_resources'], ['resource'])
-            ->willReturnOnConsecutiveCalls(null, null);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg === 'all_resources' || $arg === 'resource') {
+                        return null;
+                    }
+                }
+            );
 
         $this->integrationAuthServiceMock->expects($this->once())
             ->method('grantPermissions')

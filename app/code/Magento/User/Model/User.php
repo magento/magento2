@@ -193,11 +193,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        DeploymentConfig $deploymentConfig = null,
+        ?Json $serializer = null,
+        ?DeploymentConfig $deploymentConfig = null,
         ?NotificatorInterface $notificator = null
     ) {
         $this->_encryptor = $encryptor;

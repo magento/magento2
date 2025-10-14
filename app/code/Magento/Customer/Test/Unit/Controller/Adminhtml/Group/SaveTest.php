@@ -227,14 +227,13 @@ class SaveTest extends TestCase
         $exception = new \Exception('Exception');
         $this->resultRedirectMock
             ->method('setPath')
-            ->withConsecutive(
-                ['customer/group'],
-                ['customer/group/edit', ['id' => $groupId]]
-            )
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException($exception),
-                null
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($exception, $groupId) {
+                if ($arg1 == 'customer/group') {
+                    throw $exception;
+                } elseif ($arg1 == 'customer/group/edit' && $arg2 == ['id' => $groupId]) {
+                    return null;
+                }
+            });
 
         self::assertSame($this->resultRedirectMock, $this->controller->execute());
     }

@@ -43,17 +43,17 @@ class AjaxLoadTest extends TestCase
     {
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMock();
 
         $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->taxRateRepository = $this->getMockBuilder(RateRepository::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
     }
 
@@ -113,7 +113,7 @@ class AjaxLoadTest extends TestCase
 
         $jsonObject= $this->getMockBuilder(JsonResult::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->getMock();
 
         $jsonObject->expects($this->once())
@@ -162,7 +162,7 @@ class AjaxLoadTest extends TestCase
 
         $jsonObject= $this->getMockBuilder(JsonResult::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->getMock();
 
         $jsonObject->expects($this->once())
@@ -212,7 +212,7 @@ class AjaxLoadTest extends TestCase
 
         $jsonObject= $this->getMockBuilder(JsonResult::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->getMock();
 
         $jsonObject->expects($this->once())

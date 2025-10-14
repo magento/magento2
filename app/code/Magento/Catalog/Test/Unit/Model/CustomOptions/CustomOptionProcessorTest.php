@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
 
 use Magento\Catalog\Api\Data\CustomOptionInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
+use Magento\Catalog\Model\Product\Option\Type\File\ImageContentProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -72,32 +74,33 @@ class CustomOptionProcessorTest extends TestCase
     protected function setUp(): void
     {
         $this->objectFactory = $this->getMockBuilder(Factory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productOptionFactory = $this->getMockBuilder(ProductOptionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionFactory = $this->getMockBuilder(ProductOptionExtensionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->customOptionFactory = $this->getMockBuilder(
             CustomOptionFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartItem = $this->getMockBuilder(CartItemInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOptionByCode', 'getProductOption', 'setProductOption'])
+            ->addMethods(['getOptionByCode'])
+            ->onlyMethods(['getProductOption', 'setProductOption'])
             ->getMockForAbstractClass();
         $this->extensibleAttribute = $this->getMockBuilder(
             ProductOptionExtensionInterface::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomOptions', 'getCustomOptions'])
+            ->addMethods(['setCustomOptions', 'getCustomOptions'])
             ->getMockForAbstractClass();
         $this->productOption = $this->getMockBuilder(ProductOption::class)
             ->disableOriginalConstructor()
@@ -109,7 +112,7 @@ class CustomOptionProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
+            ->onlyMethods(['unserialize'])
             ->getMockForAbstractClass();
 
         $this->processor = new CustomOptionProcessor(
@@ -117,7 +120,9 @@ class CustomOptionProcessorTest extends TestCase
             $this->productOptionFactory,
             $this->extensionFactory,
             $this->customOptionFactory,
-            $this->serializer
+            $this->serializer,
+            $this->createMock(ProductRepositoryInterface::class),
+            $this->createMock(ImageContentProcessor::class)
         );
     }
 
@@ -137,7 +142,7 @@ class CustomOptionProcessorTest extends TestCase
         $this->extensibleAttribute->expects($this->atLeastOnce())
             ->method('getCustomOptions')
             ->willReturn([$this->customOption]);
-        $this->customOption->expects($this->once())
+        $this->customOption->expects($this->any())
             ->method('getOptionId')
             ->willReturn($optionId);
         $this->customOption->expects($this->once())

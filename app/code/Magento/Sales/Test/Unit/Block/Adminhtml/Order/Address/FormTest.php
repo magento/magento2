@@ -10,11 +10,13 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Address;
 use Magento\Backend\Model\Session\Quote as QuoteSession;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Customer\Model\Metadata\FormFactory as CustomerFormFactory;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Framework\Data\Form as DataForm;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\Form\Element\Select;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Address\Form;
@@ -67,7 +69,17 @@ class FormTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->customerFormFactory = $this->createMock(CustomerFormFactory::class);
         $this->coreRegistry = $this->createMock(Registry::class);
@@ -76,7 +88,8 @@ class FormTest extends TestCase
         );
         $this->sessionQuote = $this->getMockBuilder(QuoteSession::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreId', 'getStore'])
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getStore'])
             ->getMock();
 
         $this->orderCreate = $this->getMockBuilder(Create::class)

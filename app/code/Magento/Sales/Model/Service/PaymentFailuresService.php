@@ -75,7 +75,7 @@ class PaymentFailuresService implements PaymentFailuresInterface
         TransportBuilder $transportBuilder,
         TimezoneInterface $localeDate,
         CartRepositoryInterface $cartRepository,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->inlineTranslation = $inlineTranslation;

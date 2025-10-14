@@ -83,7 +83,7 @@ class OrderIncrementIdCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function isOrderIncrementIdUsedDataProvider(): array
+    public static function isOrderIncrementIdUsedDataProvider(): array
     {
         return [[100000001], ['10000000001'], ['M10000000001']];
     }

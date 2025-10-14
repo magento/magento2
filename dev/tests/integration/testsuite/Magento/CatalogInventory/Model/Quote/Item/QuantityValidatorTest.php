@@ -256,22 +256,22 @@ class QuantityValidatorTest extends TestCase
      *
      * @return array
      */
-    public function quantityDataProvider(): array
+    public static function quantityDataProvider(): array
     {
         $qtyRegexp = '/You can buy (this product|Configurable OptionOption 1) only in quantities of 500 at a time/';
 
         return [
             [
                 'quantity' => 1,
-                'error_regexp' => '/The fewest you may purchase is 500/'
+                'errorMessageRegexp' => '/The fewest you may purchase is 500/'
             ],
             [
                 'quantity' => 501,
-                'error_regexp' => $qtyRegexp
+                'errorMessageRegexp' => $qtyRegexp
             ],
             [
                 'quantity' => 1000,
-                'error_regexp' => ''
+                'errorMessageRegexp' => ''
             ]
         ];
     }

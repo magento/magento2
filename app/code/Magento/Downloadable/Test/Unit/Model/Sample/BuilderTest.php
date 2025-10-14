@@ -74,7 +74,7 @@ class BuilderTest extends TestCase
 
         $this->mockComponentFactory = $this->getMockBuilder(SampleFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->sampleMock = $this->getMockBuilder(SampleInterface::class)
@@ -126,13 +126,13 @@ class BuilderTest extends TestCase
         $sampleModel->expects($this->once())->method('getBasePath')->willReturn($basePath);
         $this->downloadFileMock->expects($this->once())
             ->method('moveFileFromTmp')
-            ->withConsecutive(
-                [
-                    $baseTmpPath,
-                    $basePath,
-                    $data['file']
-                ]
-            )->willReturn($fileName);
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($baseTmpPath, $basePath, $data, $fileName) {
+                    if ($arg1 == $baseTmpPath && $arg2 == $basePath && $arg3 == $data['file']) {
+                        return $fileName;
+                    }
+                }
+            );
         $this->sampleMock->expects($this->once())->method('setSampleFile')->with($fileName);
         $this->sampleMock->expects($this->once())->method('setSortOrder')->with(1);
         $useDefaultTitle = $data['use_default_title'] ?? false;

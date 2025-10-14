@@ -39,7 +39,7 @@ class CustomerSessionUserContextTest extends TestCase
 
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->customerSessionUserContext = $this->objectManager->getObject(

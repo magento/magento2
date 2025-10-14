@@ -10,9 +10,9 @@ namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Shopcart;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid;
 use Magento\Reports\Controller\Adminhtml\Report\Shopcart\ExportAbandonedCsv;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 
-class ExportAbandonedCsvTest extends AbstractControllerTest
+class ExportAbandonedCsvTest extends AbstractControllerTestCase
 {
     /**
      * @var ExportAbandonedCsv

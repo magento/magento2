@@ -201,7 +201,8 @@ class CurrencysymbolTest extends TestCase
          */
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setSection', 'setWebsite', 'setStore', 'setGroups', 'save'])
+            ->addMethods(['setSection', 'setWebsite', 'setStore', 'setGroups'])
+            ->onlyMethods(['save'])
             ->getMock();
 
         $this->configFactoryMock->expects($this->once())->method('create')->willReturn($configMock);
@@ -253,7 +254,7 @@ class CurrencysymbolTest extends TestCase
     /**
      * @return array
      */
-    public function getCurrencySymbolDataProvider()
+    public static function getCurrencySymbolDataProvider()
     {
         return [
             'existent custom symbol' => [

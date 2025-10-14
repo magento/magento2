@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,8 +95,13 @@ class SynchronizeTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['ids', []], ['type_id', null])
-            ->willReturnOnConsecutiveCalls($data['ids'], $data['type_id']);
+            ->willReturnCallback(function ($arg1, $arg2) use ($data) {
+                if ($arg1 == 'ids' && empty($arg2)) {
+                    return $data['ids'];
+                } elseif ($arg1 == 'type_id' && $arg2 === null) {
+                    return $data['type_id'];
+                }
+            });
 
         $this->synchronizerMock->expects($this->once())
             ->method('syncActions')
@@ -128,8 +133,13 @@ class SynchronizeTest extends TestCase
 
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['ids', []], ['type_id', null])
-            ->willReturnOnConsecutiveCalls($data['ids'], $data['type_id']);
+            ->willReturnCallback(function ($arg1, $arg2) use ($data) {
+                if ($arg1 == 'ids' && empty($arg2)) {
+                    return $data['ids'];
+                } elseif ($arg1 == 'type_id' && $arg2 === null) {
+                    return $data['type_id'];
+                }
+            });
 
         $this->synchronizerMock->expects($this->once())
             ->method('syncActions')
