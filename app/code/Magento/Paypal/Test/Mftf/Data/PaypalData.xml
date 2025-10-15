@@ -323,5 +323,6 @@
         <data key="amount_note">Voided authorization. Amount: $15.00.</data>
         <data key="status">void</data>
         <data key="label">Voided</data>
+        <data key="cancelled_note">Canceled order online Amount: $15.00.</data>
     </entity>
 </entities>
