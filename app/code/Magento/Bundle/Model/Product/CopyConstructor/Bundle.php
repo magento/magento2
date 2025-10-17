@@ -38,6 +38,7 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
             $productLinks = $duplicatedBundleOption->getProductLinks() ?: [];
             foreach ($productLinks as $productLink) {
                 $productLink->setSelectionId(null);
+                $productLink->setId(null);
             }
             $duplicatedBundleOption->setOptionId(null);
             $duplicatedBundleOptions[$key] = $duplicatedBundleOption;
