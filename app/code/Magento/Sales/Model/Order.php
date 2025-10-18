@@ -4703,12 +4703,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function isVisibleCustomerPrefix(): bool
     {
-        $prefixShowValue = $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             'customer/address/prefix_show',
             ScopeInterface::SCOPE_STORE
         );
 
-        return $prefixShowValue !== Nooptreq::VALUE_NO;
+        return in_array($value, [Nooptreq::VALUE_OPTIONAL, Nooptreq::VALUE_REQUIRED], true);
     }
 
     /**
@@ -4718,12 +4718,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function isVisibleCustomerSuffix(): bool
     {
-        $prefixShowValue = $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             'customer/address/suffix_show',
             ScopeInterface::SCOPE_STORE
         );
 
-        return $prefixShowValue !== Nooptreq::VALUE_NO;
+        return in_array($value, [Nooptreq::VALUE_OPTIONAL, Nooptreq::VALUE_REQUIRED], true);
     }
 
     //@codeCoverageIgnoreEnd

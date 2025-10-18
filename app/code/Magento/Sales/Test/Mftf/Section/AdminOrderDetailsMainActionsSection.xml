@@ -31,5 +31,6 @@
         <element name="void" type="button" selector="#void_payment span"/>
         <element name="invoiceTabContent1" type="text" selector="#sales_order_view_tabs_order_invoices_content > div > div.admin__data-grid-wrap > table > tbody > tr > td"/>
         <element name="creditMemoWarning" type="text" selector="//div[@class='modal-content']//div[text()='This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?']"/>
+        <element name="linkOrder" type="text" selector="//*[@id='sales_order_view_tabs_order_info_content']//table[contains(@class,'order-information-table')]/tbody//tr//th[text()='{{orderInfo}}']/following-sibling::td//a" parameterized="true"/>
     </section>
 </sections>

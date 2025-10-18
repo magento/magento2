@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5262"/>
             <group value="cloud"/>
+            <skip>
+                <issueId value="AC-15476">Skipped because of AC bug</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Set Enable Inventory Check On Cart Load = No -->

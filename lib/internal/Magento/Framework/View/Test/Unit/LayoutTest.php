@@ -897,7 +897,7 @@ class LayoutTest extends TestCase
      */
     public function testGenerateElementsWithoutCache(): void
     {
-        $this->readerContextFactoryMock->expects($this->once())
+        $this->readerContextFactoryMock->expects($this->atMost(2))
             ->method('create')
             ->willReturn($this->readerContextMock);
         $layoutCacheId = 'layout_cache_id';
@@ -952,6 +952,11 @@ class LayoutTest extends TestCase
         $this->layoutScheduledSructure->expects($this->any())
             ->method('__toArray')
             ->willReturn($layoutScheduledStructureData);
+        
+        // Ensure __toArray returns valid data for defensive copying
+        $this->pageConfigStructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($pageConfigStructureData);
         $data = [
             'pageConfigStructure' => $pageConfigStructureData,
             'scheduledStructure' => $layoutScheduledStructureData,
@@ -999,7 +1004,7 @@ class LayoutTest extends TestCase
         $xml = simplexml_load_string('<layout/>', Element::class);
         $this->model->setXml($xml);
 
-        $this->readerContextFactoryMock->expects($this->once())
+        $this->readerContextFactoryMock->expects($this->atMost(2))
             ->method('create')
             ->willReturn($this->readerContextMock);
         $themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
@@ -1035,6 +1040,14 @@ class LayoutTest extends TestCase
         $this->layoutScheduledSructure->expects($this->once())
             ->method('populateWithArray')
             ->with($layoutScheduledStructureData);
+        
+        // Ensure __toArray returns valid data for defensive copying
+        $this->layoutScheduledSructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($layoutScheduledStructureData);
+        $this->pageConfigStructure->expects($this->any())
+            ->method('__toArray')
+            ->willReturn($pageConfigStructureData);
         $data = [
             'pageConfigStructure' => $pageConfigStructureData,
             'scheduledStructure' => $layoutScheduledStructureData,

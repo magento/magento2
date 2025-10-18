@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminInProductStockOptionsFeatureSetNotifyForQuantityBelowActionGroup">
+        <annotations>
+            <description>In product stock options feature set notify for quantity below</description>
+        </annotations>
+        <arguments>
+            <argument name="quantityValue" type="string" defaultValue="1"/>
+        </arguments>
+        <scrollTo  selector="{{AdminInventoryProductStockOptionsConfigSection.notifyQty}}" x="0" y="-80" stepKey="scrollToNotifyQuantityFieldToSetValue"/>
+        <uncheckOption selector="{{AdminInventoryProductStockOptionsConfigSection.systemValue}}" stepKey="uncheckUseDefaultValue"/>
+        <fillField selector="{{AdminInventoryProductStockOptionsConfigSection.notifyQty}}" userInput="{{quantityValue}}" stepKey="setNotifyForQtyBelow"/>
+    </actionGroup>
+</actionGroups>

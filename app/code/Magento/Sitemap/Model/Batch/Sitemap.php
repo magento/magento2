@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sitemap\Model\Batch;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
@@ -141,6 +142,7 @@ class Sitemap extends BaseSitemap
             ObjectManager::getInstance()->get(ProductConfigReader::class);
         $this->sitemapItemFactory = $sitemapItemFactory ??
             ObjectManager::getInstance()->get(SitemapItemInterfaceFactory::class);
+        $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
 
         parent::__construct(
             $context,
@@ -309,5 +311,19 @@ class Sitemap extends BaseSitemap
 
         $this->_lineCount++;
         $this->_fileSize += strlen($xml);
+    }
+
+    /**
+     * Get path to sitemap file
+     *
+     * @param string $fileName
+     * @return string
+     */
+    private function getFilePath(string $fileName): string
+    {
+        $path = $this->getSitemapPath() !== null ? rtrim($this->getSitemapPath(), '/') : '';
+        $path .= '/' . $fileName;
+
+        return $path;
     }
 }

@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
-    <publisher topic="catalog_product_generate_urls"/>
+    <publisher topic="catalog_product_generate_urls" queue="catalog_product_generate_urls"/>
 </config>

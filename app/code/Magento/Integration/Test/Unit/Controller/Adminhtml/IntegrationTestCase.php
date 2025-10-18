@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * \Magento\Integration\Controller\Adminhtml
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml;
 
