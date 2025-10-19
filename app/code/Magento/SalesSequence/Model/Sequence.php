@@ -90,7 +90,7 @@ class Sequence implements SequenceInterface
      *
      * @return string
      */
-    private function calculateCurrentValue(): string
+    public function calculateCurrentValue(): string
     {
         return ($this->lastIncrementId - $this->meta->getActiveProfile()->getStartValue())
         * $this->meta->getActiveProfile()->getStep() + $this->meta->getActiveProfile()->getStartValue();
@@ -104,6 +104,16 @@ class Sequence implements SequenceInterface
     public function getEntityType(): string
     {
         return $this->meta->getEntityType();
+    }
+
+    /**
+     * Retrieve the current store id
+     *
+     * @return int
+     */
+    public function getStoreId(): int
+    {
+        return $this->meta->getStoreId();
     }
 
     /**
