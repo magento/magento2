@@ -17,14 +17,14 @@ interface SequenceInterface
     /**
      * Retrieve current value
      *
-     * @return string
+     * @return ?string
      */
-    public function getCurrentValue();
+    public function getCurrentValue(): ?string;
 
     /**
      * Retrieve next value
      *
      * @return string
      */
-    public function getNextValue();
+    public function getNextValue(): string;
 }

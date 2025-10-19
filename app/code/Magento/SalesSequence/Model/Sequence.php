@@ -49,7 +49,7 @@ class Sequence implements SequenceInterface
     public function __construct(
         Meta $meta,
         AppResource $resource,
-        $pattern = self::DEFAULT_PATTERN
+        string $pattern = self::DEFAULT_PATTERN
     ) {
         $this->meta = $meta;
         $this->connection = $resource->getConnection('sales');
@@ -59,9 +59,9 @@ class Sequence implements SequenceInterface
     /**
      * Retrieve current value
      *
-     * @return string
+     * @return ?string
      */
-    public function getCurrentValue()
+    public function getCurrentValue(): ?string
     {
         if (!isset($this->lastIncrementId)) {
             return null;
@@ -76,11 +76,9 @@ class Sequence implements SequenceInterface
     }
 
     /**
-     * Retrieve next value
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function getNextValue()
+    public function getNextValue(): string
     {
         $this->connection->insert($this->meta->getSequenceTable(), []);
         $this->lastIncrementId = $this->connection->lastInsertId($this->meta->getSequenceTable());
@@ -92,9 +90,29 @@ class Sequence implements SequenceInterface
      *
      * @return string
      */
-    private function calculateCurrentValue()
+    private function calculateCurrentValue(): string
     {
         return ($this->lastIncrementId - $this->meta->getActiveProfile()->getStartValue())
         * $this->meta->getActiveProfile()->getStep() + $this->meta->getActiveProfile()->getStartValue();
+    }
+
+    /**
+     * Retrieve the current entity type
+     *
+     * @return string
+     */
+    public function getEntityType(): string
+    {
+        return $this->meta->getEntityType();
+    }
+
+    /**
+     * Retrieve the currently active meta profile
+     *
+     * @return Profile
+     */
+    public function getMetaProfile(): Profile
+    {
+        return $this->meta->getActiveProfile();
     }
 }
