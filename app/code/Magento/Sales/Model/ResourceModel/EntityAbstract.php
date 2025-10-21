@@ -175,6 +175,9 @@ abstract class EntityAbstract extends AbstractDb implements ResetAfterRequestInt
     {
         $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         $data = $this->prepareDataForUpdate($object);
+        if (isset($data['updated_at'])) {
+            unset($data['updated_at']);
+        }
         unset($data[$this->getIdFieldName()]);
         if (count($data) > 0) {
             $this->getConnection()->update($this->getMainTable(), $data, $condition);
