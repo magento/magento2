@@ -22,11 +22,15 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_session;
 
     /**
+     * Application data storage
+     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
+     * Admin user authentication service
+     *
      * @var \Magento\Backend\Model\Auth\Session
      */
     protected $_backendSession;
@@ -57,21 +61,64 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId = 'invoice_id';
-        $this->_controller = 'adminhtml_order_invoice';
-        $this->_mode = 'view';
-        $this->_session = $this->_backendSession;
-
+        $this->initializeConfiguration();
         parent::_construct();
-
-        $this->buttonList->remove('save');
-        $this->buttonList->remove('reset');
-        $this->buttonList->remove('delete');
+        $this->removeDefaultButtons();
 
         if (!$this->getInvoice()) {
             return;
         }
 
+        $this->addInvoiceButtons();
+    }
+
+    /**
+     * Initialize basic configuration
+     *
+     * @return void
+     */
+    private function initializeConfiguration()
+    {
+        $this->_objectId = 'invoice_id';
+        $this->_controller = 'adminhtml_order_invoice';
+        $this->_mode = 'view';
+        $this->_session = $this->_backendSession;
+    }
+
+    /**
+     * Remove default buttons
+     *
+     * @return void
+     */
+    private function removeDefaultButtons()
+    {
+        $this->buttonList->remove('save');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('delete');
+    }
+
+    /**
+     * Add all invoice-specific buttons
+     *
+     * @return void
+     */
+    private function addInvoiceButtons()
+    {
+        $this->addCancelButton();
+        $this->addSendEmailButton();
+        $this->addCreditMemoButton();
+        $this->addCaptureButton();
+        $this->addVoidButton();
+        $this->addPrintButton();
+    }
+
+    /**
+     * Add cancel button if allowed and applicable
+     *
+     * @return void
+     */
+    private function addCancelButton()
+    {
         if ($this->_isAllowedAction(
             'Magento_Sales::cancel'
         ) && $this->getInvoice()->canCancel() && !$this->_isPaymentReview()
@@ -85,20 +132,37 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 ]
             );
         }
+    }
 
+    /**
+     * Add send email button if allowed
+     *
+     * @return void
+     */
+    private function addSendEmailButton()
+    {
         if ($this->_isAllowedAction('Magento_Sales::emails')) {
+            $confirmMessage = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to send an invoice email to customer?'))
+            );
             $this->addButton(
                 'send_notification',
                 [
                     'label' => __('Send Email'),
                     'class' => 'send-email',
-                    'onclick' => 'confirmSetLocation(\'' . __(
-                        'Are you sure you want to send an invoice email to customer?'
-                    ) . '\', \'' . $this->getEmailUrl() . '\')'
+                    'onclick' => 'confirmSetLocation(\'' . $confirmMessage . '\', \'' . $this->getEmailUrl() . '\')'
                 ]
             );
         }
+    }
 
+    /**
+     * Add credit memo button if allowed and applicable
+     *
+     * @return void
+     */
+    private function addCreditMemoButton()
+    {
         $orderPayment = $this->getInvoice()->getOrder()->getPayment();
 
         if ($this->_isAllowedAction('Magento_Sales::creditmemo') && $this->getInvoice()->getOrder()->canCreditmemo()) {
@@ -117,7 +181,15 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 );
             }
         }
+    }
 
+    /**
+     * Add capture button if allowed and applicable
+     *
+     * @return void
+     */
+    private function addCaptureButton()
+    {
         if ($this->_isAllowedAction(
             'Magento_Sales::capture'
         ) && $this->getInvoice()->canCapture() && !$this->_isPaymentReview()
@@ -131,7 +203,15 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 ]
             );
         }
+    }
 
+    /**
+     * Add void button if applicable
+     *
+     * @return void
+     */
+    private function addVoidButton()
+    {
         if ($this->getInvoice()->canVoid()) {
             $this->buttonList->add(
                 'void',
@@ -142,7 +222,15 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 ]
             );
         }
+    }
 
+    /**
+     * Add print button if invoice has ID
+     *
+     * @return void
+     */
+    private function addPrintButton()
+    {
         if ($this->getInvoice()->getId()) {
             $this->buttonList->add(
                 'print',

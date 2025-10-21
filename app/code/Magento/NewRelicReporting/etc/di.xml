@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright 2025 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 -->
@@ -59,7 +59,7 @@
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
     </type>
-    
+
     <!-- NerdGraph Client Dependencies -->
     <type name="Magento\NewRelicReporting\Model\NerdGraph\Client">
         <arguments>
