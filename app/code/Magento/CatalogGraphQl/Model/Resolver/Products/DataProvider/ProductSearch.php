@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -91,7 +91,7 @@ class ProductSearch
         SearchCriteriaInterface $searchCriteria,
         SearchResultInterface $searchResult,
         array $attributes = [],
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): SearchResultsInterface {
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();

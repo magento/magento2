@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,9 +61,9 @@ class ProductPriceIndexFilter implements PriceModifierInterface
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         Item $stockItem,
-        ResourceConnection $resourceConnection = null,
+        ?ResourceConnection $resourceConnection = null,
         $connectionName = 'indexer',
-        Generator $batchQueryGenerator = null,
+        ?Generator $batchQueryGenerator = null,
         $batchSize = 100
     ) {
         $this->stockConfiguration = $stockConfiguration;

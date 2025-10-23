@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogImportExport\Model\Import\Product;
@@ -400,7 +400,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = [],
-        ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
+        ?ProductOptionValueCollectionFactory $productOptionValueCollectionFactory = null,
         ?TransactionManagerInterface $transactionManager = null,
         ?SkuStorage $skuStorage = null
     ) {

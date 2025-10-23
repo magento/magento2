@@ -1,39 +1,47 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Authentication\Rest\OauthClient;
 
-use OAuth\Common\Consumer\CredentialsInterface;
-use OAuth\Common\Http\Uri\UriInterface;
 use Magento\Framework\Oauth\Helper\Utility;
 
 /**
  * Signature class for Magento REST API.
  */
-class Signature extends \OAuth\OAuth1\Signature\Signature
+class Signature
 {
     /**
      * @param Utility $helper
-     * @param CredentialsInterface $credentials
      */
-    public function __construct(private readonly Utility $helper, CredentialsInterface $credentials)
+    public function __construct(private readonly Utility $helper)
     {
-        parent::__construct($credentials);
     }
 
     /**
-     * @inheritDoc
+     * Get the signature
      *
-     * In addition to the original method, allows array parameters for filters
-     * and matches validation signature algorithm
+     * @param array $params
+     * @param string $signatureMethod
+     * @param string $consumerSecret
+     * @param string|null $tokenSecret
+     * @param string $httpMethod
+     * @param string $requestUrl
+     * @return string
      */
-    public function getSignature(UriInterface $uri, array $params, $method = 'POST')
-    {
-        $queryStringData = !$uri->getQuery() ? [] : array_reduce(
-            explode('&', $uri->getQuery()),
+    public function getSignature(
+        array $params,
+        string $signatureMethod,
+        string $consumerSecret,
+        ?string $tokenSecret,
+        string $httpMethod,
+        string $requestUrl
+    ): string {
+        $data = parse_url($requestUrl);
+        $queryStringData = !isset($data['query']) ? [] : array_reduce(
+            explode('&', $data['query']),
             function ($carry, $item) {
                 list($key, $value) = explode('=', $item, 2);
                 $carry[rawurldecode($key)] = rawurldecode($value);
@@ -42,18 +50,13 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
             []
         );
 
-        $signatureData = [];
-        foreach (array_merge($queryStringData, $params) as $key => $value) {
-            $signatureData[rawurldecode($key)] = rawurlencode($value);
-        }
-
         return $this->helper->sign(
-            $signatureData,
-            $this->algorithm,
-            $this->credentials->getConsumerSecret(),
-            $this->tokenSecret,
-            $method,
-            (string) $uri
+            array_merge($queryStringData, $params),
+            $signatureMethod,
+            $consumerSecret,
+            $tokenSecret,
+            $httpMethod,
+            $requestUrl
         );
     }
 }

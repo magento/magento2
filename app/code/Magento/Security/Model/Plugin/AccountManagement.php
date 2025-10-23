@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,13 +46,13 @@ class AccountManagement
      * @param \Magento\Framework\App\RequestInterface $request
      * @param SecurityManager $securityManager
      * @param int $passwordRequestEvent
-     * @param ScopeInterface $scope
+     * @param ScopeInterface|null $scope
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Security\Model\SecurityManager $securityManager,
         $passwordRequestEvent = PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST,
-        ScopeInterface $scope = null
+        ?ScopeInterface $scope = null
     ) {
         $this->request = $request;
         $this->securityManager = $securityManager;
@@ -80,7 +80,8 @@ class AccountManagement
     ) {
         if ($this->scope->getCurrentScope() == Area::AREA_FRONTEND
             || $this->passwordRequestEvent == PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST
-            || ($this->scope->getCurrentScope() == Area::AREA_WEBAPI_REST
+            || (($this->scope->getCurrentScope() == Area::AREA_WEBAPI_REST
+                    || $this->scope->getCurrentScope() == Area::AREA_GRAPHQL)
             && $this->passwordRequestEvent == PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST)) {
             $this->securityManager->performSecurityCheck(
                 $this->passwordRequestEvent,

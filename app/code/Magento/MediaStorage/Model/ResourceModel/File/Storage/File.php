@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MediaStorage\Model\ResourceModel\File\Storage;
 
@@ -38,7 +38,7 @@ class File
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Psr\Log\LoggerInterface $log,
-        FileIo $fileIo = null
+        ?FileIo $fileIo = null
     ) {
         $this->_logger = $log;
         $this->_filesystem = $filesystem;

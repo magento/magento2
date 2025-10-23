@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
@@ -262,9 +262,9 @@ class Eav extends AbstractModifier
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = [],
-        CompositeConfigProcessor $wysiwygConfigProcessor = null,
-        ScopeConfigInterface $scopeConfig = null,
-        AttributeCollectionFactory $attributeCollectionFactory = null,
+        ?CompositeConfigProcessor $wysiwygConfigProcessor = null,
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?AttributeCollectionFactory $attributeCollectionFactory = null,
         ?AuthorizationInterface $auth = null
     ) {
         $this->locator = $locator;

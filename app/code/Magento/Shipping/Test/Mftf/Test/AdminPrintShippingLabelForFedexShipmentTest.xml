@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminPrintShippingLabelForFedexShipmentTest">
+        <annotations>
+            <stories value="Print Shipping label"/>
+            <title value="Admin Should be Able to print Shipping label"/>
+            <description value="Admin Print Shipping Labels from Actions dropdown from the FedEx submitted shipment"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-2832"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProductWithWeight" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnableFedExConfigurationActionGroup" stepKey="enableFedEx"/>
+            <!--Set US Shipping settings origin data-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
+                <argument name="country" value="United States"/>
+                <argument name="state" value="California"/>
+                <argument name="postcode" value="90001"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetShippingOriginOtherConfigActionGroup" stepKey="setShippingOriginOtherConfigurationData"/>
+            <!--Go to configuration general page-->
+            <actionGroup ref="NavigateToConfigurationGeneralPageActionGroup" stepKey="navigateToConfigurationGeneralPage"/>
+            <actionGroup ref="SelectEuropeanUnionCountryActionGroup" stepKey="setEuropeanUnionCountry">
+                <argument name="countries" value="EuropeanCountry"/>
+            </actionGroup>
+            <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
+            <fillField selector="{{StoreConfigSection.storeName}}" userInput="Test" stepKey="fillStoreName" />
+            <fillField selector="{{StoreConfigSection.storePhoneNumber}}" userInput="9876543210" stepKey="fillStorePhone" />
+            <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJob">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
+            <!-- Login to StoreFront -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Reset shipping origin -->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
+            <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} 0" stepKey="disableCheckout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Add product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <!-- Go to Checkout Page -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" stepKey="waitForSelectFedexShippingMethod"/>
+        <click selector="{{CheckoutShippingMethodsSection.smartPostShippingMethod}}" stepKey="selectFedexShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <!-- I see order successful Page -->
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <!--Open created order in admin-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!--Create order invoice-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <!--Create shipping label-->
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipmentIntoOrder"/>
+        <waitForElementVisible selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="waitForCreateShippingLabel"/>
+        <checkOption selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="checkCreateShippingLabel"/>
+        <waitForElementClickable selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="waitForSubmitShipment"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <actionGroup ref="AdminShipmentCreateShippingLabelActionGroup" stepKey="createPackage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!-- Print shipping Label -->
+        <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterShipmentGridByOrderId">
+            <argument name="orderId" value="$orderNumber"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminShipmentGridSection.firstRow}}" stepKey="waitForShipmentRow"/>
+        <click selector="{{AdminShipmentGridSection.firstRow}}" stepKey="openCreatedShipment"/>
+        <waitForPageLoad stepKey="waitForShipmentDetailsPageToLoad"/>
+        <waitForElementClickable selector="{{AdminShipmentMainActionsSection.printShippingLabelButton}}" stepKey="waitForPrintShippingButton"/>
+        <click selector="{{AdminShipmentMainActionsSection.printShippingLabelButton}}" stepKey="clickOnPrintShippingButton"/>
+    </test>
+</tests>

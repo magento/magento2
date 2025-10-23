@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\Model\Session\Quote;
@@ -142,7 +143,7 @@ class SaveTest extends AbstractBackendController
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $assert);
+        $this->assertThat(quoted_printable_decode($message->getBody()->bodyToString()), $assert);
     }
 
     /**

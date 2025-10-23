@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,6 +29,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Item;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use Magento\Catalog\Model\Product\Type\AbstractType;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -412,5 +413,58 @@ class SaveTest extends TestCase
                 ->method('send');
         }
         $this->assertEquals($this->resultRedirectMock, $this->_controller->execute());
+    }
+
+    /**
+     * Test execute method with bundle products
+     */
+    public function testExecuteWithBundleProductCreditMemo()
+    {
+        $orderId = 1;
+        $creditmemoId = 2;
+        $invoiceId = 3;
+        $creditmemoData = ['items' => [], 'comment_text' => ''];
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['order_id', null, $orderId],
+                ['creditmemo_id', null, $creditmemoId],
+                ['creditmemo', null, $creditmemoData],
+                ['invoice_id', null, $invoiceId]
+            ]);
+
+        $this->_requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('creditmemo')
+            ->willReturn($creditmemoData);
+        $orderMock = $this->createMock(Order::class);
+        $parentOrderItemMock = $this->createMock(Order\Item::class);
+        $parentOrderItemMock->expects($this->any())->method('getProductType')->willReturn('bundle');
+        $parentOrderItemMock->expects($this->any())
+            ->method('getProductOptions')
+            ->willReturn([
+                'product_calculations' => AbstractType::CALCULATE_PARENT
+            ]);
+        $childOrderItemMock = $this->createMock(Order\Item::class);
+        $childOrderItemMock->expects($this->any())->method('getParentItemId')->willReturn(1);
+        $childOrderItemMock->expects($this->any())->method('getParentItem')->willReturn($parentOrderItemMock);
+        $creditMemoItemMock = $this->createMock(Item::class);
+        $creditMemoItemMock->expects($this->any())->method('getOrderItem')->willReturn($childOrderItemMock);
+        $creditMemoItemMock->expects($this->never())->method('setQty');
+        $creditmemoMock = $this->createMock(Creditmemo::class);
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')->willReturn(true);
+        $creditmemoMock->expects($this->once())->method('getOrder')->willReturn($orderMock);
+        $creditmemoMock->expects($this->once())->method('getOrderId')->willReturn($orderId);
+        $creditmemoMock->expects($this->once())->method('getAllItems')->willReturn([$creditMemoItemMock]);
+        $this->memoLoaderMock->expects($this->once())->method('load')->willReturn($creditmemoMock);
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('sales/order/view', ['order_id' => $orderId])
+            ->willReturnSelf();
+        $result = $this->_controller->execute();
+        $this->assertEquals($this->resultRedirectMock, $result);
     }
 }

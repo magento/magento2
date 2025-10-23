@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\ImportExport\Controller\Adminhtml\Export\File\Download;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -77,6 +79,11 @@ class DownloadTest extends TestCase
     private $directoryMock;
 
     /**
+     * @var WriteInterface|MockObject
+     */
+    private $exportDirectoryMock;
+
+    /**
      * Set up
      */
     protected function setUp(): void
@@ -88,6 +95,10 @@ class DownloadTest extends TestCase
         $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->exportDirectoryMock = $this->getMockBuilder(WriteInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
@@ -135,6 +146,10 @@ class DownloadTest extends TestCase
             ->method('getDirectoryRead')
             ->willReturn($this->directoryMock);
 
+        $this->fileSystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->exportDirectoryMock);
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->downloadControllerMock = $this->objectManagerHelper->getObject(
             Download::class,
@@ -154,7 +169,18 @@ class DownloadTest extends TestCase
         $this->requestMock->method('getParam')
             ->with('filename')
             ->willReturn('sampleFile.csv');
-        $this->directoryMock->expects($this->once())->method('isExist')->willReturn(true);
+
+        $driverMock = $this->getMockBuilder(DriverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $driverMock->expects($this->once())->method('getRealPathSafety')->willReturn('sampleFile.csv');
+
+        $this->exportDirectoryMock->expects($this->any())
+            ->method('getDriver')
+            ->willReturn($driverMock);
+
+        $this->exportDirectoryMock->expects($this->once())->method('isExist')->willReturn(true);
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(true);
         $this->fileFactoryMock->expects($this->once())->method('create');
 
@@ -170,8 +196,18 @@ class DownloadTest extends TestCase
             ->with('filename')
             ->willReturn('sampleFile');
 
+        $driverMock = $this->getMockBuilder(DriverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $driverMock->expects($this->once())->method('getRealPathSafety')->willReturn('sampleFile');
+
+        $this->exportDirectoryMock->expects($this->any())
+            ->method('getDriver')
+            ->willReturn($driverMock);
+
+        $this->exportDirectoryMock->expects($this->once())->method('isExist')->willReturn(true);
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(false);
-        $this->directoryMock->expects($this->once())->method('isExist')->willReturn(true);
         $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
 
         $this->downloadControllerMock->execute();

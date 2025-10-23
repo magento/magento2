@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Type;
@@ -119,7 +119,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * Check date in prepareForCart method with javascript calendar and Asia/Singapore timezone
      *
-     * @dataProvider testPrepareForCartDataProvider
+     * @dataProvider datePrepareForCartDataProvider
      * @param array $dateData
      * @param array $productOptionData
      * @param array $requestData
@@ -154,7 +154,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public static function testPrepareForCartDataProvider()
+    public static function datePrepareForCartDataProvider()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\Quote;
@@ -183,7 +184,7 @@ class DiscountTest extends TestCase
     /**
      * @return void
      */
-    public function testCollectItemNoDiscount()
+    public function testCollectItemNoDiscount(): void
     {
         $itemNoDiscount = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount'])
@@ -244,7 +245,7 @@ class DiscountTest extends TestCase
     /**
      * @return void
      */
-    public function testCollectItemHasParent()
+    public function testCollectItemHasParent(): void
     {
         $itemWithParentId = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount'])
@@ -303,7 +304,7 @@ class DiscountTest extends TestCase
     /**
      * @return void
      */
-    public function testCollectItemHasNoChildren()
+    public function testCollectItemHasNoChildren(): void
     {
         $itemWithChildren = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
@@ -387,7 +388,7 @@ class DiscountTest extends TestCase
      * @return void
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    public function testFetch()
+    public function testFetch(): void
     {
         $discountAmount = 100;
         $discountDescription = 100;
@@ -413,7 +414,7 @@ class DiscountTest extends TestCase
      * @return void
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
-    public function testCollectAddressBaseDiscountAmount(): void
+    public function testCollectAddressBaseDiscountAmountIncludingItemChildren(): void
     {
         $storeId = 1;
         $quote = $this->createMock(Quote::class);
@@ -426,7 +427,7 @@ class DiscountTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $total->expects($this->any())->method('getBaseDiscountAmount')->willReturn(20.00);
+        $total->expects($this->any())->method('getBaseDiscountAmount')->willReturn(-20.00);
 
         $store = $this->createMock(Store::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)->willReturn($store);
@@ -442,7 +443,16 @@ class DiscountTest extends TestCase
             ->willReturn([$rule1, $rule2]);
         $item = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount', 'getBaseDiscountAmount'])
-            ->onlyMethods(['getParentItem', 'getId', 'getExtensionAttributes', 'getAddress'])
+            ->onlyMethods(
+                [
+                    'getParentItem',
+                    'getId',
+                    'getExtensionAttributes',
+                    'getAddress',
+                    'getChildren',
+                    'isChildrenCalculated'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $item->expects($this->any())->method('getNoDiscount')->willReturn(false);
@@ -450,8 +460,14 @@ class DiscountTest extends TestCase
         $item->expects($this->any())->method('getParentItem')->willReturn(false);
         $item->expects($this->any())->method('getExtensionAttributes')->willReturn(false);
         $item->expects($this->once())->method('getAddress')->willReturn($this->addressMock);
+        $child = $this->getMockBuilder(Item::class)
+            ->addMethods(['getBaseDiscountAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $item->expects($this->any())->method('getChildren')->willReturn([$child]);
+        $item->expects($this->any())->method('isChildrenCalculated')->willReturn(true);
         $index = 1;
-        $item->expects($this->any())->method('getBaseDiscountAmount')->willReturnCallback(function () use (&$index) {
+        $child->expects($this->any())->method('getBaseDiscountAmount')->willReturnCallback(function () use (&$index) {
             $value = $index * 10;
             $index++;
             return $value;
@@ -464,14 +480,23 @@ class DiscountTest extends TestCase
             ->willReturnArgument(0);
 
         $this->addressMock->expects($this->exactly(5))
+            ->method('setBaseDiscountAmount');
+
+        $this->addressMock->expects(new MethodInvokedAtIndex(0))
             ->method('setBaseDiscountAmount')
-            ->with($this->logicalOr(
-                $this->equalTo(0),
-                $this->equalTo(10),
-                $this->equalTo(20),
-                $this->equalTo(20),
-                $this->equalTo(20.00)
-            ));
+            ->with(0);
+        $this->addressMock->expects(new MethodInvokedAtIndex(1))
+            ->method('setBaseDiscountAmount')
+            ->with(0);
+        $this->addressMock->expects(new MethodInvokedAtIndex(2))
+            ->method('setBaseDiscountAmount')
+            ->with(-10);
+        $this->addressMock->expects(new MethodInvokedAtIndex(3))
+            ->method('setBaseDiscountAmount')
+            ->with(-20);
+        $this->addressMock->expects(new MethodInvokedAtIndex(4))
+            ->method('setBaseDiscountAmount')
+            ->with(-20);
 
         $this->discount->collect($quote, $this->shippingAssignmentMock, $total);
     }

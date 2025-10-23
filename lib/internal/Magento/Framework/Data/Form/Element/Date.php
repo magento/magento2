@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -121,7 +121,7 @@ class Date extends AbstractElement
             return '';
         }
         if (null === $format) {
-            $format = $this->getDateFormat();
+            $format = $this->getDateFormat() ?: $this->getFormat();
             $format .= ($format && $this->getTimeFormat()) ? ' ' : '';
             $format .= $this->getTimeFormat() ? $this->getTimeFormat() : '';
         }

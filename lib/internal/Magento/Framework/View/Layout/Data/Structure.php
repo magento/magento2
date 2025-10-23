@@ -43,7 +43,7 @@ class Structure extends DataStructure
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         State $state,
-        array $elements = null
+        ?array $elements = null
     ) {
         $this->logger = $logger;
         $this->state = $state;

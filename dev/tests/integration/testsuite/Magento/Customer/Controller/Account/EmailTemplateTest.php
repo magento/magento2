@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -188,8 +188,7 @@ class EmailTemplateTest extends AbstractController
      */
     private function getMessageRawContent(EmailMessage $message): string
     {
-        $emailParts = $message->getBody()->getParts();
-        return current($emailParts)->getRawContent();
+        return  quoted_printable_decode($message->getBody()->bodyToString());
     }
 
     /**

@@ -25,9 +25,9 @@ class Developer extends \Magento\Framework\ObjectManager\Config\Config implement
      * @param InterceptableValidator $interceptableValidator
      */
     public function __construct(
-        RelationsInterface $relations = null,
-        DefinitionInterface $definitions = null,
-        InterceptableValidator $interceptableValidator = null
+        ?RelationsInterface $relations = null,
+        ?DefinitionInterface $definitions = null,
+        ?InterceptableValidator $interceptableValidator = null
     ) {
         $this->interceptableValidator = $interceptableValidator ?: new InterceptableValidator();
         parent::__construct($relations, $definitions);

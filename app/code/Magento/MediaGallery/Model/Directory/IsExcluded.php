@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,7 +55,7 @@ class IsExcluded implements IsPathExcludedInterface
     public function __construct(
         ExcludedPatternsConfigInterface $config,
         Filesystem $filesystem,
-        ScopeConfigInterface $coreConfig = null
+        ?ScopeConfigInterface $coreConfig = null
     ) {
         $this->config = $config;
         $this->filesystem = $filesystem;

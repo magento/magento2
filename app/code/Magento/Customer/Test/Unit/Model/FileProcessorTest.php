@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -103,8 +103,8 @@ class FileProcessorTest extends TestCase
     private function getModel(
         $entityTypeCode,
         array $allowedExtensions = [],
-        string $customerFileUrlPath = null,
-        string $customerAddressFileUrlPath = null
+        ?string $customerFileUrlPath = null,
+        ?string $customerAddressFileUrlPath = null
     ): FileProcessor {
         $model = new FileProcessor(
             $this->filesystem,

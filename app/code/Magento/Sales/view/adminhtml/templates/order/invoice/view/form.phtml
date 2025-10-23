@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
 /* @var \Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form $block */
+/* @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 /* @var \Magento\Tax\Helper\Data $helper */
 /* @var \Magento\Framework\Escaper $escaper */
 ?>
@@ -139,3 +140,5 @@ $invoiceAdminDate = $block->formatDate($_invoice->getCreatedAt(), \IntlDateForma
         </div>
     </div>
 </section>
+<?php $scriptString = '{ "*" : {"Magento_Sales/js/comment" : {}}}';?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/x-magento-init'], $scriptString, false) ?>

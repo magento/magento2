@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\Validator\HTML;
@@ -16,6 +15,49 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigurableWYSIWYGValidatorTest extends TestCase
 {
+    /**
+     * @var ConfigurableWYSIWYGValidator
+     */
+    private ConfigurableWYSIWYGValidator $validator;
+
+    protected function setUp(): void
+    {
+        $allowedTags = ['p', 'a', 'div'];
+        $allowedAttributes = ['href', 'title'];
+        $attributesAllowedByTags = ['a' => ['href', 'title']];
+        $attributeValidators = [];
+        $tagValidators = [];
+
+        $this->validator = new ConfigurableWYSIWYGValidator(
+            $allowedTags,
+            $allowedAttributes,
+            $attributesAllowedByTags,
+            $attributeValidators,
+            $tagValidators
+        );
+    }
+
+    /**
+     * Test that the validator error message does not contain duplicated tags body and html.
+     *
+     * @return void
+     * @throws ValidationException
+     */
+    public function testValidateThrowsExceptionForDisallowedTags()
+    {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessageMatches('/^(Allowed HTML tags are: p, a, div, body, html)*$/');
+
+        $validHtml = '<html><body>test1</body></html>';
+        $this->validator->validate($validHtml);
+        $validHtml = '<html><body>test2</body></html>';
+        $this->validator->validate($validHtml);
+        $validHtml = '<html><body>test3</body></html>';
+        $this->validator->validate($validHtml);
+        $invalidHtml = '<html><body><script>alert("XSS")</script></body></html>';
+        $this->validator->validate($invalidHtml);
+    }
+
     /**
      * Configurations to test.
      *

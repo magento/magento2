@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Weee\Model\Total\Invoice;
 
@@ -38,7 +38,7 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
     public function __construct(
         WeeeHelper $weeeData,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_weeeData = $weeeData;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api;
@@ -223,6 +223,52 @@ class AccountManagementTest extends WebapiAbstract
         }
     }
 
+    public function testCreateCustomerWithDateOfBirthInFuture()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST, ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'CreateAccount',
+            ],
+        ];
+
+        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $date = new \DateTime();
+        $date->modify('+1 month');
+        $futureDob = $date->format('Y-m-d');
+        $customerDataArray['dob'] = $futureDob;
+        $requestData = ['customer' => $customerDataArray, 'password' => CustomerHelper::PASSWORD];
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+            $this->fail('Expected exception did not occur.');
+        } catch (\Exception $e) {
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $expectedException = new InputException();
+                $expectedException->addError(__('The Date of Birth should not be greater than today.'));
+                $this->assertInstanceOf('SoapFault', $e);
+                $this->checkSoapFault(
+                    $e,
+                    $expectedException->getRawMessage(),
+                    'env:Sender',
+                    $expectedException->getParameters() // expected error parameters
+                );
+            } else {
+                $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+                $exceptionData = $this->processRestExceptionResult($e);
+                $expectedExceptionData = [
+                    'message' => 'The Date of Birth should not be greater than today.',
+                ];
+                $this->assertEquals($expectedExceptionData, $exceptionData);
+            }
+        }
+    }
     public function testCreateCustomerWithoutOptionalFields()
     {
         $serviceInfo = [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -92,8 +92,8 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Psr\Log\LoggerInterface $logger,
-        AddressRegistry $addressRegistry = null,
-        \Magento\Framework\Escaper $escaper = null
+        ?AddressRegistry $addressRegistry = null,
+        ?\Magento\Framework\Escaper $escaper = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->resultJsonFactory = $resultJsonFactory;

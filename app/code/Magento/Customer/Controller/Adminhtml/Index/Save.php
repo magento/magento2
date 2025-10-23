@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2025 Adobe.
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -143,7 +144,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         ForwardFactory $resultForwardFactory,
         JsonFactory $resultJsonFactory,
         SubscriptionManagerInterface $subscriptionManager,
-        AddressRegistry $addressRegistry = null,
+        ?AddressRegistry $addressRegistry = null,
         ?StoreManagerInterface $storeManager = null,
         ?SetCustomerStore $customerStore = null
     ) {
@@ -190,8 +191,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
         $customerData = [];
         if ($this->getRequest()->getPost('customer')) {
             $additionalAttributes = [
-                CustomerInterface::DEFAULT_BILLING,
-                CustomerInterface::DEFAULT_SHIPPING,
                 'confirmation',
                 'sendemail_store_id',
                 'extension_attributes',

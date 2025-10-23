@@ -36,7 +36,7 @@ class DefaultPageSizeSetter
      */
     public function processSearchCriteria(
         SearchCriteriaInterface $searchCriteria,
-        int $defaultPageSizeFallback = null
+        ?int $defaultPageSizeFallback = null
     ): void {
         if ($searchCriteria->getPageSize() === null
             && $this->validationConfigProvider->isInputLimitingEnabled()

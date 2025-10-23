@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Cart;
 
@@ -58,7 +58,7 @@ class CartTotalManagement implements CartTotalManagementInterface
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         $shippingCarrierCode = null,
         $shippingMethodCode = null,
-        \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
+        ?\Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
     ) {
         if ($shippingCarrierCode && $shippingMethodCode) {
             $this->shippingMethodManagement->set($cartId, $shippingCarrierCode, $shippingMethodCode);

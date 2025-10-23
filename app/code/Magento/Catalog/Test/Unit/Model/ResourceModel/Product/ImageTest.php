@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,62 +14,72 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\BatchIteratorInterface;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ImageTest extends TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    /**
      * @var AdapterInterface | MockObject
      */
-    protected $connectionMock;
+    private $connectionMock;
 
     /**
      * @var Generator | MockObject
      */
-    protected $generatorMock;
+    private $generatorMock;
 
     /**
      * @var ResourceConnection | MockObject
      */
-    protected $resourceMock;
+    private $resourceMock;
+
+    /**
+     * @var MetadataPool|MockObject
+     */
+    private $metadataPoolMock;
+
+    /**
+     * @var Image
+     */
+    private $imageModel;
 
     protected function setUp(): void
     {
-        $this->objectManager =
-            new ObjectManager($this);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->method('getConnection')
             ->willReturn($this->connectionMock);
         $this->resourceMock->method('getTableName')
             ->willReturnArgument(0);
         $this->generatorMock = $this->createMock(Generator::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $this->metadataPoolMock->method('getMetadata')
+            ->willReturn($metadata);
+
+        $this->imageModel = new Image(
+            $this->generatorMock,
+            $this->resourceMock,
+            $this->metadataPoolMock,
+        );
     }
 
     /**
      * @return MockObject
      */
-    protected function getVisibleImagesSelectMock(): MockObject
+    private function getVisibleImagesSelectMock(): MockObject
     {
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())
             ->method('distinct')
             ->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('from')
-            ->with(
-                ['images' => Gallery::GALLERY_TABLE],
-                'value as filepath'
-            )->willReturnSelf();
+            ->with(['images' => Gallery::GALLERY_TABLE], 'value as filepath')
+            ->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('where')
             ->with('disabled = 0')
@@ -81,29 +91,25 @@ class ImageTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function getUsedImagesSelectMock(): MockObject
+    private function getUsedImagesSelectMock(): MockObject
     {
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())
             ->method('distinct')
             ->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('from')
-            ->with(
-                ['images' => Gallery::GALLERY_TABLE],
-                'value as filepath'
-            )->willReturnSelf();
-        $selectMock->expects($this->once())
+            ->with(['images' => Gallery::GALLERY_TABLE], 'value as filepath')
+            ->willReturnSelf();
+        $selectMock->expects($this->atLeastOnce())
             ->method('joinInner')
-            ->with(
-                ['image_value' => Gallery::GALLERY_VALUE_TABLE],
-                'images.value_id = image_value.value_id'
-            )->willReturnSelf();
+            ->willReturnSelf();
         $selectMock->expects($this->once())
             ->method('where')
             ->with('images.disabled = 0 AND image_value.disabled = 0')
+            ->willReturnSelf();
+        $selectMock->expects($this->once())
+            ->method('group')
             ->willReturnSelf();
 
         return $selectMock;
@@ -140,17 +146,9 @@ class ImageTest extends TestCase
             ->with($selectMock)
             ->willReturn($imagesCount);
 
-        $imageModel = $this->objectManager->getObject(
-            Image::class,
-            [
-                'generator' => $this->generatorMock,
-                'resourceConnection' => $this->resourceMock
-            ]
-        );
-
         $this->assertSame(
             $imagesCount,
-            $imageModel->getCountAllProductImages()
+            $this->imageModel->getCountAllProductImages()
         );
     }
 
@@ -185,17 +183,9 @@ class ImageTest extends TestCase
             ->with($selectMock)
             ->willReturn($imagesCount);
 
-        $imageModel = $this->objectManager->getObject(
-            Image::class,
-            [
-                'generator' => $this->generatorMock,
-                'resourceConnection' => $this->resourceMock
-            ]
-        );
-
         $this->assertSame(
             $imagesCount,
-            $imageModel->getCountUsedProductImages()
+            $this->imageModel->getCountUsedProductImages()
         );
     }
 
@@ -206,21 +196,16 @@ class ImageTest extends TestCase
      */
     public function testGetAllProductImages(int $imagesCount, int $batchSize): void
     {
+        $selectMock = $this->getVisibleImagesSelectMock();
         $this->connectionMock->expects($this->once())
             ->method('select')
-            ->willReturn($this->getVisibleImagesSelectMock());
+            ->willReturn($selectMock);
 
         $batchCount = (int)ceil($imagesCount / $batchSize);
         $fetchResultsCallback = $this->getFetchResultCallbackForBatches($imagesCount, $batchSize);
         $this->connectionMock->expects($this->exactly($batchCount))
             ->method('fetchAll')
             ->willReturnCallback($fetchResultsCallback);
-
-        /** @var Select | MockObject $selectMock */
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->generatorMock->expects($this->once())
             ->method('generate')
             ->with(
@@ -232,13 +217,11 @@ class ImageTest extends TestCase
                 $this->getBatchIteratorCallback($selectMock, $batchCount)
             );
 
-        $imageModel = $this->objectManager->getObject(
-            Image::class,
-            [
-                'generator' => $this->generatorMock,
-                'resourceConnection' => $this->resourceMock,
-                'batchSize' => $batchSize
-            ]
+        $imageModel = new Image(
+            $this->generatorMock,
+            $this->resourceMock,
+            $this->metadataPoolMock,
+            $batchSize,
         );
         $resultImagesCount = iterator_to_array($imageModel->getAllProductImages(), false);
         $this->assertCount($imagesCount, $resultImagesCount);
@@ -251,21 +234,16 @@ class ImageTest extends TestCase
      */
     public function testGetUsedProductImages(int $imagesCount, int $batchSize): void
     {
+        $selectMock = $this->getUsedImagesSelectMock();
         $this->connectionMock->expects($this->once())
             ->method('select')
-            ->willReturn($this->getUsedImagesSelectMock());
+            ->willReturn($selectMock);
 
         $batchCount = (int)ceil($imagesCount / $batchSize);
         $fetchResultsCallback = $this->getFetchResultCallbackForBatches($imagesCount, $batchSize);
         $this->connectionMock->expects($this->exactly($batchCount))
             ->method('fetchAll')
             ->willReturnCallback($fetchResultsCallback);
-
-        /** @var Select | MockObject $selectMock */
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->generatorMock->expects($this->once())
             ->method('generate')
             ->with(
@@ -277,16 +255,12 @@ class ImageTest extends TestCase
                 $this->getBatchIteratorCallback($selectMock, $batchCount)
             );
 
-        /** @var Image $imageModel */
-        $imageModel = $this->objectManager->getObject(
-            Image::class,
-            [
-                'generator' => $this->generatorMock,
-                'resourceConnection' => $this->resourceMock,
-                'batchSize' => $batchSize
-            ]
+        $imageModel = new Image(
+            $this->generatorMock,
+            $this->resourceMock,
+            $this->metadataPoolMock,
+            $batchSize,
         );
-
         $resultImagesCount = iterator_to_array($imageModel->getUsedProductImages(), false);
         $this->assertCount($imagesCount, $resultImagesCount);
     }
@@ -296,10 +270,8 @@ class ImageTest extends TestCase
      * @param int $batchSize
      * @return \Closure
      */
-    protected function getFetchResultCallbackForBatches(
-        int $imagesCount,
-        int $batchSize
-    ): \Closure {
+    private function getFetchResultCallbackForBatches(int $imagesCount, int $batchSize): \Closure
+    {
         $fetchResultsCallback = function () use (&$imagesCount, $batchSize) {
             $batchSize =
                 ($imagesCount >= $batchSize) ? $batchSize : $imagesCount;
@@ -327,10 +299,8 @@ class ImageTest extends TestCase
      * @param int $batchCount
      * @return \Closure
      */
-    protected function getBatchIteratorCallback(
-        MockObject $selectMock,
-        int $batchCount
-    ): \Closure {
+    private function getBatchIteratorCallback(MockObject $selectMock, int $batchCount): \Closure
+    {
         $iteratorCallback = function () use ($batchCount, $selectMock): array {
             $result = [];
             $count = $batchCount;

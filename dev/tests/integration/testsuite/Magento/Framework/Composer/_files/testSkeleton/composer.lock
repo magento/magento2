@@ -2317,7 +2317,6 @@
                 "blueimp/jquery-file-upload": "5.6.14",
                 "components/jquery": "1.11.0",
                 "components/jqueryui": "1.10.4",
-                "tinymce/tinymce": "3.4.7",
                 "trentrichardson/jquery-timepicker-addon": "1.4.3",
                 "twbs/bootstrap": "3.1.0"
             },
@@ -2331,8 +2330,7 @@
                     ],
                     "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
                     "components/jqueryui": "lib/web/jquery/jquery-ui.js",
-                    "twbs/bootstrap": "lib/web/jquery/jquery.tabs.js",
-                    "tinymce/tinymce": "lib/web/tiny_mce_5"
+                    "twbs/bootstrap": "lib/web/jquery/jquery.tabs.js"
                 },
                 "map": [
                     [
@@ -2662,10 +2660,6 @@
                     [
                         "lib/web/spacer.gif",
                         "lib/web/spacer.gif"
-                    ],
-                    [
-                        "lib/web/tiny_mce_5",
-                        "lib/web/tiny_mce_5"
                     ],
                     [
                         "lib/web/underscore.js",
@@ -8679,41 +8673,6 @@
             "description": "N/A"
         },
         {
-            "name": "magento/module-tinymce-3",
-            "version": "100.3.1",
-            "dist": {
-                "type": "zip",
-                "url": "https://repo.magento.com/archives/magento/module-tinymce-3/magento-module-tinymce-3-100.3.1.0.zip",
-                "reference": null,
-                "shasum": "5153d30d5f5e5a8d99182a65dce142569f22861e"
-            },
-            "require": {
-                "magento/framework": "102.0.*",
-                "magento/module-backend": "101.0.*",
-                "magento/module-ui": "101.1.*",
-                "magento/module-variable": "100.3.*",
-                "magento/module-widget": "101.1.*",
-                "php": "~8.1.0"
-            },
-            "suggest": {
-                "magento/module-cms": "103.0.*"
-            },
-            "type": "magento2-module",
-            "autoload": {
-                "files": [
-                    "registration.php"
-                ],
-                "psr-4": {
-                    "Magento\\Tinymce3\\": ""
-                }
-            },
-            "license": [
-                "OSL-3.0",
-                "AFL-3.0"
-            ],
-            "description": "N/A"
-        },
-        {
             "name": "magento/module-translation",
             "version": "100.3.1",
             "dist": {
@@ -9544,7 +9503,6 @@
                 "magento/module-tax-import-export": "100.3.1",
                 "magento/module-theme": "101.0.1",
                 "magento/module-theme-graph-ql": "100.3.0",
-                "magento/module-tinymce-3": "100.3.1",
                 "magento/module-translation": "100.3.1",
                 "magento/module-ui": "101.1.1",
                 "magento/module-ups": "100.3.1",

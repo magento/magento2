@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,13 +84,13 @@ class UrlRewrite extends AbstractModel
     public function __construct(
         Context $context,
         Registry $registry,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        CacheContext $cacheContext = null,
-        EventManager $eventManager = null,
-        UrlFinderInterface $urlFinder = null,
+        ?Json $serializer = null,
+        ?CacheContext $cacheContext = null,
+        ?EventManager $eventManager = null,
+        ?UrlFinderInterface $urlFinder = null,
         array $entityToCacheTagMap = []
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
