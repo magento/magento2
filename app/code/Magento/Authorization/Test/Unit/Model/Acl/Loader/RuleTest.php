@@ -11,6 +11,7 @@ use Magento\Authorization\Model\Acl\Loader\Rule;
 use Magento\Framework\Acl;
 use Magento\Framework\Acl\Data\CacheInterface;
 use Magento\Framework\Acl\RootResource;
+use Magento\Framework\Acl\Role\CurrentRoleContext;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -54,8 +55,8 @@ class RuleTest extends TestCase
     {
         $this->rootResource = new RootResource('Magento_Backend::all');
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
+            ->onlyMethods(['getConnection', 'getTableName'])
             ->addMethods(['getTable'])
-            ->onlyMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
@@ -146,5 +147,82 @@ class RuleTest extends TestCase
             ]);
 
         $this->model->populateAcl($aclMock);
+    }
+
+    /**
+     * Ensure that when a role context is present, rules are loaded from the role-specific cache key
+     * and applied accordingly.
+     */
+    public function testPopulateAclForSpecificRoleFromCache(): void
+    {
+        $roleId = 10;
+        $rules = [
+            ['role_id' => $roleId, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
+            ['role_id' => $roleId, 'resource_id' => 'Magento_Backend::admin', 'permission' => 'allow'],
+        ];
+
+        $roleContext = $this->createMock(CurrentRoleContext::class);
+        $roleContext->method('getRoleId')->willReturn($roleId);
+
+        // Expect the role-specific cache key to be read
+        $this->aclDataCacheMock->expects($this->once())
+            ->method('load')
+            ->with(hash('sha256', Rule::ACL_RULE_CACHE_KEY . '_' . $roleId))
+            ->willReturn(json_encode($rules));
+
+        // ACL expectations: allow for root, then for specific resource
+        $aclMock = $this->createMock(Acl::class);
+        $aclMock->method('hasResource')->willReturn(true);
+        $calls = [];
+        $aclMock->method('allow')
+            ->willReturnCallback(function ($role, $resource, $privilege) use (&$calls) {
+                $calls[] = [$role, $resource, $privilege];
+                return null;
+            });
+
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connectionMock->method('fetchRow')->willReturn([]); // Return empty array for any DB fetchRow() call
+
+        $selectMock = $this->getMockBuilder('stdClass')
+            ->addMethods(['from', 'where', 'limit'])
+            ->getMock();
+        $selectMock->method('from')->willReturnSelf();
+        $selectMock->method('where')->willReturnSelf();
+        $selectMock->method('limit')->willReturnSelf();
+        $connectionMock->method('select')->willReturn($selectMock);
+        $this->resourceMock->method('getConnection')->willReturn($connectionMock);
+        $this->resourceMock->method('getTableName')->willReturn('authorization_role'); // Return dummy table name
+
+        $objectManager = new ObjectManager($this);
+        $model = $objectManager->getObject(
+            Rule::class,
+            [
+                'rootResource' => $this->rootResource,
+                'resource' => $this->resourceMock,
+                'aclDataCache' => $this->aclDataCacheMock,
+                'serializer' => $this->serializerMock,
+                'roleContext' => $roleContext,
+            ]
+        );
+
+        $model->populateAcl($aclMock);
+
+        $foundRootResourceAllow = false;
+        $foundAdminResourceAllow = false;
+        foreach ($calls as $call) {
+            [$role, $resource, $privilege] = $call;
+            if ($privilege === null && (int)$role === $roleId) {
+                if ($resource === 'Magento_Backend::all') {
+                    $foundRootResourceAllow = true;
+                }
+                if ($resource === 'Magento_Backend::admin') {
+                    $foundAdminResourceAllow = true;
+                }
+            }
+        }
+        $this->assertTrue($foundRootResourceAllow, 'Expected allow() call for Magento_Backend::all with given role');
+        $this->assertTrue($foundAdminResourceAllow, 'Expected allow() call for Magento_Backend::admin with given role');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2017 Adobe
  * All Rights Reserved.
  */
 namespace Magento\NewRelicReporting\Console\Command;
