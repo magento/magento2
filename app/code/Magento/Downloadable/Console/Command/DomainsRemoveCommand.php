@@ -65,7 +65,7 @@ class DomainsRemoveCommand extends Command
                 [
                     new InputArgument(
                         self::INPUT_KEY_DOMAINS,
-                        InputArgument::IS_ARRAY,
+                        InputArgument::IS_ARRAY | InputArgument::REQUIRED,
                         'Domain names'
                     )
                 ]
