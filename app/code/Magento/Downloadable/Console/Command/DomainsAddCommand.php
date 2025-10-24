@@ -64,8 +64,8 @@ class DomainsAddCommand extends Command
                 [
                     new InputArgument(
                         self::INPUT_KEY_DOMAINS,
-                        InputArgument::IS_ARRAY,
-                        'Domains name'
+                        InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+                        'Domain names'
                     )
                 ]
             );
