@@ -107,6 +107,7 @@ class BundleTest extends AbstractImportTestCase
             ->will($this->onConsecutiveCalls(
                 $fetchAllForInitAttributes,
                 $fetchAllForOtherCalls,
+                $fetchAllForOtherCalls,
                 $fetchAllForInitAttributes,
                 $fetchAllForOtherCalls,
                 $fetchAllForInitAttributes,
