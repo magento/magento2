@@ -756,7 +756,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider testValidateUploadFileExceptionDataProvider
+     * @dataProvider imageValidateUploadFileExceptionDataProvider
      * @param string $fileName
      * @param string $expectedErrorMsg
      * @param bool $useFixture
@@ -779,7 +779,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function testValidateUploadFileExceptionDataProvider()
+    public static function imageValidateUploadFileExceptionDataProvider()
     {
         return [
             'image_notfound' => [

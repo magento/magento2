@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,7 +50,7 @@ class RemoveFixtureTest extends AbstractOverridesTest
      * @magentoConfigFixture current_store test_section/test_group/field_2 new_value
      * @magentoConfigFixture current_store test_section/test_group/field_3 new_value
      *
-     * @dataProvider testDataProvider
+     * @dataProvider datasetDataProvider
      *
      * @param string $expectedFirstValue
      * @param string $expectedSecondValue
@@ -67,7 +67,7 @@ class RemoveFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public static function testDataProvider(): array
+    public static function datasetDataProvider(): array
     {
         return [
             'first_data_set' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api;
@@ -171,7 +171,7 @@ class GroupRepositoryTest extends WebapiAbstract
     /**
      * Verify that creating a new group with excluded website as extension attributes works via REST.
      *
-     * @dataProvider testExcludedWebsitesRestDataProvider
+     * @dataProvider excludedWebsitesRestDataProvider
      * @param string $code
      * @param null|array $excludeWebsitesIds
      * @param null|array $result
@@ -223,7 +223,7 @@ class GroupRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public static function testExcludedWebsitesRestDataProvider(): array
+    public static function excludedWebsitesRestDataProvider(): array
     {
         return [
             ['Create Group No Excludes REST', [], null],
@@ -612,7 +612,7 @@ class GroupRepositoryTest extends WebapiAbstract
     /**
      * Verify that creating a new group with excluded website as extension attributes works via SOAP.
      *
-     * @dataProvider testExcludedWebsitesSoapDataProvider
+     * @dataProvider excludedWebsitesSoapDataProvider
      * @param string $code
      * @param array $excludeWebsitesIds
      * @param array|null $result
@@ -665,7 +665,7 @@ class GroupRepositoryTest extends WebapiAbstract
      *
      * @return array
      */
-    public static function testExcludedWebsitesSoapDataProvider(): array
+    public static function excludedWebsitesSoapDataProvider(): array
     {
         return [
             ['Create Group No Excludes SOAP', [], null],
@@ -1092,7 +1092,7 @@ class GroupRepositoryTest extends WebapiAbstract
     /**
      * Data provider for testSearchGroups
      */
-    public static function testSearchGroupsDataProvider()
+    public static function searchGroupsDataProvider()
     {
         return [
             ['tax_class_id', 3, []],
@@ -1148,7 +1148,7 @@ class GroupRepositoryTest extends WebapiAbstract
      * @param string $filterValue Value of the field to be filtered by
      * @param array $expectedResult Expected search result
      *
-     * @dataProvider testSearchGroupsDataProvider
+     * @dataProvider searchGroupsDataProvider
      */
     public function testSearchGroups($filterField, $filterValue, $expectedResult)
     {
@@ -1248,7 +1248,7 @@ class GroupRepositoryTest extends WebapiAbstract
      * @param string $filterValue Value of the field to be filtered by
      * @param array $expectedResult Expected search result
      *
-     * @dataProvider testSearchGroupsDataProvider
+     * @dataProvider searchGroupsDataProvider
      */
     public function testSearchGroupsWithGET($filterField, $filterValue, $expectedResult)
     {

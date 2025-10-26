@@ -71,9 +71,9 @@
             <item>Bld D</item>
         </array>
         <data key="company">Magento</data>
-        <data key="telephone">Invalid Telephone</data>
+        <data key="telephone">0987654321</data>
         <data key="fax">1234568910</data>
-        <data key="postcode">Invalid PostCode</data>
+        <data key="postcode">654321</data>
         <data key="city">InvalidCity</data>
         <data key="state">Texas</data>
         <data key="firstname">John</data>
