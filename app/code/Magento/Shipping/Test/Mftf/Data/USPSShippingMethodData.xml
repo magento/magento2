@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright 2024 Adobe
-  * All Rights Reserved.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -106,5 +106,8 @@
     </entity>
     <entity name="ShippingTypeUSPSConfigData" type="usps_config">
         <data key="value">Priority Mail International Flat Rate Envelope</data>
+    </entity>
+    <entity name="USPSFirstClassInternationalShippingMethodData" type="usps_config">
+        <data key="value">First-Class Package International Service</data>
     </entity>
 </entities>
