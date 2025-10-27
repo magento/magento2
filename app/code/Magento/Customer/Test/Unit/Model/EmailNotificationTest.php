@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -354,46 +354,46 @@ class EmailNotificationTest extends TestCase
     {
         return [
             [
-                'test_number' => 1,
+                'testNumber' => 1,
                 'customerStoreId' => 0,
-                'old_email' => 'test@example.com',
-                'new_email' => 'test@example.com',
-                'is_password_changed' => true
+                'oldEmail' => 'test@example.com',
+                'newEmail' => 'test@example.com',
+                'isPasswordChanged' => true
             ],
             [
-                'test_number' => 1,
+                'testNumber' => 1,
                 'customerStoreId' => 2,
-                'old_email' => 'test@example.com',
-                'new_email' => 'test@example.com',
-                'is_password_changed' => true
+                'oldEmail' => 'test@example.com',
+                'newEmail' => 'test@example.com',
+                'isPasswordChanged' => true
             ],
             [
-                'test_number' => 2,
+                'testNumber' => 2,
                 'customerStoreId' => 0,
-                'old_email' => 'test1@example.com',
-                'new_email' => 'test2@example.com',
-                'is_password_changed' => false
+                'oldEmail' => 'test1@example.com',
+                'newEmail' => 'test2@example.com',
+                'isPasswordChanged' => false
             ],
             [
-                'test_number' => 2,
+                'testNumber' => 2,
                 'customerStoreId' => 2,
-                'old_email' => 'test1@example.com',
-                'new_email' => 'test2@example.com',
-                'is_password_changed' => false
+                'oldEmail' => 'test1@example.com',
+                'newEmail' => 'test2@example.com',
+                'isPasswordChanged' => false
             ],
             [
-                'test_number' => 3,
+                'testNumber' => 3,
                 'customerStoreId' => 0,
-                'old_email' => 'test1@example.com',
-                'new_email' => 'test2@example.com',
-                'is_password_changed' => true
+                'oldEmail' => 'test1@example.com',
+                'newEmail' => 'test2@example.com',
+                'isPasswordChanged' => true
             ],
             [
-                'test_number' => 3,
+                'testNumber' => 3,
                 'customerStoreId' => 2,
-                'old_email' => 'test1@example.com',
-                'new_email' => 'test2@example.com',
-                'is_password_changed' => true
+                'oldEmail' => 'test1@example.com',
+                'newEmail' => 'test2@example.com',
+                'isPasswordChanged' => true
             ]
         ];
     }

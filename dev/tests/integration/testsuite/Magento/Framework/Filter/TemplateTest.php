@@ -63,7 +63,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFilterForDataProvider()
+    public static function getFilterForDataProvider()
     {
         $template = <<<TEMPLATE
 <ul>

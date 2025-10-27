@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\ResourceModel\Eav;
 
 use Magento\Catalog\Model\Attribute\Backend\DefaultBackend;
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Catalog\Model\Product\Attribute\AttributeSetUnassignValidatorInterface;
 use Magento\Eav\Model\Entity;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
@@ -24,7 +26,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method bool getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -34,11 +35,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     \Magento\Catalog\Api\Data\ProductAttributeInterface,
     \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
 {
-    const MODULE_NAME = 'Magento_Catalog';
+    public const MODULE_NAME = 'Magento_Catalog';
 
-    const ENTITY = 'catalog_eav_attribute';
+    public const ENTITY = 'catalog_eav_attribute';
 
-    const KEY_IS_GLOBAL = 'is_global';
+    public const KEY_IS_GLOBAL = 'is_global';
 
     private const ALLOWED_INPUT_TYPES = [
         'boolean'     => true,
@@ -72,8 +73,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     protected static $_labels = null;
 
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'catalog_entity_attribute';
@@ -97,6 +96,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @var \Magento\Eav\Api\Data\AttributeExtensionFactory
      */
     private $eavAttributeFactory;
+
+    /**
+     * @var AttributeSetUnassignValidatorInterface
+     */
+    private $attributeSetUnassignValidator;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -123,6 +127,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Eav\Api\Data\AttributeExtensionFactory|null $eavAttributeFactory
+     * @param AttributeSetUnassignValidatorInterface|null $attributeSetUnassignValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -146,10 +151,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $indexerEavProcessor,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productFlatIndexerHelper,
         LockValidatorInterface $lockValidator,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null
+        ?\Magento\Eav\Api\Data\AttributeExtensionFactory $eavAttributeFactory = null,
+        ?AttributeSetUnassignValidatorInterface $attributeSetUnassignValidator = null
     ) {
         $this->_indexerEavProcessor = $indexerEavProcessor;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
@@ -157,6 +163,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         $this->attrLockValidator = $lockValidator;
         $this->eavAttributeFactory = $eavAttributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Eav\Api\Data\AttributeExtensionFactory::class);
+        $this->attributeSetUnassignValidator = $attributeSetUnassignValidator
+            ?: ObjectManager::getInstance()->get(AttributeSetUnassignValidatorInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -916,5 +924,17 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         }
 
         return $backend;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteEntity()
+    {
+        if ($this->getEntityAttributeId()) {
+            $result = $this->_getResource()->getEntityAttribute($this->getEntityAttributeId());
+            $result && $this->attributeSetUnassignValidator->validate($this, (int) $result['attribute_set_id']);
+        }
+        return parent::deleteEntity();
     }
 }

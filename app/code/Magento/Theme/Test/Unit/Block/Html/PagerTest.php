@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -133,7 +133,7 @@ class PagerTest extends TestCase
      *
      * @return array
      */
-    public function limitUrlDataProvider(): array
+    public static function limitUrlDataProvider(): array
     {
         return [
             [2, 21, 10, ['limit' => 10]],

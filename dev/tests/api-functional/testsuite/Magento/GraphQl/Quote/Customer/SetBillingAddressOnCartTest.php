@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -1871,7 +1871,7 @@ QUERY;
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
         $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
 
-        self::assertCount(1, $addresses);
+        self::assertCount(2, $addresses);
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         foreach ($addresses as $address) {
             $this->customerAddressRepository->delete($address);
@@ -1953,7 +1953,7 @@ QUERY;
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
         $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
 
-        $this->assertCount(1, $addresses);
+        $this->assertCount(2, $addresses);
         $this->assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
         foreach ($addresses as $address) {
             $this->customerAddressRepository->delete($address);

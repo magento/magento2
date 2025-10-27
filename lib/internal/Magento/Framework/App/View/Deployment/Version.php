@@ -49,7 +49,7 @@ class Version
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage,
-        DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->appState = $appState;
         $this->versionStorage = $versionStorage;

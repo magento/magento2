@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -296,18 +296,18 @@ class RedirectTest extends TestCase
             [1, 2, 'referer', 'base', 'defined', '', 'account', 'login', 'logout', 'dashboard', true, true],
             // Logout, Without Redirect to Dashboard
             [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
+                'customerId' => 1,
+                'lastCustomerId' => 2,
                 'referer' => 'http://base.com/customer/account/logoutSuccess/',
-                'base_url' => 'http://base.com/',
-                'before_auth_url' => 'http://base.com/',
-                'after_auth_url' => 'http://base.com/customer/account/',
-                'account_url' => 'account',
-                'login_url' => 'login',
-                'logout_url' => 'logout',
-                'dashboard_url' => 'dashboard',
-                'is_customer_logged_id_flag' => true,
-                'redirect_to_dashboard_flag' => false,
+                'baseUrl' => 'http://base.com/',
+                'beforeAuthUrl' => 'http://base.com/',
+                'afterAuthUrl' => 'http://base.com/customer/account/',
+                'accountUrl' => 'account',
+                'loginUrl' => 'login',
+                'logoutUrl' => 'logout',
+                'dashboardUrl' => 'dashboard',
+                'customerLoggedIn' => true,
+                'redirectToDashboard' => false,
             ],
         ];
     }

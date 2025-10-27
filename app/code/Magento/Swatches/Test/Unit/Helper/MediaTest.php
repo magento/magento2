@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -149,7 +149,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function dataForFullPath()
+    public static function dataForFullPath()
     {
         return [
             [
@@ -253,7 +253,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function dataForFolderName()
+    public static function dataForFolderName()
     {
         return [
             [
@@ -343,7 +343,7 @@ class MediaTest extends TestCase
     /**
      * @return array
      */
-    public function getSwatchTypes()
+    public static function getSwatchTypes()
     {
         return [
             [

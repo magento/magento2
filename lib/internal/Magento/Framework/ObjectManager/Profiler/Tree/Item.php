@@ -32,7 +32,7 @@ class Item
      * @param string $class
      * @param Item $parent
      */
-    public function __construct($class, Item $parent = null)
+    public function __construct($class, ?Item $parent = null)
     {
         $this->class = $class;
         $this->parent = $parent;

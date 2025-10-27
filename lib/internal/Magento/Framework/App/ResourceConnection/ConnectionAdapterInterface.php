@@ -26,5 +26,5 @@ interface ConnectionAdapterInterface
      * @return AdapterInterface
      * @throws \InvalidArgumentException
      */
-    public function getConnection(LoggerInterface $logger = null, SelectFactory $selectFactory = null);
+    public function getConnection(?LoggerInterface $logger = null, ?SelectFactory $selectFactory = null);
 }

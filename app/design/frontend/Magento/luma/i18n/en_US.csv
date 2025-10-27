@@ -212,6 +212,7 @@
 "Layout must be initialized","Layout must be initialized"
 "Manage Addresses","Manage Addresses"
 "Max query complexity should be %1 but got %2.","Max query complexity should be %1 but got %2."
+"Max Aliases in query should be %1 but got %2.","Max Aliases in query should be %1 but got %2."
 "Maximum items of type ""%type"" is %max","Maximum items of type ""%type"" is %max"
 "Maximum pageSize is %max","Maximum pageSize is %max"
 "Maximum SearchCriteria pageSize is %max","Maximum SearchCriteria pageSize is %max"
@@ -489,3 +490,5 @@ Remove,Remove
 Test,Test
 test,test
 Two,Two
+"Invalid data type","Invalid data type"
+"Unknown type ""%1"".","Unknown type ""%1""."

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -231,7 +231,7 @@ class EventTest extends TestCase
     /**
      * @return array
      */
-    public function getApplyLogToCollectionDataProvider(): array
+    public static function getApplyLogToCollectionDataProvider(): array
     {
         return [
             ['storeId' => 1, 'storeIdSelect' => [1]],
@@ -253,9 +253,13 @@ class EventTest extends TestCase
             ->addMethods(['select', 'fetchCol'])
             ->getMock();
 
+        $callCount = 0;
         $this->connectionMock
             ->method('fetchCol')
-            ->willReturnOnConsecutiveCalls(1);
+            ->willReturnCallback(function () use (&$callCount) {
+                return $callCount++ === 0 ? 1 : null;
+            });
+
         $this->connectionMock
             ->expects($this->any())
             ->method('delete');

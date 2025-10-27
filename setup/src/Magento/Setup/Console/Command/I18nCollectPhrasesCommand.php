@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Console\Command;
 
@@ -20,19 +20,20 @@ class I18nCollectPhrasesCommand extends Command
     /**#@+
      * Keys and shortcuts for input arguments and options
      */
-    const INPUT_KEY_DIRECTORY = 'directory';
-    const INPUT_KEY_OUTPUT = 'output';
-    const SHORTCUT_KEY_OUTPUT = 'o';
-    const INPUT_KEY_MAGENTO = 'magento';
-    const SHORTCUT_KEY_MAGENTO = 'm';
+    public const INPUT_KEY_DIRECTORY = 'directory';
+    public const INPUT_KEY_OUTPUT = 'output';
+    public const SHORTCUT_KEY_OUTPUT = 'o';
+    public const INPUT_KEY_MAGENTO = 'magento';
+    public const SHORTCUT_KEY_MAGENTO = 'm';
+    public const NAME = 'i18n:collect-phrases';
     /**#@- */
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
-        $this->setName('i18n:collect-phrases')
+        $this->setName(self::NAME)
             ->setDescription('Discovers phrases in the codebase');
         $this->setDefinition([
             new InputArgument(
@@ -57,7 +58,7 @@ class I18nCollectPhrasesCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

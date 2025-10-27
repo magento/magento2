@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -134,7 +134,7 @@ class RowParserTest extends TestCase
     /**
      * @return array
      */
-    public function parseWithExceptionDataProvider()
+    public static function parseWithExceptionDataProvider()
     {
         $rowData = ['a', 'b', 'c', 'd', 'e'];
         $conditionFullName = 'condition_full_name';

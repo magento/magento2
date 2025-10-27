@@ -60,7 +60,7 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
         $cacheIdPrefix = '',
         array $cacheTags = [],
         $cacheLifetime = null,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_cache = $cache;
         $this->_fetchStrategy = $fetchStrategy;

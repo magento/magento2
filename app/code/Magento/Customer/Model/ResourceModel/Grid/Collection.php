@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel\Grid;
 
@@ -59,7 +59,7 @@ class Collection extends SearchResult
         ResolverInterface $localeResolver,
         $mainTable = 'customer_grid_flat',
         $resourceModel = Customer::class,
-        TimezoneInterface $timeZone = null
+        ?TimezoneInterface $timeZone = null
     ) {
         $this->localeResolver = $localeResolver;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);

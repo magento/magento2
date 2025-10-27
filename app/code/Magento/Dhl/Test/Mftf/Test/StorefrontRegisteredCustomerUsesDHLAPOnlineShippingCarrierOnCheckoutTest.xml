@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRegisteredCustomerUsesDHLAPOnlineShippingCarrierOnCheckoutTest">
+        <annotations>
+            <stories value="DHL Shipping Carrier On Checkout"/>
+            <title value="Customer Uses DHL AP Online Shipping Carrier On Checkout"/>
+            <description value="Testcase verifies On storefront customer successfully place an order using DHL(AP) shipping carrier"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5026"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="Customer_US_UK_DE" stepKey="createCustomer"/>
+            <actionGroup ref="AdminSetShippingOriginConfigForStateFieldActionGroup" stepKey="setShippingOriginConfiguration">
+                <argument name="country" value="Singapore"/>
+                <argument name="postcode" value="408898"/>
+            </actionGroup>
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+            <!--Open currency options and select singapore dollar as allowed currency-->
+            <conditionalClick selector="{{AdminConfigSection.currencyOptionsTab}}" dependentSelector="{{AdminConfigSection.defaultCurrencySelect}}" visible="false" stepKey="openCurrencyOptionsTab"/>
+            <selectOption selector="{{AdminConfigSection.allowedCurrencies}}" parameterArray="['Singapore Dollar', 'US Dollar']" stepKey="selectAllowedCurrency"/>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
+            <!-- go to currency rate page and fill currency rate -->
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="naviagteToCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="SGD"/>
+                <argument name="rate" value="1.35"/>
+            </actionGroup>
+            <!--Create simple product-->
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct"/>
+            <!-- Create configurable product with two options -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChildOne">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+            <!--Create Bundle product with multi select option-->
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct"/>
+            <createData entity="MultipleSelectOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <actionGroup ref="AdminEnableDHLAPWithoutAccountAndCountryConfigurationActionGroup" stepKey="enableDHL"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Reset shipping origin -->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="resetCaliforniaShippingOrigin"/>
+            <actionGroup ref="AdminDisableDHLConfigurationActionGroup" stepKey="resetDhlConfig"/>
+            <!-- unselect sgd as a allowed currency -->
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="againGoToCurrencySetupPage"/>
+            <!--Open currency options and select singapore dollar as allowed currency-->
+            <conditionalClick selector="{{AdminConfigSection.currencyOptionsTab}}" dependentSelector="{{AdminConfigSection.defaultCurrencySelect}}" visible="false" stepKey="openCurrencyOptions"/>
+            <selectOption selector="{{AdminConfigSection.allowedCurrencies}}" parameterArray="['US Dollar']" stepKey="UnselectAllowedCurrency"/>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveConfiguration"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Add bundle product to cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$$createBundleProduct.custom_attributes[url_key]$$" />
+        </actionGroup>
+        <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addBundleProductToCart">
+            <argument name="productName" value="$createBundleProduct.name$"/>
+        </actionGroup>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Add Configurable Product to cart  -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <!-- Go to Shopping Cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartIndexPage"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.estimateShippingAndTaxSummary}}" visible="false" stepKey="openEstimateShippingAndTaxSection"/>
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields">
+            <argument name="address" value="DE_Address_Berlin_Not_Default_Address"/>
+        </actionGroup>
+        <waitForElement selector="{{CheckoutCartSummarySection.shippingMethods('Express worldwide')}}" stepKey="verifyExpressWorldWideIsAvailable"/>
+        <waitForElement selector="{{CheckoutCartSummarySection.shippingMethods('Express easy')}}" stepKey="verifyExpressEasyIsAvailable"/>
+        <waitForElement selector="{{CheckoutCartSummarySection.shippingMethods('Express 12:00')}}" stepKey="verifyExpress12IsAvailable"/>
+        <waitForElement selector="{{CheckoutCartSummarySection.shippingMethods('Medical express')}}" stepKey="verifyMedicalExpressIsAvailable"/>
+        <click selector="{{CheckoutCartSummarySection.shippingMethods('Express worldwide')}}" stepKey="selectExpressWorldWide"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--navigate to orders grid-->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminSalesOrders"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <waitForText selector="{{AdminOrdersGridSection.firstRow}}" userInput="$grabOrderNumber" stepKey="seeOrderIdInGrid"/>
+    </test>
+</tests>

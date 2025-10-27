@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -172,5 +172,17 @@ define([
                 expect(multiSelect.excluded().toString()).toEqual('3,4');
                 expect(multiSelect.selected().toString()).toEqual('5,6');
             });
+
+        it('updateState does not call selectAll when all items are selected', function () {
+            multiSelect.rows([{ id: 1 }, { id: 2 }]);
+            multiSelect.totalRecords(2);
+            multiSelect.excludeMode(false);
+            multiSelect.selected([1, 2]);
+            multiSelect.preserveSelectionsOnFilter = false;
+            spyOn(multiSelect, 'selectAll').and.callThrough();
+            multiSelect.updateState();
+
+            expect(multiSelect.selectAll).not.toHaveBeenCalled();
+        });
     });
 });

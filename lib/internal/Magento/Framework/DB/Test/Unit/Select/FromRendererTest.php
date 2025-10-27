@@ -87,7 +87,7 @@ class FromRendererTest extends TestCase
      * Data provider for testRender
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [

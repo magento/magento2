@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,7 +83,7 @@ class OrderIncrementIdCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function isOrderIncrementIdUsedDataProvider(): array
+    public static function isOrderIncrementIdUsedDataProvider(): array
     {
         return [[100000001], ['10000000001'], ['M10000000001']];
     }

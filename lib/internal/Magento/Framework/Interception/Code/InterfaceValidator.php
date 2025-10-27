@@ -42,7 +42,7 @@ class InterfaceValidator
     /**
      * @param ArgumentsReader $argumentsReader
      */
-    public function __construct(ArgumentsReader $argumentsReader = null)
+    public function __construct(?ArgumentsReader $argumentsReader = null)
     {
         $this->_argumentsReader = $argumentsReader ?? new ArgumentsReader();
     }

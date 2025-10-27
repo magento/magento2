@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class Multiple implements CustomizableOptionValueInterface
      */
     public function __construct(
         PriceUnitLabel $priceUnitLabel,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->priceUnitLabel = $priceUnitLabel;
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()

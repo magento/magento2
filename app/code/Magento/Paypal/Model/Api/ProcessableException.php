@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model\Api;
@@ -38,7 +38,7 @@ class ProcessableException extends LocalizedException
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
+    public function __construct(Phrase $phrase, ?\Exception $cause = null, $code = 0)
     {
         parent::__construct($phrase, $cause, $code);
         $this->code = $code;

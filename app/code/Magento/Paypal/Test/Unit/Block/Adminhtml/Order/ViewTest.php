@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -113,7 +113,7 @@ class ViewTest extends TestCase
      *
      * @return array
      */
-    public function orderDataProvider(): array
+    public static function orderDataProvider(): array
     {
         return [
             [true, false, false, true, Order::STATE_PROCESSING, false],

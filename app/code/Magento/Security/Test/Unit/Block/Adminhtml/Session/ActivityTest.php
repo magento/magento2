@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -156,7 +156,7 @@ class ActivityTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAreMultipleSessionsActive()
+    public static function dataProviderAreMultipleSessionsActive()
     {
         return [
             ['expectedResult' => false, 'sessionsNumber' => 0],
@@ -193,7 +193,7 @@ class ActivityTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderTime()
+    public static function dataProviderTime()
     {
         return [
             ['timeString' => '2015-12-28 13:00:00'],

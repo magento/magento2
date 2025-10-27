@@ -30,7 +30,7 @@ class AbstractClaimTest extends TestCase
         $this->assertEquals('UTC', $dt->getTimezone()->getName());
     }
 
-    public function getDates(): array
+    public static function getDates(): array
     {
         return [
             ['1970-01-01T00:00:00Z', '1970-01-01 00:00:00'],

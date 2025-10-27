@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Console\Command;
 
@@ -83,7 +83,7 @@ class SourceThemeDeployCommand extends Command
         Locale $validator,
         Publisher $assetPublisher,
         Repository $assetRepository,
-        File $file = null
+        ?File $file = null
     ) {
         parent::__construct('dev:source-theme:deploy');
         $this->validator = $validator;

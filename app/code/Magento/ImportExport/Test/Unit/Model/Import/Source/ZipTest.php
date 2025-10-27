@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,16 +60,16 @@ class ZipTest extends TestCase
     {
         return [
             [
-                '$fileName' => 'test_file.txt',
-                '$expectedfileName' => 'test_file.txt'
+                'fileName' => 'test_file.txt',
+                'expectedfileName' => 'test_file.txt'
             ],
             [
-                '$fileName' => 'test_file.zip',
-                '$expectedfileName' => 'test_file.csv'
+                'fileName' => 'test_file.zip',
+                'expectedfileName' => 'test_file.csv'
             ],
             [
-                '$fileName' => '.ziptest_.zip.file.zip.ZIP',
-                '$expectedfileName' => '.ziptest_.zip.file.zip.csv'
+                'fileName' => '.ziptest_.zip.file.zip.ZIP',
+                'expectedfileName' => '.ziptest_.zip.file.zip.csv'
             ]
         ];
     }

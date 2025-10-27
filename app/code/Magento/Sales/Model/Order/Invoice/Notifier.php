@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Invoice;
 
@@ -33,7 +33,7 @@ class Notifier implements \Magento\Sales\Model\Order\Invoice\NotifierInterface
     public function notify(
         \Magento\Sales\Api\Data\OrderInterface $order,
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
+        ?\Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         $forceSyncMode = false
     ) {
         foreach ($this->senders as $sender) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -127,7 +127,7 @@ class GatewayTest extends TestCase
     /**
      * @return array[]
      */
-    public function postRequestOkDataProvider(): array
+    public static function postRequestOkDataProvider(): array
     {
         return [
             [
@@ -217,7 +217,7 @@ class GatewayTest extends TestCase
     /**
      * @return array[]
      */
-    public function requestBodyDataProvider(): array
+    public static function requestBodyDataProvider(): array
     {
         return [
             [

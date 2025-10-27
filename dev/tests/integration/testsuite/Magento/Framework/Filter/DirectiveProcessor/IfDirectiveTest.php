@@ -62,7 +62,7 @@ class IfDirectiveTest extends TestCase
         self::assertEquals($expect, $result);
     }
 
-    public function useCasesProvider()
+    public static function useCasesProvider()
     {
         return [
             ['{{if foo}}blah{{/if}}',['foo' => true], 'blah'],

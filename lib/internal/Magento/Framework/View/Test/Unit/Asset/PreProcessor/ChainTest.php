@@ -78,7 +78,7 @@ class ChainTest extends TestCase
     /**
      * @return array
      */
-    public function isChangedDataProvider()
+    public static function isChangedDataProvider()
     {
         return [
             ['origContent', 'origType', false],

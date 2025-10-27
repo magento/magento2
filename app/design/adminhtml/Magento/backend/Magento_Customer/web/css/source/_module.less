@@ -1,7 +1,7 @@
-// /**
-//  * Copyright © Magento, Inc. All rights reserved.
-//  * See COPYING.txt for license details.
-//  */
+/**
+* Copyright 2014 Adobe
+* All Rights Reserved.
+*/
 
 .customer_form_areas_address_address_customer_address_update_modal_update_customer_address_form_loader {
     .admin__field {
@@ -84,6 +84,29 @@
                     select.admin__control-select {
                         width: 100%;
                     }
+                }
+            }
+        }
+    }
+}
+
+& when (@media-target = 'all') {
+
+    @media all and (min-width: @screen__l) {
+        .customer-index-edit {
+            .page-actions-buttons {
+                button {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+
+    @media all and (min-width: @screen__xl) {
+        .customer-index-edit {
+            .page-actions-buttons {
+                button {
+                    font-size: 1.6rem;
                 }
             }
         }

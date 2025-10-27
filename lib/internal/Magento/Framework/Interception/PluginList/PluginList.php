@@ -121,9 +121,9 @@ class PluginList extends Scoped implements InterceptionPluginList
         ClassDefinitions $classDefinitions,
         array $scopePriorityScheme = ['global'],
         $cacheId = 'plugins',
-        SerializerInterface $serializer = null,
-        ConfigLoaderInterface $configLoader = null,
-        PluginListGenerator $pluginListGenerator = null
+        ?SerializerInterface $serializer = null,
+        ?ConfigLoaderInterface $configLoader = null,
+        ?PluginListGenerator $pluginListGenerator = null
     ) {
         $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
         parent::__construct($reader, $configScope, $cache, $cacheId, $this->serializer);

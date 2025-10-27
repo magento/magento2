@@ -37,8 +37,8 @@ class ArgumentsReader extends ParameterReflection
      * @param ScalarTypesProvider|null $scalarTypesProvider
      */
     public function __construct(
-        NamespaceResolver $namespaceResolver = null,
-        ScalarTypesProvider $scalarTypesProvider = null
+        ?NamespaceResolver $namespaceResolver = null,
+        ?ScalarTypesProvider $scalarTypesProvider = null
     ) {
         $this->namespaceResolver = $namespaceResolver ?: new NamespaceResolver();
         $this->scalarTypesProvider = $scalarTypesProvider ?: new ScalarTypesProvider();

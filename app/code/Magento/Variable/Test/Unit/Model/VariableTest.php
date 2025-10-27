@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -204,7 +204,7 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $variable = [
             'variable_id' => 'matching_id',
@@ -219,7 +219,7 @@ class VariableTest extends TestCase
     /**
      * @return array
      */
-    public function validateMissingInfoDataProvider()
+    public static function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],
@@ -270,7 +270,7 @@ class VariableTest extends TestCase
      *
      * @return array
      */
-    public function getWysiwygValidationCases(): array
+    public static function getWysiwygValidationCases(): array
     {
         return [
             'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],

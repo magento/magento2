@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class MaskedListIdToCompareListId
      * @return int
      * @throws LocalizedException
      */
-    public function execute(string $maskedListId, int $customerId = null): int
+    public function execute(string $maskedListId, ?int $customerId = null): int
     {
         $compareList = $this->compareListFactory->create();
         $this->compareListResource->load($compareList, $maskedListId, 'list_id_mask');

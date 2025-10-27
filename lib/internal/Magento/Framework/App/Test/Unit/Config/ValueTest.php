@@ -95,7 +95,7 @@ class ValueTest extends TestCase
     /**
      * @return array
      */
-    public function dataIsValueChanged(): array
+    public static function dataIsValueChanged(): array
     {
         return [
             ['value', 'value', false],

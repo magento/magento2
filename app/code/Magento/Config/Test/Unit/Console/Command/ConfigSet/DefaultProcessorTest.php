@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -121,7 +121,7 @@ class DefaultProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             ['test/test/test', 'value', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],

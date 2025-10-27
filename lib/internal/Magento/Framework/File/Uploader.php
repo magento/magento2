@@ -217,11 +217,11 @@ class Uploader
      */
     public function __construct(
         $fileId,
-        Mime $fileMime = null,
-        DirectoryList $directoryList = null,
-        DriverPool $driverPool = null,
-        TargetDirectory $targetDirectory = null,
-        Filesystem $filesystem = null
+        ?Mime $fileMime = null,
+        ?DirectoryList $directoryList = null,
+        ?DriverPool $driverPool = null,
+        ?TargetDirectory $targetDirectory = null,
+        ?Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);

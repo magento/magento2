@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -107,13 +107,13 @@ class ElementVisibilityCompositeTest extends TestCase
     /**
      * @return array
      */
-    public function visibilityDataProvider()
+    public static function visibilityDataProvider()
     {
         return [
-            [$this->once(), false, $this->once(), false, false],
-            [$this->once(), false, $this->once(), true, true],
-            [$this->once(), true, $this->never(), true, true],
-            [$this->once(), true, $this->never(), false, true],
+            [self::once(), false, self::once(), false, false],
+            [self::once(), false, self::once(), true, true],
+            [self::once(), true, self::never(), true, true],
+            [self::once(), true, self::never(), false, true],
         ];
     }
 }

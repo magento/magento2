@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
 
@@ -9,13 +9,12 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo;
  * Adminhtml creditmemo view
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
+     * Application data storage
      *
      * @var \Magento\Framework\Registry
      */
@@ -68,14 +67,15 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::emails')) {
+            $confirmMessage = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to send a credit memo email to customer?'))
+            );
             $this->addButton(
                 'send_notification',
                 [
                     'label' => __('Send Email'),
                     'class' => 'send-email',
-                    'onclick' => 'confirmSetLocation(\'' . __(
-                        'Are you sure you want to send a credit memo email to customer?'
-                    ) . '\', \'' . $this->getEmailUrl() . '\')'
+                    'onclick' => 'confirmSetLocation(\'' . $confirmMessage . '\', \'' . $this->getEmailUrl() . '\')'
                 ]
             );
         }

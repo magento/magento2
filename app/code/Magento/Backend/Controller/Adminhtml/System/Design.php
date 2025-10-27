@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
@@ -14,10 +14,10 @@ abstract class Design extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::design';
+    public const ADMIN_RESOURCE = 'Magento_Backend::schedule';
 
     /**
-     * Core registry
+     * Core registry instance
      *
      * @var \Magento\Framework\Registry
      */

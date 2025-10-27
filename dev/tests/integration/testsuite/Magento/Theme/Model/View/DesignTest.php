@@ -159,7 +159,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFilenameDataProvider()
+    public static function getFilenameDataProvider()
     {
         return [
             ['theme_file.txt', ['module' => 'Magento_Catalog']],

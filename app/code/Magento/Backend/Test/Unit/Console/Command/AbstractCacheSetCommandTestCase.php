@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,26 +12,26 @@ abstract class AbstractCacheSetCommandTestCase extends AbstractCacheManageComman
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'implicit all' => [
                 [],
                 ['A', 'B', 'C'],
                 ['A', 'B', 'C'],
-                $this->getExpectedExecutionOutput(['A', 'B', 'C']),
+                static::getExpectedExecutionOutput(['A', 'B', 'C']),
             ],
             'specified types' => [
                 ['types' => ['A', 'B']],
                 ['A', 'B'],
                 ['A', 'B'],
-                $this->getExpectedExecutionOutput(['A', 'B']),
+                static::getExpectedExecutionOutput(['A', 'B']),
             ],
             'no changes' => [
                 ['types' => ['A', 'B']],
                 ['A', 'B'],
                 [],
-                $this->getExpectedExecutionOutput([]),
+                static::getExpectedExecutionOutput([]),
             ],
         ];
     }
@@ -43,7 +43,7 @@ abstract class AbstractCacheSetCommandTestCase extends AbstractCacheManageComman
      * @param bool $enabled
      * @return string
      */
-    public function getExpectedChangeOutput(array $changes, $enabled)
+    public static function getExpectedChangeOutput(array $changes, $enabled)
     {
         if ($changes) {
             $output = 'Changed cache status:' . PHP_EOL;

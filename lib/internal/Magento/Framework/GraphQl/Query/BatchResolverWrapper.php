@@ -119,7 +119,7 @@ class BatchResolverWrapper implements ResolverInterface, ResetAfterRequestInterf
     /**
      * @inheritDoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if ($this->response) {
             $this->clearAggregated();

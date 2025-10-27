@@ -24,7 +24,7 @@ class ExpressionConverterTest extends TestCase
     /**
      * @return array
      */
-    public function shortenEntityNameDataProvider()
+    public static function shortenEntityNameDataProvider()
     {
         $length64 = '________________________________________________________________';
         $length40 = '________________________________________';

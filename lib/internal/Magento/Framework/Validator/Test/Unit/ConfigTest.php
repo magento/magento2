@@ -61,7 +61,7 @@ class ConfigTest extends TestCase
      *
      * @param array|null $files
      */
-    protected function _initConfig(array $files = null)
+    protected function _initConfig(?array $files = null)
     {
         if (null === $files) {
             $files = glob(__DIR__ . '/_files/validation/positive/*/validation.xml', GLOB_NOSORT);
@@ -183,7 +183,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getValidationRulesDataProvider()
+    public static function getValidationRulesDataProvider()
     {
         $result = [];
 
@@ -313,7 +313,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getInvalidXmlFiles()
+    public static function getInvalidXmlFiles()
     {
         // TODO: add case There are no "entity_constraints" and "property_constraints" elements inside "rule" element
         return [

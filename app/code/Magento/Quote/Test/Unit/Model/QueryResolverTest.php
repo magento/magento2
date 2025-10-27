@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -101,7 +101,7 @@ class QueryResolverTest extends TestCase
     /**
      * @return array
      */
-    public function isSingleQueryWhenDataNotCachedDataProvider()
+    public static function isSingleQueryWhenDataNotCachedDataProvider()
     {
         return [
             ['default', true],

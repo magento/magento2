@@ -24,7 +24,7 @@ class OrdersCollectionFilters
      * @return array
      * @throws Exception
      */
-    public function getCollectionFiltersDataProvider(): array
+    public static function getCollectionFiltersDataProvider(): array
     {
         $filterDate = "2021-12-13 00:00:00";
         $customerOrdersFilterDate = new DateTime($filterDate);

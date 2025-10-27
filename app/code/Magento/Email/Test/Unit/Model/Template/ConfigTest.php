@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +22,10 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
-    private $designParams = [
+    /**
+     * @var array
+     */
+    private static $designParams = [
         'area' => Area::AREA_FRONTEND,
         'theme' => 'Magento/blank',
         'locale' => Locale::DEFAULT_SYSTEM_LOCALE,
@@ -206,7 +209,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function parseTemplateCodePartsDataProvider()
+    public static function parseTemplateCodePartsDataProvider()
     {
         return [
             'Template ID with no theme' => [
@@ -254,13 +257,13 @@ class ConfigTest extends TestCase
             'getEmailTemplateFileName'
         )->with(
             'one.html',
-            $this->designParams,
+            self::$designParams,
             'Fixture_ModuleOne'
         )->willReturn(
             '_files/Fixture/ModuleOne/view/frontend/email/one.html'
         );
 
-        $actualResult = $this->model->getTemplateFilename('template_one', $this->designParams);
+        $actualResult = $this->model->getTemplateFilename('template_one', self::$designParams);
         $this->assertEquals('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
     }
 
@@ -276,8 +279,8 @@ class ConfigTest extends TestCase
         )->with(
             'one.html',
             [
-                'area' => $this->designParams['area'],
-                'module' => $this->designParams['module'],
+                'area' => self::$designParams['area'],
+                'module' => self::$designParams['module'],
             ],
             'Fixture_ModuleOne'
         )->willReturn(
@@ -296,10 +299,10 @@ class ConfigTest extends TestCase
         $this->expectException('UnexpectedValueException');
         $this->expectExceptionMessage('Template file \'one.html\' is not found');
         $this->viewFileSystem->expects($this->once())->method('getEmailTemplateFileName')
-            ->with('one.html', $this->designParams, 'Fixture_ModuleOne')
+            ->with('one.html', self::$designParams, 'Fixture_ModuleOne')
             ->willReturn(false);
 
-        $this->model->getTemplateFilename('template_one', $this->designParams);
+        $this->model->getTemplateFilename('template_one', self::$designParams);
     }
 
     /**
@@ -310,7 +313,7 @@ class ConfigTest extends TestCase
     public function testGetterMethodUnknownTemplate($getterMethod, $argument = null)
     {
         $this->expectException('UnexpectedValueException');
-        $this->expectExceptionMessage('Email template \'unknown\' is not defined');
+        $this->expectExceptionMessage('Email template is not defined');
         if (!$argument) {
             $this->model->{$getterMethod}('unknown');
         } else {
@@ -321,13 +324,13 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getterMethodUnknownTemplateDataProvider()
+    public static function getterMethodUnknownTemplateDataProvider()
     {
         return [
             'label getter' => ['getTemplateLabel'],
             'type getter' => ['getTemplateType'],
             'module getter' => ['getTemplateModule'],
-            'file getter' => ['getTemplateFilename', $this->designParams],
+            'file getter' => ['getTemplateFilename', self::$designParams],
         ];
     }
 
@@ -371,26 +374,26 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getterMethodUnknownFieldDataProvider()
+    public static function getterMethodUnknownFieldDataProvider()
     {
         return [
-            'label getter' => ['getTemplateLabel', "Field 'label' is not defined for email template 'fixture'."],
-            'type getter' => ['getTemplateType', "Field 'type' is not defined for email template 'fixture'."],
+            'label getter' => ['getTemplateLabel', "Field 'label' is not defined for email template."],
+            'type getter' => ['getTemplateType', "Field 'type' is not defined for email template."],
             'module getter' => [
                 'getTemplateModule',
-                "Field 'module' is not defined for email template 'fixture'.",
+                "Field 'module' is not defined for email template.",
             ],
             'file getter, unknown module' => [
                 'getTemplateFilename',
-                "Field 'module' is not defined for email template 'fixture'.",
+                "Field 'module' is not defined for email template.",
                 [],
-                $this->designParams,
+                self::$designParams,
             ],
             'file getter, unknown file' => [
                 'getTemplateFilename',
-                "Field 'file' is not defined for email template 'fixture'.",
+                "Field 'file' is not defined for email template.",
                 ['module' => 'Fixture_Module'],
-                $this->designParams,
+                self::$designParams,
             ],
         ];
     }

@@ -1,3 +1,3 @@
-# PaypalGraphQl
+# Magento_PaypalGraphQl module
 
-**PaypalGraphQl** provides resolver information for using Paypal payment methods via GraphQl.
+This module provides resolver information for using PayPal payment methods via GraphQL.

@@ -184,7 +184,7 @@ class TriggerTest extends TestCase
     /**
      * Data provider for setBody function
      */
-    public function getStatementsDataProvider()
+    public static function getStatementsDataProvider()
     {
         return [['SQL', ['SQL;']], ['SQL;', ['SQL;']]];
     }

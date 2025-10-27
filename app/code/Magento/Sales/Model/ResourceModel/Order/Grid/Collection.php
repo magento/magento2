@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Grid;
 
@@ -42,7 +42,7 @@ class Collection extends SearchResult
         EventManager $eventManager,
         $mainTable = 'sales_order_grid',
         $resourceModel = Order::class,
-        TimezoneInterface $timeZone = null
+        ?TimezoneInterface $timeZone = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
         $this->timeZone = $timeZone ?: ObjectManager::getInstance()

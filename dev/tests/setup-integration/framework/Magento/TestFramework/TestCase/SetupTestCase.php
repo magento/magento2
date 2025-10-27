@@ -46,9 +46,9 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
         $name = null,
         array $data = [],
         $dataName = '',
-        ResourceConnection $resourceConnection = null
+        ?ResourceConnection $resourceConnection = null
     ) {
-        parent::__construct($name, $data, $dataName);
+        parent::__construct($name);
 
         $objectManager = Bootstrap::getObjectManager();
         $this->sqlVersionProvider = $objectManager->get(SqlVersionProvider::class);
@@ -69,7 +69,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
      */
     public function getData()
     {
-        if(empty($this->data)){
+        if (empty($this->data)) {
             $testDataObj = DataProviderFromFile::getTestObject();
             $this->data = $testDataObj->providedData();
         }
@@ -108,11 +108,9 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
             if ($this->sqlVersionProvider->isMysqlGte8029()) {
                 $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
                 break;
-            } elseif ($this->sqlVersionProvider->isMariaDBGte10427()) {
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_4_27_VERSION];
-                break;
-            } elseif ($this->sqlVersionProvider->isMariaDBGte10611()) {
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_6_11_VERSION];
+            } elseif ($this->sqlVersionProvider->isMariaDbEngine()) {
+                $suffixKey = $this->sqlVersionProvider->getMariaDbSuffixKey();
+                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[$suffixKey];
                 break;
             } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
                 $this->dbKey = $suffix;

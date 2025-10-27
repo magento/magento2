@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -311,16 +311,16 @@ class InfoTest extends TestCase
     {
         return [
             [
-                'hash' => 'protected_code',
-                'protect_code' => 'protected_code',
-                'number_detail' => 'track_details',
-                'track_details' => [['track_details']],
+                'protectCodeHash' => 'protected_code',
+                'protectCode' => 'protected_code',
+                'numberDetail' => 'track_details',
+                'trackDetails' => [['track_details']],
             ],
             [
-                'hash' => '0',
-                'protect_code' => '0e6640',
-                'number_detail' => '',
-                'track_details' => [],
+                'protectCodeHash' => '0',
+                'protectCode' => '0e6640',
+                'numberDetail' => '',
+                'trackDetails' => [],
             ],
         ];
     }

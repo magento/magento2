@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type\Bundle;
 
@@ -31,7 +31,7 @@ class RelationsDataSaver
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
-        Relation $productRelation = null
+        ?Relation $productRelation = null
     ) {
         $this->resource        = $resource;
         $this->productRelation = $productRelation
@@ -101,6 +101,23 @@ class RelationsDataSaver
                     'selection_qty',
                     'selection_can_change_qty'
                 ]
+            );
+        }
+    }
+
+    /**
+     * Saves bundle selection prices per website
+     *
+     * @param array $values
+     * @return void
+     */
+    public function saveSelectionPrices(array $values): void
+    {
+        if (!empty($values)) {
+            $this->resource->getConnection()->insertOnDuplicate(
+                $this->resource->getTableName('catalog_product_bundle_selection_price'),
+                $values,
+                ['selection_price_type', 'selection_price_value']
             );
         }
     }

@@ -31,7 +31,7 @@ class ArgumentsSerialization implements ModificationInterface
      *
      * @param SerializerInterface|null $serializer
      */
-    public function __construct(SerializerInterface $serializer = null)
+    public function __construct(?SerializerInterface $serializer = null)
     {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }

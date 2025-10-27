@@ -19,7 +19,7 @@ class NestedDataObjectRequest extends \Magento\Framework\Api\AbstractExtensibleO
      * @param \Magento\TestModule4\Service\V1\Entity\DataObjectRequest $details
      * @return $this
      */
-    public function setDetails(\Magento\TestModule4\Service\V1\Entity\DataObjectRequest $details = null)
+    public function setDetails(?\Magento\TestModule4\Service\V1\Entity\DataObjectRequest $details = null)
     {
         return $this->setData('details', $details);
     }

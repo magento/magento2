@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -257,24 +256,24 @@ class MassChangelogTest extends TestCase
     {
         return [
             'set1' => [
-                'idexers' => 1,
+                'indexerIds' => 1,
                 "exception" => null,
-                "expectsValues" => [0, 0, 0]
+                "expectsExceptionValues" => [0, 0, 0]
             ],
             'set2' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => null,
-                "expectsException" => [1, 0, 0]
+                "expectsExceptionValues" => [1, 0, 0]
             ],
             'set3' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => new LocalizedException(__('Test Phrase')),
-                "expectsException" => [0, 0, 1]
+                "expectsExceptionValues" => [0, 0, 1]
             ],
             'set4' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => new \Exception(),
-                "expectsException" => [0, 1, 0]
+                "expectsExceptionValues" => [0, 1, 0]
             ]
         ];
     }

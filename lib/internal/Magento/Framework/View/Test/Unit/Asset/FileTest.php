@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,7 +90,7 @@ class FileTest extends TestCase
     /**
      * @return array
      */
-    public function getPathDataProvider()
+    public static function getPathDataProvider()
     {
         return [
             ['', '', '', ''],
@@ -124,36 +124,39 @@ class FileTest extends TestCase
     }
 
     /**
-     * @param string $content
-     *
-     * @dataProvider getContentDataProvider
+     * @return void
      */
-    public function testGetContent($content)
+    public function testGetContentRegularRead(): void
     {
-        $this->source->expects($this->exactly(2))
+        $content = 'some content here';
+        $this->source->expects($this->once())
             ->method('getContent')
             ->with($this->object)
             ->willReturn($content);
         $this->assertEquals($content, $this->object->getContent());
-        $this->assertEquals($content, $this->object->getContent()); // no in-memory caching for content
     }
 
     /**
-     * @return array
+     * @return void
      */
-    public function getContentDataProvider()
+    public function testGetContentWithRetries(): void
     {
-        return [
-            'normal content' => ['content'],
-            'empty content'  => [''],
-        ];
+        $content = 'some content here';
+        $this->source->expects($this->exactly(3))
+            ->method('getContent')
+            ->with($this->object)
+            ->willReturnOnConsecutiveCalls('', false, $content);
+        $this->assertEquals($content, $this->object->getContent());
     }
 
-    public function testGetContentNotFound()
+    /**
+     * @return void
+     */
+    public function testGetContentNotFound(): void
     {
         $this->expectException('Magento\Framework\View\Asset\File\NotFoundException');
         $this->expectExceptionMessage('Unable to get content for \'Magento_Module/dir/file.css\'');
-        $this->source->expects($this->once())
+        $this->source->expects($this->exactly(3))
             ->method('getContent')
             ->with($this->object)
             ->willReturn(false);

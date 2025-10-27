@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -60,7 +60,7 @@ class RelativePathConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithInvalidArgumentsDataProvider()
+    public static function convertWithInvalidArgumentsDataProvider()
     {
         return [['', ''], ['some/node', ''], ['', 'some/node']];
     }
@@ -68,7 +68,7 @@ class RelativePathConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             ['currentNode', 'relativeNode', 'relativeNode'],

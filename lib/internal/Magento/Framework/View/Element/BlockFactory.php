@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element;
 
@@ -33,9 +33,13 @@ class BlockFactory
     /**
      * Create block
      *
-     * @param string $blockName
+     * @template T of BlockInterface
+     *
+     * @param class-string<T> $blockName
      * @param array $arguments
-     * @return \Magento\Framework\View\Element\BlockInterface
+     *
+     * @return T
+     *
      * @throws \LogicException
      */
     public function createBlock($blockName, array $arguments = [])

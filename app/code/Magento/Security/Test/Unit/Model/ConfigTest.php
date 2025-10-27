@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -121,7 +121,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBoolValues()
+    public static function dataProviderBoolValues()
     {
         return [[true], [false]];
     }
@@ -143,18 +143,15 @@ class ConfigTest extends TestCase
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($scope);
-        $this->assertEquals($resetMethod, $this->model->getPasswordResetProtectionType($scope));
+        $this->assertEquals($resetMethod, $this->model->getPasswordResetProtectionType());
     }
 
     /**
      * @return array
      */
-    public function dataProviderResetMethodValues()
+    public static function dataProviderResetMethodValues()
     {
-        $objectManager = new ObjectManager($this);
-        $resetMethodSource = $objectManager->getObject(
-            ResetMethod::class
-        );
+        $resetMethodSource = new ResetMethod();
 
         $optionKeys = array_keys($resetMethodSource->toArray());
         $data = [];
@@ -223,7 +220,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderNumberValueWithScope()
+    public static function dataProviderNumberValueWithScope()
     {
         return [
             [5, Area::AREA_ADMINHTML],

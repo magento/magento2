@@ -43,7 +43,7 @@ class TemporaryStorage
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
-        DeploymentConfig $config = null
+        ?DeploymentConfig $config = null
     ) {
         $this->resource = $resource;
         $this->config = $config !== null ? $config : ObjectManager::getInstance()->get(DeploymentConfig::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -285,7 +285,7 @@ class CartTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderExecute()
+    public static function dataProviderExecute()
     {
         return [
             [1, 'product_name', false, true, 'referer_url', 'cart_url', 'cart_url'],

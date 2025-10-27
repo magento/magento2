@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,11 +83,11 @@ class CollectionTest extends AbstractTestCase
     /**
      * @return array
      */
-    public function filterFlagDataProvider()
+    public static function filterFlagDataProvider()
     {
         return [
-            'Add temporary filter' => ['$flag' => true],
-            'Disable temporary filter' => ['$flag' => false]
+            'Add temporary filter' => ['flag' => true],
+            'Disable temporary filter' => ['flag' => false]
         ];
     }
 

@@ -64,15 +64,25 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function proxyMethodDataProvider(): array
+    public static function proxyMethodDataProvider(): array
     {
         return [
             ['test', ['record_id'], 111],
             ['load', ['record_id'], '111'],
             ['remove', ['record_id'], true],
-            ['getBackend', [], $this->createMock(\Zend_Cache_Backend::class)],
-            ['getLowLevelFrontend', [], $this->createMock(\Zend_Cache_Core::class)]
+            ['getBackend', [], static fn (self $testCase) => $testCase->createZendCacheBackendMock()],
+            ['getLowLevelFrontend', [], static fn (self $testCase) => $testCase->createZendCacheCoreMock()]
         ];
+    }
+
+    public function createZendCacheBackendMock()
+    {
+        return $this->createMock(\Zend_Cache_Backend::class);
+    }
+
+    public function createZendCacheCoreMock()
+    {
+        return $this->createMock(\Zend_Cache_Core::class);
     }
 
     public function testSave(): void
@@ -163,7 +173,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function cleanModeMatchingAnyTagDataProvider(): array
+    public static function cleanModeMatchingAnyTagDataProvider(): array
     {
         return [
             'failure, failure' => [false, false, false],

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\PageCache;
 
@@ -40,10 +41,10 @@ class Version
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        private readonly CookieManagerInterface $cookieManager,
-        private readonly CookieMetadataFactory $cookieMetadataFactory,
-        private readonly Http $request,
-        private readonly ScopeConfigInterface $scopeConfig
+        protected readonly CookieManagerInterface $cookieManager,
+        protected readonly CookieMetadataFactory $cookieMetadataFactory,
+        protected readonly Http $request,
+        protected readonly ScopeConfigInterface $scopeConfig
     ) {
     }
 
@@ -72,7 +73,8 @@ class Version
             return;
         }
 
-        if ($this->request->getOriginalPathInfo() === '/graphql' && $this->isSessionDisabled() === true) {
+        $originalPathInfo = $this->request->getOriginalPathInfo();
+        if ($originalPathInfo && str_contains($originalPathInfo, '/graphql') && $this->isSessionDisabled() === true) {
             return;
         }
 

@@ -124,7 +124,7 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function incorrectEmailDataProvider(): array
+    public static function incorrectEmailDataProvider(): array
     {
         return [
             'wrong_email' => ['some', 'Invalid email format'],

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
@@ -110,7 +111,7 @@ QUERY;
 
         // Assert the email contains the expected content
         $this->assertEquals('Welcome to Main Website Store', $sentMessage->getSubject());
-        $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
+        $messageRaw = quoted_printable_decode($sentMessage->getBody()->bodyToString());
         $this->assertStringContainsString('Welcome to Main Website Store.', $messageRaw);
     }
 
@@ -173,7 +174,7 @@ QUERY;
 
         // Assert the email contains the expected content
         $this->assertEquals('Welcome to Test Group', $sentMessage->getSubject());
-        $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
+        $messageRaw = quoted_printable_decode($sentMessage->getBody()->bodyToString());
         $this->assertStringContainsString('Welcome to Test Group.', $messageRaw);
     }
 
@@ -248,7 +249,7 @@ QUERY;
 
         // Assert the email contains the expected content
         $this->assertEquals('Bienvenue sur Test Group', $sentMessage->getSubject());
-        $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
+        $messageRaw = quoted_printable_decode($sentMessage->getBody()->bodyToString());
         $this->assertStringContainsString('Bienvenue sur Test Group.', $messageRaw);
     }
 }

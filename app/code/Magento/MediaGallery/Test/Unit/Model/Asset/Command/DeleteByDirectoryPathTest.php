@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,7 +95,7 @@ class DeleteByDirectoryPathTest extends TestCase
      *
      * @return array
      */
-    public function directoryPathDataProvider(): array
+    public static function directoryPathDataProvider(): array
     {
         return [
             'Existing path' => [self::DIRECTORY_PATH],

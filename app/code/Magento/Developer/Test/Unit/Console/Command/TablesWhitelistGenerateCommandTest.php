@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,7 +86,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      *
      * @return array
      */
-    public function successDataProvider()
+    public static function successDataProvider()
     {
         return [
             [
@@ -106,7 +106,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
      *
      * @return array
      */
-    public function failureDataProvider()
+    public static function failureDataProvider()
     {
         return [
             [
