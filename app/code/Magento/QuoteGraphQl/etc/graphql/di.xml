@@ -73,6 +73,7 @@
                 <item name="grouped_product_image" xsi:type="string">checkout/cart/grouped_product_image</item>
                 <item name="configurable_product_image" xsi:type="string">checkout/cart/configurable_product_image</item>
                 <item name="is_checkout_agreements_enabled" xsi:type="string">checkout/options/enable_agreements</item>
+                <item name="cart_merge_preference" xsi:type="string">checkout/cart/cart_merge_preference</item>
             </argument>
         </arguments>
     </type>

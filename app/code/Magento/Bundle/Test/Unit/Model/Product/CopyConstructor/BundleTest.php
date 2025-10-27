@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Product\CopyConstructor;
 
-use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Bundle\Model\Link;
+use Magento\Bundle\Model\Option;
 use Magento\Bundle\Model\Product\CopyConstructor\Bundle;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
@@ -65,38 +65,39 @@ class BundleTest extends TestCase
         $product->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributesProduct);
-
-        $productLink = $this->getMockBuilder(Link::class)
-            ->addMethods(['setSelectionId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productLink->expects($this->exactly(2))
-            ->method('setSelectionId')
-            ->with($this->identicalTo(null));
-        $firstOption = $this->getMockBuilder(BundleOptionInterface::class)
-            ->addMethods(['getProductLinks'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $firstOption->expects($this->once())
-            ->method('getProductLinks')
-            ->willReturn([$productLink]);
-        $firstOption->expects($this->once())
-            ->method('setOptionId')
-            ->with($this->identicalTo(null));
-        $secondOption = $this->getMockBuilder(BundleOptionInterface::class)
-            ->addMethods(['getProductLinks'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $secondOption->expects($this->once())
-            ->method('getProductLinks')
-            ->willReturn([$productLink]);
-        $secondOption->expects($this->once())
-            ->method('setOptionId')
-            ->with($this->identicalTo(null));
-        $bundleOptions = [
-            $firstOption,
-            $secondOption
+        
+        $bundleOptionsData = [
+            [
+                'option_id' => 1,
+                'title' => 'Option 1',
+                'product_links' => [
+                    [
+                        'option_id' => 1,
+                        'id' => 1,
+                        'selection_id' => 1,
+                        'sku' => 'sku-1'
+                    ],
+                ]
+            ],
+            [
+                'option_id' => 2,
+                'title' => 'Option 2',
+                'product_links' => [
+                    [
+                        'option_id' => 2,
+                        'id' => 2,
+                        'selection_id' => 2,
+                        'sku' => 'sku-2'
+                    ]
+                ]
+            ]
         ];
+        $bundleOptions = array_map(
+            fn ($optionData) => $this->createOptionMock(
+                [...$optionData, 'product_links' => array_map($this->createLinkMock(...), $optionData['product_links'])]
+            ),
+            $bundleOptionsData
+        );
         $extensionAttributesProduct->expects($this->once())
             ->method('getBundleProductOptions')
             ->willReturn($bundleOptions);
@@ -115,13 +116,57 @@ class BundleTest extends TestCase
             ->willReturn($extensionAttributesDuplicate);
         $extensionAttributesDuplicate->expects($this->once())
             ->method('setBundleProductOptions')
-            ->willReturnCallback(function ($bundleOptions) {
-                if ($bundleOptions) {
-                    return null;
-                }
-            });
+            ->with(
+                $this->callback(function ($options) use (&$bundleOptionsClone) {
+                    $bundleOptionsClone = $options;
+                    return !empty($bundleOptionsClone);
+                })
+            );
 
         $this->model->build($product, $duplicate);
+        foreach ($bundleOptionsData as $key => $optionData) {
+            $bundleOption = $bundleOptions[$key];
+            $bundleOptionClone = $bundleOptionsClone[$key];
+            
+            $this->assertEquals($optionData['option_id'], $bundleOption->getOptionId());
+            $this->assertEquals($optionData['title'], $bundleOption->getTitle());
+            
+            $this->assertNotEquals($bundleOption, $bundleOptionClone);
+            
+            $this->assertNull($bundleOptionClone->getOptionId());
+            $this->assertEquals($optionData['title'], $bundleOptionClone->getTitle());
+            
+            foreach ($optionData['product_links'] as $productLinkKey => $productLinkData) {
+                $productLink = $bundleOption->getProductLinks()[$productLinkKey];
+                $productLinkClone = $bundleOptionClone->getProductLinks()[$productLinkKey];
+                
+                $this->assertEquals($productLinkData['option_id'], $productLink->getOptionId());
+                $this->assertEquals($productLinkData['id'], $productLink->getId());
+                $this->assertEquals($productLinkData['selection_id'], $productLink->getSelectionId());
+                $this->assertEquals($productLinkData['sku'], $productLink->getSku());
+                
+                $this->assertNotEquals($productLink, $productLinkClone);
+                
+                $this->assertNull($productLinkClone->getId());
+                $this->assertNull($productLinkClone->getOptionId());
+                $this->assertNull($productLinkClone->getSelectionId());
+                $this->assertEquals($productLinkData['sku'], $productLinkClone->getSku());
+            }
+        }
+    }
+
+    private function createOptionMock(array $data): Option
+    {
+        $option = $this->createPartialMock(Option::class, []);
+        $option->addData($data);
+        return $option;
+    }
+
+    private function createLinkMock(array $data): Link
+    {
+        $productLink = $this->createPartialMock(Link::class, []);
+        $productLink->addData($data);
+        return $productLink;
     }
 
     /**

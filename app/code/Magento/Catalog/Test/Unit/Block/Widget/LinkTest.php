@@ -195,10 +195,17 @@ class LinkTest extends TestCase
                 [
                     [Store::XML_PATH_USE_REWRITES, ReinitableConfigInterface::SCOPE_TYPE_DEFAULT, null, true],
                     [Store::XML_PATH_UNSECURE_BASE_LINK_URL, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, ''],
+                ]
+            );
+        $config->expects($this->any())
+            ->method('isSetFlag')
+            ->willReturnMap(
+                [
                     [
                         Store::XML_PATH_STORE_IN_URL,
                         ReinitableConfigInterface::SCOPE_TYPE_DEFAULT,
-                        null, $includeStoreCode
+                        null,
+                        $includeStoreCode
                     ]
                 ]
             );

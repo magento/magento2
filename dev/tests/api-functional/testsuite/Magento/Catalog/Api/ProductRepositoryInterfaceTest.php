@@ -1092,7 +1092,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
-     * @dataProvider testGetListWithFilteringByStoreDataProvider
+     * @dataProvider getListWithFilteringByStoreDataProvider
      *
      * @param array $searchCriteria
      * @param array $skus
@@ -1137,7 +1137,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public static function testGetListWithFilteringByStoreDataProvider()
+    public static function getListWithFilteringByStoreDataProvider()
     {
         return [
             [

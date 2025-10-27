@@ -408,7 +408,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             )
             ->joinInner(
                 ['ce2' => $this->getTable('catalog_category_entity')],
-                'ce2.path LIKE CONCAT(ce.path, \'/%\') OR ce2.entity_id = ce.entity_id',
+                'ce2.path LIKE CONCAT(ce.path, \'/%\')',
                 []
             )
             ->where('ce.entity_id IN (?)', $categoryIds);

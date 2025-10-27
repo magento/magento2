@@ -183,6 +183,10 @@ class Product extends AbstractEntity
 
     private const ERROR_DUPLICATE_URL_KEY_BY_CATEGORY = 'duplicatedUrlKeyByCategory';
 
+    private const STRING_OVERFLOW = 8000;
+
+    private const STRING_PADDING = 5;
+
     /**
      * @var array
      */
@@ -3167,6 +3171,42 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Split SKUs into butches
+     *
+     * @param array $data
+     * @return array
+     */
+    private function splitIntoBatches(array $data): array
+    {
+        $batches = [];
+        $batch = [];
+        $accumulatedSkuLength = 0;
+        $accumulatedUrlLength = 0;
+        foreach ($data as $url => $sku) {
+            $skuLength = strlen($sku) + self::STRING_PADDING;
+            $urlLength = strlen($url) + self::STRING_PADDING;
+            if ($skuLength + $accumulatedSkuLength >= self::STRING_OVERFLOW ||
+                $urlLength + $accumulatedUrlLength >= self::STRING_OVERFLOW
+            ) {
+                $batches[] = $batch;
+                $batch = [$url => $sku];
+                $accumulatedSkuLength = $skuLength;
+                $accumulatedUrlLength = $urlLength;
+            } else {
+                $batch[$url] = $sku;
+                $accumulatedSkuLength += $skuLength;
+                $accumulatedUrlLength += $urlLength;
+            }
+        }
+
+        if (!empty($batch)) {
+            $batches[] = $batch;
+        }
+
+        return $batches;
+    }
+
+    /**
      * Check that url_keys are not already assigned to others entities in DB
      *
      * @return void
@@ -3176,21 +3216,27 @@ class Product extends AbstractEntity
     {
         $resource = $this->getResource();
         foreach ($this->urlKeys as $storeId => $urlKeys) {
-            $urlKeyDuplicates = $this->_connection->fetchAssoc(
-                $this->_connection->select()->from(
-                    ['url_rewrite' => $resource->getTable('url_rewrite')],
-                    [
-                        'request_path',
-                        'store_id',
-                        'entity_type'
-                    ]
-                )->joinLeft(
-                    ['cpe' => $resource->getTable('catalog_product_entity')],
-                    "cpe.entity_id = url_rewrite.entity_id"
-                )->where('request_path IN (?)', array_map('strval', array_keys($urlKeys)))
-                    ->where('store_id IN (?)', $storeId)
-                    ->where('cpe.sku not in (?)', array_values($urlKeys))
-            );
+            $requestPaths = $this->splitIntoBatches($urlKeys);
+
+            $urlKeyDuplicates = [];
+            foreach ($requestPaths as $urlKeys) {
+                $duplicates = $this->_connection->fetchAssoc(
+                    $this->_connection->select()->from(
+                        ['url_rewrite' => $resource->getTable('url_rewrite')],
+                        [
+                            'request_path',
+                            'store_id',
+                            'entity_type'
+                        ]
+                    )->joinLeft(
+                        ['cpe' => $resource->getTable('catalog_product_entity')],
+                        "cpe.entity_id = url_rewrite.entity_id"
+                    )->where('request_path IN (?)', array_map('strval', array_keys($urlKeys)))
+                        ->where('store_id IN (?)', $storeId)
+                        ->where('cpe.sku not in (?)', array_values($urlKeys))
+                );
+                $urlKeyDuplicates = [...$urlKeyDuplicates, ...$duplicates];
+            }
 
             foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];
@@ -3404,6 +3450,7 @@ class Product extends AbstractEntity
 
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
+        $isInStockOld = (bool) ($existStockData['is_in_stock'] ?? $this->defaultStockData['is_in_stock']);
 
         $row = array_merge(
             $this->defaultStockData,
@@ -3414,14 +3461,35 @@ class Product extends AbstractEntity
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
             $stockItemDo->setData($row);
-            $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo)
-                ? (int) $row['is_in_stock']
-                : 0;
+            $isInStock = $this->stockStateProvider->verifyStock($stockItemDo);
+            /**
+             * This following logic originates from
+             * @see \Magento\CatalogInventory\Model\Stock\StockItemRepository::updateStockStatus
+             * It is important to keep it for consistency
+             */
+            if ($stockItemDo->getManageStock()) {
+                if (!$isInStock) {
+                    if ($stockItemDo->getIsInStock() === true) {
+                        $stockItemDo->setIsInStock(false);
+                        $stockItemDo->setStockStatusChangedAuto(1);
+                    }
+                } else {
+                    if ($stockItemDo->getIsInStock() !== $isInStockOld) {
+                        $stockItemDo->setStockStatusChangedAuto(0);
+                    }
+                    if ($stockItemDo->getIsInStock() === false && $stockItemDo->getStockStatusChangedAuto()) {
+                        $stockItemDo->setIsInStock(true);
+                    }
+                }
+            } else {
+                $stockItemDo->setStockStatusChangedAuto(0);
+            }
+            $row['is_in_stock'] = (int) $stockItemDo->getIsInStock();
+            $row['stock_status_changed_auto'] = (int) $stockItemDo->getStockStatusChangedAuto();
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                 $date = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
                 $row['low_stock_date'] = $date->format(DateTime::DATETIME_PHP_FORMAT);
             }
-            $row['stock_status_changed_auto'] = (int)!$this->stockStateProvider->verifyStock($stockItemDo);
         } else {
             $row['qty'] = 0;
         }

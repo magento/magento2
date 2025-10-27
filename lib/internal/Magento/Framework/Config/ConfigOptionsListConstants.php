@@ -40,6 +40,7 @@ class ConfigOptionsListConstants
     public const CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING = 'db_logger/log_everything';
     public const CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD = 'db_logger/query_time_threshold';
     public const CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE = 'db_logger/include_stacktrace';
+    public const CONFIG_PATH_DB_LOGGER_INCLUDE_INDEX_CHECK = 'db_logger/include_index_check';
     /**#@-*/
 
     /**

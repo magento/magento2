@@ -14,7 +14,7 @@ use Magento\Analytics\ReportXml\DB\ReportValidator;
 use Magento\Analytics\ReportXml\ReportProvider;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInterface;
 use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,11 +44,6 @@ class ReportWriterTest extends TestCase
     private $reportProviderMock;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
-
-    /**
      * @var DirectoryWriteInterface|MockObject
      */
     private $directoryMock;
@@ -58,111 +53,107 @@ class ReportWriterTest extends TestCase
      */
     private $reportWriter;
 
-    /**
-     * @var string
-     */
-    private static $reportName = 'testReport';
-
-    /**
-     * @var string
-     */
-    private static $providerName = 'testProvider';
-
-    /**
-     * @var string
-     */
-    private static $providerClass = 'Magento\Analytics\Provider';
-
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
-        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->configInterfaceMock = $this->createMock(ConfigInterface::class);
         $this->reportValidatorMock = $this->createMock(ReportValidator::class);
         $this->providerFactoryMock = $this->createMock(ProviderFactory::class);
         $this->reportProviderMock = $this->createMock(ReportProvider::class);
-        $this->directoryMock = $this->getMockBuilder(DirectoryWriteInterface::class)
-            ->getMockForAbstractClass();
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->directoryMock = $this->createMock(DirectoryWriteInterface::class);
 
-        $this->reportWriter = $this->objectManagerHelper->getObject(
-            ReportWriter::class,
-            [
-                'config' => $this->configInterfaceMock,
-                'reportValidator' => $this->reportValidatorMock,
-                'providerFactory' => $this->providerFactoryMock
-            ]
+        $this->reportWriter = new ReportWriter(
+            $this->configInterfaceMock,
+            $this->reportValidatorMock,
+            $this->providerFactoryMock,
         );
     }
 
     /**
-     * @param array $configData
      * @param array $fileData
      * @param array $expectedFileData
-     * @return void
-     *
-     * @dataProvider writeDataProvider
      */
-    public function testWrite(array $configData, array $fileData, array $expectedFileData): void
+    #[
+        TestWith([
+            [[['number' => 1, 'type' => 'Shoes\"" Usual\\\\"']]],
+            [['number' => 1, 'type' => 'Shoes"" Usual"']],
+        ]),
+        TestWith([
+            [[['number' => 1, 'type' => 'hello "World"']]],
+            [['number' => 1, 'type' => 'hello "World"']],
+        ]),
+        TestWith([
+            [[['number' => 1, 'type' => 'hello \"World\"']]],
+            [['number' => 1, 'type' => 'hello "World"']],
+        ]),
+        TestWith([
+            [[['number' => 1, 'type' => 'hello \\"World\\"']]],
+            [['number' => 1, 'type' => 'hello "World"']],
+        ]),
+        TestWith([
+            [[['number' => 1, 'type' => 'hello \\\"World\\\"']]],
+            [['number' => 1, 'type' => 'hello "World"']],
+        ]),
+        TestWith([
+            [
+                [['number' => 1, 'type' => 'hello World 1']],
+                [['number' => 2, 'type' => 'hello World 2']],
+            ],
+            [
+                ['number' => 1, 'type' => 'hello World 1'],
+                ['number' => 2, 'type' => 'hello World 2'],
+            ],
+        ]),
+    ]
+    public function testWrite(array $fileData, array $expectedFileData): void
     {
-        $fileData = new \IteratorIterator(new \ArrayIterator($fileData));
-        $emptyFileData = new \IteratorIterator(new \ArrayIterator([]));
-        $errors = [];
-        $this->configInterfaceMock
-            ->expects($this->once())
-            ->method('get')
-            ->with()
-            ->willReturn([$configData]);
-        $this->providerFactoryMock
-            ->expects($this->once())
+        $fileData[] = [];
+        $dataBatches = array_map(fn (array $batch) => new \IteratorIterator(new \ArrayIterator($batch)), $fileData);
+        array_unshift($expectedFileData, ['number', 'type']);
+
+        $configData = [];
+        $providerClass = 'Magento\Analytics\Provider';
+        $configData['providers'] = [
+            [
+                'name' => 'testProvider',
+                'class' => $providerClass,
+                'parameters' => ['name' => 'testReport'],
+            ],
+        ];
+
+        $this->configInterfaceMock->expects($this->once())->method('get')->with()->willReturn([$configData]);
+        $this->providerFactoryMock->expects($this->once())
             ->method('create')
-            ->with(self::$providerClass)
+            ->with($providerClass)
             ->willReturn($this->reportProviderMock);
         $parameterName = isset(reset($configData)[0]['parameters']['name'])
             ? reset($configData)[0]['parameters']['name']
             : '';
-        $this->reportProviderMock->expects($this->exactly(2))
+        $this->reportProviderMock->expects($this->exactly(count($dataBatches)))
             ->method('getBatchReport')
             ->with($parameterName ?: null)
-            ->willReturnOnConsecutiveCalls($fileData, $emptyFileData);
-        $errorStreamMock = $this->getMockBuilder(
-            FileWriteInterface::class
-        )->getMockForAbstractClass();
-        $errorStreamMock
-            ->expects($this->once())
-            ->method('lock')
-            ->with();
-        $errorStreamMock
-            ->expects($this->exactly(2))
+            ->willReturnOnConsecutiveCalls(...$dataBatches);
+        $errorStreamMock = $this->createMock(FileWriteInterface::class);
+        $errorStreamMock->expects($this->once())->method('lock')->with()->willReturn(true);
+        $errorStreamMock->expects($this->exactly(count($dataBatches))) //count of batches - empty batch + headers
             ->method('writeCsv')
-            ->willReturnCallback(function (...$args) use ($expectedFileData) {
+            ->willReturnCallback(function (array $row) use ($expectedFileData) {
                 static $index = 0;
-                $expectedArgs = [
-                    [array_keys($expectedFileData[0])],
-                    [$expectedFileData[0]]
-                ];
-                $index++;
-                return $args === $expectedArgs[$index - 1] ? null : null;
+                $this->assertEquals($expectedFileData[$index++], $row);
+                return true;
             });
 
         $errorStreamMock->expects($this->once())->method('unlock');
         $errorStreamMock->expects($this->once())->method('close');
         if ($parameterName) {
-            $this->reportValidatorMock
-                ->expects($this->once())
+            $this->reportValidatorMock->expects($this->once())
                 ->method('validate')
                 ->with($parameterName)
-                ->willReturn($errors);
+                ->willReturn([]);
         }
-        $this->directoryMock
-            ->expects($this->once())
+        $this->directoryMock->expects($this->once())
             ->method('openFile')
-            ->with(
-                $this->stringContains('/var/tmp' . $parameterName ?: $this->reportName),
-                'w+'
-            )->willReturn($errorStreamMock);
+            ->with($this->stringContains('/var/tmp' . $parameterName), 'w+')
+            ->willReturn($errorStreamMock);
         $this->assertTrue($this->reportWriter->write($this->directoryMock, '/var/tmp'));
     }
 
@@ -176,9 +167,7 @@ class ReportWriterTest extends TestCase
     {
         $errors = ['orders', 'SQL Error: test'];
         $this->configInterfaceMock->expects($this->once())->method('get')->willReturn([$configData]);
-        $errorStreamMock = $this->getMockBuilder(
-            FileWriteInterface::class
-        )->getMockForAbstractClass();
+        $errorStreamMock = $this->createMock(FileWriteInterface::class);
         $errorStreamMock->expects($this->once())->method('lock');
         $errorStreamMock->expects($this->once())->method('writeCsv')->with($errors);
         $errorStreamMock->expects($this->once())->method('unlock');
@@ -203,71 +192,6 @@ class ReportWriterTest extends TestCase
     /**
      * @return array
      */
-    public static function writeDataProvider(): array
-    {
-        $configData = [
-            'providers' => [
-                [
-                    'name' => self::$providerName,
-                    'class' => self::$providerClass,
-                    'parameters' => [
-                        'name' => self::$reportName
-                    ],
-                ]
-            ]
-        ];
-        return [
-            [
-                'configData' => $configData,
-                'fileData' => [
-                    ['number' => 1, 'type' => 'Shoes\"" Usual\\\\"']
-                ],
-                'expectedFileData' => [
-                    ['number' => 1, 'type' => 'Shoes"" Usual"']
-                ]
-            ],
-            [
-                'configData' => $configData,
-                'fileData' => [
-                    ['number' => 1, 'type' => 'hello "World"']
-                ],
-                'expectedFileData' => [
-                    ['number' => 1, 'type' => 'hello "World"']
-                ]
-            ],
-            [
-                'configData' => $configData,
-                'fileData' => [
-                    ['number' => 1, 'type' => 'hello \"World\"']
-                ],
-                'expectedFileData' => [
-                    ['number' => 1, 'type' => 'hello "World"']
-                ]
-            ],
-            [
-                'configData' => $configData,
-                'fileData' => [
-                    ['number' => 1, 'type' => 'hello \\"World\\"']
-                ],
-                'expectedFileData' => [
-                    ['number' => 1, 'type' => 'hello "World"']
-                ]
-            ],
-            [
-                'configData' => $configData,
-                'fileData' => [
-                    ['number' => 1, 'type' => 'hello \\\"World\\\"']
-                ],
-                'expectedFileData' => [
-                    ['number' => 1, 'type' => 'hello "World"']
-                ]
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
     public static function writeErrorFileDataProvider(): array
     {
         return [
@@ -275,11 +199,9 @@ class ReportWriterTest extends TestCase
                 'configData' => [
                     'providers' => [
                         [
-                            'name' => self::$providerName,
-                            'class' => self::$providerClass,
-                            'parameters' => [
-                                'name' => self::$reportName
-                            ],
+                            'name' => 'testProvider',
+                            'class' => 'Magento\Analytics\Provider',
+                            'parameters' => ['name' => 'testReport'],
                         ]
                     ]
                 ],

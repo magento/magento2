@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5329ac9b4b69d67f2f032eb8f57f38de",
+    "content-hash": "358f9b6bb140353aa9f0be19ca64bd0c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -11469,16 +11469,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "5.0.5",
+            "version": "5.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "7670d653f726a0a122fa6a0d3fc4639825c65c83"
+                "reference": "2eac1598a9ad5f5427fed35c31ae2bdb1cf6df93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/7670d653f726a0a122fa6a0d3fc4639825c65c83",
-                "reference": "7670d653f726a0a122fa6a0d3fc4639825c65c83",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/2eac1598a9ad5f5427fed35c31ae2bdb1cf6df93",
+                "reference": "2eac1598a9ad5f5427fed35c31ae2bdb1cf6df93",
                 "shasum": ""
             },
             "require": {
@@ -11552,9 +11552,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.0.5"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/5.0.6"
             },
-            "time": "2025-06-19T01:37:42+00:00"
+            "time": "2025-09-08T15:33:15+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",

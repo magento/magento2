@@ -33,28 +33,25 @@ require([
                         window.updater.sortedRegions[country].length);
 
                 if (!hasRegions && selectEl) {
-                    var hasWildcard = false, i;
+                    var i, zeroOptIndex = -1, emptyOptIndex = -1;
 
                     for (i = 0; i < selectEl.options.length; i++) {
-                        if (selectEl.options[i].value === '*') { hasWildcard = true; break; }
+                        if (selectEl.options[i].value === '0') { zeroOptIndex = i; break; }
+                        if (emptyOptIndex === -1 && selectEl.options[i].value === '') { emptyOptIndex = i; }
                     }
-                    if (!hasWildcard) {
-                        var opt = document.createElement('option');
-                        opt.value = '*';
-                        opt.text = '*';
-                        opt.title = '*';
-                        try {
-                                selectEl.options.add(opt, 1);
-                            } catch (e)
-                            {
-                                selectEl.insertBefore(opt, selectEl.options[1] || null);
-                            }
+
+                    if (zeroOptIndex !== -1) {
+                        selectEl.selectedIndex = zeroOptIndex;
+                    } else if (emptyOptIndex !== -1) {
+                        selectEl.selectedIndex = emptyOptIndex;
+                    } else if (selectEl.options.length) {
+                        selectEl.selectedIndex = 0;
                     }
-                    selectEl.value = '*';
+
                     selectEl.disabled = true; // keep disable mode
                 }
                 if (!hasRegions && textEl) {
-                    textEl.value = '*';
+                    textEl.value = '';
                 }
             }
             $('#tax_country_id').on('change', function () { setTimeout(enforceWildcard, 0); });
