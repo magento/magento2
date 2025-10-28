@@ -315,4 +315,14 @@
         <data key="path">payment/wps_express/active</data>
         <data key="value">0</data>
     </entity>
+    <entity name="BillingAgreement" type="paypal">
+        <data key="path">payment/paypal_express/allow_ba_signup</data>
+        <data key="default">never</data>
+        <data key="value">Auto</data>
+        <data key="comment">Created billing agreement</data>
+        <data key="amount_note">Voided authorization. Amount: $15.00.</data>
+        <data key="status">void</data>
+        <data key="label">Voided</data>
+        <data key="cancelled_note">Canceled order online Amount: $15.00.</data>
+    </entity>
 </entities>

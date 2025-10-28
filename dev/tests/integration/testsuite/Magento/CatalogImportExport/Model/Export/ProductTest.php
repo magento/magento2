@@ -21,6 +21,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Directory\Helper\Data as DirectoryData;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -997,5 +998,23 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $csv = $this->doExport(['sku' => $sku]);
         $this->assertMatchesRegularExpression('#datetime_attr=7/19/15,\p{Zs}3:30\p{Zs}AM#u', $csv);
         $this->assertMatchesRegularExpression('#date_attr=2/7/17("|(,\w+=))#', $csv);
+    }
+
+    #[
+        AppArea(Area::AREA_ADMINHTML),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'boolean', 'backend_type' => 'int', 'attribute_code' => 'yesno_attr']
+        ),
+        DataFixture(ProductFixture::class, ['sku' => 'prod1']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod2', 'yesno_attr' => '0']),
+        DataFixture(ProductFixture::class, ['sku' => 'prod3', 'yesno_attr' => '1']),
+    ]
+    public function testExportProductWithYesNoAttribute(): void
+    {
+        $csv = $this->doExport(['yesno_attr' => '0']);
+        self::assertStringContainsString('prod2', $csv);
+        self::assertStringNotContainsString('prod1', $csv);
+        self::assertStringNotContainsString('prod3', $csv);
     }
 }

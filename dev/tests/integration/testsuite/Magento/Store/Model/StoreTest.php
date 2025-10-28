@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Model;
 
@@ -145,7 +146,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
-            ->setValue(Store::XML_PATH_STORE_IN_URL, $useStoreCode, ScopeInterface::SCOPE_STORE);
+            ->setValue(Store::XML_PATH_STORE_IN_URL, $useStoreCode);
 
         $actual = $this->model->getBaseUrl($type);
         $this->assertEquals($expected, $actual);
@@ -220,7 +221,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
-            ->setValue(Store::XML_PATH_STORE_IN_URL, $useStoreCode, ScopeInterface::SCOPE_STORE);
+            ->setValue(Store::XML_PATH_STORE_IN_URL, $useStoreCode);
 
         // emulate custom entry point
         $_SERVER['SCRIPT_FILENAME'] = 'custom_entry.php';
@@ -294,7 +295,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
-            ->setValue('web/url/use_store', true, ScopeInterface::SCOPE_STORE, 'secondstore');
+            ->setValue('web/url/use_store', 1);
 
         $this->model->load('admin');
         $this->model
@@ -346,7 +347,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class)
-            ->setValue('web/url/use_store', false, ScopeInterface::SCOPE_STORE, 'default');
+            ->setValue('web/url/use_store', 0);
 
         /** @var \Magento\Store\Model\Store $secondStore */
         $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('secondstore');
@@ -461,14 +462,12 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\Framework\Model\Context::class, ['appState' => $appStateMock]);
 
         $configMock
-            ->method('getValue')
+            ->method('isSetFlag')
             ->willReturnCallback(
-                function ($arg1) use ($singleStoreModeEnabled, $storeInUrl) {
-                    if ($arg1 == StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED) {
-                        return $singleStoreModeEnabled;
-                    } elseif ($arg1 == Store::XML_PATH_STORE_IN_URL) {
-                        return $storeInUrl;
-                    }
+                static fn($arg1) => match ($arg1) {
+                    StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED => $singleStoreModeEnabled,
+                    Store::XML_PATH_STORE_IN_URL => $storeInUrl,
+                    default => null
                 }
             );
 

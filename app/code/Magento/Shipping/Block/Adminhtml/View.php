@@ -14,6 +14,8 @@ namespace Magento\Shipping\Block\Adminhtml;
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
+     * Application data storage
+     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -33,7 +35,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Initialize View
+     * Initialize the block and configure buttons
      *
      * @return void
      */
@@ -52,12 +54,13 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($this->_authorization->isAllowed('Magento_Sales::emails')) {
             $this->buttonList->update('save', 'label', __('Send Tracking Information'));
+            $confirmMessage = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to send a Shipment email to customer?'))
+            );
             $this->buttonList->update(
                 'save',
                 'onclick',
-                "deleteConfirm('" . __(
-                    'Are you sure you want to send a Shipment email to customer?'
-                ) . "', '" . $this->getEmailUrl() . "')"
+                "deleteConfirm('" . $confirmMessage . "', '" . $this->getEmailUrl() . "')"
             );
         }
 
@@ -84,7 +87,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Header Text get
+     * Get page header text with shipment information
      *
      * @return \Magento\Framework\Phrase
      */
@@ -108,7 +111,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Get URL
+     * Get URL for back button navigation
      *
      * @return string
      */
@@ -124,7 +127,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Get Email Url
+     * Get URL for sending shipment email
      *
      * @return string
      */
@@ -134,7 +137,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Get Print Url
+     * Get URL for printing shipment
      *
      * @return string
      */
@@ -144,7 +147,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Update back button url
+     * Update back button URL configuration
      *
      * @param bool $flag
      * @return $this

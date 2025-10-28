@@ -47,6 +47,7 @@
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
             <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
             <actionGroup ref="AdminDisableTermsAndConditionsConfigurationActionGroup" stepKey="disableTermsAndConditions"/>
