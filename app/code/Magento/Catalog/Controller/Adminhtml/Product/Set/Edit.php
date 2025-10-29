@@ -55,7 +55,15 @@ class Edit extends Set implements HttpGetActionInterface
     public function execute()
     {
         $this->_setTypeId();
-        $attributeSet = $this->attributeSetRepository->get($this->getRequest()->getParam('id'));
+
+        try {
+            $attributeSet = $this->attributeSetRepository->get($this->getRequest()->getParam('id'));
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addErrorMessage(__('Could not load attribute set.'));
+
+            return $this->_redirect('*/*/');
+        }
+
         if (!$attributeSet->getId()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/*/index');
         }
