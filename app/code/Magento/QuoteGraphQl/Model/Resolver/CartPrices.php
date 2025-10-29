@@ -84,6 +84,10 @@ class CartPrices implements ResolverInterface
                 QuoteTotalsInterface::class
             );
 
+            if (isset($addressTotalsData['discount_description'])) {
+                $cartTotals->setDiscountDescription($addressTotalsData['discount_description']);
+            }
+
             $appliedTaxes = $this->getAppliedTaxes($quote->getShippingAddress(), $currency);
         } else {
             /**
@@ -177,7 +181,7 @@ class CartPrices implements ResolverInterface
     {
         $this->validateTotalsInstance($totals);
 
-        if ($totals->getDiscountAmount() === 0) {
+        if ($totals->getDiscountAmount() == 0) {
             return null;
         }
         return [
