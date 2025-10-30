@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminConfigPayflowThroughCliActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal credentials and other details. Clicks on Save</description>
+        </annotations>
+        <magentoCLI command="config:set {{PaypalPayflowProPartner.path}} {{PaypalPayflowProPartner.value}}" stepKey="enterInputForPartner"/>
+        <magentoCLI command="config:set {{PaypalPayflowProVendor.path}} {{PaypalPayflowProVendor.value}}" stepKey="enterInputForVendor"/>
+        <magentoCLI command="config:set {{PaypalPayflowProUser.path}} {{PaypalPayflowProUser.value}}" stepKey="enterInputForUser"/>
+        <magentoCLI command="config:set {{PaypalPayflowProPassword.path}} {{PaypalPayflowProPassword.value}}" stepKey="enterInputForPwd"/>
+        <magentoCLI command="config:set payment/payflowpro/sandbox_flag 1" stepKey="enableSandboxMode"/>
+        <magentoCLI command="config:set payment/payflowpro/active 1" stepKey="enablePaymentAdvancedSolution"/>
+        <magentoCLI command="config:set {{EnablePaymentAdvancedPaypalCredit.path}} {{EnablePaymentAdvancedPaypalCredit.value}}" stepKey="enablePaypalCredit"/>
+        <magentoCLI command="config:set payment/payflow_express/active 1" stepKey="enablePaypalExpress"/>
+        <magentoCLI command="config:set payment/payflowpro_cc_vault/active 1" stepKey="enablePayflowVault"/>
+    </actionGroup>
+</actionGroups>

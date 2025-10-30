@@ -1,0 +1,26 @@
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminConfigForDefaultValuesInPaylaterCartPageActionGroup">
+        <annotations>
+            <description>Check the default Dropdown Values Available in Admin Cart Page</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminPaypalCheckoutCartPageConfigSection.expandCheckoutCartPage(countryCode)}}" stepKey="waitForCheckoutCartPageClickable"/>
+        <click selector="{{AdminPaypalCheckoutCartPageConfigSection.expandCheckoutCartPage(countryCode)}}" stepKey="clickCheckoutCart"/>
+        <selectOption selector ="{{AdminPaypalCheckoutCartPageConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplayforPaylaterCartPage"/>
+        <seeOptionIsSelected selector="{{AdminPaypalCheckoutCartPageConfigSection.position(countryCode)}}" userInput="Header (center)" stepKey="seeSelectedPosition"/>
+        <seeOptionIsSelected selector="{{AdminPaypalCheckoutCartPageConfigSection.styleLayout(countryCode)}}" userInput="Text" stepKey="seeSelectedStyleLayout"/>
+        <seeOptionIsSelected selector="{{AdminPaypalCheckoutCartPageConfigSection.logoType(countryCode)}}" userInput="Primary" stepKey="seeSelectedLogoType"/>
+        <seeOptionIsSelected selector="{{AdminPaypalCheckoutCartPageConfigSection.logoPosition(countryCode)}}" userInput="Left" stepKey="seeSelectedLogoPosition"/>
+        <seeOptionIsSelected selector="{{AdminPaypalCheckoutCartPageConfigSection.textColor(countryCode)}}" userInput="Black" stepKey="seeSelectedTextColor"/>
+    </actionGroup>
+</actionGroups>

@@ -214,7 +214,7 @@ class AbstractModelTest extends TestCase
      *
      * @return array
      */
-    public function getKeyValueDataPairs(): array
+    public static function getKeyValueDataPairs(): array
     {
         return [
             'when test data and compare data are string' => [['key' => 'value'], 'key', 'value', false],

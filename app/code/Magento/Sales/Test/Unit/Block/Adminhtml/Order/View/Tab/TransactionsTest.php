@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -107,7 +107,7 @@ class TransactionsTest extends TestCase
     /**
      * @return array
      */
-    public function canShowTabDataProvider()
+    public static function canShowTabDataProvider()
     {
         return [
             [OnlineMethod::class, true],
@@ -136,7 +136,7 @@ class TransactionsTest extends TestCase
     /**
      * @return array
      */
-    public function isHiddenDataProvider()
+    public static function isHiddenDataProvider()
     {
         return [
             [true, false],

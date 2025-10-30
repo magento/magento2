@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,12 +12,14 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Session\Storage;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\SessionStartChecker;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Url;
@@ -71,6 +73,11 @@ class SessionTest extends TestCase
     protected $responseMock;
 
     /**
+     * @var CustomerRegistry|MockObject
+     */
+    private $customerRegistryMock;
+
+    /**
      * @var Session
      */
     protected $_model;
@@ -105,6 +112,7 @@ class SessionTest extends TestCase
         ];
         $helper->prepareObjectManager($objects);
         $this->responseMock = $this->createMock(Http::class);
+        $this->customerRegistryMock = $this->createMock(CustomerRegistry::class);
         $this->_model = $helper->getObject(
             Session::class,
             [
@@ -115,7 +123,8 @@ class SessionTest extends TestCase
                 'urlFactory' => $this->urlFactoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'response' => $this->responseMock,
-                '_customerResource' => $this->_customerResourceMock
+                '_customerResource' => $this->_customerResourceMock,
+                'customerRegistry' => $this->customerRegistryMock,
             ]
         );
     }
@@ -137,7 +146,7 @@ class SessionTest extends TestCase
         $this->_eventManagerMock
             ->method('dispatch')
             ->willReturnCallback(
-                function ($arg1, $arg2) use ($customer, $customerDto, &$callCount) {
+                function ($arg1, $arg2) use ($customer, $customerDto) {
                     if ($arg1 == 'customer_login' && $arg2 == ['customer' => $customer]) {
                         return null;
                     } elseif ($arg1 == 'customer_data_object_login' && $arg2 == ['customer' => $customerDto]) {
@@ -316,7 +325,7 @@ class SessionTest extends TestCase
             ->willReturn($customerMock);
 
         $this->_storageMock
-            ->expects($this->exactly(4))
+            ->expects($this->exactly(2))
             ->method('getData')
             ->with('customer_id')
             ->willReturn($customerId);
@@ -341,5 +350,28 @@ class SessionTest extends TestCase
             ->with(CustomerContext::CONTEXT_GROUP, self::callback(fn($value): bool => $value === '1'), 0);
 
         $this->_model->setCustomer($customer);
+    }
+
+    public function testCheckCustomerId(): void
+    {
+        $customerId = 123;
+        $customer = $this->createMock(Customer::class);
+        $this->customerRegistryMock->expects($this->once())
+            ->method('retrieve')
+            ->with($customerId)
+            ->willReturn($customer);
+        $result = $this->_model->checkCustomerId($customerId);
+        $this->assertTrue($result);
+    }
+
+    public function testCheckCustomerIdInvalid(): void
+    {
+        $customerId = 123;
+        $this->customerRegistryMock->expects($this->once())
+            ->method('retrieve')
+            ->with($customerId)
+            ->willThrowException(new NoSuchEntityException());
+        $result = $this->_model->checkCustomerId($customerId);
+        $this->assertFalse($result);
     }
 }

@@ -1,17 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Wishlist;
 
 use Exception;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Customer\Test\Fixture\Customer as CustomerFixture;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Wishlist\Test\Fixture\AddProductToWishlist as AddProductToWishlistFixture;
 
 /**
  * Test coverage for updating a product from wishlist
@@ -24,11 +31,17 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * Set Up
      */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
@@ -143,6 +156,53 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
         $itemsInWishlist = $response['updateProductsInWishlist']['wishlist']['items_v2']['items'][0];
         self::assertEquals($qty, $itemsInWishlist['quantity']);
         self::assertEquals('simple-1', $itemsInWishlist['product']['sku']);
+    }
+
+    #[
+      Config('wishlist/general/active', true),
+      DataFixture(ProductFixture::class, as: 'product'),
+      DataFixture(CustomerFixture::class, as: 'customer'),
+      DataFixture(AddProductToWishlistFixture::class, [
+          'customer_id' => '$customer.id$',
+          'product_ids' => [
+              '$product.id$'
+          ],
+          'name' => 'Test Wish List',
+      ], as: 'wishlist')
+    ]
+    public function testClearWishlistDescription(): void
+    {
+        $customerEmail = $this->fixtures->get('customer')->getEmail();
+        $wishlist = $this->getWishlist($customerEmail);
+
+        $customerWishlist = $wishlist['customer']['wishlists'][0];
+        $wishlistId = $customerWishlist['id'];
+        $wishlistItem = $customerWishlist['items_v2']['items'][0];
+        $qty = 5;
+        $description = 'New Description';
+
+        $updateWishlistQuery = $this->getQuery($wishlistId, $wishlistItem['id'], $qty, $description);
+        $response = $this->graphQlMutation($updateWishlistQuery, [], '', $this->getHeaderMap($customerEmail));
+
+        $this->assertArrayHasKey('updateProductsInWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
+        $wishlistResponse = $response['updateProductsInWishlist']['wishlist'];
+        $this->assertEquals($qty, $wishlistResponse['items_v2']['items'][0]['quantity']);
+        $this->assertEquals($description, $wishlistResponse['items_v2']['items'][0]['description']);
+
+        $updateWishlistQueryNoDescription = $this->getQuery($wishlistId, $wishlistItem['id'], $qty, "");
+        $responseNoDescription = $this->graphQlMutation(
+            $updateWishlistQueryNoDescription,
+            [],
+            '',
+            $this->getHeaderMap($customerEmail)
+        );
+
+        $this->assertArrayHasKey('updateProductsInWishlist', $responseNoDescription);
+        $this->assertArrayHasKey('wishlist', $responseNoDescription['updateProductsInWishlist']);
+        $wishlistResponseNoDescription = $responseNoDescription['updateProductsInWishlist']['wishlist'];
+        $this->assertEquals($qty, $wishlistResponseNoDescription['items_v2']['items'][0]['quantity']);
+        $this->assertEquals('', $wishlistResponseNoDescription['items_v2']['items'][0]['description']);
     }
 
     /**

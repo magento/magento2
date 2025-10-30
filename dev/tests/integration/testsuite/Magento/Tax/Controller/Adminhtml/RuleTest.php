@@ -138,7 +138,7 @@ class RuleTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      *
      * @return array
      */
-    public function ajaxActionDataProvider()
+    public static function ajaxActionDataProvider()
     {
         $taxRatesProvider = Bootstrap::getObjectManager()->create(RatesProvider::class);
 

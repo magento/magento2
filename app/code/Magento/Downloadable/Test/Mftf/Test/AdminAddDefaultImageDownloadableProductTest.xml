@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -17,9 +17,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-117"/>
             <group value="Downloadable"/>
-            <skip>
-                <issueId value="AC-12124">Fotorama lib isn't loaded</issueId>
-            </skip>
+            <!-- Excluded from PR builds due to AC-12124 -->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,7 +93,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderValidate()
+    public static function dataProviderValidate()
     {
         return [
             'withDuplicate' => [
@@ -215,7 +215,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderAfterSaveWithRegion()
+    public static function dataProviderAfterSaveWithRegion()
     {
         return [
             'withRegion' => [

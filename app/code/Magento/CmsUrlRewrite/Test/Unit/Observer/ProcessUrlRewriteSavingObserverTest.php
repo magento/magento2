@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -141,9 +141,9 @@ class ProcessUrlRewriteSavingObserverTest extends TestCase
     public static function executeDataProvider()
     {
         return  [
-            ['identifier' => true, 'storeIdChanged' => true],
-            ['identifier' => true, 'storeIdChanged' => false],
-            ['identifier' => false, 'storeIdChanged' => true],
+            ['identifierChanged' => true, 'storeIdChanged' => true],
+            ['identifierChanged' => true, 'storeIdChanged' => false],
+            ['identifierChanged' => false, 'storeIdChanged' => true],
         ];
     }
 

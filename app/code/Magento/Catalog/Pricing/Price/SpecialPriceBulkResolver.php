@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -24,6 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface, ArgumentInterface
 {
@@ -43,18 +33,26 @@ class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface, Arg
     private SessionManagerInterface $customerSession;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
+
+    /**
      * @param ResourceConnection $resource
      * @param MetadataPool $metadataPool
      * @param SessionManagerInterface $customerSession
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ResourceConnection $resource,
         MetadataPool $metadataPool,
-        SessionManagerInterface $customerSession
+        SessionManagerInterface $customerSession,
+        StoreManagerInterface $storeManager
     ) {
         $this->resource = $resource;
         $this->metadataPool = $metadataPool;
         $this->customerSession = $customerSession;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -70,7 +68,7 @@ class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface, Arg
         if (!$productCollection) {
             return [];
         }
-
+        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $connection = $this->resource->getConnection();
         $select = $connection->select()
@@ -87,7 +85,7 @@ class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface, Arg
             )
             ->joinLeft(
                 ['price' => $this->resource->getTableName('catalog_product_index_price')],
-                'price.entity_id = COALESCE(link.product_id, e.entity_id) AND price.website_id = ' . $storeId .
+                'price.entity_id = COALESCE(link.product_id, e.entity_id) AND price.website_id = ' . $websiteId .
                 ' AND price.customer_group_id = ' . $this->customerSession->getCustomerGroupId()
             )
             ->where('e.entity_id IN (' . implode(',', $productCollection->getAllIds()) . ')')

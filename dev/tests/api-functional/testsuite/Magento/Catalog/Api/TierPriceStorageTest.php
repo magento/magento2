@@ -355,6 +355,53 @@ class TierPriceStorageTest extends WebapiAbstract
     }
 
     /**
+     * Test replace method.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testCheckNewRecords()
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/tier-prices',
+                'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Update',
+            ],
+        ];
+
+        $newPrices = [
+            [
+                'price' => 10.31,
+                'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
+                'website_id' => 0,
+                'sku' => self::SIMPLE_PRODUCT_SKU,
+                'customer_group' => self::CUSTOMER_ALL_GROUPS_NAME,
+                'quantity' => 2
+            ],
+            [
+                'price' => 20.62,
+                'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
+                'website_id' => 1,
+                'sku' => self::SIMPLE_PRODUCT_SKU,
+                'customer_group' => self::CUSTOMER_ALL_GROUPS_NAME,
+                'quantity' => 2
+            ]
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, ['prices' => $newPrices]);
+        $this->assertNotEmpty($response);
+        $message = 'We found a duplicate website, tier price, customer group and quantity: '
+            . 'Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. '
+            . 'Row ID: SKU = %SKU, Website ID: %websiteId, Customer Group: %customerGroup, Quantity: %qty.';
+        $this->assertEquals($message, $response[0]['message']);
+        $this->assertEquals('simple', $response[0]['parameters'][0]);
+    }
+
+    /**
      * Check prise exists and is correct.
      *
      * @param array $price

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,7 +80,7 @@ class TypeTransitionManagerTest extends TestCase
     /**
      * @return array
      */
-    public function processProductDataProvider()
+    public static function processProductDataProvider()
     {
         return [
             [

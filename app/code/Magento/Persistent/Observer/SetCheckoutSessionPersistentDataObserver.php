@@ -1,64 +1,80 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Persistent\Observer;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\SessionFactory;
 
 /**
- * Class SetCheckoutSessionPersistentDataObserver
+ * Event SetCheckoutSessionPersistentData
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class SetCheckoutSessionPersistentDataObserver implements ObserverInterface
 {
     /**
-     * Persistent session
+     * Persistent session helper
      *
-     * @var \Magento\Persistent\Helper\Session
+     * @var Session
      */
     private $persistentSession = null;
 
     /**
-     * Customer session
+     * Customer model session
      *
-     * @var \Magento\Customer\Model\Session
+     * @var CustomerSession
      */
     private $customerSession;
 
     /**
-     * Persistent data
+     * Persistent helper
      *
-     * @var \Magento\Persistent\Helper\Data
+     * @var Data
      */
     private $persistentData = null;
 
     /**
-     * Customer Repository
+     * Customer Repository class
      *
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     private $customerRepository = null;
 
     /**
-     * @param \Magento\Persistent\Helper\Session $persistentSession
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Persistent\Helper\Data $persistentData
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * Session factory class
+     *
+     * @var SessionFactory
+     */
+    private $sessionFactory;
+
+    /**
+     * @param Session $persistentSession
+     * @param CustomerSession $customerSession
+     * @param Data $persistentData
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param SessionFactory $sessionFactory
      */
     public function __construct(
-        \Magento\Persistent\Helper\Session $persistentSession,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+        Session $persistentSession,
+        CustomerSession $customerSession,
+        Data $persistentData,
+        CustomerRepositoryInterface $customerRepository,
+        ?SessionFactory $sessionFactory = null
     ) {
         $this->persistentSession = $persistentSession;
         $this->customerSession = $customerSession;
         $this->persistentData = $persistentData;
         $this->customerRepository = $customerRepository;
+        $this->sessionFactory = $sessionFactory ?? ObjectManager::getInstance()->get(SessionFactory::class);
     }
 
     /**
@@ -74,11 +90,18 @@ class SetCheckoutSessionPersistentDataObserver implements ObserverInterface
         /** @var $checkoutSession \Magento\Checkout\Model\Session */
         $checkoutSession = $observer->getEvent()->getData('checkout_session');
         if ($this->persistentData->isShoppingCartPersist() && $this->persistentSession->isPersistent()) {
+            if (!$this->customerSession->isLoggedIn() && $this->persistentData->getClearOnLogout()) {
+                $this->sessionFactory->create()->removePersistentCookie();
+                // Unset persistent session
+                $this->persistentSession->setSession(null);
+                return;
+            }
             $checkoutSession->setCustomerData(
                 $this->customerRepository->getById($this->persistentSession->getSession()->getCustomerId())
             );
         }
-        if (!(($this->persistentSession->isPersistent() && !$this->customerSession->isLoggedIn())
+        if (!(
+            ($this->persistentSession->isPersistent() && !$this->customerSession->isLoggedIn())
             && !$this->persistentData->isShoppingCartPersist()
         )) {
             return;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -480,14 +480,19 @@ class RefundInvoiceTest extends TestCase
         );
     }
 
-    /**
-     * @return array
-     */
-    public function dataProvider()
-    {
+    protected function getMockForCreditMemoItem() {
         $creditmemoItemCreationMock = $this->getMockBuilder(CreditmemoItemCreationInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        return $creditmemoItemCreationMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProvider()
+    {
+        $creditmemoItemCreationMock = static fn (self $testCase) => $testCase->getMockForCreditMemoItem();
 
         return [
             'TestWithNotifyTrue' => [1, true,  [1 => $creditmemoItemCreationMock], true, true],

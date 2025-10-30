@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,14 @@ abstract class Create extends \Magento\Backend\App\Action
      * Indicates how to process post data
      */
     private const ACTION_SAVE = 'save';
+    /**
+     * Controller name for edit actions
+     */
+    private const CONTROLLER_NAME_ORDER_EDIT = 'order_edit';
+    /**
+     * Controller name for loadblock actions
+     */
+    private const CONTROLLER_NAME_LOADBLOCK = 'loadblock';
     /**
      * @var \Magento\Framework\Escaper
      */
@@ -60,7 +68,7 @@ abstract class Create extends \Magento\Backend\App\Action
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
-        ValidateCoupon $validateCoupon = null
+        ?ValidateCoupon $validateCoupon = null
     ) {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);
@@ -187,12 +195,13 @@ abstract class Create extends \Magento\Backend\App\Action
          */
         $this->_getOrderCreateModel()->getBillingAddress();
 
+        $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()?->getShippingMethod();
+
         /**
          * Flag for using billing address for shipping
          */
         if (!$this->_getOrderCreateModel()->getQuote()->isVirtual()) {
             $syncFlag = $this->getRequest()->getPost('shipping_as_billing');
-            $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()->getShippingMethod();
             if ($syncFlag === null
             && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
             ) {
@@ -285,6 +294,7 @@ abstract class Create extends \Magento\Backend\App\Action
         $eventData = [
             'order_create_model' => $this->_getOrderCreateModel(),
             'request' => $this->getRequest()->getPostValue(),
+            'shipping_method' => $shippingMethod
         ];
 
         $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data', $eventData);
@@ -376,10 +386,8 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     protected function _getAclResource()
     {
-        $action = strtolower($this->getRequest()->getActionName() ?? '');
-        if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
-            $action = 'reorder';
-        }
+        $action = $this->getAclResourceAction();
+
         switch ($action) {
             case 'index':
             case 'save':
@@ -391,10 +399,37 @@ abstract class Create extends \Magento\Backend\App\Action
             case 'cancel':
                 $aclResource = 'Magento_Sales::cancel';
                 break;
+            case 'actions_edit':
+                $aclResource = 'Magento_Sales::actions_edit';
+                break;
+            case 'actions_sidebar':
+                $aclResource = 'Magento_Customer::customer';
+                break;
             default:
                 $aclResource = 'Magento_Sales::actions';
                 break;
         }
         return $aclResource;
+    }
+
+    /**
+     * Get acl resource action
+     *
+     * @return string
+     */
+    private function getAclResourceAction(): string
+    {
+        $action = strtolower($this->getRequest()->getActionName() ?? '');
+
+        if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
+            $action = 'reorder';
+        }
+        if (strtolower($this->getRequest()->getControllerName() ?? '') === self::CONTROLLER_NAME_ORDER_EDIT) {
+            $action = 'actions_edit';
+        }
+        if ($action == self::CONTROLLER_NAME_LOADBLOCK && $this->getRequest()->getPost('sidebar')) {
+            $action = 'actions_sidebar';
+        }
+        return $action;
     }
 }

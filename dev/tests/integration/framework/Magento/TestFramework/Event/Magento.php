@@ -74,7 +74,7 @@ class Magento implements ObserverInterface
      *
      * @param \Magento\TestFramework\EventManager $eventManager
      */
-    public static function setDefaultEventManager(\Magento\TestFramework\EventManager $eventManager = null)
+    public static function setDefaultEventManager(?\Magento\TestFramework\EventManager $eventManager = null)
     {
         self::$_defaultEventManager = $eventManager;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model\Connector\ResponseHandler;
 
@@ -13,9 +13,7 @@ use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 class OTP implements ResponseHandlerInterface
 {
     /**
-     * @param array $responseBody
-     *
-     * @return bool|string
+     * @inheritdoc
      */
     public function handleResponse(array $responseBody)
     {

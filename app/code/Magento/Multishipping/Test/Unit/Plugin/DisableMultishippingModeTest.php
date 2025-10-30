@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,7 +91,7 @@ class DisableMultishippingModeTest extends TestCase
      *
      * @return array
      */
-    public function pluginWithChangedMultishippingModeDataProvider(): array
+    public static function pluginWithChangedMultishippingModeDataProvider(): array
     {
         return [
             'check_when_totals_are_collected' => [true],

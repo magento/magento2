@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,7 +69,7 @@ class AllowedProductTypesTest extends TestCase
     /**
      * @return array
      */
-    public function isAllowedProductTypeDataProvider()
+    public static function isAllowedProductTypeDataProvider()
     {
         return [
             ['typeId' => 'simple', 'expectedResult' => true],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model;
@@ -122,10 +122,10 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
         QuoteCollection $quoteCollection,
         CartSearchResultsInterfaceFactory $searchResultsDataFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null,
-        QuoteCollectionFactory $quoteCollectionFactory = null,
-        CartInterfaceFactory $cartFactory = null,
-        RequestSafetyInterface $requestSafety = null
+        ?CollectionProcessorInterface $collectionProcessor = null,
+        ?QuoteCollectionFactory $quoteCollectionFactory = null,
+        ?CartInterfaceFactory $cartFactory = null,
+        ?RequestSafetyInterface $requestSafety = null
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;

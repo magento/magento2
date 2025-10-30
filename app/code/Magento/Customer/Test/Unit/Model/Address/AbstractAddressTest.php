@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -355,7 +355,7 @@ class AbstractAddressTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $countryId = 1;
         $data = [
@@ -428,7 +428,7 @@ class AbstractAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getStreetFullDataProvider()
+    public static function getStreetFullDataProvider()
     {
         return [
             [null, null],

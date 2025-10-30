@@ -53,7 +53,7 @@ class CalculatorTest extends TestCase
     /**
      * @return array
      */
-    public function deltaRoundDataProvider()
+    public static function deltaRoundDataProvider()
     {
         return [
             [0, false, 0],

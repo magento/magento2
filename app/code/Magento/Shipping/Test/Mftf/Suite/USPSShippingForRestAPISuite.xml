@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="USPSShippingForRestAPISuite">
+        <before>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Configure USPS shipping method-->
+            <magentoCLI command="config:set {{AdminEnableUSPSConfigData.path}} {{AdminEnableUSPSConfigData.value}}" stepKey="enableUSPS"/>
+            <magentoCLI command="config:set {{AdminSetUSPSTypeToUSPSRestAPIUSPSConfigData.path}} {{AdminSetUSPSTypeToUSPSRestAPIUSPSConfigData.value}}" stepKey="changeUSPSTypeToRestAPI"/>
+            <magentoCLI command="config:set {{AdminConsumerKeyUSPSConfigData.path}} {{AdminConsumerKeyUSPSConfigData.value}}" stepKey="fillConsumerKey"/>
+            <magentoCLI command="config:set {{AdminConsumerSecretUSPSConfigData.path}} {{AdminConsumerSecretUSPSConfigData.value}}" stepKey="fillConsumerSecret"/>
+            <magentoCLI command="config:set {{AdminAccountNumberUSPSConfigData.path}} {{AdminAccountNumberUSPSConfigData.value}}" stepKey="fillAccountNumber"/>
+            <magentoCLI command="config:set {{AdminCRIDUSPSConfigData.path}} {{AdminCRIDUSPSConfigData.value}}" stepKey="fillCustomerRegistrationID"/>
+            <magentoCLI command="config:set {{AdminMIDUSPSConfigData.path}} {{AdminMIDUSPSConfigData.value}}" stepKey="fillMailerIdentifier"/>
+            <magentoCLI command="config:set {{AdminMMIDUSPSConfigData.path}} {{AdminMMIDUSPSConfigData.value}}" stepKey="fillManifestMID"/>
+            <magentoCLI command="config:set {{AdminEnableDebugUSPSConfigData.path}} {{AdminEnableDebugUSPSConfigData.value}}" stepKey="enableDebugUSPS"/>
+            <magentoCLI command="config:set {{AdminEnableShowMethodUSPSConfigData.path}} {{AdminEnableShowMethodUSPSConfigData.value}}" stepKey="enableShowMethodUSPS"/>
+            <!--Set shipping allowed for all methods-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <conditionalClick selector="{{AdminShippingMethodUSPSSection.USPSTab}}" dependentSelector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" visible="false" stepKey="expandUSPSTab"/>
+            <scrollTo selector="{{AdminShippingMethodUSPSSection.allowedMethodsForRestAPICheckbox}}" stepKey="scrollToAllowedMethodsCheckbox"/>
+            <checkOption selector="{{AdminShippingMethodUSPSSection.allowedMethodsForRestAPICheckbox}}" stepKey="checkOnAllowedMethodsCheckboxForRestAPIUSPSType"/>
+            <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForShippingMethodSaveButton"/>
+            <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+            <!--Flush cache post configuration-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostConfiguring">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Login as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Disable USPS shipping carrier-->
+            <magentoCLI command="config:set {{AdminDisableUSPSConfigData.path}} {{AdminDisableUSPSConfigData.value}}" stepKey="disableUSPS"/>
+            <magentoCLI command="config:set {{AdminSetUSPSTypeToUSPSWebToolUSPSConfigData.path}} {{AdminSetUSPSTypeToUSPSWebToolUSPSConfigData.value}}" stepKey="changeUSPSTypeToDeflaut"/>
+            <magentoCLI command="config:set {{AdminDisableDebugUSPSConfigData.path}} {{AdminDisableDebugUSPSConfigData.value}}" stepKey="disableDebugUSPS"/>
+            <magentoCLI command="config:set {{AdminDisableShowMethodUSPSConfigData.path}} {{AdminDisableShowMethodUSPSConfigData.value}}" stepKey="disableShowMethodUSPS"/>
+            <!--Set shipping allowed for all methods-->
+            <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+            <conditionalClick selector="{{AdminShippingMethodUSPSSection.USPSTab}}" dependentSelector="{{AdminShippingMethodUSPSSection.carriersUSPSActive}}" visible="false" stepKey="expandUSPSTab"/>
+            <scrollTo selector="{{AdminShippingMethodUSPSSection.carriersUSPSAllowedMethods}}" stepKey="scrollToAllowedMethodsCheckbox"/>
+            <click selector="{{AdminShippingMethodUSPSSection.carriersUSPSAllowedMethods}}" stepKey="checkOnAllowedMethodsCheckboxForWebToolUSPSType"/>
+            <waitForElementClickable selector="{{AdminConfigSection.saveButton}}" stepKey="waitForShippingMethodSaveButton"/>
+            <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <include>
+            <group name="EnableUSPSShippingForRestAPISuite"/>
+        </include>
+    </suite>
+</suites>

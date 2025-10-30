@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -114,11 +114,13 @@ class FileTest extends TestCase
         $expectedHtmlId = $this->testData['html_id_prefix']
             . $this->testData['html_id']
             . $this->testData['html_id_suffix'];
+        $escapeValue = $this->testData['value'];
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnMap(
             [
                 [$expectedHtmlId, null, $expectedHtmlId],
                 [self::XSS_FILE_NAME_TEST, null, self::XSS_FILE_NAME_TEST],
                 [self::INPUT_NAME_TEST, null, self::INPUT_NAME_TEST],
+                [$escapeValue, null, $escapeValue],
             ]
         );
 

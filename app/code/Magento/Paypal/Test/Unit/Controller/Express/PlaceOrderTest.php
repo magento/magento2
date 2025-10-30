@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +46,7 @@ class PlaceOrderTest extends ExpressTestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider()
+    public static function trueFalseDataProvider()
     {
         return [[true], [false]];
     }
@@ -92,7 +91,7 @@ class PlaceOrderTest extends ExpressTestCase
     /**
      * @return array
      */
-    public function executeProcessableExceptionDataProvider()
+    public static function executeProcessableExceptionDataProvider()
     {
         return [
             [ProcessableException::API_MAX_PAYMENT_ATTEMPTS_EXCEEDED],

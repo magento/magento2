@@ -64,7 +64,7 @@ class EntityMetadata implements EntityMetadataInterface
         ResourceConnection $resourceConnection,
         $entityTableName,
         $identifierField,
-        SequenceInterface $sequence = null,
+        ?SequenceInterface $sequence = null,
         $eavEntityType = null,
         $connectionName = null,
         $entityContext = []

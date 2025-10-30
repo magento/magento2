@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Helper;
 
@@ -30,7 +30,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
      * @param CompositeUrlKey|null $compositeUrlValidator
      */
     public function __construct(
-        CompositeUrlKey $compositeUrlValidator = null
+        ?CompositeUrlKey $compositeUrlValidator = null
     ) {
         $this->compositeUrlValidator = $compositeUrlValidator
             ?? ObjectManager::getInstance()->get(CompositeUrlKey::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Message;
 
@@ -50,7 +50,7 @@ interface ManagerInterface
     /**
      * Adds new error message
      *
-     * @param string $message
+     * @param string|\Stringable $message
      * @param string|null $group
      * @return ManagerInterface
      * @deprecated 100.1.0
@@ -61,7 +61,7 @@ interface ManagerInterface
     /**
      * Adds new warning message
      *
-     * @param string $message
+     * @param string|\Stringable $message
      * @param string|null $group
      * @return ManagerInterface
      * @deprecated 100.1.0
@@ -72,7 +72,7 @@ interface ManagerInterface
     /**
      * Adds new notice message
      *
-     * @param string $message
+     * @param string|\Stringable $message
      * @param string|null $group
      * @return ManagerInterface
      * @deprecated 100.1.0
@@ -83,7 +83,7 @@ interface ManagerInterface
     /**
      * Adds new success message
      *
-     * @param string $message
+     * @param string|\Stringable $message
      * @param string|null $group
      * @return ManagerInterface
      * @deprecated 100.1.0
@@ -94,7 +94,7 @@ interface ManagerInterface
     /**
      * Adds new error message
      *
-     * @param string $message
+     * @param string|\Stringable $message
      * @param string|null $group
      * @return ManagerInterface
      */
@@ -103,7 +103,7 @@ interface ManagerInterface
     /**
      * Adds new warning message
      *
-     * @param string $message
+     * @param string|\Stringable $message
      * @param string|null $group
      * @return ManagerInterface
      */
@@ -112,7 +112,7 @@ interface ManagerInterface
     /**
      * Adds new notice message
      *
-     * @param string $message
+     * @param string|\Stringable $message
      * @param string|null $group
      * @return ManagerInterface
      */
@@ -121,7 +121,7 @@ interface ManagerInterface
     /**
      * Adds new success message
      *
-     * @param string $message
+     * @param string|\Stringable $message
      * @param string|null $group
      * @return ManagerInterface
      */
@@ -134,6 +134,7 @@ interface ManagerInterface
      * @param array $data
      * @param string|null $group
      * @return ManagerInterface
+     * @throws \InvalidArgumentException
      */
     public function addComplexErrorMessage($identifier, array $data = [], $group = null);
 
@@ -144,6 +145,7 @@ interface ManagerInterface
      * @param array $data
      * @param string|null $group
      * @return ManagerInterface
+     * @throws \InvalidArgumentException
      */
     public function addComplexWarningMessage($identifier, array $data = [], $group = null);
 
@@ -154,6 +156,7 @@ interface ManagerInterface
      * @param array $data
      * @param string|null $group
      * @return ManagerInterface
+     * @throws \InvalidArgumentException
      */
     public function addComplexNoticeMessage($identifier, array $data = [], $group = null);
 
@@ -164,6 +167,7 @@ interface ManagerInterface
      * @param array $data
      * @param string|null $group
      * @return ManagerInterface
+     * @throws \InvalidArgumentException
      */
     public function addComplexSuccessMessage($identifier, array $data = [], $group = null);
 
@@ -195,6 +199,7 @@ interface ManagerInterface
      * @param string|null $alternativeText
      * @param string|null $group
      * @return ManagerInterface
+     * @throws \InvalidArgumentException
      */
     public function addExceptionMessage(\Exception $exception, $alternativeText = null, $group = null);
 

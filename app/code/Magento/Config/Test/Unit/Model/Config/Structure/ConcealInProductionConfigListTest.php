@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +68,7 @@ class ConcealInProductionConfigListTest extends TestCase
      *
      * @deprecated
      */
-    public function disabledDataProvider()
+    public static function disabledDataProvider()
     {
         return [
             ['first/path', State::MODE_PRODUCTION, true],
@@ -107,7 +107,7 @@ class ConcealInProductionConfigListTest extends TestCase
      *
      * @deprecated
      */
-    public function hiddenDataProvider()
+    public static function hiddenDataProvider()
     {
         return [
             ['first/path', State::MODE_PRODUCTION, false],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -213,36 +213,36 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
      *
      * @return array
      */
-    public function requestDataProvider()
+    public static function requestDataProvider()
     {
         return [
             [
                 'refererUri'           => 'checkout',
                 'requestUri'           => 'index',
-                'expireCounter'        => $this->never(),
-                'dispatchCounter'      => $this->never(),
-                'setCustomerIdCounter' => $this->never(),
+                'expireCounter'        => self::never(),
+                'dispatchCounter'      => self::never(),
+                'setCustomerIdCounter' => self::never(),
             ],
             [
                 'refererUri'           => 'checkout',
                 'requestUri'           => 'checkout',
-                'expireCounter'        => $this->never(),
-                'dispatchCounter'      => $this->never(),
-                'setCustomerIdCounter' => $this->never(),
+                'expireCounter'        => self::never(),
+                'dispatchCounter'      => self::never(),
+                'setCustomerIdCounter' => self::never(),
             ],
             [
                 'refererUri'           => 'index',
                 'requestUri'           => 'checkout',
-                'expireCounter'        => $this->never(),
-                'dispatchCounter'      => $this->never(),
-                'setCustomerIdCounter' => $this->never(),
+                'expireCounter'        => self::never(),
+                'dispatchCounter'      => self::never(),
+                'setCustomerIdCounter' => self::never(),
             ],
             [
                 'refererUri'           => 'index',
                 'requestUri'           => 'index',
-                'expireCounter'        => $this->once(),
-                'dispatchCounter'      => $this->once(),
-                'setCustomerIdCounter' => $this->once(),
+                'expireCounter'        => self::once(),
+                'dispatchCounter'      => self::once(),
+                'setCustomerIdCounter' => self::once(),
             ],
         ];
     }

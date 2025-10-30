@@ -64,7 +64,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function convertToBytesDataProvider()
+    public static function convertToBytesDataProvider()
     {
         return [
             'B' => ['1B', '1'],
@@ -93,7 +93,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function convertToBytesBadFormatDataProvider()
+    public static function convertToBytesBadFormatDataProvider()
     {
         return [
             'more than one unit of measure' => ['1234KB'],
@@ -118,7 +118,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function convertToBytes64DataProvider()
+    public static function convertToBytes64DataProvider()
     {
         return [
             ['2T', '2199023255552'],

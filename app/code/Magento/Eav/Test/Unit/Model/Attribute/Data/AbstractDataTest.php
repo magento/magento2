@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function extractedDataDataProvider()
+    public static function extractedDataDataProvider()
     {
         return [
             [
@@ -134,7 +134,7 @@ class AbstractDataTest extends TestCase
     /**
      * @return array
      */
-    public function getRequestValueDataProvider()
+    public static function getRequestValueDataProvider()
     {
         return [
             [

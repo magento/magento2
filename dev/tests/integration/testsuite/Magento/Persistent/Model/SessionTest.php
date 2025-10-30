@@ -70,7 +70,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($cookieValue, $_COOKIE[Session::COOKIE_NAME]);
     }
 
-    public function renewPersistentCookieDataProvider()
+    public static function renewPersistentCookieDataProvider()
     {
         return [
             'no duration' => [null],

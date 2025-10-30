@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Wishlist\Controller\Index;
 
@@ -126,7 +125,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         StoreManagerInterface $storeManager,
         ?CaptchaHelper $captchaHelper = null,
         ?CaptchaStringResolver $captchaStringResolver = null,
-        Escaper $escaper = null
+        ?Escaper $escaper = null
     ) {
         $this->_formKeyValidator = $formKeyValidator;
         $this->_customerSession = $customerSession;

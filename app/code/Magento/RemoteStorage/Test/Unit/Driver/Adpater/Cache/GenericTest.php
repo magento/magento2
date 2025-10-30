@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\RemoteStorage\Test\Unit\Driver\Adpater\Cache;
@@ -74,7 +74,7 @@ class GenericTest extends TestCase
     /**
      * @return array
      */
-    public function metaDataProvider(): array
+    public static function metaDataProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -23,7 +23,7 @@ class OpenDialogUrl
     /**
      * @param string $url
      */
-    public function __construct(string $url = null)
+    public function __construct(?string $url = null)
     {
         $this->openDialogUrl = $url ?? self::DEFAULT_OPEN_DIALOG_URL;
     }

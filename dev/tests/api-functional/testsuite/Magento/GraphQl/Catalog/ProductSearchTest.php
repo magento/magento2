@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,6 +112,154 @@ class ProductSearchTest extends GraphQlAbstract
         $this->config = $this->objectManager->get(Config::class);
         $this->cache = $this->objectManager->get(Cache::class);
         $this->fixture = DataFixtureStorageManager::getStorage();
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider sortByPriceAndNameDataProvider
+     */
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'search product 1'], 'prod1'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'search product 2'], 'prod2'),
+        DataFixture(ProductFixture::class, ['price' => 20, 'name' => 'search product 3'], 'prod3'),
+        DataFixture(ProductFixture::class, ['price' => 30, 'name' => 'search product 4'], 'prod4'),
+        DataFixture(ProductFixture::class, ['price' => 40, 'name' => 'search product 5'], 'prod5'),
+    ]
+    public function testSortMultipleFieldsSentInVariables($sort, $expectedOrder): void
+    {
+        $expectedOrderSku = [];
+        foreach ($expectedOrder as $productName) {
+            $expectedOrderSku[] = $this->fixture->get($productName)->getSku();
+        }
+        $query = <<<'QUERY'
+query GetProductsQuery(
+    $search: String,
+    $filter: ProductAttributeFilterInput,
+    $pageSize: Int,
+    $currentPage: Int,
+    $sort: ProductAttributeSortInput
+) {
+    products(
+        search: $search,
+        filter: $filter,
+        pageSize: $pageSize,
+        currentPage: $currentPage,
+        sort: $sort
+    ) {
+        total_count
+        page_info{total_pages}
+        items{
+            __typename
+            url_key
+            sku
+            name
+            stock_status
+            price_range {
+                minimum_price {
+                    final_price {
+                        value
+                        currency
+                    }
+                }
+            }
+        }
+    }
+}
+QUERY;
+        $variables = [
+            'search' => null,
+            'filter' => [],
+            'pageSize' => 24,
+            'currentPage' => 1,
+            'sort' => $sort
+        ];
+
+        $response = $this->graphQlQuery($query, $variables);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertEquals($expectedOrderSku, array_column($response['products']['items'], 'sku'));
+    }
+
+    /**
+     * @return array
+     */
+    public function sortByPriceAndNameDataProvider(): array
+    {
+        return [
+            [
+                ['price' => 'ASC', 'name' => 'ASC'],
+                ['prod1', 'prod2', 'prod3', 'prod4', 'prod5']
+            ],
+            [
+                ['price' => 'DESC', 'name' => 'ASC'],
+                ['prod5', 'prod4', 'prod3', 'prod1', 'prod2']
+            ],
+            [
+                ['price' => 'ASC', 'name' => 'DESC'],
+                ['prod2', 'prod1', 'prod3', 'prod4', 'prod5']
+            ],
+            [
+                ['price' => 'DESC', 'name' => 'DESC'],
+                ['prod5', 'prod4', 'prod3', 'prod2', 'prod1']
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider filterByNameWithMatchTypeSpecifiedDataProvider
+     */
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'Cronus Yoga Pant'], 'prod1'),
+        DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'Lucia Cross-Fit Bra'], 'prod2'),
+        DataFixture(ProductFixture::class, ['price' => 20, 'name' => 'Crown Summit Backpack'], 'prod3'),
+    ]
+    public function testFilterByNameWithMatchTypeSpecified($matchType, $expectedReturns, $expectedTotalCount): void
+    {
+        $expectedNames = [];
+        foreach ($expectedReturns as $productName) {
+            $expectedNames[] = $this->fixture->get($productName)->getName();
+        }
+        $query = <<<'QUERY'
+query GetProductsQuery(
+    $searchWord: String,
+    $matchType: FilterMatchTypeEnum
+) {
+    products(
+        filter: {name: {match: $searchWord, match_type: $matchType} },
+    ) {
+        total_count
+        page_info{total_pages}
+        items{
+            __typename
+            url_key
+            sku
+            name
+        }
+    }
+}
+QUERY;
+        $variables = [
+            'searchWord' => 'Cros',
+            'matchType' => $matchType,
+        ];
+
+        $response = $this->graphQlQuery($query, $variables);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertEquals($expectedTotalCount, $response['products']['total_count']);
+        $this->assertEquals($expectedNames, array_column($response['products']['items'], 'name'));
+    }
+
+    /**
+     * @return array
+     */
+    public function filterByNameWithMatchTypeSpecifiedDataProvider(): array
+    {
+        return [
+            [
+                'PARTIAL',
+                ['prod2'],
+                1
+            ],
+        ];
     }
 
     /**
@@ -1535,7 +1683,7 @@ QUERY;
     /**
      * @return array
      */
-    public function sortByPositionWithMultipleCategoriesDataProvider(): array
+    public static function sortByPositionWithMultipleCategoriesDataProvider(): array
     {
         return [
             [
@@ -2905,16 +3053,16 @@ QUERY;
      *
      * @return array[][]
      */
-    public function filterProductsBySingleCategoryIdDataProvider(): array
+    public static function filterProductsBySingleCategoryIdDataProvider(): array
     {
         return [
             [
                 'fieldName' => 'category_id',
-                'categoryId' => '333',
+                'queryCategoryId' => '333',
             ],
             [
                 'fieldName' => 'category_uid',
-                'categoryId' => base64_encode('333'),
+                'queryCategoryId' => base64_encode('333'),
             ],
         ];
     }

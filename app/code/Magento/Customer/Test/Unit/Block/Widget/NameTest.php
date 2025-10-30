@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -198,7 +198,7 @@ class NameTest extends TestCase
     /**
      * @return array
      */
-    public function methodDataProvider(): array
+    public static function methodDataProvider(): array
     {
         return [
             'showPrefix' => ['showPrefix'],
@@ -406,7 +406,7 @@ class NameTest extends TestCase
      *
      * @return array
      */
-    public function getContainerClassNameProvider(): array
+    public static function getContainerClassNameProvider(): array
     {
         return [
             [false, false, false, self::DEFAULT_CLASS_NAME],
@@ -446,7 +446,7 @@ class NameTest extends TestCase
      *
      * @return array
      */
-    public function getStoreLabelProvider(): array
+    public static function getStoreLabelProvider(): array
     {
         return [
             [self::INVALID_ATTRIBUTE_CODE, '', ''],

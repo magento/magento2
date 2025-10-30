@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function validXmlFileDataProvider()
+    public static function validXmlFileDataProvider()
     {
         return [['crontab_valid.xml'], ['crontab_valid_without_schedule.xml']];
     }
@@ -69,7 +69,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function invalidXmlFileDataProvider()
+    public static function invalidXmlFileDataProvider()
     {
         return [
             [

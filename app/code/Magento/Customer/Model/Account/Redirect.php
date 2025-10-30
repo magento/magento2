@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Account;
 
@@ -111,7 +111,7 @@ class Redirect
         CustomerUrl $customerUrl,
         ResultFactory $resultFactory,
         CookieMetadataFactory $cookieMetadataFactory,
-        HostChecker $hostChecker = null
+        ?HostChecker $hostChecker = null
     ) {
         $this->request = $request;
         $this->session = $customerSession;

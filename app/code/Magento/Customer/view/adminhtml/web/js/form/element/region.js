@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -25,12 +25,15 @@ define([
                 countryId = this.source.data.country_id,
                 hasRegionList = indexedOptionsArray.some(option => option.country_id === countryId);
 
-            this.source.set(
-                this.regionScope,
-                hasRegionList
-                    ? parseFloat(value) ? this.indexedOptions?.[value]?.label || '' : ''
-                    : this.source.data?.region || ''
-            );
+            // Clear the region field when the country changes
+            this.source.set(this.regionScope, '');
+
+            if (hasRegionList) {
+                this.source.set(
+                    this.regionScope,
+                    parseFloat(value) ? this.indexedOptions?.[value]?.label || '' : ''
+                );
+            }
         }
     });
 });

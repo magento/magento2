@@ -122,7 +122,7 @@ class InterfaceGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function generateDataProvider()
+    public static function generateDataProvider()
     {
         return [
             'Valid data' => [

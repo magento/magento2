@@ -1,17 +1,8 @@
-/************************************************************************
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ***********************************************************************
  */
+
 define([
     'squire'
 ], function (Squire) {
@@ -20,6 +11,7 @@ define([
     describe('Magento_Wishlist/js/view/wishlist', function () {
         var wishlistComponent,
             mockWishlist,
+            mockCompany,
             mockCustomerData,
             injector;
 
@@ -28,14 +20,23 @@ define([
 
             mockWishlist = {
                 counter: 1,
-                items: [],
-                websiteId: 1
+                items: [{ id: 1, name: 'Test Product' }],
+                storeId: 1
             };
+
+            mockCompany = {
+                is_enabled: true
+            };
+
             injector.clean();
 
             mockCustomerData = {
-                get: jasmine.createSpy('customerDataGet').and.returnValue(function () {
-                    return mockWishlist;
+                get: jasmine.createSpy('customerDataGet').and.callFake(function (key) {
+                    if (key === 'wishlist') {
+                        return function () { return mockWishlist; };
+                    } else if (key === 'company') {
+                        return function () { return mockCompany; };
+                    }
                 }),
                 reload: jasmine.createSpy('customerDataReload'),
                 invalidate: jasmine.createSpy(),
@@ -75,20 +76,32 @@ define([
                 expect(mockCustomerData.get).toHaveBeenCalledWith('wishlist');
             });
 
-            it('should invalidate wishlist if websiteIds do not match', async function () {
-                window.checkout = { websiteId: 2 };
+            it('should call customerData.get with "company"', async function () {
+                expect(mockCustomerData.get).toHaveBeenCalledWith('company');
+            });
+
+            it('should invalidate wishlist if storeIds do not match', async function () {
+                window.checkout = { storeId: 2 };
                 await wishlistComponent.initialize();
                 expect(mockCustomerData.invalidate).toHaveBeenCalledWith(['wishlist']);
             });
 
-            it('should not reload wishlist if websiteIds match', async function () {
-                window.checkout = { websiteId: 1 };
+            it('should not reload wishlist if storeIds match and company is disabled', async function () {
+                window.checkout = { storeId: 1 };
+                mockCompany.is_enabled = false;
                 await wishlistComponent.initialize();
-                expect(mockCustomerData.reload).not.toHaveBeenCalled();
+                expect(mockCustomerData.reload).not.toHaveBeenCalledWith(['wishlist'], false);
             });
 
-            it('should reload wishlist if websiteIds do not match', async function () {
-                window.checkout = { websiteId: 2 };
+            it('should reload wishlist if storeIds do not match', async function () {
+                window.checkout = { storeId: 2 };
+                await wishlistComponent.initialize();
+                expect(mockCustomerData.reload).toHaveBeenCalledWith(['wishlist'], false);
+            });
+
+            it('should reload wishlist if storeIds match and company is enabled', async function () {
+                window.checkout = { storeId: 1 };
+                mockCompany.is_enabled = true;
                 await wishlistComponent.initialize();
                 expect(mockCustomerData.reload).toHaveBeenCalledWith(['wishlist'], false);
             });

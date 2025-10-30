@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Backend\Helper\Data;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Config;
@@ -18,6 +19,7 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\AttributeLoaderInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Locale\Format;
@@ -322,6 +324,73 @@ class ProductTest extends TestCase
     }
 
     /**
+     * Test for loadAttributeOptions
+     *
+     * @return void
+     */
+    public function testLoadAttributeOptions(): void
+    {
+        $secondAttributeCode = 'second_attribute';
+
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods(['getDataUsingMethod'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attribute->expects($this->atLeastOnce())
+            ->method('getDataUsingMethod')
+            ->with('is_used_for_promo_rules')
+            ->willReturn(false);
+
+        $attributeSecond = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods(['getDataUsingMethod', 'isAllowedForRuleCondition', 'getAttributeCode'])
+            ->addMethods(['getFrontendLabel'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeSecond->expects($this->atLeastOnce())
+            ->method('getDataUsingMethod')
+            ->with('is_used_for_promo_rules')
+            ->willReturn(true);
+        $attributeSecond->expects($this->atLeastOnce())
+            ->method('isAllowedForRuleCondition')
+            ->willReturn(true);
+        $attributeSecond->expects($this->atLeastOnce())
+            ->method('getFrontendLabel')
+            ->willReturn('Second Attribute');
+        $attributeSecond->expects($this->atLeastOnce())
+            ->method('getAttributeCode')
+            ->willReturn($secondAttributeCode);
+
+        $attributeLoaderInterfaceMock = $this->createMock(AbstractEntity::class);
+        $attributeLoaderInterfaceMock->expects($this->atLeastOnce())
+            ->method('getAttributesByCode')
+            ->willReturn([$attribute, $attributeSecond]);
+
+        $productResourceMock = $this->createMock(Product::class);
+        $productResourceMock->expects($this->atLeastOnce())
+            ->method('loadAllAttributes')
+            ->willReturn($attributeLoaderInterfaceMock);
+
+        $model = new SalesRuleProduct(
+            $this->contextMock,
+            $this->backendHelperMock,
+            $this->configMock,
+            $this->productFactoryMock,
+            $this->productRepositoryMock,
+            $productResourceMock,
+            $this->collectionMock,
+            $this->format,
+            [],
+            $this->productCategoryListMock
+        );
+
+        $model->loadAttributeOptions();
+
+        $this->assertArrayHasKey($secondAttributeCode, $model->getAttributeOption());
+        $this->assertArrayHasKey('children::' . $secondAttributeCode, $model->getAttributeOption());
+        $this->assertArrayHasKey('parent::' . $secondAttributeCode, $model->getAttributeOption());
+    }
+
+    /**
      * DataProvider for testQuoteLocaleFormatPrice
      *
      * @return array
@@ -335,5 +404,39 @@ class ProductTest extends TestCase
             'stringOperation' => [false, '1,500.03', '{}'],
             'smallPrice' => [false, '1,500.03', '>=', 1000],
         ];
+    }
+
+    public function testValidateWhenAttributeValueIsMissingInTheProduct(): void
+    {
+        $attributeCode = 'test_attr';
+        $attribute = new DataObject();
+        $attribute->setBackendType('varchar');
+        $attribute->setFrontendInput('text');
+
+        $newResource = $this->createPartialMock(Product::class, ['getAttribute']);
+        $newResource->expects($this->any())
+            ->method('getAttribute')
+            ->with($attributeCode)
+            ->willReturn($attribute);
+
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId', 'load', 'getResource'])
+            ->getMock();
+        $product->method('getId')
+            ->willReturn(1);
+        $product->expects($this->never())
+            ->method('load')
+            ->willReturnSelf();
+        $product->expects($this->atLeastOnce())
+            ->method('getResource')
+            ->willReturn($newResource);
+
+        $item = $this->createMock(AbstractItem::class);
+        $item->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($product);
+        $this->model->setAttribute($attributeCode);
+        $this->model->validate($item);
     }
 }

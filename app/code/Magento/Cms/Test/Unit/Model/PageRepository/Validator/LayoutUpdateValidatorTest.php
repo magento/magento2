@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ class LayoutUpdateValidatorTest extends TestCase
         self::assertNull($this->validator->validate($page));
     }
 
-    public function validationSetDataProvider()
+    public static function validationSetDataProvider()
     {
         $layoutError = 'Layout update is invalid';
         $customLayoutError = 'Custom layout update is invalid';

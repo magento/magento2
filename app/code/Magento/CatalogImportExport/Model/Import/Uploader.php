@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
@@ -143,8 +143,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         Filesystem $filesystem,
         Filesystem\File\ReadFactory $readFactory,
         $filePath = null,
-        \Magento\Framework\Math\Random $random = null,
-        TargetDirectory $targetDirectory = null
+        ?\Magento\Framework\Math\Random $random = null,
+        ?TargetDirectory $targetDirectory = null
     ) {
         $this->_imageFactory = $imageFactory;
         $this->_coreFileStorageDb = $coreFileStorageDb;

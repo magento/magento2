@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class ParserTest extends TestCase
     /**
      * @return array
      */
-    public function parseExpressionDataProvider()
+    public static function parseExpressionDataProvider()
     {
         return [
             ['1-2', ['1', '2', '-']],
@@ -66,7 +66,7 @@ class ParserTest extends TestCase
     /**
      * @return array
      */
-    public function isOperationDataProvider()
+    public static function isOperationDataProvider()
     {
         return [
             ['+', true],

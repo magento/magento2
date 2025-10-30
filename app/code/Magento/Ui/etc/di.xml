@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -359,6 +359,11 @@
             <argument name="configFactory" xsi:type="object">uiComponentConfigFactory</argument>
             <argument name="definitionData" xsi:type="object">Magento\Ui\Config\Reader\Definition\Data</argument>
             <argument name="componentManager" xsi:type="object">Magento\Ui\Model\Manager\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Config\Reader\Definition\Data">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Interception\Cache\CompiledConfig</argument>
         </arguments>
     </type>
     <type name="Magento\Ui\Config\Argument\Parser\ArrayType">

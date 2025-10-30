@@ -44,7 +44,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
         $this->_model->login($userName, $password);
     }
 
-    public function getLoginDataProvider()
+    public static function getLoginDataProvider()
     {
         return [
             'Invalid credentials' => ['not_exists', 'not_exists'],

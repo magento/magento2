@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,7 @@ class ImageTest extends TestCase
     /**
      * @return array[]
      */
-    public function dataProviderForIsValid()
+    public static function dataProviderForIsValid()
     {
         return [
             'x-icon' => [dirname(__FILE__) . '/_files/favicon-x-icon.ico',

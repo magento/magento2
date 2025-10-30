@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model;
@@ -15,7 +15,7 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 
 /**
- * Class StockRegistry
+ * Class Catalog StockRegistry
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -68,6 +68,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Get Stock data
+     *
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
@@ -78,9 +80,11 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Get Stock Item data
+     *
      * @param int $productId
      * @param int $scopeId
-     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
+     * @return StockItemInterface
      */
     public function getStockItem($productId, $scopeId = null)
     {
@@ -89,9 +93,11 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Get Stock Item By SKU
+     *
      * @param string $productSku
      * @param int $scopeId
-     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
+     * @return StockItemInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getStockItemBySku($productSku, $scopeId = null)
@@ -102,6 +108,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Get Stock status
+     *
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
@@ -113,6 +121,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Get Stock status by SKU
+     *
      * @param string $productSku
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
@@ -127,6 +137,7 @@ class StockRegistry implements StockRegistryInterface
 
     /**
      * Retrieve Product stock status
+     *
      * @param int $productId
      * @param int $scopeId
      * @return int
@@ -139,8 +150,10 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Get Product Stock status by SKU
+     *
      * @param string $productSku
-     * @param null $scopeId
+     * @param null|int $scopeId
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -167,7 +180,7 @@ class StockRegistry implements StockRegistryInterface
     /**
      * @inheritdoc
      */
-    public function updateStockItemBySku($productSku, \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem)
+    public function updateStockItemBySku($productSku, StockItemInterface $stockItem)
     {
         $productId = $this->resolveProductId($productSku);
         $websiteId = $stockItem->getWebsiteId() ?: null;
@@ -182,6 +195,8 @@ class StockRegistry implements StockRegistryInterface
     }
 
     /**
+     * Resolve the Product Id
+     *
      * @param string $productSku
      * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException

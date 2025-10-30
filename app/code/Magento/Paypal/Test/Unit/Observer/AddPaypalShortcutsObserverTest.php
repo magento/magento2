@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -183,7 +183,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
     {
         return [
             [
-                'blocks1' => [
+                'blocks' => [
                     MinicartButton::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => true,
@@ -207,7 +207,7 @@ class AddPaypalShortcutsObserverTest extends TestCase
                 ]
             ],
             [
-                'blocks2' => [
+                'blocks' => [
                     MinicartButton::class => [
                         self::PAYMENT_CODE => Config::METHOD_WPS_EXPRESS,
                         self::PAYMENT_AVAILABLE => false,

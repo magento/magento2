@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -53,7 +53,7 @@ class IdentityProviderTest extends TestCase
      *
      * @return array
      */
-    public function getIdentityCases(): array
+    public static function getIdentityCases(): array
     {
         return [
             'empty-user-context' => [null, null, '127.0.0.1', ContextInterface::IDENTITY_TYPE_IP, '127.0.0.1'],

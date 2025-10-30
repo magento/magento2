@@ -47,7 +47,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($className, $this->model->getActionClassName($module, $controller));
     }
 
-    public function getControllerClassNameDataProvider()
+    public static function getControllerClassNameDataProvider()
     {
         return [
             ['Magento_TestModule', 'controller', \Magento\TestModule\Controller\Adminhtml\Controller::class],

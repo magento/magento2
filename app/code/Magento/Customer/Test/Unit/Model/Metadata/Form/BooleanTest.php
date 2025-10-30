@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * test Magento\Customer\Model\Metadata\Form\Boolean
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
@@ -33,7 +31,7 @@ class BooleanTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function getOptionTextDataProvider()
+    public static function getOptionTextDataProvider()
     {
         return [
             '0' => ['0', 'No'],

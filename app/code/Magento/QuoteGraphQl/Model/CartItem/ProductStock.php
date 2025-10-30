@@ -8,14 +8,18 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\CartItem;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\CatalogInventory\Model\StockState;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Configuration;
+use Magento\CatalogInventory\Model\StockState;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\Item;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * Product Stock class to check availability of product
+ * Product Stock class to check the availability of product
  */
 class ProductStock
 {
@@ -30,16 +34,18 @@ class ProductStock
     private const PRODUCT_TYPE_CONFIGURABLE = "configurable";
 
     /**
-     * ProductStock constructor
+     * ProductStock Constructor
      *
      * @param ProductRepositoryInterface $productRepositoryInterface
      * @param StockState $stockState
-     * @param StockConfigurationInterface $stockConfiguration
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StockRegistryInterface $stockRegistry
      */
     public function __construct(
         private readonly ProductRepositoryInterface $productRepositoryInterface,
         private readonly StockState $stockState,
-        private readonly StockConfigurationInterface $stockConfiguration
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly StockRegistryInterface $stockRegistry
     ) {
     }
 
@@ -52,8 +58,8 @@ class ProductStock
      */
     public function isProductAvailable(Item $cartItem): bool
     {
-        $requestedQty = $cartItem->getQtyToAdd() ?? $cartItem->getQty();
-        $previousQty = $cartItem->getPreviousQty() ?? 0;
+        $requestedQty = (float)($cartItem->getQtyToAdd() ?? $cartItem->getQty());
+        $previousQty = (int)$cartItem->getPreviousQty() ?? 0;
 
         if ($cartItem->getProductType() === self::PRODUCT_TYPE_BUNDLE) {
             return $this->isStockAvailableBundle($cartItem, $previousQty, $requestedQty);
@@ -62,9 +68,21 @@ class ProductStock
         $variantProduct = $this->getVariantProduct($cartItem);
         $requiredItemQty =  $requestedQty + $previousQty;
         if ($variantProduct !== null) {
-            return $this->isStockQtyAvailable($variantProduct, $requestedQty, $requiredItemQty, $previousQty);
+            return $this->isStockQtyAvailable(
+                $cartItem,
+                $variantProduct,
+                $requestedQty,
+                $requiredItemQty,
+                $previousQty
+            );
         }
-        return $this->isStockQtyAvailable($cartItem->getProduct(), $requestedQty, $requiredItemQty, $previousQty);
+        return $this->isStockQtyAvailable(
+            $cartItem,
+            $cartItem->getProduct(),
+            $requestedQty,
+            $requiredItemQty,
+            $previousQty
+        );
     }
 
     /**
@@ -74,17 +92,24 @@ class ProductStock
      * @param int $previousQty
      * @param int|float $requestedQty
      * @return bool
+     * @throws NoSuchEntityException
      */
     public function isStockAvailableBundle(Item $cartItem, int $previousQty, $requestedQty): bool
     {
         $qtyOptions = $cartItem->getQtyOptions();
         $totalRequestedQty = $previousQty + $requestedQty;
         foreach ($qtyOptions as $qtyOption) {
-            $requiredItemQty = $qtyOption->getValue();
+            $requiredItemQty = (float)$qtyOption->getValue();
             if ($totalRequestedQty) {
                 $requiredItemQty = $requiredItemQty * $totalRequestedQty;
             }
-            if (!$this->isStockQtyAvailable($qtyOption->getProduct(), $requestedQty, $requiredItemQty, $previousQty)) {
+            if (!$this->isStockQtyAvailable(
+                $cartItem,
+                $qtyOption->getProduct(),
+                $requestedQty,
+                $requiredItemQty,
+                $previousQty
+            )) {
                 return false;
             }
         }
@@ -138,6 +163,7 @@ class ProductStock
     /**
      * Check if product is available in stock
      *
+     * @param Item $cartItem
      * @param ProductInterface $product
      * @param float $itemQty
      * @param float $requiredQuantity
@@ -145,20 +171,22 @@ class ProductStock
      * @return bool
      */
     private function isStockQtyAvailable(
+        Item $cartItem,
         ProductInterface $product,
         float $itemQty,
         float $requiredQuantity,
         float $prevQty
     ): bool {
-        $stockStatus = $this->stockState->checkQuoteItemQty(
+        $this->stockState->checkQuoteItemQty(
             $product->getId(),
             $itemQty,
             $requiredQuantity,
             $prevQty,
-            $this->stockConfiguration->getDefaultScopeId()
+            $cartItem->getStore()->getId()
         );
 
-        return ((bool) $stockStatus->getHasError()) === false;
+        return ($this->getProductStockStatus($product)->getStockStatus() &&
+            $this->getAvailableStock($product) >= $itemQty);
     }
 
     /**
@@ -169,7 +197,7 @@ class ProductStock
      */
     private function getAvailableStock(ProductInterface $product): float
     {
-        return $this->stockState->getStockQty($product->getId());
+        return (float) $this->getProductStockStatus($product)->getQty();
     }
 
     /**
@@ -187,5 +215,97 @@ class ProductStock
         }
 
         return min($bundleStock);
+    }
+
+    /**
+     * Returns the lowest stock value of bundle product
+     *
+     * @param Item $cartItem
+     * @param float|null $thresholdQty
+     * @return float
+     */
+    private function getLowestSaleableQtyOfBundleProduct(Item $cartItem, ?float $thresholdQty): float
+    {
+        $bundleStock = [];
+        foreach ($cartItem->getQtyOptions() as $qtyOption) {
+            $bundleStock[] = $this->getSaleableQty($qtyOption->getProduct(), $thresholdQty);
+        }
+        return $bundleStock ? (float)min($bundleStock) : 0.0;
+    }
+
+    /**
+     * Returns the cart item's saleable qty value
+     *
+     * @param Item $cartItem
+     * @return float
+     * @throws NoSuchEntityException
+     */
+    public function getProductSaleableQty(Item $cartItem): float
+    {
+        $thresholdQty = (float)$this->scopeConfig->getValue(
+            Configuration::XML_PATH_STOCK_THRESHOLD_QTY,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        if ($thresholdQty === 0.0) {
+            return $this->getProductAvailableStock($cartItem);
+        }
+
+        return $this->getSaleableQtyByCartItem($cartItem, $thresholdQty);
+    }
+
+    /**
+     * Returns the saleable qty value by cart item
+     *
+     * @param Item $cartItem
+     * @param float|null $thresholdQty
+     * @return float
+     * @throws NoSuchEntityException
+     */
+    public function getSaleableQtyByCartItem(Item $cartItem, ?float $thresholdQty): float
+    {
+        if ($cartItem->getProductType() === self::PRODUCT_TYPE_BUNDLE) {
+            return $this->getLowestSaleableQtyOfBundleProduct($cartItem, $thresholdQty);
+        }
+
+        $variantProduct = $this->getVariantProduct($cartItem);
+        if ($variantProduct !== null) {
+            return $this->getSaleableQty($variantProduct, $thresholdQty);
+        }
+
+        return $this->getSaleableQty($cartItem->getProduct(), $thresholdQty);
+    }
+
+    /**
+     * Get product saleable qty when "Catalog > Inventory > Stock Options > Only X left Threshold" is greater than 0
+     *
+     * @param ProductInterface $product
+     * @param float|null $thresholdQty
+     * @return float
+     */
+    public function getSaleableQty(ProductInterface $product, ?float $thresholdQty): float
+    {
+        $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $product->getStore()->getWebsiteId());
+        $stockQty = (float)$stockStatus->getQty();
+        if ($thresholdQty === null) {
+            return $stockQty;
+        }
+        $stockLeft = $stockQty - $this->stockRegistry->getStockItem($product->getId())->getMinQty();
+
+        return ($stockQty >= 0 && $stockLeft <= $thresholdQty) ? $stockQty : 0.0;
+    }
+
+    /**
+     * Returns the stock status of a product
+     *
+     * @param ProductInterface $product
+     * @return StockStatusInterface
+     */
+    private function getProductStockStatus(ProductInterface $product): StockStatusInterface
+    {
+        return $this->stockRegistry->getStockStatus(
+            $product->getId(),
+            $product->getStore()->getWebsiteId()
+        );
     }
 }

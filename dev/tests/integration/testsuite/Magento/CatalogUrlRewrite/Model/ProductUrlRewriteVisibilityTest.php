@@ -82,7 +82,7 @@ class ProductUrlRewriteVisibilityTest extends AbstractUrlRewriteTest
     {
         return [
             [
-                'expected_data' => [
+                'expectedData' => [
                     [
                         'request_path' => 'simple-url-test-product%suffix%',
                         'target_path' => 'catalog/product/view/id/%id%',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -143,7 +143,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
      *
      * @return array
      */
-    public function executeWithSessionNoDownloadableProductsDataProvider()
+    public static function executeWithSessionNoDownloadableProductsDataProvider()
     {
         return [
             'Order has one item is downloadable product' => [
@@ -159,7 +159,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
                         '1'
                     ]
                 ],
-                $this->once()
+                self::once()
             ],
             'Order has all items are simple product' => [
                 [
@@ -174,7 +174,7 @@ class SetHasDownloadableProductsObserverTest extends TestCase
                         '0'
                     ]
                 ],
-                $this->never()
+                self::never()
             ],
         ];
     }

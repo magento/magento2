@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -120,7 +120,7 @@ class StorageTest extends TestCase
         $this->plugin->afterReplace($this->storage, $newUrlRewrites, $newUrlRewrites);
     }
 
-    public function afterReplaceDataProvider(): array
+    public static function afterReplaceDataProvider(): array
     {
         return [
             [

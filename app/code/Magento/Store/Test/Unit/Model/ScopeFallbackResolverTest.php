@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,7 +76,7 @@ class ScopeFallbackResolverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetFallbackScope()
+    public static function dataProviderGetFallbackScope()
     {
         return [
             [ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, true, null, null, [null, null]],

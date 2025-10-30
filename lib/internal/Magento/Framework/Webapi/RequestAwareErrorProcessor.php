@@ -41,9 +41,9 @@ class RequestAwareErrorProcessor extends ErrorProcessor
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        Json $serializer = null,
-        Request $request = null,
-        Response $response = null
+        ?Json $serializer = null,
+        ?Request $request = null,
+        ?Response $response = null
     ) {
         $this->request = $request ?: ObjectManager::getInstance()->get(Request::class);
         $this->response = $response ?: ObjectManager::getInstance()->get(Response::class);

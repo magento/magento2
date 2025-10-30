@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Rss;
 
@@ -80,7 +80,7 @@ class OrderStatus implements DataProviderInterface
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        Signature $signature = null
+        ?Signature $signature = null
     ) {
         $this->objectManager = $objectManager;
         $this->urlBuilder = $urlBuilder;

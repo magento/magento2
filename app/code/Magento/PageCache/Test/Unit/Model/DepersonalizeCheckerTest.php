@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,7 +74,7 @@ class DepersonalizeCheckerTest extends TestCase
     /**
      * return array
      */
-    public function checkIfDepersonalizeDataProvider()
+    public static function checkIfDepersonalizeDataProvider()
     {
         return [
             [['ajax' => false, 'get' => true, 'head' => false], true, true, true, true],

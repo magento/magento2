@@ -243,7 +243,7 @@ class MigrationTest extends TestCase
      *
      * @return array
      */
-    public function updateClassAliasesDataProvider()
+    public static function updateClassAliasesDataProvider()
     {
         return [
             'plain text replace model' => include __DIR__ . '/_files/data_content_plain_model.php',

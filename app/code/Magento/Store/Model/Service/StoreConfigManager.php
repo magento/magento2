@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Store\Model\Service;
@@ -67,7 +67,7 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
      * @param string[] $storeCodes list of stores by store codes, will return all if storeCodes is not set
      * @return StoreConfigInterface[]
      */
-    public function getStoreConfigs(array $storeCodes = null)
+    public function getStoreConfigs(?array $storeCodes = null)
     {
         $storeConfigs = [];
         $storeCollection = $this->storeCollectionFactory->create();

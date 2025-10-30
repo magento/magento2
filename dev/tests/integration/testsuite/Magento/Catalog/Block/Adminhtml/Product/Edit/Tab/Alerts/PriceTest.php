@@ -55,17 +55,17 @@ class PriceTest extends AbstractAlertTest
     /**
      * @return array
      */
-    public function alertsDataProvider(): array
+    public static function alertsDataProvider(): array
     {
         return [
             'without_store_id_filter' => [
-                'product_sku' => 'simple',
-                'expected_customer_emails' => 'customer@example.com',
+                'sku' => 'simple',
+                'expectedEmail' => 'customer@example.com',
             ],
             'with_store_id_filter' => [
-                'product_sku' => 'simple_on_second_website_for_price_alert',
-                'expected_customer_emails' => 'customer_second_ws_with_addr@example.com',
-                'store_code' => 'fixture_third_store',
+                'sku' => 'simple_on_second_website_for_price_alert',
+                'expectedEmail' => 'customer_second_ws_with_addr@example.com',
+                'storeCode' => 'fixture_third_store',
             ],
         ];
     }
@@ -85,14 +85,14 @@ class PriceTest extends AbstractAlertTest
     /**
      * @return array
      */
-    public function storeProvider(): array
+    public static function storeProvider(): array
     {
         return [
             'without_store_id_param' => [
-                'store_code' => null,
+                'storeCode' => null,
             ],
             'with_store_id_param' => [
-                'store_code' => 'default',
+                'storeCode' => 'default',
             ],
         ];
     }
