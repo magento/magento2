@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -32,11 +32,16 @@
         </before>
         <after>
             <!--Logging out-->
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteCategory">
+                <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
             <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <!-- Delete bundle product via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
         </after>
         <!--Make category-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>

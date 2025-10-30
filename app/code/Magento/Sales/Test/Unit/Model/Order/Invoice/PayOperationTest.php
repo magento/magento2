@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -433,7 +433,7 @@ class PayOperationTest extends TestCase
     /**
      * @return array
      */
-    public function payDataProvider()
+    public static function payDataProvider()
     {
         return [
             'Invoice can capture, online' => [

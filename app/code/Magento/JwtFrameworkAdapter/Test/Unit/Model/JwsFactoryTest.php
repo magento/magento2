@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ class JwsFactoryTest extends TestCase
         $this->model = new JwsFactory();
     }
 
-    public function getCreateCases(): array
+    public static function getCreateCases(): array
     {
         return [
             'compact-arbitrary' => [

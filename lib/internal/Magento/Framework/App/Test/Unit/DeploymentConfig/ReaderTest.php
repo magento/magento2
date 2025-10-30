@@ -192,7 +192,7 @@ class ReaderTest extends TestCase
     /**
      * @return array
      */
-    public function loadCustomDataProvider()
+    public static function loadCustomDataProvider()
     {
         return [
             ['custom.php', ['bazKey' => 'baz']],

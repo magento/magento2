@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Amqp;
 
@@ -197,5 +197,37 @@ class Queue implements QueueInterface
             ]
         );
         $this->amqpConfig->getChannel()->basic_publish($msg, '', $this->queueName);
+
+        return $msg;
+    }
+
+    /**
+     * Only subscribe queue
+     *
+     * @return void
+     */
+    public function subscribeQueue(): void
+    {
+        throw new \BadMethodCallException('subscribeQueue is not supported in amqp queue.');
+    }
+
+    /**
+     * Clear queue
+     *
+     * @return int
+     */
+    public function clearQueue(): int
+    {
+        throw new \BadMethodCallException('clearQueue is not supported in amqp queue.');
+    }
+
+    /**
+     * Get connection name
+     *
+     * @return string
+     */
+    public function getConnectionName(): string
+    {
+        return $this->amqpConfig->getConnectionName();
     }
 }

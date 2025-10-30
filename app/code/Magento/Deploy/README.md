@@ -1,23 +1,20 @@
-# Overview
+# Magento_Deploy module
 
-## Purpose of module
+This module holds a collection of services and command line tools to help with application deployment.
+To execute this command, run `bin/magento setup:static-content:deploy` from the application root directory.
+This module contains two additional commands that allow switching between application modes (for instance from
+development to production) and show the current application mode. To change the mode, run `bin/magento deploy:mode:set [mode]`.
+Where `mode` can be one of the following:
 
-Deploy is a module that holds collection of services and command line tools to help with Magento application deployment.
-To execute this command, please, run "bin/magento setup:static-content:deploy" from the Magento root directory.
-Deploy module contains 2 additional commands that allows switching between application modes (for instance from
-development to
-production) and show current application mode. To change the mode run "bin/magento deploy:mode:set [mode]".
-Where mode can be one of the following:
+- development
+- production
 
- - development
- - production
-When switching to production mode, you can pass optional parameter skip-compilation to do not compile static files, CSS
-and do not run the compilation process.
+When switching to production mode, you can pass an optional parameter `skip-compilation` to skip compiling static files, CSS, and run the compilation process.
 
-# Deployment
+## Installation
 
-## System requirements
+This module is installed automatically (using the native install mechanism) without any additional actions.
 
-## Install
+## Additional information
 
-The Magento_Deploy module is installed automatically (using the native Magento install mechanism) without any additional actions.
+You can get more information about deployment in the [Adobe Developer documentation](https://developer.adobe.com/commerce/php/development/deployment/).

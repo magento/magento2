@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Ui\Component\Product\Form\Element;
 
@@ -40,8 +40,8 @@ class UseConfigSettings extends Checkbox
         ContextInterface $context,
         $components = [],
         array $data = [],
-        Json $serializer = null,
-        JsonValidator $jsonValidator = null
+        ?Json $serializer = null,
+        ?JsonValidator $jsonValidator = null
     ) {
         parent::__construct($context, $components, $data);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);

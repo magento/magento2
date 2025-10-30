@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getEntitiesDataProvider()
+    public static function getEntitiesDataProvider()
     {
         return [
             'entities_key_exist' => [['entities' => 'value'], 'value'],
@@ -115,7 +115,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getEntityTypesDataProvider()
+    public static function getEntityTypesDataProvider()
     {
         return [
             'valid type' => [

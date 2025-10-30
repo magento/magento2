@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -182,7 +182,7 @@ class UpdateCustomizedOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function updateCustomizedOptionsDataProvider()
+    public static function updateCustomizedOptionsDataProvider()
     {
         return [
             'test customized options for simple product' => [

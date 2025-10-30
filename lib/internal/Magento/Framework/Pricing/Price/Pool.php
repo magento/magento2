@@ -25,7 +25,7 @@ class Pool implements \Iterator, \ArrayAccess
      */
     public function __construct(
         array $prices,
-        \Iterator $target = null
+        ?\Iterator $target = null
     ) {
         $this->prices = $prices;
         foreach ($target ?: [] as $code => $class) {

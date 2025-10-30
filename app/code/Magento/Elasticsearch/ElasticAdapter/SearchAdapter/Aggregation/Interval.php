@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,8 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 /**
  * Aggregate price intervals for search query result.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Interval implements IntervalInterface
 {
@@ -156,7 +158,11 @@ class Interval implements IntervalInterface
             $offset = $offset['value'];
         }
 
-        return $this->load($index - $offset + 1, $offset - 1, $lower);
+        if ($offset > 0) {
+            return $this->load($index - $offset + 1, $offset - 1, $lower);
+        }
+
+        return false;
     }
 
     /**

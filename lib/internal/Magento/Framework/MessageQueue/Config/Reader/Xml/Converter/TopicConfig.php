@@ -58,7 +58,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
         MethodsMap $methodsMap,
         Validator $xmlValidator,
         CommunicationConfig $communicationConfig,
-        DefaultValueProvider $defaultValueProvider = null
+        ?DefaultValueProvider $defaultValueProvider = null
     ) {
         $this->methodsMap = $methodsMap;
         $this->xmlValidator = $xmlValidator;

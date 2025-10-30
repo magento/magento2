@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +68,7 @@ class PriceModifierTest extends TestCase
     /**
      * @return array
      */
-    public function modifyPriceDataProvider()
+    public static function modifyPriceDataProvider()
     {
         return ['resulted_price_exists' => [150, 150], 'resulted_price_not_exists' => [null, 100]];
     }

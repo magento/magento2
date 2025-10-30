@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,7 +76,7 @@ class CheckmoTest extends TestCase
     public static function getPayableToDataProvider(): array
     {
         return [
-            ['payable_to' => 'payable', 'payable'],
+            ['details' => 'payable', 'payable'],
             ['', null]
         ];
     }
@@ -114,8 +114,8 @@ class CheckmoTest extends TestCase
     public static function getMailingAddressDataProvider(): array
     {
         return [
-            ['mailing_address' => 'blah@blah.com', 'blah@blah.com'],
-            ['mailing_address' => '', null]
+            ['details' => 'blah@blah.com', 'blah@blah.com'],
+            ['details' => '', null]
         ];
     }
 

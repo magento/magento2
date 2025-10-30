@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\MessageQueue\Model\CheckIsAvailableMessagesInQueue;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Psr\Log\LoggerInterface;
 
 /**
  * Unit tests for ConsumersRunner.
@@ -65,6 +66,11 @@ class ConsumersRunnerTest extends TestCase
     private $consumersRunner;
 
     /**
+     * @var LoggerInterface
+     */
+    private $loggerMock;
+
+    /**
      * {@inheritdoc}
      */
     protected function setUp(): void
@@ -89,6 +95,10 @@ class ConsumersRunnerTest extends TestCase
             ->getMock();
         $this->connectionTypeResolver->method('getConnectionType')->willReturn('something');
 
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->consumersRunner = new ConsumersRunner(
             $this->phpExecutableFinderMock,
             $this->consumerConfigMock,
@@ -96,7 +106,7 @@ class ConsumersRunnerTest extends TestCase
             $this->shellBackgroundMock,
             $this->lockManagerMock,
             $this->connectionTypeResolver,
-            null,
+            $this->loggerMock,
             $this->checkIsAvailableMessagesMock
         );
     }
@@ -124,6 +134,7 @@ class ConsumersRunnerTest extends TestCase
 
     /**
      * @param int $maxMessages
+     * @param int $maxMessagesConsumer
      * @param bool $isLocked
      * @param string $php
      * @param string $command
@@ -135,6 +146,7 @@ class ConsumersRunnerTest extends TestCase
      */
     public function testRun(
         $maxMessages,
+        $maxMessagesConsumer,
         $isLocked,
         $php,
         $command,
@@ -161,6 +173,7 @@ class ConsumersRunnerTest extends TestCase
         $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
             ->getMockForAbstractClass();
         $consumer->method('getName')->willReturn($consumerName);
+        $consumer->method('getMaxMessages')->willReturn($maxMessagesConsumer);
 
         $this->phpExecutableFinderMock->expects($this->once())
             ->method('find')
@@ -190,6 +203,7 @@ class ConsumersRunnerTest extends TestCase
         return [
             [
                 'maxMessages' => 20000,
+                'maxMessagesConsumer' => 20000,
                 'isLocked' => false,
                 'php' => '',
                 'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
@@ -200,16 +214,18 @@ class ConsumersRunnerTest extends TestCase
             ],
             [
                 'maxMessages' => 10000,
+                'maxMessagesConsumer' => 30000,
                 'isLocked' => false,
                 'php' => '',
                 'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=30000'],
                 'allowedConsumers' => [],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
+                'maxMessagesConsumer' => 10000,
                 'isLocked' => false,
                 'php' => '',
                 'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
@@ -220,6 +236,7 @@ class ConsumersRunnerTest extends TestCase
             ],
             [
                 'maxMessages' => 10000,
+                'maxMessagesConsumer' => 10000,
                 'isLocked' => true,
                 'php' => '',
                 'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
@@ -230,6 +247,7 @@ class ConsumersRunnerTest extends TestCase
             ],
             [
                 'maxMessages' => 10000,
+                'maxMessagesConsumer' => 10000,
                 'isLocked' => true,
                 'php' => '',
                 'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
@@ -240,6 +258,7 @@ class ConsumersRunnerTest extends TestCase
             ],
             [
                 'maxMessages' => 10000,
+                'maxMessagesConsumer' => 10000,
                 'isLocked' => true,
                 'php' => '',
                 'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
@@ -250,16 +269,18 @@ class ConsumersRunnerTest extends TestCase
             ],
             [
                 'maxMessages' => 10000,
+                'maxMessagesConsumer' => 500,
                 'isLocked' => false,
                 'php' => '',
                 'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=500'],
                 'allowedConsumers' => ['consumerName'],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 0,
+                'maxMessagesConsumer' => 0,
                 'isLocked' => false,
                 'php' => '/bin/php',
                 'command' => '/bin/php ' . BP . '/bin/magento queue:consumers:start %s %s',

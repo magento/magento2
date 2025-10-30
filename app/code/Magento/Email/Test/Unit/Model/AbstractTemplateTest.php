@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -316,7 +316,7 @@ class AbstractTemplateTest extends TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateProvider()
+    public static function getProcessedTemplateProvider()
     {
         return [
             'default' => [
@@ -397,7 +397,7 @@ class AbstractTemplateTest extends TestCase
     /**
      * @return array
      */
-    public function invalidInputParametersDataProvider()
+    public static function invalidInputParametersDataProvider()
     {
         return [[[]], [['area' => 'some_area']], [['store' => 'any_store']]];
     }

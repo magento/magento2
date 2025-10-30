@@ -28,7 +28,7 @@ class ArgumentSequence implements ValidatorInterface
     /**
      * @param \Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader
      */
-    public function __construct(\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null)
+    public function __construct(?\Magento\Framework\Code\Reader\ArgumentsReader $argumentsReader = null)
     {
         $this->_argumentsReader = $argumentsReader ?: new \Magento\Framework\Code\Reader\ArgumentsReader();
     }

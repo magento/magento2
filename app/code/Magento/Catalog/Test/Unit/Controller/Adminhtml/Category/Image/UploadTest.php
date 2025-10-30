@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category\Image;
 
+use Magento\CardinalCommerce\Model\Response\JwtPayloadValidator;
 use Magento\Catalog\Controller\Adminhtml\Category\Image\Upload as Model;
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Framework\App\Request\Http as Request;
@@ -17,6 +18,9 @@ use PHPUnit\Framework\TestCase;
 
 class UploadTest extends TestCase
 {
+    /**
+     * @var ObjectManager
+     */
     private $objectManager;
 
     protected function setUp(): void
@@ -27,7 +31,7 @@ class UploadTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             ['image1', 'image1'],

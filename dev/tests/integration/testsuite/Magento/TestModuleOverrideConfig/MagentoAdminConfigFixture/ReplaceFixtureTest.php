@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class ReplaceFixtureTest extends AbstractOverridesTest
      *
      * @magentoAdminConfigFixture test_section/test_group/field_1 new_value
      *
-     * @dataProvider testDataProvider
+     * @dataProvider configDataProvider
      *
      * @param string $expectedConfigValue
      * @return void
@@ -62,14 +62,14 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public static function testDataProvider(): array
+    public static function configDataProvider(): array
     {
         return [
             'first_data_set' => [
-                'expected_config_value' => 'Overridden admin config fixture for method',
+                'expectedConfigValue' => 'Overridden admin config fixture for method',
             ],
             'second_data_set' => [
-                'expected_config_value' => 'Overridden admin config fixture for data set',
+                'expectedConfigValue' => 'Overridden admin config fixture for data set',
             ],
         ];
     }
@@ -97,10 +97,10 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     {
         return [
             'first_data_set' => [
-                'expected_config_value' => 'Overridden admin config fixture for method from third module',
+                'expectedConfigValue' => 'Overridden admin config fixture for method from third module',
             ],
             'second_data_set' => [
-                'expected_config_value' => 'Overridden admin config fixture for data set from third module',
+                'expectedConfigValue' => 'Overridden admin config fixture for data set from third module',
             ],
         ];
     }

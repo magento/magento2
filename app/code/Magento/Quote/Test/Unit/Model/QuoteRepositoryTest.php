@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -296,7 +296,7 @@ class QuoteRepositoryTest extends TestCase
         static::assertSame($isSame ? $this->quoteMock : $customerQuote, $this->model->getForCustomer($customerId));
     }
 
-    public function getForCustomerAfterGetDataProvider(): array
+    public static function getForCustomerAfterGetDataProvider(): array
     {
         return [
             [15, 15, true],
@@ -374,16 +374,16 @@ class QuoteRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function getForCustomerDataProvider()
+    public static function getForCustomerDataProvider()
     {
         return [
             [
-                'invoke_number_times' => static::never(),
-                'shared_store_ids' => []
+                'invokeTimes' => static::never(),
+                'sharedStoreIds' => []
             ],
             [
-                'invoke_number_times' => static::once(),
-                'shared_store_ids' => [1]
+                'invokeTimes' => static::once(),
+                'sharedStoreIds' => [1]
             ]
         ];
     }

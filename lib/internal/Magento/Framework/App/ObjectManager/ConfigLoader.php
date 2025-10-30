@@ -43,7 +43,7 @@ class ConfigLoader implements ConfigLoaderInterface
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory,
-        Serialize $serializer = null
+        ?Serialize $serializer = null
     ) {
         $this->_cache = $cache;
         $this->_readerFactory = $readerFactory;

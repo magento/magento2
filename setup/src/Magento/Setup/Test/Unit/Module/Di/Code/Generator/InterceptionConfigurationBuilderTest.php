@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,13 +10,13 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Generator;
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\Interception\Config\Config;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\InterceptableValidator;
 use Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder;
 use Magento\Setup\Module\Di\Code\Generator\PluginList;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 class InterceptionConfigurationBuilderTest extends TestCase
 {
@@ -50,17 +50,21 @@ class InterceptionConfigurationBuilderTest extends TestCase
      */
     private $interceptableValidator;
 
+    /**
+     * @var MockObject
+     */
+    private $omConfig;
+
     protected function setUp(): void
     {
-        $this->interceptionConfig =
-            $this->createPartialMock(Config::class, ['hasPlugins']);
+        $this->interceptionConfig = $this->createPartialMock(Config::class, ['hasPlugins']);
         $this->pluginList = $this->createPartialMock(
             PluginList::class,
             ['setInterceptedClasses', 'setScopePriorityScheme', 'getPluginsConfig']
         );
         $this->cacheManager = $this->createMock(Manager::class);
-        $this->interceptableValidator =
-            $this->createMock(InterceptableValidator::class);
+        $this->interceptableValidator = $this->createMock(InterceptableValidator::class);
+        $this->omConfig = $this->createMock(ConfigInterface::class);
 
         $this->typeReader = $this->createPartialMock(Type::class, ['isConcrete']);
         $this->model = new InterceptionConfigurationBuilder(
@@ -68,7 +72,8 @@ class InterceptionConfigurationBuilderTest extends TestCase
             $this->pluginList,
             $this->typeReader,
             $this->cacheManager,
-            $this->interceptableValidator
+            $this->interceptableValidator,
+            $this->omConfig
         );
     }
 
@@ -106,6 +111,13 @@ class InterceptionConfigurationBuilderTest extends TestCase
             ->method('getPluginsConfig')
             ->willReturn(['instance' => $plugins]);
 
+        $this->omConfig->expects($this->any())
+            ->method('getOriginalInstanceType')
+            ->willReturnMap([
+                ['stdClass', 'stdClass'],
+                ['virtualTypeClass', 'stdClass'],
+            ]);
+
         $this->model->addAreaCode('areaCode');
         $this->model->getInterceptionConfiguration($definedClasses);
     }
@@ -113,13 +125,17 @@ class InterceptionConfigurationBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function getInterceptionConfigurationDataProvider()
+    public static function getInterceptionConfigurationDataProvider()
     {
-        $someInstance = new stdClass();
         return [
             [null],
-            [['plugin' => ['instance' => $someInstance]]],
-            [['plugin' => ['instance' => $someInstance], 'plugin2' => ['instance' => $someInstance]]]
+            [['plugin' => ['instance' => 'stdClass']]],
+            [[
+                'plugin'  => ['instance' => 'stdClass'],
+                'plugin1' => ['instance' => 'stdClass'],
+                'plugin2' => ['instance' => 'virtualTypeClass']
+            ]],
+            [['plugin' => ['instance' => 'virtualTypeClass']]],
         ];
     }
 }

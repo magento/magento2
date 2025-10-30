@@ -80,7 +80,7 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getLoadQuoteParametersProvider()
+    public static function getLoadQuoteParametersProvider()
     {
         return [
             [0, false],

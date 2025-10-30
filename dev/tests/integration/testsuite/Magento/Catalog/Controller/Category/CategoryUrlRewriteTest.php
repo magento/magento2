@@ -95,20 +95,20 @@ class CategoryUrlRewriteTest extends AbstractController
     /**
      * @return array
      */
-    public function categoryRewriteProvider(): array
+    public static function categoryRewriteProvider(): array
     {
         return [
             [
-                'category_id' => 400,
-                'url_path' => '/category-1%s',
+                'categoryId' => 400,
+                'urlPath' => '/category-1%s',
             ],
             [
-                'category_id' => 401,
-                'url_path' => '/category-1/category-1-1%s',
+                'categoryId' => 401,
+                'urlPath' => '/category-1/category-1-1%s',
             ],
             [
-                'category_id' => 402,
-                'url_path' => '/category-1/category-1-1/category-1-1-1%s',
+                'categoryId' => 402,
+                'urlPath' => '/category-1/category-1-1/category-1-1-1%s',
             ],
         ];
     }

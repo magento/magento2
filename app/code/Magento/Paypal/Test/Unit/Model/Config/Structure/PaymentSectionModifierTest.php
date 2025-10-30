@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -178,7 +178,7 @@ class PaymentSectionModifierTest extends TestCase
     /**
      * @return mixed
      */
-    public function caseProvider()
+    public static function caseProvider()
     {
         return include __DIR__ . '/_files/payment_section_structure_variations.php';
     }

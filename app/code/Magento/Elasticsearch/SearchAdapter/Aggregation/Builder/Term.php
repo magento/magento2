@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\SearchAdapter\Aggregation\Builder;
 
@@ -10,6 +10,8 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 
 /**
  * Builder for term buckets.
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Term implements BucketBuilderInterface
 {

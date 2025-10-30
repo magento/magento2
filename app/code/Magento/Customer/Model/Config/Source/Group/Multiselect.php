@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Config\Source\Group;
 
@@ -43,7 +43,7 @@ class Multiselect implements \Magento\Framework\Option\ArrayInterface
     public function __construct(
         GroupManagementInterface $groupManagement,
         \Magento\Framework\Convert\DataObject $converter,
-        GroupSourceLoggedInOnlyInterface $groupSourceLoggedInOnly = null
+        ?GroupSourceLoggedInOnlyInterface $groupSourceLoggedInOnly = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;

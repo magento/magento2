@@ -42,7 +42,7 @@ class CacheContextTest extends TestCase
     /**
      * @return array
      */
-    public function getTagsDataProvider()
+    public static function getTagsDataProvider()
     {
         return [
             'same entities and ids' => [

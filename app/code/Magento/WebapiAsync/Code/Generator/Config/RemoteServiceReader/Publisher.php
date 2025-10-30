@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -35,7 +35,7 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
      */
     public function __construct(
         WebApiAsyncConfig $webapiAsyncConfig,
-        DefaultValueProvider $defaultValueProvider = null
+        ?DefaultValueProvider $defaultValueProvider = null
     ) {
         $this->webapiAsyncConfig = $webapiAsyncConfig;
         $this->defaultValueProvider = $defaultValueProvider
@@ -59,6 +59,7 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
                 [
                     'topic'       => $topicName,
                     'disabled'    => false,
+                    'queue'       => 'async.operations.all',
                     'connections' => [
                         $this->defaultValueProvider->getConnection() => [
                             'name'     => $this->defaultValueProvider->getConnection(),

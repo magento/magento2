@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,7 @@ class RtlTextHandlerTest extends TestCase
         $this->assertEquals($expectedStr, $this->rtlTextHandler->reverseRtlText($str));
     }
 
-    public function provideRtlTexts(): array
+    public static function provideRtlTexts(): array
     {
         return [
             ['Adeline Jacobson', false],//English

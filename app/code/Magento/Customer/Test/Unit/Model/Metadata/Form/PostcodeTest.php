@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,7 +85,7 @@ class PostcodeTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             ['', ['"Zip/Postal Code" is a required value.'], 'US', false],
@@ -174,7 +174,7 @@ class PostcodeTest extends AbstractFormTestCase
     /**
      * @return array
      */
-    public function validateValueLengthDataProvider(): array
+    public static function validateValueLengthDataProvider(): array
     {
         return [
             'false' => [false, ['"" is a required value.', '"" length must be equal or greater than 5 characters.']],

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -69,7 +69,7 @@ class GenericTest extends TestCase
      *
      * @return array
      */
-    public function toOptionArrayDataProvider(): array
+    public static function toOptionArrayDataProvider(): array
     {
         return [
             [

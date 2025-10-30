@@ -71,7 +71,7 @@ class AbstractWriterTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderWrongOptionReportFilename()
+    public static function dataProviderWrongOptionReportFilename()
     {
         return [
             [['report_filename' => '']],

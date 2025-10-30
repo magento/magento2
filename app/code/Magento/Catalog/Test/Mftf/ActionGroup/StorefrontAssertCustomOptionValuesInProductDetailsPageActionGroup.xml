@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertCustomOptionValuesInProductDetailsPageActionGroup">
+        <annotations>
+            <description>Storefront Assert Custom Option Values In Product Details Page.</description>
+        </annotations>
+        <arguments>
+            <argument name="firstOption" type="string" defaultValue="Value2"/>
+            <argument name="secondOption" type="string" defaultValue="Value3"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.selectCustomOptionDropDown}}" stepKey="waitForOptionDropDownToBeClickable"/>
+        <click selector="{{StorefrontProductInfoMainSection.selectCustomOptionDropDown}}" stepKey="clickOption1ValueDropDown"/>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.customOptionDropDown(firstOption)}}" stepKey="assertValue1InDropDown"/>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.customOptionDropDown(secondOption)}}" stepKey="assertValue2InDropDown"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.selectCustomOptionDropDown}}" stepKey="againWaitForOptionDropDownToClose"/>
+        <click selector="{{StorefrontProductInfoMainSection.selectCustomOptionDropDown}}" stepKey="againClickOptionValueDropDownToClose"/>
+    </actionGroup>
+</actionGroups>
+

@@ -31,7 +31,7 @@ class DataObject
      * @param EntityFactoryInterface $entityFactory
      * @param FilterChain|null $filterChain
      */
-    public function __construct(EntityFactoryInterface $entityFactory, FilterChain $filterChain = null)
+    public function __construct(EntityFactoryInterface $entityFactory, ?FilterChain $filterChain = null)
     {
         $this->filterChain = $filterChain ?? new FilterChain();
         $this->_entityFactory = $entityFactory;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -108,7 +108,7 @@ class ResultTest extends TestCase
     /**
      * @return array
      */
-    public function getNoResultTextDataProvider()
+    public static function getNoResultTextDataProvider()
     {
         return [[true, 'Minimum Search query length is 5'], [false, null]];
     }

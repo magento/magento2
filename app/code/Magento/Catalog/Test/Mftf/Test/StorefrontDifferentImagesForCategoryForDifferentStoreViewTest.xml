@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDifferentImagesForCategoryForDifferentStoreViewTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Different Images for category on different store views"/>
+            <title value="Different Images for category"/>
+            <description value="Different images can be set for category on different store view level"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4134"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!-- Create 3 store views -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView1">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView2">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView3">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
+            <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage11">
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+            <waitForPageLoad  stepKey="waitForStoreFrontPageLoad1"/>
+            <!-- open product in nl -->
+            <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewNL22">
+                <argument name="storeView" value="customStoreNLNotUnique"/>
+            </actionGroup>
+            <!--open product in FR -->
+            <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewFR11">
+                <argument name="storeView" value="customStoreFR"/>
+            </actionGroup>
+            <!-- open product in EN -->
+            <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewEN11">
+                <argument name="storeView" value="customStoreEN"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- delete 3 store views -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView1">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView2">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView3">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- add image 1st time -->
+        <!--Go to created category admin page and upload image-->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage1">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddImageCategoryAtAllStoreViewActionGroup" stepKey="addCategoryImage">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton1"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertCategorySaveSuccessMessage1"/>
+        <!-- Switch to the New Website Store view NL-->
+        <waitForPageLoad stepKey="waitForEditCatalogPage1"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewNL1">
+            <argument name="storeView" value="customStoreNLNotUnique.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryImageOnStoreviewActionGroup" stepKey="addPlaceholderSmallImage">
+            <argument name="image" value="ImageUpload_1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton2"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertCategorySaveSuccessMessage2"/>
+        <!-- Switch to the New Website Store view FR-->
+        <waitForPageLoad stepKey="waitForEditCatalogPage2"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewFR1">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryImageOnStoreviewActionGroup" stepKey="addPlaceholderSmallImage1">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton3"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertCategorySaveSuccessMessage3"/>
+        <!--assert images in admin 1st time -->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage2">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminDF1">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+         <!-- assert in be NL storeview-->
+        <waitForPageLoad stepKey="waitForEditCatalogPage4"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewNL2">
+            <argument name="storeView" value="customStoreNLNotUnique.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminNL1">
+            <argument name="image" value="ImageUpload_1"/>
+        </actionGroup>
+        <!--assert in be FR storeview-->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewFR2">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminFR1">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <!--assert in be EN storeview-->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewEN2">
+            <argument name="storeView" value="customStoreEN.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminEN1">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <!-- Assert images on FE 1st time-->
+        <!-- Open created category on Storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <!--assert in NL-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToNLStoreView1">
+            <argument name="storeView" value="customStoreNLNotUnique"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload_1.fileName)}}" stepKey="seeImage2"/>
+        <!--assert in FR-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToFRStoreView1">
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="seeImage3"/>
+        <!-- assert in EN -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToENStoreView1">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ProductImage.fileName)}}" stepKey="seeImage4"/>
+        <!--assert in default-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToDFStoreView1">
+            <argument name="storeView" value="_defaultStore"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ProductImage.fileName)}}" stepKey="seeImage1"/>
+        <!--edit images again for store views 2nd time-->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage3">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddImageCategoryAtAllStoreViewActionGroup" stepKey="addCategoryImage1">
+            <argument name="image" value="AdobeThumbImage"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton4"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertCategorySaveSuccessMessage4"/>
+        <!-- Switch to the New Website Store view NL-->
+        <waitForPageLoad stepKey="waitForEditCatalogPage9"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewNL3">
+            <argument name="storeView" value="customStoreNLNotUnique.name"/>
+        </actionGroup>
+        <!-- Remove image from category -->
+        <actionGroup ref="RemoveCategoryImageActionGroup" stepKey="removeCategoryImage"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryFormAfterRemove"/>
+        <!-- Switch to the New Website Store view EN-->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewEN3">
+            <argument name="storeView" value="customStoreEN.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryImageOnStoreviewActionGroup" stepKey="addPlaceholderSmallImage2">
+            <argument name="image" value="MagentoImage"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton5"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertCategorySaveSuccessMessage5"/>
+        <!--assert images in admin 2nd time-->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage4">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+        <!-- assert in all store view -->
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminDF4">
+            <argument name="image" value="AdobeThumbImage"/>
+        </actionGroup>
+        <!-- assert in be NL storeview-->
+        <waitForPageLoad stepKey="waitForEditCatalogPage12"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewNL4">
+            <argument name="storeView" value="customStoreNLNotUnique.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryNoImageActionGroup" stepKey="assertImageAdminNL4"/>
+        <!-- assert in be FR storeview-->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewFR4">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminFR4">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <!-- assert in be EN storeview-->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewEN4">
+            <argument name="storeView" value="customStoreEN.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminEN4">
+            <argument name="image" value="MagentoImage"/>
+        </actionGroup>
+        <!--assert in FE 2nd time -->
+        <!-- Open created category on Storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage3">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <!--assert in NL-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToNLStoreView2">
+            <argument name="storeView" value="customStoreNLNotUnique"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCategoryMainSection.categoryImage}}" stepKey="dontSeeImage1"/>
+        <!--assert in FR-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToFRStoreView2">
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="seeImage6"/>
+        <!-- assert in EN -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToENStoreView2">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(MagentoImage.fileName)}}" stepKey="seeImage7"/>
+        <!--assert in default-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToDFStoreView2">
+            <argument name="storeView" value="_defaultStore"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(AdobeThumbImage.fileName)}}" stepKey="seeImage5"/>
+        <!--edit images again for store views for 3rd time-->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage5">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+        <!-- Remove image from category -->
+        <actionGroup ref="RemoveCategoryImageActionGroup" stepKey="removeCategoryImage1"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryFormAfterRemove1"/>
+        <!-- assert images in admin  3rd time-->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage6">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+        <!-- assert in _defaultStore -->
+        <waitForPageLoad stepKey="waitForEditCatalogPage15"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewDF5">
+            <argument name="storeView" value="_defaultStore.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryNoImageActionGroup" stepKey="assertImageAdminDF5"/>
+        <!--assert in be NL storeview-->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewNL5">
+            <argument name="storeView" value="customStoreNLNotUnique.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryNoImageActionGroup" stepKey="assertImageAdminNL5"/>
+        <!-- assert in be FR storeview-->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewFR5">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminFR5">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <!--assert in be EN storeview-->
+        <waitForPageLoad stepKey="waitForEditCatalogPage18"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToNewStoreViewEN5">
+            <argument name="storeView" value="customStoreEN.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCategoryImageActionGroup" stepKey="assertImageAdminEN5">
+            <argument name="image" value="MagentoImage"/>
+        </actionGroup>
+        <!--assert in FE 3rd time-->
+        <!-- Open created category on Storefront -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage4">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <!--assert in NL-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToNLStoreView3">
+            <argument name="storeView" value="customStoreNLNotUnique"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCategoryMainSection.categoryImage}}" stepKey="dontSeeImage3"/>
+        <!--assert in FR-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToFRStoreView3">
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="seeImage8"/>
+        <!-- assert in EN -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToENStoreView3">
+            <argument name="storeView" value="customStoreEN"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.imageSource(MagentoImage.fileName)}}" stepKey="seeImage9"/>
+        <!--assert in default-->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToDFStoreView3">
+            <argument name="storeView" value="_defaultStore"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCategoryMainSection.categoryImage}}" stepKey="dontSeeImage2"/>
+
+    </test>
+</tests>
+

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class ScopeTypeNormalizerTest extends TestCase
     /**
      * @return array
      */
-    public function normalizeDataProvider()
+    public static function normalizeDataProvider()
     {
         return [
             [ScopeInterface::SCOPE_WEBSITE, true, ScopeInterface::SCOPE_WEBSITES],
@@ -73,7 +73,7 @@ class ScopeTypeNormalizerTest extends TestCase
     /**
      * @return array
      */
-    public function normalizeDefaultDataProvider()
+    public static function normalizeDefaultDataProvider()
     {
         return [
             [ScopeInterface::SCOPE_WEBSITE, ScopeInterface::SCOPE_WEBSITES],

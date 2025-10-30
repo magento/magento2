@@ -23,7 +23,7 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
     /**
      * @param \Magento\Framework\Code\Reader\ClassReaderInterface $reader
      */
-    public function __construct(\Magento\Framework\Code\Reader\ClassReaderInterface $reader = null)
+    public function __construct(?\Magento\Framework\Code\Reader\ClassReaderInterface $reader = null)
     {
         $this->_reader = $reader ?: new \Magento\Framework\Code\Reader\ClassReader();
     }

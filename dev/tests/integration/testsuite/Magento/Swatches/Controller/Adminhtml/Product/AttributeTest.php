@@ -68,7 +68,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $optionsData[] = http_build_query($optionRowData);
         }
         return [
-            'attribute_data' => array_merge_recursive(
+            'attributeData' => array_merge_recursive(
                 [
                     'serialized_options' => json_encode($optionsData),
                 ],
@@ -81,8 +81,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
                     'frontend_input' => 'swatch_visual'
                 ]
             ),
-            'expected_options_count' => $optionsCount + 1,
-            'expected_store_labels' => $expectedOptionsLabels
+            'expectedOptionsCount' => $optionsCount + 1,
+            'expectedLabels' => $expectedOptionsLabels
         ];
     }
 
@@ -110,7 +110,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $optionsData[] = http_build_query($optionRowData);
         }
         return [
-            'attribute_data' => array_merge_recursive(
+            'attributeData' => array_merge_recursive(
                 [
                     'serialized_options' => json_encode($optionsData),
                 ],
@@ -123,8 +123,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
                     'frontend_input' => 'swatch_text'
                 ]
             ),
-            'expected_options_count' => $optionsCount + 1,
-            'expected_store_labels' => $expectedOptionsLabels
+            'expectedOptionsCount' => $optionsCount + 1,
+            'expectedLabels' => $expectedOptionsLabels
         ];
     }
 

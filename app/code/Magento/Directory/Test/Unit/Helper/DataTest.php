@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -178,7 +178,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getRegionJsonDataProvider(): array
+    public static function getRegionJsonDataProvider(): array
     {
         return [
             [
@@ -353,7 +353,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function topCountriesDataProvider()
+    public static function topCountriesDataProvider()
     {
         return [
             [null, []],

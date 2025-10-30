@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -166,7 +166,6 @@ class GroupRepositoryTest extends TestCase
                     'getData',
                 ]
             )
-            ->setMockClassName('groupModel')
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupDataFactory = $this->createPartialMock(
@@ -176,13 +175,13 @@ class GroupRepositoryTest extends TestCase
         $this->group = $this->getMockForAbstractClass(
             GroupInterface::class,
             [],
-            'group',
+            '',
             false
         );
         $this->factoryCreatedGroup = $this->getMockForAbstractClass(
             GroupInterface::class,
             [],
-            'group',
+            '',
             false
         );
 

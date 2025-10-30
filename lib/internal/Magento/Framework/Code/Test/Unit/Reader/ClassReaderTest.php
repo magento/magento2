@@ -86,7 +86,7 @@ class ClassReaderTest extends TestCase
      *
      * @return array
      */
-    public function getTestData()
+    public static function getTestData()
     {
         return
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Total\Config;
 
@@ -52,7 +52,7 @@ class Base extends \Magento\Sales\Model\Config\Ordered
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory,
         $sourceData = null,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($configCacheType, $logger, $salesConfig, $sourceData, $serializer);
         $this->_orderTotalFactory = $orderTotalFactory;

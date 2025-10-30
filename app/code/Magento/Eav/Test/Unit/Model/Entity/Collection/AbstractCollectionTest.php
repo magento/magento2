@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -238,7 +238,7 @@ class AbstractCollectionTest extends TestCase
     }
 
     /**
-     * @dataProvider getItemsDataProvider
+     * @dataProvider getItemsDataProviderWithoutCount
      */
     public function testAttributeIdIsInt($values)
     {
@@ -269,12 +269,24 @@ class AbstractCollectionTest extends TestCase
     /**
      * @return array
      */
-    public function getItemsDataProvider()
+    public static function getItemsDataProvider()
     {
         return [
             ['values' => [['id' => 1]], 'count' => 1],
             ['values' => [['id' => 1], ['id' => 2]], 'count' => 2],
             ['values' => [['id' => 2], ['id' => 3]], 'count' => 2]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getItemsDataProviderWithoutCount()
+    {
+        return [
+            ['values' => [['id' => 1]]],
+            ['values' => [['id' => 1], ['id' => 2]]],
+            ['values' => [['id' => 2], ['id' => 3]]]
         ];
     }
 

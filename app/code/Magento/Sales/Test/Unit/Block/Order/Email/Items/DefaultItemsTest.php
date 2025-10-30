@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -126,7 +126,7 @@ class DefaultItemsTest extends TestCase
     /**
      * @return array
      */
-    public function getItemPriceDataProvider()
+    public static function getItemPriceDataProvider()
     {
         return [
             'get default item price' => [34.28,'$34.28',1.0],

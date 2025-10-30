@@ -160,11 +160,11 @@ class LayoutTest extends TestCase
     /**
      * @return array
      */
-    public function renderResultDataProvider()
+    public static function renderResultDataProvider()
     {
         return [
-            [200, 'content-type', 'text/html', true, $this->once(), $this->once()],
-            [0, '', '', false, $this->never(), $this->never()]
+            [200, 'content-type', 'text/html', true, self::once(), self::once()],
+            [0, '', '', false, self::never(), self::never()]
         ];
     }
 

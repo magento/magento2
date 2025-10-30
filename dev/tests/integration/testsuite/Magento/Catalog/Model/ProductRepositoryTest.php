@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -195,7 +195,7 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function skuDataProvider(): array
+    public static function skuDataProvider(): array
     {
         return [
             ['sku' => 'simple'],
@@ -307,7 +307,7 @@ class ProductRepositoryTest extends TestCase
     private function assertProductNotExist(string $sku): void
     {
         $this->expectExceptionObject(new NoSuchEntityException(
-            __("The product that was requested doesn't exist. Verify the product and try again.")
+            __('The product with SKU "' . $sku . '" does not exist.')
         ));
         $this->productRepository->get($sku);
     }
@@ -345,7 +345,7 @@ class ProductRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function productUpdateDataProvider(): array
+    public static function productUpdateDataProvider(): array
     {
         return [
             'Updating for global store' => [

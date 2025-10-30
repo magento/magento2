@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Quote\Model\Quote\Item;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Quote item abstract model
@@ -18,21 +22,22 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  - custom_price - new price that can be declared by user and recalculated during calculation process
  *  - original_custom_price - original defined value of custom price without any conversion
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @method float getDiscountAmount()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountAmount(float $amount)
  * @method float getBaseDiscountAmount()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountAmount(float $amount)
  * @method float getDiscountPercent()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountPercent()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountPercent(float $percent)
  * @method float getOriginalDiscountAmount()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setOriginalDiscountAmount()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setOriginalDiscountAmount(float $amount)
  * @method float getBaseOriginalDiscountAmount()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseOriginalDiscountAmount()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseOriginalDiscountAmount(float $amount)
  * @method float getDiscountCalculationPrice()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountCalculationPrice()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountCalculationPrice(float $amount)
  * @method float getBaseDiscountCalculationPrice()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice($price)
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice(float $price)
  * @method int[] getAppliedRuleIds()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setAppliedRuleIds(array $ruleIds)
  * @method float getBaseTaxAmount()
@@ -47,8 +52,7 @@ use Magento\Framework\Api\AttributeValueFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface
+abstract class AbstractItem extends AbstractExtensibleModel implements ItemInterface
 {
     /**
      * @var Item|null
@@ -68,7 +72,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * List of custom options
      *
-     * @var array
+     * @var OptionInterface[]
      */
     protected $_optionsByCode;
 
@@ -100,8 +104,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -187,7 +191,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Set parent item
      *
-     * @param  Item $parentItem
+     * @param Item $parentItem
      * @return $this
      */
     public function setParentItem($parentItem)
@@ -222,7 +226,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Add child item
      *
-     * @param  \Magento\Quote\Model\Quote\Item\AbstractItem $child
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $child
      * @return $this
      */
     public function addChild($child)
@@ -235,7 +239,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Adds message(s) for quote item. Duplicated messages are not added.
      *
-     * @param  mixed $messages
+     * @param mixed $messages
      * @return $this
      */
     public function setMessage($messages)
@@ -255,7 +259,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Add message of quote item to array of messages
      *
-     * @param   string $message
+     * @param string $message
      * @return $this
      */
     public function addMessage($message)
@@ -267,8 +271,8 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Get messages array of quote item
      *
-     * @param   bool $string flag for converting messages to string
-     * @return  array|string
+     * @param bool $string flag for converting messages to string
+     * @return array|string
      */
     public function getMessage($string = true)
     {
@@ -624,18 +628,12 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      */
     public function isChildrenCalculated()
     {
-        if ($this->getParentItem()) {
-            $calculate = $this->getParentItem()->getProduct()->getPriceType();
-        } else {
-            $calculate = $this->getProduct()->getPriceType();
-        }
+        $calculate = $this->getParentItem()
+            ? $this->getParentItem()->getProduct()->getPriceType()
+            : $this->getProduct()->getPriceType();
 
-        if (null !== $calculate &&
-            (int)$calculate === \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
-        ) {
-            return true;
-        }
-        return false;
+        return $calculate !== null
+            && (int)$calculate === \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD;
     }
 
     /**
@@ -648,18 +646,12 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      */
     public function isShipSeparately()
     {
-        if ($this->getParentItem()) {
-            $shipmentType = $this->getParentItem()->getProduct()->getShipmentType();
-        } else {
-            $shipmentType = $this->getProduct()->getShipmentType();
-        }
+        $shipmentType = $this->getParentItem()
+            ? $this->getParentItem()->getProduct()->getShipmentType()
+            : $this->getProduct()->getShipmentType();
 
-        if (null !== $shipmentType &&
-            (int)$shipmentType === \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY
-        ) {
-            return true;
-        }
-        return false;
+        return null !== $shipmentType &&
+            (int)$shipmentType === \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY;
     }
 
     /**
@@ -678,9 +670,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
             foreach ($children as $child) {
                 $totalDiscountAmount += $child->getDiscountAmount();
             }
-        } else {
-            $totalDiscountAmount = $this->getDiscountAmount();
         }
-        return $totalDiscountAmount;
+        return $totalDiscountAmount + $this->getDiscountAmount();
     }
 }

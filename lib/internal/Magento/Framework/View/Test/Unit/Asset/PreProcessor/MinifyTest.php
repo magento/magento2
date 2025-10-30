@@ -122,7 +122,7 @@ class MinifyTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             ['test.min.css', 'test.css', 1, 1, true],

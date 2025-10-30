@@ -42,7 +42,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateWithTimestampOutOfSystemRangeDataProvider()
+    public static function validateWithTimestampOutOfSystemRangeDataProvider()
     {
         return [
             [['min' => 2000, 'max' => 2030], ['timestamp' => PHP_INT_MAX, 'to_date' => PHP_INT_MAX]],

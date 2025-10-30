@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
@@ -48,9 +48,10 @@ class Table implements FactoryInterface
      * @var array|string[]
      */
     private static array $defaultCharset = [
-        '10.4.' => 'utf8',
-        '10.6.' => 'utf8mb3',
-        'mysql_8_29' => 'utf8mb3',
+        '10.4.' => 'utf8mb4',
+        '10.6.' => 'utf8mb4',
+        '11.4.' => 'utf8mb4',
+        'mysql_8_29' => 'utf8mb4',
         'default' => 'utf8'
     ];
 
@@ -58,9 +59,10 @@ class Table implements FactoryInterface
      * @var array|string[]
      */
     private static array $defaultCollation = [
-        '10.4.' => 'utf8_general_ci',
-        '10.6.' => 'utf8mb3_general_ci',
-        'mysql_8_29' => 'utf8mb3_general_ci',
+        '10.4.' => 'utf8mb4_general_ci',
+        '10.6.' => 'utf8mb4_general_ci',
+        '11.4.' => 'utf8mb4_general_ci',
+        'mysql_8_29' => 'utf8mb4_general_ci',
         'default' => 'utf8_general_ci'
     ];
 
@@ -122,7 +124,7 @@ class Table implements FactoryInterface
      *
      * @return string
      */
-    private function getDefaultCharset(): string
+    public function getDefaultCharset(): string
     {
         if ($this->sqlVersionProvider->isMysqlGte8029()) {
             return self::$defaultCharset['mysql_8_29'];
@@ -137,7 +139,7 @@ class Table implements FactoryInterface
      *
      * @return string
      */
-    private function getDefaultCollation(): string
+    public function getDefaultCollation(): string
     {
         if ($this->sqlVersionProvider->isMysqlGte8029()) {
             return self::$defaultCollation['mysql_8_29'];

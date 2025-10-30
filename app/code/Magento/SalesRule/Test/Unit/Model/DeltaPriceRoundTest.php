@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,16 +64,16 @@ class DeltaPriceRoundTest extends TestCase
     /**
      * @return array
      */
-    public function roundDataProvider(): array
+    public static function roundDataProvider(): array
     {
         return [
             [
                 'prices' => [1.004, 1.004],
-                'rounded prices' => [1.00, 1.01],
+                'roundedPrices' => [1.00, 1.01],
             ],
             [
                 'prices' => [1.005, 1.005],
-                'rounded prices' => [1.01, 1.0],
+                'roundedPrices' => [1.01, 1.0],
             ],
         ];
     }

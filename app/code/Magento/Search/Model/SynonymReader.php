@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model;
 
@@ -52,8 +52,8 @@ class SynonymReader extends AbstractModel
     public function __construct( //phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
         \Magento\Framework\Model\Context $context,
         Registry $registry,
-        AbstractResource $resource = null,
-        DbCollection $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?DbCollection $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);

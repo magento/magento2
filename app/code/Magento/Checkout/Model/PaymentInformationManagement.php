@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Checkout\Model;
@@ -142,7 +142,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     public function savePaymentInformationAndPlaceOrder(
         $cartId,
         PaymentInterface $paymentMethod,
-        QuoteAddressInterface $billingAddress = null
+        ?QuoteAddressInterface $billingAddress = null
     ) {
         $this->paymentRateLimiter->limit();
         try {
@@ -185,7 +185,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     public function savePaymentInformation(
         $cartId,
         PaymentInterface $paymentMethod,
-        QuoteAddressInterface $billingAddress = null
+        ?QuoteAddressInterface $billingAddress = null
     ) {
         if (!$this->saveRateLimiterDisabled) {
             try {

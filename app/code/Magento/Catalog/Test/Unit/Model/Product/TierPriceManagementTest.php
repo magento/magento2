@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -170,7 +170,7 @@ class TierPriceManagementTest extends TestCase
     /**
      * @return array
      */
-    public function getListDataProvider()
+    public static function getListDataProvider()
     {
         return [
             [
@@ -413,7 +413,7 @@ class TierPriceManagementTest extends TestCase
     /**
      * @return array
      */
-    public function addDataProvider()
+    public static function addDataProvider()
     {
         return [
             ['string', 10],

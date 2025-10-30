@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -86,7 +86,6 @@ class AsyncRequestCustomerGroupAuthorizationTest extends TestCase
             [$customer, 'Password1', '']
         ];
         $this->authorizationMock
-            ->expects($this->once())
             ->method('isAllowed')
             ->with('Magento_Customer::manage')
             ->willReturn($isAllowed);
@@ -102,7 +101,7 @@ class AsyncRequestCustomerGroupAuthorizationTest extends TestCase
     /**
      * @return array
      */
-    public function customerDataProvider(): array
+    public static function customerDataProvider(): array
     {
         return [
             [3, 1, false, 1],

@@ -127,9 +127,9 @@ class Context implements ContextInterface
         UrlInterface $urlBuilder,
         Processor $processor,
         UiComponentFactory $uiComponentFactory,
-        DataProviderInterface $dataProvider = null,
+        ?DataProviderInterface $dataProvider = null,
         $namespace = null,
-        AuthorizationInterface $authorization = null,
+        ?AuthorizationInterface $authorization = null,
         ?Sanitizer $sanitizer = null
     ) {
         $this->namespace = $namespace;

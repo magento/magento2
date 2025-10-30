@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Query;
@@ -19,6 +19,8 @@ use Magento\Framework\App\ScopeResolverInterface;
  *
  * @api
  * @since 100.2.2
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Builder
 {

@@ -528,6 +528,7 @@ Subtotal:,Subtotal:
 Refresh,Refresh
 Item,Item
 "Add To Order","Add To Order"
+"Add to the new order", "Add to the new order"
 "Configure and Add to Order","Configure and Add to Order"
 "No items","No items"
 "Append Comments","Append Comments"
@@ -821,3 +822,6 @@ If set YES Email field will be required during Admin order creation for new Cust
 "Please provide a comment text or update the order status to be able to submit a comment for this order.", "Please provide a comment text or update the order status to be able to submit a comment for this order."
 "A status change or comment text is required to submit a comment.", "A status change or comment text is required to submit a comment."
 "Update","Update"
+"User is not authorized to edit comment.","User is not authorized to edit comment."
+"Cannot edit comment.","Cannot edit comment."
+"Update Comment","Update Comment"

@@ -79,7 +79,7 @@ class GenerateRepositoryTest extends TestCase
      *
      * @return array
      */
-    public function interfaceListDataProvider()
+    public static function interfaceListDataProvider()
     {
         return [
             [

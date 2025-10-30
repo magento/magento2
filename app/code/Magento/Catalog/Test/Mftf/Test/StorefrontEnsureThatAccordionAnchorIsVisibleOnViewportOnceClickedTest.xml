@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -112,20 +112,26 @@
 
         <!-- Click on reviews and add 2 reviews with current user -->
         <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addFirstReview"/>
+        <wait time="10" stepKey="waitBeforeAddSecondReview"/>
         <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addSecondReview"/>
 
         <!-- Go to Pending reviews page and clear filters -->
         <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
-
         <!-- Moderate first product reviews: change review status from pending to approved, save -->
-        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
+        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews">
+            <argument name="nickname" value="{{simpleProductReview.nickname}}"/>
+        </actionGroup>
         <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeFirstReviewStatus"/>
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
-
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+          <argument name="tags" value="config"/>
+        </actionGroup>
         <!-- Moderate second product reviews: change review status from pending to approved, save -->
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
-        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openSecondCustomerReviews"/>
+        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openSecondCustomerReviews">
+            <argument name="nickname" value="{{simpleProductReview.nickname}}"/>
+        </actionGroup>
         <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeSecondReviewStatus"/>
         <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedSecondReview"/>
 

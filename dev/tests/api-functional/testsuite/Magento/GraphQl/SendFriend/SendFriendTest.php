@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -123,7 +123,7 @@ class SendFriendTest extends GraphQlAbstract
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
+            'The product with ID "2018" does not exist.'
         );
 
         $productId = 2018;
@@ -292,18 +292,18 @@ QUERY;
     /**
      * @return array
      */
-    public function sendFriendsErrorsDataProvider(): array
+    public static function sendFriendsErrorsDataProvider(): array
     {
         return array_merge(
-            $this->getRecipientErrors(),
-            $this->getSenderErrors()
+            self::getRecipientErrors(),
+            self::getSenderErrors()
         );
     }
 
     /**
      * @return array
      */
-    private function getRecipientErrors(): array
+    private static function getRecipientErrors(): array
     {
         return [
             [
@@ -350,7 +350,7 @@ QUERY;
     /**
      * @return array
      */
-    private function getSenderErrors(): array
+    private static function getSenderErrors(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -94,7 +94,7 @@ class ImageTest extends MediaTest
      * Data provider for testPrepare
      * @return array
      */
-    public function prepareDataProvider(): array
+    public static function prepareDataProvider(): array
     {
         return [
             [['maxFileSize' => 10], 10, ['maxFileSize' => 10]],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class DataTest extends TestCase
     /**
      * @return array shipping method name
      */
-    public function shippingMethodDataProvider()
+    public static function shippingMethodDataProvider()
     {
         return [
             ['usps_0_FCLE'],   // First-Class Mail Large Envelope

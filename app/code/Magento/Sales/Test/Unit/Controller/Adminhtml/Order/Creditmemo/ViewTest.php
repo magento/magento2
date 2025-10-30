@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,7 +95,7 @@ class ViewTest extends TestCase
     /**
      * @var MockObject
      */
-    protected $invoiceMock;
+    protected static $invoiceMock;
 
     /**
      * @var Config|MockObject
@@ -142,7 +142,7 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->invoiceMock = $this->getMockBuilder(Invoice::class)
+        self::$invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
@@ -324,11 +324,11 @@ class ViewTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [false],
-            [$this->invoiceMock]
+            [self::$invoiceMock]
         ];
     }
 

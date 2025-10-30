@@ -198,7 +198,7 @@ class RequestTest extends TestCase
      *
      * @return array
      */
-    public function providerAcceptType()
+    public static function providerAcceptType()
     {
         return [
             // Each element is: array(Accept HTTP header value, expected result))
@@ -231,7 +231,7 @@ class RequestTest extends TestCase
      *
      * @return array
      */
-    public function providerContentType()
+    public static function providerContentType()
     {
         return [
             // Each element is: array(Content-Type header value, content-type part[, expected exception message])

@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * \Magento\Wishlist\Block\Item\Configure
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Wishlist\Test\Unit\Block\Item;
 

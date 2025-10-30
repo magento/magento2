@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,14 +30,19 @@ class ResultTest extends TestCase
         $this->assertEquals($expectedFailsDescription, $this->model->getFailsDescription());
     }
 
-    /**
-     * @return array
-     */
-    public function resultDataProvider()
-    {
+    protected function getMockForPhrase() {
         $phraseMock = $this->getMockBuilder(Phrase::class)
             ->disableOriginalConstructor()
             ->getMock();
+        return $phraseMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function resultDataProvider()
+    {
+        $phraseMock = static fn (self $testCase) => $testCase->getMockForPhrase();
         return [
             [true, [$phraseMock, $phraseMock], true, [$phraseMock, $phraseMock]],
             ['', [], false, []],

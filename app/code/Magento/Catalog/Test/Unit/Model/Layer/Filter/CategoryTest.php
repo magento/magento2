@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -221,15 +221,15 @@ class CategoryTest extends TestCase
         return [
             [
                 'requestValue' => null,
-                'id' => 0
+                'idValue' => 0
             ],
             [
                 'requestValue' => 0,
-                'id' => false
+                'idValue' => false
             ],
             [
                 'requestValue' => 0,
-                'id' => null
+                'idValue' => null
             ]
         ];
     }
