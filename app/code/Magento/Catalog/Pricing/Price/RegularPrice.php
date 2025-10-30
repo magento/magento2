@@ -10,14 +10,14 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 
 /**
- * Class RegularPrice
+ * Regular Price model
  */
 class RegularPrice extends AbstractPrice implements BasePriceProviderInterface
 {
     /**
      * Price type
      */
-    const PRICE_CODE = 'regular_price';
+    public const PRICE_CODE = 'regular_price';
 
     /**
      * Get price value
@@ -28,7 +28,7 @@ class RegularPrice extends AbstractPrice implements BasePriceProviderInterface
     {
         if ($this->value === null) {
             $price = $this->product->getPrice();
-            $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
+            $priceInCurrentCurrency = $this->priceCurrency->convert($price);
             $this->value = $priceInCurrentCurrency ? (float)$priceInCurrentCurrency : 0;
         }
         return $this->value;

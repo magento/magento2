@@ -80,7 +80,7 @@ class StorePathInfoValidatorTest extends TestCase
             ->willReturn(true);
 
         $this->configMock->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(false);
         $this->storeRepositoryMock->expects($this->never())
@@ -95,7 +95,7 @@ class StorePathInfoValidatorTest extends TestCase
         $storeCode = 'store1';
 
         $this->configMock->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->pathInfoMock->expects($this->once())
@@ -118,7 +118,7 @@ class StorePathInfoValidatorTest extends TestCase
     public function testGetValidStoreCodeWithEmptyPathInfo(): void
     {
         $this->configMock->expects($this->once())
-            ->method('getValue')
+            ->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->pathInfoMock->expects($this->once())
@@ -139,7 +139,7 @@ class StorePathInfoValidatorTest extends TestCase
      */
     public function testGetValidStoreCodeThrowsException(\Throwable $exception): void
     {
-        $this->configMock->method('getValue')
+        $this->configMock->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->storeCodeValidatorMock->method('isValid')
@@ -169,7 +169,7 @@ class StorePathInfoValidatorTest extends TestCase
      */
     public function testGetValidStoreCode(string $pathInfo, bool $isStoreCodeValid, ?string $expectedResult): void
     {
-        $this->configMock->method('getValue')
+        $this->configMock->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->pathInfoMock->method('getPathInfo')
@@ -195,7 +195,7 @@ class StorePathInfoValidatorTest extends TestCase
         bool $isStoreCodeValid,
         ?string $expectedResult
     ): void {
-        $this->configMock->method('getValue')
+        $this->configMock->method('isSetFlag')
             ->with(Store::XML_PATH_STORE_IN_URL)
             ->willReturn(true);
         $this->pathInfoMock->method('getPathInfo')

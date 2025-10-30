@@ -17,6 +17,6 @@
         </arguments>
 
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see selector="{{StorefrontBundledSection.validationMessageBox}}" userInput="{{message}}" stepKey="seeErrorHoldMessage"/>
+        <see selector="{{StorefrontBundledSection.selectOptionError}}" userInput="{{message}}" stepKey="seeErrorHoldMessage"/>
     </actionGroup>
 </actionGroups>

@@ -444,6 +444,60 @@ class ImageResizeTest extends TestCase
         $this->service->resizeFromImageName($this->testfilename);
     }
 
+    public function testResizeFromImageNameWithAssignedWebsite()
+    {
+        $this->databaseMock->expects($this->atLeastOnce())
+            ->method('checkDbUsage')
+            ->willReturn(false);
+        $this->mediaDirectoryMock->expects($this->exactly(2))
+            ->method('isFile')
+            ->with($this->testfilepath)
+            ->willReturnOnConsecutiveCalls(true, false);
+        $this->themeCollectionMock->expects($this->once())
+            ->method('loadRegisteredThemes')
+            ->willReturn(
+                [ new DataObject(['id' => '0']) ]
+            );
+        $this->themeCustomizationConfigMock->expects($this->once())
+            ->method('getStoresByThemes')
+            ->willReturn(
+                ['0' => []]
+            );
+        $this->productImageMock->expects($this->once())->method('getRelatedWebsiteIds')->willReturn([2]);
+        $imageMock = $this->createMock(Image::class);
+        $this->imageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($imageMock);
+
+        $this->service->resizeFromImageName($this->testfilename, true);
+    }
+
+    public function testResizeFromImageNameWithNotAssignedWebsite()
+    {
+        $this->databaseMock->expects($this->atLeastOnce())
+            ->method('checkDbUsage')
+            ->willReturn(false);
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('isFile')
+            ->with($this->testfilepath)
+            ->willReturn(true);
+        $this->themeCollectionMock->expects($this->once())
+            ->method('loadRegisteredThemes')
+            ->willReturn(
+                [ new DataObject(['id' => '0']) ]
+            );
+        $this->themeCustomizationConfigMock->expects($this->once())
+            ->method('getStoresByThemes')
+            ->willReturn(
+                ['0' => []]
+            );
+        $this->productImageMock->expects($this->once())->method('getRelatedWebsiteIds')->willReturn([3]);
+        $this->imageFactoryMock->expects($this->never())
+            ->method('create');
+
+        $this->service->resizeFromImageName($this->testfilename, true);
+    }
+
     public function testSkipResizingAlreadyResizedImageOnDisk()
     {
         $this->databaseMock->expects($this->atLeastOnce())

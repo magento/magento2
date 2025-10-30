@@ -12,4 +12,7 @@
         <data key="remove_image_notice">The image cannot be removed as it has been assigned to the other image role</data>
         <data key="save_success">You saved the product.</data>
     </entity>
+    <entity name="ProductWarningMessage" type="message">
+        <data key="require_Message">This is a required field.</data>
+    </entity>
 </entities>

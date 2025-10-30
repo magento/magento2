@@ -887,8 +887,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private function checkItemShipping(): bool
     {
         foreach ($this->getAllItems() as $item) {
-            $qtyToShip = !$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE ?
-                $item->getQtyToShip() : $item->getSimpleQtyToShip();
+            if (!$item->getParentItem() || $item->getParentItem()->getProductType() !== Type::TYPE_BUNDLE) {
+                $qtyToShip = $item->getQtyToShip();
+            } else {
+                if ($item->getParentItem()->getProductType() === Type::TYPE_BUNDLE &&
+                    $item->getParentItem()->getProduct()->getShipmentType() == Type\AbstractType::SHIPMENT_TOGETHER) {
+                    $qtyToShip = $item->getParentItem()->getQtyToShip();
+                } else {
+                    $qtyToShip = $item->getSimpleQtyToShip();
+                }
+            }
 
             if ($qtyToShip > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
                 return true;
@@ -4695,12 +4703,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function isVisibleCustomerPrefix(): bool
     {
-        $prefixShowValue = $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             'customer/address/prefix_show',
             ScopeInterface::SCOPE_STORE
         );
 
-        return $prefixShowValue !== Nooptreq::VALUE_NO;
+        return in_array($value, [Nooptreq::VALUE_OPTIONAL, Nooptreq::VALUE_REQUIRED], true);
     }
 
     /**
@@ -4710,12 +4718,12 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function isVisibleCustomerSuffix(): bool
     {
-        $prefixShowValue = $this->scopeConfig->getValue(
+        $value = $this->scopeConfig->getValue(
             'customer/address/suffix_show',
             ScopeInterface::SCOPE_STORE
         );
 
-        return $prefixShowValue !== Nooptreq::VALUE_NO;
+        return in_array($value, [Nooptreq::VALUE_OPTIONAL, Nooptreq::VALUE_REQUIRED], true);
     }
 
     //@codeCoverageIgnoreEnd

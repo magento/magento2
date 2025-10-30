@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
 
 use Magento\Catalog\Api\Data\CustomOptionInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
+use Magento\Catalog\Model\Product\Option\Type\File\ImageContentProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -118,7 +120,9 @@ class CustomOptionProcessorTest extends TestCase
             $this->productOptionFactory,
             $this->extensionFactory,
             $this->customOptionFactory,
-            $this->serializer
+            $this->serializer,
+            $this->createMock(ProductRepositoryInterface::class),
+            $this->createMock(ImageContentProcessor::class)
         );
     }
 
@@ -138,7 +142,7 @@ class CustomOptionProcessorTest extends TestCase
         $this->extensibleAttribute->expects($this->atLeastOnce())
             ->method('getCustomOptions')
             ->willReturn([$this->customOption]);
-        $this->customOption->expects($this->once())
+        $this->customOption->expects($this->any())
             ->method('getOptionId')
             ->willReturn($optionId);
         $this->customOption->expects($this->once())

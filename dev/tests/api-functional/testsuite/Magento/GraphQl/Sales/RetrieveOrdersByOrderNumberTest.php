@@ -509,7 +509,7 @@ QUERY;
         for ($i = 1; $i <= 3; $i++) {
             $orderNumber = $this->fixtures->get('or' . $i)->getIncrementId();
             $orderCreatedAt = $this->timezone->date($this->fixtures->get('or' . $i)->getCreatedAt())
-                ->format(DateTime::DATETIME_PHP_FORMAT);
+                ->format(DateTime::DATETIME_SLASH_PHP_FORMAT);
             $orderNumberCreatedAtExpected[$orderNumber] = $orderCreatedAt;
         }
 

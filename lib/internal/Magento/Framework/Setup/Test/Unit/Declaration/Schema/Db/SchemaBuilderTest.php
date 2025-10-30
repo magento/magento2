@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright 2018 Adobe All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,7 @@ use Magento\Framework\Setup\Declaration\Schema\Sharding;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for SchemaBuilder.
@@ -62,6 +63,11 @@ class SchemaBuilderTest extends TestCase
      * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\SqlVersionProvider
      */
     private $sqlVersionProvider;
+
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
 
     protected function setUp(): void
     {
@@ -401,11 +407,16 @@ class SchemaBuilderTest extends TestCase
             ->method('read')
             ->willReturn($data);
 
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $schemaBuilder = new SchemaBuilder(
             $this->elementFactoryMock,
             $this->dbSchemaReaderMock,
             $this->shardingMock,
-            $readerCompositeMock
+            $readerCompositeMock,
+            $this->loggerMock
         );
 
         $schemaBuilder->build($this->createMock(Schema::class));

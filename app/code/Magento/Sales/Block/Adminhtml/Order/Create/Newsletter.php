@@ -11,12 +11,10 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  * @api
  * @since 100.0.2
  */
-class Newsletter extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
+class Newsletter extends AbstractCreate
 {
     /**
-     * Constructor
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -42,14 +40,5 @@ class Newsletter extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCre
     public function getHeaderCssClass()
     {
         return 'head-newsletter-list';
-    }
-
-    /**
-     * @inheritdoc
-     * phpcs:disable
-     */
-    protected function _toHtml()
-    {
-        return parent::_toHtml();
     }
 }

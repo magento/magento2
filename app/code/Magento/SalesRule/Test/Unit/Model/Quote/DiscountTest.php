@@ -11,6 +11,7 @@ use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\Quote;
@@ -426,7 +427,7 @@ class DiscountTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $total->expects($this->any())->method('getBaseDiscountAmount')->willReturn(20.00);
+        $total->expects($this->any())->method('getBaseDiscountAmount')->willReturn(-20.00);
 
         $store = $this->createMock(Store::class);
         $this->storeManagerMock->expects($this->once())->method('getStore')->with($storeId)->willReturn($store);
@@ -463,8 +464,8 @@ class DiscountTest extends TestCase
             ->addMethods(['getBaseDiscountAmount'])
             ->disableOriginalConstructor()
             ->getMock();
-        $item->expects($this->exactly(2))->method('getChildren')->willReturn([$child]);
-        $item->expects($this->once())->method('isChildrenCalculated')->willReturn(true);
+        $item->expects($this->any())->method('getChildren')->willReturn([$child]);
+        $item->expects($this->any())->method('isChildrenCalculated')->willReturn(true);
         $index = 1;
         $child->expects($this->any())->method('getBaseDiscountAmount')->willReturnCallback(function () use (&$index) {
             $value = $index * 10;
@@ -479,14 +480,23 @@ class DiscountTest extends TestCase
             ->willReturnArgument(0);
 
         $this->addressMock->expects($this->exactly(5))
+            ->method('setBaseDiscountAmount');
+
+        $this->addressMock->expects(new MethodInvokedAtIndex(0))
             ->method('setBaseDiscountAmount')
-            ->with($this->logicalOr(
-                $this->equalTo(0),
-                $this->equalTo(10),
-                $this->equalTo(20),
-                $this->equalTo(20),
-                $this->equalTo(20.00)
-            ));
+            ->with(0);
+        $this->addressMock->expects(new MethodInvokedAtIndex(1))
+            ->method('setBaseDiscountAmount')
+            ->with(0);
+        $this->addressMock->expects(new MethodInvokedAtIndex(2))
+            ->method('setBaseDiscountAmount')
+            ->with(-10);
+        $this->addressMock->expects(new MethodInvokedAtIndex(3))
+            ->method('setBaseDiscountAmount')
+            ->with(-20);
+        $this->addressMock->expects(new MethodInvokedAtIndex(4))
+            ->method('setBaseDiscountAmount')
+            ->with(-20);
 
         $this->discount->collect($quote, $this->shippingAssignmentMock, $total);
     }

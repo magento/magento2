@@ -4225,7 +4225,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     public function __destruct()
     {
         if ($this->_transactionLevel > 0) {
-            trigger_error('Some transactions have not been committed or rolled back', E_USER_ERROR);
+            while ($this->_transactionLevel) {
+                $this->rollBack();
+            }
+            $this->logger->log('Some transactions have not been committed or rolled back');
         }
     }
 

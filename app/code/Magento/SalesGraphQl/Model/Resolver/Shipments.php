@@ -75,7 +75,7 @@ class Shipments implements ResolverInterface
             if ($comment->getIsVisibleOnFront()) {
                 $comments[] = [
                     'timestamp' => $this->timezone->date($comment->getCreatedAt())
-                        ->format(DateTime::DATETIME_PHP_FORMAT),
+                        ->format(DateTime::DATETIME_SLASH_PHP_FORMAT),
                     'message' => $comment->getComment()
                 ];
             }

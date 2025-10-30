@@ -37,11 +37,11 @@
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
         <seeElement selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEDescription" />
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductDescriptionWysiwyg"/>
-        <executeJS function="tinyMCE.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
+        <executeJS function="hugerte.get('product_form_description').setContent('Hello World!');" stepKey="executeJSFillContent1"/>
         <waitForElementVisible selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForShortDescription" />
         <seeElement selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="TinyMCEShortDescription" />
         <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.EditArea}}" stepKey="focusProductShortDescriptionWysiwyg"/>
-        <executeJS function="tinyMCE.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
+        <executeJS function="hugerte.get('product_form_short_description').setContent('Hello World! Short Content');" stepKey="executeJSFillContent2"/>
         <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn1" />
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage1" />
@@ -62,6 +62,8 @@
         <see userInput="Hello World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
         <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
         <after>
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

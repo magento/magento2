@@ -219,9 +219,18 @@ class CreateHandler implements ExtensionInterface
                     $clearImages[] = $image['file'];
                 } elseif (empty($image['value_id']) || !empty($image['recreate'])) {
                     $newFile = $this->moveImageFromTmp($image['file'] ?? '');
-                    $image['new_file'] = $newFile;
-                    $newImages[$image['file']] = $image;
-                    $image['file'] = $newFile;
+                    if (!empty($image['recreate']) && $newFile !== $image['file']) {
+                        //delete old image
+                        $this->mediaDirectory->renameFile(
+                            $this->mediaConfig->getMediaPath($newFile),
+                            $this->mediaConfig->getMediaPath($image['file'])
+                        );
+                        $existImages[$image['file']] = $image;
+                    } else {
+                        $image['new_file'] = $newFile;
+                        $newImages[$image['file']] = $image;
+                        $image['file'] = $newFile;
+                    }
                 } else {
                     $existImages[$image['file']] = $image;
                 }

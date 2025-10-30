@@ -96,7 +96,9 @@ class SaveHandler implements ExtensionInterface
         /** @var OptionInterface[] $bundleProductOptions */
         $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
         //Only processing bundle products.
-        if ($entity->getTypeId() !== Type::TYPE_CODE || empty($bundleProductOptions)) {
+        if ($entity->getTypeId() !== Type::TYPE_CODE
+            || (empty($bundleProductOptions) && !$entity->getDropOptions())
+        ) {
             return $entity;
         }
 
@@ -139,10 +141,7 @@ class SaveHandler implements ExtensionInterface
         $links = $option->getProductLinks();
         if (!empty($links)) {
             foreach ($links as $link) {
-                $linkCanBeDeleted = $this->checkOptionLinkIfExist->execute($entitySku, $option, $link);
-                if ($linkCanBeDeleted) {
-                    $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
-                }
+                $this->productLinkManagement->removeChild($entitySku, $option->getId(), $link->getSku());
             }
         }
     }
