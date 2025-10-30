@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright 2011 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 -->
@@ -33,6 +33,7 @@
                 <item name="layout_update" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdate</item>
                 <item name="layout_update_permissions" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdatePermissions</item>
                 <item name="name" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Name</item>
+                <item name="backorders" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Backorders</item>
             </argument>
         </arguments>
     </type>

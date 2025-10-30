@@ -967,7 +967,8 @@ class AccountManagement implements AccountManagementInterface
             }
             $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {
-            $this->customerRepository->delete($customer);
+            $this->deleteCustomerInSecureArea($customer);
+
             throw $e;
         }
         $customer = $this->customerRepository->getById($customer->getId());
@@ -1677,5 +1678,24 @@ class AccountManagement implements AccountManagementInterface
         $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
 
         return in_array($address->getCountryId(), $allowedCountries);
+    }
+
+    /**
+     * Set isSecureArea to true, then delete the customer and revert isSecureArea to original value
+     *
+     * @param  CustomerInterface  $customer
+     * @return void
+     * @throws LocalizedException
+     */
+    private function deleteCustomerInSecureArea(CustomerInterface $customer): void
+    {
+        $originalValue = $this->registry->registry('isSecureArea');
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
+        $this->customerRepository->delete($customer);
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', $originalValue);
     }
 }

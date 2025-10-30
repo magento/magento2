@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright 2024 Adobe.
+/**
+ * Copyright 2018 Adobe
  * All Rights Reserved.
-  */
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -31,7 +31,7 @@
         <element name="productPriceLinkAfterLabel" type="text" selector="//span[@class='price-label'][contains(text(),'{{var1}}')]/following::span[contains(text(), '{{var2}}')]" parameterized="true"/>
         <element name="ProductAddToCartByName" type="button" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocart')]" parameterized="true"/>
         <!--<element name="ProductAddToCompareByName" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocompare')]" parameterized="true"/>-->
-        <element name="ProductAddToCompareByName" type="text" selector="//*[contains(@class,'product-item-info')][descendant::a[contains(text(), '{{var1}}')]]//a[contains(@class, 'tocompare')]" parameterized="true"/>
+        <element name="ProductAddToCompareByName" type="text" selector="//*[contains(@class,'product-item-info')][descendant::a[contains(text(), '{{var1}}')]]//*[(name()='a' or name()='button') and contains(@class, 'tocompare')]" parameterized="true"/>
         <element name="ProductImageByNameAndSrc" type="text" selector="//main//li[.//a[contains(text(), '{{var1}}')]]//img[contains(@src, '{{src}}')]" parameterized="true"/>
         <element name="ProductStockUnavailable" type="text" selector="//*[text()='Out of stock']"/>
         <element name="listedProductOnProductPage" type="block" selector="//div[contains(@aria-labelledBy,'{{attribute_code}}')]//div[@aria-label='{{attribute_name}}']" parameterized="true"/>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -624,33 +624,35 @@ class StoreTest extends TestCase
      * @dataProvider isCurrentlySecureDataProvider
      *
      * @param bool $expected
-     * @param array $value
+     * @param array|int|null $value
      * @param bool $requestSecure
      * @param bool $useSecureInFrontend
      * @param string|null $secureBaseUrl
      */
     public function testIsCurrentlySecure(
-        $expected,
-        $value,
-        $requestSecure = false,
-        $useSecureInFrontend = true,
-        $secureBaseUrl = 'https://example.com:443'
+        bool        $expected,
+        array|int|null   $value,
+        bool        $requestSecure = false,
+        bool        $useSecureInFrontend = true,
+        ?string     $secureBaseUrl = 'https://example.com:443'
     ) {
         /* @var ReinitableConfigInterface|MockObject $configMock */
-        $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $configMock = $this->getMockBuilder(ReinitableConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $configMock->expects($this->any())
             ->method('getValue')
             ->willReturnMap([
                 [
                     Store::XML_PATH_SECURE_BASE_URL,
                     ScopeInterface::SCOPE_STORE,
-                    null,
+                    2,
                     $secureBaseUrl
                 ],
                 [
                     Store::XML_PATH_SECURE_IN_FRONTEND,
                     ScopeInterface::SCOPE_STORE,
-                    null,
+                    2,
                     $useSecureInFrontend
                 ]
             ]);
@@ -669,6 +671,8 @@ class StoreTest extends TestCase
             Store::class,
             ['config' => $configMock, 'request' => $this->requestMock]
         );
+
+        $model->setStoreId(2);
 
         if ($expected) {
             $this->assertTrue($model->isCurrentlySecure(), "Was expecting this test to show as secure, but it wasn't");
@@ -690,6 +694,7 @@ class StoreTest extends TestCase
             'unsecure request, using registered port, not using secure in frontend' => [false, 443, false, false],
             'unsecure request, no secure base url, not using secure in frontend' => [false, 443, false, false, null],
             'unsecure request, not using registered port, not using secure in frontend' => [false, 80, false, false],
+            'unsecure request, no server setting' => [false, null, false],
         ];
     }
 

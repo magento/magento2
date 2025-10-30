@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Product;
 
@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Adminhtml\Product;
  * Adminhtml most viewed products report content block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Viewed extends \Magento\Backend\Block\Widget\Grid\Container
@@ -20,6 +19,8 @@ class Viewed extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_template = 'Magento_Reports::report/grid/container.phtml';
 
     /**
+     * Initialize Viewed
+     *
      * @return void
      */
     protected function _construct()

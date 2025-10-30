@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,13 +87,21 @@ class SelectTest extends TestCase
      * @param mixed $value
      * @param mixed $originalValue
      * @param bool $isRequired
+     * @param bool $skipRequiredValidation
      * @param array $expectedResult
      * @dataProvider validateValueDataProvider
      */
-    public function testValidateValue($value, $originalValue, $isRequired, $expectedResult)
+    public function testValidateValue($value, $originalValue, $isRequired, $skipRequiredValidation, $expectedResult)
     {
-        $entityMock = $this->createMock(AbstractModel::class);
+        $entityMock = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getData'])
+            ->addMethods(['getSkipRequiredValidation'])
+            ->getMock();
         $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
+        $entityMock->expects($this->any())
+            ->method('getSkipRequiredValidation')
+            ->willReturn($skipRequiredValidation);
 
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
@@ -114,30 +122,35 @@ class SelectTest extends TestCase
                 'value' => false,
                 'originalValue' => 'value',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => true,
             ],
             [
                 'value' => false,
                 'originalValue' => null,
                 'isRequired' => true,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['"Label" is a required value.'],
             ],
             [
                 'value' => false,
                 'originalValue' => null,
                 'isRequired' => false,
+                'skipRequiredValidation' => true,
                 'expectedResult' => true,
             ],
             [
                 'value' => false,
                 'originalValue' => '0',
                 'isRequired' => true,
+                'skipRequiredValidation' => true,
                 'expectedResult' => true,
             ],
             [
                 'value' => 'value',
                 'originalValue' => '',
                 'isRequired' => true,
+                'skipRequiredValidation' => true,
                 'expectedResult' => true,
             ]
         ];

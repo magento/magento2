@@ -9,6 +9,7 @@ namespace Magento\QuoteGraphQl\Model\Resolver;
 
 use Magento\Checkout\Api\Data\TotalsInformationInterface;
 use Magento\Checkout\Api\TotalsInformationManagementInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -20,12 +21,19 @@ use Magento\QuoteGraphQl\Model\Cart\AssignShippingMethodToCart;
 use Magento\QuoteGraphQl\Model\ErrorMapper;
 use Magento\QuoteGraphQl\Model\TotalsBuilder;
 use Psr\Log\LoggerInterface;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 
 /**
  * Apply address and shipping method to totals estimate and return the quote
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EstimateTotals implements ResolverInterface
 {
+    /**
+     * @var GetCartForUser
+     */
+    private GetCartForUser $getCartForUser;
+
     /**
      * EstimateTotals Constructor
      *
@@ -36,6 +44,7 @@ class EstimateTotals implements ResolverInterface
      * @param AssignShippingMethodToCart $assignShippingMethodToCart
      * @param LoggerInterface $logger
      * @param TotalsBuilder $totalsBuilder
+     * @param GetCartForUser|null $getCartForUser
      */
     public function __construct(
         private readonly MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
@@ -44,8 +53,10 @@ class EstimateTotals implements ResolverInterface
         private readonly ErrorMapper $errorMapper,
         private readonly AssignShippingMethodToCart $assignShippingMethodToCart,
         private readonly LoggerInterface $logger,
-        private readonly TotalsBuilder $totalsBuilder
+        private readonly TotalsBuilder $totalsBuilder,
+        ?GetCartForUser $getCartForUser = null
     ) {
+        $this->getCartForUser = $getCartForUser ?? ObjectManager::getInstance()->get(GetCartForUser::class);
     }
 
     /**
@@ -54,19 +65,20 @@ class EstimateTotals implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $input = $args['input'] ?? [];
+        $maskedCartId = $input['cart_id'];
 
-        if (empty($input['cart_id'])) {
+        if (empty($maskedCartId)) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
 
         try {
-            $cartId = $this->maskedQuoteIdToQuoteId->execute($input['cart_id']);
+            $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlInputException(
                 __(
                     'Could not find a cart with ID "%masked_id"',
                     [
-                        'masked_id' => $input['cart_id']
+                        'masked_id' => $maskedCartId
                     ]
                 ),
                 $exception,
@@ -78,6 +90,10 @@ class EstimateTotals implements ResolverInterface
         if (empty($addressData['country_code'])) {
             throw new GraphQlInputException(__('Required parameter "country_code" is missing'));
         }
+
+        $currentUserId = $context->getUserId();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $this->getCartForUser->execute($maskedCartId, $currentUserId, $storeId);
 
         $totalsInfo = $this->totalsBuilder->execute($addressData, $input['shipping_method'] ?? []);
         $this->totalsInformationManagement->calculate($cartId, $totalsInfo);

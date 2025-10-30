@@ -248,7 +248,7 @@ QUERY;
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
         $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
-        $expectedErrorCode = 'UNDEFINED';
+        $expectedErrorCode = 'UNABLE_TO_PLACE_ORDER';
 
         $this->payflowRequest->method('setData')
             ->with(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,11 @@ namespace Magento\Setup\Test\Unit\Mvc\Bootstrap;
 
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\SharedEventManager;
-use Laminas\Mvc\Application;
-use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\RequestInterface;
+use Magento\Framework\Setup\Mvc\MvcApplication;
+use Magento\Framework\Setup\Mvc\MvcEvent;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
@@ -33,7 +33,9 @@ class InitParamListenerTest extends TestCase
      */
     private $listener;
 
-    /** callable[][] */
+    /**
+     * @var array
+     */
     private $callbacks = [];
 
     protected function setUp(): void
@@ -59,7 +61,7 @@ class InitParamListenerTest extends TestCase
     {
         /** @var MvcEvent|MockObject $mvcEvent */
         $mvcEvent = $this->createMock(MvcEvent::class);
-        $mvcApplication = $this->getMockBuilder(Application::class)
+        $mvcApplication = $this->getMockBuilder(MvcApplication::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mvcEvent->expects($this->once())->method('getApplication')->willReturn($mvcApplication);
@@ -120,7 +122,7 @@ class InitParamListenerTest extends TestCase
          * @var ServiceLocatorInterface|MockObject $serviceLocator
          */
         $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
-        $mvcApplication = $this->getMockBuilder(Application::class)
+        $mvcApplication = $this->getMockBuilder(MvcApplication::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -172,13 +174,17 @@ class InitParamListenerTest extends TestCase
             'one MAGE_DIRS CLI' => [
                 [],
                 [],
-                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2'],
+                ['bin/magento', 'setup:install',
+                    '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2'],
                 ['MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2']], 'MAGE_MODE' => 'developer'],
             ],
             'two MAGE_DIRS CLI' => [
                 [],
                 [],
-                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
+                // phpcs:disable Generic.Files.LineLength
+                ['bin/magento', 'setup:install',
+                    '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
+                // phpcs:disable Generic.Files.LineLength
                 [
                     'MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2'], 'cache' => ['path' => '/tmp/cache']],
                     'MAGE_MODE' => 'developer',
@@ -199,7 +205,10 @@ class InitParamListenerTest extends TestCase
             'two MAGE_DIRS' => [
                 [],
                 [],
-                ['bin/magento', 'setup:install', '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
+                // phpcs:disable Generic.Files.LineLength
+                ['bin/magento', 'setup:install',
+                    '--magento-init-params=MAGE_MODE=developer&MAGE_DIRS[base][path]=/var/www/magento2&MAGE_DIRS[cache][path]=/tmp/cache'],
+                // phpcs:disable Generic.Files.LineLength
                 [
                     'MAGE_DIRS' => ['base' => ['path' => '/var/www/magento2'], 'cache' => ['path' => '/tmp/cache']],
                     'MAGE_MODE' => 'developer',
@@ -258,7 +267,7 @@ class InitParamListenerTest extends TestCase
 
         $sharedManager = $this->createMock(SharedEventManager::class);
         $sharedManager->expects($this->once())->method('attach')->with(
-            Application::class,
+            MvcApplication::class,
             MvcEvent::EVENT_BOOTSTRAP,
             [$this->listener, 'onBootstrap']
         );

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Multishipping\Model\Checkout\Type\Multishipping;
 
@@ -11,21 +11,21 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 /**
  * Multishipping checkout state model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class State extends \Magento\Framework\DataObject
 {
-    const STEP_SELECT_ADDRESSES = 'multishipping_addresses';
+    public const STEP_SELECT_ADDRESSES = 'multishipping_addresses';
 
-    const STEP_SHIPPING = 'multishipping_shipping';
+    public const STEP_SHIPPING = 'multishipping_shipping';
 
-    const STEP_BILLING = 'multishipping_billing';
+    public const STEP_BILLING = 'multishipping_billing';
 
-    const STEP_OVERVIEW = 'multishipping_overview';
+    public const STEP_OVERVIEW = 'multishipping_overview';
 
-    const STEP_SUCCESS = 'multishipping_success';
+    public const STEP_SUCCESS = 'multishipping_success';
 
-    const STEP_RESULTS = 'multishipping_results';
+    public const STEP_RESULTS = 'multishipping_results';
 
     /**
      * Allow steps array
@@ -107,6 +107,8 @@ class State extends \Magento\Framework\DataObject
     }
 
     /**
+     * Setup Checkout step
+     *
      * @param string $step
      * @return $this
      */
@@ -171,11 +173,14 @@ class State extends \Magento\Framework\DataObject
         return $this;
     }
 
+    // phpcs:disable
     /**
+     *
      * @return bool
      */
     public function canSelectAddresses()
     {
+        return false;
     }
 
     /**
@@ -183,6 +188,7 @@ class State extends \Magento\Framework\DataObject
      */
     public function canInputShipping()
     {
+        return false;
     }
 
     /**
@@ -190,6 +196,7 @@ class State extends \Magento\Framework\DataObject
      */
     public function canSeeOverview()
     {
+        return false;
     }
 
     /**
@@ -197,8 +204,10 @@ class State extends \Magento\Framework\DataObject
      */
     public function canSuccess()
     {
+        return false;
     }
 
+    // phpcs:enable
     /**
      * Retrieve checkout session
      *

@@ -9,8 +9,6 @@ use Magento\Backend\App\AbstractAction;
 
 /**
  * System admin controller
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 abstract class System extends AbstractAction
 {
@@ -19,5 +17,5 @@ abstract class System extends AbstractAction
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::system';
+    public const ADMIN_RESOURCE = 'Magento_Backend::system';
 }
