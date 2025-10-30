@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +32,7 @@ use Magento\Framework\View\Result\PageFactory;
  */
 class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
-    const DEFAULT_MESSAGE_KEY = 'message';
+    public const DEFAULT_MESSAGE_KEY = 'message';
     private const RESERVED_ATTRIBUTE_CODES = ['product_type', 'type_id'];
 
     /**
@@ -77,7 +77,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * @param array $multipleAttributeList
      * @param FormData|null $formDataSerializer
      * @param AttributeCodeValidator|null $attributeCodeValidator
-     * @param Escaper $escaper
+     * @param Escaper|null $escaper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -88,9 +88,9 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         JsonFactory $resultJsonFactory,
         LayoutFactory $layoutFactory,
         array $multipleAttributeList = [],
-        FormData $formDataSerializer = null,
-        AttributeCodeValidator $attributeCodeValidator = null,
-        Escaper $escaper = null
+        ?FormData $formDataSerializer = null,
+        ?AttributeCodeValidator $attributeCodeValidator = null,
+        ?Escaper $escaper = null
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -246,7 +246,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * @param array|null $options
      * @return $this
      */
-    private function checkUniqueOption(DataObject $response, array $options = null)
+    private function checkUniqueOption(DataObject $response, ?array $options = null)
     {
         if (is_array($options)
             && isset($options['value'])
@@ -270,10 +270,10 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
      * Check that admin does not try to create option with empty admin scope option.
      *
      * @param DataObject $response
-     * @param array $optionsForCheck
+     * @param array|null $optionsForCheck
      * @return void
      */
-    private function checkEmptyOption(DataObject $response, array $optionsForCheck = null)
+    private function checkEmptyOption(DataObject $response, ?array $optionsForCheck = null)
     {
         foreach ($optionsForCheck as $optionValues) {
             if (isset($optionValues[0]) && trim((string)$optionValues[0]) == '') {

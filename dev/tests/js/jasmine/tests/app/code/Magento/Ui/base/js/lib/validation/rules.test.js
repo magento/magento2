@@ -94,6 +94,76 @@ define([
                 expect(rules['validate-number'].handler(value)).toBe(false);
             });
         });
+        describe('"validate-nonempty-number-greater-than-zero" method', function () {
+            it('Check on empty value', function () {
+                var value = '';
+
+                expect(rules['validate-nonempty-number-greater-than-zero'].handler(value)).toBe(false);
+            });
+
+            it('Check on integer', function () {
+                var value = '125';
+
+                expect(rules['validate-nonempty-number-greater-than-zero'].handler(value)).toBe(true);
+            });
+
+            it('Check on zero', function () {
+                var value = '0';
+
+                expect(rules['validate-nonempty-number-greater-than-zero'].handler(value)).toBe(false);
+            });
+
+            it('Check on not a number', function () {
+                var value = 'string';
+
+                expect(rules['validate-nonempty-number-greater-than-zero'].handler(value)).toBe(false);
+            });
+        });
+        describe('"validate-number-range" method', function () {
+            it('should return true for empty value', function () {
+                expect(rules['validate-number-range'].handler('', '1-10')).toBe(true);
+            });
+
+            it('should return true for value within range', function () {
+                expect(rules['validate-number-range'].handler('5', '1-10')).toBe(true);
+            });
+
+            it('should return false for value below range', function () {
+                expect(rules['validate-number-range'].handler('0', '1-10')).toBe(false);
+            });
+
+            it('should return false for value above range', function () {
+                expect(rules['validate-number-range'].handler('11', '1-10')).toBe(false);
+            });
+
+            it('should return false for non-numeric value', function () {
+                expect(rules['validate-number-range'].handler('abc', '1-10')).toBe(false);
+            });
+
+            it('should return true for value equal to min', function () {
+                expect(rules['validate-number-range'].handler('1', '1-10')).toBe(true);
+            });
+
+            it('should return true for value equal to max', function () {
+                expect(rules['validate-number-range'].handler('10', '1-10')).toBe(true);
+            });
+
+            it('should return true for value within negative range', function () {
+                expect(rules['validate-number-range'].handler('-5', '-10--1')).toBe(false);
+            });
+
+            it('should return false for value outside negative range', function () {
+                expect(rules['validate-number-range'].handler('0', '-10--1')).toBe(false);
+            });
+
+            it('should return false for invalid range param', function () {
+                expect(rules['validate-number-range'].handler('5', 'invalid')).toBe(true);
+            });
+
+            it('should return false for alphanumeric value', function () {
+                expect(rules['validate-number-range'].handler('abc123', '1-10')).toBe(false);
+            });
+        });
     });
 
     describe('validate-color', function () {

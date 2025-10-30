@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,7 +31,7 @@ class Breadcrumbs
      */
     public function __construct(
         CollectionFactory $collectionFactory,
-        Uid $uidEncoder = null
+        ?Uid $uidEncoder = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()

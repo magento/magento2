@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\Rate;
@@ -54,7 +54,7 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
         TaxRateRepositoryInterface $taxRateRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Converter $converter,
-        RateProvider $rateProvider = null
+        ?RateProvider $rateProvider = null
     ) {
         $this->taxRateRepository = $taxRateRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;

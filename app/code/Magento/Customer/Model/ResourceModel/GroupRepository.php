@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model\ResourceModel;
@@ -98,7 +98,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->groupRegistry = $groupRegistry;
         $this->groupFactory = $groupFactory;

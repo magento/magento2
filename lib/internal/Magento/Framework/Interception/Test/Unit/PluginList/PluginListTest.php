@@ -278,7 +278,7 @@ class PluginListTest extends TestCase
     /**
      * @return array
      */
-    public function getPluginsDataProvider()
+    public static function getPluginsDataProvider()
     {
         return [
             [

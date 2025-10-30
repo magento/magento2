@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Model\Category;
 
@@ -46,8 +46,8 @@ class ChildrenUrlRewriteGenerator
     public function __construct(
         ChildrenCategoriesProvider $childrenCategoriesProvider,
         CategoryUrlRewriteGeneratorFactory $categoryUrlRewriteGeneratorFactory,
-        MergeDataProviderFactory $mergeDataProviderFactory = null,
-        CategoryRepositoryInterface $categoryRepository = null
+        ?MergeDataProviderFactory $mergeDataProviderFactory = null,
+        ?CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
         $this->categoryUrlRewriteGeneratorFactory = $categoryUrlRewriteGeneratorFactory;

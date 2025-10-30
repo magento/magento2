@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -90,11 +90,11 @@ class DisabledFundingOptionsTest extends TestCase
         $this->config->expects($this->any())
             ->method('getMerchantCountry')
             ->willReturnCallback(
-                
+
                     function () use ($merchantCountry) {
                         return $merchantCountry;
                     }
-                
+
             );
         $this->model->render($this->element);
         $payPalCreditOption = [
@@ -112,7 +112,7 @@ class DisabledFundingOptionsTest extends TestCase
     /**
      * @return array
      */
-    public function isPaypalCreditAvailableDataProvider(): array
+    public static function isPaypalCreditAvailableDataProvider(): array
     {
         return [
             [null, 'US', true],

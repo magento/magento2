@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Model;
@@ -44,7 +44,7 @@ class CustomerTokenService implements CustomerTokenServiceInterface
         private readonly AccountManagementInterface $accountManagement,
         private readonly CredentialsValidator $validatorHelper,
         private readonly TokenManager $tokenManager,
-        ManagerInterface $eventManager = null
+        ?ManagerInterface $eventManager = null
     ) {
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(ManagerInterface::class);
     }

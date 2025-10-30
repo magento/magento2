@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -118,7 +118,7 @@ class MatchQueryTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider(): array
+    public static function buildDataProvider(): array
     {
         return [
             'match query without minimum_should_match' => [
@@ -207,7 +207,7 @@ class MatchQueryTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProviderForMatchPhrasePrefix()
+    public static function buildDataProviderForMatchPhrasePrefix()
     {
         return [
         'match_phrase_prefix query with minimum_should_match' => [

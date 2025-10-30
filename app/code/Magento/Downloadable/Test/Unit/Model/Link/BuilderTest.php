@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -239,7 +239,6 @@ class BuilderTest extends TestCase
     public static function buildProvider()
     {
         $expectedPrice = 0;
-        $expectedOrder = 1;
         return [
             'price_0' => [
                 [
@@ -251,8 +250,7 @@ class BuilderTest extends TestCase
                         'type' => 'file'
                     ]
                 ],
-                'expectedPrice' => $expectedPrice,
-                'expectedOrder' => $expectedOrder
+                'expectedPrice' => $expectedPrice
             ],
             'price_declared' => [
                 [
@@ -266,8 +264,7 @@ class BuilderTest extends TestCase
                         'type' => 'file'
                     ]
                 ],
-                'expectedPrice' => 150,
-                'expectedOrder' => 2
+                'expectedPrice' => 150
             ]
         ];
     }

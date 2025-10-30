@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -101,7 +101,9 @@
             <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickSubmitInvoice"/>
             <waitForText selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeSuccessMessage"/>
             <waitForText selector="{{AdminCreditMemoOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="waitForTextOrderStatus"/>
-            <scrollTo selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="scrollToMemoId"/>
+            <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
+            <waitForPageLoad stepKey="waitForTabLoad"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToMemoId"/>
             <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
             <actionGroup ref="AdminAssertRefundInRefundsGridActionGroup" stepKey="assertRefund">
                 <argument name="orderId" value="{$grabOrderNumber}"/>

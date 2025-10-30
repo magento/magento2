@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\DataProvider;
 
@@ -31,7 +31,7 @@ class ModifierPoolDataProvider extends AbstractDataProvider
         $requestFieldName,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null
+        ?PoolInterface $pool = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->pool = $pool ?: ObjectManager::getInstance()->get(PoolInterface::class);

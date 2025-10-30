@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Sales\Model\OrderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Paypal\Model\Exception\UnknownIpnException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -86,6 +87,15 @@ class IndexTest extends TestCase
         $this->model->execute();
     }
 
+    public function testIndexActionUnknownIpnException()
+    {
+        $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
+        $exception = new UnknownIpnException(__('Missing invoice field in IPN request.'));
+        $this->requestMock->expects($this->once())->method('getPostValue')->willThrowException($exception);
+        $this->loggerMock->expects($this->once())->method('warning')->with($this->identicalTo($exception));
+        $this->model->execute();
+    }
+
     public function testIndexAction()
     {
         $this->requestMock->expects($this->once())->method('isPost')->willReturn(true);
@@ -94,7 +104,7 @@ class IndexTest extends TestCase
             'invoice' => $incrementId,
             'other' => 'other data'
         ];
-        $this->requestMock->expects($this->exactly(2))->method('getPostValue')->willReturn($data);
+        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn($data);
         $ipnMock = $this->getMockForAbstractClass(IpnInterface::class);
         $this->ipnFactoryMock->expects($this->once())
             ->method('create')

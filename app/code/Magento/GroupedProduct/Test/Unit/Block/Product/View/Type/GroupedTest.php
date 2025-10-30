@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -127,7 +127,7 @@ class GroupedTest extends TestCase
     /**
      * @return array
      */
-    public function setPreconfiguredValueDataProvider()
+    public static function setPreconfiguredValueDataProvider()
     {
         return ['item_id_exist_in_config' => ['id_one'], 'item_id_not_exist_in_config' => ['id_two']];
     }

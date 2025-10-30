@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -156,7 +155,7 @@ class PostTest extends TestCase
     /**
      * Data provider for test exceute post validation
      */
-    public function postDataProvider(): array
+    public static function postDataProvider(): array
     {
         return [
             [['name' => null, 'comment' => null, 'email' => '', 'hideit' => 'no']],

@@ -16,12 +16,37 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     /**
      * Mysql default Port.
      */
-    const DEFAULT_PORT = 3306;
+    public const DEFAULT_PORT = 3306;
+
+    /**
+     * MariaDB minimum version.
+     */
+    public const MARIADB_MIN_VERSION = '11.4.';
+
+    /**
+     * MariaDB command.
+     */
+    public const MARIADB_COMMAND = 'mariadb';
+
+    /**
+     * MariaDB Dump command.
+     */
+    public const MARIADB_DUMP_COMMAND = 'mariadb-dump';
+
+    /**
+     * Mysql command.
+     */
+    public const MYSQL_COMMAND = 'mysql';
+
+    /**
+     * Mysql Dump command.
+     */
+    public const MYSQL_DUMP_COMMAND = 'mysqldump';
 
     /**
      * Name of configuration file.
      */
-    const DEFAULTS_EXTRA_FILE_NAME = 'defaults_extra.cnf';
+    public const DEFAULTS_EXTRA_FILE_NAME = 'defaults_extra.cnf';
 
     /**
      * MySQL DB dump file
@@ -55,6 +80,11 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     private $isUsingAuroraDb;
 
     /**
+     * @var bool
+     */
+    private $isMariaDB;
+
+    /**
      * {@inheritdoc}
      *
      * @param string $host
@@ -82,9 +112,11 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     public function cleanup()
     {
+        $dbCommand = $this->getDbCommand();
+
         $this->ensureDefaultsExtraFile();
         $this->_shell->execute(
-            'mysql --defaults-file=%s --host=%s --port=%s %s -e %s',
+            "{$dbCommand} --defaults-file=%s --host=%s --port=%s %s -e %s",
             [
                 $this->_defaultsExtraFile,
                 $this->_host,
@@ -120,6 +152,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     public function storeDbDump()
     {
+        $dumpCommand = $this->getDbDumpCommand();
         $this->ensureDefaultsExtraFile();
         $additionalArguments = [];
 
@@ -133,7 +166,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
         $format = sprintf(
             '%s %s %s %s',
-            'mysqldump --defaults-file=%s --host=%s --port=%s',
+            "{$dumpCommand} --defaults-file=%s --host=%s --port=%s",
             '--no-tablespaces',
             implode(' ', $additionalArguments),
             '%s > %s'
@@ -162,9 +195,13 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         if (!$this->isDbDumpExists()) {
             throw new \LogicException("DB dump file does not exist: " . $this->getSetupDbDumpFilename());
         }
+
+        $dbCommand = $this->getDbCommand();
+
         $this->_shell->execute(
-            'mysql --defaults-file=%s --host=%s --port=%s %s < %s',
-            [$this->_defaultsExtraFile, $this->_host, $this->_port, $this->_schema, $this->getSetupDbDumpFilename()]
+            "{$dbCommand} --defaults-file=%s --host=%s --port=%s %s < %s",
+            [$this->_defaultsExtraFile, $this->_host, $this->_port,
+                $this->_schema, $this->getSetupDbDumpFilename()]
         );
     }
 
@@ -240,5 +277,56 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         }
 
         return $this->isUsingAuroraDb;
+    }
+
+    /**
+     * Check is mariadb.
+     *
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isMariaDB(): bool
+    {
+        try {
+            if (!isset($this->isMariaDB)) {
+                $version = $this->_shell->execute(
+                    self::MARIADB_DUMP_COMMAND.' --version'
+                );
+                $pattern = "/((?:[0-9]+\.?)+)(.*?)(mariadb)/i";
+                preg_match($pattern, $version !== null ? $version : '', $matches);
+                $currentVersion = $matches[1] ?? '';
+                $isMariadb = isset($matches[3]);
+                if ($isMariadb
+                    && $currentVersion
+                    && version_compare($currentVersion, self::MARIADB_MIN_VERSION, '>=')) {
+                    $this->isMariaDB = true;
+                } else {
+                    $this->isMariaDB = false;
+                }
+            }
+        } catch (LocalizedException $e) {
+            $this->isMariaDB = false;
+        }
+        return $this->isMariaDB;
+    }
+
+    /**
+     * Get db command mysql or mariadb
+     *
+     * @return string
+     */
+    protected function getDbCommand()
+    {
+        return $this->isMariaDB() ? self::MARIADB_COMMAND : self::MYSQL_COMMAND;
+    }
+
+    /**
+     * Get dump command mysqldum or mariadb-dump
+     *
+     * @return string
+     */
+    protected function getDbDumpCommand()
+    {
+        return $this->isMariaDB() ? self::MARIADB_DUMP_COMMAND : self::MYSQL_DUMP_COMMAND;
     }
 }

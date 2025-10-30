@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class XsdTest extends TestCase
     /**
      * @return array
      */
-    public function exemplarXmlDataProvider()
+    public static function exemplarXmlDataProvider()
     {
         return [
             'valid' => ['<config><group name="test"><attribute name="attr"/></group></config>', []],

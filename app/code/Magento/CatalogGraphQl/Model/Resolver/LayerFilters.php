@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,8 +37,8 @@ class LayerFilters implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['layer_type'])) {
             return null;
@@ -57,7 +57,7 @@ class LayerFilters implements ResolverInterface
     private function prepareAttributesResults(array $value): ?array
     {
         $attributes = [];
-        if (!empty($value['search_result'])) {
+        if (!empty($value['search_result']) && $value['search_result']->getSearchAggregation()) {
             $buckets = $value['search_result']->getSearchAggregation()->getBuckets();
             foreach ($buckets as $bucket) {
                 if (!empty($bucket->getValues())) {

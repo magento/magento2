@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,10 +20,17 @@ class City extends AbstractValidator
      *
      * \p{L}: Unicode letters.
      * \p{M}: Unicode marks (diacritic marks, accents, etc.).
-     * ': Apostrophe mark.
+     * \d: Digits (0-9).
      * \s: Whitespace characters (spaces, tabs, newlines, etc.).
+     * -: Hyphen.
+     * _: Underscore.
+     * ', ’: Apostrophes (straight and typographical).
+     * .: Period/full stop.
+     * ,: Comma.
+     * &: Ampersand.
+     * (): Parentheses.
      */
-    private const PATTERN_CITY = '/(?:[\p{L}\p{M}\s\-\']{1,100})/u';
+    private const PATTERN_CITY = '/^[\p{L}\p{M}\d\s\-_\'’\.,&\(\)]{1,100}$/u';
 
     /**
      * Validate city fields.
@@ -35,7 +42,8 @@ class City extends AbstractValidator
     {
         if (!$this->isValidCity($customer->getCity())) {
             parent::_addMessages([[
-                'city' => "Invalid City. Please use A-Z, a-z, 0-9, -, ', spaces"
+                'city' => "Invalid City. Please use letters, numbers, spaces,
+                and the following characters: - _ ' ’ . , & ( )"
             ]]);
         }
 

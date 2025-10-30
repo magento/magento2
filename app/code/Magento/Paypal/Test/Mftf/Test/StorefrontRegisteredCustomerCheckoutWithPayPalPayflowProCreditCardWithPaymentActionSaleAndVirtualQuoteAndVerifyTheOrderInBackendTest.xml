@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -16,6 +16,8 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5685"/>
             <group value="paypalPayflowPro"/>
+            <group value="pr_exclude"/>
+            <group value="3rd_party_integration"/>
         </annotations>
         <before>
             <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
@@ -27,6 +29,7 @@
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{StorefrontPaypalPayflowProAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalPayflowProAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionAuthorization"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

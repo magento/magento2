@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -96,7 +96,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function yearValueDataProvider()
+    public static function yearValueDataProvider()
     {
         return [
             [null, null],
@@ -195,7 +195,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function getAdditionalDataDataProvider()
+    public static function getAdditionalDataDataProvider()
     {
         return [
             [
@@ -226,7 +226,7 @@ class PaymentTest extends TestCase
     /**
      * @return array
      */
-    public function importDataPositiveCheckDataProvider()
+    public static function importDataPositiveCheckDataProvider()
     {
         return [
             [

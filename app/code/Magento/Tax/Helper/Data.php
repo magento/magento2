@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Helper;
 
@@ -125,7 +125,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Helper\Data $catalogHelper,
         OrderTaxManagementInterface $orderTaxManagement,
         PriceCurrencyInterface $priceCurrency,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         parent::__construct($context);
         $this->priceCurrency = $priceCurrency;

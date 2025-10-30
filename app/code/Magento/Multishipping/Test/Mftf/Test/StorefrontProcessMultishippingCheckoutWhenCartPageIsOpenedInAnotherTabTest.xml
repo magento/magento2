@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -88,7 +88,7 @@
         <switchToNextTab stepKey="switchToNextTab"/>
         <!-- Click 'Continue to Billing Information' and 'Go to Review Your Order' -->
         <actionGroup ref="StorefrontGoToBillingInformationActionGroup" stepKey="redirectToSelectAddressAfterReset"/>
-        <seeOptionIsSelected selector="{{StorefrontCheckoutShippingMultipleAddressesSection.selectedMultipleShippingAddress('1')}}" userInput="{{US_Address_NY.street[1]}}" stepKey="checkAddressIsReset"/>
+        <seeOptionIsSelected selector="{{StorefrontCheckoutShippingMultipleAddressesSection.selectedMultipleShippingAddress('1')}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="checkAddressIsReset"/>
         <actionGroup ref="StorefrontCheckoutShippingSelectMultipleAddressesActionGroup" stepKey="selectMultipleAddressesAfterReset">
             <argument name="firstAddress" value="{{UK_Not_Default_Address.street[0]}}"/>
             <argument name="secondAddress" value="{{US_Address_NY.street[1]}}"/>

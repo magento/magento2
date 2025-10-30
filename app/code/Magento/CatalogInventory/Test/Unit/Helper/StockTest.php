@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -171,6 +171,10 @@ class StockTest extends TestCase
      */
     public function testAddInStockFilterToCollection($configMock)
     {
+        if ($configMock!=null) {
+            $configMock = $configMock($this);
+        }
+
         $collectionMock = $this->getMockBuilder(
             Collection::class
         )->disableOriginalConstructor()
@@ -183,14 +187,20 @@ class StockTest extends TestCase
         $this->assertNull($this->stock->addInStockFilterToCollection($collectionMock));
     }
 
-    /**
-     * @return array
-     */
-    public function filterProvider()
+    public function getMockForConfigClass()
     {
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
+        return $configMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function filterProvider()
+    {
+        $configMock = static fn (self $testCase) => $testCase->getMockForConfigClass();
         return [
             [$configMock],
             [null],

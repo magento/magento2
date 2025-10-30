@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -57,7 +57,7 @@ class ShippingTest extends TestCase
     /**
      * @return array
      */
-    public function displayShippingDataProvider()
+    public static function displayShippingDataProvider()
     {
         return [
             ["flatrate_flatrate", true],

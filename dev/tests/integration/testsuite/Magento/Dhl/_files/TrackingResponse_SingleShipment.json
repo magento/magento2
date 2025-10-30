@@ -1,0 +1,47 @@
+{
+  "shipments" : [
+    {
+      "shipmentTrackingNumber" : "2725476530",
+      "status" : "Success",
+      "shipmentTimestamp" : "2025-02-05T00:00:00",
+      "productCode" : "N",
+      "description" : "Shipment",
+      "shipperDetails" : {
+        "name" : "",
+        "postalAddress" : {
+          "cityName" : "",
+          "postalCode" : "",
+          "provinceCode" : "",
+          "countryCode" : "US"
+        },
+        "serviceArea" : [
+          {
+            "code" : "ELA",
+            "description" : "Los Angeles-US"
+          }
+        ]
+      },
+      "receiverDetails" : {
+        "name" : "",
+        "postalAddress" : {
+          "cityName" : "",
+          "postalCode" : "",
+          "provinceCode" : "",
+          "countryCode" : "US"
+        },
+        "serviceArea" : [
+          {
+            "code" : "ELA",
+            "description" : "Los Angeles-US",
+            "facilityCode" : "ELA"
+          }
+        ]
+      },
+      "totalWeight" : 222,
+      "unitOfMeasurements" : "imperial",
+      "shipperReferences" : [ ],
+      "events" : [ ],
+      "numberOfPieces" : 1
+    }
+  ]
+}

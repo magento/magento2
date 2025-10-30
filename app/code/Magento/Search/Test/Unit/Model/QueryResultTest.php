@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,7 +44,7 @@ class QueryResultTest extends TestCase
      * Data provider for testGetProperties
      * @return array
      */
-    public function getPropertiesDataProvider()
+    public static function getPropertiesDataProvider()
     {
         return [
             [

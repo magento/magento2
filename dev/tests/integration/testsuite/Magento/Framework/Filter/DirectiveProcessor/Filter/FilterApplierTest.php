@@ -33,7 +33,7 @@ class FilterApplierTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    public function arrayUseCaseProvider()
+    public static function arrayUseCaseProvider()
     {
         $standardInput = 'Hello ' . "\n" . ' &world!';
         return [
@@ -61,7 +61,7 @@ class FilterApplierTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    public function rawUseCaseProvider()
+    public static function rawUseCaseProvider()
     {
         $standardInput = 'Hello ' . "\n" . ' &world!';
         return [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,7 +54,7 @@ class AddCommentTest extends AbstractCreditmemoControllerTest
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $messageConstraint);
+        $this->assertThat(quoted_printable_decode($message->getBody()->bodyToString()), $messageConstraint);
     }
 
     /**
@@ -94,8 +94,7 @@ class AddCommentTest extends AbstractCreditmemoControllerTest
             ]
         );
 
-        $data = $params ?? [];
-        $this->getRequest()->setPostValue($data);
+        $this->getRequest()->setPostValue($params);
 
         return $order;
     }

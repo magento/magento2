@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -101,7 +101,7 @@ class InstructionsConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetConfig()
+    public static function dataProviderGetConfig()
     {
         $oneCode = Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
         $twoCode = Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE;

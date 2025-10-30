@@ -171,7 +171,7 @@ class MagentoImportTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function processDataProvider(): array
+    public static function processDataProvider()
     {
         return [
             'non-modular notation' => [

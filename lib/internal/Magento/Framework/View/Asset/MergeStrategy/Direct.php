@@ -48,7 +48,7 @@ class Direct implements MergeStrategyInterface
     public function __construct(
         Filesystem $filesystem,
         CssResolver $cssUrlResolver,
-        Random $mathRandom = null
+        ?Random $mathRandom = null
     ) {
         $this->filesystem = $filesystem;
         $this->cssUrlResolver = $cssUrlResolver;

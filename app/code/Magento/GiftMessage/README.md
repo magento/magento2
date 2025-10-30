@@ -1,16 +1,16 @@
 # Magento_GiftMessage module
 
-This module allows to add a message to order or to each ordered item either on frontend or backend.
+This module allows adding a message to an order or to each ordered item either on the frontend or on the backend.
 
 ## Installation
 
-Before installing this module, note that the Magento_GiftMessage is dependent on the following modules:
+Before installing this module, note that this module is dependent on the following modules:
 
 - `Magento_Catalog`
 - `Magento_Sales`
 - `Magento_Quote`
 
-Before disabling or uninstalling this module, note that the Magento_GiftMessageGraphQl module depends on this module
+Before disabling or uninstalling this module, note that the Magento_GiftMessageGraphQl module depends on this module.
 
 The Magento_GiftMessage module creates the `gift_message` table in the database.
 
@@ -23,13 +23,13 @@ This module modifies the following tables in the database:
 - `sales_order` - adds column `gift_message_id`
 - `sales_order_item` - adds columns `gift_message_id` and `gift_message_available`
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
+For information about a module installation, see [Enable or disable modules](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_GiftMessage module. For more information about the Magento extension mechanism, see [Magento plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
+Extension developers can interact with the Magento_GiftMessage module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_GiftMessage module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_GiftMessage module.
 
 A lot of functionality in the module is on JavaScript, use [mixins](https://developer.adobe.com/commerce/frontend-core/javascript/mixins/) to extend it.
 
@@ -43,7 +43,7 @@ The module dispatches the following events:
 - `gift_options_prepare` event in the `\Magento\GiftMessage\Block\Message\Inline::isMessagesOrderAvailable` method. Parameters:
     - `entity` is an entity object
 
-For information about an event in Magento 2, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
+For information about an event, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
 
 ### Layout
 
@@ -58,7 +58,7 @@ This module introduces the following layouts in the `view/frontend/layout` and `
     - `checkout_cart_index`
     - `checkout_cart_item_renderers`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
+For more information about a layout, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### Public APIs
 
@@ -99,8 +99,8 @@ For more information about a layout in Magento 2, see the [Layout documentation]
     - get the gift message for a specified item in a specified order
     - set the gift message for a specified item in a specified order
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
+For information about a public API, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 
-[Learn more about Gift Options and Gift Message](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/point-of-purchase/cart/cart-configuration.html#gift-options).
+[Learn more about Gift Options and Gift Message](https://experienceleague.adobe.com/en/docs/commerce-admin/stores-sales/point-of-purchase/cart/cart-configuration#gift-options).

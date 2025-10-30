@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,7 +58,7 @@ class AddressAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function streetLine1DataProvider()
+    public static function streetLine1DataProvider()
     {
         return [
             [['Street Line 1'], 'Street Line 1'], //$street, $expected
@@ -80,7 +80,7 @@ class AddressAdapterTest extends TestCase
     /**
      * @return array
      */
-    public function streetLine2DataProvider()
+    public static function streetLine2DataProvider()
     {
         return [
             [['Street Line 1', 'Street Line 2'], 'Street Line 2'], //$street, $expected

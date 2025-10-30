@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
@@ -22,7 +22,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::ship';
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
@@ -62,8 +62,8 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
         \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator,
         \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender,
-        \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface $shipmentValidator = null,
-        SalesData $salesData = null
+        ?\Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface $shipmentValidator = null,
+        ?SalesData $salesData = null
     ) {
         parent::__construct($context);
 
@@ -167,7 +167,9 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
             $this->_saveShipment($shipment);
 
-            if (!empty($data['send_email']) && $this->salesData->canSendNewShipmentEmail()) {
+            // Pass the specific store ID from the order to check if shipment emails are enabled for that store
+            if (!empty($data['send_email'])
+                && $this->salesData->canSendNewShipmentEmail($shipment->getOrder()->getStoreId())) {
                 $this->shipmentSender->send($shipment);
             }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -162,12 +162,12 @@ class BeforeAddressSaveObserverTest extends TestCase
     {
         return [
             [
-                'TaxCalculationAddressType' => AbstractAddress::TYPE_BILLING,
+                'configAddressType' => AbstractAddress::TYPE_BILLING,
                 'isDefaultBilling' => true,
                 'isDefaultShipping' => false,
             ],
             [
-                'TaxCalculationAddressType' => AbstractAddress::TYPE_SHIPPING,
+                'configAddressType' => AbstractAddress::TYPE_SHIPPING,
                 'isDefaultBilling' => false,
                 'isDefaultShipping' => true,
             ],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -165,7 +165,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function isMultishippingCheckoutAvailableDataProvider()
+    public static function isMultishippingCheckoutAvailableDataProvider()
     {
         return [
             [true, false, true, null, null, null, null, null],

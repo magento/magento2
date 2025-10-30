@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Deploy\Console\Command\App;
@@ -60,9 +60,9 @@ class ConfigImportCommand extends Command
      */
     public function __construct(
         Processor $processor,
-        DeploymentConfig $deploymentConfig = null,
-        EmulatedAdminhtmlAreaProcessor $adminhtmlAreaProcessor = null,
-        AreaList $areaList = null
+        ?DeploymentConfig $deploymentConfig = null,
+        ?EmulatedAdminhtmlAreaProcessor $adminhtmlAreaProcessor = null,
+        ?AreaList $areaList = null
     ) {
         $this->processor = $processor;
         $this->deploymentConfig = $deploymentConfig

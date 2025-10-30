@@ -102,7 +102,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function isOutputEnabledGenericConfigPathDataProvider(): array
+    public static function isOutputEnabledGenericConfigPathDataProvider(): array
     {
         return ['output disabled' => [true, false], 'output enabled' => [false, true]];
     }
@@ -127,7 +127,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function isOutputEnabledCustomConfigPathDataProvider(): array
+    public static function isOutputEnabledCustomConfigPathDataProvider(): array
     {
         return [
             'path literal, output disabled' => [false, false],

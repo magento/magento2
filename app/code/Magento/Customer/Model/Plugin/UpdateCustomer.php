@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -52,14 +52,21 @@ class UpdateCustomer
         CustomerInterface $customer,
         ?string $passwordHash = null
     ): array {
-        $customerSessionId = $this->userContext->getUserType() === $this->userContext::USER_TYPE_CUSTOMER ?
-                             (int)$this->userContext->getUserId() : 0;
+        $userType = $this->userContext->getUserType();
+        $customerSessionId = (int)$this->userContext->getUserId();
         $customerId = (int)$this->request->getParam('customerId');
         $bodyParams = $this->request->getBodyParams();
-        if (!isset($bodyParams['customer']['Id']) && $customerId) {
-            if ($customerId === $customerSessionId || $customerSessionId === 0) {
-                $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
-            }
+
+        if ($userType === UserContextInterface::USER_TYPE_CUSTOMER &&
+            !isset($bodyParams['customer']['Id']) &&
+            $customerId &&
+            $customerId === $customerSessionId
+        ) {
+            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
+        } elseif ($customerId && in_array($userType, [UserContextInterface::USER_TYPE_ADMIN,
+                    UserContextInterface::USER_TYPE_INTEGRATION], true)
+        ) {
+            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
         }
 
         return [$customer, $passwordHash];

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,6 +78,7 @@ class ExtractQuoteAddressData
                     'region_id'=> $address->getRegionId()
                 ],
                 'uid' => $this->uidEncoder->encode((string)$address->getAddressId()) ,
+                'id' => $address->getCustomerAddressId(),
                 'street' => $address->getStreet(),
                 'items_weight' => $address->getWeight(),
                 'customer_notes' => $address->getCustomerNotes(),

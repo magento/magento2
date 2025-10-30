@@ -50,7 +50,7 @@ class AttributeYesNoTest extends AbstractAttributeTest
     {
         return [
             [
-                'product_sku' => 'simple2',
+                'productSku' => 'simple2',
             ],
         ];
     }
@@ -62,8 +62,8 @@ class AttributeYesNoTest extends AbstractAttributeTest
     {
         return [
             [
-                'first_product_sku' => 'simple2',
-                'second_product_sku' => 'simple-out-of-stock',
+                'firstSku' => 'simple2',
+                'secondSku' => 'simple-out-of-stock',
             ],
         ];
     }

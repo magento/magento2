@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 namespace Magento\Swatches\Block\Product\Renderer;
@@ -125,8 +125,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         SwatchData $swatchHelper,
         Media $swatchMediaHelper,
         array $data = [],
-        SwatchAttributesProvider $swatchAttributesProvider = null,
-        UrlBuilder $imageUrlBuilder = null
+        ?SwatchAttributesProvider $swatchAttributesProvider = null,
+        ?UrlBuilder $imageUrlBuilder = null
     ) {
         $this->swatchHelper = $swatchHelper;
         $this->swatchMediaHelper = $swatchMediaHelper;

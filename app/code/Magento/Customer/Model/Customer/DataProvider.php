@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Customer;
 
@@ -164,10 +164,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         FilterPool $filterPool,
-        FileProcessorFactory $fileProcessorFactory = null,
+        ?FileProcessorFactory $fileProcessorFactory = null,
         array $meta = [],
         array $data = [],
-        ContextInterface $context = null,
+        ?ContextInterface $context = null,
         $allowToShowHiddenAttributes = true,
         $fileUploaderDataResolver = null
     ) {

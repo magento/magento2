@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Controller\Adminhtml\Order;
@@ -87,9 +86,9 @@ class AddressSave extends Order implements HttpPostActionInterface
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
-        RegionFactory $regionFactory = null,
-        OrderAddressRepositoryInterface $orderAddressRepository = null,
-        AttributeMetadataDataProvider $attributeMetadataDataProvider = null
+        ?RegionFactory $regionFactory = null,
+        ?OrderAddressRepositoryInterface $orderAddressRepository = null,
+        ?AttributeMetadataDataProvider $attributeMetadataDataProvider = null
     ) {
         $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
         $this->orderAddressRepository = $orderAddressRepository ?: ObjectManager::getInstance()

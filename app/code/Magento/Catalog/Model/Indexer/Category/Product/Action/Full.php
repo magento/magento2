@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -95,13 +95,13 @@ class Full extends AbstractAction
         ResourceConnection $resource,
         StoreManagerInterface $storeManager,
         Config $config,
-        QueryGenerator $queryGenerator = null,
-        BatchSizeManagementInterface $batchSizeManagement = null,
-        BatchProviderInterface $batchProvider = null,
-        MetadataPool $metadataPool = null,
+        ?QueryGenerator $queryGenerator = null,
+        ?BatchSizeManagementInterface $batchSizeManagement = null,
+        ?BatchProviderInterface $batchProvider = null,
+        ?MetadataPool $metadataPool = null,
         $batchRowsCount = null,
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        ProcessManager $processManager = null,
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?ProcessManager $processManager = null,
         ?DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct(
@@ -187,7 +187,6 @@ class Full extends AbstractAction
     protected function reindex(): void
     {
         $userFunctions = [];
-
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
                 $userFunctions[$store->getId()] = function () use ($store) {
@@ -195,7 +194,6 @@ class Full extends AbstractAction
                 };
             }
         }
-
         $this->processManager->execute($userFunctions);
     }
 
@@ -206,6 +204,9 @@ class Full extends AbstractAction
      */
     private function reindexStore($store): void
     {
+        // Ensure the same adapter instance that created the TEMP table is used for all operations
+        // phpcs:ignore
+        $this->connection = $this->tableMaintainer->getSameAdapterConnection();
         $this->reindexRootCategory($store);
         $this->reindexAnchorCategories($store);
         $this->reindexNonAnchorCategories($store);

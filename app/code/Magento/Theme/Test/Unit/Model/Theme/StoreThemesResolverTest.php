@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -83,7 +83,7 @@ class StoreThemesResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getThemesDataProvider(): array
+    public static function getThemesDataProvider(): array
     {
         return [
             [

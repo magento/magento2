@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillNewUserFormActionGroup">
+        <annotations>
+            <description>Navigate to new user page and fill form with basic user information without saving</description>
+        </annotations>
+        <arguments>
+            <argument name="user" defaultValue="activeAdmin"/>
+        </arguments>
+        <amOnPage url="{{AdminNewUserPage.url}}" stepKey="navigateToNewUser"/>
+        <waitForPageLoad stepKey="waitForUsersPage"/>
+        <fillField selector="{{AdminEditUserSection.usernameTextField}}" userInput="{{user.username}}" stepKey="enterUserName"/>
+        <fillField selector="{{AdminEditUserSection.firstNameTextField}}" userInput="{{user.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{AdminEditUserSection.lastNameTextField}}" userInput="{{user.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{AdminEditUserSection.emailTextField}}" userInput="{{user.username}}@magento.com" stepKey="enterEmail"/>
+        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword"/>
+    </actionGroup>
+</actionGroups>

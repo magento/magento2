@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,11 +42,11 @@ class VariationMatrixTest extends TestCase
     /**
      * Test data provider.
      */
-    public function variationProvider()
-    {
+    public static function variationProvider()
+    {   
         return [
             [
-                'with_attribute_id' => [
+                [
                     'result' => [
                         [
                             130 => [
@@ -102,7 +102,7 @@ class VariationMatrixTest extends TestCase
                         ],
                     ]
                 ],
-                'without_attribute_id' => [
+                [
                     'result' => [
                         [
                             130 => [

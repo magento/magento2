@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCompleteUserCreationWithRoleActionGroup">
+        <annotations>
+            <description>Complete user creation by setting role and saving</description>
+        </annotations>
+        <arguments>
+            <argument name="role" defaultValue="roleDefaultAdministrator"/>
+            <argument name="user" defaultValue="activeAdmin"/>
+        </arguments>
+        <!-- Assign role -->
+        <click stepKey="clickUserRole" selector="{{AdminEditUserSection.userRoleTab}}"/>
+        <waitForPageLoad stepKey="waitForUserRoleTabOpened"/>
+        <click stepKey="chooseRole" selector="{{AdminEditUserSection.administratorRoleRadio(role.name)}}"/>
+        <!-- Save user -->
+        <click selector="{{AdminEditUserSection.saveButton}}" stepKey="clickSaveUser"/>
+        <waitForPageLoad stepKey="waitForSaveUser"/>
+        <see stepKey="seeSuccessMessage" userInput="You saved the user."/>
+    </actionGroup>
+</actionGroups>

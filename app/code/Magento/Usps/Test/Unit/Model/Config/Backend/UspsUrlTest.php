@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -99,7 +99,7 @@ class UspsUrlTest extends TestCase
         $this->urlConfig->beforeSave();
     }
 
-    public function validDataProvider(): array
+    public static function validDataProvider(): array
     {
         return [
             [],
@@ -113,7 +113,7 @@ class UspsUrlTest extends TestCase
     /**
      * @return string[][]
      */
-    public function invalidDataProvider(): array
+    public static function invalidDataProvider(): array
     {
         return [
             ['https://shippingapis.com.fake.com'],

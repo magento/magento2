@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -152,7 +152,7 @@ class ContentTest extends TestCase
      * Data provider for requestParams
      * @return array
      */
-    public function requestParamsProvider()
+    public static function requestParamsProvider()
     {
         return [
             [

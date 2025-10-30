@@ -1,9 +1,7 @@
 <?php
 /**
- * Data Model implementing the Address interface
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -215,7 +213,7 @@ class Rule extends AbstractExtensibleObject implements RuleInterface
      * @param ConditionInterface|null $condition
      * @return $this
      */
-    public function setCondition(ConditionInterface $condition = null)
+    public function setCondition(?ConditionInterface $condition = null)
     {
         return $this->setData(self::KEY_CONDITION, $condition);
     }
@@ -236,7 +234,7 @@ class Rule extends AbstractExtensibleObject implements RuleInterface
      * @param ConditionInterface|null $actionCondition
      * @return $this
      */
-    public function setActionCondition(ConditionInterface $actionCondition = null)
+    public function setActionCondition(?ConditionInterface $actionCondition = null)
     {
         return $this->setData(self::KEY_ACTION_CONDITION, $actionCondition);
     }
@@ -301,7 +299,7 @@ class Rule extends AbstractExtensibleObject implements RuleInterface
      * @param RuleLabelInterface[]|null $storeLabels
      * @return $this
      */
-    public function setStoreLabels(array $storeLabels = null)
+    public function setStoreLabels(?array $storeLabels = null)
     {
         return $this->setData(self::KEY_STORE_LABELS, $storeLabels);
     }
@@ -364,7 +362,7 @@ class Rule extends AbstractExtensibleObject implements RuleInterface
      * @param int[]|null $productIds
      * @return $this
      */
-    public function setProductIds(array $productIds = null)
+    public function setProductIds(?array $productIds = null)
     {
         return $this->setData(self::KEY_PRODUCT_IDS, $productIds);
     }

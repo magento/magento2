@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier;
 
@@ -136,8 +136,8 @@ class Grouped extends AbstractModifier
         AttributeSetRepositoryInterface $attributeSetRepository,
         CurrencyInterface $localeCurrency,
         array $uiComponentsConfig = [],
-        GroupedProducts $groupedProducts = null,
-        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null
+        ?GroupedProducts $groupedProducts = null,
+        ?\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\SalesRule\Model\ResourceModel;
 
 use Magento\Framework\App\ObjectManager;
@@ -77,14 +78,14 @@ class Rule extends AbstractResource
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
         $connectionName = null,
-        \Magento\Framework\DataObject $associatedEntityMapInstance = null,
-        Json $serializer = null,
-        MetadataPool $metadataPool = null
+        ?\Magento\Framework\DataObject $associatedEntityMapInstance = null,
+        ?Json $serializer = null,
+        ?MetadataPool $metadataPool = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
         $associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
-            // phpstan:ignore "Class Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap not found."
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
         );
         $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();
@@ -187,7 +188,10 @@ class Rule extends AbstractResource
         }
 
         // Update auto geterated specific coupons if exists
-        if ($object->getUseAutoGeneration() && $object->hasDataChanges()) {
+        if (($object->getUseAutoGeneration()
+            || ((int) $object->getCouponType()) === \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO
+            ) && $object->hasDataChanges()
+        ) {
             $this->_resourceCoupon->updateSpecificCoupons($object);
         }
         return parent::_afterSave($object);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
@@ -24,7 +24,7 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         $connectionName = null,
-        Encryptor $encryptor = null
+        ?Encryptor $encryptor = null
     ) {
         parent::__construct($context, $connectionName);
         $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(Encryptor::class);

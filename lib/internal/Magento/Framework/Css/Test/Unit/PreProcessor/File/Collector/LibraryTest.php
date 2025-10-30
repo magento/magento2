@@ -186,7 +186,7 @@ class LibraryTest extends TestCase
      *
      * @return array
      */
-    public function getFilesDataProvider()
+    public static function getFilesDataProvider()
     {
         return [
             'all files' => [['file1'], ['file2']],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -71,7 +71,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function outputValueDataProvider()
+    public static function outputValueDataProvider()
     {
         return [
             [
@@ -96,14 +96,27 @@ class DateTest extends TestCase
      * @param array $rules
      * @param mixed $originalValue
      * @param bool $isRequired
+     * @param bool $skipRequiredValidation
      * @param array $expectedResult
      * @dataProvider validateValueDataProvider
      */
-    public function testValidateValue($value, $rules, $originalValue, $isRequired, $expectedResult)
-    {
-        $entityMock = $this->createMock(AbstractModel::class);
+    public function testValidateValue(
+        $value,
+        $rules,
+        $originalValue,
+        $isRequired,
+        $skipRequiredValidation,
+        $expectedResult
+    ) {
+        $entityMock = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getDataUsingMethod'])
+            ->addMethods(['getSkipRequiredValidation'])
+            ->getMock();
         $entityMock->expects($this->any())->method('getDataUsingMethod')->willReturn($originalValue);
-
+        $entityMock->expects($this->any())
+            ->method('getSkipRequiredValidation')
+            ->willReturn($skipRequiredValidation);
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
         $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
@@ -117,7 +130,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function validateValueDataProvider()
+    public static function validateValueDataProvider()
     {
         return [
             [
@@ -125,6 +138,7 @@ class DateTest extends TestCase
                 'rules' => [],
                 'originalValue' => false,
                 'isRequired' => true,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['"Label" is a required value.'],
             ],
             [
@@ -132,6 +146,15 @@ class DateTest extends TestCase
                 'rules' => [],
                 'originalValue' => 'value',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
+                'expectedResult' => true,
+            ],
+            [
+                'value' => false,
+                'rules' => [],
+                'originalValue' => '',
+                'isRequired' => true,
+                'skipRequiredValidation' => true,
                 'expectedResult' => true,
             ],
             [
@@ -139,6 +162,7 @@ class DateTest extends TestCase
                 'rules' => [],
                 'originalValue' => '',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => true,
             ],
             [
@@ -146,6 +170,7 @@ class DateTest extends TestCase
                 'rules' => ['date_range_min' => strtotime('2001-01-01'),'date_range_max' => strtotime('2002-01-01')],
                 'originalValue' => '',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['Please enter a valid date between 01/01/2001 and 01/01/2002 at Label.'],
             ],
             [
@@ -153,6 +178,7 @@ class DateTest extends TestCase
                 'rules' => ['date_range_min' => strtotime('2001-01-01')],
                 'originalValue' => '',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['Please enter a valid date equal to or greater than 01/01/2001 at Label.'],
             ],
             [
@@ -160,6 +186,7 @@ class DateTest extends TestCase
                 'rules' => ['date_range_max' => strtotime('2001-01-01')],
                 'originalValue' => '',
                 'isRequired' => false,
+                'skipRequiredValidation' => false,
                 'expectedResult' => ['Please enter a valid date less than or equal to 01/01/2001 at Label.'],
             ],
         ];
@@ -188,7 +215,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function compactValueDataProvider()
+    public static function compactValueDataProvider()
     {
         return [
             ['value' => 'value', 'expectedResult' => 'value'],

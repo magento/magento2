@@ -93,8 +93,8 @@ class Files
         ComponentRegistrar $componentRegistrar,
         DirSearch $dirSearch,
         ThemePackageList $themePackageList,
-        Json $serializer = null,
-        RegexIteratorFactory $regexIteratorFactory = null
+        ?Json $serializer = null,
+        ?RegexIteratorFactory $regexIteratorFactory = null
     ) {
         $this->componentRegistrar = $componentRegistrar;
         $this->dirSearch = $dirSearch;
@@ -113,7 +113,7 @@ class Files
      * @param Files|null $instance
      * @return void
      */
-    public static function setInstance(Files $instance = null)
+    public static function setInstance(?Files $instance = null)
     {
         self::$_instance = $instance;
     }

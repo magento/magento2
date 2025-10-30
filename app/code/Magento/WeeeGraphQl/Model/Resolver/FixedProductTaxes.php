@@ -31,7 +31,7 @@ class FixedProductTaxes implements ResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null): array
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null): array
     {
         if (!isset($value['model']) || !($value['model'] instanceof Item)) {
             throw new LocalizedException(__('"model" value should be specified'));

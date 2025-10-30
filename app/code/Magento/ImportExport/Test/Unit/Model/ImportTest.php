@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -1011,7 +1011,7 @@ class ImportTest extends AbstractImportTestCase
     public function testCreateHistoryReportThrowException()
     {
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('Source file coping failed');
+        $this->expectExceptionMessage('Source file copying failed');
         $sourceFileRelative = null;
         $entity = '';
         $extension = '';
@@ -1059,14 +1059,14 @@ class ImportTest extends AbstractImportTestCase
     {
         return [
             [
-                '$entity' => null,
-                '$getEntityResult' => null,
-                '$expectedResult' => false,
+                'entity' => null,
+                'getEntityResult' => null,
+                'expectedResult' => false,
             ],
             [
-                '$entity' => 'advanced_pricing',
-                '$getEntityResult' => 'advanced_pricing',
-                '$expectedResult' => null,
+                'entity' => 'advanced_pricing',
+                'getEntityResult' => 'advanced_pricing',
+                'expectedResult' => null,
             ],
         ];
     }
@@ -1080,16 +1080,16 @@ class ImportTest extends AbstractImportTestCase
     {
         return [
             [
-                '$entity' => 'entity',
-                '$getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
-                '$getEntityResult' => 'catalog_product',
-                '$expectedResult' => false,
+                'entity' => 'entity',
+                'getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
+                'getEntityResult' => 'catalog_product',
+                'expectedResult' => false,
             ],
             [
-                '$entity' => 'advanced_pricing',
-                '$getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
-                '$getEntityResult' => 'advanced_pricing',
-                '$expectedResult' => true,
+                'entity' => 'advanced_pricing',
+                'getEntitiesResult' => ['catalog_product' => ['model' => 'catalog_product']],
+                'getEntityResult' => 'advanced_pricing',
+                'expectedResult' => true,
             ],
         ];
     }

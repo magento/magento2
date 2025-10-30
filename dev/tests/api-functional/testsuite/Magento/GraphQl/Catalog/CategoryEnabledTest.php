@@ -100,13 +100,13 @@ class CategoryEnabledTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function categoryEnabledDataProvider(): array
+    public static function categoryEnabledDataProvider(): array
     {
         return [
             [
-                'query' => $this->getQuery(44),
-                'store' => 'default',
-                'data' => [
+                'query' => self::getQuery(44),
+                'storeCode' => 'default',
+                'category' => [
                     'category' => [
                         'id' => 44,
                         'name' => 'Category_UA',
@@ -121,13 +121,13 @@ class CategoryEnabledTest extends GraphQlAbstract
      *
      * @return array[][]
      */
-    public function categoryDisabledDataProvider(): array
+    public static function categoryDisabledDataProvider(): array
     {
         return [
             [
-                'query' => $this->getQuery(33),
-                'store' => 'english',
-                'data' => [
+                'query' => self::getQuery(33),
+                'storeCode' => 'english',
+                'category' => [
                     'category' => null,
                 ],
             ],
@@ -140,7 +140,7 @@ class CategoryEnabledTest extends GraphQlAbstract
      * @param int $categoryId
      * @return string
      */
-    private function getQuery(int $categoryId): string
+    private static function getQuery(int $categoryId): string
     {
         return <<<QUERY
 {

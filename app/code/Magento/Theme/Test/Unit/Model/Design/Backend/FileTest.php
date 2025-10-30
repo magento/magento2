@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -277,7 +277,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function beforeSaveDataProvider(): array
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'Normal file name' => ['filename.jpg'],
@@ -354,7 +354,7 @@ class FileTest extends TestCase
      *
      * @return array
      */
-    public function getRelativeMediaPathDataProvider(): array
+    public static function getRelativeMediaPathDataProvider(): array
     {
         return [
             'Normal path' => ['pub/media/', 'filename.jpg'],

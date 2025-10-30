@@ -136,7 +136,7 @@ class DiffOldSchemaTest extends SetupTestCase
     /**
      * @return array
      */
-    public function oldSchemaUpgradeDataProvider(): array
+    public static function oldSchemaUpgradeDataProvider(): array
     {
         return [
             'Without db prefix' => [

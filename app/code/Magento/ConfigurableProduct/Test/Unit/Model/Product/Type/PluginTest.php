@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,10 @@ class PluginTest extends TestCase
      */
     public function testAfterGetOptionArray(array $expected, array $data)
     {
+        if (!empty($data['subject']) && is_callable($data['subject']))
+        {
+            $data['subject'] = $data['subject']($this);
+        }
         $moduleManagerMock = $this->createPartialMock(Manager::class, ['isOutputEnabled']);
         $moduleManagerMock->expects($this->once())
             ->method('isOutputEnabled')
@@ -34,12 +38,18 @@ class PluginTest extends TestCase
         );
     }
 
+    protected function getMockForTypeClass()
+    {
+        $productTypeMock = $this->createMock(Type::class);
+        return $productTypeMock;
+    }
+
     /**
      * @return array
      */
-    public function afterGetOptionArrayDataProvider()
+    public static function afterGetOptionArrayDataProvider()
     {
-        $productTypeMock = $this->createMock(Type::class);
+        $productTypeMock = static fn (self $testCase) => $testCase->getMockForTypeClass();
         return [
             [
                 [

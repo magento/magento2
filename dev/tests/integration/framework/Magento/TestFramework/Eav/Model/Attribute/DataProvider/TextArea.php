@@ -49,18 +49,18 @@ class TextArea extends AbstractBaseAttributeData
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'text_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'text_attribute',
                     ],
                 ],
                 "{$frontendInput}_change_frontend_input" => [
-                    'post_data' => [
+                    'postData' => [
                         'frontend_input' => 'texteditor',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'frontend_input' => 'textarea',
                         'is_wysiwyg_enabled' => '1'
                     ],

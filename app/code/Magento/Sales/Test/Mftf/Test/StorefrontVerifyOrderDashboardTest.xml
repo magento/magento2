@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyOrderDashboardTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Recent Orders appearing on Dashboard"/>
+            <title value="Verify recent Orders appearing in other store view if the orders are created on another store view"/>
+            <description value="Verify recent Orders appearing in other store view if the orders are created on another store view"/>
+            <testCaseId value="AC-14595"/>
+            <useCaseId value="ACP2E-3807"/>
+            <severity value="MINOR"/>
+            <group value="Sales"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!-- Create product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Customer log out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!-- Admin log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- 2. Switch store view -->
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="SwitchStoreView">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <waitForPageLoad time="10" stepKey="waitForProductPageLoad"/>
+        <!-- Add product to cart -->
+        <click selector="{{StorefrontProductPageSection.addToCart}}" stepKey="addToCart"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreView">
+            <argument name="storeView" value="_defaultStore"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="navigateToCustomerDashboardPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <scrollTo selector="{{StorefrontCustomerResentOrdersSection.blockResentOrders}}" stepKey="scrollToResent"/>
+        <seeElement selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderNumber})}}" stepKey="seeOrderInGrid"/>
+    </test>
+</tests>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,7 +61,7 @@ class TelephoneTest extends TestCase
     /**
      * @return array
      */
-    public function expectedPunctuationInNamesDataProvider(): array
+    public static function expectedPunctuationInNamesDataProvider(): array
     {
         return [
             [

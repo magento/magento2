@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,7 +73,7 @@ class TaxvatTest extends TestCase
     /**
      * @return array
      */
-    public function isEnabledDataProvider()
+    public static function isEnabledDataProvider()
     {
         return [[true, true], [false, false]];
     }
@@ -111,7 +111,7 @@ class TaxvatTest extends TestCase
     /**
      * @return array
      */
-    public function isRequiredDataProvider()
+    public static function isRequiredDataProvider()
     {
         return [[true, true], [false, false]];
     }

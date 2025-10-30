@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Observer;
 
@@ -89,7 +89,7 @@ class SaveInventoryDataObserver implements ObserverInterface
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         StockRegistryInterface $stockRegistry,
-        StockItemValidator $stockItemValidator = null,
+        ?StockItemValidator $stockItemValidator = null,
         array $parentItemProcessorPool = []
     ) {
         $this->stockConfiguration = $stockConfiguration;

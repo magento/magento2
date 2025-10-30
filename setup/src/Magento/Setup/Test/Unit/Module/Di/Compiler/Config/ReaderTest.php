@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -174,8 +174,8 @@ class ReaderTest extends TestCase
     private function getPreferences()
     {
         return [
-            'Interface1' => 'ConcreteType1',
-            'ThirdPartyInterface' => 'ConcreteType2'
+            'Interface1' => 'DateTime',
+            'ThirdPartyInterface' => 'DateTimeZone',
         ];
     }
 
@@ -187,8 +187,8 @@ class ReaderTest extends TestCase
         return [
             ['ConcreteType1', 'ConcreteType1'],
             ['ConcreteType2', 'ConcreteType2'],
-            ['Interface1', 'ConcreteType1'],
-            ['ThirdPartyInterface', 'ConcreteType2']
+            ['Interface1', 'DateTime'],
+            ['ThirdPartyInterface', 'DateTimeZone'],
         ];
     }
 

@@ -241,7 +241,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      */
     protected function _initTranslate()
     {
-        $this->_translator->loadData(null, false);
+        $this->_translator->loadData($this->_code, false);
 
         \Magento\Framework\Phrase::setRenderer(
             $this->_objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)

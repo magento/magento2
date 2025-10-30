@@ -49,7 +49,7 @@ class AbstractParserTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForValidateOptions()
+    public static function dataProviderForValidateOptions()
     {
         return [
             [[['paths' => []]], 'Missed "type" in parser options.'],
