@@ -48,4 +48,8 @@
     <entity name="AdminPaymentErrorMessage" type="message">
         <data key="error_Message">This payment method is not available.</data>
     </entity>
+    <entity name="AdminOrderEmailsSendMessage" type="text">
+        <data key="emailSuccessMessage">You sent the message.</data>
+        <data key="shipmentEmailSuccessMessage">You sent the shipment.</data>
+    </entity>
 </entities>

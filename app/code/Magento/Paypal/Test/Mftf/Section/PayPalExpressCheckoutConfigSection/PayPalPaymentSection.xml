@@ -37,6 +37,6 @@
         <element name="changeShippingAddressButton" type="button" selector="//button[@data-dd-action-name='Ship to Tab']"/>
         <element name="shippingAddressDropdown" type="select" selector="(//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]])[1]" parameterized="true"/>
         <element name="selectedShippingAddress" type="text" selector="//div/p[contains(text(), '{{selectedAddress}}')]" parameterized="true"/>
-        <element name="usePasswordInsteadButton" type="button" selector="(//button[text()='Use Password Instead'] | //a[text()='Try another way'])[1]"/>
+        <element name="usePasswordInsteadButton" type="button" selector="(//button[text()='Use Password Instead'] | //*[@normalize-space(text())='Try another way'])[1]"/>
     </section>
 </sections>
