@@ -15,6 +15,8 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\GraphQl\Model\Query\Context;
 use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Quote\Api\Data\TotalsInterfaceFactory;
+use Magento\Quote\Api\Data\TotalsExtensionInterfaceFactory;
+use Magento\Quote\Api\Data\TotalsExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
@@ -45,6 +47,11 @@ class CartPricesTest extends TestCase
      * @var ScopeConfigInterface|MockObject
      */
     private ScopeConfigInterface $scopeConfigMock;
+
+    /**
+     * @var TotalsExtensionInterfaceFactory|MockObject
+     */
+    private TotalsExtensionInterfaceFactory $totalExtensionMock
 
     /**
      * @var Field|MockObject
@@ -111,6 +118,7 @@ class CartPricesTest extends TestCase
             )
             ->getMock();
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->totalExtensionMock = $this->createMock(TotalsExtensionInterfaceFactory::class);
         $this->fieldMock = $this->createMock(Field::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
         $this->resolveInfoMock->operation = new OperationDefinitionNode([]);
@@ -138,7 +146,8 @@ class CartPricesTest extends TestCase
             $this->totalsCollectorMock,
             $this->totalsFactoryMock,
             $this->dataObjectHelperMock,
-            $this->scopeConfigMock
+            $this->scopeConfigMock,
+            $this->totalExtensionConfigMock
         );
     }
 
@@ -184,6 +193,14 @@ class CartPricesTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->totalMock);
+
+        $this->dataObjectHelperMock->expects($this->once())
+            ->method('populateWithArray')
+            ->with(
+                $this->identicalTo($this->totalExtensionMock),
+                [],
+                TotalsExtensionInterface::class
+            );
 
         $this->resolve();
     }
