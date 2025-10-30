@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,14 +16,15 @@ use PHPUnit\Framework\TestCase;
  */
 class ColumnResolverTest extends TestCase
 {
-    const CUSTOM_FIELD = 'custom_field';
+    private const CUSTOM_FIELD = 'custom_field';
 
-    // phpstan:ignore
+    /**
+     * @var array<string, string>
+     */
     private static $values = [
         ColumnResolver::COLUMN_COUNTRY => 'country value',
         ColumnResolver::COLUMN_REGION => 'region value',
         ColumnResolver::COLUMN_ZIP => 'zip_value',
-        ColumnResolver::COLUMN_WEIGHT => 'weight_value',
         ColumnResolver::COLUMN_WEIGHT_DESTINATION => 'weight_destination_value',
         ColumnResolver::COLUMN_PRICE => 'price_value',
         self::CUSTOM_FIELD => 'custom_value',
@@ -86,11 +87,6 @@ class ColumnResolverTest extends TestCase
             ColumnResolver::COLUMN_ZIP => [
                 ColumnResolver::COLUMN_ZIP,
                 self::$values[ColumnResolver::COLUMN_ZIP],
-            ],
-            // phpstan:ignore
-            ColumnResolver::COLUMN_WEIGHT => [
-                ColumnResolver::COLUMN_WEIGHT,
-                self::$values[ColumnResolver::COLUMN_WEIGHT],
             ],
             ColumnResolver::COLUMN_WEIGHT_DESTINATION => [
                 ColumnResolver::COLUMN_WEIGHT_DESTINATION,

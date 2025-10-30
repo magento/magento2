@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -270,17 +270,7 @@
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
-        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
-            <argument name="expectedUrl">sales/guest/print/order_id/</argument>
-            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
-        </helper>
-
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen" />
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToWindow"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintTabToOpen"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToTab"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintPreviewToLoad"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="seePrintPage"/>
+        <waitForPageLoad stepKey="waitForPrintOrderPageLoad"/>
 
         <!-- AssertSalesPrintOrderProducts -->
         <see userInput="$createBundleProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeBundleProduct"/>
@@ -304,6 +294,5 @@
 
         <!-- AssertShippingMethodOnPrintOrder -->
         <see userInput="Flat Rate - Fixed" selector="{{StorefrontOrderDetailsSection.shippingMethod}}" stepKey="assertShippingMethodOnPrintOrder"/>
-        <switchToPreviousTab stepKey="switchToPreviousTab"/>
     </test>
 </tests>

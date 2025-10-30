@@ -89,4 +89,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter">
+        <plugin name="ordergrid_fulltext_fallback"
+                type="Magento\Sales\Plugin\SearchCriteria\FulltextFilterPlugin"
+                sortOrder="10"/>
+    </type>
 </config>

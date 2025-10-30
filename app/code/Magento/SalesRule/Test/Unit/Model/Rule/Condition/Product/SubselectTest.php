@@ -198,6 +198,160 @@ class SubselectTest extends TestCase
     }
 
     /**
+     * Tests validate for fixed bundle product
+     *
+     * @param array|null $attributeDetails
+     * @param array $productDetails
+     * @param bool $isMultiShipping
+     * @param bool $expectedResult
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider dataProviderForBundleAndSimpleProducts
+     */
+    public function testValidateForBundleAndSimpleProducts(
+        array $attributeDetails,
+        array $productsDetails,
+        bool $isMultiShipping,
+        bool $expectedResult
+    ): void {
+        $attributeResource = new DataObject();
+        $childrenQuoteItemsMock = [];
+        foreach ($productsDetails as $productDetails) {
+            $attributeResource->setAttribute($attributeDetails['id']);
+            $this->ruleConditionMock->expects($this->any())
+                ->method('setName')
+                ->willReturn($attributeDetails['name']);
+            $this->ruleConditionMock->expects($this->any())
+                ->method('setAttributeScope')
+                ->willReturn($attributeDetails['attributeScope']);
+            $this->ruleConditionMock->expects($this->any())
+                ->method('getAttribute')
+                ->willReturn($attributeDetails['id']);
+            $this->model->setData('conditions', [$this->ruleConditionMock]);
+            $this->model->setData('attribute', $attributeDetails['id']);
+            $this->model->setData('value', $productDetails['valueParsed']);
+            $this->model->setData('operator', $attributeDetails['attributeOperator']);
+            $this->productMock->expects($this->any())
+                ->method('hasData')
+                ->with($attributeDetails['id'])
+                ->willReturn(!empty($productDetails));
+            $this->productMock->expects($this->any())
+                ->method('getData')
+                ->with($attributeDetails['id'])
+                ->willReturn($productDetails['price']);
+            $this->ruleConditionMock->expects($this->any())
+                ->method('getValueParsed')
+                ->willReturn($productDetails['valueParsed']);
+            $this->ruleConditionMock->expects($this->any())->method('getOperatorForValidate')
+                ->willReturn($attributeDetails['attributeOperator']);
+
+            $this->quoteMock->expects($this->any())
+                ->method('getIsMultiShipping')
+                ->willReturn($isMultiShipping);
+            $this->quoteItemMock->expects($this->any())
+                ->method('getProductType')
+                ->willReturn($productDetails['type']);
+
+            /* @var AbstractItem|MockObject $quoteItemMock */
+            $childQuoteItemMock = $this->getMockBuilder(AbstractItem::class)
+                ->onlyMethods(['getProduct', 'getData', 'getPrice', 'getQty'])
+                ->addMethods(['getBaseRowTotal'])
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
+            $childQuoteItemMock->expects($this->any())
+                ->method('getProduct')
+                ->willReturn($this->productMock);
+            $childQuoteItemMock->expects($this->any())
+                ->method('getQty')
+                ->willReturn($productDetails['qty']);
+            $childQuoteItemMock->expects($this->any())
+                ->method('getPrice')
+                ->willReturn($productDetails['price']);
+            $childQuoteItemMock->expects($this->any())
+                ->method('getBaseRowTotal')
+                ->willReturn($productDetails['baseRowTotal']);
+            $this->productMock->expects($this->any())
+                ->method('getResource')
+                ->willReturn($attributeResource);
+            $this->quoteItemMock->expects($this->any())
+                ->method('getProduct')
+                ->willReturn($this->productMock);
+            $this->quoteItemMock->expects($this->any())
+                ->method('getHasChildren')
+                ->willReturn($productDetails['hasChildren']);
+            $this->quoteItemMock->expects($this->any())
+                ->method('getChildren')
+                ->willReturn([$childQuoteItemMock]);
+            $this->quoteItemMock->expects($this->any())
+                ->method('getProductId')
+                ->willReturn($productDetails['id']);
+            $this->quoteItemMock->expects($this->any())
+                ->method('getChildren')
+                ->willReturn([$childQuoteItemMock]);
+            $this->quoteItemMock->expects($this->any())
+                ->method('getData')
+                ->willReturn($productDetails['baseRowTotal']);
+            $childrenQuoteItemsMock[] = clone $this->quoteItemMock;
+        }
+
+        $abstractModel = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getQuote', 'getAllItems', 'getProduct'])
+            ->getMockForAbstractClass();
+        $abstractModel->expects($this->any())
+            ->method('getQuote')
+            ->willReturn($this->quoteMock);
+        $abstractModel->expects($this->any())
+            ->method('getAllItems')
+            ->willReturn($childrenQuoteItemsMock);
+        $this->assertEquals($expectedResult, $this->model->validate($abstractModel));
+    }
+
+    /**
+     * Get data provider array for validate bundle and simple products
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public static function dataProviderForBundleAndSimpleProducts(): array
+    {
+        return [
+            'validate true for multiple products  with conditions
+            for attribute base_row_total with multi shipping' =>
+                [
+                    [
+                        'id' => 'attribute_set_id',
+                        'name' => 'test conditions',
+                        'attributeScope' => 'frontend',
+                        'attributeOperator' => '=='
+                    ],
+                    [
+                        [
+                            'id'=> 1,
+                            'type' => ProductType::TYPE_SIMPLE,
+                            'qty' => 1,
+                            'price' => 100,
+                            'hasChildren' => false ,
+                            'baseRowTotal' => 100,
+                            'valueParsed' => 100
+                        ],
+                        [
+                            'id'=> 1,
+                            'type' => ProductType::TYPE_BUNDLE,
+                            'qty' => 1,
+                            'price' => 100,
+                            'hasChildren' => true,
+                            'baseRowTotal' => 100,
+                            'valueParsed' => 100
+                        ],
+                    ],
+                    true,
+                    true
+                ],
+        ];
+    }
+
+    /**
      * Get data provider array for validate bundle product
      *
      * @return array
@@ -258,7 +412,7 @@ class SubselectTest extends TestCase
                         'baseRowTotal' => 100,
                         'valueParsed' => 100
                     ],
-                    false,
+                    true,
                     false
                 ],
             'validate true for bundle product

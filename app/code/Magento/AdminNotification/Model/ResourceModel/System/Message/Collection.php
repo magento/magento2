@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 namespace Magento\AdminNotification\Model\ResourceModel\System\Message;

@@ -1436,11 +1436,12 @@ class Carrier extends AbstractDhl implements CarrierInterface
             "packages" => [
                 [
                     "typeCode" => "3BX",
-                    "weight" => (int) $this->_getWeight($rawRequest->getWeight()),
+                    "weight" => (float) $this->_getWeight($rawRequest->getWeight()),
                     "dimensions" => [
-                        "length" => $this->_getDimension($this->getConfigData('depth')),
-                        "width" => $this->_getDimension($this->getConfigData('width')),
-                        "height" => $this->_getDimension($this->getConfigData('height'))
+                        // If no value is provided for the dimension, a default size of 3 will be used
+                        "length" => $this->_getDimension(max(3, $this->getConfigData('depth'))),
+                        "width" => $this->_getDimension(max(3, $this->getConfigData('width'))),
+                        "height" => $this->_getDimension(max(3, $this->getConfigData('height')))
                     ]
                 ]
             ]
@@ -1575,7 +1576,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
             $dhlProduct = (string)$product['productCode'];
             $totalPrice = $product['totalPrice'];
             $billic_price = array_column(
-                array_filter($totalPrice, fn($price) => $price['currencyType'] === 'BILLC'),
+                array_filter($totalPrice, fn ($price) => $price['currencyType'] === 'BILLC'),
                 'price'
             );
 
@@ -2245,7 +2246,7 @@ class Carrier extends AbstractDhl implements CarrierInterface
                     "invoice" => [
                         "number" => $rawRequest->getOrderShipment()->getOrder()->getIncrementId(),
                         "date" => date('Y-m-d')
-                        ]
+                    ]
                 ]
             ];
         }

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Usps\Test\Unit\Model;
@@ -96,6 +97,7 @@ class CarrierTest extends TestCase
         'carriers/usps/debug' => 1,
         'carriers/usps/userid' => 'test',
         'carriers/usps/mode' => 0,
+        'carriers/usps/usps_type' => 'USPS_XML',
     ];
 
     /**
@@ -345,7 +347,7 @@ class CarrierTest extends TestCase
         $this->config = array_merge(
             $this->config,
             [
-                'carriers/usps/free_method' => 3
+                'carriers/usps/free_method' => 3,
             ]
         );
         $requestData = array_merge(

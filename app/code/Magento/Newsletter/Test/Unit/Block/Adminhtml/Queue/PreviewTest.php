@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Filter\Input\MaliciousCode;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Block\Adminhtml\Queue\Preview as QueuePreview;
 use Magento\Newsletter\Model\Queue;
@@ -68,6 +69,11 @@ class PreviewTest extends TestCase
      * @var QueuePreview
      */
     private $preview;
+
+    /**
+     * @var MaliciousCode|MockObject
+     */
+    protected $maliciousCode;
 
     protected function setUp(): void
     {
@@ -147,7 +153,7 @@ class PreviewTest extends TestCase
         $queueFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->queueMock);
-
+        $this->maliciousCode = $this->createPartialMock(MaliciousCode::class, ['filter']);
         $this->objectManager = new ObjectManager($this);
 
         $escaper = $this->objectManager->getObject(Escaper::class);
@@ -155,6 +161,7 @@ class PreviewTest extends TestCase
             ->method('getEscaper')
             ->willReturn($escaper);
 
+        $this->objectManager->prepareObjectManager();
         $this->preview = $this->objectManager->getObject(
             QueuePreview::class,
             [
@@ -162,6 +169,7 @@ class PreviewTest extends TestCase
                 'templateFactory' => $templateFactory,
                 'subscriberFactory' => $subscriberFactory,
                 'queueFactory' => $queueFactory,
+                'maliciousCode' => $this->maliciousCode,
             ]
         );
     }
@@ -173,6 +181,9 @@ class PreviewTest extends TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
             ->willReturn($store);
+        $this->maliciousCode->expects($this->once())
+            ->method('filter')
+            ->willReturn('');
         $result = $this->preview->toHtml();
         $this->assertEquals('', $result);
     }
@@ -210,7 +221,10 @@ class PreviewTest extends TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getStores')
             ->willReturn([0 => $store]);
+        $this->maliciousCode->expects($this->once())
+            ->method('filter')
+            ->willReturn($newsletterText);
         $result = $this->preview->toHtml();
-        $this->assertEquals('<pre></pre>', $result);
+        $this->assertEquals('<pre>'. $newsletterText .'</pre>', $result);
     }
 }
