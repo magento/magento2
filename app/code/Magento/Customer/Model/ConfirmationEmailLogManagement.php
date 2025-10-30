@@ -15,12 +15,22 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
     /**
      * @var string
      */
-    public const XML_PATH_MAX_REQUEST = 'customer/create_account/max_number_confirmation_email_requests';
+    public const string XML_PATH_MAX_REQUEST = 'customer/create_account/max_number_confirmation_email_requests';
 
     /**
      * @var string
      */
-    public const XML_PATH_MIN_TIME_INTERVAL = 'customer/create_account/min_time_between_confirmation_email_requests';
+    public const string XML_PATH_MIN_TIME_INTERVAL = 'customer/create_account/min_time_between_confirmation_email_requests';
+
+    /**
+     * @var string
+     */
+    public const string XML_PATH_ENABLE_RATE_LIMIT = 'customer/create_account/enable_rate_limit_for_confirmation_email';
+
+    /**
+     * @var int
+     */
+    private const int DISABLED = 0;
 
     /**
      * @param ResourceModel $resource
@@ -29,10 +39,10 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
      * @param DateTime $dateTime
      */
     public function __construct(
-        private ResourceModel $resource,
-        private ConfirmationLogFactory $confirmationLogFactory,
-        private ScopeConfigInterface $scopeConfig,
-        private DateTime $dateTime
+        private readonly ResourceModel $resource,
+        private readonly ConfirmationLogFactory $confirmationLogFactory,
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly DateTime $dateTime
     ) {
     }
 
@@ -72,6 +82,9 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
      */
     public function canSend(int $customerId): bool
     {
+        if ($this->isConfirmationEmailRateLimitDisabled()) {
+            return true;
+        }
         $existingLog = $this->getByCustomerId($customerId);
 
         if ($existingLog) {
@@ -83,6 +96,7 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
         }
 
         $this->addNewLogEntry($customerId);
+
         return true;
     }
 
@@ -92,6 +106,14 @@ class ConfirmationEmailLogManagement implements ConfirmationEmailLogManagementIn
     public function getConfig(string $path): int
     {
         return (int) $this->scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @inheirtDoc
+     */
+    public function isConfirmationEmailRateLimitDisabled(): bool
+    {
+        return (int) $this->getConfig(self::XML_PATH_ENABLE_RATE_LIMIT) === self::DISABLED;
     }
 
     /**

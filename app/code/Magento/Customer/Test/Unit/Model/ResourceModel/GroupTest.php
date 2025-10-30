@@ -32,7 +32,6 @@ class GroupTest extends TestCase
     /** @var Group */
     protected $groupResourceModel;
 
-
     /** @var ResourceConnection|MockObject */
     protected $resource;
 

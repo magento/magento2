@@ -452,12 +452,9 @@ class AccountManagement implements AccountManagementInterface
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
      * @param Authenticate|null $authenticate
-<<<<<<< HEAD
      * @param ConfirmationEmailLogManagementInterface|null $confirmationEmailLogManagement
-=======
      * @param AddressFactory|null $addressFactory
      * @param ValidatorFactory|null $validatorFactory
->>>>>>> 45cbf9b6ff7dfcf16bda883dc5f0ee9ccffa56fc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -504,12 +501,9 @@ class AccountManagement implements AccountManagementInterface
         ?Backend $eavValidator = null,
         ?CustomerLogger $customerLogger = null,
         ?Authenticate $authenticate = null,
-<<<<<<< HEAD
-        ?ConfirmationEmailLogManagementInterface $confirmationEmailLogManagement = null
-=======
+        ?ConfirmationEmailLogManagementInterface $confirmationEmailLogManagement = null,
         private ?AddressFactory $addressFactory = null,
         private ?ValidatorFactory $validatorFactory = null,
->>>>>>> 45cbf9b6ff7dfcf16bda883dc5f0ee9ccffa56fc
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;

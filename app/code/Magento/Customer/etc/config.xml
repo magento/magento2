@@ -19,6 +19,7 @@
                 <email_identity>general</email_identity>
                 <email_template>customer_create_account_email_template</email_template>
                 <email_no_password_template>customer_create_account_email_no_password_template</email_no_password_template>
+                <enable_rate_limit_for_confirmation_email>0</enable_rate_limit_for_confirmation_email>
                 <max_number_confirmation_email_requests>3</max_number_confirmation_email_requests>
                 <min_time_between_confirmation_email_requests>30</min_time_between_confirmation_email_requests>
                 <email_confirmation_template>customer_create_account_email_confirmation_template</email_confirmation_template>

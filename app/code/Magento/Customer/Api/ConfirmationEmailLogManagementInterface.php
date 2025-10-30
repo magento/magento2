@@ -47,4 +47,11 @@ interface ConfirmationEmailLogManagementInterface
      * @return int
      */
     public function getConfig(string $path): int;
+
+    /**
+     * To check if the confirmation email rate limit is disabled
+     *
+     * @return bool
+     */
+    public function isConfirmationEmailRateLimitDisabled(): bool;
 }
