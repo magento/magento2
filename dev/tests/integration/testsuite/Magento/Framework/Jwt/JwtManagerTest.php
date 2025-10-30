@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -147,7 +147,6 @@ class JwtManagerTest extends TestCase
             }
             $this->verifyAgainstHeaders($jwt->getProtectedHeaders(), $recreated->getProtectedHeaders()[0]);
         }
-
     }
 
     public static function getTokenVariants(): array

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
@@ -130,14 +130,13 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      * Access configuration file directly
      *
      * @return array
-     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     protected function getCacheStates()
     {
         $configFilePool = new ConfigFilePool();
         $configPath = Bootstrap::getInstance()->getAppTempDir() . '/'. DirectoryList::CONFIG .'/'
             . $configFilePool->getPath($configFilePool::APP_ENV);
-        $configData = eval(str_replace('<?php', '', file_get_contents($configPath)));
+        $configData = include $configPath;
         return $configData[State::CACHE_KEY];
     }
 
