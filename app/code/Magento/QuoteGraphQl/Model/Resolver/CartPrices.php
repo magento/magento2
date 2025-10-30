@@ -47,28 +47,42 @@ class CartPrices implements ResolverInterface
     private ScopeConfigInterface $scopeConfig;
 
     /**
+     * @var TotalsInterfaceFactory
+     */
+    private TotalsInterfaceFactory $totalsFactory;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private DataObjectHelper $dataObjectHelper;
+
+    /**
      * @var TotalsExtensionInterfaceFactory
      */
     private TotalsExtensionInterfaceFactory $totalsExtension;
 
     /**
      * @param TotalsCollector $totalsCollector
-     * @param TotalsInterfaceFactory $totalsFactory
-     * @param DataObjectHelper $dataObjectHelper
      * @param ScopeConfigInterface|null $scopeConfig
+     * @param TotalsInterfaceFactory|null $totalsFactory
+     * @param DataObjectHelper|null $dataObjectHelper
      * @param TotalsExtensionInterfaceFactory|null $totalsExtensionFactory
      */
     public function __construct(
         TotalsCollector $totalsCollector,
-        private TotalsInterfaceFactory $totalsFactory,
-        private DataObjectHelper $dataObjectHelper,
         ?ScopeConfigInterface $scopeConfig = null,
+        ?TotalsInterfaceFactory $totalsFactory = null,
+        ?DataObjectHelper $dataObjectHelper = null,
         ?TotalsExtensionInterfaceFactory $totalsExtensionFactory = null
     ) {
         $this->totalsCollector = $totalsCollector;
         $this->scopeConfig = $scopeConfig ??  ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->totalsFactory = $totalsFactory ??
+            ObjectManager::getInstance()->get(TotalsInterfaceFactory::class);
+        $this->dataObjectHelper = $dataObjectHelper ??
+            ObjectManager::getInstance()->get(DataObjectHelper::class);
         $this->totalsExtension = $totalsExtensionFactory ??
-            ObjectManager::getInstance()->create(TotalsExtensionInterfaceFactory::class);
+            ObjectManager::getInstance()->get(TotalsExtensionInterfaceFactory::class);
     }
 
     /**
@@ -96,12 +110,13 @@ class CartPrices implements ResolverInterface
             );
 
             if ($extensionAttributes) {
+                $newExtensionAttributes = $this->totalsExtension->create();
                 $this->dataObjectHelper->populateWithArray(
-                    $this->totalsExtension,
+                    $newExtensionAttributes,
                     $extensionAttributes,
                     \Magento\Quote\Api\Data\TotalsExtensionInterface::class
                 );
-                $cartTotals->setExtensionAttributes($this->totalsExtension);
+                $cartTotals->setExtensionAttributes($newExtensionAttributes);
             }
 
             if (isset($addressTotalsData['discount_description'])) {

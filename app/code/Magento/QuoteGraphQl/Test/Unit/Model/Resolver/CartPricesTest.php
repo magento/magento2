@@ -17,6 +17,8 @@ use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Quote\Api\Data\TotalsInterfaceFactory;
 use Magento\Quote\Api\Data\TotalsExtensionInterfaceFactory;
 use Magento\Quote\Api\Data\TotalsExtensionInterface;
+use Magento\Quote\Api\Data\TotalsExtension;
+use Magento\Quote\Api\Data\AddressExtension;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
@@ -47,11 +49,6 @@ class CartPricesTest extends TestCase
      * @var ScopeConfigInterface|MockObject
      */
     private ScopeConfigInterface $scopeConfigMock;
-
-    /**
-     * @var TotalsExtensionInterfaceFactory|MockObject
-     */
-    private TotalsExtensionInterfaceFactory $totalExtensionMock
 
     /**
      * @var Field|MockObject
@@ -86,12 +83,27 @@ class CartPricesTest extends TestCase
     /**
      * @var TotalsInterfaceFactory|MockObject
      */
-    private $totalsFactoryMock;
+    private TotalsInterfaceFactory $totalsFactoryMock;
+
+    /**
+     * @var TotalsExtensionInterfaceFactory|MockObject
+     */
+    private TotalsExtensionInterfaceFactory $totalExtensionFactoryMock;
+
+    /**
+     * @var TotalsExtension|MockObject
+     */
+    private TotalsExtension $totalExtensionMock;
 
     /**
      * @var Address|MockObject
      */
-    private $shippingAddressMock;
+    private Address $shippingAddressMock;
+
+    /**
+     * @var AddressExtension|MockObject
+     */
+    private AddressExtension $addressExtensionMock;
 
     /**
      * @var array
@@ -118,7 +130,8 @@ class CartPricesTest extends TestCase
             )
             ->getMock();
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->totalExtensionMock = $this->createMock(TotalsExtensionInterfaceFactory::class);
+        $this->totalExtensionFactoryMock = $this->createMock(TotalsExtensionInterfaceFactory::class);
+        $this->totalExtensionMock = $this->createMock(TotalsExtension::class);
         $this->fieldMock = $this->createMock(Field::class);
         $this->resolveInfoMock = $this->createMock(ResolveInfo::class);
         $this->resolveInfoMock->operation = new OperationDefinitionNode([]);
@@ -138,16 +151,18 @@ class CartPricesTest extends TestCase
                     'getDiscountTaxCompensationAmount',
                     'getDiscountAmount',
                     'getDiscountDescription',
-                    'getAppliedTaxes'
+                    'getAppliedTaxes',
+                    'setExtensionAttributes'
                 ]
             )
             ->getMock();
+
         $this->cartPrices = new CartPrices(
             $this->totalsCollectorMock,
+            $this->scopeConfigMock,
             $this->totalsFactoryMock,
             $this->dataObjectHelperMock,
-            $this->scopeConfigMock,
-            $this->totalExtensionConfigMock
+            $this->totalExtensionFactoryMock
         );
     }
 
@@ -161,15 +176,27 @@ class CartPricesTest extends TestCase
     public function testResolveQuery(): void
     {
         $this->resolveInfoMock->operation->operation = 'query';
+        $extAttributes = ['custom_field' => 'custom_value'];
+
+        $this->addressExtensionMock = $this->createMock(AddressExtension::class);
 
         $this->shippingAddressMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getData'])
+            ->onlyMethods(['getData', 'getExtensionAttributes'])
             ->getMock();
 
         $this->shippingAddressMock->expects($this->any())
             ->method('getData')
             ->willReturn([]);
+
+        $this->shippingAddressMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->addressExtensionMock);
+
+        $this->addressExtensionMock
+            ->expects($this->once())
+            ->method('__toArray')
+            ->willReturn($extAttributes);
 
         $this->quoteMock
             ->expects($this->once())
@@ -181,26 +208,35 @@ class CartPricesTest extends TestCase
             ->method('getShippingAddress')
             ->willReturn($this->shippingAddressMock);
 
-        $this->dataObjectHelperMock->expects($this->once())
-            ->method('populateWithArray')
-            ->with(
-                $this->identicalTo($this->totalMock),
-                [],
-                TotalsInterface::class
-            );
-
         $this->totalsFactoryMock
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->totalMock);
 
-        $this->dataObjectHelperMock->expects($this->once())
+        $this->totalExtensionFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->totalExtensionMock);
+
+        $this->totalMock->expects($this->once())
+            ->method('setExtensionAttributes')
+            ->with($this->totalExtensionMock);
+
+        $this->dataObjectHelperMock->expects($this->atLeastOnce())
             ->method('populateWithArray')
-            ->with(
-                $this->identicalTo($this->totalExtensionMock),
-                [],
-                TotalsExtensionInterface::class
+            ->withConsecutive(
+                [
+                    $this->identicalTo($this->totalMock),
+                    [],
+                    $this->equalTo(TotalsInterface::class)
+                ],
+                [
+                    $this->identicalTo($this->totalExtensionMock),
+                    $this->equalTo($extAttributes),
+                    $this->equalTo(TotalsExtensionInterface::class)
+                ]
             );
+
 
         $this->resolve();
     }
