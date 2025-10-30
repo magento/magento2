@@ -1,4 +1,3 @@
-# BundleGraphQl
+# Magento_BundleGraphQl module
 
-**BundleGraphQl** provides type and resolver information for the GraphQl module
-to generate bundle product information.
+This module provides type and resolver information for the GraphQl module to generate bundle product information.

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
+use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Tax\Test\Fixture\ProductTaxClass;
 use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
@@ -261,5 +262,38 @@ QUERY;
                 ]
             ]
         ];
+    }
+
+    /**
+     * Test invalid cart ID error handling
+     */
+    public function testEstimateTotalsWithInvalidCartId(): void
+    {
+        $invalidCartId = 'abcxyz';
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "' . $invalidCartId . '"');
+
+        $query = <<<QUERY
+        mutation {
+            estimateTotals(input: {
+                cart_id: "{$invalidCartId}",
+                address: {
+                    country_code: US
+                }
+            }) {
+                cart {
+                    prices {
+                        grand_total {
+                            value
+                            currency
+                        }
+                    }
+                }
+            }
+        }
+    QUERY;
+
+        $this->graphQlMutation($query);
     }
 }

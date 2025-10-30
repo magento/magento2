@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,6 +38,7 @@ class SearchCriteriaBuilder
      * @param RequestDataBuilder $localData
      * @param SearchCriteriaResolverFactory $criteriaResolverFactory
      * @param ArgumentApplierPool $argumentApplierPool
+     * @param array $partialSearchAnalyzers
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -52,6 +52,7 @@ class SearchCriteriaBuilder
         private readonly RequestDataBuilder $localData,
         private readonly SearchCriteriaResolverFactory $criteriaResolverFactory,
         private readonly ArgumentApplierPool $argumentApplierPool,
+        private readonly array $partialSearchAnalyzers = []
     ) {
     }
 
@@ -118,6 +119,10 @@ class SearchCriteriaBuilder
             foreach ($query['match'] ?? [] as $index => $matchItem) {
                 if (in_array($matchItem['field'] ?? null, $partialMatchFilters, true)) {
                     $data['queries'][$queryName]['match'][$index]['matchCondition'] = 'match_phrase_prefix';
+                    if (array_key_exists($matchItem['field'], $this->partialSearchAnalyzers)) {
+                        $data['queries'][$queryName]['match'][$index]['analyzer']
+                            = $this->partialSearchAnalyzers[$matchItem['field']];
+                    }
                 }
             }
         }

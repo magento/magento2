@@ -18,7 +18,7 @@
             <testCaseId value="AC-4428"/>
             <group value="paypalPayflowProWithOutValut"/>
             <group value="3rd_party_integration"/>
-<!--            <group value="pr_exclude" />-->
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
@@ -47,6 +47,7 @@
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
             <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
             <actionGroup ref="AdminDisableTermsAndConditionsConfigurationActionGroup" stepKey="disableTermsAndConditions"/>

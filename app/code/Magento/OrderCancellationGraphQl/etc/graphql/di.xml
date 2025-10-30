@@ -32,4 +32,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\OrderCancellation\Model\CancelOrder">
+        <plugin name="validateCancelOrderReason" type="Magento\OrderCancellationGraphQl\Plugin\Model\CancelOrder"/>
+    </type>
+    <type name="Magento\OrderCancellationGraphQl\Model\CancelOrderGuest">
+        <plugin name="validateCancelGuestOrderReason" type="Magento\OrderCancellationGraphQl\Plugin\Model\CancelOrderGuest"/>
+    </type>
 </config>

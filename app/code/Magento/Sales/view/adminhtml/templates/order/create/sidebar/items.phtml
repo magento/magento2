@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 
@@ -64,9 +64,9 @@ $sideBarPermissionCheck = $block->getData('sideBarPermissionCheck');
                     <?php endif; ?>
 
                     <th class="col-add">
-                        <span title="<?= $escaper->escapeHtml(__('Add To Order')) ?>"
+                        <span title="<?= $escaper->escapeHtml(__('Add to the new order')) ?>"
                               class="icon icon-add">
-                            <span><?= $escaper->escapeHtml(__('Add To Order')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Add to the new order')) ?></span>
                         </span>
                     </th>
                 </tr>
@@ -145,7 +145,7 @@ $sideBarPermissionCheck = $block->getData('sideBarPermissionCheck');
                                            name="sidebar[<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction())
                                             ?>][<?= (int) $block->getIdentifierId($_item) ?>]"
                                            value="<?= $block->canDisplayItemQty() ? (float) $_item->getQty() : 1 ?>"
-                                           title="<?= $escaper->escapeHtml(__('Add To Order')) ?>"/>
+                                           title="<?= $escaper->escapeHtml(__('Add to the new order')) ?>"/>
                                     <label class="admin__field-label"
                                            for="sidebar-<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction())
                                             ?>-<?= (int) $block->getIdentifierId($_item) ?>">

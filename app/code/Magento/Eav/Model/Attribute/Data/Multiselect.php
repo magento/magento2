@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
@@ -9,8 +9,6 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Multiply select Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Multiselect extends AbstractData
 {
@@ -81,7 +79,11 @@ class Multiselect extends AbstractData
     }
 
     /**
-     * @inheritdoc
+     * Validate the data
+     *
+     * @param array|string $value
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {
@@ -91,6 +93,10 @@ class Multiselect extends AbstractData
         if ($value === false) {
             // try to load original value and validate it
             $value = $this->getEntity()->getData($attribute->getAttributeCode());
+        }
+
+        if ((!$attribute->getIsRequired() || ($this->getEntity()?->getSkipRequiredValidation())) && empty($value)) {
+            return true;
         }
 
         if ($attribute->getIsRequired() && empty($value) && $value != '0') {

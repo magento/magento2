@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2020 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Backend\Console\Command;

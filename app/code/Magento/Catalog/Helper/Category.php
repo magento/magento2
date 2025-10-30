@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper;
@@ -10,8 +10,10 @@ use Magento\Catalog\Model\Category as ModelCategory;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\CollectionFactory;
 use Magento\Framework\Data\Tree\Node\Collection;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -64,23 +66,32 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
     protected $categoryRepository;
 
     /**
+     * @var Escaper|null
+     */
+    private ?Escaper $escaper;
+
+    /**
      * @param Context $context
      * @param CategoryFactory $categoryFactory
      * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $dataCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
+     * @param Escaper|null $escaper
      */
     public function __construct(
         Context $context,
         CategoryFactory $categoryFactory,
         StoreManagerInterface $storeManager,
         CollectionFactory $dataCollectionFactory,
-        CategoryRepositoryInterface $categoryRepository
+        CategoryRepositoryInterface $categoryRepository,
+        ?Escaper $escaper = null
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_storeManager = $storeManager;
         $this->_dataCollectionFactory = $dataCollectionFactory;
         $this->categoryRepository = $categoryRepository;
+        $this->escaper = $escaper ?: ObjectManager::getInstance()->get(Escaper::class);
+
         parent::__construct($context);
     }
 
@@ -204,6 +215,7 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
         if ($params && isset($params['p'])) {
             $categoryUrl = $categoryUrl . '?p=' . $params['p'];
         }
-        return $categoryUrl;
+
+        return $this->escaper->escapeUrl($categoryUrl);
     }
 }

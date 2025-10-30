@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable no-undef */
@@ -95,7 +95,7 @@ define([
                     }
                 },
                 reset: function () {
-                    jQuery('input[name="default[]"]').prop('checked', false);
+                    jQuery('input[name^="default["]').prop('checked', false);
                     jQuery('input[name="reset_is-default_option"]').val(1);
                 },
 

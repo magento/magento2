@@ -1,3 +1,3 @@
-# SendFriendGraphQl
+# Magento_SendFriendGraphQl module
 
-**SendFriendGraphQl** provides support of GraphQL for SendFriend functionality.
+This module provides support of GraphQL for the SendFriend functionality.

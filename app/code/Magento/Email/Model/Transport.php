@@ -16,6 +16,7 @@ use Symfony\Component\Mailer\Transport\TransportInterface as SymfonyTransportInt
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mailer\Transport\Smtp\Auth\LoginAuthenticator;
 use Symfony\Component\Mailer\Transport\Smtp\Auth\PlainAuthenticator;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
@@ -77,6 +78,11 @@ class Transport implements TransportInterface
      * Configuration path for SMTP SSL value
      */
     private const XML_PATH_SSL = 'system/smtp/ssl';
+
+    /**
+     * SMTP scheme constant
+     */
+    private const SMTP_SCHEME = 'smtp';
 
     /**
      * Whether return path should be set or no.
@@ -146,7 +152,7 @@ class Transport implements TransportInterface
     public function getTransport(): SymfonyTransportInterface
     {
         if (!isset($this->symfonyTransport)) {
-            $transportType = $this->scopeConfig->getValue(self::XML_PATH_TRANSPORT);
+            $transportType = $this->scopeConfig->getValue(self::XML_PATH_TRANSPORT, ScopeInterface::SCOPE_STORE);
             if ($transportType === 'smtp') {
                 $this->symfonyTransport = $this->createSmtpTransport();
             } else {
@@ -170,19 +176,27 @@ class Transport implements TransportInterface
         $password = $this->scopeConfig->getValue(self::XML_PATH_PASSWORD, ScopeInterface::SCOPE_STORE);
         $auth = $this->scopeConfig->getValue(self::XML_PATH_AUTH, ScopeInterface::SCOPE_STORE);
         $ssl = $this->scopeConfig->getValue(self::XML_PATH_SSL, ScopeInterface::SCOPE_STORE);
-        $tls = false;
 
+        $options = [];
         if ($ssl === 'tls') {
-            $tls = true;
+            $options['tls'] = true;
+        } elseif ($ssl === 'ssl') {
+            $options['ssl'] = true;
+            $options['verify_peer'] = true;
+            $options['verify_peer_name'] = true;
         }
 
-        $transport = new EsmtpTransport($host, $port, $tls);
-        if ($username) {
-            $transport->setUsername($username);
-        }
-        if ($password) {
-            $transport->setPassword($password);
-        }
+        $dsn = new Dsn(
+            self::SMTP_SCHEME,
+            $host,
+            $username,
+            $password,
+            $port,
+            $options
+        );
+
+        $factory = new EsmtpTransportFactory();
+        $transport = $factory->create($dsn);
 
         switch ($auth) {
             case 'plain':
@@ -242,11 +256,15 @@ class Transport implements TransportInterface
     private function setReturnPath(SymfonyMessage $email): void
     {
         if ($this->isSetReturnPath === 2 && $this->returnPathValue) {
-            $email->getHeaders()->addMailboxListHeader('Sender', [$this->returnPathValue]);
+            $email->getHeaders()->addMailboxHeader('Sender', $this->returnPathValue);
         } elseif ($this->isSetReturnPath === 1 &&
-            !empty($fromAddresses = $email->getHeaders()->get('From')?->getAddresses())) {
+            !empty(
+                /** @var \Symfony\Component\Mime\Address[] $fromAddresses */
+                $fromAddresses = $email->getHeaders()->get('From')?->getAddresses()
+            )
+        ) {
             reset($fromAddresses);
-            $email->getHeaders()->addMailboxListHeader('Sender', [current($fromAddresses)->getAddress()]);
+            $email->getHeaders()->addMailboxHeader('Sender', current($fromAddresses));
         }
     }
 

@@ -14,6 +14,7 @@ use Magento\Framework\Acl\RootResource;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Serialize\Serializer\Json;
 use PHPUnit\Framework\MockObject\Exception;
+use Magento\Framework\Acl\Role\CurrentRoleContext;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -80,11 +81,16 @@ class MissingDeclineRuleTest extends TestCase
                 }
             );
 
+        $ruleContext = $this->createMock(CurrentRoleContext::class);
+
         $this->model = new Rule(
             $this->rootResource,
             $this->resourceMock,
             $this->aclDataCacheMock,
-            $this->serializerMock
+            $this->serializerMock,
+            null,
+            null,
+            $ruleContext
         );
     }
 

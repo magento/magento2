@@ -552,8 +552,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
     {
         if (!$product->hasData($this->_usedProductIds)) {
             $usedProductIds = [];
-            foreach ($this->getUsedProducts($product) as $product) {
-                $usedProductIds[] = $product->getId();
+            foreach ($this->getUsedProducts($product) as $childProduct) {
+                $usedProductIds[] = $childProduct->getId();
             }
             $product->setData($this->_usedProductIds, $usedProductIds);
         }

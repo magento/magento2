@@ -12,6 +12,7 @@
         "magento/module-catalog-url-rewrite": "*",
         "magento/module-cms": "*",
         "magento/module-config": "*",
+        "magento/module-cron": "*",
         "magento/module-eav": "*",
         "magento/module-media-storage": "*",
         "magento/module-robots": "*",

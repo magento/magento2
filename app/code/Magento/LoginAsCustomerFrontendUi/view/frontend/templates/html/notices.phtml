@@ -8,11 +8,7 @@
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  */
-if ($block->getConfig()->isB2bEnabled()) {
-    $adobeFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/adobe-icon.svg');
-} else {
-    $adobeFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/magento-icon.svg');
-}
+$viewFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerFrontendUi::images/magento-icon.svg');
 ?>
 <?php if ($block->getConfig()->isEnabled()): ?>
     <div class="lac-notification-sticky"
@@ -21,7 +17,7 @@ if ($block->getConfig()->isB2bEnabled()) {
         <div class="lac-notification clearfix" data-bind="visible: isVisible" style="display: none">
             <div class="top-container">
                 <div class="lac-notification-icon wrapper">
-                    <img class="logo-img"  src="<?= $escaper->escapeUrl($adobeFileUrl) ?>" alt="Magento" />
+                    <img class="logo-img"  src="<?= $escaper->escapeUrl($viewFileUrl) ?>" alt="Magento" />
                 </div>
                 <div class="lac-notification-text wrapper">
                     <span data-bind="html: notificationText"></span>

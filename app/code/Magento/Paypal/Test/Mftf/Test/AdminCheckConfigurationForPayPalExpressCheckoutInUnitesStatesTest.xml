@@ -48,7 +48,9 @@
         <actionGroup ref="AdminOpenPayPalAdvancedFrontendExperienceFeaturesPageActionGroup" stepKey= "openFeatures"/>
         <dontSeeOptionIsSelected selector="{{PayPalAdvancedFrontendExperienceFeaturesSection.disableFundingOptionsMultiselect('us')}}" userInput="PayPal Credit" stepKey="dontSeePayPalCreditOptionIsSelected" />
         <!--Enable paypal solution-->
-        <actionGroup ref="AdminAssertEnableThisSolutionAndInContextCheckoutValueActionGroup" stepKey= "adminConfigPaypalExpressCheckout"/>
+        <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="adminConfigPaypalExpressCheckout">
+            <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+        </actionGroup>
         <!--Go to storefront and add product to cart -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
             <argument name="product" value="$$simpleProduct$$"/>
