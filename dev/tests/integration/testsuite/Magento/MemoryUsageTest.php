@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento;
 
@@ -10,7 +10,7 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
     /**
      * Number of application reinitialization iterations to be conducted by tests
      */
-    const APP_REINITIALIZATION_LOOPS = 20;
+    private const APP_REINITIALIZATION_LOOPS = 20;
 
     /**
      * @var \Magento\TestFramework\Helper\Memory
